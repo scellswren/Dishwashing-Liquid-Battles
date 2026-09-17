@@ -1,0 +1,3081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Dishwashing Liquid battles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1016;
+  --panel:#1b1d29;
+  --panel2:#242639;
+  --line:#33364a;
+  --text:#f2f0ea;
+  --muted:#9296ab;
+  --amber:#f2a541;
+  --red:#e5484d;
+  --green:#3fb96f;
+  --blue:#4c8bf5;
+  --shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background: radial-gradient(1200px 800px at 50% -10%, #1b2038 0%, #0f1016 55%);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  -webkit-tap-highlight-color: transparent;
+  overflow:hidden;
+}
+
+html{overflow:hidden;}
+#app{height:100vh; display:flex; align-items:center; justify-content:center;}
+h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
+#app{width:100%; max-width:1200px; margin:0 auto;}
+.screen{display:none;}
+.screen.active{display:flex; align-items:center; justify-content:center; width:100%; min-height:100%;}
+
+/* ---------- Menu ---------- */
+.menu-wrap{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:40px 28px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.menu-title{font-size:clamp(38px,7vw,64px); color:var(--amber); text-shadow:3px 3px 0 rgba(0,0,0,.4);}
+.menu-sub{color:var(--muted); margin-top:8px; margin-bottom:28px;}
+.menu-buttons{display:flex; flex-direction:column; gap:14px; max-width:340px; margin:0 auto;}
+.btn{
+  border:none; border-radius:12px; padding:14px 18px; font-size:16px; font-weight:800;
+  cursor:pointer; color:var(--text); background:var(--panel2); border:1px solid var(--line);
+  transition:transform .08s ease, background .15s ease;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600;}
+.btn-secondary{background:var(--panel2);}
+.btn-danger{background:linear-gradient(180deg,var(--red),#b13437); color:#fff;}
+.btn-small{padding:8px 14px; font-size:13px; border-radius:9px;}
+
+/* ---------- Generic panel screens ---------- */
+.panel{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--line); border-radius:18px; padding:24px; box-shadow:var(--shadow);
+}
+.panel-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+.panel-header h2{font-size:28px; color:var(--amber);}
+
+/* ---------- Character grid ---------- */
+.char-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:14px;
+}
+.char-card{
+  background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:12px;
+  text-align:center; cursor:pointer; transition:transform .1s ease, border-color .15s ease;
+}
+.char-card:hover{transform:translateY(-3px); border-color:var(--amber);}
+.char-card.locked{opacity:.45; filter:grayscale(1); cursor:not-allowed;}
+.char-card.selected{border-color:var(--amber); box-shadow:0 0 0 2px var(--amber) inset;}
+.char-square{
+  width:96px; height:96px; margin:0 auto 10px; border-radius:12px; overflow:hidden;
+  background:#2c2f45; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--line); position:relative;
+}
+.char-square img{width:100%; height:100%; object-fit:cover; display:block;}
+.char-square .fallback{
+  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  font-family:'Anton',sans-serif; font-size:34px; color:#fff;
+}
+.char-name{font-weight:800; font-size:14px;}
+.char-cat{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.5px;}
+.lock-badge{font-size:10px; color:var(--muted); margin-top:4px;}
+
+/* ---------- Modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center;
+  padding:16px; z-index:50;
+}
+.modal-overlay.hidden{display:none;}
+.modal{
+  background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px; max-width:420px; width:100%;
+  box-shadow:var(--shadow); max-height:86vh; overflow-y:auto;
+}
+.modal-top{display:flex; gap:14px; align-items:center;}
+.modal .char-square{width:74px;height:74px; margin:0;}
+.modal-ability{background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-top:8px;}
+.modal-ability .ab-name{font-weight:800; color:var(--amber); font-size:13px;}
+.modal-ability .ab-meta{color:var(--muted); font-size:12px; margin-top:2px;}
+
+/* ---------- Instructions ---------- */
+.instructions p{color:var(--muted); line-height:1.6;}
+.instructions ul{color:var(--muted); line-height:1.7;}
+.instructions kbd{background:var(--panel2); border:1px solid var(--line); border-radius:5px; padding:1px 7px; color:var(--text);}
+
+/* ---------- Battle screen ---------- */
+#screen-battle.active{display:flex; flex-direction:column; gap:6px; height:100vh; width:100%; max-width:1200px; padding:6px; overflow:hidden;}
+#hud{display:flex; justify-content:space-between; gap:16px;}
+.hud-side{flex:1; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 14px;}
+.hud-side.opp{text-align:right;}
+.hud-name-row{display:flex; align-items:center; gap:8px;}
+.hud-side.opp .hud-name-row{justify-content:flex-end;}
+.hud-mini{width:30px;height:30px;border-radius:7px; overflow:hidden; background:#2c2f45; flex-shrink:0;}
+.hud-mini img{width:100%;height:100%;object-fit:cover;}
+.hud-mini .fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:14px;}
+.hud-nm{font-weight:800; font-size:14px;}
+.healthbar-track{height:14px; background:#3a1414; border-radius:7px; overflow:hidden; margin-top:6px; border:1px solid #000a;}
+.healthbar-fill{height:100%; background:linear-gradient(90deg,#3fb96f,#7fe39a); transition:width .18s ease;}
+.healthbar-fill.mid{background:linear-gradient(90deg,#e0a83f,#f2cd6e);}
+.healthbar-fill.low{background:linear-gradient(90deg,#e5484d,#ff8a8e);}
+.hp-num{font-size:11px; color:var(--muted); margin-top:3px;}
+
+#arena-wrapper{
+  position:relative; width:100%; aspect-ratio:1280/720; background:#0b0c12; border-radius:14px;
+  overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); touch-action:none;
+}
+#arena{
+  position:absolute; top:0; left:0; width:1280px; height:720px; transform-origin:top left;
+  background:
+    radial-gradient(700px 300px at 50% 0%, #232746 0%, #14151f 70%);
+  overflow:hidden;
+}
+.bg-hill{position:absolute; bottom:0; border-radius:50% 50% 0 0;
+  background:radial-gradient(120% 100% at 50% 100%, #1c2c54 0%, #101a38 70%, #0a1228 100%);
+  box-shadow:0 -3px 20px rgba(124,58,237,.14);
+  opacity:.75;}
+.platform{
+  position:absolute; background:linear-gradient(180deg,#4a4e6b,#33364a); border-radius:8px;
+  border-top:3px solid #6a6f95; box-shadow:0 6px 0 rgba(0,0,0,.25);
+}
+.fighter{position:absolute; width:64px; height:64px;}
+.fighter-square{
+  width:100%; height:100%; border-radius:10px; overflow:hidden; position:relative;
+  background:#2c2f45; border:2px solid rgba(255,255,255,.15);
+  transition:transform .16s ease;
+}
+.fighter-square img{width:100%; height:100%; object-fit:cover; display:block;}
+.fighter-square .fallback{
+  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  font-family:'Anton'; font-size:26px; color:#fff;
+}
+.fighter.facing-left .fighter-square{transform:scaleX(-1);}
+.fighter.hitflash .fighter-square{filter:brightness(2.4) saturate(0);}
+.fighter .overhead-hp{position:absolute; top:-12px; left:0; width:100%; height:5px; background:#0006; border-radius:3px; overflow:hidden;}
+.fighter .overhead-hp .fill{height:100%; background:#3fb96f;}
+.fighter .shield-ring{
+  position:absolute; inset:-6px; border-radius:50%; border:3px solid #6cd0ff; box-shadow:0 0 14px #6cd0ff;
+  opacity:.85; pointer-events:none; display:none;
+}
+.fighter .flight-glow{position:absolute; inset:-4px; border-radius:12px; box-shadow:0 0 16px 4px #ffce6b; display:none; pointer-events:none;}
+.thor-hammer{position:absolute; width:30px; height:46px; right:-8px; top:25px; z-index:5; pointer-events:none; transform:rotate(16deg); transform-origin:50% 78%; filter:drop-shadow(0 3px 2px rgba(0,0,0,.45));}
+.thor-hammer .hammer-handle{position:absolute; left:12px; top:18px; width:7px; height:27px; border-radius:4px; background:linear-gradient(90deg,#5b3a22,#9b693d 42%,#4b2e1b 100%);}
+.thor-hammer .hammer-head{position:absolute; left:1px; top:4px; width:29px; height:18px; border-radius:4px 5px 5px 4px; background:linear-gradient(180deg,#edf3f8,#aeb8c4 48%,#707a86); border:2px solid #5d6670; box-shadow:inset 0 2px 0 rgba(255,255,255,.65);}
+.thor-hammer .hammer-head:before{content:''; position:absolute; left:-5px; top:2px; width:7px; height:14px; border-radius:3px 0 0 3px; background:#88929e; border:1px solid #5d6670;}
+.fighter.facing-left .thor-hammer{right:auto; left:-7px; transform:scaleX(-1) rotate(16deg);}
+
+
+#screen-battle .hud-side{padding:7px 10px;}
+#screen-battle .hud-mini{width:26px;height:26px;}
+#screen-battle .healthbar-track{height:10px;}
+#screen-battle .hp-num{font-size:10px;}
+#screen-battle #ability-bar{gap:7px;}
+#screen-battle .ability-btn{width:96px;height:62px;}
+
+.web-projectile{position:absolute; background:transparent !important; filter:none !important; animation:webPulse .35s ease-in-out infinite alternate;}
+.web-core{position:absolute; inset:30%; border:2px solid #fff; border-radius:50%; opacity:.95;}
+.web-spokes{position:absolute; inset:4px; border:2px solid #fff; border-radius:50%; opacity:.95; background:conic-gradient(from 0deg, transparent 0 10deg, #fff 10deg 12deg, transparent 12deg 55deg, #fff 55deg 57deg, transparent 57deg 100deg, #fff 100deg 102deg, transparent 102deg 145deg, #fff 145deg 147deg, transparent 147deg 190deg, #fff 190deg 192deg, transparent 192deg 235deg, #fff 235deg 237deg, transparent 237deg 280deg, #fff 280deg 282deg, transparent 282deg 325deg, #fff 325deg 327deg, transparent 327deg);}
+.web-spokes:after{content:''; position:absolute; inset:18%; border:2px solid #fff; border-radius:50%;}
+@keyframes webPulse{from{transform:scale(.96)}to{transform:scale(1.04)}}
+.projectile{position:absolute; border-radius:6px; display:flex; align-items:center; justify-content:center; transform-origin:center; font-size:28px; line-height:1; z-index:6;}
+.projectile.burger{background:transparent !important; box-shadow:none !important; animation:burgerSpin .5s linear infinite;}
+@keyframes burgerSpin{from{transform:rotate(-10deg)}to{transform:rotate(350deg)}}
+.wallblock{position:absolute; border-radius:6px; background:linear-gradient(180deg,#8a6a45,#5c4429); border:2px solid #3b2f1c;}
+.wallblock .wall-hp{position:absolute; top:-10px; left:0; width:100%; height:4px; background:#0007; border-radius:2px; overflow:hidden;}
+.wallblock .wall-hp .fill{height:100%; background:#e0a83f;}
+
+.dmg-num{position:absolute; font-weight:800; font-family:'Anton'; font-size:20px; color:#fff;
+  text-shadow:1px 1px 0 #000,-1px -1px 0 #000; pointer-events:none; animation:floatUp .8s ease-out forwards;}
+.dmg-num.heal{color:#7fe39a;}
+@keyframes floatUp{ from{transform:translateY(0); opacity:1;} to{transform:translateY(-46px); opacity:0;} }
+
+.fx{position:absolute; pointer-events:none;}
+.fx-burst{border-radius:50%; animation:burst .35s ease-out forwards;}
+@keyframes burst{ from{transform:scale(.3); opacity:1;} to{transform:scale(1.8); opacity:0;} }
+
+/* ---------- Ability bar & dpad ---------- */
+#controls-row{display:flex; justify-content:space-between; align-items:flex-end; gap:10px; flex-wrap:wrap;}
+#dpad{display:grid; grid-template-columns:repeat(3,48px); grid-template-rows:repeat(2,48px); gap:4px;}
+#dpad button{
+  border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:10px;
+  font-size:18px; font-weight:800; cursor:pointer; user-select:none;
+}
+#dpad button:active, #dpad button.pressed{background:var(--amber); color:#231600;}
+.dpad-up{grid-column:2; grid-row:1;}
+.dpad-left{grid-column:1; grid-row:2;}
+.dpad-down{grid-column:2; grid-row:2;}
+.dpad-right{grid-column:3; grid-row:2;}
+
+#ability-bar{display:flex; gap:10px;}
+.ability-btn{
+  position:relative; width:84px; height:64px; border-radius:12px; border:1px solid var(--line);
+  background:var(--panel2); color:var(--text); cursor:pointer; overflow:hidden; text-align:left; padding:8px;
+}
+.ability-btn .ab-key{font-family:'Anton'; font-size:16px; color:var(--amber);}
+.ability-btn .ab-nm{font-size:10px; color:var(--text); line-height:1.15; margin-top:2px; display:block;}
+.ability-btn .cd-overlay{
+  position:absolute; left:0; right:0; bottom:0; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center;
+  font-family:'Anton'; font-size:16px; color:#fff;
+}
+.ability-btn.flight-on{background:linear-gradient(180deg,#3f6fe0,#2a4ea6);}
+.ability-btn:disabled{cursor:default;}
+
+#battle-topbar{display:flex; justify-content:space-between; align-items:center; flex:0 0 auto;}
+#screen-battle #hud{width:100%;}
+#screen-battle #arena-wrapper{flex:1 1 auto; min-height:0; aspect-ratio:auto; width:100%;}
+#screen-battle #controls-row{flex:0 0 auto; min-height:70px; padding-bottom:2px;}
+
+/* ---------- Game over ---------- */
+.gameover-wrap{text-align:center; padding-top:6px;}
+.go-badge{
+  font-family:'Anton',sans-serif; font-size:52px; letter-spacing:4px; margin-bottom:4px;
+  animation:goBadgeIn .6s cubic-bezier(.2,.85,.25,1) forwards;
+}
+.go-badge.win{color:#8dffba; text-shadow:0 0 22px #3fb96f, 0 0 64px rgba(63,185,111,.55);}
+.go-badge.lose{color:#ff9296; text-shadow:0 0 22px #e5484d, 0 0 64px rgba(229,72,77,.55);}
+@keyframes goBadgeIn{
+  0%{transform:scale(2.1); opacity:0; filter:blur(10px);}
+  60%{transform:scale(.96); opacity:1; filter:blur(0);}
+  100%{transform:scale(1);}
+}
+.go-portraits{display:flex; align-items:center; justify-content:center; gap:20px; margin:20px 0 22px;}
+.go-portrait{display:flex; flex-direction:column; align-items:center; gap:9px; opacity:0; animation:goPortraitIn .5s ease forwards;}
+.go-portrait.winner{animation-delay:.15s;}
+.go-portrait.loser{animation-delay:.3s;}
+@keyframes goPortraitIn{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);}}
+.go-portrait-square{
+  width:88px; height:88px; border-radius:14px; overflow:hidden; position:relative;
+  background:#2c2f45; border:2px solid rgba(255,255,255,.15); transition:transform .3s ease;
+}
+.go-portrait-square img{width:100%; height:100%; object-fit:cover; display:block;}
+.go-portrait-square .fallback{width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Anton'; font-size:32px; color:#fff;}
+.go-portrait.winner .go-portrait-square{
+  border-color:#3fb96f; box-shadow:0 0 26px rgba(63,185,111,.5), 0 0 0 3px rgba(63,185,111,.22);
+  transform:scale(1.1);
+  animation:goWinnerPulse 1.8s ease-in-out .7s infinite;
+}
+@keyframes goWinnerPulse{
+  0%,100%{box-shadow:0 0 26px rgba(63,185,111,.5), 0 0 0 3px rgba(63,185,111,.22);}
+  50%{box-shadow:0 0 40px rgba(63,185,111,.75), 0 0 0 5px rgba(63,185,111,.32);}
+}
+.go-portrait.loser .go-portrait-square{filter:grayscale(.8) brightness(.6); border-color:#3a3d54;}
+.go-portrait-name{font-weight:800; font-size:13px; color:var(--text);}
+.go-portrait.loser .go-portrait-name{color:var(--muted);}
+.go-vs{font-family:'Anton',sans-serif; font-size:19px; color:var(--muted); opacity:.65; margin-top:-22px;}
+.go-sub{color:var(--muted); margin-bottom:22px;}
+.go-buttons{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
+
+@media (max-width:640px){
+  .ability-btn{width:72px; height:58px;}
+  #dpad{grid-template-columns:repeat(3,42px); grid-template-rows:repeat(2,42px);}
+}
+
+.ability-ring{position:absolute;border:3px solid;border-radius:50%;animation:abilityRing .5s cubic-bezier(.15,.7,.2,1) forwards;pointer-events:none;z-index:4;}
+.spark{position:absolute;width:8px;height:8px;border-radius:50%;box-shadow:0 0 14px currentColor;animation:sparkFly .5s ease-out forwards;z-index:7;}
+.epic-projectile{will-change:transform,filter;box-shadow:0 0 12px currentColor,0 0 24px currentColor;filter:drop-shadow(0 0 7px currentColor) saturate(1.3);}
+.ability-btn{transition:transform .12s ease,filter .12s ease,box-shadow .12s ease,border-color .12s ease;}
+.ability-btn:active{transform:translateY(-1px) scale(.97);filter:brightness(1.25);box-shadow:0 0 25px #7c3aed66;}
+@keyframes abilityRing{from{transform:scale(.15);opacity:1}to{transform:scale(1.35);opacity:0}}
+@keyframes sparkFly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.1);opacity:0}}
+/* ---------- Dishwashing Liquid Battles visual upgrade ---------- */
+.menu-wrap{position:relative;overflow:hidden;background:linear-gradient(145deg,#171a2b,#252944 60%,#11131f);border-color:#464b6d;box-shadow:0 18px 60px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.05);}
+.menu-wrap:before{content:"";position:absolute;inset:-35%;background:conic-gradient(from 90deg,transparent,#7c3aed22,transparent,#22d3ee1c,transparent);animation:menuSpin 14s linear infinite;pointer-events:none;}
+.menu-wrap>*{position:relative;z-index:1;}
+.menu-title{font-size:clamp(38px,7vw,74px);line-height:.95;text-shadow:0 4px 0 rgba(0,0,0,.35),0 0 28px #7c3aed55;}
+.menu-sub{font-size:15px;}
+.btn{box-shadow:0 6px 18px rgba(0,0,0,.18);}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
+.panel{background:linear-gradient(145deg,#171a2b,#252944 68%,#11131f);border-color:#464b6d;box-shadow:0 18px 60px rgba(0,0,0,.42);}
+.panel-header h2{font-size:34px;text-shadow:0 2px 14px rgba(124,58,237,.25);}
+.inventory-caption{color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:4px;}
+.loadout-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:15px 18px;margin-bottom:18px;border:1px solid #555b84;border-radius:16px;background:linear-gradient(90deg,#7c3aed1c,#22d3ee10);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
+.loadout-label{font-size:10px;letter-spacing:.16em;color:#aeb5d6;font-weight:800;}
+.loadout-name{font-family:'Anton';font-size:28px;color:#fff;margin-top:2px;}
+.loadout-hint{color:#9da4c1;font-size:12px;text-align:right;}
+.inventory-legend{display:flex;align-items:center;gap:7px;color:#969db8;font-size:11px;margin-top:14px;}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#5a607c;margin-left:8px;}
+.legend-dot.owned{background:#7c3aed;box-shadow:0 0 8px #7c3aed88;}
+.legend-dot.locked{background:#4b5068;}
+.char-card{position:relative;overflow:hidden;background:linear-gradient(160deg,#252944,#1b1e30);border-color:#3c4160;box-shadow:0 10px 25px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);}
+.char-card:hover{transform:translateY(-5px) scale(1.015);border-color:#7c3aed;box-shadow:0 14px 34px rgba(0,0,0,.25),0 0 0 1px #7c3aed44;}
+.char-card.selected{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee inset,0 0 26px #22d3ee22;}
+.equipped-badge{position:absolute;left:6px;right:6px;bottom:6px;border-radius:7px;padding:4px;background:#22d3eeea;color:#071018;font-weight:900;font-size:9px;letter-spacing:.12em;}
+.char-square{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 10px 20px rgba(0,0,0,.18);}
+#arena-wrapper{aspect-ratio:1280/720;border:1px solid #4b5278;background:#080a12;box-shadow:0 20px 60px rgba(0,0,0,.46);}
+#arena{
+  background:
+    radial-gradient(900px 460px at 50% -60px, #2c3170 0%, transparent 62%),
+    radial-gradient(560px 420px at 6% 104%, #0f3a4a 0%, transparent 72%),
+    radial-gradient(560px 420px at 94% 104%, #3a1648 0%, transparent 72%),
+    linear-gradient(180deg,#141a37 0%,#0c1224 55%,#070914 100%);
+}
+#arena::before{
+  content:'';
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    radial-gradient(1.6px 1.6px at 12% 16%, rgba(255,255,255,.55) 50%, transparent 52%),
+    radial-gradient(1.3px 1.3px at 33% 9%, rgba(255,255,255,.4) 50%, transparent 52%),
+    radial-gradient(1.8px 1.8px at 58% 6%, rgba(255,255,255,.5) 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 77% 14%, rgba(255,255,255,.35) 50%, transparent 52%),
+    radial-gradient(1.5px 1.5px at 91% 5%, rgba(255,255,255,.45) 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 22% 26%, rgba(255,255,255,.3) 50%, transparent 52%),
+    radial-gradient(1.4px 1.4px at 47% 21%, rgba(255,255,255,.4) 50%, transparent 52%),
+    radial-gradient(1.3px 1.3px at 68% 24%, rgba(255,255,255,.32) 50%, transparent 52%),
+    radial-gradient(1.5px 1.5px at 85% 28%, rgba(255,255,255,.4) 50%, transparent 52%);
+  opacity:.8;
+}
+#arena::after{
+  content:'';
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 55%, transparent 58%, rgba(3,4,10,.5) 100%);
+}
+.arena-skyline{
+  position:absolute; inset:auto 0 0; height:50%; opacity:.5; filter:blur(.2px);
+  background-image:
+    radial-gradient(circle, rgba(255,213,140,.6) 1px, transparent 1.4px),
+    repeating-linear-gradient(90deg, transparent 0 40px, #1c2444 40px 74px, transparent 74px 116px),
+    linear-gradient(180deg, transparent, #0c1230 88%);
+  background-size:30px 22px, auto, auto;
+  background-position:12px 9px, 0 0, 0 0;
+  background-repeat:repeat, no-repeat, no-repeat;
+}
+.arena-glow{
+  position:absolute; width:700px; height:700px; left:50%; top:-350px; transform:translateX(-50%);
+  border-radius:50%; background:radial-gradient(circle,#7c3aed2e 0%,#22d3ee16 40%,transparent 70%);
+  animation:arenaPulse 5s ease-in-out infinite; pointer-events:none;
+}
+.platform{
+  position:absolute;
+  background:linear-gradient(180deg,#6873ab 0%,#454b74 46%,#282c46 100%);
+  border-radius:9px; border-top:2px solid #a3ade4;
+  box-shadow:0 9px 0 rgba(0,0,0,.26), 0 0 26px rgba(124,58,237,.2), inset 0 1px 0 rgba(255,255,255,.16);
+}
+.platform::after{
+  content:''; position:absolute; left:6%; right:6%; top:2px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, transparent, #8fe3ff 32%, #c9a6ff 70%, transparent);
+  opacity:.85; pointer-events:none;
+}
+.fighter{transition:filter .08s ease;will-change:transform,left,top;animation:idleBob 1.7s ease-in-out infinite;}
+.fighter.moving{animation:runBob .28s ease-in-out infinite;}
+.fighter.airborne{animation:airFloat .55s ease-in-out infinite;}
+.fighter.stunned{animation:shake .09s linear infinite;filter:saturate(1.3);} 
+.fighter-square{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 22px rgba(0,0,0,.26);}
+.projectile{filter:drop-shadow(0 0 5px currentColor);animation:projectilePulse .18s ease-in-out infinite alternate;}
+.fx-burst{mix-blend-mode:screen;}
+.ability-btn{background:linear-gradient(145deg,#252a45,#171b2d);border-color:#454b6f;box-shadow:0 7px 18px rgba(0,0,0,.22);}
+.ability-btn:hover{border-color:#7c3aed;transform:translateY(-2px);}
+#dpad button{background:linear-gradient(145deg,#252a45,#171b2d);border-color:#454b6f;box-shadow:0 6px 15px rgba(0,0,0,.2);}
+@keyframes idleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes runBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-1deg)}}
+@keyframes airFloat{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(-3px)}}
+@keyframes projectilePulse{from{transform:scale(.95)}to{transform:scale(1.08)}}
+@keyframes arenaPulse{0%,100%{opacity:.6;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.08)}}
+@keyframes menuSpin{to{transform:rotate(360deg)}}
+
+/* =========================================================================
+   COMBAT FX UPGRADE — countdown, lightning, webs, impacts, trails
+   ========================================================================= */
+
+/* ---- 3-2-1 countdown ---- */
+/* ---- KO death sequence ---- */
+.fighter.dying{z-index:12;}
+.fighter.dying .fighter-square{
+  animation: koTumble 1.35s cubic-bezier(.32,0,.24,1) forwards;
+  box-shadow:none;
+}
+@keyframes koTumble{
+  0%{transform:none; opacity:1; filter:brightness(2.6) saturate(0) contrast(1.3);}
+  8%{transform:translateY(-16px) rotate(-10deg); filter:brightness(1.6) saturate(.25);}
+  30%{transform:translateY(4px) rotate(50deg) scale(1.04); filter:none;}
+  58%{transform:translateY(48px) rotate(140deg) scale(.92); opacity:.88;}
+  100%{transform:translateY(104px) rotate(230deg) scale(.5); opacity:0;}
+}
+.count-num.count-ko{
+  font-size:clamp(64px,15vw,168px); color:#ff5b5f; letter-spacing:6px;
+  text-shadow:0 0 30px #e5484d, 0 0 90px #7c1418, 0 8px 0 rgba(0,0,0,.5);
+  animation:koStamp 1.05s cubic-bezier(.15,.85,.22,1) forwards;
+}
+@keyframes koStamp{
+  0%{transform:scale(3.4) rotate(-6deg); opacity:0; filter:blur(14px);}
+  20%{transform:scale(.94) rotate(1deg); opacity:1; filter:blur(0);}
+  30%{transform:scale(1.06) rotate(-1deg);}
+  40%{transform:scale(1) rotate(0);}
+  78%{opacity:1;}
+  100%{opacity:0; transform:scale(1.15);}
+}
+.count-ring.ko{border-color:#e5484daa; box-shadow:0 0 60px #e5484d77;}
+.fx-ko-vignette{position:absolute; inset:0; pointer-events:none; z-index:11;
+  background:radial-gradient(circle, transparent 42%, rgba(20,4,6,.55) 100%);
+  animation:koVignette 1.5s ease-out forwards;}
+@keyframes koVignette{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+
+#countdown-overlay{
+  position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+  pointer-events:none; z-index:30; overflow:hidden;
+}
+#countdown-overlay.on{display:flex;}
+.count-item{position:relative; display:flex; align-items:center; justify-content:center;}
+.count-num{
+  font-family:'Anton',sans-serif; font-size:clamp(88px,20vw,210px); line-height:1; color:#fff;
+  text-shadow:0 0 26px #7c3aed, 0 0 70px #22d3ee, 0 8px 0 rgba(0,0,0,.45);
+  animation:countPop .8s cubic-bezier(.18,.9,.25,1) forwards;
+}
+.count-num.count-go{
+  font-size:clamp(56px,13vw,150px); color:#ffe27a; letter-spacing:5px;
+  text-shadow:0 0 30px #f2a541, 0 0 90px #e5484d, 0 8px 0 rgba(0,0,0,.5);
+  animation:countGo .95s cubic-bezier(.15,.85,.25,1) forwards;
+}
+.count-ring{
+  position:absolute; width:clamp(150px,30vw,330px); height:clamp(150px,30vw,330px);
+  border-radius:50%; border:4px solid #7c3aed88; box-shadow:0 0 45px #7c3aed55;
+  animation:countRing .8s cubic-bezier(.1,.75,.2,1) forwards;
+}
+.count-ring.go{border-color:#f2a541aa; box-shadow:0 0 60px #f2a54177;}
+@keyframes countPop{
+  0%{transform:scale(2.7) rotate(-13deg); opacity:0; filter:blur(10px);}
+  17%{transform:scale(1) rotate(0deg); opacity:1; filter:blur(0);}
+  70%{transform:scale(1.02); opacity:1;}
+  100%{transform:scale(.5); opacity:0;}
+}
+@keyframes countGo{
+  0%{transform:scale(.15); opacity:0;}
+  14%{transform:scale(1.3); opacity:1;}
+  28%{transform:scale(1);}
+  70%{transform:scale(1.05); opacity:1;}
+  100%{transform:scale(2); opacity:0;}
+}
+@keyframes countRing{0%{transform:scale(.2);opacity:0}25%{opacity:1}100%{transform:scale(1.5);opacity:0}}
+
+/* ---- arena screen shake ---- */
+#arena-wrapper.shaking{animation:arenaShake .32s ease-out;}
+@keyframes arenaShake{
+  0%,100%{transform:translate(0,0);}
+  14%{transform:translate(calc(var(--shake,6px) * -1), calc(var(--shake,6px) * .55));}
+  32%{transform:translate(var(--shake,6px), calc(var(--shake,6px) * -.6));}
+  52%{transform:translate(calc(var(--shake,6px) * -.65), calc(var(--shake,6px) * .25));}
+  74%{transform:translate(calc(var(--shake,6px) * .45), calc(var(--shake,6px) * -.2));}
+}
+
+/* ---- Thor: Mjolnir swing ---- */
+.fighter.thor-swing .thor-hammer{animation:hammerSwing .36s cubic-bezier(.25,.85,.3,1);}
+.fighter.facing-left.thor-swing .thor-hammer{animation:hammerSwingL .36s cubic-bezier(.25,.85,.3,1);}
+@keyframes hammerSwing{
+  0%{transform:rotate(-104deg) translate(-6px,-10px);}
+  22%{transform:rotate(-86deg) translate(-4px,-8px);}
+  52%{transform:rotate(74deg) translate(6px,2px);}
+  74%{transform:rotate(36deg);}
+  100%{transform:rotate(16deg);}
+}
+@keyframes hammerSwingL{
+  0%{transform:scaleX(-1) rotate(-104deg) translate(-6px,-10px);}
+  22%{transform:scaleX(-1) rotate(-86deg) translate(-4px,-8px);}
+  52%{transform:scaleX(-1) rotate(74deg) translate(6px,2px);}
+  74%{transform:scaleX(-1) rotate(36deg);}
+  100%{transform:scaleX(-1) rotate(16deg);}
+}
+.fighter.thor-swing .thor-hammer .hammer-head{box-shadow:inset 0 2px 0 rgba(255,255,255,.65), 0 0 16px #9fd8ff, 0 0 30px #4aa8ff;}
+.mj-arc-wrap{pointer-events:none; z-index:7;}
+.mj-arc{
+  position:absolute; inset:0; border-radius:50%; border:8px solid transparent;
+  border-right-color:#eaf7ff; border-top-color:#8fd0ff;
+  filter:drop-shadow(0 0 9px #8fd0ff) drop-shadow(0 0 20px #3f8fe0);
+  animation:mjArc .36s ease-out forwards;
+}
+@keyframes mjArc{
+  0%{transform:rotate(-104deg) scale(.55); opacity:0;}
+  22%{opacity:1;}
+  100%{transform:rotate(80deg) scale(1.15); opacity:0;}
+}
+
+/* ---- lightning (branching SVG arcs) ---- */
+.fx-lightning{pointer-events:none; z-index:9; animation:boltFade var(--bl,300ms) linear forwards;}
+.fx-lightning svg{overflow:visible; filter:drop-shadow(0 0 5px #8fd0ff) drop-shadow(0 0 13px #3f8fe0);}
+@keyframes boltFade{0%{opacity:0}9%{opacity:1}42%{opacity:.9}62%{opacity:.5}100%{opacity:0}}
+
+/* ---- generic impact primitives ---- */
+.fx-flash{border-radius:50%; mix-blend-mode:screen; background:radial-gradient(circle,#fff 0%,#ffffffaa 34%,transparent 70%); animation:flashPop .28s ease-out forwards;}
+@keyframes flashPop{0%{transform:scale(.18);opacity:1}100%{transform:scale(1.9);opacity:0}}
+.fx-ring{border-radius:50%; border:4px solid #fff; animation:ringOut .52s cubic-bezier(.1,.72,.2,1) forwards;}
+@keyframes ringOut{0%{transform:scale(.18);opacity:1}100%{transform:scale(1.45);opacity:0}}
+.fx-shock{border-radius:50%; animation:shockOut .6s cubic-bezier(.08,.75,.2,1) forwards;}
+@keyframes shockOut{0%{transform:scale(.06);opacity:1}70%{opacity:.75}100%{transform:scale(1.05);opacity:0}}
+.fx-trail{border-radius:50%; pointer-events:none; animation:trailFade .34s linear forwards;}
+@keyframes trailFade{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(.25)}}
+.fx-webtick{pointer-events:none; animation:trailFade .36s linear forwards;}
+.fx-webtick svg{overflow:visible;}
+.afterimage{border-radius:11px; pointer-events:none; animation:aiFade .36s ease-out forwards;}
+@keyframes aiFade{0%{opacity:.48;transform:scale(1)}100%{opacity:0;transform:scale(.82)}}
+.fx-crack{pointer-events:none; animation:boltFade 620ms linear forwards;}
+.fx-crack svg{overflow:visible; filter:drop-shadow(0 0 6px #ffd479);}
+
+/* ---- Spider-Man: webs ---- */
+.proj-svg{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); overflow:visible; pointer-events:none;}
+.proj-svg svg{overflow:visible; filter:drop-shadow(0 0 3px rgba(255,255,255,.85));}
+.web-net-spin{animation:netSpin .75s linear infinite; transform-origin:50% 50%; display:block;}
+@keyframes netSpin{to{transform:rotate(360deg)}}
+.web-wrap{position:absolute; inset:-11px; pointer-events:none; z-index:9; animation:webWrapIn .14s ease-out;}
+.web-wrap svg{width:100%; height:100%; overflow:visible; filter:drop-shadow(0 0 4px rgba(255,255,255,.7));}
+.web-wrap .wrap-pulse{animation:webWrapPulse .3s ease-in-out infinite alternate; transform-origin:50% 50%;}
+@keyframes webWrapIn{from{transform:scale(1.55); opacity:0;}to{transform:scale(1); opacity:1;}}
+@keyframes webWrapPulse{from{opacity:.75}to{opacity:1}}
+.fighter.slowed .fighter-square{filter:saturate(.55) brightness(.88);}
+.fx-webline{pointer-events:none; z-index:6; animation:weblineFade .5s ease-out forwards;}
+.fx-webline svg{overflow:visible; filter:drop-shadow(0 0 3px rgba(255,255,255,.8));}
+@keyframes weblineFade{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+.fx-splat{pointer-events:none; animation:splatPop .55s cubic-bezier(.1,.8,.2,1) forwards;}
+.fx-splat svg{overflow:visible; filter:drop-shadow(0 0 4px rgba(255,255,255,.75));}
+@keyframes splatPop{0%{transform:scale(.25);opacity:0}18%{transform:scale(1.12);opacity:1}62%{transform:scale(1);opacity:.95}100%{transform:scale(1.18);opacity:0}}
+
+/* ---- arena walls & floor ---- */
+.arena-floor{position:absolute; left:0; right:0; bottom:0; height:16px;
+  background:linear-gradient(180deg,#4b5182,#1c2038 78%,#141728);
+  border-top:2px solid #9aa4e0;
+  box-shadow:0 -8px 26px rgba(124,58,237,.2), inset 0 1px 0 rgba(255,255,255,.14);
+  pointer-events:none;}
+.arena-wall{position:absolute; top:0; bottom:0; width:8px; pointer-events:none;
+  background:linear-gradient(90deg,#5a6194,#20233b);
+  box-shadow:0 0 22px rgba(124,58,237,.28);}
+.arena-wall.left{left:0; border-right:2px solid #9aa4e0;}
+.arena-wall.right{right:0; border-left:2px solid #9aa4e0;}
+
+/* ---- Iron Man: homing missile ---- */
+.missile{position:absolute; z-index:7; pointer-events:none; will-change:transform,left,top;}
+.missile .m-body{position:absolute; inset:0; transform-origin:50% 50%;}
+.missile .m-hull{position:absolute; left:10px; top:5px; width:30px; height:12px; border-radius:4px 3px 3px 4px;
+  background:linear-gradient(180deg,#f2f4f8,#b9c0cc 46%,#727a88); border:1px solid #5d6670;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);}
+.missile .m-nose{position:absolute; left:38px; top:4px; width:0; height:0;
+  border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:12px solid #e5484d;
+  filter:drop-shadow(0 0 4px #e5484d);}
+.missile .m-fin{position:absolute; left:8px; width:12px; height:6px; background:#8a93a3; border-radius:2px;}
+.missile .m-fin.top{top:0;} .missile .m-fin.bot{bottom:0;}
+.missile .m-flame{position:absolute; right:calc(100% - 12px); top:50%; width:26px; height:11px;
+  transform:translateY(-50%); border-radius:60% 0 0 60%;
+  background:linear-gradient(270deg,#ffffff,#ffd479 32%,#ff8c3a 66%,rgba(255,140,58,0) 100%);
+  filter:blur(1px); animation:thrustFlicker .1s infinite alternate;}
+.missile .m-hp{position:absolute; top:-11px; left:0; width:100%; height:5px; background:rgba(0,0,0,.55);
+  border-radius:3px; overflow:hidden; border:1px solid rgba(0,0,0,.6);}
+.missile .m-hp .fill{height:100%; background:linear-gradient(90deg,#ffd479,#ff8c3a); transition:width .1s linear;}
+.missile.locked .m-nose{animation:lockBlink .35s infinite alternate;}
+@keyframes lockBlink{from{filter:drop-shadow(0 0 4px #e5484d)}to{filter:drop-shadow(0 0 12px #ff8a8e)}}
+.lock-reticle{border-radius:50%; border:2px dashed #ff8a8e; pointer-events:none;
+  animation:reticleSpin 1.1s linear infinite;}
+@keyframes reticleSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* ---- Iron Man: repulsor / shield / thrusters ---- */
+.repulsor-core{position:absolute; inset:0; border-radius:50%;
+  background:radial-gradient(circle,#ffffff 0%,#ffeebb 30%,#ffd479 55%,#ff8c3a 78%,transparent 100%);
+  box-shadow:0 0 12px #ffd479, 0 0 28px #ff8c3a;}
+.repulsor-tail{position:absolute; top:50%; height:7px; width:38px; transform:translateY(-50%); border-radius:4px; opacity:.85;}
+.fx-hex{border-radius:50%; border:3px solid #6cd0ff; box-shadow:0 0 30px #6cd0ff, inset 0 0 24px rgba(108,208,255,.4);
+  animation:hexPop .6s cubic-bezier(.15,.8,.2,1) forwards;}
+@keyframes hexPop{0%{transform:scale(.2) rotate(0deg);opacity:0}22%{opacity:1}100%{transform:scale(1.3) rotate(42deg);opacity:0}}
+.thruster{position:absolute; left:50%; bottom:-17px; width:20px; height:26px; transform:translateX(-50%);
+  display:none; border-radius:50% 50% 62% 62%; pointer-events:none;
+  background:linear-gradient(180deg,#eaf7ff,#6cb6ff 38%,#ffd479 76%,rgba(255,212,121,0) 100%);
+  filter:blur(1px); animation:thrustFlicker .11s infinite alternate;}
+@keyframes thrustFlicker{from{transform:translateX(-50%) scaleY(.75); opacity:.8;}to{transform:translateX(-50%) scaleY(1.25); opacity:1;}}
+.charge-glow{border-radius:50%; pointer-events:none; animation:chargeIn .16s ease-out forwards;}
+@keyframes chargeIn{0%{transform:scale(1.7);opacity:0}60%{transform:scale(.7);opacity:1}100%{transform:scale(.4);opacity:0}}
+
+@media(max-width:700px){.loadout-banner{align-items:flex-start;flex-direction:column;gap:5px}.loadout-hint{text-align:left}.char-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr));}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ MAIN MENU ============ -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-wrap">
+      <h1 class="menu-title">DISHWASHING LIQUID BATTLES</h1>
+      <div class="menu-buttons">
+        <button class="btn btn-primary" id="btn-menu-play">Play</button>
+        <button class="btn btn-secondary" data-nav="inventory">Inventory</button>
+        <button class="btn btn-secondary" data-nav="instructions">Instructions</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ INVENTORY ============ -->
+  <div id="screen-inventory" class="screen">
+    <div class="panel">
+      <div class="panel-header">
+        <div>
+        <h2>Inventory</h2>
+        <div class="inventory-caption">Roster, collection & equipped fighter</div>
+      </div>
+      <button class="btn btn-small btn-secondary" data-nav="menu">Back</button>
+      </div>
+      <div class="loadout-banner">
+        <div>
+          <div class="loadout-label">EQUIPPED FIGHTER</div>
+          <div id="equipped-name" class="loadout-name">None</div>
+        </div>
+        <div id="equipped-hint" class="loadout-hint">Select a fighter below.</div>
+      </div>
+      <div id="inventory-grid" class="char-grid"></div>
+      <div class="inventory-legend"><span class="legend-dot owned"></span> Owned <span class="legend-dot locked"></span> Locked</div>
+    </div>
+  </div>
+
+  <!-- ============ INSTRUCTIONS ============ -->
+  <div id="screen-instructions" class="screen">
+    <div class="panel instructions">
+      <div class="panel-header">
+        <h2>Instructions</h2>
+        <button class="btn btn-small btn-secondary" data-nav="menu">Back</button>
+      </div>
+      <p><strong>Goal:</strong> knock your opponent's health to 0, or knock them clean out of the arena.</p>
+      <ul>
+        <li><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> jump &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> left &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> right</li>
+        <li><kbd>E</kbd> main ability &nbsp; <kbd>Q</kbd> secondary ability &nbsp; <kbd>R</kbd> special ability</li>
+        <li>On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</li>
+        <li>Every ability has a cooldown shown right on its button — watch the timer count down.</li>
+        <li>The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</li>
+        <li>Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ BATTLE ============ -->
+  <div id="screen-battle" class="screen">
+    <div id="battle-topbar">
+      <div id="hud" style="flex:1;">
+        <div class="hud-side" id="hud-player">
+          <div class="hud-name-row">
+            <div class="hud-mini" id="hud-player-img"></div>
+            <div class="hud-nm" id="hud-player-name">You</div>
+          </div>
+          <div class="healthbar-track"><div class="healthbar-fill" id="hud-player-bar"></div></div>
+          <div class="hp-num" id="hud-player-hp"></div>
+        </div>
+        <div class="hud-side opp" id="hud-opp">
+          <div class="hud-name-row">
+            <div class="hud-nm" id="hud-opp-name">Opponent</div>
+            <div class="hud-mini" id="hud-opp-img"></div>
+          </div>
+          <div class="healthbar-track"><div class="healthbar-fill" id="hud-opp-bar"></div></div>
+          <div class="hp-num" id="hud-opp-hp"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="arena-wrapper">
+      <div id="arena"></div>
+      <div id="countdown-overlay"></div>
+    </div>
+
+    <div id="controls-row">
+      <div id="dpad">
+        <button class="dpad-up" data-dir="up">&uarr;</button>
+        <button class="dpad-left" data-dir="left">&larr;</button>
+        <button class="dpad-right" data-dir="right">&rarr;</button>
+      </div>
+      <div id="ability-bar"></div>
+    </div>
+  </div>
+
+  <!-- ============ GAME OVER ============ -->
+  <div id="screen-gameover" class="screen">
+    <div class="panel gameover-wrap">
+      <h1 class="go-badge" id="go-badge">Victory!</h1>
+      <div class="go-portraits" id="go-portraits"></div>
+      <p class="go-sub" id="go-sub"></p>
+      <div class="go-buttons">
+        <button class="btn btn-primary" id="go-play-another-btn">Play Another</button>
+        <button class="btn btn-secondary" data-nav="menu">Return to Menu</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Character detail modal (used from inventory/collection) -->
+<div id="char-modal" class="modal-overlay hidden">
+  <div class="modal" id="char-modal-inner"></div>
+</div>
+
+<script>
+/* =========================================================================
+   SECTION: CHARACTER DATA
+   Data-driven roster. Add a new character by adding an entry here plus
+   its abilities below — nothing else needs to change to add a fighter.
+   ========================================================================= */
+const CHARACTERS = {
+  thor: {
+    id:'thor', name:'Thor', img:'Thor.jpg', color:'#3b6bd6',
+    maxHealth:13200, aiStyle:'aggressive',
+    description:'God of Thunder. Huge health pool, hits hard, and can escape danger with a colossal leap.',
+    abilities:{
+      E:{key:'E', name:'Mjolnir Smash', type:'melee', damage:650, cooldown:700, knockback:12, range:92,
+         sound:'mjolnir_swing', fx:'thor_smash', hitDelay:130, hitFx:'mjolnir', hitSound:'mjolnir',
+         desc:'A powerful close-range swing of Mjolnir. Heavy damage and knockback.'},
+      Q:{key:'Q', name:'Thunderclap', type:'aoe', damage:1500, cooldown:6500, knockback:18, radius:125,
+         sound:'thunder', fx:'thor_clap', hitFx:'thunder', hitSound:'thunder_hit',
+         desc:'Thor slams Mjolnir down and unleashes a devastating shockwave around him.'},
+      R:{key:'R', name:'Thunder Jump', type:'jump', damage:0, cooldown:10000, jumpVel:-27,
+         sound:'thunder_jump', fx:'thor_jump',
+         desc:'Leaps extremely high into the air. No damage — pure escape/repositioning.'}
+    }
+  },
+  spiderman: {
+    id:'spiderman', name:'Spider-Man', img:'SpiderMan.jpg', color:'#d6323b',
+    maxHealth:7500, aiStyle:'mobile',
+    description:'Low health, very high mobility. Wins by darting in, poking with webs, and swinging away.',
+    abilities:{
+      E:{key:'E', name:'Web Strike', type:'projectile', damage:240, cooldown:500, knockback:5,
+         speed:15, w:22, h:8, color:'#e7e7e7',
+         sound:'web_shoot', fx:'web_shot', render:'web-strand', trail:'web', web:true,
+         hitFx:'web', hitSound:'web_hit', slow:300, desc:'Fast, thin web shot. Basic poke.'},
+      Q:{key:'Q', name:'Web Bomb', type:'projectile', damage:600, cooldown:9000, knockback:11,
+         speed:10, w:34, h:34, color:'#f2f2f2',
+         sound:'web_bomb', fx:'web_bomb', render:'web-net', trail:'web', web:true,
+         hitFx:'web_big', hitSound:'web_splat', slow:300, desc:'A larger web glob with a bigger hit area.'},
+      R:{key:'R', name:'Web Swing', type:'mobility', damage:0, cooldown:8000, boostX:18, swingToTop:true,
+         sound:'web_swing', fx:'web_swing',
+         desc:'Fires a web line to the ceiling and swings you all the way to the top of the arena. Pure mobility — no damage.'}
+    }
+  },
+  ironman: {
+    id:'ironman', name:'Iron Man', img:'IronMan.jpg', color:'#d6432b',
+    maxHealth:8500, aiStyle:'defensive',
+    description:'Defensive attacker who fights at range with repulsors and missiles, then opens distance with free flight when things get dangerous.',
+    abilities:{
+      E:{key:'E', name:'Repulsor Blast', type:'projectile', damage:320, cooldown:650, knockback:8,
+         speed:12, w:24, h:14, color:'#ffd479',
+         sound:'repulsor', fx:'repulsor', render:'repulsor', trail:'energy',
+         hitFx:'energy', hitSound:'energy_hit', desc:'Medium-range repulsor projectile.'},
+      Q:{key:'Q', name:'Homing Missile', type:'missile', damage:0, cooldown:21000, knockback:14,
+         missileHealth:900, startSpeed:1.6, accel:0.075, maxSpeed:15, turnRate:0.075, life:14000,
+         sound:'missile_launch', fx:'missile',
+         desc:'Fires a missile that locks on and accelerates the longer it flies. It has 900 HP — shoot it down or it hits you for whatever health it has left.'},
+      R:{key:'R', name:'Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
+         sound:'flight_on', fx:'flight',
+         desc:'Activates free flight for 5 seconds. Recharges after a 10 second cooldown.'}
+    }
+  },
+};
+const ROSTER_ORDER = ['thor','spiderman','ironman'];
+
+/* =========================================================================
+   SECTION: ARENA / MAP
+   ========================================================================= */
+const ARENA_W = 1280, ARENA_H = 720;
+const PLATFORMS = [
+  {x:70,  y:620, w:1140, h:34},
+  {x:120, y:455, w:250, h:22},
+  {x:910, y:455, w:250, h:22},
+  {x:470, y:345, w:340, h:22},
+  {x:185, y:235, w:205, h:20},
+  {x:890, y:235, w:205, h:20},
+  {x:545, y:145, w:190, h:20},
+];
+const GRAVITY = 0.62;
+const MOVE_SPEED = 5.1;
+const AI_TURN_DELAY = 180; // ms an AI-controlled fighter takes to notice and turn around
+const JUMP_VEL = -14.2;
+const FLY_SPEED = 4.6;
+const FIGHTER_SIZE = 64;
+// The arena is fully enclosed — fighters are clamped inside these bounds.
+const BOUND_MIN_X = 8;
+const BOUND_MAX_X = ARENA_W - FIGHTER_SIZE - 8;
+const FLOOR_Y = ARENA_H - FIGHTER_SIZE - 6;
+
+/* =========================================================================
+   SECTION: PLATFORM NAVIGATION GRAPH (for AI pathing)
+   Bots don't phase through platforms — they physically walk off an edge to
+   fall to a lower one, or line themselves up and jump to reach a higher
+   one, exactly like the player would. This graph just tells the AI which
+   platforms are reachable from which, using the fighter's real jump arc
+   and normal walking speed, so it knows *which way* to walk.
+   ========================================================================= */
+const AI_JUMP_RISE = Math.abs(JUMP_VEL*JUMP_VEL/(2*GRAVITY)) - 20; // max height a normal jump actually clears
+const AI_JUMP_REACH_X = 220;  // horizontal distance coverable while jumping up onto something
+const AI_FALL_REACH_X = 520;  // horizontal distance coverable while walking then falling down
+function rangesNear(aX, aW, bX, bW, margin){
+  return (aX - margin) < (bX + bW) && (bX - margin) < (aX + aW);
+}
+const PLATFORM_GRAPH = PLATFORMS.map(()=>[]);
+for(let i=0; i<PLATFORMS.length; i++){
+  for(let j=0; j<PLATFORMS.length; j++){
+    if(i === j) continue;
+    const A = PLATFORMS[i], B = PLATFORMS[j];
+    const dy = B.y - A.y; // negative: B sits above A
+    if(dy < -20 && dy > -AI_JUMP_RISE && rangesNear(A.x,A.w,B.x,B.w,AI_JUMP_REACH_X)){
+      PLATFORM_GRAPH[i].push(j); // reachable by jumping up
+    } else if(dy > 20 && rangesNear(A.x,A.w,B.x,B.w,AI_FALL_REACH_X)){
+      PLATFORM_GRAPH[i].push(j); // reachable by walking off the edge and falling
+    }
+  }
+}
+// Breadth-first search over the platform graph — the platforms are static,
+// so this is cheap enough to call straight from the AI tick.
+function findPlatformPath(startIdx, goalIdx){
+  if(startIdx < 0 || goalIdx < 0) return null;
+  if(startIdx === goalIdx) return [startIdx];
+  const visited = new Set([startIdx]);
+  const queue = [[startIdx]];
+  while(queue.length){
+    const path = queue.shift();
+    const node = path[path.length-1];
+    for(const next of PLATFORM_GRAPH[node]){
+      if(visited.has(next)) continue;
+      if(next === goalIdx) return [...path, next];
+      visited.add(next);
+      queue.push([...path, next]);
+    }
+  }
+  return null;
+}
+// Which platform would this fighter land on if it fell straight down from
+// its current x? Used to figure out "what level am I standing on" even if
+// the fighter is currently mid-air.
+function platformUnderX(entity){
+  const cx = entity.x + FIGHTER_SIZE/2;
+  let best = null, bestY = Infinity;
+  for(const p of PLATFORMS){
+    if(cx >= p.x && cx <= p.x + p.w && p.y >= entity.y && p.y < bestY){
+      best = p; bestY = p.y;
+    }
+  }
+  return best;
+}
+
+/* =========================================================================
+   SECTION: LOCAL STORAGE / PLAYER PROGRESS
+   ========================================================================= */
+const STORAGE_KEY = 'dishwashingLiquidBattlesSave_v4';
+const LEGACY_STORAGE_KEY = 'brawlArenaLegacySave_v1';
+function loadSave(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ console.warn('Save read failed', e); }
+  return null;
+}
+function writeSave(save){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(save)); }catch(e){ console.warn('Save write failed', e); }
+}
+let SAVE = loadSave();
+if(!SAVE){
+  try {
+    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+    SAVE = legacy ? JSON.parse(legacy) : null;
+  } catch(e) {}
+}
+if(!SAVE){
+  const starter = ROSTER_ORDER[Math.floor(Math.random()*ROSTER_ORDER.length)];
+  SAVE = { unlocked: [starter], equipped: starter };
+  writeSave(SAVE);
+}
+// Migrate the old character id without losing the player's unlocked roster.
+if(!SAVE.equipped || !ROSTER_ORDER.includes(SAVE.equipped) || !SAVE.unlocked.includes(SAVE.equipped)) SAVE.equipped = ROSTER_ORDER.find(isUnlocked) || ROSTER_ORDER[0];
+writeSave(SAVE);
+function isUnlocked(id){ return SAVE.unlocked.includes(id); }
+function equipCharacter(id){
+  if(!isUnlocked(id)) return;
+  SAVE.equipped = id;
+  writeSave(SAVE);
+  renderInventory();
+}
+function unlockCharacter(id){
+  if(!isUnlocked(id)){ SAVE.unlocked.push(id); writeSave(SAVE); }
+}
+
+/* =========================================================================
+   SECTION: NAVIGATION / SCREENS
+   ========================================================================= */
+const screens = ['menu','inventory','instructions','battle','gameover'];
+function showScreen(name){
+  screens.forEach(s=>{
+    document.getElementById('screen-'+s).classList.toggle('active', s===name);
+  });
+  if(name==='inventory') renderInventory();
+
+}
+document.addEventListener('click', (e)=>{
+  const nav = e.target.closest('[data-nav]');
+  if(nav){ showScreen(nav.getAttribute('data-nav')); }
+});
+document.getElementById('go-play-another-btn').addEventListener('click', startRandomBattle);
+
+/* =========================================================================
+   SECTION: CHARACTER CARD RENDERING (inventory / collection / select)
+   ========================================================================= */
+function squareInner(def){
+  return `<img src="${def.img}" alt="${def.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="fallback" style="display:none; background:${def.color}">${def.name[0]}</div>`;
+}
+function renderInventory(){
+  const grid = document.getElementById('inventory-grid');
+  grid.innerHTML = '';
+  const equipped = SAVE.equipped;
+  const eqDef = CHARACTERS[equipped];
+  document.getElementById('equipped-name').textContent = eqDef ? eqDef.name : 'None';
+  document.getElementById('equipped-hint').textContent = eqDef ? `${eqDef.maxHealth.toLocaleString()} HP` : 'Select a fighter below.';
+
+  ROSTER_ORDER.forEach(id=>{
+    const def = CHARACTERS[id];
+    const unlocked = isUnlocked(id);
+    const card = document.createElement('div');
+    const selected = equipped===id;
+    card.className = 'char-card' + (unlocked ? '' : ' locked') + (selected ? ' selected equipped' : '');
+    card.innerHTML = `
+      <div class="char-square">${squareInner(def)}${selected ? '<div class="equipped-badge">EQUIPPED</div>' : ''}</div>
+      <div class="char-name">${def.name}</div>
+      <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
+      <div class="lock-badge">${unlocked ? (selected ? 'Ready for battle' : 'Click to equip') : 'Locked'}</div>`;
+    if(unlocked){
+      card.onclick = ()=>{ equipCharacter(id); openCharModal(id); };
+    }
+    grid.appendChild(card);
+  });
+}
+
+// Character detail modal.
+function openCharModal(id){
+  const def = CHARACTERS[id];
+  const inner = document.getElementById('char-modal-inner');
+  const abilityRows = ['E','Q','R'].map(k=>{
+    const a = def.abilities[k];
+    let meta = `Cooldown: ${a.cooldown ? (a.cooldown/1000)+'s' : 'None'}`;
+    if(a.damage) meta += ` · Damage: ${a.damage}`;
+    if(a.heal) meta += ` · Heals: ${a.heal} HP`;
+    return `<div class="modal-ability"><div class="ab-name">${k} — ${a.name}</div><div class="ab-meta">${meta}</div><div class="ab-meta">${a.desc}</div></div>`;
+  }).join('');
+  inner.innerHTML = `
+    <div class="modal-top"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP</div></div></div>
+    <p style="color:var(--muted); margin-top:12px;">${def.description}</p>${abilityRows}
+    <div style="text-align:center;margin-top:16px;"><button class="btn btn-secondary btn-small" id="modal-close">Close</button></div>`;
+  document.getElementById('modal-close').onclick = closeCharModal;
+  document.getElementById('char-modal').classList.remove('hidden');
+}
+function closeCharModal(){ document.getElementById('char-modal').classList.add('hidden'); }
+document.getElementById('char-modal').addEventListener('click', e=>{ if(e.target.id === 'char-modal') closeCharModal(); });
+
+// Shared by the menu's Play button and the post-battle "Play Another"
+// button: always battles with whichever fighter is currently equipped
+// (equipping happens in Inventory, not here) against a fresh random
+// opponent, so you're never stuck fighting the same matchup on repeat.
+function startRandomBattle(){
+  const playerId = SAVE.equipped;
+  if(!playerId || !isUnlocked(playerId)){ showScreen('inventory'); return; }
+  const botPool = ROSTER_ORDER.filter(id => id !== playerId);
+  const botId = botPool[Math.floor(Math.random()*botPool.length)];
+  startBattle(playerId, botId);
+}
+document.getElementById('btn-menu-play').addEventListener('click', startRandomBattle);
+
+/* =========================================================================
+   SECTION: FIGHTER ENTITY
+   ========================================================================= */
+function makeFighter(charId, isBot, spawnX){
+  const def = CHARACTERS[charId];
+  return {
+    def, id: (isBot ? 'bot' : 'player'),
+    isBot,
+    x: spawnX, y: 380,
+    vx:0, vy:0,
+    facing: isBot ? -1 : 1,
+    onGround:false,
+    dropThrough:false, dropThroughTimer:0,
+    jumpQueued:false,
+    health: def.maxHealth,
+    dead:false,
+    cooldowns:{E:0,Q:0,R:0},
+    shield:null,
+    flight:false,
+    flightExpire:0,
+    hitStun:0,
+    slowUntil:0, webWrapEl:null,
+    turnPending:null,
+    aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0,
+    el:null, overheadFillEl:null, shieldEl:null, flightEl:null, thrusterEl:null,
+  };
+}
+
+/* =========================================================================
+   SECTION: GAME STATE
+   ========================================================================= */
+const state = {
+  mode:'menu', // 'battle'
+  countdown:false,
+  player:null, bot:null,
+  projectiles:[], walls:[], missiles:[], fxNodes:[],
+  lastTime:0,
+  scaleFactor:1,
+  input:{left:false,right:false,down:false,up:false},
+};
+
+function now(){ return performance.now(); }
+// #region debug-point A:bot-debug-report
+const DEBUG_SERVER_URL = 'http://127.0.0.1:7777/event';
+const DEBUG_SESSION_ID = 'bot-platform-tweak';
+const DEBUG_RUN_ID = 'pre-fix';
+function debugReport(hypothesisId, location, msg, data){
+  fetch(DEBUG_SERVER_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      sessionId: DEBUG_SESSION_ID,
+      runId: DEBUG_RUN_ID,
+      hypothesisId,
+      location,
+      msg,
+      data: data || {},
+      ts: Date.now()
+    })
+  }).catch(()=>{});
+}
+// #endregion
+
+function startBattle(playerCharId, botCharId){
+  state.player = makeFighter(playerCharId, false, 250);
+  state.bot = makeFighter(botCharId, true, 950);
+  state.projectiles = [];
+  state.walls = [];
+  state.missiles = [];
+  clearArenaDOM();
+  buildArenaStatic();
+  buildFighterDOM(state.player);
+  buildFighterDOM(state.bot);
+  updateHudNames();
+  buildAbilityBar();
+  state.mode = 'battle';
+  state.lastTime = 0;
+  showScreen('battle');
+  startCountdown();
+}
+
+/* =========================================================================
+   SECTION: 3-2-1-FIGHT! COUNTDOWN
+   Runs only when a new battle begins/restarts. Freezes player + AI until
+   "FIGHT!" lands, then hands control straight back to the normal game loop.
+   ========================================================================= */
+let battleToken = 0;
+const COUNT_STEP_MS = 800;
+function startCountdown(){
+  const token = ++battleToken;
+  state.countdown = true;
+  const ov = document.getElementById('countdown-overlay');
+  if(!ov){ state.countdown = false; return; }
+  ov.innerHTML = '';
+  ov.classList.add('on');
+
+  const steps = ['3', '2', '1', 'FIGHT!'];
+  steps.forEach((label, i)=>{
+    setTimeout(()=>{
+      if(token !== battleToken || state.mode !== 'battle') return;
+      const go = (i === steps.length - 1);
+      ov.innerHTML = '';
+      const item = document.createElement('div');
+      item.className = 'count-item';
+      item.innerHTML = `<div class="count-ring${go ? ' go' : ''}"></div>`
+        + `<div class="count-num${go ? ' count-go' : ''}">${label}</div>`;
+      ov.appendChild(item);
+      sfx(go ? 'fight' : 'count');
+      if(go) shakeArena(9, 320);
+      setTimeout(()=>{ if(item.parentNode) item.remove(); }, go ? 950 : 780);
+    }, i * COUNT_STEP_MS);
+  });
+
+  // Control is returned the moment FIGHT! appears.
+  setTimeout(()=>{
+    if(token !== battleToken) return;
+    state.countdown = false;
+  }, (steps.length - 1) * COUNT_STEP_MS + 60);
+
+  setTimeout(()=>{
+    if(token !== battleToken) return;
+    ov.classList.remove('on');
+    ov.innerHTML = '';
+  }, (steps.length - 1) * COUNT_STEP_MS + 1000);
+}
+
+/* =========================================================================
+   SECTION: ARENA DOM
+   ========================================================================= */
+const arenaEl = document.getElementById('arena');
+function clearArenaDOM(){ arenaEl.innerHTML=''; }
+function buildArenaStatic(){
+  // layered background for more depth and motion.
+  const skyline = document.createElement('div');
+  skyline.className='arena-skyline';
+  arenaEl.appendChild(skyline);
+  const glow = document.createElement('div');
+  glow.className='arena-glow';
+  arenaEl.appendChild(glow);
+  const floor = document.createElement('div');
+  floor.className='arena-floor';
+  arenaEl.appendChild(floor);
+  const wallL = document.createElement('div');
+  wallL.className='arena-wall left';
+  const wallR = document.createElement('div');
+  wallR.className='arena-wall right';
+  arenaEl.appendChild(wallL); arenaEl.appendChild(wallR);
+  const hill1 = document.createElement('div');
+  hill1.className='bg-hill'; hill1.style.cssText='left:-60px;width:340px;height:140px;';
+  const hill2 = document.createElement('div');
+  hill2.className='bg-hill'; hill2.style.cssText='right:-80px;width:400px;height:170px;background:#1a2436;';
+  arenaEl.appendChild(hill1); arenaEl.appendChild(hill2);
+
+  PLATFORMS.forEach(p=>{
+    const el = document.createElement('div');
+    el.className='platform';
+    el.style.left=p.x+'px'; el.style.top=p.y+'px'; el.style.width=p.w+'px'; el.style.height=p.h+'px';
+    arenaEl.appendChild(el);
+  });
+}
+function buildFighterDOM(f){
+  const el = document.createElement('div');
+  el.className='fighter';
+  el.innerHTML = `
+    <div class="overhead-hp"><div class="fill"></div></div>
+    <div class="fighter-square">${squareInner(f.def)}</div>
+    ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
+    <div class="shield-ring"></div>
+    <div class="flight-glow"></div>
+    <div class="thruster"></div>
+  `;
+  arenaEl.appendChild(el);
+  f.el = el;
+  f.overheadFillEl = el.querySelector('.overhead-hp .fill');
+  f.shieldEl = el.querySelector('.shield-ring');
+  f.flightEl = el.querySelector('.flight-glow');
+  f.thrusterEl = el.querySelector('.thruster');
+}
+
+/* Scale the fixed-size arena to fit its responsive wrapper */
+function rescaleArena(){
+  const wrapper = document.getElementById('arena-wrapper');
+  if(!wrapper || !arenaEl) return;
+  const availableW = Math.max(1, wrapper.clientWidth - 2);
+  const availableH = Math.max(1, wrapper.clientHeight - 2);
+  const factor = Math.min(availableW / ARENA_W, availableH / ARENA_H);
+  state.scaleFactor = factor;
+  const scaledW = ARENA_W * factor;
+  const scaledH = ARENA_H * factor;
+  arenaEl.style.left = `${(wrapper.clientWidth - scaledW) / 2}px`;
+  arenaEl.style.top = `${(wrapper.clientHeight - scaledH) / 2}px`;
+  arenaEl.style.transform = `scale(${factor})`;
+}
+window.addEventListener('resize', rescaleArena);
+
+/* =========================================================================
+   SECTION: HUD
+   ========================================================================= */
+function updateHudNames(){
+  document.getElementById('hud-player-name').textContent = state.player.def.name;
+  document.getElementById('hud-opp-name').textContent = state.bot.def.name;
+  document.getElementById('hud-player-img').innerHTML = squareInner(state.player.def);
+  document.getElementById('hud-opp-img').innerHTML = squareInner(state.bot.def);
+}
+function hpClass(pct){
+  if(pct <= 0.25) return 'low';
+  if(pct <= 0.55) return 'mid';
+  return '';
+}
+function updateHud(){
+  const p = state.player, b = state.bot;
+  const ppct = Math.max(0,p.health)/p.def.maxHealth;
+  const bpct = Math.max(0,b.health)/b.def.maxHealth;
+  const pBar = document.getElementById('hud-player-bar');
+  const bBar = document.getElementById('hud-opp-bar');
+  pBar.style.width = (ppct*100)+'%'; pBar.className = 'healthbar-fill '+hpClass(ppct);
+  bBar.style.width = (bpct*100)+'%'; bBar.className = 'healthbar-fill '+hpClass(bpct);
+  document.getElementById('hud-player-hp').textContent = `${Math.max(0,Math.round(p.health))} / ${p.def.maxHealth}`;
+  document.getElementById('hud-opp-hp').textContent = `${Math.max(0,Math.round(b.health))} / ${b.def.maxHealth}`;
+}
+
+/* =========================================================================
+   SECTION: ABILITY BAR UI
+   ========================================================================= */
+function buildAbilityBar(){
+  const bar = document.getElementById('ability-bar');
+  bar.innerHTML = '';
+  ['E','Q','R'].forEach(k=>{
+    const a = state.player.def.abilities[k];
+    const btn = document.createElement('button');
+    btn.className = 'ability-btn';
+    btn.dataset.key = k;
+    btn.innerHTML = `<span class="ab-key">${k}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
+    btn.onclick = ()=> tryUseAbility(state.player, state.bot, k);
+    bar.appendChild(btn);
+  });
+}
+function updateAbilityBar(){
+  const bar = document.getElementById('ability-bar');
+  const t = now();
+  ['E','Q','R'].forEach(k=>{
+    const btn = bar.querySelector(`[data-key="${k}"]`);
+    if(!btn) return;
+    const a = state.player.def.abilities[k];
+    const overlay = btn.querySelector('.cd-overlay');
+    if(a.type==='toggle'){
+      btn.classList.toggle('flight-on', !!state.player.flight);
+      overlay.style.display='none';
+      overlay.textContent = state.player.flight ? 'ON' : 'OFF';
+      overlay.style.display='flex';
+      overlay.style.background = state.player.flight ? 'rgba(60,120,220,.55)' : 'rgba(0,0,0,.5)';
+      return;
+    }
+    if(a.type==='timedToggle' && state.player.flight){
+      btn.classList.add('flight-on');
+      overlay.style.display='flex';
+      overlay.textContent = Math.max(0,(state.player.flightExpire-t)/1000).toFixed(1)+'s';
+      overlay.style.background='rgba(60,120,220,.55)';
+      return;
+    }
+    const remain = state.player.cooldowns[k] - t;
+    if(remain > 0){
+      overlay.style.display='flex';
+      overlay.textContent = (remain/1000).toFixed(1)+'s';
+    } else {
+      overlay.style.display='none';
+    }
+  });
+}
+
+/* =========================================================================
+   SECTION: ABILITY EXECUTION
+   ========================================================================= */
+function cdReady(f, key, t){
+  const a = f.def.abilities[key];
+  if(a.type==='toggle') return true;
+  if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
+  return t >= f.cooldowns[key];
+}
+function tryUseAbility(caster, target, key){
+  const t = now();
+  if(caster.dead) return false;
+  if(state.countdown) return false; // nobody acts until FIGHT!
+  if(!cdReady(caster, key, t)) return false;
+  const ability = caster.def.abilities[key];
+  const fallbackSound = ability.type==='jump' ? 'jump' : ability.type==='wall' ? 'wall'
+    : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
+  sfx(ability.sound || fallbackSound);
+  spawnAbilityFx(caster, ability);
+  executeAbility(caster, target, ability, t);
+  if(ability.type !== 'toggle'){
+    caster.cooldowns[key] = t + ability.cooldown;
+  }
+  return true;
+}
+function dirSignTo(from, to){ return (to.x >= from.x) ? 1 : -1; }
+
+function executeAbility(caster, target, ability, t){
+  switch(ability.type){
+    case 'projectile': {
+      // A bot fires wherever it's actually facing (which briefly lags the
+      // real target during the flank-reaction window — see updateBotFacing),
+      // so a shot fired the instant you cross behind it can genuinely miss.
+      // The player's own shots still auto-aim at the true target, same as before.
+      const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
+      state.projectiles.push({
+        x: caster.x + FIGHTER_SIZE/2, y: caster.y + FIGHTER_SIZE/2 - ability.h/2,
+        vx: dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color||'#ffffff',
+        damage: ability.damage, knockback: ability.knockback, owner: caster.id,
+        icon: ability.icon || '',
+        life: 3200, returns: !!ability.returns, phase:'out', originX: caster.x, casterRef: caster,
+        render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
+        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0,
+        trailTick: 0,
+        el:null
+      });
+      if(!ability.fx) spawnMuzzleFx(caster);
+      break;
+    }
+    case 'melee': {
+      // Damage lands on the contact frame of the swing animation, not instantly.
+      const resolve = ()=>{
+        if(state.mode !== 'battle' || caster.dead || target.dead) return;
+        // a swing also knocks incoming missiles out of the air
+        damageMissilesInArea(caster.id, caster.x+FIGHTER_SIZE/2 + caster.facing*ability.range*0.5,
+          caster.y+FIGHTER_SIZE/2, ability.range, ability.damage);
+        const dist = Math.abs((target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2));
+        const vertOk = Math.abs(target.y - caster.y) < 90;
+        const dirNow = dirSignTo(caster, target);
+        // Bots must actually be facing the target to land a hit — this is
+        // what makes flanking one matter instead of being purely cosmetic.
+        // A human player's facing is always a deliberate choice, so this
+        // never restricts the player's own attacks.
+        const facingOk = !caster.isBot || (dirNow === caster.facing);
+        if(dist <= ability.range && vertOk && facingOk){
+          damageTargetOrWall(target, ability.damage, ability.knockback, dirNow,
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
+        } else {
+          // whiff: a small puff of air so the swing still reads
+          const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*52;
+          fxEl('fx-burst',
+            `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;`
+            + `background:radial-gradient(circle,#ffffff44,transparent 70%);`, 380);
+        }
+      };
+      const delay = ability.hitDelay || 0;
+      if(delay > 0) setTimeout(resolve, delay); else resolve();
+      break;
+    }
+    case 'aoe': {
+      spawnAoeFx(caster, ability.radius);
+      damageMissilesInArea(caster.id, caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, ability.radius, ability.damage);
+      const dist = Math.hypot((target.x - caster.x), (target.y - caster.y));
+      if(dist <= ability.radius && !target.dead){
+        const dir = dirSignTo(caster, target);
+        damageTargetOrWall(target, ability.damage, ability.knockback, dir,
+          {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
+      }
+      break;
+    }
+    case 'jump': {
+      caster.vy = ability.jumpVel;
+      caster.onGround = false;
+      if(!ability.fx) spawnMuzzleFx(caster);
+      break;
+    }
+    case 'mobility': {
+      caster.vx = caster.facing * ability.boostX;
+      if(ability.swingToTop){
+        // Pick exactly the launch speed needed so the arc's apex lands at
+        // the top of the arena, regardless of how high up the caster
+        // already is — a swing from the floor and a swing from a high
+        // platform both land you at the ceiling.
+        const targetY = 24;
+        const dist = Math.max(30, caster.y - targetY);
+        caster.vy = -Math.sqrt(2 * GRAVITY * dist);
+      } else {
+        caster.vy = ability.boostY;
+      }
+      caster.onGround = false;
+      if(!ability.fx) spawnMuzzleFx(caster);
+      break;
+    }
+    case 'shield': {
+      caster.shield = { reduction: ability.reduction, expire: t + ability.duration };
+      break;
+    }
+    case 'missile': {
+      const dir = dirSignTo(caster, target);
+      state.missiles.push({
+        owner: caster.id,
+        targetRef: target,
+        x: caster.x + FIGHTER_SIZE/2 + dir*30 - 26,
+        y: caster.y + FIGHTER_SIZE/2 - 11,
+        w: 52, h: 22,
+        angle: dir > 0 ? 0 : Math.PI,
+        speed: ability.startSpeed,
+        accel: ability.accel,
+        maxSpeed: ability.maxSpeed,
+        turnRate: ability.turnRate,
+        health: ability.missileHealth,
+        maxHealth: ability.missileHealth,
+        knockback: ability.knockback,
+        life: ability.life,
+        trailTick: 0,
+        el: null, fillEl: null
+      });
+      break;
+    }
+    case 'wall': {
+      // Replace any existing wall from this caster
+      state.walls = state.walls.filter(w => w.owner !== caster.id);
+      const facing = caster.facing;
+      const wx = caster.x + FIGHTER_SIZE/2 + facing*46 - 10;
+      state.walls.push({
+        owner: caster.id, x: wx, y: caster.y - 26, w:20, h:90,
+        health: ability.wallHealth, maxHealth: ability.wallHealth, expire: t + ability.duration, el:null
+      });
+      break;
+    }
+    case 'heal': {
+      const before = caster.health;
+      caster.health = Math.min(caster.def.maxHealth, caster.health + ability.heal);
+      const healed = Math.round(caster.health - before);
+      spawnDamageNumber(caster.x+22, caster.y-10, '+'+healed, true);
+      spawnHealFx(caster);
+      break;
+    }
+    case 'toggle': {
+      caster.flight = !caster.flight;
+      if(caster.flight) caster.vy = 0;
+      break;
+    }
+    case 'timedToggle': {
+      caster.flight = true;
+      caster.flightExpire = t + ability.duration;
+      caster.vy = 0;
+      break;
+    }
+  }
+}
+
+function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
+  // If the target has an active wall shielding it, hit the wall instead.
+  const wall = state.walls.find(w => w.owner === target.id);
+  if(wall){
+    wall.health -= dmg;
+    spawnDamageNumber(wall.x+2, wall.y, Math.round(dmg), false);
+    if(wall.health <= 0){
+      state.walls = state.walls.filter(w => w !== wall);
+    }
+    return;
+  }
+  applyDamage(target, dmg, knockback, dirSign, opts);
+}
+
+function applyDamage(target, dmg, knockback, dirSign, opts){
+  if(target.dead) return;
+  opts = opts || {};
+  let actual = dmg;
+  if(target.shield && now() < target.shield.expire){
+    actual = dmg * (1 - target.shield.reduction);
+  }
+  target.health = Math.max(0, target.health - actual);
+  spawnDamageNumber(target.x+18, target.y, Math.round(actual), false);
+  target.vx += dirSign * knockback * 2.6;
+  target.vy = -knockback * 1.5;
+  target.onGround = false;
+  target.hitStun = Math.min(420, 90 + knockback*10);
+  sfx(opts.sound || 'hit');
+  spawnHitFx(target, opts.hitFx || '', dirSign);
+  if(opts.slow) applyWebSlow(target, opts.slow);
+  flashHit(target);
+  if(target.health <= 0 && !target.dead){
+    endBattle(target === state.player ? 'bot' : 'player', 'ko-health');
+  }
+}
+
+/* =========================================================================
+   SECTION: AUDIO + EPIC ABILITY FX
+   ========================================================================= */
+let audioCtx = null;
+function ensureAudio(){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+/* --- low-level synth helpers --------------------------------------------- */
+function aTone(ctx, t, type, f0, f1, dur, vol){
+  const o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type;
+  o.frequency.setValueAtTime(Math.max(20,f0), t);
+  o.frequency.exponentialRampToValueAtTime(Math.max(20,f1), t+dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(Math.max(0.0002,vol), t+Math.min(0.02,dur*0.25));
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t+dur+0.03);
+  return o;
+}
+function aNoise(ctx, t, dur, vol, filterType, f0, f1, q){
+  const len = Math.max(1, Math.floor(ctx.sampleRate*dur));
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i] = (Math.random()*2-1) * (1 - i/len);
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const f = ctx.createBiquadFilter();
+  f.type = filterType || 'bandpass';
+  f.frequency.setValueAtTime(Math.max(40,f0), t);
+  f.frequency.exponentialRampToValueAtTime(Math.max(40,f1), t+dur);
+  f.Q.value = q == null ? 1.1 : q;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(Math.max(0.0002,vol), t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  src.connect(f); f.connect(g); g.connect(ctx.destination);
+  src.start(t); src.stop(t+dur+0.02);
+}
+
+/* --- named sound effects -------------------------------------------------- */
+function sfx(kind='ability'){
+  try{
+    const ctx = ensureAudio(), t = ctx.currentTime;
+    switch(kind){
+
+      /* ---------- Thor ---------- */
+      case 'mjolnir_swing': // heavy hammer whoosh through the air
+        aNoise(ctx, t, 0.26, 0.20, 'bandpass', 1400, 240, 1.6);
+        aTone(ctx, t, 'triangle', 420, 150, 0.22, 0.06);
+        return;
+      case 'mjolnir': { // THE metal impact — layered clang + boom + sparks
+        aTone(ctx, t, 'sine', 170, 36, 0.60, 0.34);            // sub boom
+        aTone(ctx, t, 'square', 98, 42, 0.30, 0.12);           // body thud
+        [1730, 2360, 3140, 4190, 5320].forEach((f,i)=>{        // metallic partials
+          aTone(ctx, t + i*0.004, 'triangle', f, f*0.82, 0.55 - i*0.05, 0.075);
+        });
+        aNoise(ctx, t, 0.30, 0.30, 'highpass', 5200, 1100, 0.8); // clang transient
+        aNoise(ctx, t+0.055, 0.22, 0.14, 'bandpass', 3000, 900, 2.2); // second ring
+        aTone(ctx, t+0.055, 'triangle', 2480, 1900, 0.34, 0.05);
+        return;
+      }
+      case 'thunder': case 'thunder_hit': { // thunderclap
+        aTone(ctx, t, 'sine', 128, 34, 0.66, 0.32);
+        aNoise(ctx, t, 0.55, 0.20, 'lowpass', 2600, 220, 0.7);
+        aNoise(ctx, t+0.03, 0.35, 0.12, 'highpass', 4200, 1400, 0.9);
+        return;
+      }
+      case 'thunder_jump':
+        aTone(ctx, t, 'triangle', 190, 900, 0.34, 0.14);
+        aNoise(ctx, t, 0.36, 0.16, 'bandpass', 500, 3400, 1.3);
+        aTone(ctx, t, 'sine', 120, 60, 0.30, 0.16);
+        return;
+
+      /* ---------- Spider-Man ---------- */
+      case 'web_shoot': // thwip
+        aNoise(ctx, t, 0.15, 0.22, 'bandpass', 5200, 900, 4.5);
+        aTone(ctx, t, 'sawtooth', 1500, 340, 0.11, 0.05);
+        return;
+      case 'web_bomb': // heavier thwip + glob launch
+        aNoise(ctx, t, 0.24, 0.24, 'bandpass', 3400, 480, 3.2);
+        aTone(ctx, t, 'sawtooth', 780, 190, 0.20, 0.08);
+        aTone(ctx, t+0.05, 'sine', 300, 120, 0.18, 0.07);
+        return;
+      case 'web_swing':
+        aNoise(ctx, t, 0.20, 0.20, 'bandpass', 4600, 1000, 4.0);
+        aNoise(ctx, t+0.09, 0.34, 0.14, 'bandpass', 700, 2600, 1.1);
+        return;
+      case 'web_hit': // sticky slap
+        aNoise(ctx, t, 0.13, 0.20, 'bandpass', 1700, 380, 1.9);
+        aTone(ctx, t, 'sine', 330, 120, 0.12, 0.10);
+        return;
+      case 'web_splat': // big splat
+        aNoise(ctx, t, 0.24, 0.26, 'lowpass', 2200, 300, 0.8);
+        aTone(ctx, t, 'sine', 260, 70, 0.26, 0.16);
+        aTone(ctx, t+0.04, 'triangle', 520, 190, 0.16, 0.06);
+        return;
+
+      /* ---------- Iron Man ---------- */
+      case 'repulsor':
+        aTone(ctx, t, 'sine', 1150, 220, 0.20, 0.13);
+        aTone(ctx, t, 'sawtooth', 780, 180, 0.16, 0.05);
+        aNoise(ctx, t, 0.16, 0.10, 'bandpass', 2600, 700, 2.4);
+        return;
+      case 'energy_hit':
+        aTone(ctx, t, 'square', 640, 120, 0.18, 0.13);
+        aNoise(ctx, t, 0.20, 0.16, 'highpass', 3200, 900, 1.0);
+        aTone(ctx, t, 'sine', 180, 60, 0.24, 0.14);
+        return;
+      case 'missile_launch':
+        aTone(ctx, t, 'sawtooth', 160, 90, 0.45, 0.12);
+        aNoise(ctx, t, 0.55, 0.18, 'lowpass', 1800, 320, 0.8);
+        aTone(ctx, t+0.04, 'square', 420, 140, 0.22, 0.06);
+        return;
+      case 'missile_lock':
+        aTone(ctx, t, 'square', 1400, 1400, 0.05, 0.07);
+        aTone(ctx, t+0.09, 'square', 1400, 1400, 0.05, 0.07);
+        return;
+      case 'missile_boom':
+        aTone(ctx, t, 'sine', 190, 32, 0.72, 0.34);
+        aTone(ctx, t, 'square', 120, 48, 0.36, 0.13);
+        aNoise(ctx, t, 0.7, 0.30, 'lowpass', 3200, 200, 0.7);
+        aNoise(ctx, t+0.04, 0.4, 0.14, 'highpass', 4200, 900, 0.9);
+        return;
+      case 'missile_ping':
+        aTone(ctx, t, 'triangle', 900, 520, 0.09, 0.09);
+        aNoise(ctx, t, 0.10, 0.10, 'highpass', 3600, 1400, 1.0);
+        return;
+      case 'shield_up':
+        aTone(ctx, t, 'sine', 300, 900, 0.32, 0.12);
+        aTone(ctx, t+0.05, 'triangle', 900, 1500, 0.30, 0.06);
+        aNoise(ctx, t, 0.30, 0.07, 'bandpass', 900, 4200, 2.0);
+        return;
+      case 'flight_on':
+        aTone(ctx, t, 'triangle', 170, 520, 0.36, 0.13);
+        aNoise(ctx, t, 0.48, 0.13, 'lowpass', 600, 2400, 0.8);
+        return;
+
+      /* ---------- countdown ---------- */
+      case 'count':
+        aTone(ctx, t, 'square', 900, 640, 0.10, 0.11);
+        aTone(ctx, t, 'sine', 1800, 1300, 0.09, 0.05);
+        return;
+      case 'fight':
+        aTone(ctx, t, 'sawtooth', 300, 780, 0.34, 0.14);
+        aTone(ctx, t+0.01, 'square', 150, 420, 0.30, 0.09);
+        aTone(ctx, t, 'sine', 120, 52, 0.42, 0.22);
+        aNoise(ctx, t, 0.34, 0.16, 'highpass', 3000, 600, 0.9);
+        return;
+
+      /* ---------- legacy / generic ---------- */
+      case 'hit':
+        aTone(ctx, t, 'square', 140, 62, 0.13, 0.13);
+        aNoise(ctx, t, 0.12, 0.10, 'bandpass', 1300, 300, 1.4);
+        return;
+      case 'jump':
+        aTone(ctx, t, 'triangle', 260, 520, 0.12, 0.11);
+        return;
+      case 'wall':
+        aTone(ctx, t, 'square', 90, 150, 0.22, 0.12);
+        return;
+      case 'heal':
+        aTone(ctx, t, 'sine', 420, 760, 0.20, 0.12);
+        return;
+      case 'flight':
+        aTone(ctx, t, 'triangle', 180, 420, 0.22, 0.12);
+        return;
+      case 'ko':
+        aTone(ctx, t, 'sawtooth', 220, 40, 0.55, 0.20);
+        aTone(ctx, t, 'sine', 140, 32, 0.62, 0.24);
+        aNoise(ctx, t, 0.5, 0.18, 'lowpass', 2400, 260, 0.7);
+        aTone(ctx, t+0.32, 'triangle', 600, 340, 0.4, 0.10);
+        return;
+      default: // 'ability'
+        aTone(ctx, t, 'sawtooth', 240, 620, 0.16, 0.12);
+        return;
+    }
+  }catch(err){}
+}
+/* -------------------------------------------------------------------------
+   FX PRIMITIVES — every helper cleans its own DOM node up when it finishes.
+   ------------------------------------------------------------------------- */
+function fxEl(cls, css, life, html){
+  const el = document.createElement('div');
+  el.className = 'fx ' + cls;
+  el.style.cssText = css;
+  if(html) el.innerHTML = html;
+  arenaEl.appendChild(el);
+  setTimeout(()=>{ if(el.parentNode) el.remove(); }, life);
+  return el;
+}
+function shakeArena(px, ms){
+  const w = document.getElementById('arena-wrapper');
+  if(!w) return;
+  w.style.setProperty('--shake', px + 'px');
+  w.classList.remove('shaking');
+  void w.offsetWidth; // restart the animation
+  w.classList.add('shaking');
+  clearTimeout(w._shakeTimer);
+  w._shakeTimer = setTimeout(()=>w.classList.remove('shaking'), ms || 320);
+}
+function spawnSparks(cx, cy, n, color, spread, life){
+  life = life || 520;
+  for(let i=0;i<n;i++){
+    const ang = Math.random()*Math.PI*2;
+    const d = spread * (0.35 + Math.random()*0.85);
+    const el = document.createElement('div');
+    el.className = 'fx spark';
+    el.style.cssText = `left:${(cx-4).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;background:${color};color:${color};`
+      + `--dx:${(Math.cos(ang)*d).toFixed(1)}px;--dy:${(Math.sin(ang)*d).toFixed(1)}px;`
+      + `animation-duration:${life}ms;`;
+    arenaEl.appendChild(el);
+    setTimeout(()=>{ if(el.parentNode) el.remove(); }, life + 40);
+  }
+}
+function spawnAfterimage(f, color, life){
+  life = life || 360;
+  fxEl('afterimage',
+    `left:${f.x}px;top:${f.y}px;width:${FIGHTER_SIZE}px;height:${FIGHTER_SIZE}px;`
+    + `background:${color};box-shadow:0 0 18px ${color};animation-duration:${life}ms;`, life + 40);
+}
+
+/* --- branching lightning ------------------------------------------------- */
+function boltPoints(x1, y1, x2, y2, segs, jag){
+  const pts = [[x1,y1]];
+  const dx = x2-x1, dy = y2-y1, len = Math.hypot(dx,dy) || 1;
+  const nx = -dy/len, ny = dx/len;
+  for(let i=1;i<segs;i++){
+    const t = i/segs;
+    const off = (Math.random()-0.5) * jag * Math.sin(Math.PI*t) * 2;
+    pts.push([x1 + dx*t + nx*off, y1 + dy*t + ny*off]);
+  }
+  pts.push([x2,y2]);
+  return pts;
+}
+function ptsToPath(pts){
+  return 'M ' + pts.map(a => a[0].toFixed(1) + ' ' + a[1].toFixed(1)).join(' L ');
+}
+function spawnLightning(x1, y1, x2, y2, opts){
+  const o = Object.assign({bolts:2, branches:2, width:2.6, life:300, color:'#cfe9ff', jag:28, segs:7}, opts||{});
+  const pad = 46;
+  const minX = Math.min(x1,x2) - pad, minY = Math.min(y1,y2) - pad;
+  const w = Math.abs(x2-x1) + pad*2, h = Math.abs(y2-y1) + pad*2;
+  let paths = '';
+  for(let b=0;b<o.bolts;b++){
+    const pts = boltPoints(x1-minX, y1-minY, x2-minX, y2-minY, o.segs, o.jag);
+    const d = ptsToPath(pts);
+    paths += `<path d="${d}" stroke="${o.color}" stroke-width="${o.width}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    paths += `<path d="${d}" stroke="#ffffff" stroke-width="${Math.max(0.9, o.width*0.4).toFixed(2)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    for(let k=0;k<o.branches;k++){
+      if(pts.length < 3) break;
+      const idx = 1 + Math.floor(Math.random()*(pts.length-2));
+      const bx = pts[idx][0], by = pts[idx][1];
+      const ang = Math.random()*Math.PI*2;
+      const blen = 16 + Math.random()*26;
+      const bp = boltPoints(bx, by, bx + Math.cos(ang)*blen, by + Math.sin(ang)*blen, 3, 9);
+      paths += `<path d="${ptsToPath(bp)}" stroke="${o.color}" stroke-width="${Math.max(0.9, o.width*0.6).toFixed(2)}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+  }
+  return fxEl('fx-lightning',
+    `left:${minX.toFixed(1)}px;top:${minY.toFixed(1)}px;width:${w.toFixed(1)}px;height:${h.toFixed(1)}px;--bl:${o.life}ms;`,
+    o.life + 60,
+    `<svg width="${w.toFixed(1)}" height="${h.toFixed(1)}" viewBox="0 0 ${w.toFixed(1)} ${h.toFixed(1)}">${paths}</svg>`);
+}
+
+/* --- web geometry -------------------------------------------------------- */
+function webNetSvg(size, stroke){
+  const r = size/2, cx = r, cy = r, spokes = 10;
+  const sw = stroke || 1.5;
+  const pt = (ring, i) => {
+    const a = (Math.PI*2*i)/spokes - Math.PI/2;
+    return [cx + Math.cos(a)*r*ring, cy + Math.sin(a)*r*ring];
+  };
+  let g = '';
+  for(let i=0;i<spokes;i++){
+    const q = pt(1, i);
+    g += `<line x1="${cx.toFixed(1)}" y1="${cy.toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}"/>`;
+  }
+  [0.32, 0.56, 0.8, 1].forEach(ring => {
+    let d = '';
+    for(let i=0;i<spokes;i++){
+      const a = pt(ring, i), b = pt(ring, (i+1)%spokes);
+      const mx = (a[0]+b[0])/2, my = (a[1]+b[1])/2;
+      const sx = cx + (mx-cx)*0.84, sy = cy + (my-cy)*0.84;   // strand sag toward centre
+      if(i===0) d += `M ${a[0].toFixed(1)} ${a[1].toFixed(1)} `;
+      d += `Q ${sx.toFixed(1)} ${sy.toFixed(1)} ${b[0].toFixed(1)} ${b[1].toFixed(1)} `;
+    }
+    g += `<path d="${d}Z"/>`;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`
+    + `<g stroke="#ffffff" fill="none" stroke-width="${sw}" stroke-linecap="round" opacity="0.95">${g}</g></svg>`;
+}
+function webStrandSvg(){
+  return `<svg width="62" height="26" viewBox="0 0 62 26">
+    <g stroke="#ffffff" fill="none" stroke-width="1.5" stroke-linecap="round" opacity="0.96">
+      <path d="M1 13 L12 13 L26 13 L40 13"/>
+      <path d="M3 13 L13 7.5 L26 10 L38 12.5"/>
+      <path d="M3 13 L13 18.5 L26 16 L38 13.5"/>
+      <path d="M13 7.5 L13 18.5"/><path d="M26 10 L26 16"/>
+      <path d="M8 10.5 L8 15.5"/><path d="M19 9 L19 17"/>
+      <circle cx="47" cy="13" r="8"/>
+      <circle cx="47" cy="13" r="4.6"/>
+      <circle cx="47" cy="13" r="1.8"/>
+      <path d="M39 13 L55 13"/><path d="M47 5 L47 21"/>
+      <path d="M41.4 7.4 L52.6 18.6"/><path d="M52.6 7.4 L41.4 18.6"/>
+    </g></svg>`;
+}
+function webSplatSvg(size){
+  const r = size/2;
+  let g = '';
+  for(let i=0;i<9;i++){
+    const a = (Math.PI*2*i)/9 + Math.random()*0.2;
+    const len = r*(0.7 + Math.random()*0.35);
+    const pts = boltPoints(r, r, r + Math.cos(a)*len, r + Math.sin(a)*len, 3, 7);
+    g += `<path d="${ptsToPath(pts)}"/>`;
+  }
+  [0.4, 0.72].forEach(ring=>{
+    let d='';
+    for(let i=0;i<9;i++){
+      const a1=(Math.PI*2*i)/9, a2=(Math.PI*2*(i+1))/9;
+      const x1=r+Math.cos(a1)*r*ring, y1=r+Math.sin(a1)*r*ring;
+      const x2=r+Math.cos(a2)*r*ring, y2=r+Math.sin(a2)*r*ring;
+      const mx=(x1+x2)/2, my=(y1+y2)/2;
+      if(i===0) d+=`M ${x1.toFixed(1)} ${y1.toFixed(1)} `;
+      d+=`Q ${(r+(mx-r)*0.8).toFixed(1)} ${(r+(my-r)*0.8).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)} `;
+    }
+    g += `<path d="${d}Z"/>`;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`
+    + `<g stroke="#ffffff" fill="none" stroke-width="1.7" stroke-linecap="round" opacity="0.95">${g}</g></svg>`;
+}
+
+/* -------------------------------------------------------------------------
+   PER-ABILITY CAST FX  (dispatched from ability.fx)
+   ------------------------------------------------------------------------- */
+function spawnAbilityFx(caster, ability){
+  const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
+  const dir = caster.facing;
+  switch(ability.fx){
+
+    /* ---------------- Thor ---------------- */
+    case 'thor_smash': {
+      // hammer physically swings from Thor's hand toward the opponent
+      caster.el.classList.remove('thor-swing');
+      void caster.el.offsetWidth;
+      caster.el.classList.add('thor-swing');
+      const who = caster;
+      setTimeout(()=>{ if(who.el) who.el.classList.remove('thor-swing'); }, 380);
+      // sweeping arc, mirrored with facing
+      fxEl('mj-arc-wrap',
+        `left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;transform:scaleX(${dir});`,
+        400, '<div class="mj-arc"></div>');
+      // electricity crackling off Mjolnir during the swing
+      for(let i=0;i<3;i++){
+        setTimeout(()=>{
+          if(state.mode !== 'battle' || !who.el) return;
+          const hx = who.x + FIGHTER_SIZE/2 + who.facing*26;
+          const hy = who.y + FIGHTER_SIZE/2 - 4;
+          spawnLightning(hx, hy, hx + who.facing*(40+Math.random()*44), hy - 34 + Math.random()*66,
+            {bolts:1, branches:2, width:2.2, life:240, jag:20, segs:6});
+        }, i*55);
+      }
+      spawnSparks(cx + dir*24, cy - 6, 6, '#cfe9ff', 34, 420);
+      break;
+    }
+    case 'thor_clap': {
+      // triple shockwave + bolts raining onto Thor + ground crack
+      const R = ability.radius || 120;
+      [0, 90, 180].forEach((delay, i)=>{
+        setTimeout(()=>{
+          fxEl('fx-shock',
+            `left:${cx-R}px;top:${cy-R}px;width:${R*2}px;height:${R*2}px;`
+            + `border:${5-i}px solid #cfe9ff;border-radius:50%;box-shadow:0 0 30px #7cc4ff, inset 0 0 34px rgba(124,196,255,.35);`, 660);
+        }, delay);
+      });
+      for(let i=0;i<5;i++){
+        const tx = cx + (Math.random()-0.5)*R*1.5;
+        spawnLightning(tx, Math.max(0, cy - 300 - Math.random()*60), cx + (Math.random()-0.5)*40, cy,
+          {bolts:1, branches:3, width:3, life:340, jag:26, segs:8});
+      }
+      fxEl('fx-flash', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;`, 320);
+      spawnSparks(cx, cy, 18, '#dff1ff', 95);
+      spawnGroundCrack(cx, caster.y + FIGHTER_SIZE, R);
+      shakeArena(12, 380);
+      break;
+    }
+    case 'thor_jump': {
+      // lightning column launching Thor skyward + rising sparks + afterimages
+      spawnLightning(cx, cy, cx, Math.max(4, cy - 230), {bolts:2, branches:3, width:3, life:340, jag:18, segs:7});
+      fxEl('fx-ring',
+        `left:${cx-46}px;top:${caster.y+FIGHTER_SIZE-24}px;width:92px;height:48px;`
+        + `border-color:#8fd0ff;box-shadow:0 0 26px #4aa8ff;`, 560);
+      spawnSparks(cx, caster.y + FIGHTER_SIZE, 14, '#9fd8ff', 70);
+      const who = caster;
+      for(let i=0;i<5;i++){
+        setTimeout(()=>{ if(state.mode==='battle') spawnAfterimage(who, '#4aa8ff88', 320); }, 60 + i*55);
+      }
+      break;
+    }
+
+    /* ---------------- Spider-Man ---------------- */
+    case 'web_shot': {
+      const hx = cx + dir*24, hy = cy;
+      fxEl('fx-webtick', `left:${hx-14}px;top:${hy-14}px;width:28px;height:28px;`, 360, webSplatSvg(28));
+      spawnSparks(hx, hy, 4, '#ffffff', 20, 320);
+      break;
+    }
+    case 'web_bomb': {
+      const hx = cx + dir*26, hy = cy;
+      fxEl('fx-splat', `left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;`, 600, webSplatSvg(52));
+      fxEl('fx-ring', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;border-color:#ffffffaa;`, 540);
+      break;
+    }
+    case 'web_swing': {
+      // a web line fires up-forward to an anchor, then Spidey trails after it
+      const ax = cx + dir*120, ay = Math.max(10, cy - 260);
+      const pad = 20;
+      const minX = Math.min(cx, ax) - pad, minY = Math.min(cy, ay) - pad;
+      const w = Math.abs(ax-cx) + pad*2, h = Math.abs(ay-cy) + pad*2;
+      let g = `<line x1="${(cx-minX).toFixed(1)}" y1="${(cy-minY).toFixed(1)}" x2="${(ax-minX).toFixed(1)}" y2="${(ay-minY).toFixed(1)}" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>`;
+      for(let i=1;i<7;i++){
+        const t = i/7;
+        const px = (cx + (ax-cx)*t) - minX, py = (cy + (ay-cy)*t) - minY;
+        const nx = -(ay-cy), ny = (ax-cx), nl = Math.hypot(nx,ny)||1;
+        g += `<line x1="${(px-(nx/nl)*5).toFixed(1)}" y1="${(py-(ny/nl)*5).toFixed(1)}" x2="${(px+(nx/nl)*5).toFixed(1)}" y2="${(py+(ny/nl)*5).toFixed(1)}" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>`;
+      }
+      fxEl('fx-webline', `left:${minX}px;top:${minY}px;width:${w}px;height:${h}px;`, 560,
+        `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${g}</svg>`);
+      const who = caster;
+      for(let i=0;i<6;i++){
+        setTimeout(()=>{ if(state.mode==='battle') spawnAfterimage(who, '#d6323b77', 300); }, 40 + i*52);
+      }
+      break;
+    }
+
+    /* ---------------- Iron Man ---------------- */
+    case 'repulsor': {
+      const hx = cx + dir*26, hy = cy;
+      fxEl('charge-glow',
+        `left:${hx-20}px;top:${hy-20}px;width:40px;height:40px;`
+        + `background:radial-gradient(circle,#ffffff,#ffd479 45%,transparent 72%);box-shadow:0 0 22px #ffd479;`, 220);
+      fxEl('fx-flash', `left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;`, 300);
+      spawnSparks(hx, hy, 6, '#ffd479', 26, 380);
+      break;
+    }
+    case 'missile': {
+      const hx = cx + dir*30, hy = cy;
+      fxEl('fx-flash', `left:${hx-38}px;top:${hy-38}px;width:76px;height:76px;`, 320);
+      fxEl('fx-ring', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;border-color:#ffd479;box-shadow:0 0 22px #ff8c3a;`, 540);
+      spawnSparks(hx, hy, 10, '#ffd479', 46);
+      // lock-on reticle briefly snaps onto the target
+      const tg = (caster.id === 'player') ? state.bot : state.player;
+      if(tg && !tg.dead){
+        fxEl('lock-reticle',
+          `left:${tg.x-14}px;top:${tg.y-14}px;width:${FIGHTER_SIZE+28}px;height:${FIGHTER_SIZE+28}px;`
+          + `box-shadow:0 0 18px #ff8a8e66;animation-duration:1.1s;`, 900);
+      }
+      break;
+    }
+    case 'shield': {
+      fxEl('fx-hex', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;`, 640);
+      fxEl('fx-ring', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;border-color:#6cd0ff;box-shadow:0 0 26px #6cd0ff;`, 560);
+      spawnSparks(cx, cy, 10, '#6cd0ff', 52);
+      break;
+    }
+    case 'flight': {
+      fxEl('fx-ring',
+        `left:${cx-50}px;top:${caster.y+FIGHTER_SIZE-22}px;width:100px;height:44px;`
+        + `border-color:#ffd479;box-shadow:0 0 26px #ff8c3a;`, 560);
+      fxEl('fx-flash', `left:${cx-46}px;top:${caster.y+FIGHTER_SIZE-40}px;width:92px;height:80px;`, 320);
+      spawnSparks(cx, caster.y + FIGHTER_SIZE, 12, '#ffd479', 60);
+      break;
+    }
+
+    /* ---------------- fallback (keeps any future ability covered) --------- */
+    default: {
+      const col = ability.color || caster.def.color || '#fff';
+      fxEl('ability-ring',
+        `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:${col};box-shadow:0 0 34px ${col};`, 520);
+      spawnSparks(cx, cy, 9, col, 38);
+      break;
+    }
+  }
+}
+
+function spawnGroundCrack(cx, gy, spread){
+  const pad = 18, w = spread*2 + pad*2, h = 60;
+  let g = '';
+  for(let i=0;i<6;i++){
+    const side = i%2 ? 1 : -1;
+    const len = spread*(0.45 + Math.random()*0.55);
+    const pts = boltPoints(spread+pad, pad, spread+pad + side*len, pad + 8 + Math.random()*22, 4, 12);
+    g += `<path d="${ptsToPath(pts)}" stroke="#ffd479" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  }
+  fxEl('fx-crack', `left:${cx-spread-pad}px;top:${gy-pad}px;width:${w}px;height:${h}px;`, 700,
+    `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${g}</svg>`);
+}
+
+/* -------------------------------------------------------------------------
+   IMPACT FX  (dispatched from ability.hitFx)
+   ------------------------------------------------------------------------- */
+function spawnHitFx(target, kind, dirSign){
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  switch(kind){
+    case 'mjolnir': {
+      fxEl('fx-flash', `left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;`, 320);
+      fxEl('fx-ring', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#eaf7ff;box-shadow:0 0 34px #7cc4ff;`, 560);
+      fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#ffffff;border-width:6px;box-shadow:0 0 26px #ffffff;`, 560);
+      for(let i=0;i<7;i++){
+        const a = (Math.PI*2*i)/7 + Math.random()*0.35;
+        spawnLightning(cx, cy, cx + Math.cos(a)*92, cy + Math.sin(a)*92,
+          {bolts:1, branches:2, width:2.8, life:320, jag:26, segs:7});
+      }
+      spawnSparks(cx, cy, 18, '#eaf7ff', 78);
+      spawnSparks(cx, cy, 8, '#ffd479', 55, 420);
+      shakeArena(14, 360);
+      break;
+    }
+    case 'thunder': {
+      fxEl('fx-flash', `left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;`, 320);
+      spawnLightning(cx + (Math.random()-0.5)*30, Math.max(0, cy-260), cx, cy,
+        {bolts:2, branches:3, width:3, life:340, jag:24, segs:8});
+      spawnSparks(cx, cy, 14, '#cfe9ff', 70);
+      shakeArena(9, 300);
+      break;
+    }
+    case 'web': {
+      fxEl('fx-splat', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;`, 600, webSplatSvg(60));
+      spawnSparks(cx, cy, 6, '#ffffff', 30, 380);
+      break;
+    }
+    case 'web_big': {
+      fxEl('fx-splat', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`, 620, webSplatSvg(104));
+      fxEl('fx-ring', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#ffffffcc;`, 560);
+      spawnSparks(cx, cy, 10, '#ffffff', 52, 440);
+      shakeArena(6, 260);
+      break;
+    }
+    case 'missile': {
+      fxEl('fx-flash', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;`, 340);
+      fxEl('fx-ring', `left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;border-color:#ffd479;border-width:5px;box-shadow:0 0 34px #ff8c3a;`, 580);
+      fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#fff3d0;border-width:3px;`, 560);
+      spawnSparks(cx, cy, 22, '#ffd479', 100);
+      spawnSparks(cx, cy, 10, '#ffffff', 64, 460);
+      shakeArena(15, 400);
+      break;
+    }
+    case 'energy': {
+      fxEl('fx-flash', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`, 300);
+      fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#ffd479;box-shadow:0 0 26px #ff8c3a;`, 540);
+      fxEl('fx-ring', `left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;border-color:#fff3d0;border-width:3px;`, 540);
+      spawnSparks(cx, cy, 12, '#ffd479', 58);
+      shakeArena(5, 240);
+      break;
+    }
+    default: {
+      const size = 44;
+      fxEl('fx-burst',
+        `left:${cx-size/2}px;top:${cy-size/2}px;width:${size}px;height:${size}px;`
+        + `background:radial-gradient(circle,#ffffffcc,transparent 70%);`, 400);
+      spawnSparks(cx, cy, 6, '#ffffff', 34, 400);
+      break;
+    }
+  }
+  // a little directional knock-spray so hits read from either side
+  spawnSparks(cx + (dirSign||1)*16, cy, 4, '#ffffffcc', 40, 360);
+}
+
+/* -------------------------------------------------------------------------
+   WEB SLOW  (Spider-Man) — movement speed only, 0.3s
+   ------------------------------------------------------------------------- */
+const WEB_SLOW_FACTOR = 0.32;
+function isSlowed(f){ return !!f && (f.slowUntil || 0) > now(); }
+function applyWebSlow(target, ms){
+  if(!target || target.dead) return;
+  ms = ms || 300;
+  target.slowUntil = Math.max(target.slowUntil || 0, now() + ms);
+  showWebWrap(target, ms);
+}
+function showWebWrap(f, ms){
+  if(!f.el) return;
+  if(!f.webWrapEl || !f.webWrapEl.parentNode){
+    const el = document.createElement('div');
+    el.className = 'web-wrap';
+    el.innerHTML = '<div class="wrap-pulse" style="width:100%;height:100%;">' + webNetSvg(86, 1.7) + '</div>';
+    f.el.appendChild(el);
+    f.webWrapEl = el;
+  }
+  f.el.classList.add('slowed');
+  clearTimeout(f._webWrapTimer);
+  f._webWrapTimer = setTimeout(()=>{
+    if(f.webWrapEl && f.webWrapEl.parentNode) f.webWrapEl.remove();
+    f.webWrapEl = null;
+    if(f.el) f.el.classList.remove('slowed');
+  }, ms);
+}
+
+/* =========================================================================
+   SECTION: VISUAL EFFECTS
+   ========================================================================= */
+function spawnDamageNumber(x, y, value, isHeal){
+  const el = document.createElement('div');
+  el.className = 'dmg-num' + (isHeal ? ' heal' : '');
+  el.textContent = isHeal ? value : value;
+  el.style.left = x+'px'; el.style.top = y+'px';
+  arenaEl.appendChild(el);
+  setTimeout(()=>el.remove(), 850);
+}
+function flashHit(f){
+  f.el.classList.add('hitflash');
+  setTimeout(()=>{ if(f.el) f.el.classList.remove('hitflash'); }, 130);
+}
+function spawnMuzzleFx(caster){
+  const el = document.createElement('div');
+  el.className = 'fx fx-burst';
+  const size = 34;
+  el.style.cssText = `left:${caster.x+FIGHTER_SIZE/2 - size/2}px; top:${caster.y+FIGHTER_SIZE/2-size/2}px; width:${size}px; height:${size}px; background:radial-gradient(circle, ${caster.def.color}aa, transparent 70%);`;
+  arenaEl.appendChild(el);
+  setTimeout(()=>el.remove(), 380);
+}
+function spawnAoeFx(caster, radius){
+  const el = document.createElement('div');
+  el.className = 'fx fx-burst';
+  const size = radius*2;
+  el.style.cssText = `left:${caster.x+FIGHTER_SIZE/2-size/2}px; top:${caster.y+FIGHTER_SIZE/2-size/2}px; width:${size}px; height:${size}px; background:radial-gradient(circle, #ffffff55, transparent 70%); border:2px solid #ffffff66; border-radius:50%;`;
+  arenaEl.appendChild(el);
+  setTimeout(()=>el.remove(), 380);
+}
+function spawnHealFx(caster){
+  const el = document.createElement('div');
+  el.className = 'fx fx-burst';
+  const size = 70;
+  el.style.cssText = `left:${caster.x+FIGHTER_SIZE/2-size/2}px; top:${caster.y+FIGHTER_SIZE/2-size/2}px; width:${size}px; height:${size}px; background:radial-gradient(circle, #7fe39a88, transparent 70%); border-radius:50%;`;
+  arenaEl.appendChild(el);
+  setTimeout(()=>el.remove(), 500);
+}
+
+/* =========================================================================
+   SECTION: PHYSICS / MOVEMENT
+   ========================================================================= */
+function collidesPlatform(f, plat){
+  return (f.x + FIGHTER_SIZE) > plat.x && f.x < (plat.x + plat.w);
+}
+function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
+  // Horizontal input
+  if(f.hitStun > 0){
+    f.hitStun -= dtF*16.67;
+    f.vx *= 0.92;
+    // Knockback never fully locks you out — held movement keys still nudge you,
+    // so you can always fight your way out of a hitstun chain instead of just
+    // riding the knockback wherever it sends you.
+    if(moveDir !== 0){
+      const diSpeed = (f.flight ? FLY_SPEED : MOVE_SPEED) * 0.55;
+      f.vx += moveDir * diSpeed * dtF;
+    }
+    if(wantJump && f.onGround && !f.flight){
+      f.vy = JUMP_VEL;
+      f.onGround = false;
+    }
+  } else {
+    const slowMul = isSlowed(f) ? WEB_SLOW_FACTOR : 1; // webs only affect movement speed
+    if(f.flight){
+      f.vx = moveDir * FLY_SPEED * slowMul;
+    } else {
+      const spd = MOVE_SPEED * slowMul;
+      f.vx = moveDir * spd + (f.vx - moveDir*spd) * 0.75; // blend so knockback still shows briefly
+      if(Math.abs(f.vx - moveDir*spd) < 0.3) f.vx = moveDir*spd;
+    }
+    if(wantJump && f.onGround && !f.flight){
+      f.vy = JUMP_VEL;
+      f.onGround = false;
+    }
+  }
+
+  // Vertical
+  if(f.flight){
+    let vertDir = 0;
+    if(wantJump) vertDir -= 1;
+    if(wantDown) vertDir += 1;
+    f.vy = vertDir * FLY_SPEED * (isSlowed(f) ? WEB_SLOW_FACTOR : 1);
+  } else {
+    f.vy += GRAVITY * dtF;
+  }
+
+  // Drop-through timer
+  if(f.dropThroughTimer > 0){ f.dropThroughTimer -= dtF*16.67; }
+  f.dropThrough = wantDown && !f.flight && f.onGround;
+  if(wantDown && !f.flight) f.dropThroughTimer = 260;
+
+  // Integrate
+  f.x += f.vx * dtF;
+  f.y += f.vy * dtF;
+
+  // Platform collision (only when falling, one-way platforms)
+  f.onGround = false;
+  if(!f.flight){
+    for(const plat of PLATFORMS){
+      if(f.dropThroughTimer > 0) continue;
+      if(!collidesPlatform(f, plat)) continue;
+      const feetPrev = (f.y - f.vy*dtF) + FIGHTER_SIZE;
+      const feetNow = f.y + FIGHTER_SIZE;
+      if(f.vy >= 0 && feetPrev <= plat.y + 6 && feetNow >= plat.y){
+        f.y = plat.y - FIGHTER_SIZE;
+        f.vy = 0;
+        f.onGround = true;
+        // #region debug-point D:bot-landed
+        if(f.isBot){
+          debugReport('D', 'Game:updatePhysics:landing', '[DEBUG] Bot landed on platform', {
+            x: Math.round(f.x),
+            y: Math.round(f.y),
+            platformY: plat.y,
+            platformX: plat.x,
+            platformW: plat.w
+          });
+        }
+        // #endregion
+      }
+    }
+  }
+
+  // Wall collision (solid, blocks horizontal movement through it)
+  for(const w of state.walls){
+    if(w.owner === f.id) continue; // your own wall doesn't block you
+    const overlapX = (f.x + FIGHTER_SIZE) > w.x && f.x < (w.x + w.w);
+    const overlapY = (f.y + FIGHTER_SIZE) > w.y && f.y < (w.y + w.h);
+    if(overlapX && overlapY){
+      if(f.x < w.x){ f.x = w.x - FIGHTER_SIZE; }
+      else { f.x = w.x + w.w; }
+      f.vx = 0;
+    }
+  }
+
+  // Arena bounds — solid side walls and a solid floor. You cannot leave the map
+  // through the sides or bottom. Only sustained Flight gets an upper cap (it's
+  // the one ability that could otherwise let you hide fully off-screen for
+  // seconds at a time); ordinary jumps like Thunder Jump are brief and
+  // ballistic — gravity always brings them back down on its own, so capping
+  // them too just clipped big jumps into an invisible ceiling for no benefit.
+  if(f.x < BOUND_MIN_X){ f.x = BOUND_MIN_X; if(f.vx < 0) f.vx = 0; }
+  if(f.x > BOUND_MAX_X){ f.x = BOUND_MAX_X; if(f.vx > 0) f.vx = 0; }
+  if(f.flight && f.y < -40){ f.y = -40; if(f.vy < 0) f.vy = 0; }
+  if(f.y > FLOOR_Y){
+    f.y = FLOOR_Y;
+    if(f.vy > 0) f.vy = 0;
+    if(!f.flight) f.onGround = true;
+  }
+
+  // Facing — for a human player, facing simply follows the movement key you
+  // last pressed. A bot's facing is NOT set here at all; it's driven by
+  // updateBotFacing() below, which tracks the opponent's true side with a
+  // reaction delay, and that facing is what actually gates whether the
+  // bot's attacks can connect (see executeAbility).
+  if(!f.isBot && moveDir !== 0) f.facing = moveDir;
+}
+
+function updateShield(f){
+  const active = f.shield && now() < f.shield.expire;
+  f.shieldEl.style.display = active ? 'block' : 'none';
+  if(f.shield && now() >= f.shield.expire) f.shield = null;
+}
+function updateFlightGlow(f){
+  const t = now();
+  if(f.flight && f.flightExpire && t >= f.flightExpire){
+    f.flight = false;
+    f.flightExpire = 0;
+  }
+  f.flightEl.style.display = f.flight ? 'block' : 'none';
+  if(f.thrusterEl) f.thrusterEl.style.display = f.flight ? 'block' : 'none';
+}
+
+/* =========================================================================
+   SECTION: PROJECTILES
+   ========================================================================= */
+function updateProjectiles(dtF){
+  const t = now();
+  for(let i=state.projectiles.length-1; i>=0; i--){
+    const p = state.projectiles[i];
+    p.life -= dtF*16.67;
+    if(p.returns){
+      const traveled = Math.abs(p.x - p.originX);
+      if(p.phase==='out' && traveled > 220){ p.phase='return'; }
+      if(p.phase==='return'){
+        const dir = (p.casterRef.x > p.x) ? 1 : -1;
+        p.vx = dir * Math.abs(p.vx);
+        p.x += p.vx*dtF;
+        if(Math.abs(p.x - p.casterRef.x) < 20){ p.life = -1; }
+      } else {
+        p.x += p.vx*dtF;
+      }
+    } else {
+      p.x += p.vx*dtF;
+    }
+    p.y += p.vy*dtF;
+
+    // Wall collision
+    let consumed = false;
+    for(const w of state.walls){
+      if(w.owner === p.owner) continue;
+      const overlapX = (p.x + p.w) > w.x && p.x < (w.x + w.w);
+      const overlapY = (p.y + p.h) > w.y && p.y < (w.y + w.h);
+      if(overlapX && overlapY){
+        w.health -= p.damage;
+        spawnDamageNumber(w.x, w.y, p.damage, false);
+        if(w.health <= 0) state.walls = state.walls.filter(x=>x!==w);
+        consumed = true;
+        break;
+      }
+    }
+    if(consumed || p.life <= 0 || p.x < -60 || p.x > ARENA_W+60){
+      if(p.el) p.el.remove();
+      state.projectiles.splice(i,1);
+      continue;
+    }
+
+    // Missile collision — projectiles can shoot an incoming missile down
+    let struckMissile = false;
+    for(let mi = state.missiles.length - 1; mi >= 0; mi--){
+      const m = state.missiles[mi];
+      if(m.owner === p.owner) continue;
+      const mx = (p.x + p.w) > m.x && p.x < (m.x + m.w);
+      const my = (p.y + p.h) > m.y && p.y < (m.y + m.h);
+      if(mx && my){
+        m.health -= p.damage;
+        spawnDamageNumber(m.x + m.w/2 - 10, m.y - 14, Math.round(p.damage), false);
+        sfx('missile_ping');
+        spawnSparks(p.x + p.w/2, p.y + p.h/2, 7, '#ffd479', 34, 380);
+        if(m.health <= 0) destroyMissile(mi, true);
+        struckMissile = true;
+        break;
+      }
+    }
+    if(struckMissile){
+      if(p.el) p.el.remove();
+      state.projectiles.splice(i,1);
+      continue;
+    }
+
+    // Character collision
+    const target = (p.owner === 'player') ? state.bot : state.player;
+    if(!target.dead){
+      const overlapX = (p.x + p.w) > target.x && p.x < (target.x + FIGHTER_SIZE);
+      const overlapY = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
+      if(overlapX && overlapY){
+        const dir = dirSignTo({x:p.x}, {x:target.x});
+        applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow});
+        if(p.el) p.el.remove();
+        state.projectiles.splice(i,1);
+        continue;
+      }
+    }
+
+    // render
+    if(!p.el){
+      p.el = document.createElement('div');
+      p.el.className='projectile' + (p.icon ? ' burger' : '');
+      p.el.style.width=p.w+'px'; p.el.style.height=p.h+'px';
+      buildProjectileVisual(p);
+      arenaEl.appendChild(p.el);
+    }
+    p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
+
+    // motion trail
+    if(p.trail){
+      p.trailTick = (p.trailTick || 0) + dtF;
+      if(p.trailTick >= 2){ p.trailTick = 0; spawnProjTrail(p); }
+    }
+  }
+}
+
+/* Distinct look per projectile type — webs, repulsor bolts, generic energy. */
+function buildProjectileVisual(p){
+  const flip = p.vx < 0 ? -1 : 1;
+  if(p.render === 'web-strand'){
+    p.el.classList.add('web-projectile');
+    p.el.style.background = 'transparent';
+    p.el.innerHTML = `<div class="proj-svg" style="transform:translate(-50%,-50%) scaleX(${flip});">${webStrandSvg()}</div>`;
+  } else if(p.render === 'web-net'){
+    p.el.classList.add('web-projectile');
+    p.el.style.background = 'transparent';
+    p.el.innerHTML = `<div class="proj-svg"><div class="web-net-spin">${webNetSvg(p.w + 18, 1.6)}</div></div>`;
+  } else if(p.render === 'repulsor'){
+    p.el.classList.add('epic-projectile');
+    p.el.style.background = 'transparent';
+    p.el.style.boxShadow = 'none';
+    p.el.style.color = p.color;
+    const tailSide = flip > 0 ? 'right:100%;' : 'left:100%;';
+    const tailGrad = flip > 0 ? '90deg' : '270deg';
+    p.el.innerHTML = `<div class="repulsor-tail" style="${tailSide}background:linear-gradient(${tailGrad},rgba(255,212,121,0),rgba(255,212,121,.85));"></div>`
+      + `<div class="repulsor-core"></div>`;
+  } else {
+    p.el.classList.add('epic-projectile');
+    if(p.icon) p.el.textContent = p.icon;
+    p.el.style.background = p.color;
+    p.el.style.color = p.color;
+    p.el.style.boxShadow = `0 0 8px ${p.color}`;
+  }
+}
+function spawnProjTrail(p){
+  const cx = p.x + p.w/2, cy = p.y + p.h/2;
+  if(p.trail === 'web'){
+    const n = Math.max(8, Math.min(20, p.w));
+    fxEl('fx-webtick', `left:${(cx-n/2).toFixed(1)}px;top:${(cy-n/2).toFixed(1)}px;width:${n}px;height:${n}px;`, 400,
+      `<svg width="${n}" height="${n}" viewBox="0 0 ${n} ${n}"><g stroke="#ffffff" stroke-width="1.2" fill="none" opacity=".75" stroke-linecap="round">`
+      + `<line x1="${n*0.5}" y1="0" x2="${n*0.5}" y2="${n}"/><line x1="0" y1="${n*0.5}" x2="${n}" y2="${n*0.5}"/>`
+      + `<line x1="${n*0.15}" y1="${n*0.15}" x2="${n*0.85}" y2="${n*0.85}"/><line x1="${n*0.85}" y1="${n*0.15}" x2="${n*0.15}" y2="${n*0.85}"/>`
+      + `</g></svg>`);
+  } else {
+    const col = p.color || '#ffd479';
+    const sz = Math.max(7, Math.min(16, p.h));
+    fxEl('fx-trail',
+      `left:${(cx-sz/2).toFixed(1)}px;top:${(cy-sz/2).toFixed(1)}px;width:${sz}px;height:${sz}px;`
+      + `background:radial-gradient(circle,#ffffff,${col} 55%,transparent 75%);box-shadow:0 0 10px ${col};`, 380);
+  }
+}
+
+/* =========================================================================
+   SECTION: HOMING MISSILES (Iron Man — Q)
+   The missile locks onto its target, starts slow and keeps accelerating.
+   It has its own health pool: shoot it down or it detonates for whatever
+   health it has left.
+   ========================================================================= */
+function updateMissiles(dtF){
+  for(let i = state.missiles.length - 1; i >= 0; i--){
+    const m = state.missiles[i];
+    const target = m.targetRef;
+
+    m.life -= dtF*16.67;
+    if(m.life <= 0 || !target || target.dead || m.health <= 0){
+      destroyMissile(i, m.health <= 0);
+      continue;
+    }
+
+    // accelerate the longer it stays in the air
+    m.speed = Math.min(m.maxSpeed, m.speed + m.accel*dtF);
+
+    // steer toward the target at a limited turn rate so it reads as a missile
+    const mcx = m.x + m.w/2, mcy = m.y + m.h/2;
+    const tcx = target.x + FIGHTER_SIZE/2, tcy = target.y + FIGHTER_SIZE/2;
+    const want = Math.atan2(tcy - mcy, tcx - mcx);
+    let diff = want - m.angle;
+    while(diff > Math.PI) diff -= Math.PI*2;
+    while(diff < -Math.PI) diff += Math.PI*2;
+    const maxTurn = m.turnRate * dtF;
+    m.angle += Math.max(-maxTurn, Math.min(maxTurn, diff));
+
+    m.x += Math.cos(m.angle) * m.speed * dtF;
+    m.y += Math.sin(m.angle) * m.speed * dtF;
+
+    // keep it inside the arena
+    m.x = Math.max(-40, Math.min(ARENA_W + 40 - m.w, m.x));
+    m.y = Math.max(-40, Math.min(ARENA_H + 40 - m.h, m.y));
+
+    // impact
+    const hitX = (m.x + m.w) > target.x && m.x < (target.x + FIGHTER_SIZE);
+    const hitY = (m.y + m.h) > target.y && m.y < (target.y + FIGHTER_SIZE);
+    if(hitX && hitY){
+      const dmg = Math.max(0, Math.round(m.health)); // damage = health it had left
+      const dir = (tcx >= mcx) ? 1 : -1;
+      applyDamage(target, dmg, m.knockback, dir, {hitFx:'missile', sound:'missile_boom'});
+      destroyMissile(i, false);
+      continue;
+    }
+
+    // render
+    if(!m.el){
+      m.el = document.createElement('div');
+      m.el.className = 'missile locked';
+      m.el.style.width = m.w+'px'; m.el.style.height = m.h+'px';
+      m.el.innerHTML = '<div class="m-hp"><div class="fill"></div></div>'
+        + '<div class="m-body"><div class="m-flame"></div><div class="m-fin top"></div>'
+        + '<div class="m-fin bot"></div><div class="m-hull"></div><div class="m-nose"></div></div>';
+      arenaEl.appendChild(m.el);
+      m.fillEl = m.el.querySelector('.m-hp .fill');
+      m.bodyEl = m.el.querySelector('.m-body');
+    }
+    m.el.style.left = m.x+'px';
+    m.el.style.top = m.y+'px';
+    if(m.bodyEl) m.bodyEl.style.transform = `rotate(${m.angle}rad)`;
+    if(m.fillEl) m.fillEl.style.width = Math.max(0, (m.health/m.maxHealth)*100) + '%';
+
+    // exhaust trail
+    m.trailTick += dtF;
+    if(m.trailTick >= 2){
+      m.trailTick = 0;
+      const bx = mcx - Math.cos(m.angle)*24, by = mcy - Math.sin(m.angle)*24;
+      fxEl('fx-trail',
+        `left:${(bx-6).toFixed(1)}px;top:${(by-6).toFixed(1)}px;width:12px;height:12px;`
+        + `background:radial-gradient(circle,#ffffff,#ffd479 50%,transparent 75%);box-shadow:0 0 10px #ff8c3a;`, 380);
+    }
+  }
+}
+function destroyMissile(index, shotDown){
+  const m = state.missiles[index];
+  if(!m) return;
+  const cx = m.x + m.w/2, cy = m.y + m.h/2;
+  if(m.el) m.el.remove();
+  state.missiles.splice(index, 1);
+  if(shotDown){
+    sfx('missile_boom');
+    fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;`, 320);
+    fxEl('fx-ring', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;border-color:#ffd479;box-shadow:0 0 28px #ff8c3a;`, 560);
+    spawnSparks(cx, cy, 16, '#ffd479', 70);
+    spawnSparks(cx, cy, 8, '#ffffff', 46, 420);
+    shakeArena(7, 280);
+  }
+}
+/* Anything the defender throws at the missile chips its health down. */
+function damageMissilesInArea(attackerId, cx, cy, radius, dmg){
+  let hitAny = false;
+  for(let i = state.missiles.length - 1; i >= 0; i--){
+    const m = state.missiles[i];
+    if(m.owner === attackerId) continue;
+    const mcx = m.x + m.w/2, mcy = m.y + m.h/2;
+    if(Math.hypot(mcx - cx, mcy - cy) > radius) continue;
+    m.health -= dmg;
+    spawnDamageNumber(mcx - 10, mcy - 14, Math.round(dmg), false);
+    sfx('missile_ping');
+    spawnSparks(mcx, mcy, 6, '#ffd479', 32, 380);
+    hitAny = true;
+    if(m.health <= 0) destroyMissile(i, true);
+  }
+  return hitAny;
+}
+
+/* =========================================================================
+   SECTION: WALLS
+   ========================================================================= */
+function updateWalls(){
+  const t = now();
+  for(let i=state.walls.length-1; i>=0; i--){
+    const w = state.walls[i];
+    if(t > w.expire || w.health <= 0){
+      if(w.el) w.el.remove();
+      state.walls.splice(i,1);
+      continue;
+    }
+    if(!w.el){
+      w.el = document.createElement('div');
+      w.el.className='wallblock';
+      w.el.innerHTML = '<div class="wall-hp"><div class="fill"></div></div>';
+      arenaEl.appendChild(w.el);
+    }
+    w.el.style.left=w.x+'px'; w.el.style.top=w.y+'px'; w.el.style.width=w.w+'px'; w.el.style.height=w.h+'px';
+    const pct = Math.max(0, w.health/w.maxHealth);
+    w.el.querySelector('.fill').style.width = (pct*100)+'%';
+  }
+}
+
+/* =========================================================================
+   SECTION: BOT AI
+   Style-aware: each character plays to its kit instead of one generic loop.
+   The bot predicts where the player is heading, holds a sensible spacing
+   for its style, actively hunts down or shoots down incoming missiles, and
+   picks abilities based on range and cooldown rather than raw chance.
+   ========================================================================= */
+const AI_STYLE_RANGE = {
+  aggressive: 70,   // Thor wants to be inside melee range
+  mobile:     260,  // Spider-Man pokes from mid-range, darts in/out
+  defensive:  340,  // Iron Man kites and fights from a distance
+};
+/* A bot's facing tracks its opponent's true side by default — including
+   while it's retreating/kiting, so ranged characters can still fire while
+   backing away. The only time facing lags is the instant the opponent
+   crosses from one side to the other (a flank): that triggers a genuine
+   AI_TURN_DELAY reaction window during which the bot's facing (and
+   therefore its melee range and projectile aim, see executeAbility) stays
+   pointed at the old side. That's the real fix for "the AI instantly turns
+   and hits me the moment I get behind it" — sneaking around now actually
+   buys you a punish window instead of doing nothing. */
+function updateBotFacing(bot, opp){
+  if(!bot || bot.dead || !opp || opp.dead) return;
+  const trueSide = dirSignTo(bot, opp);
+  if(trueSide === bot.facing){ bot.turnPending = null; return; }
+  if(bot.turnPending && bot.turnPending.dir === trueSide){
+    if(now() >= bot.turnPending.readyAt){ bot.facing = trueSide; bot.turnPending = null; }
+  } else {
+    bot.turnPending = { dir: trueSide, readyAt: now() + AI_TURN_DELAY };
+  }
+}
+function findIncomingMissile(bot){
+  let best = null, bestD = Infinity;
+  for(const m of state.missiles){
+    if(m.owner === bot.id) continue;
+    const d = Math.hypot((m.x+m.w/2) - (bot.x+FIGHTER_SIZE/2), (m.y+m.h/2) - (bot.y+FIGHTER_SIZE/2));
+    if(d < bestD){ bestD = d; best = m; }
+  }
+  return best;
+}
+function updateBotAI(dtF){
+  const bot = state.bot, player = state.player;
+  if(bot.dead || player.dead) return;
+  bot.aiTimer -= dtF*16.67;
+  if(bot.aiTimer > 0) return;
+  bot.aiTimer = 60 + Math.random()*50; // quick reactions
+
+  const t = now();
+  // Predict a little ahead using the player's current velocity so the bot
+  // leads its approach instead of always chasing where the player *was*.
+  const predictedX = player.x + player.vx * 7;
+  const dx = predictedX - bot.x;
+  const adist = Math.abs(player.x - bot.x);
+  const dirToPlayer = dx >= 0 ? 1 : -1;
+  const vertical = player.y - bot.y;
+  const hpPct = bot.health / bot.def.maxHealth;
+  const playerHpPct = player.health / player.def.maxHealth;
+  const style = bot.def.aiStyle;
+  const preferred = AI_STYLE_RANGE[style] || 200;
+
+  const missile = findIncomingMissile(bot);
+
+  /* ---------------- movement: navigate to the player's level first ---------------- */
+  let moveDir = dirToPlayer;
+  let jumpPulse = false;
+  let dropPulse = false;
+  let usingPlatformRoute = false;
+
+  const botPlat = platformUnderX(bot);
+  const playerPlat = platformUnderX(player);
+  const botPlatIdx = botPlat ? PLATFORMS.indexOf(botPlat) : -1;
+  const playerPlatIdx = playerPlat ? PLATFORMS.indexOf(playerPlat) : -1;
+  // Small height differences (e.g. mid-hop) don't need real navigation —
+  // only route through the platform graph when they're genuinely on
+  // different levels.
+  const sameLevel = !botPlat || !playerPlat || botPlat === playerPlat || Math.abs(vertical) < 60;
+  let path = null;
+  let decision = sameLevel ? 'same-level' : 'needs-route';
+
+  // #region debug-point A:bot-ai-snapshot
+  debugReport('A', 'Game:updateBotAI:entry', '[DEBUG] Bot AI snapshot', {
+    botX: Math.round(bot.x),
+    botY: Math.round(bot.y),
+    playerX: Math.round(player.x),
+    playerY: Math.round(player.y),
+    vertical: Math.round(vertical),
+    botPlatIdx,
+    playerPlatIdx,
+    sameLevel,
+    onGround: !!bot.onGround,
+    aiMoveDir: bot.aiMoveDir,
+    style
+  });
+  // #endregion
+
+  if(!sameLevel){
+    usingPlatformRoute = true;
+    // Different platform levels: walk off the edge to fall to a lower one,
+    // or line up and jump to reach a higher one — no phasing through floors.
+    path = findPlatformPath(botPlatIdx, playerPlatIdx);
+    if(!path){
+      decision = 'no-path';
+      // No route exists through the platform graph at all — every normal
+      // jump from here is physically too short to reach anything above (the
+      // graph only links platforms a real jump or fall can actually cross).
+      // Without this check, the old code fell back to aiming straight at the
+      // final target regardless of whether that jump was possible, which is
+      // exactly the "bot just bounces in place" bug: it kept attempting a
+      // jump it could never complete. Reach for a real escape tool instead —
+      // a big jump, a swing, or flight — and only if nothing is ready, hold
+      // position under the player instead of spamming a jump that can't land.
+      const rAb = bot.def.abilities.R;
+      const isEscapeTool = rAb && (rAb.type === 'jump' || rAb.type === 'mobility' || rAb.type === 'timedToggle');
+      if(isEscapeTool && cdReady(bot, 'R', t)){
+        tryUseAbility(bot, player, 'R');
+        bot.aiMoveDir = dirToPlayer;
+        bot.aiJumpPulse = false;
+        bot.aiDropPulse = false;
+        return;
+      }
+      moveDir = dirToPlayer;
+      jumpPulse = false;
+    } else {
+      const nextPlat = (path.length > 1) ? PLATFORMS[path[1]] : playerPlat;
+      const centerX = bot.x + FIGHTER_SIZE/2;
+      if(nextPlat.y < botPlat.y - 10){
+        decision = 'ascend';
+        // Ascend: on this map no platform sits directly enough above another
+        // to jump straight up onto it — every climb is actually a running
+        // jump off one edge of the current platform, drifting sideways
+        // through the arc (the physics already lets a jumping fighter steer
+        // in mid-air) to land on the platform above. So: if there's a real
+        // overlap window reachable within jump range, line up under it and
+        // jump straight up; otherwise the only reachable launch point is our
+        // own platform's edge closest to the target — walk there and jump,
+        // then keep steering toward the target while airborne to cover the
+        // rest of the horizontal gap on the way up.
+        const lo = Math.max(botPlat.x, nextPlat.x - 20);
+        const hi = Math.min(botPlat.x + botPlat.w, nextPlat.x + nextPlat.w + 20);
+        let targetX;
+        if(lo <= hi){
+          targetX = (lo + hi) / 2;
+        } else {
+          const nextCenter = nextPlat.x + nextPlat.w/2;
+          targetX = (nextCenter > centerX) ? (botPlat.x + botPlat.w - 4) : (botPlat.x + 4);
+        }
+        moveDir = targetX > centerX + 6 ? 1 : (targetX < centerX - 6 ? -1 : 0);
+        // Once the bot reaches a valid launch lane, commit to the climb.
+        // Random jump checks here made it shadow the player underneath a
+        // higher platform instead of actually taking the route up.
+        if(bot.onGround && Math.abs(targetX - centerX) < 56) jumpPulse = true;
+      } else if(nextPlat.y > botPlat.y + 10){
+        decision = 'descend';
+        // Descend: head for whichever edge of the current platform points
+        // toward the platform below, then keep walking — stepping off it
+        // and letting gravity take over is the only way down.
+        const nextCenter = nextPlat.x + nextPlat.w/2;
+        const leftEdge = botPlat.x, rightEdge = botPlat.x + botPlat.w;
+        const goLeft = Math.abs(leftEdge - nextCenter) < Math.abs(rightEdge - nextCenter);
+        const targetX = goLeft ? leftEdge - 30 : rightEdge + 30;
+        moveDir = targetX > centerX ? 1 : -1;
+      } else {
+        decision = 'route-horizontal';
+        moveDir = dirToPlayer;
+      }
+    }
+  } else if(missile && Math.abs((missile.x+missile.w/2) - (bot.x+FIGHTER_SIZE/2)) < 260){
+    decision = 'missile-pressure';
+    // A live missile heading this way is the top movement priority — close on it
+    // if this character needs to be in range to shoot or swing it down.
+    const eAb = bot.def.abilities.E;
+    if(eAb.type === 'melee' || eAb.type === 'aoe'){
+      moveDir = (missile.x + missile.w/2 >= bot.x + FIGHTER_SIZE/2) ? 1 : -1;
+    }
+  } else if(style === 'aggressive'){
+    decision = 'aggressive-spacing';
+    // Always closing the gap; only backs off a hair if right on top of the player
+    // so its melee swing has room to land cleanly.
+    moveDir = (adist < preferred*0.5) ? (Math.random() < 0.6 ? dirToPlayer : -dirToPlayer) : dirToPlayer;
+  } else {
+    decision = 'spacing';
+    // Mobile / defensive styles hold a rough spacing, but they don't get to
+    // sprint away forever — a melee attacker needs a real shot at landing hits.
+    // Retreating only fires when the player is genuinely in striking range,
+    // only some of the time, and never if it would just trap the bot at a wall.
+    const meleeDanger = 130;
+    const retreatDir = -dirToPlayer;
+    const nearLeftWall = bot.x < 130, nearRightWall = bot.x > ARENA_W - FIGHTER_SIZE - 130;
+    const retreatBlocked = (retreatDir < 0 && nearLeftWall) || (retreatDir > 0 && nearRightWall);
+
+    if(adist < meleeDanger && !retreatBlocked && Math.random() < 0.55){
+      moveDir = retreatDir; // duck out of real danger — not a permanent flee
+    } else if(retreatBlocked && adist < meleeDanger){
+      moveDir = dirToPlayer; // cornered: better to fight than get trapped
+    } else if(adist > preferred + 40){
+      moveDir = dirToPlayer; // too far to do anything useful — close back in
+    } else {
+      // comfortable spacing: hold ground or drift lightly instead of reflexively fleeing
+      const roll = Math.random();
+      moveDir = roll < 0.4 ? dirToPlayer : (roll < 0.65 ? -dirToPlayer : 0);
+    }
+  }
+
+  if(!usingPlatformRoute && Math.abs(vertical) > 70 && player.y < bot.y){
+    jumpPulse = Math.random() < 0.55;
+  }
+
+  // The player is below the bot by a real margin — rather than pacing
+  // forever on the platform overhead mirroring the player's x position,
+  // drop straight through it to close the gap (same one-way-platform
+  // drop-through the player has, just AI-driven).
+  if(!usingPlatformRoute && vertical > 70 && bot.onGround){
+    dropPulse = Math.random() < 0.6;
+  }
+
+  // Recover from edges while still pursuing.
+  if(bot.x < 70) moveDir = 1;
+  if(bot.x > ARENA_W - FIGHTER_SIZE - 70) moveDir = -1;
+
+  // #region debug-point B:bot-ai-route
+  debugReport('B', 'Game:updateBotAI:decision', '[DEBUG] Bot route decision', {
+    decision,
+    botPlatIdx,
+    playerPlatIdx,
+    path,
+    usingPlatformRoute,
+    vertical: Math.round(vertical),
+    adist: Math.round(adist)
+  });
+  // #endregion
+
+  bot.aiMoveDir = moveDir;
+  bot.aiJumpPulse = jumpPulse;
+  bot.aiDropPulse = dropPulse;
+
+  // #region debug-point C:bot-ai-output
+  debugReport('C', 'Game:updateBotAI:output', '[DEBUG] Bot AI output', {
+    moveDir,
+    jumpPulse,
+    dropPulse,
+    onGround: !!bot.onGround,
+    facing: bot.facing,
+    x: Math.round(bot.x),
+    y: Math.round(bot.y)
+  });
+  // #endregion
+
+  /* ---------------- shoot down an incoming missile ---------------- */
+  if(missile && cdReady(bot,'E',t)){
+    const ab = bot.def.abilities.E;
+    const mcx = missile.x + missile.w/2, mcy = missile.y + missile.h/2;
+    const mdist = Math.hypot(mcx - (bot.x+FIGHTER_SIZE/2), mcy - (bot.y+FIGHTER_SIZE/2));
+    bot.facing = (mcx >= bot.x + FIGHTER_SIZE/2) ? 1 : -1;
+    if(ab.type === 'projectile'){
+      tryUseAbility(bot, {x: missile.x, y: missile.y}, 'E');
+      return;
+    }
+    if((ab.type === 'melee' && mdist <= ab.range + 20) || (ab.type === 'aoe' && mdist <= ab.radius + 20)){
+      tryUseAbility(bot, player, 'E'); // passive area check also strikes the missile
+      return;
+    }
+  }
+  if(missile && cdReady(bot,'Q',t)){
+    const ab = bot.def.abilities.Q;
+    const mcx = missile.x + missile.w/2, mcy = missile.y + missile.h/2;
+    const mdist = Math.hypot(mcx - (bot.x+FIGHTER_SIZE/2), mcy - (bot.y+FIGHTER_SIZE/2));
+    if(ab.type === 'aoe' && mdist <= ab.radius + 20){ tryUseAbility(bot, player, 'Q'); return; }
+    if(ab.type === 'projectile'){ tryUseAbility(bot, {x: missile.x, y: missile.y}, 'Q'); return; }
+  }
+
+  /* ---------------- style-specific decision making ---------------- */
+  if(style === 'aggressive'){
+    // Thor: swing whenever in range, burst with Thunderclap when the timing is
+    // right (either right on top of the player, or to punish them closing in),
+    // and only escape with the big jump when in real danger.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q, rAb = bot.def.abilities.R;
+    if(hpPct < 0.22 && cdReady(bot,'R',t) && Math.random() < 0.5){ tryUseAbility(bot, player, 'R'); return; }
+    if(cdReady(bot,'Q',t) && adist <= qAb.radius + 15 && (hpPct > playerHpPct - 0.15 || Math.random() < 0.4)){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 15){
+      tryUseAbility(bot, player, 'E'); return;
+    }
+  } else if(style === 'mobile'){
+    // Spider-Man: keep chip damage flowing with Web Strike at range, land the
+    // heavier Web Bomb when it's off cooldown and roughly in line, and swing
+    // away the moment things get dangerous rather than trading blows.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q;
+    const dangerClose = adist < 110 && (player.def.aiStyle !== 'mobile'); // player is in real range on us
+    if((hpPct < 0.35 || dangerClose) && cdReady(bot,'R',t) && Math.random() < 0.75){
+      tryUseAbility(bot, player, 'R'); return;
+    }
+    if(cdReady(bot,'Q',t) && adist < 420 && Math.random() < 0.55){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'E',t)){
+      tryUseAbility(bot, player, 'E'); return;
+    }
+  } else if(style === 'defensive'){
+    // Iron Man: keep the repulsor firing constantly at range, launch missiles
+    // whenever the cooldown allows and there's room for one to build up speed,
+    // and duck into flight to open distance when the player closes in or HP drops.
+    const eAb = bot.def.abilities.E;
+    if(cdReady(bot,'R',t) && !bot.flight && (adist < 130 || hpPct < 0.4) && Math.random() < 0.6){
+      tryUseAbility(bot, player, 'R'); return;
+    }
+    if(cdReady(bot,'Q',t) && adist > 130){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'E',t) && adist <= eAb.speed*60){
+      tryUseAbility(bot, player, 'E'); return;
+    }
+  }
+}
+
+/* =========================================================================
+   SECTION: KO / END CHECK
+   ========================================================================= */
+function checkKO(){
+  // Ring-outs are gone: the arena is walled in, so health is the only way out.
+}
+function endBattle(winnerSide, reason){
+  if(state.mode !== 'battle') return;
+  state.mode = 'ended';
+  state.countdown = false;
+  battleToken++; // invalidate any pending countdown steps
+  state.missiles.forEach(m => { if(m.el) m.el.remove(); });
+  state.missiles = [];
+  const ov = document.getElementById('countdown-overlay');
+  if(ov){ ov.classList.remove('on'); ov.innerHTML = ''; }
+  state.player.dead = true; state.bot.dead = true;
+  const winnerDef = winnerSide==='player' ? state.player.def : state.bot.def;
+  const loserDef = winnerSide==='player' ? state.bot.def : state.player.def;
+  const badge = document.getElementById('go-badge');
+  const isWin = winnerSide === 'player';
+  badge.textContent = isWin ? 'Victory!' : 'Defeat...';
+  badge.className = 'go-badge ' + (isWin ? 'win' : 'lose');
+  document.getElementById('go-sub').textContent =
+    `${winnerDef.name} defeats ${loserDef.name}.`;
+  const portraits = document.getElementById('go-portraits');
+  portraits.innerHTML = `
+    <div class="go-portrait winner">
+      <div class="go-portrait-square">${squareInner(winnerDef)}</div>
+      <div class="go-portrait-name">${winnerDef.name}</div>
+    </div>
+    <div class="go-vs">VS</div>
+    <div class="go-portrait loser">
+      <div class="go-portrait-square">${squareInner(loserDef)}</div>
+      <div class="go-portrait-name">${loserDef.name}</div>
+    </div>
+  `;
+  const loser = winnerSide==='player' ? state.bot : state.player;
+  spawnKODeathFx(loser);
+  setTimeout(()=>showScreen('gameover'), 1900);
+}
+
+/* =========================================================================
+   SECTION: KO DEATH SEQUENCE
+   Plays once, on the loser, the moment health hits zero. Pure CSS keyframes
+   drive the tumble/fade so it keeps animating even though the game loop has
+   already stopped ticking for this fighter.
+   ========================================================================= */
+function spawnKODeathFx(loser){
+  if(!loser || !loser.el) return;
+  const cx = loser.x + FIGHTER_SIZE/2, cy = loser.y + FIGHTER_SIZE/2;
+  const col = loser.def.color || '#ffffff';
+
+  // Hide the extra rig (hammer, shield ring, thrusters, hp sliver) so the
+  // tumble reads clean rather than dragging UI chrome down with it.
+  loser.el.classList.add('dying');
+  if(loser.shieldEl) loser.shieldEl.style.display = 'none';
+  if(loser.flightEl) loser.flightEl.style.display = 'none';
+  if(loser.thrusterEl) loser.thrusterEl.style.display = 'none';
+  if(loser.overheadFillEl && loser.overheadFillEl.parentElement) loser.overheadFillEl.parentElement.style.display = 'none';
+  const hammer = loser.el.querySelector('.thor-hammer');
+  if(hammer) hammer.style.display = 'none';
+
+  sfx('ko');
+  shakeArena(16, 520);
+
+  // Big themed shatter burst — the character's own color, then a white core.
+  fxEl('fx-flash', `left:${cx-100}px;top:${cy-100}px;width:200px;height:200px;`, 420);
+  fxEl('fx-ring', `left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;border-color:${col};box-shadow:0 0 40px ${col};`, 640);
+  fxEl('fx-ko-vignette', `left:0;top:0;`, 1520);
+  spawnSparks(cx, cy, 26, col, 120, 900);
+  spawnSparks(cx, cy, 14, '#ffffff', 80, 700);
+
+  // A second, delayed shockwave sells the "hit the ground" beat of the tumble.
+  setTimeout(()=>{
+    fxEl('fx-shock', `left:${cx-60}px;top:${cy+40}px;width:120px;height:120px;border:3px solid #ffffff88;border-radius:50%;`, 500);
+    spawnSparks(cx, cy+50, 10, col, 60, 500);
+  }, 480);
+
+  // K.O. stamp — reuses the countdown overlay's staging so it's centered
+  // over the arena with the same polish as the pre-fight countdown.
+  const ov = document.getElementById('countdown-overlay');
+  if(ov){
+    ov.innerHTML = '';
+    ov.classList.add('on');
+    const item = document.createElement('div');
+    item.className = 'count-item';
+    item.innerHTML = '<div class="count-ring ko"></div><div class="count-num count-ko">K.O.</div>';
+    ov.appendChild(item);
+    setTimeout(()=>{ if(item.parentNode) item.remove(); }, 1050);
+    setTimeout(()=>{ ov.classList.remove('on'); ov.innerHTML = ''; }, 1550);
+  }
+}
+
+/* =========================================================================
+   SECTION: RENDER FRAME (fighter DOM sync)
+   ========================================================================= */
+function renderFighter(f){
+  f.el.style.left = f.x+'px';
+  f.el.style.top = f.y+'px';
+  f.el.classList.toggle('facing-left', f.facing < 0);
+  f.el.classList.toggle('moving', Math.abs(f.vx) > 0.7 && f.hitStun <= 0);
+  f.el.classList.toggle('airborne', !f.onGround && !f.flight);
+  f.el.classList.toggle('stunned', f.hitStun > 0);
+  if(!isSlowed(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
+  const pct = Math.max(0, f.health/f.def.maxHealth);
+  f.overheadFillEl.style.width = (pct*100)+'%';
+  f.overheadFillEl.style.background = pct<=0.25 ? '#e5484d' : (pct<=0.55 ? '#f2cd6e' : '#3fb96f');
+  updateShield(f);
+  updateFlightGlow(f);
+}
+
+/* =========================================================================
+   SECTION: INPUT — KEYBOARD
+   ========================================================================= */
+const keysHeld = { left:false, right:false, up:false };
+window.addEventListener('keydown', (e)=>{
+  if(state.mode !== 'battle') return;
+  const k = e.key.toLowerCase();
+  if(k==='a' || k==='arrowleft') keysHeld.left = true;
+  if(k==='d' || k==='arrowright') keysHeld.right = true;
+  if(k==='w' || k==='arrowup' || k===' ') keysHeld.up = true;
+  // S intentionally does nothing.
+  if(k==='w' || k==='arrowup' || k===' '){
+    e.preventDefault();
+    if(!e.repeat && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
+  }
+  if(k==='e') tryUseAbility(state.player, state.bot, 'E');
+  if(k==='q') tryUseAbility(state.player, state.bot, 'Q');
+  if(k==='r') tryUseAbility(state.player, state.bot, 'R');
+});
+window.addEventListener('keyup', (e)=>{
+  const k = e.key.toLowerCase();
+  if(k==='a' || k==='arrowleft') keysHeld.left = false;
+  if(k==='d' || k==='arrowright') keysHeld.right = false;
+  if(k==='w' || k==='arrowup' || k===' ') keysHeld.up = false;
+});
+
+/* =========================================================================
+   SECTION: INPUT — ON-SCREEN D-PAD (press-and-hold)
+   ========================================================================= */
+document.querySelectorAll('#dpad button').forEach(btn=>{
+  const dir = btn.getAttribute('data-dir');
+  const press = (ev)=>{
+    ev.preventDefault();
+    if(dir==='down') return;
+    keysHeld[dir] = true;
+    btn.classList.add('pressed');
+    if(dir==='up' && state.player && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
+  };
+  const release = (ev)=>{
+    if(dir==='down') return;
+    if(dir==='down') return;
+    keysHeld[dir] = false;
+    btn.classList.remove('pressed');
+  };
+  btn.addEventListener('touchstart', press, {passive:false});
+  btn.addEventListener('touchend', release);
+  btn.addEventListener('touchcancel', release);
+  btn.addEventListener('mousedown', press);
+  window.addEventListener('mouseup', release);
+});
+
+/* =========================================================================
+   SECTION: INPUT — TOUCH DRAG ON ARENA
+   ========================================================================= */
+const dragState = { active:false, startX:0, startY:0 };
+const wrapper = document.getElementById('arena-wrapper');
+const DRAG_DEADZONE = 12;
+function dragUpdate(dx, dy){
+  keysHeld.left = dx < -DRAG_DEADZONE;
+  keysHeld.right = dx > DRAG_DEADZONE;
+  const wasUp = keysHeld.up;
+  keysHeld.up = dy < -DRAG_DEADZONE;
+  keysHeld.down = false;
+  if(keysHeld.up && !wasUp && state.player && state.player.onGround && !state.player.flight){
+    state.player.jumpQueued = true;
+  }
+}
+wrapper.addEventListener('touchstart', (e)=>{
+  if(state.mode!=='battle') return;
+  const t = e.touches[0];
+  dragState.active = true; dragState.startX = t.clientX; dragState.startY = t.clientY;
+}, {passive:true});
+wrapper.addEventListener('touchmove', (e)=>{
+  if(!dragState.active) return;
+  const t = e.touches[0];
+  dragUpdate(t.clientX - dragState.startX, t.clientY - dragState.startY);
+}, {passive:true});
+function dragEnd(){
+  dragState.active = false;
+  keysHeld.left = false; keysHeld.right = false; keysHeld.up = false; keysHeld.down = false;
+}
+wrapper.addEventListener('touchend', dragEnd);
+wrapper.addEventListener('touchcancel', dragEnd);
+
+/* =========================================================================
+   SECTION: MAIN LOOP
+   ========================================================================= */
+function gameLoop(ts){
+  if(!state.lastTime) state.lastTime = ts;
+  const dt = Math.min(42, ts - state.lastTime);
+  state.lastTime = ts;
+  const dtF = dt / 16.6667;
+
+  if(state.mode === 'battle'){
+    rescaleArena(); // keep in sync with layout/orientation changes; cheap to call each frame
+    const p = state.player, b = state.bot;
+    const frozen = state.countdown; // nobody moves or attacks until FIGHT!
+
+    // resolve player movement input
+    let pMoveDir = 0;
+    if(!frozen){
+      if(keysHeld.left) pMoveDir -= 1;
+      if(keysHeld.right) pMoveDir += 1;
+    }
+    const pWantJump = !frozen && (p.jumpQueued || (p.flight && keysHeld.up));
+    p.jumpQueued = false;
+    updatePhysics(p, pMoveDir, pWantJump, frozen ? false : keysHeld.down, dtF);
+
+    // resolve bot movement input
+    const bWantJump = !frozen && b.aiJumpPulse && b.onGround && !b.flight;
+    b.aiJumpPulse = false;
+    const bWantDown = !frozen && b.aiDropPulse && !b.flight;
+    b.aiDropPulse = false;
+    updatePhysics(b, frozen ? 0 : b.aiMoveDir, bWantJump, bWantDown, dtF);
+
+    updateBotFacing(b, p);
+    updateProjectiles(dtF);
+    updateMissiles(dtF);
+    updateWalls();
+    if(!frozen) updateBotAI(dtF);
+    checkKO();
+
+    renderFighter(p);
+    renderFighter(b);
+    updateHud();
+    updateAbilityBar();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop);
+rescaleArena();
+window.addEventListener('load', rescaleArena);
+
+/* =========================================================================
+   SECTION: INITIAL RENDER
+   ========================================================================= */
+showScreen('menu');
+</script>
+</body>
+</html>
