@@ -258,6 +258,33 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   font-family:'Anton',sans-serif; color:var(--amber); background:#000a; border-radius:5px; padding:1px 7px; font-size:12px;
 }
 
+/* ---------- Settings screen ---------- */
+.settings-panel{max-width:560px; width:100%; max-height:86vh; overflow-y:auto;}
+.settings-subhead{color:var(--amber); font-size:17px; margin-bottom:4px;}
+.settings-note{color:var(--muted); font-size:12.5px; line-height:1.5; margin:0 0 14px;}
+.keybind-list{display:flex; flex-direction:column; gap:8px; margin-bottom:14px;}
+.keybind-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+}
+.keybind-row .kb-label{font-weight:800; font-size:13px;}
+.keybind-row .kb-key{
+  min-width:88px; text-align:center; font-family:'Anton',sans-serif; font-size:13px; letter-spacing:.5px;
+  background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:7px 10px; cursor:pointer;
+  color:var(--amber); transition:border-color .15s ease, background .15s ease;
+}
+.keybind-row .kb-key:hover{border-color:var(--amber);}
+.keybind-row .kb-key.listening{background:var(--amber); color:#231600; border-color:var(--amber); animation:kbPulse 1s ease-in-out infinite;}
+@keyframes kbPulse{0%,100%{opacity:1;}50%{opacity:.55;}}
+.lang-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px;}
+.lang-btn{
+  border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:10px;
+  padding:10px 12px; font-size:14px; font-weight:700; cursor:pointer; text-align:center;
+  transition:border-color .15s ease, background .15s ease, transform .08s ease;
+}
+.lang-btn:hover{border-color:var(--amber); transform:translateY(-1px);}
+.lang-btn.active{background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600; border-color:var(--amber);}
+
 #battle-topbar{display:flex; justify-content:space-between; align-items:center; flex:0 0 auto;}
 #screen-battle #hud{width:100%;}
 #screen-battle #arena-wrapper{flex:1 1 auto; min-height:0; aspect-ratio:auto; width:100%;}
@@ -629,9 +656,10 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
     <div class="menu-wrap">
       <h1 class="menu-title">DISHWASHING LIQUID BATTLES</h1>
       <div class="menu-buttons">
-        <button class="btn btn-primary" id="btn-menu-play">Play</button>
-        <button class="btn btn-secondary" data-nav="inventory">Inventory</button>
-        <button class="btn btn-secondary" data-nav="instructions">Instructions</button>
+        <button class="btn btn-primary" id="btn-menu-play" data-i18n="nav_play">Play</button>
+        <button class="btn btn-secondary" data-nav="inventory" data-i18n="nav_inventory">Inventory</button>
+        <button class="btn btn-secondary" data-nav="instructions" data-i18n="nav_instructions">Instructions</button>
+        <button class="btn btn-secondary" data-nav="settings" data-i18n="nav_settings">Settings</button>
       </div>
     </div>
   </div>
@@ -641,20 +669,20 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
     <div class="panel">
       <div class="panel-header">
         <div>
-        <h2>Inventory</h2>
-        <div class="inventory-caption">Roster, collection & equipped fighter</div>
+        <h2 data-i18n="inv_title">Inventory</h2>
+        <div class="inventory-caption" data-i18n="inv_caption">Roster, collection & equipped fighter</div>
       </div>
-      <button class="btn btn-small btn-secondary" data-nav="menu">Back</button>
+      <button class="btn btn-small btn-secondary" data-nav="menu" data-i18n="nav_back">Back</button>
       </div>
       <div class="loadout-banner">
         <div>
-          <div class="loadout-label">EQUIPPED FIGHTER</div>
+          <div class="loadout-label" data-i18n="inv_equipped_label">EQUIPPED FIGHTER</div>
           <div id="equipped-name" class="loadout-name">None</div>
         </div>
         <div id="equipped-hint" class="loadout-hint">Select a fighter below.</div>
       </div>
       <div id="inventory-grid" class="char-grid"></div>
-      <div class="inventory-legend"><span class="legend-dot owned"></span> Owned <span class="legend-dot locked"></span> Locked</div>
+      <div class="inventory-legend"><span class="legend-dot owned"></span> <span data-i18n="inv_legend_owned">Owned</span> <span class="legend-dot locked"></span> <span data-i18n="inv_legend_locked">Locked</span></div>
     </div>
   </div>
 
@@ -662,19 +690,38 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   <div id="screen-instructions" class="screen">
     <div class="panel instructions">
       <div class="panel-header">
-        <h2>Instructions</h2>
-        <button class="btn btn-small btn-secondary" data-nav="menu">Back</button>
+        <h2 data-i18n="instr_title">Instructions</h2>
+        <button class="btn btn-small btn-secondary" data-nav="menu" data-i18n="nav_back">Back</button>
       </div>
-      <p><strong>Goal:</strong> knock your opponent's health to 0, or knock them clean out of the arena.</p>
+      <p><strong data-i18n="instr_goal_label">Goal:</strong> <span data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</span></p>
       <ul>
-        <li><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> jump &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> left &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> right</li>
-        <li><kbd>E</kbd> main ability &nbsp; <kbd>Q</kbd> secondary ability &nbsp; <kbd>R</kbd> special ability</li>
-        <li>On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</li>
-        <li><strong>Controller support:</strong> Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / &#10005; / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</li>
-        <li>Every ability has a cooldown shown right on its button — watch the timer count down.</li>
-        <li>The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</li>
-        <li>Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</li>
+        <li><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></li>
+        <li><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></li>
+        <li data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</li>
+        <li><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></li>
+        <li data-i18n="instr_cooldown">Every ability has a cooldown shown right on its button — watch the timer count down.</li>
+        <li data-i18n="instr_arena">The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</li>
+        <li data-i18n="instr_roster">Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</li>
       </ul>
+    </div>
+  </div>
+
+  <!-- ============ SETTINGS ============ -->
+  <div id="screen-settings" class="screen">
+    <div class="panel settings-panel">
+      <div class="panel-header">
+        <h2 data-i18n="settings_title">Settings</h2>
+        <button class="btn btn-small btn-secondary" data-nav="menu" data-i18n="nav_back">Back</button>
+      </div>
+
+      <h3 class="settings-subhead" data-i18n="settings_controls_header">Controls</h3>
+      <p class="settings-note" data-i18n="settings_controls_note">Click a control below, then press the key you want to use. Controller buttons are mapped automatically and can't be changed.</p>
+      <div id="keybind-list" class="keybind-list"></div>
+      <button class="btn btn-small btn-secondary" id="settings-reset-btn" data-i18n="settings_reset">Reset to Defaults</button>
+
+      <h3 class="settings-subhead" data-i18n="settings_lang_header" style="margin-top:26px;">Language</h3>
+      <p class="settings-note" data-i18n="settings_lang_note">Changes the text throughout the app.</p>
+      <div id="lang-grid" class="lang-grid"></div>
     </div>
   </div>
 
@@ -713,7 +760,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
         <button class="dpad-right" data-dir="right">&rarr;</button>
       </div>
       <div id="ability-bar"></div>
-      <div id="gamepad-hint"><span>🎮</span><span>Jump</span><span class="gp-jump-key" id="gp-jump-key">A</span></div>
+      <div id="gamepad-hint"><span>🎮</span><span data-i18n="battle_jump_hint">Jump</span><span class="gp-jump-key" id="gp-jump-key">A</span></div>
     </div>
   </div>
 
@@ -724,8 +771,8 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       <div class="go-portraits" id="go-portraits"></div>
       <p class="go-sub" id="go-sub"></p>
       <div class="go-buttons">
-        <button class="btn btn-primary" id="go-play-another-btn">Play Another</button>
-        <button class="btn btn-secondary" data-nav="menu">Return to Menu</button>
+        <button class="btn btn-primary" id="go-play-another-btn" data-i18n="go_play_another">Play Another</button>
+        <button class="btn btn-secondary" data-nav="menu" data-i18n="go_return_menu">Return to Menu</button>
       </div>
     </div>
   </div>
@@ -746,13 +793,13 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 const CHARACTERS = {
   thor: {
     id:'thor', name:'Thor', img:'Thor.jpg', color:'#3b6bd6',
-    maxHealth:13200, aiStyle:'aggressive',
+    maxHealth:23400, aiStyle:'aggressive',
     description:'God of Thunder. Huge health pool, hits hard, and can escape danger with a colossal leap.',
     abilities:{
-      E:{key:'E', name:'Mjolnir Smash', type:'melee', damage:650, cooldown:700, knockback:12, range:92,
+      E:{key:'E', name:'Mjolnir Smash', type:'melee', damage:900, cooldown:700, knockback:12, range:92,
          sound:'mjolnir_swing', fx:'thor_smash', hitDelay:130, hitFx:'mjolnir', hitSound:'mjolnir',
          desc:'A powerful close-range swing of Mjolnir. Heavy damage and knockback.'},
-      Q:{key:'Q', name:'Thunderclap', type:'aoe', damage:1500, cooldown:6500, knockback:18, radius:125,
+      Q:{key:'Q', name:'Thunderclap', type:'aoe', damage:2100, cooldown:6500, knockback:18, radius:125,
          sound:'thunder', fx:'thor_clap', hitFx:'thunder', hitSound:'thunder_hit',
          desc:'Thor slams Mjolnir down and unleashes a devastating shockwave around him.'},
       R:{key:'R', name:'Thunder Jump', type:'jump', damage:0, cooldown:10000, jumpVel:-27,
@@ -780,7 +827,7 @@ const CHARACTERS = {
   },
   ironman: {
     id:'ironman', name:'Iron Man', img:'IronMan.jpg', color:'#d6432b',
-    maxHealth:8500, aiStyle:'defensive',
+    maxHealth:10150, aiStyle:'defensive',
     description:'Defensive attacker who fights at range with repulsors and missiles, then opens distance with free flight when things get dangerous.',
     abilities:{
       E:{key:'E', name:'Repulsor Blast', type:'projectile', damage:320, cooldown:650, knockback:8,
@@ -798,6 +845,213 @@ const CHARACTERS = {
   },
 };
 const ROSTER_ORDER = ['thor','spiderman','ironman'];
+
+/* =========================================================================
+   SECTION: I18N — LANGUAGE / TRANSLATIONS
+   Covers all app "chrome" (menus, instructions, settings, HUD labels,
+   game-over screen). Character names and ability names/flavor text stay
+   in English across every language, same as most games keep proper nouns
+   untranslated.
+   ========================================================================= */
+const LANGUAGES = [
+  {code:'en', label:'English'},
+  {code:'es', label:'Español'},
+  {code:'zh', label:'中文'},
+  {code:'ar', label:'العربية'},
+  {code:'fr', label:'Français'},
+  {code:'de', label:'Deutsch'},
+  {code:'pt', label:'Português'},
+  {code:'hi', label:'हिन्दी'},
+  {code:'ja', label:'日本語'}
+];
+const I18N = {
+  en:{ nav_play:'Play', nav_inventory:'Inventory', nav_instructions:'Instructions', nav_settings:'Settings', nav_back:'Back',
+    inv_title:'Inventory', inv_caption:'Roster, collection & equipped fighter', inv_equipped_label:'EQUIPPED FIGHTER',
+    inv_equipped_hint_default:'Select a fighter below.', inv_none:'None', inv_legend_owned:'Owned', inv_legend_locked:'Locked',
+    inv_ready:'Ready for battle', inv_click_equip:'Click to equip',
+    instr_title:'Instructions', instr_goal_label:'Goal:', instr_goal_text:"knock your opponent's health to 0, or knock them clean out of the arena.",
+    instr_jump:'jump', instr_left:'left', instr_right:'right', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
+    instr_touch:'On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.',
+    instr_controller_label:'Controller support:', instr_controller_text:'Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.',
+    instr_cooldown:'Every ability has a cooldown shown right on its button — watch the timer count down.',
+    instr_arena:'The arena is fully walled in — you cannot fall out. Knock your opponent\'s health to zero to win.',
+    instr_roster:'Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.',
+    battle_jump_hint:'Jump', go_play_another:'Play Another', go_return_menu:'Return to Menu', go_victory:'Victory!', go_defeat:'Defeat...', go_result_template:'{w} defeats {l}.',
+    settings_title:'Settings', settings_controls_header:'Controls', settings_controls_note:"Click a control below, then press the key you want to use. Controller buttons are mapped automatically and can't be changed.",
+    settings_bind_left:'Move Left', settings_bind_right:'Move Right', settings_bind_jump:'Jump', settings_bind_e:'Ability E', settings_bind_q:'Ability Q', settings_bind_r:'Ability R',
+    settings_press_key:'Press any key…', settings_reset:'Reset to Defaults', settings_lang_header:'Language', settings_lang_note:'Changes the text throughout the app.',
+    modal_close:'Close', modal_cooldown_label:'Cooldown:', modal_cooldown_none:'None', modal_damage_label:'Damage:', modal_heal_label:'Heals:'
+  },
+  es:{ nav_play:'Jugar', nav_inventory:'Inventario', nav_instructions:'Instrucciones', nav_settings:'Configuración', nav_back:'Atrás',
+    inv_title:'Inventario', inv_caption:'Plantilla, colección y luchador equipado', inv_equipped_label:'LUCHADOR EQUIPADO',
+    inv_equipped_hint_default:'Selecciona un luchador abajo.', inv_none:'Ninguno', inv_legend_owned:'Poseído', inv_legend_locked:'Bloqueado',
+    inv_ready:'Listo para combatir', inv_click_equip:'Clic para equipar',
+    instr_title:'Instrucciones', instr_goal_label:'Objetivo:', instr_goal_text:'reduce la salud de tu oponente a 0, o sácalo por completo de la arena.',
+    instr_jump:'saltar', instr_left:'izquierda', instr_right:'derecha', instr_ability_main:'habilidad principal', instr_ability_sec:'habilidad secundaria', instr_ability_special:'habilidad especial',
+    instr_touch:'En dispositivos táctiles: usa las flechas en pantalla, o arrastra en cualquier parte de la arena para mover a tu luchador. Toca los botones E/Q/R para usar habilidades.',
+    instr_controller_label:'Soporte de mando:', instr_controller_text:'Los mandos de Xbox, PlayStation y Nintendo funcionan automáticamente — solo conéctalo (por cable o Bluetooth) y pulsa cualquier botón. Muévete con el stick izquierdo, salta con el botón inferior (A / ✕ / B), y la barra de habilidades mostrará el botón exacto de tu mando para cada habilidad.',
+    instr_cooldown:'Cada habilidad tiene un tiempo de reutilización que se muestra en su botón — vigila la cuenta atrás.',
+    instr_arena:'La arena está completamente cerrada — no puedes caer fuera de ella. Reduce la salud de tu oponente a cero para ganar.',
+    instr_roster:'Tus luchadores poseídos y bloqueados están juntos en el Inventario. Selecciona uno allí para equiparlo y luego pulsa Jugar en el menú principal para combatir contra un oponente aleatorio. Tu plantilla se guarda en este navegador.',
+    battle_jump_hint:'Salto', go_play_another:'Jugar otra vez', go_return_menu:'Volver al menú', go_victory:'¡Victoria!', go_defeat:'Derrota...', go_result_template:'{w} derrota a {l}.',
+    settings_title:'Configuración', settings_controls_header:'Controles', settings_controls_note:'Haz clic en un control y luego pulsa la tecla que quieras usar. Los botones del mando se asignan automáticamente y no se pueden cambiar.',
+    settings_bind_left:'Mover izquierda', settings_bind_right:'Mover derecha', settings_bind_jump:'Saltar', settings_bind_e:'Habilidad E', settings_bind_q:'Habilidad Q', settings_bind_r:'Habilidad R',
+    settings_press_key:'Pulsa una tecla…', settings_reset:'Restablecer valores', settings_lang_header:'Idioma', settings_lang_note:'Cambia el texto de toda la aplicación.',
+    modal_close:'Cerrar', modal_cooldown_label:'Reutilización:', modal_cooldown_none:'Ninguna', modal_damage_label:'Daño:', modal_heal_label:'Cura:'
+  },
+  zh:{ nav_play:'开始游戏', nav_inventory:'库存', nav_instructions:'说明', nav_settings:'设置', nav_back:'返回',
+    inv_title:'库存', inv_caption:'阵容、收藏与已装备角色', inv_equipped_label:'已装备角色',
+    inv_equipped_hint_default:'请在下方选择一名角色。', inv_none:'无', inv_legend_owned:'已拥有', inv_legend_locked:'未解锁',
+    inv_ready:'可以出战', inv_click_equip:'点击装备',
+    instr_title:'说明', instr_goal_label:'目标：', instr_goal_text:'将对手的生命值降为0，或将其彻底击出竞技场。',
+    instr_jump:'跳跃', instr_left:'左移', instr_right:'右移', instr_ability_main:'主要技能', instr_ability_sec:'次要技能', instr_ability_special:'特殊技能',
+    instr_touch:'触屏设备：使用屏幕上的方向键，或在竞技场任意位置拖动来移动角色。点击 E/Q/R 按钮释放技能。',
+    instr_controller_label:'手柄支持：', instr_controller_text:'Xbox、PlayStation 和任天堂手柄均可自动识别——只需连接（有线或蓝牙）并按下任意按键即可。使用左摇杆移动，按下方按键跳跃（A / ✕ / B），技能栏会自动显示您手柄上每个技能对应的按键。',
+    instr_cooldown:'每个技能的冷却时间都会显示在其按钮上——请留意倒计时。',
+    instr_arena:'竞技场四周完全封闭——你不会掉出场外。将对手生命值降为零即可获胜。',
+    instr_roster:'已拥有和未解锁的角色都在库存中。在库存中选择一名角色将其装备，然后在主菜单点击开始游戏，与随机对手战斗。你的阵容会保存在此浏览器中。',
+    battle_jump_hint:'跳跃', go_play_another:'再来一局', go_return_menu:'返回主菜单', go_victory:'胜利！', go_defeat:'失败……', go_result_template:'{w} 击败了 {l}。',
+    settings_title:'设置', settings_controls_header:'操作设置', settings_controls_note:'点击下方按键后，按下你想使用的新按键。手柄按键为自动映射，无法更改。',
+    settings_bind_left:'向左移动', settings_bind_right:'向右移动', settings_bind_jump:'跳跃', settings_bind_e:'技能 E', settings_bind_q:'技能 Q', settings_bind_r:'技能 R',
+    settings_press_key:'请按任意键…', settings_reset:'恢复默认设置', settings_lang_header:'语言', settings_lang_note:'更改整个应用中的文字。',
+    modal_close:'关闭', modal_cooldown_label:'冷却：', modal_cooldown_none:'无', modal_damage_label:'伤害：', modal_heal_label:'治疗：'
+  },
+  ar:{ nav_play:'لعب', nav_inventory:'المخزون', nav_instructions:'التعليمات', nav_settings:'الإعدادات', nav_back:'رجوع',
+    inv_title:'المخزون', inv_caption:'التشكيلة والمجموعة والمقاتل المجهّز', inv_equipped_label:'المقاتل المجهّز',
+    inv_equipped_hint_default:'اختر مقاتلاً أدناه.', inv_none:'لا شيء', inv_legend_owned:'مملوك', inv_legend_locked:'مغلق',
+    inv_ready:'جاهز للقتال', inv_click_equip:'انقر للتجهيز',
+    instr_title:'التعليمات', instr_goal_label:'الهدف:', instr_goal_text:'أنزل صحة خصمك إلى 0، أو أخرجه تمامًا من الحلبة.',
+    instr_jump:'القفز', instr_left:'يسار', instr_right:'يمين', instr_ability_main:'القدرة الأساسية', instr_ability_sec:'القدرة الثانوية', instr_ability_special:'القدرة الخاصة',
+    instr_touch:'على الأجهزة اللمسية: استخدم الأسهم على الشاشة، أو اسحب في أي مكان على الحلبة لتوجيه مقاتلك. اضغط على أزرار E/Q/R لاستخدام القدرات.',
+    instr_controller_label:'دعم أذرع التحكم:', instr_controller_text:'أذرع تحكم Xbox وPlayStation ونينتندو تعمل تلقائيًا — فقط قم بالتوصيل (سلكيًا أو عبر البلوتوث) واضغط أي زر. تحرك باستخدام العصا اليسرى، واقفز بالزر السفلي (A / ✕ / B)، وسيُظهر شريط القدرات تلقائيًا الزر الصحيح لكل قدرة حسب ذراع التحكم لديك.',
+    instr_cooldown:'لكل قدرة فترة تهدئة تظهر على زرها — راقب العد التنازلي.',
+    instr_arena:'الحلبة مغلقة بالكامل — لا يمكنك السقوط خارجها. أنزل صحة خصمك إلى الصفر للفوز.',
+    instr_roster:'تعيش مقاتلوك المملوكون والمغلقون معًا في المخزون. اختر مقاتلاً هناك لتجهيزه، ثم اضغط لعب من القائمة الرئيسية لمواجهة خصم عشوائي. يتم حفظ تشكيلتك في هذا المتصفح.',
+    battle_jump_hint:'قفز', go_play_another:'لعب مرة أخرى', go_return_menu:'العودة إلى القائمة', go_victory:'!انتصار', go_defeat:'...هزيمة', go_result_template:'{w} يهزم {l}.',
+    settings_title:'الإعدادات', settings_controls_header:'التحكم', settings_controls_note:'انقر على أحد عناصر التحكم أدناه، ثم اضغط المفتاح الذي تريد استخدامه. أزرار ذراع التحكم مُعيَّنة تلقائيًا ولا يمكن تغييرها.',
+    settings_bind_left:'التحرك لليسار', settings_bind_right:'التحرك لليمين', settings_bind_jump:'القفز', settings_bind_e:'القدرة E', settings_bind_q:'القدرة Q', settings_bind_r:'القدرة R',
+    settings_press_key:'...اضغط أي مفتاح', settings_reset:'إعادة التعيين للافتراضي', settings_lang_header:'اللغة', settings_lang_note:'يغيّر النص في التطبيق بأكمله.',
+    modal_close:'إغلاق', modal_cooldown_label:'فترة التهدئة:', modal_cooldown_none:'لا يوجد', modal_damage_label:'الضرر:', modal_heal_label:'الشفاء:'
+  },
+  fr:{ nav_play:'Jouer', nav_inventory:'Inventaire', nav_instructions:'Instructions', nav_settings:'Paramètres', nav_back:'Retour',
+    inv_title:'Inventaire', inv_caption:'Effectif, collection et combattant équipé', inv_equipped_label:'COMBATTANT ÉQUIPÉ',
+    inv_equipped_hint_default:'Choisissez un combattant ci-dessous.', inv_none:'Aucun', inv_legend_owned:'Possédé', inv_legend_locked:'Verrouillé',
+    inv_ready:'Prêt au combat', inv_click_equip:'Cliquez pour équiper',
+    instr_title:'Instructions', instr_goal_label:'Objectif :', instr_goal_text:"réduisez la santé de votre adversaire à 0, ou éjectez-le complètement de l'arène.",
+    instr_jump:'sauter', instr_left:'gauche', instr_right:'droite', instr_ability_main:'capacité principale', instr_ability_sec:'capacité secondaire', instr_ability_special:'capacité spéciale',
+    instr_touch:"Sur appareils tactiles : utilisez les flèches à l'écran, ou faites glisser n'importe où sur l'arène pour diriger votre combattant. Appuyez sur les boutons E/Q/R pour les capacités.",
+    instr_controller_label:'Prise en charge des manettes :', instr_controller_text:"Les manettes Xbox, PlayStation et Nintendo fonctionnent automatiquement — branchez-la (ou connectez-la en Bluetooth) et appuyez sur n'importe quel bouton. Déplacez-vous avec le stick gauche, sautez avec le bouton du bas (A / ✕ / B), et la barre de capacités affichera automatiquement le bon bouton pour chaque capacité sur votre manette.",
+    instr_cooldown:'Chaque capacité a un temps de recharge affiché sur son bouton — surveillez le compte à rebours.',
+    instr_arena:"L'arène est entièrement fermée — vous ne pouvez pas en tomber. Réduisez la santé de votre adversaire à zéro pour gagner.",
+    instr_roster:"Vos combattants possédés et verrouillés se trouvent ensemble dans l'Inventaire. Sélectionnez-en un pour l'équiper, puis appuyez sur Jouer dans le menu principal pour affronter un adversaire aléatoire. Votre effectif est sauvegardé dans ce navigateur.",
+    battle_jump_hint:'Sauter', go_play_another:'Rejouer', go_return_menu:'Retour au menu', go_victory:'Victoire !', go_defeat:'Défaite…', go_result_template:'{w} bat {l}.',
+    settings_title:'Paramètres', settings_controls_header:'Commandes', settings_controls_note:'Cliquez sur une commande ci-dessous, puis appuyez sur la touche souhaitée. Les boutons de manette sont assignés automatiquement et ne peuvent pas être modifiés.',
+    settings_bind_left:'Aller à gauche', settings_bind_right:'Aller à droite', settings_bind_jump:'Sauter', settings_bind_e:'Capacité E', settings_bind_q:'Capacité Q', settings_bind_r:'Capacité R',
+    settings_press_key:'Appuyez sur une touche…', settings_reset:'Réinitialiser', settings_lang_header:'Langue', settings_lang_note:"Change le texte dans toute l'application.",
+    modal_close:'Fermer', modal_cooldown_label:'Recharge :', modal_cooldown_none:'Aucune', modal_damage_label:'Dégâts :', modal_heal_label:'Soigne :'
+  },
+  de:{ nav_play:'Spielen', nav_inventory:'Inventar', nav_instructions:'Anleitung', nav_settings:'Einstellungen', nav_back:'Zurück',
+    inv_title:'Inventar', inv_caption:'Kader, Sammlung & ausgerüsteter Kämpfer', inv_equipped_label:'AUSGERÜSTETER KÄMPFER',
+    inv_equipped_hint_default:'Wähle unten einen Kämpfer aus.', inv_none:'Keiner', inv_legend_owned:'Im Besitz', inv_legend_locked:'Gesperrt',
+    inv_ready:'Kampfbereit', inv_click_equip:'Klicken zum Ausrüsten',
+    instr_title:'Anleitung', instr_goal_label:'Ziel:', instr_goal_text:'Senke die Lebenspunkte deines Gegners auf 0 oder befördere ihn komplett aus der Arena.',
+    instr_jump:'springen', instr_left:'links', instr_right:'rechts', instr_ability_main:'Hauptfähigkeit', instr_ability_sec:'Zweitfähigkeit', instr_ability_special:'Spezialfähigkeit',
+    instr_touch:'Auf Touch-Geräten: Nutze die Pfeile auf dem Bildschirm oder ziehe irgendwo in der Arena, um deinen Kämpfer zu steuern. Tippe auf die Tasten E/Q/R für Fähigkeiten.',
+    instr_controller_label:'Controller-Unterstützung:', instr_controller_text:'Xbox-, PlayStation- und Nintendo-Controller funktionieren automatisch — einfach anschließen (oder per Bluetooth verbinden) und eine beliebige Taste drücken. Bewege dich mit dem linken Stick, springe mit der unteren Aktionstaste (A / ✕ / B), und die Fähigkeitenleiste zeigt automatisch die passende Taste deines Controllers für jede Fähigkeit.',
+    instr_cooldown:'Jede Fähigkeit hat eine Abklingzeit, die direkt auf ihrer Taste angezeigt wird — beobachte den Countdown.',
+    instr_arena:'Die Arena ist vollständig ummauert — du kannst nicht herausfallen. Senke die Lebenspunkte deines Gegners auf null, um zu gewinnen.',
+    instr_roster:'Deine besessenen und gesperrten Kämpfer befinden sich gemeinsam im Inventar. Wähle dort einen aus, um ihn auszurüsten, und drücke dann im Hauptmenü auf Spielen, um gegen einen zufälligen Gegner anzutreten. Dein Kader wird in diesem Browser gespeichert.',
+    battle_jump_hint:'Springen', go_play_another:'Nochmal spielen', go_return_menu:'Zurück zum Menü', go_victory:'Sieg!', go_defeat:'Niederlage…', go_result_template:'{w} besiegt {l}.',
+    settings_title:'Einstellungen', settings_controls_header:'Steuerung', settings_controls_note:'Klicke auf eine Steuerung unten und drücke dann die gewünschte Taste. Controller-Tasten werden automatisch zugewiesen und können nicht geändert werden.',
+    settings_bind_left:'Nach links', settings_bind_right:'Nach rechts', settings_bind_jump:'Springen', settings_bind_e:'Fähigkeit E', settings_bind_q:'Fähigkeit Q', settings_bind_r:'Fähigkeit R',
+    settings_press_key:'Beliebige Taste drücken…', settings_reset:'Auf Standard zurücksetzen', settings_lang_header:'Sprache', settings_lang_note:'Ändert den Text in der gesamten App.',
+    modal_close:'Schließen', modal_cooldown_label:'Abklingzeit:', modal_cooldown_none:'Keine', modal_damage_label:'Schaden:', modal_heal_label:'Heilt:'
+  },
+  pt:{ nav_play:'Jogar', nav_inventory:'Inventário', nav_instructions:'Instruções', nav_settings:'Configurações', nav_back:'Voltar',
+    inv_title:'Inventário', inv_caption:'Elenco, coleção e lutador equipado', inv_equipped_label:'LUTADOR EQUIPADO',
+    inv_equipped_hint_default:'Selecione um lutador abaixo.', inv_none:'Nenhum', inv_legend_owned:'Possuído', inv_legend_locked:'Bloqueado',
+    inv_ready:'Pronto para lutar', inv_click_equip:'Clique para equipar',
+    instr_title:'Instruções', instr_goal_label:'Objetivo:', instr_goal_text:'reduza a vida do seu oponente a 0, ou o expulse completamente da arena.',
+    instr_jump:'pular', instr_left:'esquerda', instr_right:'direita', instr_ability_main:'habilidade principal', instr_ability_sec:'habilidade secundária', instr_ability_special:'habilidade especial',
+    instr_touch:'Em dispositivos touch: use as setas na tela, ou arraste em qualquer lugar da arena para mover seu lutador. Toque nos botões E/Q/R para usar habilidades.',
+    instr_controller_label:'Suporte a controles:', instr_controller_text:'Controles de Xbox, PlayStation e Nintendo funcionam automaticamente — basta conectar (com fio ou Bluetooth) e pressionar qualquer botão. Mova-se com o analógico esquerdo, pule com o botão inferior (A / ✕ / B), e a barra de habilidades mostrará automaticamente o botão certo do seu controle para cada habilidade.',
+    instr_cooldown:'Cada habilidade tem um tempo de recarga mostrado em seu botão — fique de olho na contagem regressiva.',
+    instr_arena:'A arena é totalmente fechada — você não pode cair para fora dela. Reduza a vida do oponente a zero para vencer.',
+    instr_roster:'Seus lutadores possuídos e bloqueados ficam juntos no Inventário. Selecione um ali para equipá-lo e depois clique em Jogar no menu principal para enfrentar um oponente aleatório. Seu elenco é salvo neste navegador.',
+    battle_jump_hint:'Pular', go_play_another:'Jogar novamente', go_return_menu:'Voltar ao menu', go_victory:'Vitória!', go_defeat:'Derrota...', go_result_template:'{w} derrota {l}.',
+    settings_title:'Configurações', settings_controls_header:'Controles', settings_controls_note:'Clique em um controle abaixo e pressione a tecla que deseja usar. Os botões do controle são mapeados automaticamente e não podem ser alterados.',
+    settings_bind_left:'Mover à esquerda', settings_bind_right:'Mover à direita', settings_bind_jump:'Pular', settings_bind_e:'Habilidade E', settings_bind_q:'Habilidade Q', settings_bind_r:'Habilidade R',
+    settings_press_key:'Pressione uma tecla…', settings_reset:'Restaurar padrões', settings_lang_header:'Idioma', settings_lang_note:'Altera o texto em todo o aplicativo.',
+    modal_close:'Fechar', modal_cooldown_label:'Recarga:', modal_cooldown_none:'Nenhuma', modal_damage_label:'Dano:', modal_heal_label:'Cura:'
+  },
+  hi:{ nav_play:'खेलें', nav_inventory:'इन्वेंटरी', nav_instructions:'निर्देश', nav_settings:'सेटिंग्स', nav_back:'वापस',
+    inv_title:'इन्वेंटरी', inv_caption:'रोस्टर, संग्रह और सुसज्जित योद्धा', inv_equipped_label:'सुसज्जित योद्धा',
+    inv_equipped_hint_default:'नीचे एक योद्धा चुनें।', inv_none:'कोई नहीं', inv_legend_owned:'स्वामित्व में', inv_legend_locked:'लॉक किया हुआ',
+    inv_ready:'लड़ाई के लिए तैयार', inv_click_equip:'सुसज्जित करने हेतु क्लिक करें',
+    instr_title:'निर्देश', instr_goal_label:'लक्ष्य:', instr_goal_text:'अपने प्रतिद्वंद्वी का स्वास्थ्य 0 तक लाएं, या उसे एरिना से पूरी तरह बाहर कर दें।',
+    instr_jump:'कूदें', instr_left:'बाएँ', instr_right:'दाएँ', instr_ability_main:'मुख्य क्षमता', instr_ability_sec:'द्वितीयक क्षमता', instr_ability_special:'विशेष क्षमता',
+    instr_touch:'टच डिवाइस पर: स्क्रीन पर दिए तीरों का उपयोग करें, या अपने योद्धा को चलाने के लिए एरिना में कहीं भी खींचें। क्षमताओं के लिए E/Q/R बटन दबाएँ।',
+    instr_controller_label:'कंट्रोलर समर्थन:', instr_controller_text:'Xbox, PlayStation और Nintendo के कंट्रोलर अपने आप काम करते हैं — बस कनेक्ट करें (वायर या ब्लूटूथ से) और कोई भी बटन दबाएँ। लेफ्ट स्टिक से चलें, नीचे वाले बटन से कूदें (A / ✕ / B), और एबिलिटी बार आपके कंट्रोलर के अनुसार हर क्षमता का सही बटन अपने आप दिखा देगा।',
+    instr_cooldown:'हर क्षमता का कूलडाउन उसके बटन पर दिखता है — काउंटडाउन पर नज़र रखें।',
+    instr_arena:'एरिना पूरी तरह घिरा हुआ है — आप बाहर नहीं गिर सकते। जीतने के लिए प्रतिद्वंद्वी का स्वास्थ्य शून्य तक लाएं।',
+    instr_roster:'आपके स्वामित्व वाले और लॉक किए गए योद्धा इन्वेंटरी में साथ रहते हैं। वहाँ से किसी को चुनकर सुसज्जित करें, फिर मुख्य मेनू से खेलें दबाकर किसी रैंडम प्रतिद्वंद्वी से लड़ें। आपका रोस्टर इस ब्राउज़र में सेव रहता है।',
+    battle_jump_hint:'कूदें', go_play_another:'फिर से खेलें', go_return_menu:'मेनू पर वापस जाएँ', go_victory:'जीत!', go_defeat:'हार...', go_result_template:'{w} ने {l} को हराया।',
+    settings_title:'सेटिंग्स', settings_controls_header:'नियंत्रण', settings_controls_note:'नीचे किसी नियंत्रण पर क्लिक करें, फिर वह कुंजी दबाएँ जो आप उपयोग करना चाहते हैं। कंट्रोलर के बटन अपने आप सेट होते हैं और बदले नहीं जा सकते।',
+    settings_bind_left:'बाएँ चलें', settings_bind_right:'दाएँ चलें', settings_bind_jump:'कूदें', settings_bind_e:'क्षमता E', settings_bind_q:'क्षमता Q', settings_bind_r:'क्षमता R',
+    settings_press_key:'कोई भी कुंजी दबाएँ…', settings_reset:'डिफ़ॉल्ट पर रीसेट करें', settings_lang_header:'भाषा', settings_lang_note:'पूरे ऐप में टेक्स्ट बदल देता है।',
+    modal_close:'बंद करें', modal_cooldown_label:'कूलडाउन:', modal_cooldown_none:'कोई नहीं', modal_damage_label:'डैमेज:', modal_heal_label:'हील:'
+  },
+  ja:{ nav_play:'プレイ', nav_inventory:'インベントリ', nav_instructions:'遊び方', nav_settings:'設定', nav_back:'戻る',
+    inv_title:'インベントリ', inv_caption:'ロースター、コレクション、装備中のファイター', inv_equipped_label:'装備中のファイター',
+    inv_equipped_hint_default:'下からファイターを選んでください。', inv_none:'なし', inv_legend_owned:'所持', inv_legend_locked:'未解放',
+    inv_ready:'戦闘準備完了', inv_click_equip:'クリックして装備',
+    instr_title:'遊び方', instr_goal_label:'目標：', instr_goal_text:'相手の体力を0にするか、アリーナの外に完全に弾き飛ばそう。',
+    instr_jump:'ジャンプ', instr_left:'左', instr_right:'右', instr_ability_main:'メインアビリティ', instr_ability_sec:'サブアビリティ', instr_ability_special:'スペシャルアビリティ',
+    instr_touch:'タッチデバイスの場合：画面上の矢印を使うか、アリーナ内をドラッグしてファイターを操作します。E/Q/Rボタンでアビリティを発動できます。',
+    instr_controller_label:'コントローラー対応：', instr_controller_text:'Xbox、PlayStation、Nintendoのコントローラーは自動で認識されます — 接続（有線またはBluetooth）してボタンを押すだけです。左スティックで移動、下のフェイスボタン（A／✕／B）でジャンプでき、アビリティバーはお使いのコントローラーに合わせて各アビリティの正しいボタンを自動で表示します。',
+    instr_cooldown:'各アビリティのクールダウンはボタン上に表示されます — カウントダウンを確認しましょう。',
+    instr_arena:'アリーナは完全に壁で囲まれているため、外に落ちることはありません。相手の体力を0にすれば勝利です。',
+    instr_roster:'所持中・未解放のファイターはインベントリにまとめて表示されます。そこでファイターを選んで装備し、メインメニューの「プレイ」でランダムな相手と対戦しましょう。ロースターはこのブラウザに保存されます。',
+    battle_jump_hint:'ジャンプ', go_play_another:'もう一度プレイ', go_return_menu:'メニューに戻る', go_victory:'勝利！', go_defeat:'敗北…', go_result_template:'{w}が{l}を倒した。',
+    settings_title:'設定', settings_controls_header:'操作設定', settings_controls_note:'下の項目をクリックしてから、使いたいキーを押してください。コントローラーのボタンは自動的に割り当てられ、変更はできません。',
+    settings_bind_left:'左に移動', settings_bind_right:'右に移動', settings_bind_jump:'ジャンプ', settings_bind_e:'アビリティ E', settings_bind_q:'アビリティ Q', settings_bind_r:'アビリティ R',
+    settings_press_key:'キーを押してください…', settings_reset:'デフォルトに戻す', settings_lang_header:'言語', settings_lang_note:'アプリ全体のテキストが変わります。',
+    modal_close:'閉じる', modal_cooldown_label:'クールダウン：', modal_cooldown_none:'なし', modal_damage_label:'ダメージ：', modal_heal_label:'回復：'
+  }
+};
+let currentLang = localStorage.getItem('dwlb_lang') || 'en';
+function t(key){
+  const table = I18N[currentLang] || I18N.en;
+  return (table && table[key] !== undefined) ? table[key] : (I18N.en[key] !== undefined ? I18N.en[key] : key);
+}
+function applyTranslations(){
+  document.documentElement.setAttribute('lang', currentLang);
+  document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  // Re-render any screens whose content is built dynamically in JS so
+  // their strings pick up the new language too.
+  if(document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
+  else renderInventoryHint(); // keep the equipped-hint default in sync even off-screen
+  if(document.getElementById('screen-settings').classList.contains('active')) renderSettingsScreen();
+  const modal = document.getElementById('char-modal');
+  if(modal && !modal.classList.contains('hidden') && modal.dataset.charId) openCharModal(modal.dataset.charId);
+}
+function renderInventoryHint(){
+  const eqDef = CHARACTERS[SAVE.equipped];
+  const nameEl = document.getElementById('equipped-name');
+  const hintEl = document.getElementById('equipped-hint');
+  if(nameEl) nameEl.textContent = eqDef ? eqDef.name : t('inv_none');
+  if(hintEl) hintEl.textContent = eqDef ? `${eqDef.maxHealth.toLocaleString()} HP` : t('inv_equipped_hint_default');
+}
+function setLanguage(code){
+  if(!I18N[code]) return;
+  currentLang = code;
+  localStorage.setItem('dwlb_lang', code);
+  applyTranslations();
+}
+
 
 /* =========================================================================
    SECTION: ARENA / MAP
@@ -927,12 +1181,13 @@ function unlockCharacter(id){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','inventory','instructions','battle','gameover'];
+const screens = ['menu','inventory','instructions','settings','battle','gameover'];
 function showScreen(name){
   screens.forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('active', s===name);
   });
   if(name==='inventory') renderInventory();
+  if(name==='settings') renderSettingsScreen();
 
 }
 document.addEventListener('click', (e)=>{
@@ -953,8 +1208,7 @@ function renderInventory(){
   grid.innerHTML = '';
   const equipped = SAVE.equipped;
   const eqDef = CHARACTERS[equipped];
-  document.getElementById('equipped-name').textContent = eqDef ? eqDef.name : 'None';
-  document.getElementById('equipped-hint').textContent = eqDef ? `${eqDef.maxHealth.toLocaleString()} HP` : 'Select a fighter below.';
+  renderInventoryHint();
 
   ROSTER_ORDER.forEach(id=>{
     const def = CHARACTERS[id];
@@ -966,7 +1220,7 @@ function renderInventory(){
       <div class="char-square">${squareInner(def)}${selected ? '<div class="equipped-badge">EQUIPPED</div>' : ''}</div>
       <div class="char-name">${def.name}</div>
       <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
-      <div class="lock-badge">${unlocked ? (selected ? 'Ready for battle' : 'Click to equip') : 'Locked'}</div>`;
+      <div class="lock-badge">${unlocked ? (selected ? t('inv_ready') : t('inv_click_equip')) : t('inv_legend_locked')}</div>`;
     if(unlocked){
       card.onclick = ()=>{ equipCharacter(id); openCharModal(id); };
     }
@@ -980,19 +1234,25 @@ function openCharModal(id){
   const inner = document.getElementById('char-modal-inner');
   const abilityRows = ['E','Q','R'].map(k=>{
     const a = def.abilities[k];
-    let meta = `Cooldown: ${a.cooldown ? (a.cooldown/1000)+'s' : 'None'}`;
-    if(a.damage) meta += ` · Damage: ${a.damage}`;
-    if(a.heal) meta += ` · Heals: ${a.heal} HP`;
+    let meta = `${t('modal_cooldown_label')} ${a.cooldown ? (a.cooldown/1000)+'s' : t('modal_cooldown_none')}`;
+    if(a.damage) meta += ` · ${t('modal_damage_label')} ${a.damage}`;
+    if(a.heal) meta += ` · ${t('modal_heal_label')} ${a.heal} HP`;
     return `<div class="modal-ability"><div class="ab-name">${k} — ${a.name}</div><div class="ab-meta">${meta}</div><div class="ab-meta">${a.desc}</div></div>`;
   }).join('');
   inner.innerHTML = `
     <div class="modal-top"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP</div></div></div>
     <p style="color:var(--muted); margin-top:12px;">${def.description}</p>${abilityRows}
-    <div style="text-align:center;margin-top:16px;"><button class="btn btn-secondary btn-small" id="modal-close">Close</button></div>`;
+    <div style="text-align:center;margin-top:16px;"><button class="btn btn-secondary btn-small" id="modal-close">${t('modal_close')}</button></div>`;
   document.getElementById('modal-close').onclick = closeCharModal;
-  document.getElementById('char-modal').classList.remove('hidden');
+  const modalEl = document.getElementById('char-modal');
+  modalEl.dataset.charId = id;
+  modalEl.classList.remove('hidden');
 }
-function closeCharModal(){ document.getElementById('char-modal').classList.add('hidden'); }
+function closeCharModal(){
+  const modalEl = document.getElementById('char-modal');
+  modalEl.classList.add('hidden');
+  delete modalEl.dataset.charId;
+}
 document.getElementById('char-modal').addEventListener('click', e=>{ if(e.target.id === 'char-modal') closeCharModal(); });
 
 // Shared by the menu's Play button and the post-battle "Play Another"
@@ -2878,10 +3138,10 @@ function endBattle(winnerSide, reason){
   const loserDef = winnerSide==='player' ? state.bot.def : state.player.def;
   const badge = document.getElementById('go-badge');
   const isWin = winnerSide === 'player';
-  badge.textContent = isWin ? 'Victory!' : 'Defeat...';
+  badge.textContent = isWin ? t('go_victory') : t('go_defeat');
   badge.className = 'go-badge ' + (isWin ? 'win' : 'lose');
   document.getElementById('go-sub').textContent =
-    `${winnerDef.name} defeats ${loserDef.name}.`;
+    t('go_result_template').replace('{w}', winnerDef.name).replace('{l}', loserDef.name);
   const portraits = document.getElementById('go-portraits');
   portraits.innerHTML = `
     <div class="go-portrait winner">
@@ -2970,30 +3230,117 @@ function renderFighter(f){
 }
 
 /* =========================================================================
+   SECTION: KEY BINDINGS (customizable in Settings)
+   Arrow keys and Space always work as a permanent fallback, on top of
+   whatever the player rebinds here — rebinding only changes the letter
+   key alternative.
+   ========================================================================= */
+const DEFAULT_KEYBINDS = { left:'a', right:'d', jump:'w', abilityE:'e', abilityQ:'q', abilityR:'r' };
+let KEYBINDS = loadKeybinds();
+function loadKeybinds(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('dwlb_keybinds'));
+    if(saved && typeof saved === 'object') return Object.assign({}, DEFAULT_KEYBINDS, saved);
+  }catch(err){ /* ignore corrupt save */ }
+  return Object.assign({}, DEFAULT_KEYBINDS);
+}
+function saveKeybinds(){
+  try{ localStorage.setItem('dwlb_keybinds', JSON.stringify(KEYBINDS)); }catch(err){ /* storage unavailable */ }
+}
+function displayKeyName(k){
+  if(k === ' ') return 'SPACE';
+  if(k === 'arrowup') return '↑';
+  if(k === 'arrowdown') return '↓';
+  if(k === 'arrowleft') return '←';
+  if(k === 'arrowright') return '→';
+  return k.toUpperCase();
+}
+let rebindingAction = null; // which action (if any) is waiting for a key press
+
+/* =========================================================================
    SECTION: INPUT — KEYBOARD
    ========================================================================= */
 const keysHeld = { left:false, right:false, up:false };
 window.addEventListener('keydown', (e)=>{
+  // If the Settings screen is waiting on a keypress to rebind a control,
+  // capture it here instead of feeding it to the game.
+  if(rebindingAction){
+    e.preventDefault();
+    const k = e.key.toLowerCase();
+    if(k !== 'escape'){ KEYBINDS[rebindingAction] = k; saveKeybinds(); }
+    rebindingAction = null;
+    renderSettingsScreen();
+    return;
+  }
   if(state.mode !== 'battle') return;
   const k = e.key.toLowerCase();
-  if(k==='a' || k==='arrowleft') keysHeld.left = true;
-  if(k==='d' || k==='arrowright') keysHeld.right = true;
-  if(k==='w' || k==='arrowup' || k===' ') keysHeld.up = true;
+  if(k===KEYBINDS.left || k==='arrowleft') keysHeld.left = true;
+  if(k===KEYBINDS.right || k==='arrowright') keysHeld.right = true;
+  if(k===KEYBINDS.jump || k==='arrowup' || k===' ') keysHeld.up = true;
   // S intentionally does nothing.
-  if(k==='w' || k==='arrowup' || k===' '){
+  if(k===KEYBINDS.jump || k==='arrowup' || k===' '){
     e.preventDefault();
     if(!e.repeat && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
   }
-  if(k==='e') tryUseAbility(state.player, state.bot, 'E');
-  if(k==='q') tryUseAbility(state.player, state.bot, 'Q');
-  if(k==='r') tryUseAbility(state.player, state.bot, 'R');
+  if(k===KEYBINDS.abilityE) tryUseAbility(state.player, state.bot, 'E');
+  if(k===KEYBINDS.abilityQ) tryUseAbility(state.player, state.bot, 'Q');
+  if(k===KEYBINDS.abilityR) tryUseAbility(state.player, state.bot, 'R');
 });
 window.addEventListener('keyup', (e)=>{
   const k = e.key.toLowerCase();
-  if(k==='a' || k==='arrowleft') keysHeld.left = false;
-  if(k==='d' || k==='arrowright') keysHeld.right = false;
-  if(k==='w' || k==='arrowup' || k===' ') keysHeld.up = false;
+  if(k===KEYBINDS.left || k==='arrowleft') keysHeld.left = false;
+  if(k===KEYBINDS.right || k==='arrowright') keysHeld.right = false;
+  if(k===KEYBINDS.jump || k==='arrowup' || k===' ') keysHeld.up = false;
 });
+
+/* =========================================================================
+   SECTION: SETTINGS SCREEN
+   ========================================================================= */
+const KEYBIND_ROWS = [
+  { action:'left', labelKey:'settings_bind_left' },
+  { action:'right', labelKey:'settings_bind_right' },
+  { action:'jump', labelKey:'settings_bind_jump' },
+  { action:'abilityE', labelKey:'settings_bind_e' },
+  { action:'abilityQ', labelKey:'settings_bind_q' },
+  { action:'abilityR', labelKey:'settings_bind_r' }
+];
+function renderSettingsScreen(){
+  const list = document.getElementById('keybind-list');
+  if(list){
+    list.innerHTML = '';
+    KEYBIND_ROWS.forEach(row=>{
+      const rowEl = document.createElement('div');
+      rowEl.className = 'keybind-row';
+      const listening = rebindingAction === row.action;
+      rowEl.innerHTML = `<span class="kb-label">${t(row.labelKey)}</span><button class="kb-key${listening?' listening':''}" data-action="${row.action}">${listening ? t('settings_press_key') : displayKeyName(KEYBINDS[row.action])}</button>`;
+      rowEl.querySelector('.kb-key').onclick = ()=>{
+        rebindingAction = row.action;
+        renderSettingsScreen();
+      };
+      list.appendChild(rowEl);
+    });
+  }
+  const langGrid = document.getElementById('lang-grid');
+  if(langGrid){
+    langGrid.innerHTML = '';
+    LANGUAGES.forEach(lang=>{
+      const btn = document.createElement('button');
+      btn.className = 'lang-btn' + (lang.code === currentLang ? ' active' : '');
+      btn.textContent = lang.label;
+      btn.onclick = ()=> setLanguage(lang.code);
+      langGrid.appendChild(btn);
+    });
+  }
+}
+const resetBtn = document.getElementById('settings-reset-btn');
+if(resetBtn){
+  resetBtn.addEventListener('click', ()=>{
+    KEYBINDS = Object.assign({}, DEFAULT_KEYBINDS);
+    saveKeybinds();
+    rebindingAction = null;
+    renderSettingsScreen();
+  });
+}
 
 /* =========================================================================
    SECTION: INPUT — CONTROLLER (Xbox / PlayStation / Nintendo)
@@ -3275,6 +3622,7 @@ window.addEventListener('load', rescaleArena);
 /* =========================================================================
    SECTION: INITIAL RENDER
    ========================================================================= */
+applyTranslations();
 showScreen('menu');
 </script>
 </body>
