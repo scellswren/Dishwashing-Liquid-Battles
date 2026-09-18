@@ -3145,15 +3145,17 @@ function updateBotAI(dtF){
       tryUseAbility(bot, player, 'E'); return;
     }
   } else if(style === 'mobile'){
-    // Spider-Man: keep chip damage flowing with Web Strike at range, land the
-    // heavier Web Bomb when it's off cooldown and roughly in line, and swing
-    // away the moment things get dangerous rather than trading blows.
+    // Spider-Man: keep chip damage flowing with Web Strike at range, but only
+    // attempt the heavy Web Punch when the enemy is actually inside punching
+    // range (and on roughly the same vertical level). He can still use Web Swing
+    // to reposition rather than wasting the punch from too far away.
     const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q;
     const dangerClose = adist < 110 && (player.def.aiStyle !== 'mobile'); // player is in real range on us
+    const punchInRange = adist <= qAb.range && Math.abs(player.y - bot.y) < 90;
     if((hpPct < 0.35 || dangerClose) && cdReady(bot,'R',t) && Math.random() < 0.75){
       tryUseAbility(bot, player, 'R'); return;
     }
-    if(cdReady(bot,'Q',t) && adist < 420 && Math.random() < 0.55){
+    if(cdReady(bot,'Q',t) && punchInRange && Math.random() < 0.55){
       tryUseAbility(bot, player, 'Q'); return;
     }
     if(cdReady(bot,'E',t)){
