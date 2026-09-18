@@ -424,6 +424,22 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.moving{animation:runBob .28s ease-in-out infinite;}
 .fighter.airborne{animation:airFloat .55s ease-in-out infinite;}
 .fighter.stunned{animation:shake .09s linear infinite;filter:saturate(1.3);} 
+.fighter.spidey-punch .fighter-square{animation:spideyPunch .34s cubic-bezier(.2,.9,.25,1);}
+@keyframes spideyPunch{
+  0%{transform:translateX(0) rotate(0) scale(1);}
+  18%{transform:translateX(calc(var(--punch-dir,1) * -5px)) rotate(calc(var(--punch-dir,1) * -3deg)) scale(.98);}
+  52%{transform:translateX(calc(var(--punch-dir,1) * 9px)) rotate(calc(var(--punch-dir,1) * 4deg)) scale(1.045);}
+  78%{transform:translateX(calc(var(--punch-dir,1) * 3px)) rotate(calc(var(--punch-dir,1) * 1deg)) scale(1.015);}
+  100%{transform:translateX(0) rotate(0) scale(1);}
+}
+.fx-web-punch{pointer-events:none;z-index:9;animation:webPunchFade .42s cubic-bezier(.1,.8,.2,1) forwards;}
+.fx-web-punch svg{overflow:visible;filter:drop-shadow(0 0 4px rgba(255,255,255,.9)) drop-shadow(0 0 12px rgba(214,50,59,.55));}
+@keyframes webPunchFade{
+  0%{opacity:0;transform:translateX(calc(var(--web-dir,1) * -14px)) scale(.65);}
+  18%{opacity:1;transform:translateX(calc(var(--web-dir,1) * -2px)) scale(.88);}
+  58%{opacity:1;transform:translateX(calc(var(--web-dir,1) * 16px)) scale(1.06);}
+  100%{opacity:0;transform:translateX(calc(var(--web-dir,1) * 42px)) scale(1.18);}
+}
 .fighter-square{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 22px rgba(0,0,0,.26);}
 .projectile{filter:drop-shadow(0 0 5px currentColor);animation:projectilePulse .18s ease-in-out infinite alternate;}
 .fx-burst{mix-blend-mode:screen;}
@@ -809,17 +825,17 @@ const CHARACTERS = {
   },
   spiderman: {
     id:'spiderman', name:'Spider-Man', img:'SpiderMan.jpg', color:'#d6323b',
-    maxHealth:7500, aiStyle:'mobile',
-    description:'Low health, very high mobility. Wins by darting in, poking with webs, and swinging away.',
+    maxHealth:9000, aiStyle:'mobile',
+    description:'Fast, mobile fighter who mixes web attacks with a devastating close-range super punch.',
     abilities:{
       E:{key:'E', name:'Web Strike', type:'projectile', damage:240, cooldown:500, knockback:5,
          speed:15, w:22, h:8, color:'#e7e7e7',
          sound:'web_shoot', fx:'web_shot', render:'web-strand', trail:'web', web:true,
          hitFx:'web', hitSound:'web_hit', slow:300, desc:'Fast, thin web shot. Basic poke.'},
-      Q:{key:'Q', name:'Web Bomb', type:'projectile', damage:600, cooldown:9000, knockback:11,
-         speed:10, w:34, h:34, color:'#f2f2f2',
-         sound:'web_bomb', fx:'web_bomb', render:'web-net', trail:'web', web:true,
-         hitFx:'web_big', hitSound:'web_splat', slow:300, desc:'A larger web glob with a bigger hit area.'},
+      Q:{key:'Q', name:'Web Punch', type:'melee', damage:1000, cooldown:9000, knockback:18, range:106,
+         sound:'web_punch', fx:'web_punch', hitDelay:150,
+         hitFx:'web_punch', hitSound:'web_punch_hit', slow:300,
+         desc:'A powerful super punch that blasts a burst of webs forward for 1000 damage.'},
       R:{key:'R', name:'Web Swing', type:'mobility', damage:0, cooldown:8000, boostX:18, swingToTop:true,
          sound:'web_swing', fx:'web_swing',
          desc:'Fires a web line to the ceiling and swings you all the way to the top of the arena. Pure mobility — no damage.'}
@@ -1833,11 +1849,20 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.15, 0.22, 'bandpass', 5200, 900, 4.5);
         aTone(ctx, t, 'sawtooth', 1500, 340, 0.11, 0.05);
         return;
-      case 'web_bomb': // heavier thwip + glob launch
-        aNoise(ctx, t, 0.24, 0.24, 'bandpass', 3400, 480, 3.2);
-        aTone(ctx, t, 'sawtooth', 780, 190, 0.20, 0.08);
-        aTone(ctx, t+0.05, 'sine', 300, 120, 0.18, 0.07);
+      case 'web_punch': { // charged web-assisted punch
+        aNoise(ctx, t, 0.18, 0.24, 'bandpass', 5200, 900, 4.2);
+        aTone(ctx, t, 'sawtooth', 980, 180, 0.18, 0.08);
+        aTone(ctx, t+0.06, 'square', 160, 62, 0.34, 0.18);
+        aNoise(ctx, t+0.055, 0.28, 0.22, 'lowpass', 1800, 180, 0.9);
         return;
+      }
+      case 'web_punch_hit': { // heavy punch impact + web snap
+        aTone(ctx, t, 'sine', 110, 52, 0.48, 0.24);
+        aNoise(ctx, t, 0.30, 0.26, 'lowpass', 2600, 180, 0.8);
+        aNoise(ctx, t+0.03, 0.14, 0.22, 'bandpass', 4300, 700, 2.4);
+        aTone(ctx, t+0.035, 'triangle', 420, 150, 0.22, 0.08);
+        return;
+      }
       case 'web_swing':
         aNoise(ctx, t, 0.20, 0.20, 'bandpass', 4600, 1000, 4.0);
         aNoise(ctx, t+0.09, 0.34, 0.14, 'bandpass', 700, 2600, 1.1);
@@ -2161,10 +2186,41 @@ function spawnAbilityFx(caster, ability){
       spawnSparks(hx, hy, 4, '#ffffff', 20, 320);
       break;
     }
-    case 'web_bomb': {
-      const hx = cx + dir*26, hy = cy;
-      fxEl('fx-splat', `left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;`, 600, webSplatSvg(52));
-      fxEl('fx-ring', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;border-color:#ffffffaa;`, 540);
+    case 'web_punch': {
+      const hx = cx + dir*34, hy = cy-1;
+      caster.el.classList.remove('spidey-punch');
+      caster.el.style.setProperty('--punch-dir', dir);
+      void caster.el.offsetWidth;
+      caster.el.classList.add('spidey-punch');
+      setTimeout(()=>{ if(caster.el) caster.el.classList.remove('spidey-punch'); }, 390);
+
+      const left = Math.min(cx, hx) - 78;
+      const top = hy - 58;
+      const width = Math.abs(hx-cx) + 130;
+      const height = 116;
+      const sx = cx - left, sy = hy - top;
+      const ex = hx - left;
+      const spread = 34;
+      let g = '';
+      // Several thick web strands fire out from the punch and spread around the target.
+      for(let i=0;i<7;i++){
+        const off = (i-3)/3;
+        const ey = sy + off*34;
+        const c1x = sx + (ex-sx)*0.40;
+        const c1y = sy + off*12;
+        const c2x = sx + (ex-sx)*0.72;
+        const c2y = ey - off*10;
+        g += `<path d="M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}"/>`;
+      }
+      // Web rings at the end of the punch for a stronger impact silhouette.
+      for(let r=14;r<=42;r+=14){
+        g += `<ellipse cx="${(ex+8).toFixed(1)}" cy="${sy.toFixed(1)}" rx="${r}" ry="${Math.max(7,r*.48).toFixed(1)}"/>`;
+      }
+      const svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="2.4" opacity=".96">${g}</g><g stroke-width="1.1" opacity=".62">${g}</g></g></svg>`;
+      fxEl('fx-web-punch', `left:${left}px;top:${top}px;width:${width}px;height:${height}px;--web-dir:${dir};transform-origin:${sx}px ${sy}px;`, 470, svg);
+      fxEl('fx-flash', `left:${hx-34}px;top:${hy-34}px;width:68px;height:68px;`, 260);
+      spawnSparks(hx, hy, 12, '#ffffff', 62, 420);
+      spawnSparks(hx + dir*10, hy, 8, '#d6323b', 48, 360);
       break;
     }
     case 'web_swing': {
@@ -2285,11 +2341,13 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx, cy, 6, '#ffffff', 30, 380);
       break;
     }
-    case 'web_big': {
-      fxEl('fx-splat', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`, 620, webSplatSvg(104));
-      fxEl('fx-ring', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#ffffffcc;`, 560);
-      spawnSparks(cx, cy, 10, '#ffffff', 52, 440);
-      shakeArena(6, 260);
+    case 'web_punch': {
+      fxEl('fx-flash', `left:${cx-82}px;top:${cy-82}px;width:164px;height:164px;`, 300);
+      fxEl('fx-ring', `left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;border-color:#ffffff;border-width:5px;box-shadow:0 0 32px #ffffffaa;`, 520);
+      fxEl('fx-splat', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;`, 620, webSplatSvg(108));
+      spawnSparks(cx, cy, 18, '#ffffff', 92, 460);
+      spawnSparks(cx, cy, 10, '#d6323b', 76, 400);
+      shakeArena(9, 320);
       break;
     }
     case 'missile': {
