@@ -236,6 +236,27 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 }
 .ability-btn.flight-on{background:linear-gradient(180deg,#3f6fe0,#2a4ea6);}
 .ability-btn:disabled{cursor:default;}
+.ability-btn.gp-mode .ab-key{font-size:20px;}
+
+/* ---------- Controller banner / hint ---------- */
+#gamepad-banner{
+  position:fixed; top:16px; left:50%; transform:translateX(-50%) translateY(-140%);
+  background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--amber);
+  border-radius:12px; padding:10px 18px; box-shadow:var(--shadow); z-index:80;
+  display:flex; align-items:center; gap:10px; font-size:13px; font-weight:800;
+  transition:transform .3s cubic-bezier(.2,.85,.25,1), opacity .3s ease; opacity:0; pointer-events:none;
+}
+#gamepad-banner.show{transform:translateX(-50%) translateY(0); opacity:1;}
+#gamepad-banner .gp-icon{font-size:18px;}
+#gamepad-banner .gp-brand{color:var(--amber);}
+#gamepad-hint{
+  display:none; align-items:center; gap:8px; color:var(--muted); font-size:11px; font-weight:600;
+  background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:6px 10px;
+}
+#gamepad-hint.show{display:flex;}
+#gamepad-hint .gp-jump-key{
+  font-family:'Anton',sans-serif; color:var(--amber); background:#000a; border-radius:5px; padding:1px 7px; font-size:12px;
+}
 
 #battle-topbar{display:flex; justify-content:space-between; align-items:center; flex:0 0 auto;}
 #screen-battle #hud{width:100%;}
@@ -600,6 +621,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 </style>
 </head>
 <body>
+<div id="gamepad-banner"><span class="gp-icon">🎮</span><span>Controller connected — <span class="gp-brand" id="gp-brand-name">Controller</span></span></div>
 <div id="app">
 
   <!-- ============ MAIN MENU ============ -->
@@ -648,6 +670,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
         <li><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> jump &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> left &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> right</li>
         <li><kbd>E</kbd> main ability &nbsp; <kbd>Q</kbd> secondary ability &nbsp; <kbd>R</kbd> special ability</li>
         <li>On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</li>
+        <li><strong>Controller support:</strong> Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / &#10005; / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</li>
         <li>Every ability has a cooldown shown right on its button — watch the timer count down.</li>
         <li>The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</li>
         <li>Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</li>
@@ -690,6 +713,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
         <button class="dpad-right" data-dir="right">&rarr;</button>
       </div>
       <div id="ability-bar"></div>
+      <div id="gamepad-hint"><span>🎮</span><span>Jump</span><span class="gp-jump-key" id="gp-jump-key">A</span></div>
     </div>
   </div>
 
@@ -1214,12 +1238,14 @@ function buildAbilityBar(){
   ['E','Q','R'].forEach(k=>{
     const a = state.player.def.abilities[k];
     const btn = document.createElement('button');
-    btn.className = 'ability-btn';
+    btn.className = 'ability-btn' + (gamepadState.connected ? ' gp-mode' : '');
     btn.dataset.key = k;
-    btn.innerHTML = `<span class="ab-key">${k}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
+    const label = gamepadState.connected ? abilityButtonLabel(k) : k;
+    btn.innerHTML = `<span class="ab-key">${label}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
     btn.onclick = ()=> tryUseAbility(state.player, state.bot, k);
     bar.appendChild(btn);
   });
+  updateGamepadHint();
 }
 function updateAbilityBar(){
   const bar = document.getElementById('ability-bar');
@@ -1229,6 +1255,11 @@ function updateAbilityBar(){
     if(!btn) return;
     const a = state.player.def.abilities[k];
     const overlay = btn.querySelector('.cd-overlay');
+    const keyEl = btn.querySelector('.ab-key');
+    if(keyEl){
+      keyEl.textContent = gamepadState.connected ? abilityButtonLabel(k) : k;
+      btn.classList.toggle('gp-mode', gamepadState.connected);
+    }
     if(a.type==='toggle'){
       btn.classList.toggle('flight-on', !!state.player.flight);
       overlay.style.display='none';
@@ -2965,6 +2996,172 @@ window.addEventListener('keyup', (e)=>{
 });
 
 /* =========================================================================
+   SECTION: INPUT — CONTROLLER (Xbox / PlayStation / Nintendo)
+   Uses the standard Gamepad API mapping, so button *positions* are the
+   same across every brand:
+     buttons[0] = bottom face button   (A / Cross / B)
+     buttons[1] = right face button    (B / Circle / A)
+     buttons[2] = left face button     (X / Square / Y)
+     buttons[3] = top face button      (Y / Triangle / X)
+   Movement = left stick (or d-pad). Jump = bottom face button, the same
+   button every console uses for jumping. Abilities sit on the other three
+   face buttons so they're always one thumb-press away.
+   ========================================================================= */
+const GAMEPAD_DEADZONE = 0.28;
+const gpKeys = { left:false, right:false, up:false };
+const gamepadState = { connected:false, index:null, brand:'generic' };
+const gpPrevPressed = {}; // button index -> was pressed last frame
+
+// Position -> ability key. E = left button, Q = top button, R = right button.
+const ABILITY_POS = { E:2, Q:3, R:1 };
+const JUMP_POS = 0;
+
+const FACE_BUTTON_LABELS = {
+  xbox:        { 0:'A', 1:'B', 2:'X', 3:'Y' },
+  playstation: { 0:'✕', 1:'○', 2:'□', 3:'△' },
+  nintendo:    { 0:'B', 1:'A', 2:'Y', 3:'X' },
+  generic:     { 0:'A', 1:'B', 2:'X', 3:'Y' }
+};
+const BRAND_DISPLAY_NAME = { xbox:'Xbox', playstation:'PlayStation', nintendo:'Nintendo', generic:'Controller' };
+
+function detectGamepadBrand(gp){
+  const id = ((gp && gp.id) || '').toLowerCase();
+  if(/xbox|xinput|045e|microsoft/.test(id)) return 'xbox';
+  if(/dualsense|dualshock|playstation|ps3|ps4|ps5|054c|sony/.test(id)) return 'playstation';
+  if(/nintendo|switch|joy-con|joycon|pro controller|057e/.test(id)) return 'nintendo';
+  return 'generic';
+}
+function faceLabel(pos){
+  const table = FACE_BUTTON_LABELS[gamepadState.brand] || FACE_BUTTON_LABELS.generic;
+  return table[pos];
+}
+function abilityButtonLabel(key){ return faceLabel(ABILITY_POS[key]); }
+function jumpButtonLabel(){ return faceLabel(JUMP_POS); }
+
+let gpBannerTimer = null;
+function flashGamepadBanner(connected){
+  const banner = document.getElementById('gamepad-banner');
+  const brandNameEl = document.getElementById('gp-brand-name');
+  if(!banner) return;
+  if(connected){
+    brandNameEl.textContent = BRAND_DISPLAY_NAME[gamepadState.brand] || 'Controller';
+    banner.classList.add('show');
+  } else {
+    banner.querySelector('span:last-child').textContent = 'Controller disconnected';
+    banner.classList.add('show');
+  }
+  clearTimeout(gpBannerTimer);
+  gpBannerTimer = setTimeout(()=> banner.classList.remove('show'), 2600);
+}
+function updateGamepadHint(){
+  const hint = document.getElementById('gamepad-hint');
+  const jumpKeyEl = document.getElementById('gp-jump-key');
+  if(!hint || !jumpKeyEl) return;
+  if(gamepadState.connected){
+    jumpKeyEl.textContent = jumpButtonLabel();
+    hint.classList.add('show');
+  } else {
+    hint.classList.remove('show');
+  }
+}
+
+function setGamepadConnected(index, gp){
+  const wasConnected = gamepadState.connected;
+  gamepadState.connected = true;
+  gamepadState.index = index;
+  gamepadState.brand = detectGamepadBrand(gp);
+  if(!wasConnected) flashGamepadBanner(true);
+  updateGamepadHint();
+  if(typeof buildAbilityBar === 'function' && state.mode === 'battle') buildAbilityBar();
+}
+function setGamepadDisconnected(){
+  if(!gamepadState.connected) return;
+  gamepadState.connected = false;
+  gamepadState.index = null;
+  gpKeys.left = gpKeys.right = gpKeys.up = false;
+  flashGamepadBanner(false);
+  updateGamepadHint();
+  if(typeof buildAbilityBar === 'function' && state.mode === 'battle') buildAbilityBar();
+}
+
+window.addEventListener('gamepadconnected', (e)=> setGamepadConnected(e.gamepad.index, e.gamepad));
+window.addEventListener('gamepaddisconnected', (e)=>{
+  if(gamepadState.index === e.gamepad.index) setGamepadDisconnected();
+});
+
+let gamepadApiBlocked = false;
+function pollGamepad(){
+  if(gamepadApiBlocked) return;
+  if(!navigator.getGamepads) return;
+  let pads;
+  try{
+    pads = navigator.getGamepads();
+  }catch(err){
+    // Some embedding contexts (e.g. a sandboxed preview iframe) disallow the
+    // Gamepad API via Permissions-Policy. Fail silently and stop polling
+    // rather than crashing the render loop — keyboard/touch still work,
+    // and controller support works normally once the file is opened
+    // directly in a regular browser tab/window.
+    gamepadApiBlocked = true;
+    return;
+  }
+
+  // Some browsers (notably Firefox) don't reliably fire gamepadconnected
+  // until a button is pressed, so fall back to scanning every frame.
+  if(!gamepadState.connected){
+    for(let i=0;i<pads.length;i++){
+      if(pads[i]){ setGamepadConnected(i, pads[i]); break; }
+    }
+  }
+  if(!gamepadState.connected) return;
+
+  const gp = pads[gamepadState.index];
+  if(!gp){ setGamepadDisconnected(); return; }
+
+  // Left stick / d-pad movement
+  const axisX = gp.axes[0] || 0;
+  const dpadLeft = !!(gp.buttons[14] && gp.buttons[14].pressed);
+  const dpadRight = !!(gp.buttons[15] && gp.buttons[15].pressed);
+  gpKeys.left = axisX < -GAMEPAD_DEADZONE || dpadLeft;
+  gpKeys.right = axisX > GAMEPAD_DEADZONE || dpadRight;
+
+  const axisY = gp.axes[1] || 0;
+  const dpadUp = !!(gp.buttons[12] && gp.buttons[12].pressed);
+  const wantUp = axisY < -GAMEPAD_DEADZONE || dpadUp;
+  const wasUp = gpKeys.up;
+  gpKeys.up = wantUp;
+
+  // Jump: bottom face button, same rising-edge behavior as the keyboard.
+  const jumpBtn = gp.buttons[JUMP_POS];
+  const jumpPressed = !!(jumpBtn && jumpBtn.pressed);
+  const jumpWasPressed = !!gpPrevPressed[JUMP_POS];
+  gpPrevPressed[JUMP_POS] = jumpPressed;
+  const stickJumpEdge = wantUp && !wasUp;
+  if(state.mode === 'battle' && state.player && (jumpPressed && !jumpWasPressed || stickJumpEdge)
+     && state.player.onGround && !state.player.flight){
+    state.player.jumpQueued = true;
+  }
+
+  if(state.mode === 'battle' && state.player && state.bot){
+    ['E','Q','R'].forEach(key=>{
+      const idx = ABILITY_POS[key];
+      const btn = gp.buttons[idx];
+      const pressed = !!(btn && btn.pressed);
+      const was = !!gpPrevPressed[idx];
+      gpPrevPressed[idx] = pressed;
+      if(pressed && !was) tryUseAbility(state.player, state.bot, key);
+    });
+  } else {
+    // Keep edge-state fresh even outside battle so a held button doesn't
+    // fire the instant a fight starts.
+    [ABILITY_POS.E, ABILITY_POS.Q, ABILITY_POS.R].forEach(idx=>{
+      const btn = gp.buttons[idx];
+      gpPrevPressed[idx] = !!(btn && btn.pressed);
+    });
+  }
+}
+
+/* =========================================================================
    SECTION: INPUT — ON-SCREEN D-PAD (press-and-hold)
    ========================================================================= */
 document.querySelectorAll('#dpad button').forEach(btn=>{
@@ -3031,18 +3228,20 @@ function gameLoop(ts){
   state.lastTime = ts;
   const dtF = dt / 16.6667;
 
+  pollGamepad();
+
   if(state.mode === 'battle'){
     rescaleArena(); // keep in sync with layout/orientation changes; cheap to call each frame
     const p = state.player, b = state.bot;
     const frozen = state.countdown; // nobody moves or attacks until FIGHT!
 
-    // resolve player movement input
+    // resolve player movement input (keyboard/touch OR controller)
     let pMoveDir = 0;
     if(!frozen){
-      if(keysHeld.left) pMoveDir -= 1;
-      if(keysHeld.right) pMoveDir += 1;
+      if(keysHeld.left || gpKeys.left) pMoveDir -= 1;
+      if(keysHeld.right || gpKeys.right) pMoveDir += 1;
     }
-    const pWantJump = !frozen && (p.jumpQueued || (p.flight && keysHeld.up));
+    const pWantJump = !frozen && (p.jumpQueued || (p.flight && (keysHeld.up || gpKeys.up)));
     p.jumpQueued = false;
     updatePhysics(p, pMoveDir, pWantJump, frozen ? false : keysHeld.down, dtF);
 
@@ -3064,6 +3263,7 @@ function gameLoop(ts){
     renderFighter(b);
     updateHud();
     updateAbilityBar();
+    updateGamepadHint();
   }
 
   requestAnimationFrame(gameLoop);
