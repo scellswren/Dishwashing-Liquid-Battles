@@ -3182,6 +3182,27 @@ function tryUseAbility(caster, target, key){
 }
 function dirSignTo(from, to){ return (to.x >= from.x) ? 1 : -1; }
 
+// True if a floor/platform sits between two fighters (centre to centre), so close-range
+// attacks and shockwaves can't reach through it.
+function segHitsRect(x1,y1,x2,y2,rx1,ry1,rx2,ry2){
+  let t0 = 0, t1 = 1;
+  const dx = x2-x1, dy = y2-y1;
+  const p = [-dx, dx, -dy, dy], q = [x1-rx1, rx2-x1, y1-ry1, ry2-y1];
+  for(let i=0;i<4;i++){
+    if(p[i] === 0){ if(q[i] < 0) return false; }
+    else {
+      const r = q[i]/p[i];
+      if(p[i] < 0){ if(r > t1) return false; if(r > t0) t0 = r; }
+      else { if(r < t0) return false; if(r < t1) t1 = r; }
+    }
+  }
+  return true;
+}
+function attackBlockedByFloor(a, b){
+  const x1 = a.x+FIGHTER_SIZE/2, y1 = a.y+FIGHTER_SIZE/2, x2 = b.x+FIGHTER_SIZE/2, y2 = b.y+FIGHTER_SIZE/2;
+  return PLATFORMS.some(pl => segHitsRect(x1,y1,x2,y2, pl.x, pl.y, pl.x+pl.w, pl.y+pl.h));
+}
+
 function executeAbility(caster, target, ability, t){
   switch(ability.type){
     case 'projectile': {
@@ -3209,26 +3230,38 @@ function executeAbility(caster, target, ability, t){
     }
     case 'melee': {
       // Damage lands on the contact frame of the swing animation, not instantly.
-      // Close-range reach is forgiving: a little slack past the listed range, a taller
-      // vertical window, and it's checked when the swing STARTS as well as when it lands,
-      // so a target that shuffles away mid-swing still gets hit.
-      const inReach = ()=>{
-        const d = Math.abs((target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2));
-        return d <= ability.range + 44 && Math.abs(target.y - caster.y) < 115;
+      // Reach is forgiving (a little slack past the listed range, a taller vertical window,
+      // and a swing that started in range still lands if the target shuffles off) - but a
+      // swing only counts if it makes sense:
+      //  - it hits what's in FRONT of the attacker (facing at the moment of the swing);
+      //    bodies overlapping count as in front,
+      //  - it can't reach through a floor/platform between the two fighters,
+      //  - a swing whose attacker got knocked away mid-swing doesn't keep its hit.
+      const startX = caster.x, startY = caster.y, faceAtStart = caster.facing;
+      const inReach = (slack)=>{
+        const dx = (target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
+        return Math.abs(dx) <= ability.range + 44 + (slack||0) && Math.abs(target.y - caster.y) < 115
+          && !attackBlockedByFloor(caster, target);
       };
-      const reachedAtStart = inReach();
+      const swingOk = ()=>{
+        const dx = (target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
+        if(caster.isBot) return (dx >= 0 ? 1 : -1) === caster.facing;   // bots: see updateBotFacing
+        return Math.abs(dx) < 24 || (dx >= 0 ? 1 : -1) === faceAtStart;
+      };
+      const reachedAtStart = inReach(0) && swingOk();
       const resolve = ()=>{
         if(state.mode !== 'battle' || caster.dead || target.dead) return;
         // a swing also knocks incoming missiles out of the air
         damageMissilesInArea(caster.id, caster.x+FIGHTER_SIZE/2 + caster.facing*ability.range*0.5,
           caster.y+FIGHTER_SIZE/2, ability.range, ability.damage);
-        const inRange = reachedAtStart || inReach();
+        const stillPlanted = Math.abs(caster.x - startX) < 60 && Math.abs(caster.y - startY) < 90;
+        const inRange = inReach(0) || (reachedAtStart && stillPlanted && inReach(70));
         const dirNow = dirSignTo(caster, target);
         // Bots must actually be facing the target to land a hit — this is
         // what makes flanking one matter instead of being purely cosmetic.
         // A human player's facing is always a deliberate choice, so this
         // never restricts the player's own attacks.
-        const facingOk = !caster.isBot || (dirNow === caster.facing);
+        const facingOk = swingOk();
         if(inRange && facingOk){
           damageTargetOrWall(target, ability.damage, ability.knockback, dirNow,
             {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
@@ -3248,7 +3281,7 @@ function executeAbility(caster, target, ability, t){
       spawnAoeFx(caster, ability.radius);
       damageMissilesInArea(caster.id, caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, ability.radius, ability.damage);
       const dist = Math.hypot((target.x - caster.x), (target.y - caster.y));
-      if(dist <= ability.radius && !target.dead){
+      if(dist <= ability.radius && !target.dead && !attackBlockedByFloor(caster, target)){
         const dir = dirSignTo(caster, target);
         damageTargetOrWall(target, ability.damage, ability.knockback, dir,
           {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
@@ -3410,7 +3443,7 @@ function updateBPCharge(f){
   const target = (f === state.player) ? state.bot : state.player;
   if(target && !target.dead){
     const dist = Math.hypot((target.x-f.x),(target.y-f.y));
-    if(dist <= ability.radius){
+    if(dist <= ability.radius && !attackBlockedByFloor(f, target)){
       const dir = dirSignTo(f, target);
       damageTargetOrWall(target, dmg, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound});
     }
@@ -3452,9 +3485,17 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   // Black Panther channeling Energy Redistribution: every hit is absorbed
   // as stored energy instead of landing as damage.
   if(target.bpCharging){
+    // Energy Redistribution: the hit still hurts, and every point of it is stored to be
+    // redistributed in the slam. He's braced, so no knockback or hit-stun while channeling.
     target.bpAbsorbed = (target.bpAbsorbed||0) + dmg;
+    target.health = Math.max(0, target.health - dmg);
+    spawnDamageNumber(target.x+18, target.y, Math.round(dmg), false);
     spawnBPAbsorbFx(target);
     sfx('bp_absorb');
+    flashHit(target);
+    if(target.health <= 0 && !target.dead){
+      endBattle(target === state.player ? 'bot' : 'player', 'ko-health');
+    }
     return;
   }
   let actual = dmg;
