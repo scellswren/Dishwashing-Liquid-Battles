@@ -2734,13 +2734,12 @@ function openCharModal(id){
     if(a.damage) meta += ` · ${t('modal_damage_label')} ${a.damage}`;
     if(a.heal) meta += ` · ${t('modal_heal_label')} ${a.heal} HP`;
     const keyLabel = gamepadState.connected ? abilityButtonLabel(k) : k;
-    return `<div class="modal-ability"><div class="cm-key">${keyLabel}</div><div class="ab-name">${a.name}</div><div class="ab-meta">${meta}</div><div class="ab-meta">${a.desc}</div></div>`;
+    return `<div class="modal-ability"><div class="cm-key">${keyLabel}</div><div class="ab-name">${a.name}</div><div class="ab-meta">${meta}</div></div>`;
   }).join('');
   const hint = gamepadState.connected ? `<span class="modal-hint">${t('modal_pad_close').replace('{b}', faceLabel(ABILITY_POS.R))}</span>` : '<span></span>';
   inner.style.setProperty('--char-color', def.color);
   inner.innerHTML = `
-    <div class="cm-head"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP</div></div></div>
-    <p class="cm-desc">${def.description}</p>
+    <div class="cm-head"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP${def.dodgeChance ? ' · ' + t('modal_dodge_label') + ' ' + Math.round(def.dodgeChance*100) + '%' : ''}</div></div></div>
     <div class="cm-body">${abilityRows}</div>
     <div class="cm-foot">${hint}<button class="btn btn-small btn-secondary" id="modal-close">${t('modal_close')}</button></div>`;
   document.getElementById('modal-close').onclick = closeCharModal;
@@ -3425,14 +3424,6 @@ function updateSpecialViz(f){
   f.el.classList.toggle('cap-blocking', !!f.blocking);
   f.el.classList.toggle('bp-charging', !!f.bpCharging);
   f.el.classList.toggle('bp-slam-pending', !!f.bpSlamPending);
-  if(f === state.player && !state.pvp){
-    const echoOn = f.def.id === 'daredevil';
-    arenaEl.classList.toggle('echolocation-mode', echoOn);
-    if(echoOn){
-      arenaEl.style.setProperty('--echo-x', `${f.x + FIGHTER_SIZE/2}px`);
-      arenaEl.style.setProperty('--echo-y', `${f.y + FIGHTER_SIZE/2}px`);
-    }
-  }
 }
 
 function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
@@ -6371,6 +6362,7 @@ const I18N_V5 = {
     modal_pad_close:'{b}で閉じる' }
 };
 Object.keys(I18N_V5).forEach(code => { if(I18N[code]) Object.assign(I18N[code], I18N_V5[code]); });
+({en:'Dodge',es:'Esquiva',zh:'闪避',ar:'مراوغة',fr:'Esquive',de:'Ausweichen',pt:'Esquiva',hi:'चकमा',ja:'回避'}) && Object.entries({en:'Dodge',es:'Esquiva',zh:'闪避',ar:'مراوغة',fr:'Esquive',de:'Ausweichen',pt:'Esquiva',hi:'चकमा',ja:'回避'}).forEach(([c,v])=>{ if(I18N[c]) I18N[c].modal_dodge_label = v; });
 
 /* =========================================================================
    SECTION: SCREEN WIRING — mode select, 1 V 1 actions, double-tap details
