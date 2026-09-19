@@ -729,6 +729,16 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fx-webtick svg{overflow:visible;}
 .afterimage{border-radius:11px; pointer-events:none; animation:aiFade .36s ease-out forwards;}
 @keyframes aiFade{0%{opacity:.48;transform:scale(1)}100%{opacity:0;transform:scale(.82)}}
+
+/* Clear, readable melee weapon/slash FX for Black Panther and Daredevil. */
+.melee-weapon-fx{pointer-events:none;z-index:10;transform-origin:50% 50%;}
+.melee-weapon-fx svg{display:block;overflow:visible;}
+.dd-club-swing{animation:ddClubSwing .24s cubic-bezier(.18,.82,.2,1) forwards;}
+.bp-claw-marks{animation:bpClawMarks .28s cubic-bezier(.18,.82,.2,1) forwards;}
+@keyframes ddClubSwing{0%{opacity:0;transform:scale(.72) rotate(-70deg)}12%{opacity:1}55%{opacity:1;transform:scale(1.05) rotate(12deg)}100%{opacity:0;transform:scale(1.12) rotate(48deg)}}
+@keyframes bpClawMarks{0%{opacity:0;transform:scale(.55) rotate(-18deg)}15%{opacity:1}55%{opacity:1;transform:scale(1.08) rotate(4deg)}100%{opacity:0;transform:scale(1.18) rotate(12deg)}}
+.melee-hit-guide{position:absolute;pointer-events:none;z-index:8;border:2px solid currentColor;border-radius:50%;opacity:0;animation:hitGuide .26s ease-out forwards;}
+@keyframes hitGuide{0%{opacity:.55;transform:scale(.8)}30%{opacity:.35}100%{opacity:0;transform:scale(1.05)}}
 .fx-crack{pointer-events:none; animation:boltFade 620ms linear forwards;}
 .fx-crack svg{overflow:visible; filter:drop-shadow(0 0 6px #ffd479);}
 
@@ -1143,10 +1153,10 @@ const CHARACTERS = {
     maxHealth:12500, aiStyle:'bruiser',
     description:"Vibranium-powered brawler. Slashes with fast claw strikes and darts in with Panther Dash, but his real threat is Energy Redistribution — tank a hit and pay it right back, multiplied.",
     abilities:{
-      E:{key:'E', name:'Vibranium Claw Rush', type:'melee', damage:650, cooldown:1100, knockback:9, range:78,
+      E:{key:'E', name:'Vibranium Claws', type:'melee', damage:650, cooldown:1100, knockback:9, range:90,
          hitDelay:70,
          sound:'claw_swipe', fx:'bp_claw', hitFx:'bp_claw_hit', hitSound:'claw_hit',
-         desc:'A quick twin-claw slash at close range. Low cooldown keeps the pressure on.'},
+         desc:'Three visible vibranium claw slashes sweep forward at close range. The 90px reach is clearly telegraphed.'},
       Q:{key:'Q', name:'Energy Redistribution', type:'chargeSlam', chargeTime:4500, baseDamage:400,
          multiplier:1, radius:150, knockback:22, cooldown:12000,
          sound:'bp_charge', fx:'bp_charge', hitFx:'bp_slam', hitSound:'bp_slam_hit',
@@ -1162,11 +1172,11 @@ const CHARACTERS = {
     dodgeChance:0.4,
     description:"Passive: instinctively dodges 40% of incoming attacks. Low health, but a slippery close-range brawler with his billy club — strike up close, throw it as a returning boomerang at range, and spring away with an acrobatic leap. His view of the world is entirely echolocation-based.",
     abilities:{
-      E:{key:'E', name:'Billy Club Strike', type:'melee', damage:550, cooldown:750, knockback:8, range:76,
+      E:{key:'E', name:'Billy Club Strike', type:'melee', damage:200, cooldown:750, knockback:8, range:88,
          hitDelay:70,
          sound:'club_strike', fx:'dd_club', hitFx:'dd_club_hit', hitSound:'club_hit',
-         desc:'A fast baton strike at close range. Cheap and quick — the backbone of his offense.'},
-      Q:{key:'Q', name:'Club Boomerang', type:'projectile', damage:700, cooldown:6000, knockback:12,
+         desc:'A fast, clearly visible billy-club swing at close range. The weapon and 88px strike area are telegraphed so contact is easier to read.'},
+      Q:{key:'Q', name:'Club Boomerang', type:'projectile', damage:500, cooldown:6000, knockback:12,
          speed:15, w:30, h:30, color:'#1a1a1a',
          sound:'club_throw', fx:'dd_boomerang', render:'dd-club', trail:'energy',
          returns:true, pierce:true, returnDistance:720,
@@ -3038,10 +3048,19 @@ function spawnAbilityFx(caster, ability){
 
     /* ---------------- Black Panther ---------------- */
     case 'bp_claw': {
-      fxEl('mj-arc-wrap',
-        `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;transform:scaleX(${dir});`,
-        260, '<div class="mj-arc" style="border-right-color:#c9a6ff;border-top-color:#8a4fe0;"></div>');
-      spawnSparks(cx + dir*22, cy, 6, '#c9a6ff', 30, 260);
+      // Three large, distinct vibranium claw marks sweep in front of Black Panther.
+      const gx = cx + dir*40, gy = cy + 2;
+      const clawSvg = `<svg width="108" height="86" viewBox="0 0 108 86" style="transform:scaleX(${dir})">
+        <g fill="none" stroke-linecap="round">
+          <path d="M18 18 Q 54 42 90 18" stroke="#f1e6ff" stroke-width="7" opacity=".96"/>
+          <path d="M13 40 Q 52 62 88 38" stroke="#c9a6ff" stroke-width="6" opacity=".92"/>
+          <path d="M17 62 Q 52 80 84 57" stroke="#8a4fe0" stroke-width="5" opacity=".9"/>
+        </g>
+      </svg>`;
+      fxEl('melee-weapon-fx bp-claw-marks', `left:${gx-54}px;top:${gy-43}px;width:108px;height:86px;filter:drop-shadow(0 0 7px #8a4fe0);`, 300, clawSvg);
+      // A short, visible contact guide makes the 90px attack range easier to read.
+      fxEl('melee-hit-guide', `left:${cx + dir*8}px;top:${cy-34}px;width:90px;height:68px;color:#c9a6ff;`, 260);
+      spawnSparks(gx, gy, 7, '#c9a6ff', 34, 280);
       break;
     }
     case 'bp_charge': {
@@ -3060,10 +3079,20 @@ function spawnAbilityFx(caster, ability){
 
     /* ---------------- Daredevil ---------------- */
     case 'dd_club': {
-      fxEl('mj-arc-wrap',
-        `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;transform:scaleX(${dir});`,
-        220, '<div class="mj-arc" style="border-right-color:#e0e0e0;border-top-color:#c53030;"></div>');
-      spawnSparks(cx + dir*20, cy, 5, '#c53030', 24, 220);
+      // Put the actual billy club clearly in front of Daredevil during the swing.
+      const wx = cx + dir*52, wy = cy + 2;
+      const clubSvg = `<svg width="104" height="78" viewBox="0 0 104 78" style="transform:scaleX(${dir})">
+        <g transform="translate(8 8) rotate(-18 44 31)" filter="drop-shadow(0 0 5px rgba(197,48,48,.8))">
+          <rect x="12" y="28" width="72" height="10" rx="5" fill="#171717" stroke="#000" stroke-width="2"/>
+          <rect x="12" y="28" width="20" height="10" rx="5" fill="#c53030"/>
+          <rect x="64" y="28" width="20" height="10" rx="5" fill="#c53030"/>
+          <circle cx="48" cy="33" r="3" fill="#b7b7b7"/>
+        </g>
+      </svg>`;
+      fxEl('melee-weapon-fx dd-club-swing', `left:${wx-52}px;top:${wy-39}px;width:104px;height:78px;`, 270, clubSvg);
+      // Keep a readable swing guide around the same range as the collision box.
+      fxEl('melee-hit-guide', `left:${cx + dir*10}px;top:${cy-32}px;width:88px;height:64px;color:#c53030;`, 240);
+      spawnSparks(wx, wy, 6, '#e0e0e0', 28, 260);
       break;
     }
     case 'dd_boomerang': {
@@ -3186,6 +3215,8 @@ function spawnHitFx(target, kind, dirSign){
     case 'bp_claw_hit': {
       fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;`, 260);
       fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#c9a6ff;box-shadow:0 0 22px #8a4fe0;`, 420);
+      const hitClaws = `<svg width="92" height="72" viewBox="0 0 92 72"><g fill="none" stroke-linecap="round"><path d="M12 14 Q46 34 80 14" stroke="#f1e6ff" stroke-width="6"/><path d="M10 35 Q46 54 78 33" stroke="#c9a6ff" stroke-width="5"/><path d="M14 55 Q46 68 74 52" stroke="#8a4fe0" stroke-width="4"/></g></svg>`;
+      fxEl('melee-weapon-fx bp-claw-marks', `left:${cx-46}px;top:${cy-36}px;width:92px;height:72px;`, 300, hitClaws);
       spawnSparks(cx, cy, 10, '#c9a6ff', 46, 340);
       break;
     }
@@ -3283,7 +3314,7 @@ function spawnHealFx(caster){
   arenaEl.appendChild(el);
   setTimeout(()=>el.remove(), 500);
 }
-/* Daredevil's Evasion passive — an afterimage blur + a light spray to sell
+/* Daredevil's Evasion passive — an afterimage + a light spray to sell
    a genuine slip rather than the attack just silently doing nothing. */
 function spawnDodgeFx(target, dirSign){
   spawnAfterimage(target, '#c5303066', 240);
