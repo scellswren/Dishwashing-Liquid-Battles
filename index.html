@@ -767,6 +767,96 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .charge-glow{border-radius:50%; pointer-events:none; animation:chargeIn .16s ease-out forwards;}
 @keyframes chargeIn{0%{transform:scale(1.7);opacity:0}60%{transform:scale(.7);opacity:1}100%{transform:scale(.4);opacity:0}}
 
+
+/* ---------- Captain America: held shield / blocking stance ---------- */
+.cap-shield-held{
+  position:absolute; width:34px; height:34px; right:-11px; top:15px; z-index:7;
+  pointer-events:none; display:block; transform:rotate(8deg);
+  transform-origin:50% 50%; filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));
+}
+.cap-shield-held svg{width:100%;height:100%;display:block;}
+.fighter.facing-left .cap-shield-held{left:-11px;right:auto;transform:scaleX(-1) rotate(8deg);}
+.fighter.cap-thrown .cap-shield-held{display:none;}
+.fighter.cap-blocking .cap-shield-held{width:54px;height:54px;right:-22px;top:5px;transform:scale(1.08) rotate(-7deg);filter:drop-shadow(0 0 9px rgba(108,208,255,.9));}
+.fighter.cap-blocking.facing-left .cap-shield-held{left:-22px;right:auto;transform:scaleX(-1) scale(1.08) rotate(-7deg);}
+.fighter.cap-blocking .fighter-square{box-shadow:0 0 0 2px rgba(108,208,255,.28),0 0 26px rgba(108,208,255,.32),0 12px 22px rgba(0,0,0,.26);}
+
+/* ---------- Black Panther: Energy Redistribution channel ---------- */
+.fighter.bp-charging .fighter-square{
+  box-shadow:0 0 0 2px rgba(176,136,255,.52),0 0 22px rgba(138,79,224,.85),0 12px 22px rgba(0,0,0,.26);
+  filter:saturate(1.25) brightness(1.08);
+}
+.fighter.bp-charging:after{
+  content:'';position:absolute;inset:-13px;border-radius:50%;pointer-events:none;
+  border:2px solid rgba(201,166,255,.72);box-shadow:0 0 24px rgba(138,79,224,.45),inset 0 0 18px rgba(138,79,224,.2);
+  animation:bpChargePulse .55s ease-in-out infinite alternate;
+}
+@keyframes bpChargePulse{from{transform:scale(.93);opacity:.65}to{transform:scale(1.05);opacity:1}}
+.fighter.bp-slam-pending .fighter-square{box-shadow:0 0 0 2px rgba(232,217,255,.65),0 0 34px rgba(138,79,224,.9),0 12px 22px rgba(0,0,0,.26);}
+
+/* ---------- Daredevil: echolocation arena ---------- */
+#arena.echolocation-mode{
+  background:#05070b !important;
+}
+#arena.echolocation-mode .arena-skyline,
+#arena.echolocation-mode .bg-hill{
+  opacity:.11; filter:none;
+}
+#arena.echolocation-mode .platform{
+  background:transparent;
+  border:2px solid rgba(116,255,235,.88);
+  border-top-color:rgba(195,255,249,.98);
+  box-shadow:0 0 8px rgba(56,232,204,.55),inset 0 0 10px rgba(56,232,204,.08);
+}
+#arena.echolocation-mode .platform:after{background:linear-gradient(90deg,transparent,rgba(195,255,249,.95),transparent);}
+#arena.echolocation-mode .arena-floor,
+#arena.echolocation-mode .arena-wall{
+  background:transparent;
+  border-color:rgba(116,255,235,.75);
+  box-shadow:0 0 18px rgba(56,232,204,.35);
+}
+#arena.echolocation-mode .arena-floor{border-top:2px solid rgba(195,255,249,.9);}
+#arena.echolocation-mode .arena-wall.left{border-right:2px solid rgba(116,255,235,.82);}
+#arena.echolocation-mode .arena-wall.right{border-left:2px solid rgba(116,255,235,.82);}
+#arena.echolocation-mode .fighter{z-index:20;filter:none;}
+#arena.echolocation-mode .fighter-square{
+  filter:none !important; opacity:1 !important;
+  box-shadow:0 0 0 2px rgba(116,255,235,.55),0 0 18px rgba(56,232,204,.42),0 12px 22px rgba(0,0,0,.4);
+}
+#arena.echolocation-mode .missile,
+#arena.echolocation-mode .projectile,
+#arena.echolocation-mode .wallblock{
+  filter:drop-shadow(0 0 5px rgba(116,255,235,.55));
+}
+#arena.echolocation-mode .wallblock{
+  background:transparent;border:2px solid rgba(116,255,235,.8);box-shadow:0 0 12px rgba(56,232,204,.35);
+}
+.echo-wave{
+  position:absolute; left:0; top:0; width:0; height:0; z-index:16; pointer-events:none; display:none;
+}
+.echolocation-mode .echo-wave{display:block;}
+.echo-wave:before,.echo-wave:after{
+  content:'';position:absolute;left:var(--echo-x,0px);top:var(--echo-y,0px);
+  width:48px;height:48px;margin:-24px;border-radius:50%;border:2px solid rgba(116,255,235,.72);
+  box-shadow:0 0 12px rgba(56,232,204,.35);
+  animation:echoPulse 1.35s ease-out infinite;
+}
+.echo-wave:after{animation-delay:.67s;}
+@keyframes echoPulse{0%{transform:scale(.35);opacity:.85}100%{transform:scale(18);opacity:0}}
+#arena.echolocation-mode:before{
+  opacity:.9;
+  background:
+    repeating-radial-gradient(circle at var(--echo-x,50%) var(--echo-y,50%), transparent 0 48px, rgba(116,255,235,.055) 49px 51px, transparent 52px 92px),
+    linear-gradient(90deg,transparent 49.7%,rgba(116,255,235,.045) 50%,transparent 50.3%),
+    linear-gradient(0deg,transparent 49.7%,rgba(116,255,235,.045) 50%,transparent 50.3%);
+  animation:echoScan 2.8s linear infinite;
+}
+#arena.echolocation-mode:after{
+  background:radial-gradient(circle at var(--echo-x,50%) var(--echo-y,50%),transparent 0 24%,rgba(0,0,0,.28) 75%,rgba(0,0,0,.72) 100%);
+  opacity:.8;
+}
+@keyframes echoScan{0%{filter:brightness(.85)}50%{filter:brightness(1.15)}100%{filter:brightness(.85)}}
+
 @media(max-width:700px){.loadout-banner{align-items:flex-start;flex-direction:column;gap:5px}.loadout-hint{text-align:left}.char-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr));}}
 </style>
 </head>
@@ -969,8 +1059,66 @@ const CHARACTERS = {
          desc:'Activates free flight for 5 seconds. Recharges after a 10 second cooldown.'}
     }
   },
+  captainamerica: {
+    id:'captainamerica', name:'Captain America', img:'CaptainAmerica.jpg', color:'#3b5bdb',
+    maxHealth:10000, aiStyle:'balanced',
+    description:'Super-soldier all-rounder. Throws his shield for reliable ranged damage, raises it to no-sell small hits outright, and closes the gap or bails out with a huge leap.',
+    abilities:{
+      E:{key:'E', name:'Shield Throw', type:'projectile', damage:500, cooldown:2000, knockback:10,
+         speed:17, w:34, h:34, color:'#3b5bdb',
+         sound:'shield_throw', fx:'cap_shield_throw', render:'cap-shield', trail:'energy',
+         returns:true, pierce:true, shieldViz:true, returnDistance:820,
+         hitFx:'cap_shield_hit', hitSound:'shield_hit',
+         desc:'Throws his shield in a straight line — it always returns to hand afterward. Reliable ranged poke.'},
+      Q:{key:'Q', name:'Shield Block', type:'block', blockThreshold:1000, duration:20000, cooldown:8000,
+         sound:'shield_block', fx:'cap_block',
+         desc:'Raises his shield defensively. Hits of 1,000 damage or less do nothing; anything harder breaks the block. Cannot attack while blocking, and moves 35% slower. Press again to lower it early. Cannot hold longer than 20 seconds.'},
+      R:{key:'R', name:'Super Jump', type:'mobility', boostX:0, boostY:0, swingToTop:true, cooldown:6000,
+         sound:'cap_jump', fx:'cap_jump',
+         desc:'A colossal leap that launches him all the way to the top of the arena. Pure mobility — no damage.'}
+    }
+  },
+  blackpanther: {
+    id:'blackpanther', name:'Black Panther', img:'BlackPanther.jpg', color:'#8a4fe0',
+    maxHealth:12500, aiStyle:'bruiser',
+    description:"Vibranium-powered brawler. Slashes with fast claw strikes and darts in with Panther Dash, but his real threat is Energy Redistribution — tank a hit and pay it right back, multiplied.",
+    abilities:{
+      E:{key:'E', name:'Vibranium Claw Rush', type:'melee', damage:650, cooldown:1100, knockback:9, range:78,
+         hitDelay:70,
+         sound:'claw_swipe', fx:'bp_claw', hitFx:'bp_claw_hit', hitSound:'claw_hit',
+         desc:'A quick twin-claw slash at close range. Low cooldown keeps the pressure on.'},
+      Q:{key:'Q', name:'Energy Redistribution', type:'chargeSlam', chargeTime:4500, baseDamage:400,
+         multiplier:1, radius:150, knockback:22, cooldown:12000,
+         sound:'bp_charge', fx:'bp_charge', hitFx:'bp_slam', hitSound:'bp_slam_hit',
+         desc:'Channels for 4.5 seconds, absorbing all incoming damage as stored energy, then leaps and slams the ground for a shockwave that deals the stored damage (plus a base amount) to anyone caught in range. The more damage he tanks, the harder the slam hits.'},
+      R:{key:'R', name:'Panther Dash', type:'mobility', boostX:22, boostY:-4, cooldown:5000,
+         sound:'bp_dash', fx:'bp_dash',
+         desc:'A sudden burst of speed in the direction he\u2019s facing — close distance to start a combo, or bail out to reposition. Pure mobility — no damage.'}
+    }
+  },
+  daredevil: {
+    id:'daredevil', name:'Daredevil', img:'Daredevil.jpg', color:'#c53030',
+    maxHealth:5000, aiStyle:'agile',
+    dodgeChance:0.4,
+    description:"Passive: instinctively dodges 40% of incoming attacks. Low health, but a slippery close-range brawler with his billy club — strike up close, throw it as a returning boomerang at range, and spring away with an acrobatic leap. His view of the world is entirely echolocation-based.",
+    abilities:{
+      E:{key:'E', name:'Billy Club Strike', type:'melee', damage:550, cooldown:750, knockback:8, range:76,
+         hitDelay:70,
+         sound:'club_strike', fx:'dd_club', hitFx:'dd_club_hit', hitSound:'club_hit',
+         desc:'A fast baton strike at close range. Cheap and quick — the backbone of his offense.'},
+      Q:{key:'Q', name:'Club Boomerang', type:'projectile', damage:700, cooldown:6000, knockback:12,
+         speed:15, w:30, h:30, color:'#1a1a1a',
+         sound:'club_throw', fx:'dd_boomerang', render:'dd-club', trail:'energy',
+         returns:true, pierce:true, returnDistance:720,
+         hitFx:'dd_club_hit', hitSound:'club_hit',
+         desc:'Throws his billy club end over end — it always spins back to hand. His only real ranged option.'},
+      R:{key:'R', name:'Acrobatic Leap', type:'mobility', boostX:16, boostY:-14, cooldown:5000,
+         sound:'dd_leap', fx:'dd_leap',
+         desc:'A springing acrobatic leap up and forward. Great for closing distance or escaping a bad spot.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['thor','spiderman','ironman'];
+const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil'];
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -1426,6 +1574,9 @@ function makeFighter(charId, isBot, spawnX){
     dead:false,
     cooldowns:{E:0,Q:0,R:0},
     shield:null,
+    shieldThrown:false,
+    blocking:false, blockKey:null, blockExpire:0, blockStart:0,
+    bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
     flight:false,
     flightExpire:0,
     hitStun:0,
@@ -1560,6 +1711,9 @@ function buildArenaStatic(){
   const hill2 = document.createElement('div');
   hill2.className='bg-hill'; hill2.style.cssText='right:-80px;width:400px;height:170px;background:#1a2436;';
   arenaEl.appendChild(hill1); arenaEl.appendChild(hill2);
+  const echoWave = document.createElement('div');
+  echoWave.className='echo-wave';
+  arenaEl.appendChild(echoWave);
 
   PLATFORMS.forEach(p=>{
     const el = document.createElement('div');
@@ -1575,6 +1729,7 @@ function buildFighterDOM(f){
     <div class="overhead-hp"><div class="fill"></div></div>
     <div class="fighter-square">${squareInner(f.def)}</div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
+    ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
     <div class="shield-ring"></div>
     <div class="flight-glow"></div>
     <div class="thruster"></div>
@@ -1675,6 +1830,24 @@ function updateAbilityBar(){
       overlay.style.background='rgba(60,120,220,.55)';
       return;
     }
+    if(a.type==='block' && state.player.blocking){
+      overlay.style.display='flex';
+      overlay.textContent = 'BLOCK';
+      overlay.style.background='rgba(76,139,245,.45)';
+      return;
+    }
+    if(a.type==='chargeSlam' && state.player.bpCharging){
+      overlay.style.display='flex';
+      overlay.textContent = 'CHARGE '+Math.max(0,(state.player.bpChargeEnd-t)/1000).toFixed(1)+'s';
+      overlay.style.background='rgba(138,79,224,.55)';
+      return;
+    }
+    if(a.type==='chargeSlam' && state.player.bpSlamPending){
+      overlay.style.display='flex';
+      overlay.textContent = 'SLAM!';
+      overlay.style.background='rgba(232,217,255,.36)';
+      return;
+    }
     const remain = state.player.cooldowns[k] - t;
     if(remain > 0){
       overlay.style.display='flex';
@@ -1692,20 +1865,30 @@ function cdReady(f, key, t){
   const a = f.def.abilities[key];
   if(a.type==='toggle') return true;
   if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
+  // Shield Block: always "ready" while already active, so pressing the key
+  // again can lower it manually; only gated by cooldown before it's raised.
+  if(a.type==='block') return f.blocking ? true : (t >= f.cooldowns[key]);
+  // Energy Redistribution: can't be re-triggered mid-charge, and doesn't
+  // free itself up again until the whole charge+slam sequence resolves.
+  if(a.type==='chargeSlam') return !f.bpCharging && !f.bpSlamPending && t >= f.cooldowns[key];
   return t >= f.cooldowns[key];
 }
 function tryUseAbility(caster, target, key){
   const t = now();
   if(caster.dead) return false;
   if(state.countdown) return false; // nobody acts until FIGHT!
-  if(!cdReady(caster, key, t)) return false;
   const ability = caster.def.abilities[key];
+  // While actively blocking or channeling Energy Redistribution, nothing
+  // else can be used except the ability itself (to lower the block).
+  if(caster.blocking && ability.type !== 'block') return false;
+  if(caster.bpCharging || caster.bpSlamPending) return false;
+  if(!cdReady(caster, key, t)) return false;
   const fallbackSound = ability.type==='jump' ? 'jump' : ability.type==='wall' ? 'wall'
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
   sfx(ability.sound || fallbackSound);
   spawnAbilityFx(caster, ability);
   executeAbility(caster, target, ability, t);
-  if(ability.type !== 'toggle'){
+  if(ability.type !== 'toggle' && ability.type !== 'block'){
     caster.cooldowns[key] = t + ability.cooldown;
   }
   return true;
@@ -1725,12 +1908,15 @@ function executeAbility(caster, target, ability, t){
         vx: dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color||'#ffffff',
         damage: ability.damage, knockback: ability.knockback, owner: caster.id,
         icon: ability.icon || '',
-        life: 3200, returns: !!ability.returns, phase:'out', originX: caster.x, casterRef: caster,
+        life: 4200, returns: !!ability.returns, phase:'out', originX: caster.x, casterRef: caster, targetRef: target,
+        returnDistance: ability.returnDistance || 760,
         render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
         hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0,
+        pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false,
         trailTick: 0,
         el:null
       });
+      if(ability.shieldViz) caster.shieldThrown = true;
       if(!ability.fx) spawnMuzzleFx(caster);
       break;
     }
@@ -1854,6 +2040,103 @@ function executeAbility(caster, target, ability, t){
       caster.vy = 0;
       break;
     }
+    case 'block': {
+      // Toggle: press once to raise the shield, press again to lower it
+      // early. The forced 20s cutoff is enforced separately, per-frame, in
+      // updateBlock() below (needed since the player may never press again).
+      if(caster.blocking){
+        caster.blocking = false;
+        caster.blockExpire = 0;
+        caster.cooldowns[ability.key] = t + ability.cooldown;
+      } else {
+        caster.blocking = true;
+        caster.blockKey = ability.key;
+        caster.blockExpire = t + ability.duration;
+        caster.blockStart = t;
+      }
+      break;
+    }
+    case 'chargeSlam': {
+      caster.bpCharging = true;
+      caster.bpChargeEnd = t + ability.chargeTime;
+      caster.bpAbsorbed = 0;
+      caster.bpSlamAbility = ability;
+      break;
+    }
+  }
+}
+/* Shield Block: forces the block off after its max duration even if the
+   player never presses the key again, and starts its cooldown from there. */
+function updateBlock(f){
+  if(f.blocking && f.blockExpire && now() >= f.blockExpire){
+    const key = f.blockKey || 'Q';
+    const ability = f.def.abilities[key];
+    f.blocking = false;
+    f.blockExpire = 0;
+    f.blockStart = 0;
+    if(ability) f.cooldowns[key] = now() + ability.cooldown;
+  }
+}
+/* Energy Redistribution (Black Panther): resolves the charge once its
+   timer elapses — leap + ground slam for base damage plus everything
+   absorbed while channeling. */
+function updateBPCharge(f){
+  if(!f.bpCharging && !f.bpSlamPending) return;
+  const t = now();
+  if(f.bpCharging){
+    if(t < f.bpChargeEnd) return;
+    // The channel completes: launch Black Panther first, then detonate the
+    // stored energy when he reaches the peak of the automatic leap.
+    f.bpCharging = false;
+    f.bpSlamPending = true;
+    f.bpSlamAt = t + 1100;
+    f.bpSlamMinAt = t + 260;
+    f.vx = 0;
+    f.vy = -15.5;
+    f.onGround = false;
+    fxEl('fx-ring', `left:${f.x-10}px;top:${f.y-18}px;width:${FIGHTER_SIZE+20}px;height:${FIGHTER_SIZE+20}px;border-color:#e8d9ff;border-width:4px;box-shadow:0 0 34px #8a4fe0;`, 700);
+    return;
+  }
+  // Let the leap play out and trigger the ground slam as soon as Panther
+  // actually touches the floor/platform again. The timeout is only a safety
+  // fallback in case an unusual map state keeps him airborne too long.
+  if(!f.onGround && t < f.bpSlamMinAt) return;
+  if(!f.onGround && t < f.bpSlamAt) return;
+
+  f.bpSlamPending = false;
+  const ability = f.bpSlamAbility;
+  if(!ability) return;
+  const mult = (ability.multiplier != null) ? ability.multiplier : 1;
+  const dmg = Math.round((ability.baseDamage||0) + (f.bpAbsorbed||0) * mult);
+  spawnBPSlamFx(f, ability.radius, dmg);
+  sfx('bp_slam_ground');
+  // The damage is resolved at the actual landing point, so the slam follows
+  // the automatic leap instead of detonating instantly at channel expiry.
+  if(f.onGround) f.vy = 0;
+  const target = (f === state.player) ? state.bot : state.player;
+  if(target && !target.dead){
+    const dist = Math.hypot((target.x-f.x),(target.y-f.y));
+    if(dist <= ability.radius){
+      const dir = dirSignTo(f, target);
+      damageTargetOrWall(target, dmg, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound});
+    }
+  }
+}
+/* Cosmetic state toggles driven purely by CSS classes on the fighter root —
+   Captain America's held/thrown/blocking shield pose, Black Panther's
+   charge-up ring. Harmless no-ops for characters without those elements. */
+function updateSpecialViz(f){
+  f.el.classList.toggle('cap-thrown', !!f.shieldThrown);
+  f.el.classList.toggle('cap-blocking', !!f.blocking);
+  f.el.classList.toggle('bp-charging', !!f.bpCharging);
+  f.el.classList.toggle('bp-slam-pending', !!f.bpSlamPending);
+  if(f === state.player){
+    const echoOn = f.def.id === 'daredevil';
+    arenaEl.classList.toggle('echolocation-mode', echoOn);
+    if(echoOn){
+      arenaEl.style.setProperty('--echo-x', `${f.x + FIGHTER_SIZE/2}px`);
+      arenaEl.style.setProperty('--echo-y', `${f.y + FIGHTER_SIZE/2}px`);
+    }
   }
 }
 
@@ -1874,7 +2157,37 @@ function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
 function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.dead) return;
   opts = opts || {};
+  // Daredevil passive: Evasion — a clean dodge, no damage, no knockback.
+  if(target.def.dodgeChance && Math.random() < target.def.dodgeChance){
+    spawnDodgeFx(target, dirSign);
+    sfx('dodge');
+    return;
+  }
+  // Black Panther channeling Energy Redistribution: every hit is absorbed
+  // as stored energy instead of landing as damage.
+  if(target.bpCharging){
+    target.bpAbsorbed = (target.bpAbsorbed||0) + dmg;
+    spawnBPAbsorbFx(target);
+    sfx('bp_absorb');
+    return;
+  }
   let actual = dmg;
+  // Captain America's Shield Block: no-sells anything at or under the
+  // threshold; anything harder breaks the block and deals full damage.
+  if(target.blocking){
+    const blockAbility = target.def.abilities[target.blockKey || 'Q'];
+    if(blockAbility && dmg <= (blockAbility.blockThreshold||0)){
+      spawnBlockFx(target, dirSign);
+      sfx('shield_block_hit');
+      return;
+    } else if(blockAbility){
+      target.blocking = false;
+      target.blockExpire = 0;
+      target.blockStart = 0;
+      target.cooldowns[target.blockKey || 'Q'] = now() + blockAbility.cooldown;
+      sfx('shield_break');
+    }
+  }
   if(target.shield && now() < target.shield.expire){
     actual = dmg * (1 - target.shield.reduction);
   }
@@ -2037,6 +2350,82 @@ function sfx(kind='ability'){
       case 'flight_on':
         aTone(ctx, t, 'triangle', 170, 520, 0.36, 0.13);
         aNoise(ctx, t, 0.48, 0.13, 'lowpass', 600, 2400, 0.8);
+        return;
+
+      /* ---------- Captain America ---------- */
+      case 'shield_throw':
+        aNoise(ctx, t, 0.18, 0.16, 'bandpass', 3400, 600, 3.0);
+        aTone(ctx, t, 'triangle', 700, 260, 0.14, 0.08);
+        return;
+      case 'shield_hit':
+        aTone(ctx, t, 'square', 220, 90, 0.20, 0.16);
+        aNoise(ctx, t, 0.16, 0.20, 'bandpass', 2600, 700, 2.4);
+        aTone(ctx, t+0.03, 'triangle', 1400, 700, 0.14, 0.06);
+        return;
+      case 'shield_block':
+        aTone(ctx, t, 'sine', 260, 640, 0.22, 0.11);
+        aNoise(ctx, t, 0.14, 0.10, 'bandpass', 2200, 900, 2.0);
+        return;
+      case 'shield_block_hit':
+        aTone(ctx, t, 'square', 180, 130, 0.10, 0.12);
+        aNoise(ctx, t, 0.09, 0.12, 'highpass', 2800, 1200, 1.2);
+        return;
+      case 'shield_break':
+        aTone(ctx, t, 'sawtooth', 500, 90, 0.28, 0.16);
+        aNoise(ctx, t, 0.22, 0.18, 'lowpass', 1800, 260, 0.8);
+        return;
+      case 'cap_jump':
+        aTone(ctx, t, 'square', 90, 46, 0.20, 0.14);
+        aNoise(ctx, t, 0.20, 0.16, 'lowpass', 1200, 200, 0.8);
+        return;
+
+      /* ---------- Black Panther ---------- */
+      case 'claw_swipe':
+        aNoise(ctx, t, 0.14, 0.20, 'bandpass', 4200, 1100, 3.6);
+        aTone(ctx, t, 'sawtooth', 500, 180, 0.12, 0.06);
+        return;
+      case 'claw_hit':
+        aTone(ctx, t, 'square', 160, 60, 0.16, 0.15);
+        aNoise(ctx, t, 0.16, 0.22, 'bandpass', 3200, 700, 2.6);
+        return;
+      case 'bp_charge':
+        aTone(ctx, t, 'sine', 90, 320, 0.5, 0.10);
+        aNoise(ctx, t, 0.4, 0.08, 'bandpass', 500, 3400, 1.6);
+        return;
+      case 'bp_absorb':
+        aTone(ctx, t, 'triangle', 500, 220, 0.09, 0.07);
+        return;
+      case 'bp_slam_ground':
+        aTone(ctx, t, 'sine', 150, 32, 0.6, 0.34);
+        aTone(ctx, t, 'square', 96, 42, 0.28, 0.13);
+        aNoise(ctx, t, 0.5, 0.26, 'lowpass', 2200, 220, 0.7);
+        return;
+      case 'bp_slam_hit':
+        aTone(ctx, t, 'square', 200, 80, 0.20, 0.16);
+        aNoise(ctx, t, 0.18, 0.20, 'bandpass', 2800, 700, 2.2);
+        return;
+      case 'bp_dash':
+        aNoise(ctx, t, 0.16, 0.16, 'bandpass', 2600, 700, 2.0);
+        return;
+
+      /* ---------- Daredevil ---------- */
+      case 'club_strike':
+        aNoise(ctx, t, 0.12, 0.20, 'bandpass', 4600, 1100, 3.8);
+        aTone(ctx, t, 'triangle', 420, 160, 0.10, 0.06);
+        return;
+      case 'club_throw':
+        aNoise(ctx, t, 0.15, 0.18, 'bandpass', 3600, 700, 3.2);
+        return;
+      case 'club_hit':
+        aTone(ctx, t, 'square', 190, 70, 0.15, 0.14);
+        aNoise(ctx, t, 0.14, 0.20, 'bandpass', 3000, 700, 2.4);
+        return;
+      case 'dd_leap':
+        aTone(ctx, t, 'triangle', 300, 640, 0.14, 0.10);
+        return;
+      case 'dodge':
+        aNoise(ctx, t, 0.08, 0.12, 'highpass', 3800, 1600, 1.4);
+        aTone(ctx, t, 'sine', 700, 1000, 0.06, 0.05);
         return;
 
       /* ---------- countdown ---------- */
@@ -2236,6 +2625,23 @@ function webSplatSvg(size){
 /* -------------------------------------------------------------------------
    PER-ABILITY CAST FX  (dispatched from ability.fx)
    ------------------------------------------------------------------------- */
+function capShieldSvg(){
+  return `<svg viewBox="0 0 40 40" width="40" height="40" style="overflow:visible;filter:drop-shadow(0 0 6px rgba(76,139,245,.75));">
+    <circle cx="20" cy="20" r="19" fill="#c0393f" stroke="#7a1f24" stroke-width="1.4"/>
+    <circle cx="20" cy="20" r="15" fill="#f2f0ea"/>
+    <circle cx="20" cy="20" r="11" fill="#c0393f"/>
+    <circle cx="20" cy="20" r="6.2" fill="#3b5bdb" stroke="#1c357c" stroke-width="1"/>
+    <path d="M20 15.2 L21.8 18.7 L25.8 19.2 L22.9 21.9 L23.7 25.9 L20 23.9 L16.3 25.9 L17.1 21.9 L14.2 19.2 L18.2 18.7 Z" fill="#f2f0ea"/>
+  </svg>`;
+}
+function ddClubSvg(){
+  return `<svg viewBox="0 0 40 40" width="40" height="40" style="overflow:visible;filter:drop-shadow(0 0 5px rgba(0,0,0,.6));">
+    <rect x="5" y="16.5" width="30" height="7" rx="3.5" fill="#1c1c1c" stroke="#000" stroke-width="1"/>
+    <rect x="5" y="16.5" width="9" height="7" rx="3.5" fill="#c53030"/>
+    <rect x="26" y="16.5" width="9" height="7" rx="3.5" fill="#c53030"/>
+    <circle cx="20" cy="20" r="2" fill="#8a8a8a"/>
+  </svg>`;
+}
 function spawnAbilityFx(caster, ability){
   const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
   const dir = caster.facing;
@@ -2390,6 +2796,75 @@ function spawnAbilityFx(caster, ability){
       break;
     }
 
+    /* ---------------- Captain America ---------------- */
+    case 'cap_shield_throw': {
+      // muzzle-less throw — a quick metallic glint off the shield as it leaves the hand
+      const hx = cx + dir*22, hy = cy;
+      fxEl('fx-flash', `left:${hx-24}px;top:${hy-24}px;width:48px;height:48px;background:radial-gradient(circle,#eaf2ff,#6a8bff 55%,transparent 75%);`, 220);
+      spawnSparks(hx, hy, 6, '#c0393f', 22, 260);
+      spawnSparks(hx, hy, 4, '#eaf2ff', 26, 260);
+      break;
+    }
+    case 'cap_block': {
+      // shield snaps up into a defensive stance — quick ring + shimmer, no matter which way it's toggling
+      fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#6a8bff;box-shadow:0 0 20px #6a8bff;`, 340);
+      spawnSparks(cx + dir*14, cy, 5, '#eaf2ff', 24, 260);
+      break;
+    }
+    case 'cap_jump': {
+      // ground-crack launch, no lightning — a purely physical superhero leap
+      fxEl('fx-flash', `left:${cx-40}px;top:${caster.y+FIGHTER_SIZE-24}px;width:80px;height:56px;background:radial-gradient(circle,#dfe6ff,transparent 70%);`, 300);
+      spawnSparks(cx, caster.y + FIGHTER_SIZE, 12, '#eaf2ff', 60);
+      spawnGroundCrack(cx, caster.y + FIGHTER_SIZE, 46);
+      shakeArena(6, 260);
+      break;
+    }
+
+    /* ---------------- Black Panther ---------------- */
+    case 'bp_claw': {
+      fxEl('mj-arc-wrap',
+        `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;transform:scaleX(${dir});`,
+        260, '<div class="mj-arc" style="border-right-color:#c9a6ff;border-top-color:#8a4fe0;"></div>');
+      spawnSparks(cx + dir*22, cy, 6, '#c9a6ff', 30, 260);
+      break;
+    }
+    case 'bp_charge': {
+      fxEl('charge-glow', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;background:radial-gradient(circle,#e8d9ff,#8a4fe0 45%,transparent 72%);box-shadow:0 0 30px #8a4fe0;`, 500);
+      spawnSparks(cx, cy, 10, '#b088ff', 42);
+      break;
+    }
+    case 'bp_dash': {
+      const who = caster;
+      for(let i=0;i<5;i++){
+        setTimeout(()=>{ if(state.mode==='battle') spawnAfterimage(who, '#8a4fe077', 280); }, 30 + i*40);
+      }
+      spawnSparks(cx, cy, 6, '#c9a6ff', 26, 260);
+      break;
+    }
+
+    /* ---------------- Daredevil ---------------- */
+    case 'dd_club': {
+      fxEl('mj-arc-wrap',
+        `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;transform:scaleX(${dir});`,
+        220, '<div class="mj-arc" style="border-right-color:#e0e0e0;border-top-color:#c53030;"></div>');
+      spawnSparks(cx + dir*20, cy, 5, '#c53030', 24, 220);
+      break;
+    }
+    case 'dd_boomerang': {
+      const hx = cx + dir*20, hy = cy;
+      fxEl('fx-flash', `left:${hx-20}px;top:${hy-20}px;width:40px;height:40px;background:radial-gradient(circle,#fff,#c53030 55%,transparent 75%);`, 220);
+      spawnSparks(hx, hy, 5, '#c53030', 22, 240);
+      break;
+    }
+    case 'dd_leap': {
+      const who = caster;
+      for(let i=0;i<4;i++){
+        setTimeout(()=>{ if(state.mode==='battle') spawnAfterimage(who, '#c5303066', 260); }, 20 + i*40);
+      }
+      spawnSparks(cx, caster.y + FIGHTER_SIZE, 8, '#ffffff', 40, 300);
+      break;
+    }
+
     /* ---------------- fallback (keeps any future ability covered) --------- */
     default: {
       const col = ability.color || caster.def.color || '#fff';
@@ -2484,6 +2959,33 @@ function spawnHitFx(target, kind, dirSign){
       shakeArena(5, 240);
       break;
     }
+    case 'cap_shield_hit': {
+      fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;`, 300);
+      fxEl('fx-ring', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;border-color:#6a8bff;border-width:5px;box-shadow:0 0 26px #6a8bff;`, 500);
+      spawnSparks(cx, cy, 12, '#eaf2ff', 54);
+      spawnSparks(cx, cy, 6, '#c0393f', 40, 380);
+      shakeArena(7, 280);
+      break;
+    }
+    case 'bp_claw_hit': {
+      fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;`, 260);
+      fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#c9a6ff;box-shadow:0 0 22px #8a4fe0;`, 420);
+      spawnSparks(cx, cy, 10, '#c9a6ff', 46, 340);
+      break;
+    }
+    case 'bp_slam': {
+      fxEl('fx-flash', `left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;`, 320);
+      fxEl('fx-ring', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#e8d9ff;border-width:5px;box-shadow:0 0 30px #8a4fe0;`, 540);
+      spawnSparks(cx, cy, 16, '#c9a6ff', 66);
+      shakeArena(9, 320);
+      break;
+    }
+    case 'dd_club_hit': {
+      fxEl('fx-flash', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;`, 260);
+      fxEl('fx-ring', `left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;border-color:#e0e0e0;box-shadow:0 0 20px #c53030;`, 400);
+      spawnSparks(cx, cy, 9, '#e0e0e0', 40, 320);
+      break;
+    }
     default: {
       const size = 44;
       fxEl('fx-burst',
@@ -2565,6 +3067,35 @@ function spawnHealFx(caster){
   arenaEl.appendChild(el);
   setTimeout(()=>el.remove(), 500);
 }
+/* Daredevil's Evasion passive — an afterimage blur + a light spray to sell
+   a genuine slip rather than the attack just silently doing nothing. */
+function spawnDodgeFx(target, dirSign){
+  spawnAfterimage(target, '#c5303066', 240);
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  spawnSparks(cx - (dirSign||1)*12, cy, 5, '#ffffff', 26, 220);
+}
+/* Captain America's Shield Block absorbing a hit clean. */
+function spawnBlockFx(target, dirSign){
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  fxEl('fx-flash', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#eaf2ff,#6a8bff 55%,transparent 75%);`, 220);
+  fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#eaf2ff;box-shadow:0 0 20px #6a8bff;`, 340);
+  spawnSparks(cx + (dirSign||1)*10, cy, 6, '#eaf2ff', 26, 240);
+}
+/* Black Panther absorbing a hit into Energy Redistribution's charge. */
+function spawnBPAbsorbFx(caster){
+  const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
+  fxEl('fx-ring', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;border-color:#b088ff;box-shadow:0 0 20px #b088ff;`, 300);
+  spawnSparks(cx, cy, 8, '#b088ff', 36, 300);
+}
+/* Black Panther's Energy Redistribution release — leap + ground slam. */
+function spawnBPSlamFx(caster, radius, dmg){
+  const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
+  fxEl('fx-flash', `left:${cx-100}px;top:${cy-100}px;width:200px;height:200px;background:radial-gradient(circle,#fff,#e8d9ff 30%,#b088ff 60%,transparent 78%);`, 340);
+  fxEl('fx-shock', `left:${cx-radius}px;top:${cy-radius}px;width:${radius*2}px;height:${radius*2}px;border:5px solid #b088ff;box-shadow:0 0 34px #b088ff, inset 0 0 30px rgba(176,136,255,.4);`, 620);
+  spawnSparks(cx, cy, 20, '#d9c6ff', 90);
+  spawnGroundCrack(cx, caster.y + FIGHTER_SIZE, Math.min(radius, 160));
+  shakeArena(Math.min(18, 8 + dmg/300), 400);
+}
 
 /* =========================================================================
    SECTION: PHYSICS / MOVEMENT
@@ -2574,7 +3105,11 @@ function collidesPlatform(f, plat){
 }
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   // Horizontal input
-  if(f.hitStun > 0){
+  if(f.bpCharging){
+    // Energy Redistribution roots Black Panther in place for the whole
+    // channel — full commitment is the trade-off for the payoff.
+    f.vx = 0;
+  } else if(f.hitStun > 0){
     f.hitStun -= dtF*16.67;
     f.vx *= 0.92;
     // Knockback never fully locks you out — held movement keys still nudge you,
@@ -2590,10 +3125,11 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     }
   } else {
     const slowMul = isSlowed(f) ? WEB_SLOW_FACTOR : 1; // webs only affect movement speed
+    const blockMul = f.blocking ? 0.65 : 1; // Captain America: -35% movement speed while Shield Block is active
     if(f.flight){
       f.vx = moveDir * FLY_SPEED * slowMul;
     } else {
-      const spd = MOVE_SPEED * slowMul;
+      const spd = MOVE_SPEED * slowMul * blockMul;
       f.vx = moveDir * spd + (f.vx - moveDir*spd) * 0.75; // blend so knockback still shows briefly
       if(Math.abs(f.vx - moveDir*spd) < 0.3) f.vx = moveDir*spd;
     }
@@ -2703,25 +3239,40 @@ function updateFlightGlow(f){
    SECTION: PROJECTILES
    ========================================================================= */
 function updateProjectiles(dtF){
-  const t = now();
   for(let i=state.projectiles.length-1; i>=0; i--){
     const p = state.projectiles[i];
-    p.life -= dtF*16.67;
-    if(p.returns){
+    const owner = p.casterRef;
+    const target = (p.owner === 'player') ? state.bot : state.player;
+
+    if(p.returns && p.phase === 'out'){
+      p.life -= dtF*16.67;
+      p.x += p.vx*dtF;
+      p.y += p.vy*dtF;
       const traveled = Math.abs(p.x - p.originX);
-      if(p.phase==='out' && traveled > 220){ p.phase='return'; }
-      if(p.phase==='return'){
-        const dir = (p.casterRef.x > p.x) ? 1 : -1;
-        p.vx = dir * Math.abs(p.vx);
-        p.x += p.vx*dtF;
-        if(Math.abs(p.x - p.casterRef.x) < 20){ p.life = -1; }
+      if(traveled >= p.returnDistance || p.life <= 0 || p.x < -30 || p.x > ARENA_W+30){
+        p.phase = 'return';
+        p.life = 1800;
+      }
+    } else if(p.returns && p.phase === 'return'){
+      p.life -= dtF*16.67;
+      const tx = owner.x + FIGHTER_SIZE/2 - p.w/2;
+      const ty = owner.y + FIGHTER_SIZE/2 - p.h/2;
+      const dx = tx - p.x, dy = ty - p.y;
+      const dist = Math.hypot(dx,dy);
+      const speed = Math.max(18, Math.hypot(p.vx,p.vy));
+      if(dist <= Math.max(16, speed*dtF*1.35) || p.life <= 0){
+        p.x = tx; p.y = ty; p.life = -1;
       } else {
+        p.vx = dx/dist*speed;
+        p.vy = dy/dist*speed;
         p.x += p.vx*dtF;
+        p.y += p.vy*dtF;
       }
     } else {
+      p.life -= dtF*16.67;
       p.x += p.vx*dtF;
+      p.y += p.vy*dtF;
     }
-    p.y += p.vy*dtF;
 
     // Wall collision
     let consumed = false;
@@ -2730,20 +3281,26 @@ function updateProjectiles(dtF){
       const overlapX = (p.x + p.w) > w.x && p.x < (w.x + w.w);
       const overlapY = (p.y + p.h) > w.y && p.y < (w.y + w.h);
       if(overlapX && overlapY){
+        if(p.returns && p.phase === 'out'){
+          p.phase = 'return';
+          p.life = 1800;
+          break;
+        }
         w.health -= p.damage;
-        spawnDamageNumber(w.x, w.y, p.damage, false);
+        spawnDamageNumber(w.x+2, w.y, Math.round(p.damage), false);
         if(w.health <= 0) state.walls = state.walls.filter(x=>x!==w);
         consumed = true;
         break;
       }
     }
-    if(consumed || p.life <= 0 || p.x < -60 || p.x > ARENA_W+60){
+    if(consumed){
+      if(p.shieldViz && p.casterRef) p.casterRef.shieldThrown = false;
       if(p.el) p.el.remove();
       state.projectiles.splice(i,1);
       continue;
     }
 
-    // Missile collision — projectiles can shoot an incoming missile down
+    // Missile collision — projectiles can shoot an incoming missile down.
     let struckMissile = false;
     for(let mi = state.missiles.length - 1; mi >= 0; mi--){
       const m = state.missiles[mi];
@@ -2761,27 +3318,44 @@ function updateProjectiles(dtF){
       }
     }
     if(struckMissile){
+      if(p.returns && p.phase === 'out'){
+        p.phase = 'return';
+        p.life = 1800;
+      } else {
+        if(p.el) p.el.remove();
+        state.projectiles.splice(i,1);
+      }
+      continue;
+    }
+
+    // Character collision
+    if(target && !target.dead && p.phase === 'out'){
+      const overlapX = (p.x + p.w) > target.x && p.x < (target.x + FIGHTER_SIZE);
+      const overlapY = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
+      if(overlapX && overlapY && !p.hasHitTarget){
+        const dir = dirSignTo({x:p.x}, {x:target.x});
+        applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow});
+        p.hasHitTarget = true;
+        if(p.returns){
+          p.phase = 'return';
+          p.life = 1800;
+        } else if(!p.pierce){
+          if(p.el) p.el.remove();
+          state.projectiles.splice(i,1);
+          continue;
+        }
+      }
+    }
+
+    // Returning shield/club is now visibly homing back to its owner.
+    if(p.life <= 0 || (!p.returns && (p.x < -60 || p.x > ARENA_W+60))){
+      if(p.shieldViz && p.casterRef) p.casterRef.shieldThrown = false;
       if(p.el) p.el.remove();
       state.projectiles.splice(i,1);
       continue;
     }
 
-    // Character collision
-    const target = (p.owner === 'player') ? state.bot : state.player;
-    if(!target.dead){
-      const overlapX = (p.x + p.w) > target.x && p.x < (target.x + FIGHTER_SIZE);
-      const overlapY = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
-      if(overlapX && overlapY){
-        const dir = dirSignTo({x:p.x}, {x:target.x});
-        applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
-          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow});
-        if(p.el) p.el.remove();
-        state.projectiles.splice(i,1);
-        continue;
-      }
-    }
-
-    // render
     if(!p.el){
       p.el = document.createElement('div');
       p.el.className='projectile' + (p.icon ? ' burger' : '');
@@ -2790,8 +3364,10 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
+    if(p.el.classList.contains('spin-projectile')){
+      p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
+    }
 
-    // motion trail
     if(p.trail){
       p.trailTick = (p.trailTick || 0) + dtF;
       if(p.trailTick >= 2){ p.trailTick = 0; spawnProjTrail(p); }
@@ -2819,6 +3395,14 @@ function buildProjectileVisual(p){
     const tailGrad = flip > 0 ? '90deg' : '270deg';
     p.el.innerHTML = `<div class="repulsor-tail" style="${tailSide}background:linear-gradient(${tailGrad},rgba(255,212,121,0),rgba(255,212,121,.85));"></div>`
       + `<div class="repulsor-core"></div>`;
+  } else if(p.render === 'cap-shield'){
+    p.el.classList.add('spin-projectile');
+    p.el.style.background = 'transparent';
+    p.el.innerHTML = capShieldSvg();
+  } else if(p.render === 'dd-club'){
+    p.el.classList.add('spin-projectile');
+    p.el.style.background = 'transparent';
+    p.el.innerHTML = ddClubSvg();
   } else {
     p.el.classList.add('epic-projectile');
     if(p.icon) p.el.textContent = p.icon;
@@ -2989,6 +3573,9 @@ const AI_STYLE_RANGE = {
   aggressive: 70,   // Thor wants to be inside melee range
   mobile:     260,  // Spider-Man pokes from mid-range, darts in/out
   defensive:  340,  // Iron Man kites and fights from a distance
+  balanced:   130,  // Captain America wants shield-throw range, closes for melee/block pressure
+  bruiser:    85,   // Black Panther wants to be inside claw range
+  agile:      110,  // Daredevil weaves in and out of club range
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -3312,6 +3899,49 @@ function updateBotAI(dtF){
     if(cdReady(bot,'E',t) && adist <= eAb.speed*60){
       tryUseAbility(bot, player, 'E'); return;
     }
+  } else if(style === 'balanced'){
+    // Captain America: use the shield throw at mid range, block when cornered
+    // or hurt, and use Super Jump to break out of bad platform positions.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q, rAb = bot.def.abilities.R;
+    if(bot.blocking){
+      if((t - (bot.blockStart || t)) > 1500 && cdReady(bot,'Q',t)){
+        tryUseAbility(bot, player, 'Q'); return;
+      }
+    } else if(cdReady(bot,'Q',t) && (hpPct < 0.38 || (adist < 105 && Math.random() < 0.35))){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'E',t) && adist <= 760){
+      tryUseAbility(bot, player, 'E'); return;
+    }
+    if(cdReady(bot,'R',t) && (hpPct < 0.2 || (!bot.onGround && Math.abs(vertical) > 170)) && Math.random() < 0.5){
+      tryUseAbility(bot, player, 'R'); return;
+    }
+  } else if(style === 'bruiser'){
+    // Black Panther: close aggressively, spend Energy Redistribution while
+    // threatened so damage received becomes the payoff, and Dash to stay on top of evasive targets.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q, rAb = bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist < 180 && (hpPct < 0.78 || Math.random() < 0.28)){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 18){
+      tryUseAbility(bot, player, 'E'); return;
+    }
+    if(cdReady(bot,'R',t) && (adist > 150 || hpPct < 0.3) && Math.random() < 0.55){
+      tryUseAbility(bot, player, 'R'); return;
+    }
+  } else if(style === 'agile'){
+    // Daredevil: weave around opponents, strike in close, use the returning club
+    // when range opens up, and leap away often enough to exploit his evasion identity.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q, rAb = bot.def.abilities.R;
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 20 && Math.random() < 0.85){
+      tryUseAbility(bot, player, 'E'); return;
+    }
+    if(cdReady(bot,'Q',t) && adist > 140){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'R',t) && (hpPct < 0.32 || adist < 90) && Math.random() < 0.65){
+      tryUseAbility(bot, player, 'R'); return;
+    }
   }
 }
 
@@ -3331,6 +3961,9 @@ function endBattle(winnerSide, reason){
   const ov = document.getElementById('countdown-overlay');
   if(ov){ ov.classList.remove('on'); ov.innerHTML = ''; }
   state.player.dead = true; state.bot.dead = true;
+  if(state.player) state.player.shieldThrown = false;
+  if(state.bot) state.bot.shieldThrown = false;
+  if(arenaEl) arenaEl.classList.remove('echolocation-mode');
   const winnerDef = winnerSide==='player' ? state.player.def : state.bot.def;
   const loserDef = winnerSide==='player' ? state.bot.def : state.player.def;
   const badge = document.getElementById('go-badge');
@@ -3424,6 +4057,7 @@ function renderFighter(f){
   f.overheadFillEl.style.background = pct<=0.25 ? '#e5484d' : (pct<=0.55 ? '#f2cd6e' : '#3fb96f');
   updateShield(f);
   updateFlightGlow(f);
+  updateSpecialViz(f);
 }
 
 /* =========================================================================
@@ -3923,6 +4557,8 @@ function gameLoop(ts){
     updatePhysics(b, frozen ? 0 : b.aiMoveDir, bWantJump, bWantDown, dtF);
 
     updateBotFacing(b, p);
+    updateBlock(p); updateBlock(b);
+    updateBPCharge(p); updateBPCharge(b);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
