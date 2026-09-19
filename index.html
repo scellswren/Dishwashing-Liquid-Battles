@@ -1554,6 +1554,192 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
   background:linear-gradient(180deg,color-mix(in srgb,var(--amber) 16%,#171a2b),#171a2b 40%); box-shadow:0 30px 90px rgba(0,0,0,.6);
 }
 #code-modal h3{font-size:clamp(26px,4vh,34px); text-transform:uppercase; letter-spacing:.05em;}
+
+/* =========================================================================
+   v7 — FULL-PAGE ARENA: night-city rooftop
+   The battle screen now fills the window. The 1280x720 play field is scaled
+   to fit inside it; everything around it is scenery (#battle-backdrop) that
+   continues the rooftop deck, so there are no letterbox bars or boxed frame.
+   ========================================================================= */
+#screen-battle.active{
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; padding:0; gap:0;
+  display:block; overflow:hidden; z-index:2; background:#05070f; --ground-y:86vh; --sc:1;
+}
+#screen-battle #arena-wrapper{
+  position:absolute; inset:0; z-index:2; width:auto; height:auto; aspect-ratio:auto; flex:none; min-height:0;
+  border:0; border-radius:0; background:transparent; box-shadow:none; overflow:hidden;
+}
+#arena{background:none;}
+#arena:not(.echolocation-mode)::before, #arena:not(.echolocation-mode)::after{display:none;}
+.arena-skyline, .arena-glow, .bg-hill, .arena-floor{display:none;}
+
+/* HUD + controls float over the scene */
+#screen-battle #battle-topbar{
+  position:absolute; top:clamp(6px,1.6vh,14px); left:50%; transform:translateX(-50%); z-index:6;
+  width:min(1080px,calc(100% - 24px)) !important; pointer-events:none;
+}
+#screen-battle .hud-side{background:rgba(10,12,22,.82); border-color:rgba(255,255,255,.14);}
+#screen-battle #controls-row{
+  position:absolute; left:0; right:0; bottom:clamp(6px,1.6vh,14px); z-index:6; min-height:0;
+  padding:0 clamp(12px,2.5vw,36px); pointer-events:none;
+}
+#screen-battle #controls-row > *{pointer-events:auto;}
+#screen-battle #pvp-controls{pointer-events:none;}
+#screen-battle .ability-btn{background:linear-gradient(145deg,rgba(37,42,69,.94),rgba(23,27,45,.94));}
+
+/* ---------- backdrop ---------- */
+#battle-backdrop{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;}
+.bd-sky{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(60% 40% at 18% 20%, rgba(255,236,190,.10), transparent 70%),
+    radial-gradient(90% 50% at 50% 100%, rgba(255,150,90,.30), transparent 70%),
+    linear-gradient(180deg,#080b20 0%,#121846 30%,#28235c 55%,#4d2f6b 72%,#8c4d6c 84%,#d98a5a 93%,#f0b070 100%);
+}
+.bd-stars{position:absolute; left:0; top:0; width:2px; height:2px; border-radius:50%; animation:starTwinkle 5s ease-in-out infinite alternate;}
+@keyframes starTwinkle{from{opacity:.55}to{opacity:1}}
+.bd-moon{
+  position:absolute; top:17vh; left:9vw; width:clamp(80px,11vw,170px); aspect-ratio:1; border-radius:50%;
+  background:
+    radial-gradient(circle at 62% 30%, rgba(190,170,130,.5) 0 7%, transparent 8%),
+    radial-gradient(circle at 34% 62%, rgba(190,170,130,.4) 0 10%, transparent 11%),
+    radial-gradient(circle at 70% 70%, rgba(190,170,130,.35) 0 5%, transparent 6%),
+    radial-gradient(circle at 35% 30%, #fffaf0, #f1e6c8 55%, #d5c39a 100%);
+  box-shadow:0 0 50px 16px rgba(255,240,200,.28), 0 0 170px 70px rgba(255,190,120,.14);
+}
+.bd-beam{
+  position:absolute; bottom:calc(100% - var(--ground-y)); width:22vw; height:88vh; transform-origin:50% 100%;
+  background:linear-gradient(0deg,rgba(190,225,255,.20),transparent 88%); clip-path:polygon(47% 100%,53% 100%,100% 0,0 0);
+  animation:beamSway 11s ease-in-out infinite alternate;
+}
+.bd-beam.b1{left:6vw; transform:rotate(-18deg);}
+.bd-beam.b2{right:5vw; transform:rotate(16deg); animation-delay:-5s;}
+@keyframes beamSway{from{transform:rotate(-24deg);}to{transform:rotate(8deg);}}
+.bd-beam.b2{animation-name:beamSway2;}
+@keyframes beamSway2{from{transform:rotate(24deg);}to{transform:rotate(-8deg);}}
+.bd-cities{position:absolute; left:0; right:0; bottom:calc(100% - var(--ground-y)); height:56vh;}
+.bd-city{position:absolute; left:0; bottom:0; width:100%; height:100%;}
+.bd-city.far{opacity:.55;}
+.bd-city.mid{opacity:.9;}
+.bd-blink{animation:beaconBlink 2.2s ease-in-out infinite;}
+@keyframes beaconBlink{0%,100%{opacity:.15}50%{opacity:1}}
+
+/* the rooftop deck: the arena's main platform continues to the screen edges */
+.platform.main, .bd-ground{
+  background:
+    linear-gradient(180deg,rgba(170,225,255,.95) 0 3px,transparent 3px),
+    radial-gradient(circle at 50% 22px,rgba(255,196,96,.95) 0 2.5px,transparent 3.5px) 0 0/96px 100px repeat-x,
+    repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 2px,transparent 2px 96px),
+    linear-gradient(180deg,#3a4070 0%,#262a4c 26%,#161930 62%,#0e1022 100%);
+  border:0; border-radius:0; box-shadow:0 -6px 36px rgba(120,190,255,.20);
+}
+.platform.main::after{display:none;}
+.bd-ground{
+  --u:calc(var(--sc,1) * 1px);
+  position:absolute; left:0; right:0; top:var(--ground-y); bottom:0; z-index:2;
+  background-size:auto, calc(96 * var(--u)) calc(100 * var(--u)), auto, auto;
+  background:
+    linear-gradient(180deg,rgba(170,225,255,.95) 0 3px,transparent 3px),
+    radial-gradient(circle at 50% calc(22 * var(--u)),rgba(255,196,96,.95) 0 calc(2.5 * var(--u)),transparent calc(3.5 * var(--u))) 0 0/calc(96 * var(--u)) calc(100 * var(--u)) repeat-x,
+    repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 2px,transparent 2px calc(96 * var(--u))),
+    linear-gradient(180deg,#3a4070 0,#262a4c calc(26 * var(--u)),#161930 calc(62 * var(--u)),#0e1022 calc(100 * var(--u)),#0a0c1a 100%);
+}
+.bd-vignette{position:absolute; inset:0; z-index:3; background:radial-gradient(120% 100% at 50% 55%,transparent 56%,rgba(3,4,10,.55) 100%);}
+
+/* floating platforms: steel ledges with a neon underglow */
+.platform:not(.main){
+  background:
+    repeating-linear-gradient(90deg,transparent 0 38px,rgba(0,0,0,.16) 38px 40px),
+    linear-gradient(180deg,#6570a6 0%,#414872 42%,#252944 100%);
+  border-radius:6px 6px 12px 12px; border-top:2px solid #c3ceff;
+  box-shadow:0 10px 0 rgba(0,0,0,.26), 0 16px 38px rgba(34,211,238,.18), 0 0 28px rgba(124,58,237,.22), inset 0 1px 0 rgba(255,255,255,.22);
+}
+.platform:not(.main)::before{
+  content:''; position:absolute; left:10px; right:10px; bottom:3px; height:3px; border-radius:3px;
+  background:linear-gradient(90deg,#22d3ee,#7c3aed 55%,#ff5a95); opacity:.9; box-shadow:0 0 10px rgba(124,58,237,.7); pointer-events:none;
+}
+
+/* energy barriers at the edges of the play field */
+.arena-wall{
+  width:12px; border:0 !important; background:linear-gradient(90deg,rgba(120,210,255,.0),rgba(150,225,255,.5));
+  box-shadow:0 0 30px rgba(34,211,238,.5), 0 0 90px rgba(124,58,237,.35);
+}
+.arena-wall.left{background:linear-gradient(90deg,rgba(150,225,255,.55),rgba(120,210,255,0)); border:0;}
+.arena-wall.right{background:linear-gradient(270deg,rgba(150,225,255,.55),rgba(120,210,255,0)); border:0;}
+.arena-wall::after{
+  content:''; position:absolute; inset:0; opacity:.55;
+  background:repeating-linear-gradient(180deg,transparent 0 22px,rgba(255,255,255,.4) 22px 24px);
+  animation:wallScan 3s linear infinite;
+}
+@keyframes wallScan{from{background-position:0 0}to{background-position:0 46px}}
+
+/* Daredevil's echolocation blacks out the whole scene */
+#screen-battle:has(#arena.echolocation-mode) #battle-backdrop{opacity:.07; transition:opacity .3s ease;}
+#arena.echolocation-mode .platform{background:transparent !important;}
+#arena.echolocation-mode .platform::before, #arena.echolocation-mode .platform::after, #arena.echolocation-mode .arena-wall::after{display:none;}
+
+/* "DODGE" pop-up */
+.dmg-num.dodge-tag{
+  width:84px; margin-left:-10px; text-align:center; font-size:26px; letter-spacing:.1em; font-style:italic;
+  color:#fff; text-shadow:0 0 12px #ff4d4d, 2px 2px 0 #b01212, -1px -1px 0 #000; animation-duration:.9s;
+}
+
+@media (prefers-reduced-motion:reduce){ .bd-beam, .bd-stars, .arena-wall::after, .bd-blink{animation:none;} }
+
+/* =========================================================================
+   v8 — scrollbars · health bars
+   ========================================================================= */
+/* Stop padding from creating pointless scrollbars on the full-screen pages */
+.menu-stage, .page-stage, .inv-stage{box-sizing:border-box;}
+
+/* Scrollbars: slim, rounded, only visible when there's something to scroll */
+*{scrollbar-width:thin; scrollbar-color:rgba(246,239,224,.28) transparent;}
+*::-webkit-scrollbar{width:10px; height:10px;}
+*::-webkit-scrollbar-track{background:transparent;}
+*::-webkit-scrollbar-thumb{background:rgba(246,239,224,.22); border-radius:999px; border:3px solid transparent; background-clip:content-box;}
+*::-webkit-scrollbar-thumb:hover{background:rgba(242,165,65,.75); background-clip:content-box;}
+*::-webkit-scrollbar-corner{background:transparent;}
+html, body{overflow:hidden;}
+
+/* Health bars: slanted, segmented, glossy, with a trailing "damage" chunk */
+#screen-battle .hud-side{padding:8px 16px 9px; border-radius:8px;}
+.hud-nm{font-family:'Anton',sans-serif; font-weight:400; font-size:clamp(15px,2.4vh,19px); letter-spacing:.06em; text-transform:uppercase;}
+#screen-battle .healthbar-track, .healthbar-track{
+  position:relative; height:18px; margin-top:7px; overflow:hidden; border:0; border-radius:0;
+  background:linear-gradient(180deg,#07080f,#171b2e);
+  clip-path:polygon(0 0,100% 0,calc(100% - 11px) 100%,0 100%);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.16);
+}
+.hud-side.opp .healthbar-track{clip-path:polygon(11px 0,100% 0,100% 100%,0 100%);}
+.healthbar-track::after{
+  content:''; position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),rgba(0,0,0,.5) calc(10% - 2px) 10%);
+}
+.healthbar-fill, .healthbar-ghost{position:absolute; top:0; bottom:0; left:0; height:auto;}
+.hud-side.opp .healthbar-fill, .hud-side.opp .healthbar-ghost{left:auto; right:0;}
+.healthbar-fill{z-index:2; transition:width .14s ease; background:linear-gradient(180deg,#a6f5bf 0%,#3fb96f 48%,#2a8a52 100%);}
+.healthbar-fill.mid{background:linear-gradient(180deg,#ffe08a 0%,#e0a83f 48%,#b57a1c 100%);}
+.healthbar-fill.low{background:linear-gradient(180deg,#ffa3a6 0%,#e5484d 48%,#a5252b 100%); animation:hpLow .7s ease-in-out infinite alternate;}
+.healthbar-fill::after{content:''; position:absolute; left:0; right:0; top:0; height:42%; background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,0));}
+.healthbar-ghost{z-index:1; background:linear-gradient(180deg,#fff4d0,#f2a541); transition:width .9s cubic-bezier(.3,.7,.2,1) .32s;}
+@keyframes hpLow{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+.hp-num{font-size:12px; font-weight:800; color:#fff; opacity:.85; margin-top:5px; letter-spacing:.02em;}
+#screen-battle .hp-num{font-size:12px;}
+.fighter .overhead-hp{
+  top:-15px; height:8px; border-radius:2px; overflow:hidden; background:rgba(8,10,20,.85);
+  box-shadow:0 0 0 1px rgba(0,0,0,.85), 0 0 0 2px rgba(255,255,255,.18);
+}
+.fighter .overhead-hp .fill{background:linear-gradient(180deg,#a6f5bf,#3fb96f 55%,#2a8a52); transition:width .14s ease;}
+@media (prefers-reduced-motion:reduce){ .healthbar-fill.low{animation:none;} }
+
+/* fit the menu / instructions / settings pages in a normal window without a scrollbar */
+.menu-stage{padding-top:clamp(56px,8.5vh,96px); padding-bottom:clamp(16px,3vh,40px);}
+.menu-title{font-size:clamp(38px,min(8vw,11.4vh),150px);}
+.page-stage:not(.inv-stage){padding-top:clamp(64px,10vh,100px); padding-bottom:clamp(20px,4vh,50px);}
+@media (max-width:760px), (max-aspect-ratio:1/1){
+  .menu-stage{padding-top:76px;}
+  .menu-title{font-size:clamp(38px,13vw,84px);}
+}
 </style>
 </head>
 <body>
@@ -1735,6 +1921,13 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 
   <!-- ============ BATTLE ============ -->
   <div id="screen-battle" class="screen">
+    <div id="battle-backdrop" aria-hidden="true">
+      <div class="bd-sky"></div><div class="bd-stars" id="bd-stars"></div><div class="bd-moon"></div>
+      <div class="bd-beam b1"></div><div class="bd-beam b2"></div>
+      <div class="bd-cities" id="bd-cities"></div>
+      <div class="bd-ground"></div>
+      <div class="bd-vignette"></div>
+    </div>
     <div id="battle-topbar">
       <div id="hud" style="flex:1;">
         <div class="hud-side" id="hud-player">
@@ -2170,7 +2363,7 @@ function setLanguage(code){
    ========================================================================= */
 const ARENA_W = 1280, ARENA_H = 720;
 const PLATFORMS = [
-  {x:70,  y:620, w:1140, h:34},
+  {x:0,   y:620, w:1280, h:100}, // main deck: solid edge to edge, nothing can get beneath it
   {x:120, y:455, w:250, h:22},
   {x:910, y:455, w:250, h:22},
   {x:470, y:345, w:340, h:22},
@@ -2187,7 +2380,7 @@ const FIGHTER_SIZE = 64;
 // The arena is fully enclosed — fighters are clamped inside these bounds.
 const BOUND_MIN_X = 8;
 const BOUND_MAX_X = ARENA_W - FIGHTER_SIZE - 8;
-const FLOOR_Y = ARENA_H - FIGHTER_SIZE - 6;
+const FLOOR_Y = PLATFORMS[0].y - FIGHTER_SIZE; // the deck IS the floor
 
 /* =========================================================================
    SECTION: PLATFORM NAVIGATION GRAPH (for AI pathing)
@@ -2753,7 +2946,7 @@ function buildArenaStatic(){
 
   PLATFORMS.forEach(p=>{
     const el = document.createElement('div');
-    el.className='platform';
+    el.className='platform' + (p === PLATFORMS[0] ? ' main' : '');
     el.style.left=p.x+'px'; el.style.top=p.y+'px'; el.style.width=p.w+'px'; el.style.height=p.h+'px';
     arenaEl.appendChild(el);
   });
@@ -2782,22 +2975,61 @@ function buildFighterDOM(f){
 function rescaleArena(){
   const wrapper = document.getElementById('arena-wrapper');
   if(!wrapper || !arenaEl) return;
-  const availableW = Math.max(1, wrapper.clientWidth - 2);
-  const availableH = Math.max(1, wrapper.clientHeight - 2);
+  const availableW = Math.max(1, wrapper.clientWidth);
+  const availableH = Math.max(1, wrapper.clientHeight);
   const factor = Math.min(availableW / ARENA_W, availableH / ARENA_H);
   state.scaleFactor = factor;
   const scaledW = ARENA_W * factor;
   const scaledH = ARENA_H * factor;
+  const top = (wrapper.clientHeight - scaledH) / 2;
   arenaEl.style.left = `${(wrapper.clientWidth - scaledW) / 2}px`;
-  arenaEl.style.top = `${(wrapper.clientHeight - scaledH) / 2}px`;
+  arenaEl.style.top = `${top}px`;
   arenaEl.style.transform = `scale(${factor})`;
+  const scr = document.getElementById('screen-battle');
+  if(scr){
+    scr.style.setProperty('--ground-y', `${(top + PLATFORMS[0].y * factor).toFixed(1)}px`);
+    scr.style.setProperty('--sc', factor.toFixed(4));
+  }
 }
 window.addEventListener('resize', rescaleArena);
 
 /* =========================================================================
-   SECTION: HUD
+   SECTION: BATTLE BACKDROP — procedural night skyline
    ========================================================================= */
+function buildBattleBackdrop(){
+  const stars = document.getElementById('bd-stars');
+  const cities = document.getElementById('bd-cities');
+  if(!stars || !cities || cities.dataset.ready) return;
+  cities.dataset.ready = '1';
+  let seed = 11;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const sh = [];
+  for(let i=0;i<90;i++) sh.push(`${(rnd()*100).toFixed(1)}vw ${(rnd()*62).toFixed(1)}vh 0 ${rnd()<.2?1:0}px rgba(255,255,255,${(.35+rnd()*.6).toFixed(2)})`);
+  stars.style.boxShadow = sh.join(',');
+  const W = 1600, H = 340;
+  const layer = (cls, fill, minH, maxH, minW, maxW, winChance, extra) => {
+    let x = -20, rects = '', wins = '';
+    while(x < W + 20){
+      const w = minW + rnd()*(maxW-minW), h = minH + rnd()*(maxH-minH);
+      rects += `<rect x="${x.toFixed(0)}" y="${(H-h).toFixed(0)}" width="${w.toFixed(0)}" height="${h.toFixed(0)}"/>`;
+      if(rnd() < .28) rects += `<rect x="${(x+w/2-1).toFixed(0)}" y="${(H-h-26).toFixed(0)}" width="2" height="26"/>`;
+      if(winChance){
+        for(let wy = H-h+12; wy < H-10; wy += 16) for(let wx = x+8; wx < x+w-10; wx += 14){
+          if(rnd() < winChance) wins += `<rect x="${wx.toFixed(0)}" y="${wy.toFixed(0)}" width="5" height="7" fill="${rnd()<.72?'#ffd58a':'#7fe9ff'}" opacity="${(.35+rnd()*.6).toFixed(2)}"/>`;
+        }
+      }
+      x += w + rnd()*8;
+    }
+    return `<svg class="bd-city ${cls}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMax slice">${extra?extra.defs:''}<g fill="${fill}">${rects}</g>${wins}${extra?extra.body:''}</svg>`;
+  };
+  cities.innerHTML =
+      layer('far',  '#1c2350', 90, 210, 40, 92, 0.05)
+    + layer('mid',  '#121838', 70, 190, 52, 110, 0.13)
+    + layer('near', '#0a0e22', 40, 130, 70, 150, 0.10);
+}
+
 function updateHudNames(){
+  document.querySelectorAll('.healthbar-ghost').forEach(g => g.remove()); // fresh trail each fight
   if(state.pvp){
     document.getElementById('hud-player-name').innerHTML = `<span class="hud-pchip p1">P1</span>${state.player.def.name}`;
     document.getElementById('hud-opp-name').innerHTML = `${state.bot.def.name}<span class="hud-pchip p2">P2</span>`;
@@ -2819,6 +3051,11 @@ function updateHud(){
   const bpct = Math.max(0,b.health)/b.def.maxHealth;
   const pBar = document.getElementById('hud-player-bar');
   const bBar = document.getElementById('hud-opp-bar');
+  [[pBar,ppct],[bBar,bpct]].forEach(([bar,pct])=>{
+    let g = bar.parentElement.querySelector('.healthbar-ghost');
+    if(!g){ g = document.createElement('div'); g.className = 'healthbar-ghost'; bar.parentElement.insertBefore(g, bar); }
+    g.style.width = (pct*100)+'%';
+  });
   pBar.style.width = (ppct*100)+'%'; pBar.className = 'healthbar-fill '+hpClass(ppct);
   bBar.style.width = (bpct*100)+'%'; bBar.className = 'healthbar-fill '+hpClass(bpct);
   document.getElementById('hud-player-hp').textContent = `${Math.max(0,Math.round(p.health))} / ${p.def.maxHealth}`;
@@ -2930,7 +3167,9 @@ function tryUseAbility(caster, target, key){
   // While actively blocking or channeling Energy Redistribution, nothing
   // else can be used except the ability itself (to lower the block).
   if(caster.blocking && ability.type !== 'block') return false;
-  if(caster.bpCharging || caster.bpSlamPending) return false;
+  // Energy Redistribution no longer locks Black Panther out: he can keep moving and
+  // use his other abilities while channeling. The channel itself can't be re-triggered
+  // (cdReady blocks Q until the whole charge + slam has resolved).
   if(!cdReady(caster, key, t)) return false;
   const fallbackSound = ability.type==='jump' ? 'jump' : ability.type==='wall' ? 'wall'
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
@@ -2971,20 +3210,27 @@ function executeAbility(caster, target, ability, t){
     }
     case 'melee': {
       // Damage lands on the contact frame of the swing animation, not instantly.
+      // Close-range reach is forgiving: a little slack past the listed range, a taller
+      // vertical window, and it's checked when the swing STARTS as well as when it lands,
+      // so a target that shuffles away mid-swing still gets hit.
+      const inReach = ()=>{
+        const d = Math.abs((target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2));
+        return d <= ability.range + 44 && Math.abs(target.y - caster.y) < 115;
+      };
+      const reachedAtStart = inReach();
       const resolve = ()=>{
         if(state.mode !== 'battle' || caster.dead || target.dead) return;
         // a swing also knocks incoming missiles out of the air
         damageMissilesInArea(caster.id, caster.x+FIGHTER_SIZE/2 + caster.facing*ability.range*0.5,
           caster.y+FIGHTER_SIZE/2, ability.range, ability.damage);
-        const dist = Math.abs((target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2));
-        const vertOk = Math.abs(target.y - caster.y) < 90;
+        const inRange = reachedAtStart || inReach();
         const dirNow = dirSignTo(caster, target);
         // Bots must actually be facing the target to land a hit — this is
         // what makes flanking one matter instead of being purely cosmetic.
         // A human player's facing is always a deliberate choice, so this
         // never restricts the player's own attacks.
         const facingOk = !caster.isBot || (dirNow === caster.facing);
-        if(dist <= ability.range && vertOk && facingOk){
+        if(inRange && facingOk){
           damageTargetOrWall(target, ability.damage, ability.knockback, dirNow,
             {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
         } else {
@@ -4155,6 +4401,12 @@ function spawnDodgeFx(target, dirSign){
   spawnAfterimage(target, '#c5303066', 240);
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   spawnSparks(cx - (dirSign||1)*12, cy, 5, '#ffffff', 26, 220);
+  const tag = document.createElement('div');
+  tag.className = 'dmg-num dodge-tag';
+  tag.textContent = 'DODGE';
+  tag.style.left = target.x + 'px'; tag.style.top = (target.y - 18) + 'px';
+  arenaEl.appendChild(tag);
+  setTimeout(()=> tag.remove(), 950);
 }
 /* Captain America's Shield Block absorbing a hit clean. */
 function spawnBlockFx(target, dirSign){
@@ -4187,11 +4439,7 @@ function collidesPlatform(f, plat){
 }
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   // Horizontal input
-  if(f.bpCharging){
-    // Energy Redistribution roots Black Panther in place for the whole
-    // channel — full commitment is the trade-off for the payoff.
-    f.vx = 0;
-  } else if(f.hitStun > 0){
+  if(f.hitStun > 0){
     f.hitStun -= dtF*16.67;
     f.vx *= 0.92;
     // Knockback never fully locks you out — held movement keys still nudge you,
@@ -4427,6 +4675,19 @@ function updateProjectiles(dtF){
           state.projectiles.splice(i,1);
           continue;
         }
+      }
+    }
+
+    // Captain America's shield also hits on the way BACK: whoever is in its path as it
+    // flies home takes the damage (once per return trip, and only after it has
+    // separated from the target it just hit on the way out).
+    if(target && !target.dead && p.shieldViz && p.phase === 'return'){
+      const rx = (p.x + p.w) > target.x && p.x < (target.x + FIGHTER_SIZE);
+      const ry = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
+      if(!(rx && ry)) p.retClear = true;
+      else if(p.retClear && !p.hasHitReturn){
+        applyDamage(target, p.damage, p.knockback, p.vx >= 0 ? 1 : -1, {hitFx: p.hitFx, sound: p.hitSound});
+        p.hasHitReturn = true;
       }
     }
 
@@ -4753,15 +5014,12 @@ function updateBotAI(dtF){
     // so the flight doesn't just turn into sideways-only kiting.
     usingPlatformRoute = true;
     decision = 'flight';
-    moveDir = (adist > preferred - 30) ? dirToPlayer : (adist < preferred*0.55 ? -dirToPlayer : 0);
-    const meleeThreat = adist < 150 && vertical > -140; // player close and not well below us
-    if(meleeThreat || vertical > 90){
-      bot.aiFlyDir = -1; // climb: open space from danger, or match a player above us
-    } else if(vertical < -170){
-      bot.aiFlyDir = 1; // way above the player with room to spare — descend back into range
-    } else {
-      bot.aiFlyDir = 0; // comfortable altitude — hold and keep firing
-    }
+    // Flight is an APPROACH tool: fly at the player and match their altitude so the
+    // repulsors actually line up, only backing off if they get right on top of us.
+    moveDir = adist > 190 ? dirToPlayer : (adist < 85 ? -dirToPlayer : 0);
+    if(vertical < -30) bot.aiFlyDir = -1;       // player is higher: rise to their level
+    else if(vertical > 30) bot.aiFlyDir = 1;    // player is lower: dive to their level
+    else bot.aiFlyDir = 0;
   } else if(!sameLevel){
     usingPlatformRoute = true;
     // Different platform levels: walk off the edge to fall to a lower one,
@@ -4972,7 +5230,8 @@ function updateBotAI(dtF){
     // whenever the cooldown allows and there's room for one to build up speed,
     // and duck into flight to open distance when the player closes in or HP drops.
     const eAb = bot.def.abilities.E;
-    if(cdReady(bot,'R',t) && !bot.flight && (adist < 130 || hpPct < 0.4) && Math.random() < 0.6){
+    const needsApproach = !bot.flight && (Math.abs(vertical) > 110 || adist > 520); // player on another level / far away: fly to them
+    if(cdReady(bot,'R',t) && !bot.flight && (needsApproach || adist < 130 || hpPct < 0.4) && Math.random() < (needsApproach ? 0.85 : 0.6)){
       tryUseAbility(bot, player, 'R'); return;
     }
     if(cdReady(bot,'Q',t) && adist > 130){
@@ -6262,6 +6521,7 @@ window.addEventListener('load', rescaleArena);
 /* =========================================================================
    SECTION: INITIAL RENDER
    ========================================================================= */
+buildBattleBackdrop();
 initBubbles();
 applyTranslations();
 renderSaveSlots();
