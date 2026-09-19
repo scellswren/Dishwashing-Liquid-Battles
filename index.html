@@ -821,7 +821,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       </div>
       <p class="instr-goal"><strong data-i18n="instr_goal_label">Goal:</strong> <span data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</span></p>
       <ul>
-        <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></span></li>
+        <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span> &nbsp; <kbd>S</kbd>/<kbd>&darr;</kbd> <span data-i18n="instr_down">drop through / descend while flying</span></span></li>
         <li><span class="instr-icon">✨</span><span><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></span></li>
         <li><span class="instr-icon">👆</span><span data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</span></li>
         <li><span class="instr-icon">🎮</span><span><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></span></li>
@@ -883,6 +883,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       <div id="dpad">
         <button class="dpad-up" data-dir="up">&uarr;</button>
         <button class="dpad-left" data-dir="left">&larr;</button>
+        <button class="dpad-down" data-dir="down">&darr;</button>
         <button class="dpad-right" data-dir="right">&rarr;</button>
       </div>
       <div id="ability-bar"></div>
@@ -935,17 +936,17 @@ const CHARACTERS = {
   },
   spiderman: {
     id:'spiderman', name:'Spider-Man', img:'SpiderMan.jpg', color:'#d6323b',
-    maxHealth:7500, aiStyle:'mobile',
-    description:'Low health, very high mobility. Wins by darting in, poking with webs, and swinging away.',
+    maxHealth:9000, aiStyle:'mobile',
+    description:'High health, very high mobility. Wins by darting in, poking with webs, and swinging away.',
     abilities:{
       E:{key:'E', name:'Web Strike', type:'projectile', damage:240, cooldown:500, knockback:5,
          speed:15, w:22, h:8, color:'#e7e7e7',
          sound:'web_shoot', fx:'web_shot', render:'web-strand', trail:'web', web:true,
          hitFx:'web', hitSound:'web_hit', slow:300, desc:'Fast, thin web shot. Basic poke.'},
-      Q:{key:'Q', name:'Web Bomb', type:'projectile', damage:600, cooldown:9000, knockback:11,
-         speed:10, w:34, h:34, color:'#f2f2f2',
-         sound:'web_bomb', fx:'web_bomb', render:'web-net', trail:'web', web:true,
-         hitFx:'web_big', hitSound:'web_splat', slow:300, desc:'A larger web glob with a bigger hit area.'},
+      Q:{key:'Q', name:'Web Punch', type:'melee', damage:800, cooldown:9000, knockback:14, range:74,
+         hitDelay:90,
+         sound:'web_punch', fx:'web_punch', hitFx:'web_punch_hit', hitSound:'web_punch_hit', slow:300,
+         desc:'A devastating close-range haymaker wrapped in webbing. Short range, huge damage.'},
       R:{key:'R', name:'Web Swing', type:'mobility', damage:0, cooldown:8000, boostX:18, swingToTop:true,
          sound:'web_swing', fx:'web_swing',
          desc:'Fires a web line to the ceiling and swings you all the way to the top of the arena. Pure mobility — no damage.'}
@@ -996,7 +997,7 @@ const I18N = {
     inv_equipped_hint_default:'Select a fighter below.', inv_none:'None', inv_legend_owned:'Owned', inv_legend_locked:'Locked', inv_equipped_badge:'EQUIPPED',
     inv_ready:'Ready for battle', inv_click_equip:'Click to equip',
     instr_title:'Instructions', instr_goal_label:'Goal:', instr_goal_text:"knock your opponent's health to 0, or knock them clean out of the arena.",
-    instr_jump:'jump', instr_left:'left', instr_right:'right', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
+    instr_jump:'jump', instr_left:'left', instr_right:'right', instr_down:'drop through / descend while flying', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
     instr_touch:'On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.',
     instr_controller_label:'Controller support:', instr_controller_text:'Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.',
     instr_cooldown:'Every ability has a cooldown shown right on its button — watch the timer count down.',
@@ -1200,7 +1201,7 @@ const PLATFORMS = [
 const GRAVITY = 0.62;
 const MOVE_SPEED = 5.1;
 const AI_TURN_DELAY = 180; // ms an AI-controlled fighter takes to notice and turn around
-const JUMP_VEL = -14.2;
+const JUMP_VEL = -16.4;
 const FLY_SPEED = 4.6;
 const FIGHTER_SIZE = 64;
 // The arena is fully enclosed — fighters are clamped inside these bounds.
@@ -1973,11 +1974,18 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.15, 0.22, 'bandpass', 5200, 900, 4.5);
         aTone(ctx, t, 'sawtooth', 1500, 340, 0.11, 0.05);
         return;
-      case 'web_bomb': // heavier thwip + glob launch
-        aNoise(ctx, t, 0.24, 0.24, 'bandpass', 3400, 480, 3.2);
-        aTone(ctx, t, 'sawtooth', 780, 190, 0.20, 0.08);
-        aTone(ctx, t+0.05, 'sine', 300, 120, 0.18, 0.07);
+      case 'web_punch': // web-wrapped wind-up + heavy swing
+        aNoise(ctx, t, 0.12, 0.22, 'bandpass', 5200, 900, 4.2);
+        aTone(ctx, t+0.04, 'triangle', 300, 110, 0.20, 0.09);
+        aNoise(ctx, t+0.06, 0.16, 0.16, 'bandpass', 1400, 260, 1.7);
         return;
+      case 'web_punch_hit': { // heavy webbed haymaker impact
+        aTone(ctx, t, 'sine', 150, 38, 0.48, 0.32);
+        aTone(ctx, t, 'square', 92, 44, 0.26, 0.11);
+        aNoise(ctx, t, 0.22, 0.24, 'bandpass', 2400, 480, 2.1);
+        aNoise(ctx, t+0.05, 0.18, 0.14, 'lowpass', 1800, 260, 0.8);
+        return;
+      }
       case 'web_swing':
         aNoise(ctx, t, 0.20, 0.20, 'bandpass', 4600, 1000, 4.0);
         aNoise(ctx, t+0.09, 0.34, 0.14, 'bandpass', 700, 2600, 1.1);
@@ -2301,10 +2309,25 @@ function spawnAbilityFx(caster, ability){
       spawnSparks(hx, hy, 4, '#ffffff', 20, 320);
       break;
     }
-    case 'web_bomb': {
-      const hx = cx + dir*26, hy = cy;
-      fxEl('fx-splat', `left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;`, 600, webSplatSvg(52));
-      fxEl('fx-ring', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;border-color:#ffffffaa;`, 540);
+    case 'web_punch': {
+      // Spidey cocoons his fist in webbing and rockets it forward in a
+      // single close-range haymaker — a wind-up wrap, then a fast
+      // forward-streaking burst that reads as a heavy punch, not a shot.
+      const hx = cx + dir*30, hy = cy;
+      fxEl('fx-webtick', `left:${cx-22}px;top:${cy-22}px;width:44px;height:44px;`, 220, webSplatSvg(44));
+      fxEl('mj-arc-wrap',
+        `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;transform:scaleX(${dir});`,
+        260, '<div class="mj-arc" style="border-right-color:#ffffff;border-top-color:#e7e7e7;"></div>');
+      const who = caster;
+      for(let i=0;i<5;i++){
+        setTimeout(()=>{
+          if(state.mode !== 'battle' || !who.el) return;
+          const px = who.x + FIGHTER_SIZE/2 + who.facing*(18 + i*13);
+          const py = hy - 6 + Math.random()*12;
+          spawnSparks(px, py, 2, '#ffffff', 20, 200);
+        }, i*16);
+      }
+      spawnSparks(hx, hy, 5, '#d6323b', 30, 260);
       break;
     }
     case 'web_swing': {
@@ -2430,6 +2453,19 @@ function spawnHitFx(target, kind, dirSign){
       fxEl('fx-ring', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#ffffffcc;`, 560);
       spawnSparks(cx, cy, 10, '#ffffff', 52, 440);
       shakeArena(6, 260);
+      break;
+    }
+    case 'web_punch_hit': {
+      // A big, weighty haymaker landing — bright flash, a wide web-crack
+      // splat, a snapping white shockwave, and a spray of red/white sparks
+      // so an 800-damage hit actually reads as heavy on screen.
+      fxEl('fx-flash', `left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;`, 300);
+      fxEl('fx-splat', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;`, 580, webSplatSvg(100));
+      fxEl('fx-ring', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#ffffff;border-width:5px;box-shadow:0 0 28px #ffffffcc;`, 500);
+      fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#d6323b;box-shadow:0 0 22px #d6323b99;`, 460);
+      spawnSparks(cx, cy, 16, '#ffffff', 70, 420);
+      spawnSparks(cx, cy, 9, '#d6323b', 50, 380);
+      shakeArena(10, 320);
       break;
     }
     case 'missile': {
@@ -3010,6 +3046,7 @@ function updateBotAI(dtF){
   let jumpPulse = false;
   let dropPulse = false;
   let usingPlatformRoute = false;
+  bot.aiFlyDir = 0; // vertical flight intent (-1 climb, 0 hold, 1 descend); only consumed while bot.flight is true
 
   const botPlat = platformUnderX(bot);
   const playerPlat = platformUnderX(player);
@@ -3038,7 +3075,26 @@ function updateBotAI(dtF){
   });
   // #endregion
 
-  if(!sameLevel){
+  if(bot.flight){
+    // Flight bypasses the platform graph entirely — a flying fighter isn't
+    // stuck walking edges or timing jumps, so route it straight at the
+    // player on both axes instead of running the ground-navigation logic
+    // below. Altitude itself becomes a real tool: climb to open vertical
+    // space from anything closing in for melee or sitting well above us,
+    // and sink back down out of a climb once we've actually got clearance,
+    // so the flight doesn't just turn into sideways-only kiting.
+    usingPlatformRoute = true;
+    decision = 'flight';
+    moveDir = (adist > preferred - 30) ? dirToPlayer : (adist < preferred*0.55 ? -dirToPlayer : 0);
+    const meleeThreat = adist < 150 && vertical > -140; // player close and not well below us
+    if(meleeThreat || vertical > 90){
+      bot.aiFlyDir = -1; // climb: open space from danger, or match a player above us
+    } else if(vertical < -170){
+      bot.aiFlyDir = 1; // way above the player with room to spare — descend back into range
+    } else {
+      bot.aiFlyDir = 0; // comfortable altitude — hold and keep firing
+    }
+  } else if(!sameLevel){
     usingPlatformRoute = true;
     // Different platform levels: walk off the edge to fall to a lower one,
     // or line up and jump to reach a higher one — no phasing through floors.
@@ -3211,6 +3267,7 @@ function updateBotAI(dtF){
     const mdist = Math.hypot(mcx - (bot.x+FIGHTER_SIZE/2), mcy - (bot.y+FIGHTER_SIZE/2));
     if(ab.type === 'aoe' && mdist <= ab.radius + 20){ tryUseAbility(bot, player, 'Q'); return; }
     if(ab.type === 'projectile'){ tryUseAbility(bot, {x: missile.x, y: missile.y}, 'Q'); return; }
+    if(ab.type === 'melee' && mdist <= ab.range + 20){ tryUseAbility(bot, player, 'Q'); return; }
   }
 
   /* ---------------- style-specific decision making ---------------- */
@@ -3227,16 +3284,17 @@ function updateBotAI(dtF){
       tryUseAbility(bot, player, 'E'); return;
     }
   } else if(style === 'mobile'){
-    // Spider-Man: keep chip damage flowing with Web Strike at range, land the
-    // heavier Web Bomb when it's off cooldown and roughly in line, and swing
-    // away the moment things get dangerous rather than trading blows.
+    // Spider-Man: keep chip damage flowing with Web Strike at range, dash
+    // in and land the heavy close-range Web Punch whenever it's off
+    // cooldown and the player is actually within its short reach, and
+    // swing away when things get dangerous rather than trading blows.
     const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q;
     const dangerClose = adist < 110 && (player.def.aiStyle !== 'mobile'); // player is in real range on us
+    if(cdReady(bot,'Q',t) && adist <= qAb.range + 12){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
     if((hpPct < 0.35 || dangerClose) && cdReady(bot,'R',t) && Math.random() < 0.75){
       tryUseAbility(bot, player, 'R'); return;
-    }
-    if(cdReady(bot,'Q',t) && adist < 420 && Math.random() < 0.55){
-      tryUseAbility(bot, player, 'Q'); return;
     }
     if(cdReady(bot,'E',t)){
       tryUseAbility(bot, player, 'E'); return;
@@ -3400,7 +3458,7 @@ let rebindingAction = null; // which action (if any) is waiting for a key press
 /* =========================================================================
    SECTION: INPUT — KEYBOARD
    ========================================================================= */
-const keysHeld = { left:false, right:false, up:false };
+const keysHeld = { left:false, right:false, up:false, down:false };
 window.addEventListener('keydown', (e)=>{
   // If the Settings screen is waiting on a keypress to rebind a control,
   // capture it here instead of feeding it to the game.
@@ -3417,7 +3475,10 @@ window.addEventListener('keydown', (e)=>{
   if(k===KEYBINDS.left || k==='arrowleft') keysHeld.left = true;
   if(k===KEYBINDS.right || k==='arrowright') keysHeld.right = true;
   if(k===KEYBINDS.jump || k==='arrowup' || k===' ') keysHeld.up = true;
-  // S intentionally does nothing.
+  // Down: drops you through a one-way platform on the ground, or makes you
+  // descend while Flight is active. 's' and the down arrow always work,
+  // same permanent-fallback treatment jump gets from Space/ArrowUp.
+  if(k==='s' || k==='arrowdown') keysHeld.down = true;
   if(k===KEYBINDS.jump || k==='arrowup' || k===' '){
     e.preventDefault();
     if(!e.repeat && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
@@ -3431,6 +3492,7 @@ window.addEventListener('keyup', (e)=>{
   if(k===KEYBINDS.left || k==='arrowleft') keysHeld.left = false;
   if(k===KEYBINDS.right || k==='arrowright') keysHeld.right = false;
   if(k===KEYBINDS.jump || k==='arrowup' || k===' ') keysHeld.up = false;
+  if(k==='s' || k==='arrowdown') keysHeld.down = false;
 });
 
 /* =========================================================================
@@ -3495,7 +3557,7 @@ if(resetBtn){
    face buttons so they're always one thumb-press away.
    ========================================================================= */
 const GAMEPAD_DEADZONE = 0.28;
-const gpKeys = { left:false, right:false, up:false };
+const gpKeys = { left:false, right:false, up:false, down:false };
 const gamepadState = { connected:false, index:null, brand:'generic' };
 const gpPrevPressed = {}; // button index -> was pressed last frame
 
@@ -3565,7 +3627,7 @@ function setGamepadDisconnected(){
   if(!gamepadState.connected) return;
   gamepadState.connected = false;
   gamepadState.index = null;
-  gpKeys.left = gpKeys.right = gpKeys.up = false;
+  gpKeys.left = gpKeys.right = gpKeys.up = gpKeys.down = false;
   flashGamepadBanner(false);
   updateGamepadHint();
   if(typeof buildAbilityBar === 'function' && state.mode === 'battle') buildAbilityBar();
@@ -3614,9 +3676,13 @@ function pollGamepad(){
 
   const axisY = gp.axes[1] || 0;
   const dpadUp = !!(gp.buttons[12] && gp.buttons[12].pressed);
+  const dpadDown = !!(gp.buttons[13] && gp.buttons[13].pressed);
   const wantUp = axisY < -GAMEPAD_DEADZONE || dpadUp;
   const wasUp = gpKeys.up;
   gpKeys.up = wantUp;
+  // Down: drop through a platform on the ground, or descend while flying —
+  // same stick/d-pad reused for the on-screen down control.
+  gpKeys.down = axisY > GAMEPAD_DEADZONE || dpadDown;
 
   // Jump: bottom face button, same rising-edge behavior as the keyboard.
   const jumpBtn = gp.buttons[JUMP_POS];
@@ -3768,14 +3834,11 @@ document.querySelectorAll('#dpad button').forEach(btn=>{
   const dir = btn.getAttribute('data-dir');
   const press = (ev)=>{
     ev.preventDefault();
-    if(dir==='down') return;
     keysHeld[dir] = true;
     btn.classList.add('pressed');
     if(dir==='up' && state.player && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
   };
   const release = (ev)=>{
-    if(dir==='down') return;
-    if(dir==='down') return;
     keysHeld[dir] = false;
     btn.classList.remove('pressed');
   };
@@ -3797,7 +3860,9 @@ function dragUpdate(dx, dy){
   keysHeld.right = dx > DRAG_DEADZONE;
   const wasUp = keysHeld.up;
   keysHeld.up = dy < -DRAG_DEADZONE;
-  keysHeld.down = false;
+  // Drag down to drop through a platform or descend while flying — mirrors
+  // the up-drag-to-jump gesture instead of being permanently disabled.
+  keysHeld.down = dy > DRAG_DEADZONE;
   if(keysHeld.up && !wasUp && state.player && state.player.onGround && !state.player.flight){
     state.player.jumpQueued = true;
   }
@@ -3843,12 +3908,16 @@ function gameLoop(ts){
     }
     const pWantJump = !frozen && (p.jumpQueued || (p.flight && (keysHeld.up || gpKeys.up)));
     p.jumpQueued = false;
-    updatePhysics(p, pMoveDir, pWantJump, frozen ? false : keysHeld.down, dtF);
+    // Down works both on the ground (drop through a one-way platform) and
+    // while flying (descend) — same input, updatePhysics picks the right
+    // behavior based on whether the fighter currently has flight active.
+    const pWantDown = !frozen && (keysHeld.down || gpKeys.down);
+    updatePhysics(p, pMoveDir, pWantJump, pWantDown, dtF);
 
     // resolve bot movement input
-    const bWantJump = !frozen && b.aiJumpPulse && b.onGround && !b.flight;
+    const bWantJump = !frozen && (b.flight ? b.aiFlyDir < 0 : (b.aiJumpPulse && b.onGround));
+    const bWantDown = !frozen && (b.flight ? b.aiFlyDir > 0 : b.aiDropPulse);
     b.aiJumpPulse = false;
-    const bWantDown = !frozen && b.aiDropPulse && !b.flight;
     b.aiDropPulse = false;
     updatePhysics(b, frozen ? 0 : b.aiMoveDir, bWantJump, bWantDown, dtF);
 
