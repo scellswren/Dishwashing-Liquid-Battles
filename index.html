@@ -903,6 +903,499 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes echoScan{0%{filter:brightness(.85)}50%{filter:brightness(1.15)}100%{filter:brightness(.85)}}
 
 @media(max-width:700px){.loadout-banner{align-items:flex-start;flex-direction:column;gap:5px}.loadout-hint{text-align:left}.char-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr));}}
+
+/* =========================================================================
+   v5 — FULL-BLEED MENUS · MODE SELECT · CONTROLLER PAIRING · 1 V 1 FRIEND
+   Loaded last so it overrides the older boxed-menu styling above.
+   Signature motif: the diagonal "slash" seam that splits the screen —
+   it returns on the menu hero, the mode cards, the pairing screen and the
+   versus screen so the whole flow reads as one piece.
+   ========================================================================= */
+:root{
+  --p1:#4da3ff; --p2:#ff5a5f; --cream:#f6efe0;
+  --slant:clamp(34px,9vh,104px);
+}
+
+/* ---------- shared full-bleed shell ---------- */
+#screen-mode.active, #screen-pair.active, #screen-versus.active{
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; min-height:0;
+  display:block; overflow:hidden; z-index:2;
+  background:
+    radial-gradient(1100px 700px at 18% 8%, rgba(76,139,245,.14), transparent 60%),
+    radial-gradient(1100px 700px at 85% 92%, rgba(242,165,65,.13), transparent 60%),
+    radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
+}
+.fs-bg{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;}
+.fs-back{position:absolute !important; top:clamp(12px,3vh,28px); left:clamp(16px,3vw,40px); z-index:40; margin:0;}
+[dir="rtl"] .fs-back{left:auto; right:clamp(16px,3vw,40px);}
+
+/* ---------- soap bubbles (the one ambient motion) ---------- */
+.bubbles{position:absolute; inset:0; overflow:hidden;}
+.bubble{
+  position:absolute; bottom:-16vmin; width:var(--s); height:var(--s); border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255,255,255,.8) 0 5%, rgba(255,255,255,0) 6%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 56%, rgba(110,220,255,.22) 72%, rgba(255,140,225,.24) 87%, rgba(255,255,255,.36) 100%);
+  border:1px solid rgba(255,255,255,.2);
+  opacity:0; will-change:transform,opacity;
+  animation:bubbleRise var(--d) linear var(--delay) infinite;
+}
+@keyframes bubbleRise{
+  0%{transform:translate3d(0,0,0) scale(.85); opacity:0;}
+  10%{opacity:.75;}
+  50%{transform:translate3d(var(--drift),-62vh,0) scale(1);}
+  90%{opacity:.5;}
+  100%{transform:translate3d(calc(var(--drift) * -.6),-130vh,0) scale(1.08); opacity:0;}
+}
+@media (prefers-reduced-motion:reduce){
+  .bubble{animation:none; bottom:auto; top:var(--y); opacity:.28;}
+  .menu-item, .menu-hero .hero-frame, .split-card, .split-card::before, .split-card::after{transition:none !important;}
+}
+
+/* =========================================================================
+   MAIN MENU
+   ========================================================================= */
+#screen-menu{--hero:#f2a541;}
+#screen-menu.active{display:block; overflow-x:hidden; overflow-y:auto; padding:0;}
+.fs-slash{
+  position:absolute; top:-12%; bottom:-12%; right:-7vw; width:min(57vw,1000px);
+  background:linear-gradient(205deg,
+    color-mix(in srgb,var(--hero) 52%,#151728) 0%,
+    color-mix(in srgb,var(--hero) 16%,#0f1016) 68%);
+  border-left:clamp(5px,.55vw,9px) solid var(--hero);
+  transform:skewX(-11deg);
+  box-shadow:-40px 0 100px rgba(0,0,0,.5);
+}
+.fs-slash::before{
+  content:''; position:absolute; inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.13) 1.3px,transparent 1.6px); background-size:15px 15px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 55%); mask-image:linear-gradient(90deg,transparent 0%,#000 55%);
+}
+[dir="rtl"] .fs-slash{right:auto; left:-7vw; transform:skewX(11deg); border-left:0; border-right:clamp(5px,.55vw,9px) solid var(--hero);}
+
+.menu-stage{
+  position:relative; z-index:1; min-height:100%;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.9fr); align-items:center;
+  gap:clamp(12px,3vw,56px);
+  padding:clamp(58px,10vh,100px) clamp(22px,6vw,110px) clamp(20px,5vh,56px);
+}
+.menu-left{display:flex; flex-direction:column; justify-content:center; gap:clamp(16px,3.6vh,38px); min-width:0;}
+.menu-title{
+  margin:0; font-size:clamp(38px,min(8vw,12.4vh),150px); line-height:1; letter-spacing:.012em;
+  text-transform:uppercase; transform:skewX(-6deg); transform-origin:left bottom;
+  background:linear-gradient(180deg,#fff0c6 0%,var(--amber) 48%,#c97418 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:none;
+  filter:drop-shadow(3px 3px 0 #6b3a06) drop-shadow(7px 8px 0 rgba(0,0,0,.4));
+}
+.menu-title span{display:block;}
+[dir="rtl"] .menu-title{transform:skewX(6deg); transform-origin:right bottom;}
+
+.menu-list{display:flex; flex-direction:column; gap:clamp(5px,1.1vh,11px); width:min(480px,100%);}
+.menu-item{
+  --cut:clamp(14px,2.4vh,24px);
+  position:relative; display:flex; align-items:center; gap:14px; width:100%; margin:0;
+  padding:clamp(9px,1.7vh,16px) calc(var(--cut) + 20px) clamp(9px,1.7vh,16px) 18px;
+  font-family:'Anton',sans-serif; font-size:clamp(18px,3.1vh,29px); letter-spacing:.07em; text-transform:uppercase; text-align:start;
+  color:var(--text); background:rgba(255,255,255,.06); border:0; border-radius:0; cursor:pointer;
+  clip-path:polygon(0 0,100% 0,calc(100% - var(--cut)) 100%,0 100%);
+  transition:transform .16s cubic-bezier(.2,.8,.2,1), background .16s ease, color .16s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+[dir="rtl"] .menu-item{clip-path:polygon(0 0,100% 0,100% 100%,var(--cut) 100%); padding:clamp(9px,1.7vh,16px) 18px clamp(9px,1.7vh,16px) calc(var(--cut) + 20px);}
+.menu-item .mi-icon{width:1.5em; text-align:center; font-size:.82em; flex:0 0 auto;}
+.menu-item::after{
+  content:'▶'; margin-inline-start:auto; font-size:.55em; opacity:0; transform:translateX(-10px);
+  transition:opacity .16s ease, transform .16s ease;
+}
+.menu-item.primary{
+  font-size:clamp(23px,4.3vh,40px); padding-top:clamp(11px,2.3vh,21px); padding-bottom:clamp(11px,2.3vh,21px);
+  background:linear-gradient(90deg,var(--amber),#e08a20); color:#231600;
+}
+.menu-item.menu-code-highlight{box-shadow:inset 4px 0 0 #7c3aed; border:0;}
+.menu-item:focus-visible{outline:none;}
+.menu-item:active{transform:translateX(8px) scale(.985);}
+.menu-item.gp-focused, .menu-item:focus-visible{
+  transform:translateX(18px); background:var(--cream); color:#1a1305;
+  outline:none !important; box-shadow:inset 7px 0 0 var(--amber) !important;
+}
+.menu-item.primary.gp-focused, .menu-item.primary:focus-visible{background:linear-gradient(90deg,#ffd98a,#f5ae4a); box-shadow:inset 7px 0 0 #fff !important;}
+.menu-item.gp-focused::after, .menu-item:focus-visible::after{opacity:1; transform:none;}
+[dir="rtl"] .menu-item.gp-focused{transform:translateX(-18px);}
+@media (hover:hover) and (pointer:fine){
+  .menu-item:hover{transform:translateX(18px); background:var(--cream); color:#1a1305; filter:none; box-shadow:inset 7px 0 0 var(--amber);}
+  .menu-item.primary:hover{background:linear-gradient(90deg,#ffd98a,#f5ae4a); box-shadow:inset 7px 0 0 #fff;}
+  .menu-item:hover::after{opacity:1; transform:none;}
+  [dir="rtl"] .menu-item:hover{transform:translateX(-18px);}
+}
+
+.menu-save-slots-top{
+  position:absolute !important; top:clamp(12px,3vh,28px); left:clamp(22px,6vw,110px); z-index:40;
+  padding:9px 14px; font-size:12px; border-radius:999px; min-width:0; margin:0;
+  background:rgba(15,16,22,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+[dir="rtl"] .menu-save-slots-top{left:auto; right:clamp(22px,6vw,110px);}
+
+/* hero = the equipped fighter, tinted in their colour */
+.menu-hero{
+  position:relative; z-index:2; justify-self:center; align-self:center;
+  display:flex; flex-direction:column; align-items:center; gap:clamp(10px,2.2vh,22px);
+  background:none; border:0; padding:8px; color:var(--text); font:inherit; cursor:pointer; text-align:center;
+}
+.hero-frame{
+  width:min(32vw,48vh,440px); aspect-ratio:1; overflow:hidden; background:#1c1e2e;
+  border:clamp(4px,.5vw,8px) solid var(--hero); border-radius:6px; transform:rotate(-4deg);
+  box-shadow:clamp(8px,1.2vw,18px) clamp(8px,1.2vw,18px) 0 rgba(0,0,0,.45), 0 30px 80px rgba(0,0,0,.5);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);
+}
+.hero-art{width:100%; height:100%;}
+.hero-art img{width:100%; height:100%; object-fit:cover; display:block;}
+.hero-art .fallback{width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Anton'; font-size:clamp(60px,12vw,160px); color:#fff;}
+.hero-name{font-family:'Anton',sans-serif; font-size:clamp(28px,5.4vh,58px); line-height:1; text-transform:uppercase; letter-spacing:.03em; text-shadow:0 3px 0 rgba(0,0,0,.45);}
+.hero-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:center; font-size:clamp(12px,1.8vh,15px); font-weight:800;}
+.hero-hp{color:#fff; opacity:.85;}
+.hero-change{
+  display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:999px;
+  background:rgba(0,0,0,.38); border:1px solid rgba(255,255,255,.22); transition:background .15s ease, color .15s ease;
+}
+.menu-hero.gp-focused, .menu-hero:focus-visible{outline:none !important; box-shadow:none !important;}
+.menu-hero.gp-focused .hero-frame, .menu-hero:focus-visible .hero-frame{transform:rotate(-2deg) scale(1.035);}
+.menu-hero.gp-focused .hero-change, .menu-hero:focus-visible .hero-change{background:var(--cream); color:#1a1305;}
+@media (hover:hover) and (pointer:fine){
+  .menu-hero:hover .hero-frame{transform:rotate(-2deg) scale(1.035);}
+  .menu-hero:hover .hero-change{background:var(--cream); color:#1a1305;}
+}
+
+/* phones in portrait: stack, hero becomes a compact row */
+@media (max-width:760px), (max-aspect-ratio:1/1){
+  .menu-stage{grid-template-columns:1fr; align-content:start; gap:20px; padding-top:76px;}
+  .menu-title{font-size:clamp(38px,13vw,84px);}
+  .menu-hero{flex-direction:row; justify-self:start; gap:14px; text-align:start; padding:0;}
+  .hero-frame{width:74px; border-width:3px; box-shadow:4px 4px 0 rgba(0,0,0,.45);}
+  .hero-name{font-size:24px;}
+  .hero-row{justify-content:flex-start;}
+  .fs-slash{width:95vw; right:-30vw; opacity:.5;}
+  .menu-item.gp-focused, .menu-item:hover{transform:translateX(8px);}
+}
+/* short landscape (phone on its side / TV overscan) */
+@media (max-height:520px) and (min-aspect-ratio:1/1){
+  .menu-stage{padding-top:52px; gap:20px;}
+  .menu-title{font-size:clamp(20px,9vh,44px); line-height:1; }
+  .menu-title span{display:inline;}
+  .menu-left{gap:12px;}
+  .menu-item{font-size:16px; padding-top:7px; padding-bottom:7px;}
+  .menu-item.primary{font-size:20px;}
+  .hero-frame{width:min(30vw,42vh);}
+  .hero-name{font-size:24px;}
+}
+
+/* =========================================================================
+   SPLIT CARDS — mode select + pairing (two halves, one diagonal seam)
+   ========================================================================= */
+.split-stage{position:absolute; inset:0; z-index:1;}
+.split-card{
+  --pad-out:clamp(24px,6vw,110px);
+  position:absolute; top:0; bottom:0; width:calc(50% + var(--slant)/2 - 4px);
+  display:flex; flex-direction:column; justify-content:center; gap:clamp(10px,2.2vh,22px);
+  margin:0; border:0; border-radius:0; overflow:hidden; text-align:start; font:inherit; color:var(--text);
+  padding:clamp(70px,14vh,140px) 0 clamp(30px,6vh,70px);
+}
+.split-card.left{
+  left:0; clip-path:polygon(0 0,100% 0,calc(100% - var(--slant)) 100%,0 100%);
+  padding-left:var(--pad-out); padding-right:calc(var(--slant) * .9 + 20px);
+}
+.split-card.right{
+  right:0; clip-path:polygon(var(--slant) 0,100% 0,100% 100%,0 100%);
+  padding-right:var(--pad-out); padding-left:calc(var(--slant) * .9 + 28px);
+}
+button.split-card{cursor:pointer; transition:filter .2s ease;}
+.split-card::before{
+  content:''; position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity .2s ease;
+  background:linear-gradient(100deg,rgba(255,255,255,.16),transparent 60%);
+}
+.split-card::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:clamp(6px,1.1vh,10px);
+  background:var(--accent,var(--amber)); transform:scaleX(0); transform-origin:left; transition:transform .28s cubic-bezier(.2,.8,.2,1);
+}
+.split-card.right::after{transform-origin:right;}
+button.split-card.gp-focused, button.split-card:focus-visible{outline:none !important; box-shadow:none !important; filter:brightness(1.18);}
+button.split-card.gp-focused::before, button.split-card:focus-visible::before{opacity:1;}
+button.split-card.gp-focused::after, button.split-card:focus-visible::after{transform:scaleX(1);}
+@media (hover:hover) and (pointer:fine){
+  button.split-card:hover{filter:brightness(1.18);}
+  button.split-card:hover::before{opacity:1;}
+  button.split-card:hover::after{transform:scaleX(1);}
+}
+/* halftone texture on the cards */
+.split-card > *{position:relative; z-index:1;}
+
+.mode-heading{
+  position:absolute; top:clamp(14px,3.2vh,30px); left:0; right:0; text-align:center; z-index:30; pointer-events:none;
+  font-size:clamp(22px,4.2vh,42px); letter-spacing:.08em; text-transform:uppercase; text-shadow:0 3px 0 rgba(0,0,0,.55);
+}
+.mode-practice{--accent:var(--amber);
+  background:
+    radial-gradient(rgba(255,255,255,.09) 1.2px,transparent 1.5px) 0 0/16px 16px,
+    linear-gradient(160deg,rgba(242,165,65,.55),rgba(242,165,65,.10) 62%),#12131d;}
+.mode-friend{--accent:#fff;
+  background:
+    radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px,
+    linear-gradient(115deg,rgba(77,163,255,.42) 0%,rgba(77,163,255,.12) 46%,rgba(255,90,95,.12) 54%,rgba(255,90,95,.42) 100%),#12131d;}
+.mode-name{font-family:'Anton',sans-serif; font-size:clamp(34px,min(7.2vw,11vh),108px); line-height:.95; text-transform:uppercase; letter-spacing:.02em; text-shadow:0 4px 0 rgba(0,0,0,.4);}
+.mode-desc{max-width:30ch; color:#d9dcea; font-size:clamp(14px,2.1vh,19px); line-height:1.5; font-weight:600;}
+.mode-chip{display:inline-flex; align-items:center; gap:12px; align-self:flex-start; padding:7px 16px 7px 7px; border-radius:999px; background:rgba(0,0,0,.36); border:1px solid rgba(255,255,255,.16); font-weight:800; font-size:clamp(12px,1.9vh,15px);}
+.mode-chip-art{width:clamp(30px,5vh,42px); height:clamp(30px,5vh,42px); border-radius:50%; overflow:hidden; background:#2c2f45; flex:0 0 auto;}
+.mode-chip-art img{width:100%; height:100%; object-fit:cover; display:block;}
+.mode-chip-art .fallback{width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Anton'; font-size:16px; color:#fff;}
+.mode-pads{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-weight:800; font-size:clamp(12px,1.9vh,15px);}
+.mode-pad{
+  font-family:'Anton',sans-serif; font-size:clamp(14px,2.4vh,20px); letter-spacing:.06em; padding:5px 12px; border-radius:8px;
+  border:2px dashed rgba(255,255,255,.28); color:rgba(255,255,255,.4); transition:all .2s ease;
+}
+.mode-pad.p1.on{border-style:solid; border-color:var(--p1); background:var(--p1); color:#08121f;}
+.mode-pad.p2.on{border-style:solid; border-color:var(--p2); background:var(--p2); color:#1e0708;}
+.mode-tag{align-self:flex-start; font-size:clamp(11px,1.7vh,14px); font-weight:800; color:#e9ecf7; opacity:.9;}
+.mode-arrow{position:absolute !important; bottom:clamp(20px,5vh,54px); font-size:clamp(20px,3.4vh,34px); opacity:.0; transition:opacity .2s ease, transform .2s ease;}
+.split-card.left .mode-arrow{right:calc(var(--slant) + 22px); transform:translateX(-12px);}
+.split-card.right .mode-arrow{right:var(--pad-out); transform:translateX(-12px);}
+button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-arrow{opacity:1; transform:none;}
+@media (hover:hover) and (pointer:fine){ button.split-card:hover .mode-arrow{opacity:1; transform:none;} }
+
+@media (max-width:760px), (max-aspect-ratio:1/1){
+  :root{--slant:0px;}
+  .split-card{width:100% !important; left:0 !important; right:0 !important; clip-path:none !important; padding:14px 22px !important; justify-content:center;}
+  .split-card.left{top:0; bottom:50%; padding-top:64px !important;}
+  .split-card.right{top:50%; bottom:0;}
+  .mode-name{font-size:clamp(30px,10vw,64px);}
+  .mode-arrow{display:none;}
+}
+
+/* =========================================================================
+   CONTROLLER PAIRING
+   ========================================================================= */
+.pair-half{justify-content:center; align-items:flex-start; cursor:default; --pc:var(--p1);}
+.pair-half.p1{--pc:var(--p1); --accent:var(--p1);
+  background:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px, linear-gradient(160deg,rgba(77,163,255,.42),rgba(77,163,255,.07) 70%),#0f1220;}
+.pair-half.p2{--pc:var(--p2); --accent:var(--p2); align-items:flex-end; text-align:end;
+  background:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px, linear-gradient(200deg,rgba(255,90,95,.42),rgba(255,90,95,.07) 70%),#1a0f14;}
+.pair-num{
+  position:absolute !important; z-index:0 !important; font-family:'Anton',sans-serif; line-height:.8; pointer-events:none;
+  font-size:min(70vh,46vw); color:var(--pc); opacity:.13; bottom:-3vh;
+}
+.pair-half.p1 .pair-num{left:calc(var(--pad-out) - 2vw);}
+.pair-half.p2 .pair-num{right:calc(var(--pad-out) - 2vw);}
+.pair-who{font-family:'Anton',sans-serif; font-size:clamp(34px,min(6vw,9vh),90px); text-transform:uppercase; letter-spacing:.03em; text-shadow:0 4px 0 rgba(0,0,0,.4);}
+.pair-glyph{width:clamp(96px,20vh,200px); height:auto; color:rgba(255,255,255,.28); transition:color .25s ease, filter .25s ease, transform .25s ease;}
+.pg-line{fill:none; stroke:currentColor; stroke-width:3; stroke-linejoin:round; stroke-linecap:round;}
+.pg-line.pg-fill{fill:currentColor; fill-opacity:.14;}
+.pg-dot{fill:currentColor;}
+.pair-half.state-detected .pair-glyph, .pair-half.state-press .pair-glyph{color:#fff;}
+.pair-half.state-press .pair-glyph{animation:padWiggle 1.1s ease-in-out infinite;}
+.pair-half.state-locked .pair-glyph{color:var(--pc); filter:drop-shadow(0 0 22px var(--pc)); transform:scale(1.06);}
+@keyframes padWiggle{0%,100%{transform:rotate(-3deg) scale(1);}50%{transform:rotate(3deg) scale(1.06);}}
+.pair-state{font-size:clamp(15px,2.6vh,24px); font-weight:800; display:flex; align-items:center; gap:10px; color:#dfe3f2;}
+.pair-half.state-press .pair-state{color:#fff; animation:pairPulse 1.1s ease-in-out infinite;}
+.pair-half.state-locked .pair-state{color:var(--pc);}
+@keyframes pairPulse{0%,100%{opacity:1;}50%{opacity:.45;}}
+.pair-brand{font-size:clamp(12px,1.9vh,16px); font-weight:700; color:var(--muted); min-height:1.4em;}
+.pair-check{
+  display:none; width:1.5em; height:1.5em; border-radius:50%; background:var(--pc); color:#0a0d16; font-size:.9em;
+  align-items:center; justify-content:center; font-weight:900;
+}
+.pair-half.state-locked .pair-check{display:inline-flex; animation:pairPop .35s cubic-bezier(.2,1.6,.4,1);}
+@keyframes pairPop{from{transform:scale(0);}to{transform:scale(1);}}
+
+.pair-center{
+  position:absolute; z-index:35; left:50%; top:clamp(66px,13vh,130px); transform:translateX(-50%);
+  width:min(92vw,700px); text-align:center; padding:clamp(14px,2.6vh,24px) clamp(18px,3vw,34px);
+  background:rgba(9,10,16,.78); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.14); border-radius:18px; box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+.pair-center h2{font-size:clamp(24px,5vh,50px); letter-spacing:.05em; text-transform:uppercase; color:var(--amber);}
+.pair-center p{margin:8px 0 0; color:#cfd3e6; font-size:clamp(13px,2vh,17px); line-height:1.5;}
+.pair-center .pair-hint{font-size:clamp(11px,1.6vh,13px); color:var(--muted); margin-top:10px;}
+@media (max-width:760px), (max-aspect-ratio:1/1){
+  .pair-center{top:50%; transform:translate(-50%,-50%); width:min(92vw,520px);}
+  .pair-half.p1{align-items:flex-start;} .pair-half.p2{align-items:flex-start; text-align:start;}
+  .pair-num{font-size:40vh;}
+  .split-card.pair-half{padding-top:20px !important; padding-bottom:20px !important;}
+  .split-card.left.pair-half{padding-top:64px !important; padding-bottom:64px !important;}
+  .split-card.right.pair-half{padding-top:64px !important;}
+  .pair-glyph{width:80px;}
+}
+
+/* =========================================================================
+   VERSUS FIGHTER SELECT
+   ========================================================================= */
+.vs-stage{
+  position:absolute; inset:0; z-index:1; display:grid;
+  grid-template-columns:minmax(250px,1fr) minmax(340px,1.06fr) minmax(250px,1fr);
+}
+.vs-side{
+  position:relative; display:flex; flex-direction:column; justify-content:center; gap:clamp(6px,1.4vh,14px);
+  padding:clamp(56px,9vh,90px) 0 clamp(16px,3vh,32px); --pc:var(--p1); min-width:0;
+}
+.vs-side.p1{
+  padding-left:clamp(20px,4vw,72px); padding-right:calc(var(--slant) * .9 + 14px);
+  clip-path:polygon(0 0,100% 0,calc(100% - var(--slant)) 100%,0 100%);
+  background:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px, linear-gradient(160deg,rgba(77,163,255,.4),rgba(77,163,255,.06) 70%),#0f1220;
+}
+.vs-side.p2{
+  --pc:var(--p2); padding-right:clamp(20px,4vw,72px); padding-left:calc(var(--slant) * .9 + 14px); align-items:flex-end; text-align:end;
+  clip-path:polygon(var(--slant) 0,100% 0,100% 100%,0 100%);
+  background:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px, linear-gradient(200deg,rgba(255,90,95,.4),rgba(255,90,95,.06) 70%),#1a0f14;
+}
+.vs-side.locked{filter:brightness(1.12) saturate(1.15);}
+.vs-who{font-family:'Anton',sans-serif; font-size:clamp(20px,3.4vh,32px); letter-spacing:.06em; text-transform:uppercase; display:flex; align-items:center; gap:12px; color:var(--pc);}
+.vs-side.p2 .vs-who{flex-direction:row-reverse;}
+.vs-pad{font-family:'Inter',sans-serif; font-size:11px; font-weight:800; letter-spacing:.04em; padding:3px 9px; border-radius:999px; background:rgba(0,0,0,.38); color:#dfe3f2; border:1px solid rgba(255,255,255,.16);}
+.vs-portrait{position:relative; width:min(100%,26vh,250px);}
+.vs-portrait .char-square{margin:0; width:100%; border:clamp(3px,.4vw,6px) solid var(--char-color,var(--pc)); border-radius:6px; box-shadow:6px 6px 0 rgba(0,0,0,.45);}
+.vs-side.p1 .vs-portrait .char-square{transform:rotate(-3deg);}
+.vs-side.p2 .vs-portrait .char-square{transform:rotate(3deg);}
+.vs-stamp{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:'Anton',sans-serif; font-size:clamp(22px,4.4vh,44px);
+  letter-spacing:.1em; text-transform:uppercase; padding:4px 16px; color:var(--pc); background:rgba(8,9,15,.86); border:4px solid var(--pc); border-radius:8px;
+  animation:stampIn .32s cubic-bezier(.2,1.5,.4,1);
+}
+@keyframes stampIn{from{transform:translate(-50%,-50%) rotate(-12deg) scale(2.2); opacity:0;}to{transform:translate(-50%,-50%) rotate(-12deg) scale(1); opacity:1;}}
+.vs-name{font-family:'Anton',sans-serif; font-size:clamp(26px,5.2vh,54px); line-height:1; text-transform:uppercase; letter-spacing:.02em; text-shadow:0 3px 0 rgba(0,0,0,.4);}
+.vs-hp{font-weight:800; font-size:clamp(12px,1.9vh,15px); color:#dfe3f2; margin-top:-2px;}
+.vs-abilities{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:clamp(4px,.8vh,8px); width:100%;}
+.vs-abilities li{display:flex; align-items:center; gap:10px; background:rgba(0,0,0,.32); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:clamp(5px,.9vh,9px) 10px; font-size:clamp(11px,1.7vh,14px);}
+.vs-side.p2 .vs-abilities li{flex-direction:row-reverse;}
+.vs-key{
+  flex:0 0 auto; min-width:1.9em; text-align:center; font-family:'Anton',sans-serif; font-size:1.15em; padding:1px 6px; border-radius:6px;
+  background:var(--pc); color:#0b0d14;
+}
+.vs-ab-name{font-weight:800; flex:1 1 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.vs-ab-meta{flex:0 0 auto; color:var(--muted); font-size:.92em; white-space:nowrap;}
+.vs-status{font-weight:800; font-size:clamp(13px,2vh,17px); color:#fff; margin-top:2px;}
+.vs-side.locked .vs-status{color:var(--pc);}
+.vs-hintline{font-size:clamp(10px,1.5vh,12px); color:var(--muted); font-weight:600; line-height:1.4;}
+
+.vs-center{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(12px,2.4vh,24px); padding:clamp(56px,9vh,90px) 6px clamp(16px,3vh,32px); min-width:0;}
+.vs-heading{font-size:clamp(22px,4.2vh,42px); letter-spacing:.07em; text-transform:uppercase; text-align:center; text-shadow:0 3px 0 rgba(0,0,0,.5);}
+.vs-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(10px,1.8vh,20px); width:min(100%,540px);}
+.vs-card{
+  position:relative; background:linear-gradient(160deg,#252944,#1b1e30); border:1px solid #3c4160; border-radius:12px; padding:clamp(5px,.9vh,9px); text-align:center;
+  transition:box-shadow .12s ease, transform .12s ease;
+}
+.vs-card .char-square{margin:0 0 6px; border-radius:8px;}
+.vs-card-name{font-weight:800; font-size:clamp(11px,1.8vh,14px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.vs-card.mystery{border:1px dashed #3a3d54; background:linear-gradient(160deg,#1b1d29,#131420);}
+.vs-card.cur-1{box-shadow:0 0 0 4px var(--p1), 0 0 26px rgba(77,163,255,.6); transform:translateY(-3px);}
+.vs-card.cur-2{box-shadow:0 0 0 4px var(--p2), 0 0 26px rgba(255,90,95,.6); transform:translateY(-3px);}
+.vs-card.cur-1.cur-2{box-shadow:0 0 0 4px var(--p1), 0 0 0 9px var(--p2), 0 0 28px rgba(255,255,255,.35);}
+.vs-mark{
+  position:absolute; top:-9px; width:24px; height:24px; border-radius:50%; display:none; align-items:center; justify-content:center;
+  font-family:'Anton',sans-serif; font-size:14px; z-index:3; box-shadow:0 2px 0 rgba(0,0,0,.5);
+}
+.vs-mark.m1{left:-9px; background:var(--p1); color:#08121f;}
+.vs-mark.m2{right:-9px; background:var(--p2); color:#1e0708;}
+.vs-card.cur-1 .vs-mark.m1, .vs-card.cur-2 .vs-mark.m2{display:flex;}
+.vs-card.lock-1 .vs-mark.m1::after, .vs-card.lock-2 .vs-mark.m2::after{content:'✓'; position:absolute; inset:0; border-radius:50%; background:inherit; display:flex; align-items:center; justify-content:center; font-family:'Inter'; font-weight:900;}
+.vs-note{font-size:clamp(11px,1.7vh,13px); color:var(--muted); text-align:center; min-height:1.4em; max-width:46ch;}
+
+.vs-splash{
+  position:absolute; inset:0; z-index:60; display:none; align-items:center; justify-content:center; gap:clamp(16px,4vw,64px);
+  background:rgba(7,8,14,.9); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+.vs-splash.on{display:flex; animation:splashFade .2s ease;}
+@keyframes splashFade{from{opacity:0;}to{opacity:1;}}
+.vsp{display:flex; flex-direction:column; align-items:center; gap:12px; width:min(26vw,30vh,260px);}
+.vsp .char-square{width:100%; margin:0; border:6px solid var(--pc); border-radius:6px; box-shadow:10px 10px 0 rgba(0,0,0,.5);}
+.vsp-1{--pc:var(--p1); animation:slideL .45s cubic-bezier(.2,.9,.2,1) both;}
+.vsp-2{--pc:var(--p2); animation:slideR .45s cubic-bezier(.2,.9,.2,1) both;}
+.vsp-1 .char-square{transform:rotate(-4deg);} .vsp-2 .char-square{transform:rotate(4deg);}
+@keyframes slideL{from{transform:translateX(-60vw);}to{transform:none;}}
+@keyframes slideR{from{transform:translateX(60vw);}to{transform:none;}}
+.vsp-name{font-family:'Anton',sans-serif; font-size:clamp(20px,4.4vh,44px); text-transform:uppercase; letter-spacing:.04em; text-align:center;}
+.vsp-vs{font-family:'Anton',sans-serif; font-size:clamp(60px,16vh,170px); line-height:1; color:#fff; text-shadow:5px 5px 0 var(--p1), -5px -5px 0 var(--p2); animation:vsSlam .5s .25s cubic-bezier(.2,1.6,.4,1) both;}
+@keyframes vsSlam{from{transform:scale(3); opacity:0;}to{transform:scale(1); opacity:1;}}
+
+@media (max-width:900px), (max-aspect-ratio:1/1){
+  :root{--slant:0px;}
+  .vs-stage{grid-template-columns:1fr 1fr; grid-template-rows:auto 1fr;}
+  .vs-center{grid-column:1 / -1; grid-row:1; padding-top:60px;}
+  .vs-side{clip-path:none !important; grid-row:2; padding:14px 16px !important; align-items:stretch; text-align:start !important;}
+  .vs-side.p2 .vs-who, .vs-side.p2 .vs-abilities li{flex-direction:row;}
+  .vs-abilities, .vs-hintline{display:none;}
+  .vs-portrait{width:min(100%,16vh);}
+}
+
+/* =========================================================================
+   1 V 1 — BATTLE CHROME
+   ========================================================================= */
+#pvp-controls{display:none; width:100%; justify-content:space-between; align-items:flex-end; gap:12px;}
+#screen-battle.pvp #pvp-controls{display:flex;}
+#screen-battle.pvp #dpad, #screen-battle.pvp #ability-bar, #screen-battle.pvp #gamepad-hint{display:none !important;}
+.pvp-side{display:flex; align-items:center; gap:10px;}
+.pvp-chip{font-family:'Anton',sans-serif; font-size:20px; padding:8px 12px; border-radius:8px; color:#0b0c12; letter-spacing:.04em;}
+.pvp-side.p1 .pvp-chip{background:var(--p1);}
+.pvp-side.p2 .pvp-chip{background:var(--p2);}
+.ability-bar{display:flex; gap:7px;}
+#screen-battle .ability-bar .ability-btn{width:96px; height:62px;}
+.hud-pchip{display:inline-block; font-family:'Anton',sans-serif; font-size:11px; letter-spacing:.05em; padding:1px 7px; border-radius:5px; margin:0 6px; vertical-align:1px; color:#0b0c12;}
+.hud-pchip.p1{background:var(--p1);} .hud-pchip.p2{background:var(--p2);}
+#screen-battle.pvp #hud-player{border-color:var(--p1); box-shadow:inset 0 3px 0 var(--p1);}
+#screen-battle.pvp #hud-opp{border-color:var(--p2); box-shadow:inset 0 3px 0 var(--p2);}
+
+.pvp-pause{
+  position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center; padding:16px;
+  background:rgba(7,8,14,.82); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+.pvp-pause.on{display:flex;}
+.pvp-pause-card{text-align:center; max-width:460px; display:flex; flex-direction:column; align-items:center; gap:14px;}
+.pvp-pause-card h3{font-size:clamp(28px,5vh,46px); color:var(--amber); letter-spacing:.05em; text-transform:uppercase;}
+.pvp-pause-card p{margin:0; color:#cfd3e6; line-height:1.5;}
+
+/* game over — extra 1 V 1 actions */
+.gameover-wrap .pvp-only{display:none;}
+.gameover-wrap.pvp .pvp-only{display:inline-flex;}
+.gameover-wrap.pvp .solo-only{display:none;}
+.go-portrait-tag{font-family:'Anton',sans-serif; font-size:12px; letter-spacing:.06em; padding:1px 8px; border-radius:5px; color:#0b0c12;}
+.go-portrait-tag.p1{background:var(--p1);} .go-portrait-tag.p2{background:var(--p2);}
+
+/* =========================================================================
+   INVENTORY TIP + CHARACTER DETAIL MODAL
+   ========================================================================= */
+.inventory-tip{
+  display:flex; align-items:center; gap:10px; margin-top:16px; padding:12px 16px; border-radius:12px;
+  background:rgba(255,255,255,.05); border:1px dashed #4a4f70; color:#c5cadf; font-size:clamp(12px,1.5vw,14px); font-weight:600; line-height:1.45;
+}
+.inventory-tip .tip-ico{font-size:1.3em;}
+
+.modal-overlay{background:rgba(6,7,12,.72); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);}
+#char-modal .modal{
+  --char-color:var(--amber);
+  max-width:min(560px,100%); padding:0; overflow:hidden; border:1px solid var(--char-color); border-radius:18px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--char-color) 20%,#171a2b),#171a2b 38%);
+  box-shadow:0 30px 90px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.05) inset;
+  display:flex; flex-direction:column; max-height:min(88vh,760px);
+}
+.cm-head{display:flex; gap:16px; align-items:center; padding:20px 22px 12px;}
+#char-modal .cm-head .char-square{width:clamp(72px,11vh,96px); height:clamp(72px,11vh,96px); flex:0 0 auto; border:3px solid var(--char-color); border-radius:8px; box-shadow:4px 4px 0 rgba(0,0,0,.4);}
+.cm-head h3{font-size:clamp(28px,4.6vh,40px); text-transform:uppercase; line-height:1;}
+.cm-desc{margin:0; padding:0 22px 8px; color:#b9bed6; font-size:13.5px; line-height:1.55;}
+.cm-body{overflow-y:auto; padding:6px 22px 4px; flex:1 1 auto; min-height:0;}
+#char-modal .modal-ability{display:grid; grid-template-columns:auto 1fr; gap:2px 12px; align-items:start; border-radius:12px; padding:10px 12px;}
+.cm-key{grid-row:1 / span 3; min-width:2.2em; text-align:center; font-family:'Anton',sans-serif; font-size:18px; padding:4px 8px; border-radius:8px; background:var(--char-color); color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.4);}
+.cm-foot{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 22px 18px; border-top:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.18);}
+.modal-hint{font-size:12px; color:var(--muted); font-weight:700;}
+#modal-close{padding:11px 26px; font-size:14px; background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600; border-color:var(--amber);}
+
+/* =========================================================================
+   SAVE SLOTS — same full-bleed treatment (was a boxed dialog)
+   ========================================================================= */
+#screen-save-slots.active{align-items:center; justify-content:center; padding:clamp(70px,10vh,110px) clamp(16px,5vw,90px) clamp(20px,4vh,50px);}
+.save-slot-wrap{
+  width:min(1200px,100%); max-height:none; overflow:visible; background:none; border:0; box-shadow:none; padding:0;
+}
+.save-slot-title{text-align:start; font-size:clamp(34px,7vh,76px); text-transform:uppercase; letter-spacing:.03em; text-shadow:0 4px 0 rgba(0,0,0,.4);}
+.save-slot-sub{text-align:start; margin-inline-start:0; max-width:64ch;}
+.save-slot-card{border-radius:6px; padding:clamp(16px,2.4vh,26px);}
+/* 1 V 1: let the two health bars use the full width (solo layout is left as-is) */
+#screen-battle.pvp #battle-topbar{width:100%;}
 </style>
 </head>
 <body>
@@ -911,21 +1404,104 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
   <!-- ============ MAIN MENU ============ -->
   <div id="screen-menu" class="screen active">
+    <div class="fs-bg" aria-hidden="true"><div class="fs-slash"></div><div class="bubbles"></div></div>
     <button class="btn btn-secondary menu-save-slots-top" id="btn-menu-save-slots"><span class="btn-icon">💾</span><span data-i18n="nav_save_slots">Save Slots</span></button>
-    <div class="menu-wrap">
-      <h1 class="menu-title">DISHWASHING LIQUID BATTLES</h1>
-      <div class="menu-buttons">
-        <button class="btn btn-primary" id="btn-menu-play"><span class="btn-icon">▶</span><span data-i18n="nav_play">Play</span></button>
-        <button class="btn btn-secondary" data-nav="inventory"><span class="btn-icon">🎒</span><span data-i18n="nav_inventory">Inventory</span></button>
-        <button class="btn btn-secondary" data-nav="instructions"><span class="btn-icon">📖</span><span data-i18n="nav_instructions">Instructions</span></button>
-        <button class="btn btn-secondary" data-nav="settings"><span class="btn-icon">⚙️</span><span data-i18n="nav_settings">Settings</span></button>
-        <button class="btn btn-secondary menu-code-highlight" style="display:flex !important;" id="btn-menu-code"><span class="btn-icon">🔑</span><span data-i18n="nav_code">Code</span></button>
+    <div class="menu-stage">
+      <div class="menu-left">
+        <h1 class="menu-title"><span>Dishwashing</span> <span>Liquid</span> <span>Battles</span></h1>
+        <nav class="menu-list">
+          <button class="menu-item primary" id="btn-menu-play" data-gp-default><span class="mi-icon">▶</span><span data-i18n="nav_play">Play</span></button>
+          <button class="menu-item" data-nav="inventory"><span class="mi-icon">🎒</span><span data-i18n="nav_inventory">Inventory</span></button>
+          <button class="menu-item" data-nav="instructions"><span class="mi-icon">📖</span><span data-i18n="nav_instructions">Instructions</span></button>
+          <button class="menu-item" data-nav="settings"><span class="mi-icon">⚙️</span><span data-i18n="nav_settings">Settings</span></button>
+          <button class="menu-item menu-code-highlight" id="btn-menu-code"><span class="mi-icon">🔑</span><span data-i18n="nav_code">Code</span></button>
+        </nav>
       </div>
+      <button class="menu-hero" id="menu-hero" data-nav="inventory">
+        <div class="hero-frame"><div class="hero-art" id="menu-hero-art"></div></div>
+        <div class="hero-name" id="menu-hero-name"></div>
+        <div class="hero-row"><span class="hero-hp" id="menu-hero-hp"></span><span class="hero-change" data-i18n="menu_change_fighter">Change fighter</span></div>
+      </button>
     </div>
   </div>
 
+  <!-- ============ MODE SELECT (Play) ============ -->
+  <div id="screen-mode" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <h2 class="mode-heading" data-i18n="mode_title">Choose a mode</h2>
+    <div class="split-stage">
+      <button class="split-card left mode-practice" id="btn-mode-practice" data-gp-default>
+        <span class="mode-name" data-i18n="mode_practice">Practice</span>
+        <span class="mode-desc" data-i18n="mode_practice_desc">Fight a random opponent using your equipped fighter.</span>
+        <span class="mode-chip"><span class="mode-chip-art" id="mode-chip-art"></span><span id="mode-chip-text"></span></span>
+        <span class="mode-arrow">▶</span>
+      </button>
+      <button class="split-card right mode-friend" id="btn-mode-friend">
+        <span class="mode-name">1 V 1 Friend</span>
+        <span class="mode-desc" data-i18n="mode_friend_desc">Two players, two controllers. Pick your fighters and settle it.</span>
+        <span class="mode-pads"><span class="mode-pad p1" id="mode-pad-1">P1</span><span class="mode-pad p2" id="mode-pad-2">P2</span><span id="mode-pads-text"></span></span>
+        <span class="mode-tag" data-i18n="mode_controller_only">🎮 Controller only</span>
+        <span class="mode-arrow">▶</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ 1 V 1: WHO IS PLAYER 1 / 2 ============ -->
+  <div id="screen-pair" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="split-stage">
+      <div class="split-card left pair-half p1 state-waiting" id="pair-p1">
+        <div class="pair-num" aria-hidden="true">1</div>
+        <div class="pair-who" id="pair-p1-who"></div>
+        <svg class="pair-glyph" viewBox="0 0 120 80" aria-hidden="true"><use href="#pad-glyph"/></svg>
+        <div class="pair-state" id="pair-p1-state"></div>
+        <div class="pair-brand" id="pair-p1-brand"></div>
+      </div>
+      <div class="split-card right pair-half p2 state-waiting" id="pair-p2">
+        <div class="pair-num" aria-hidden="true">2</div>
+        <div class="pair-who" id="pair-p2-who"></div>
+        <svg class="pair-glyph" viewBox="0 0 120 80" aria-hidden="true"><use href="#pad-glyph"/></svg>
+        <div class="pair-state" id="pair-p2-state"></div>
+        <div class="pair-brand" id="pair-p2-brand"></div>
+      </div>
+    </div>
+    <div class="pair-center">
+      <h2 id="pair-title"></h2>
+      <p id="pair-sub"></p>
+      <div class="pair-hint" id="pair-hint"></div>
+    </div>
+  </div>
+
+  <!-- ============ 1 V 1: FIGHTER SELECT ============ -->
+  <div id="screen-versus" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="vs-stage">
+      <section class="vs-side p1" id="vs-side-1"></section>
+      <section class="vs-center">
+        <h2 class="vs-heading" data-i18n="vs_title">Choose your fighters</h2>
+        <div class="vs-grid" id="vs-grid"></div>
+        <p class="vs-note" id="vs-note"></p>
+      </section>
+      <section class="vs-side p2" id="vs-side-2"></section>
+    </div>
+    <div class="vs-splash" id="vs-splash"></div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="pad-glyph" viewBox="0 0 120 80">
+      <path class="pg-line pg-fill" d="M30 12H90C101 12 108 18 111 28L117 55C119 66 113 74 103 74C96 74 92 71 88 64L84 58H36L32 64C28 71 24 74 17 74C7 74 1 66 3 55L9 28C12 18 19 12 30 12Z"/>
+      <path class="pg-line" d="M31 24h6v6h6v6h-6v6h-6v-6h-6v-6h6z" transform="translate(-2 -3)"/>
+      <circle class="pg-dot" cx="88" cy="26" r="3.6"/><circle class="pg-dot" cx="96" cy="33" r="3.6"/><circle class="pg-dot" cx="88" cy="40" r="3.6"/><circle class="pg-dot" cx="80" cy="33" r="3.6"/>
+      <circle class="pg-line" cx="48" cy="46" r="5"/><circle class="pg-line" cx="70" cy="46" r="5"/>
+    </symbol></defs></svg>
+
+  
   <!-- ============ SAVE SLOT PICKER ============ -->
   <div id="screen-save-slots" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
     <div class="save-slot-wrap">
       <h1 class="save-slot-title" data-i18n="save_slots_title">Choose a Save Slot</h1>
       <p class="save-slot-sub" data-i18n="save_slots_sub">Choose which save slot you want to play. Your progress, equipped character, and unlocks are stored separately in each slot.</p>
@@ -955,6 +1531,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       </div>
       <div id="inventory-grid" class="char-grid"></div>
       <div class="inventory-legend"><span class="legend-dot owned"></span> <span data-i18n="inv_legend_owned">Owned</span> <span class="legend-dot locked"></span> <span data-i18n="inv_legend_locked">Locked</span></div>
+      <div class="inventory-tip" id="inventory-tip"></div>
     </div></div>
   </div>
 
@@ -1033,6 +1610,10 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       </div>
       <div id="ability-bar"></div>
       <div id="gamepad-hint"><span>🎮</span><span data-i18n="battle_jump_hint">Jump</span><span class="gp-jump-key" id="gp-jump-key">A</span></div>
+      <div id="pvp-controls">
+        <div class="pvp-side p1"><span class="pvp-chip">P1</span><div class="ability-bar" id="ability-bar-p1"></div></div>
+        <div class="pvp-side p2"><div class="ability-bar" id="ability-bar-p2"></div><span class="pvp-chip">P2</span></div>
+      </div>
     </div>
   </div>
 
@@ -1043,13 +1624,21 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       <div class="go-portraits" id="go-portraits"></div>
       <p class="go-sub" id="go-sub"></p>
       <div class="go-buttons">
-        <button class="btn btn-primary" id="go-play-another-btn" data-i18n="go_play_another">Play Another</button>
+        <button class="btn btn-primary solo-only" id="go-play-another-btn" data-i18n="go_play_another">Play Another</button>
+        <button class="btn btn-primary pvp-only" id="go-rematch-btn" data-i18n="go_rematch">Rematch</button>
+        <button class="btn btn-secondary pvp-only" id="go-change-btn" data-i18n="go_change_fighters">Change fighters</button>
         <button class="btn btn-secondary" data-nav="menu" data-i18n="go_return_menu">Return to Menu</button>
       </div>
     </div>
   </div>
 
 </div>
+
+<div id="pvp-pause" class="pvp-pause"><div class="pvp-pause-card">
+  <h3 data-i18n="pvp_paused">Controller disconnected</h3>
+  <p id="pvp-pause-sub"></p>
+  <button class="btn btn-secondary" id="pvp-quit" data-i18n="pvp_quit">Quit to menu</button>
+</div></div>
 
 <!-- Unlock code modal -->
 <div id="code-modal" class="modal-overlay hidden">
@@ -1387,6 +1976,12 @@ function applyTranslations(){
   if(document.getElementById('screen-settings').classList.contains('active')) renderSettingsScreen();
   const modal = document.getElementById('char-modal');
   if(modal && !modal.classList.contains('hidden') && modal.dataset.charId) openCharModal(modal.dataset.charId);
+  renderMenuHero();
+  renderInventoryTip();
+  const scr = activeScreenName();
+  if(scr === 'mode') renderModeScreen();
+  if(scr === 'pair') renderPairing(true);
+  if(scr === 'versus') renderVersus();
 }
 function renderInventoryHint(){
   const eqDef = CHARACTERS[SAVE.equipped];
@@ -1655,15 +2250,21 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','save-slots','inventory','instructions','settings','battle','gameover'];
+const screens = ['menu','mode','pair','versus','save-slots','inventory','instructions','settings','battle','gameover'];
 function showScreen(name){
+  // Fighter select needs both controllers still present — otherwise re-pair.
+  if(name === 'versus' && !versusPadsPresent()) name = 'pair';
   screens.forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('active', s===name);
   });
+  if(name!=='versus') hideVersusSplash();
   if(name==='save-slots') renderSaveSlots();
   if(name==='inventory') renderInventory();
   if(name==='settings') renderSettingsScreen();
-  if(name==='menu') updateCurrentSaveSlotLabel();
+  if(name==='menu'){ updateCurrentSaveSlotLabel(); renderMenuHero(); }
+  if(name==='mode') renderModeScreen();
+  if(name==='pair') startPairing();
+  if(name==='versus') startVersusSelect();
   if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
 document.addEventListener('click', (e)=>{
@@ -1679,10 +2280,12 @@ function openCodeModal(){
   if(result){ result.textContent=''; result.className='code-result'; }
   if(input){ input.value=''; setTimeout(()=>input.focus(), 0); }
   modal.classList.remove('hidden');
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
 function closeCodeModal(){
   const modal = document.getElementById('code-modal');
   modal.classList.add('hidden');
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
 function submitUnlockCode(){
   const input = document.getElementById('code-input');
@@ -1714,6 +2317,7 @@ function renderInventory(){
   const equipped = SAVE.equipped;
   const eqDef = CHARACTERS[equipped];
   renderInventoryHint();
+  renderInventoryTip();
 
   ROSTER_ORDER.forEach(id=>{
     const def = CHARACTERS[id];
@@ -1728,7 +2332,9 @@ function renderInventory(){
         <div class="char-name">${def.name}</div>
         <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
         <div class="lock-badge">${selected ? t('inv_ready') : t('inv_click_equip')}</div>`;
-      card.onclick = ()=>{ equipCharacter(id); openCharModal(id); };
+      card.dataset.id = id;
+      if(selected) card.setAttribute('data-gp-default','');
+      card.onclick = ()=> handleCardTap(id);
     } else {
       // Locked fighters are kept a mystery: no name, no artwork, just a
       // silhouette placeholder — a little surprise for later.
@@ -1742,7 +2348,28 @@ function renderInventory(){
   });
 }
 
+// Single tap equips a fighter; a quick second tap on the same fighter opens
+// their stats & attacks. Works for mouse, touch and controller (A / ✕ / B).
+const DOUBLE_TAP_MS = 380;
+let lastCardTap = { id:null, t:0 };
+function handleCardTap(id){
+  const nowT = performance.now();
+  const isDouble = lastCardTap.id === id && (nowT - lastCardTap.t) < DOUBLE_TAP_MS;
+  lastCardTap = isDouble ? { id:null, t:0 } : { id, t:nowT };
+  if(isDouble){ openCharModal(id); return; }
+  equipCharacter(id);
+}
+function renderInventoryTip(){
+  const el = document.getElementById('inventory-tip');
+  if(!el) return;
+  const msg = gamepadState.connected
+    ? t('inv_tip_pad').replace('{a}', faceLabel(JUMP_POS)).replace('{y}', faceLabel(GP_INSPECT_POS))
+    : t('inv_tip');
+  el.innerHTML = `<span class="tip-ico">👆</span><span>${msg}</span>`;
+}
+
 // Character detail modal.
+let modalReturnKey = null;
 function openCharModal(id){
   const def = CHARACTERS[id];
   const inner = document.getElementById('char-modal-inner');
@@ -1751,21 +2378,30 @@ function openCharModal(id){
     let meta = `${t('modal_cooldown_label')} ${a.cooldown ? (a.cooldown/1000)+'s' : t('modal_cooldown_none')}`;
     if(a.damage) meta += ` · ${t('modal_damage_label')} ${a.damage}`;
     if(a.heal) meta += ` · ${t('modal_heal_label')} ${a.heal} HP`;
-    return `<div class="modal-ability"><div class="ab-name">${k} — ${a.name}</div><div class="ab-meta">${meta}</div><div class="ab-meta">${a.desc}</div></div>`;
+    const keyLabel = gamepadState.connected ? abilityButtonLabel(k) : k;
+    return `<div class="modal-ability"><div class="cm-key">${keyLabel}</div><div class="ab-name">${a.name}</div><div class="ab-meta">${meta}</div><div class="ab-meta">${a.desc}</div></div>`;
   }).join('');
+  const hint = gamepadState.connected ? `<span class="modal-hint">${t('modal_pad_close').replace('{b}', faceLabel(ABILITY_POS.R))}</span>` : '<span></span>';
+  inner.style.setProperty('--char-color', def.color);
   inner.innerHTML = `
-    <div class="modal-top"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP</div></div></div>
-    <p style="color:var(--muted); margin-top:12px;">${def.description}</p>${abilityRows}
-    <div style="text-align:center;margin-top:16px;"><button class="btn btn-secondary btn-small" id="modal-close">${t('modal_close')}</button></div>`;
+    <div class="cm-head"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP</div></div></div>
+    <p class="cm-desc">${def.description}</p>
+    <div class="cm-body">${abilityRows}</div>
+    <div class="cm-foot">${hint}<button class="btn btn-small btn-secondary" id="modal-close">${t('modal_close')}</button></div>`;
   document.getElementById('modal-close').onclick = closeCharModal;
   const modalEl = document.getElementById('char-modal');
+  const wasHidden = modalEl.classList.contains('hidden');
   modalEl.dataset.charId = id;
   modalEl.classList.remove('hidden');
+  if(wasHidden){ modalReturnKey = id; resetGpMenuFocus(); }
 }
 function closeCharModal(){
   const modalEl = document.getElementById('char-modal');
   modalEl.classList.add('hidden');
   delete modalEl.dataset.charId;
+  resetGpMenuFocus();
+  gpFocusById(modalReturnKey);   // controller focus returns to the fighter you inspected
+  modalReturnKey = null;
 }
 document.getElementById('char-modal').addEventListener('click', e=>{ if(e.target.id === 'char-modal') closeCharModal(); });
 
@@ -1780,15 +2416,15 @@ function startRandomBattle(){
   const botId = botPool[Math.floor(Math.random()*botPool.length)];
   startBattle(playerId, botId);
 }
-document.getElementById('btn-menu-play').addEventListener('click', startRandomBattle);
+document.getElementById('btn-menu-play').addEventListener('click', ()=> showScreen('mode'));
 
 /* =========================================================================
    SECTION: FIGHTER ENTITY
    ========================================================================= */
-function makeFighter(charId, isBot, spawnX){
+function makeFighter(charId, isBot, spawnX, idOverride){
   const def = CHARACTERS[charId];
   return {
-    def, id: (isBot ? 'bot' : 'player'),
+    def, id: idOverride || (isBot ? 'bot' : 'player'),
     isBot,
     x: spawnX, y: 380,
     vx:0, vy:0,
@@ -1848,9 +2484,20 @@ function debugReport(hypothesisId, location, msg, data){
 }
 // #endregion
 
-function startBattle(playerCharId, botCharId){
+function startBattle(playerCharId, botCharId, opts){
+  // 1 V 1 Friend: Player 2 is a second human (same 'bot' owner id, no AI).
+  const pvp = !!(opts && opts.pvp);
+  state.pvp = pvp;
+  state.pvpPaused = false;
+  document.getElementById('pvp-pause').classList.remove('on');
+  document.getElementById('screen-battle').classList.toggle('pvp', pvp);
   state.player = makeFighter(playerCharId, false, 250);
-  state.bot = makeFighter(botCharId, true, 950);
+  state.bot = pvp ? makeFighter(botCharId, false, 950, 'bot') : makeFighter(botCharId, true, 950);
+  if(pvp){
+    state.bot.facing = -1;
+    versus.lastPick = [playerCharId, botCharId];
+    versus.keys.forEach(k => { k.left = k.right = k.up = k.down = false; });
+  }
   state.projectiles = [];
   state.walls = [];
   state.missiles = [];
@@ -1858,8 +2505,9 @@ function startBattle(playerCharId, botCharId){
   buildArenaStatic();
   buildFighterDOM(state.player);
   buildFighterDOM(state.bot);
+  arenaEl.classList.remove('echolocation-mode');
   updateHudNames();
-  buildAbilityBar();
+  if(pvp) buildPvpAbilityBars(); else buildAbilityBar();
   state.mode = 'battle';
   state.lastTime = 0;
   showScreen('battle');
@@ -1988,8 +2636,13 @@ window.addEventListener('resize', rescaleArena);
    SECTION: HUD
    ========================================================================= */
 function updateHudNames(){
-  document.getElementById('hud-player-name').textContent = state.player.def.name;
-  document.getElementById('hud-opp-name').textContent = state.bot.def.name;
+  if(state.pvp){
+    document.getElementById('hud-player-name').innerHTML = `<span class="hud-pchip p1">P1</span>${state.player.def.name}`;
+    document.getElementById('hud-opp-name').innerHTML = `${state.bot.def.name}<span class="hud-pchip p2">P2</span>`;
+  } else {
+    document.getElementById('hud-player-name').textContent = state.player.def.name;
+    document.getElementById('hud-opp-name').textContent = state.bot.def.name;
+  }
   document.getElementById('hud-player-img').innerHTML = squareInner(state.player.def);
   document.getElementById('hud-opp-img').innerHTML = squareInner(state.bot.def);
 }
@@ -2029,52 +2682,60 @@ function buildAbilityBar(){
   updateGamepadHint();
 }
 function updateAbilityBar(){
-  const bar = document.getElementById('ability-bar');
+  if(state.pvp){
+    updateAbilityBarFor(document.getElementById('ability-bar-p1'), state.player, versus.slots[0].brand);
+    updateAbilityBarFor(document.getElementById('ability-bar-p2'), state.bot, versus.slots[1].brand);
+    return;
+  }
+  updateAbilityBarFor(document.getElementById('ability-bar'), state.player, null);
+}
+function updateAbilityBarFor(bar, fighter, brand){
+  if(!bar || !fighter) return;
   const t = now();
   ['E','Q','R'].forEach(k=>{
     const btn = bar.querySelector(`[data-key="${k}"]`);
     if(!btn) return;
-    const a = state.player.def.abilities[k];
+    const a = fighter.def.abilities[k];
     const overlay = btn.querySelector('.cd-overlay');
     const keyEl = btn.querySelector('.ab-key');
     if(keyEl){
-      keyEl.textContent = gamepadState.connected ? abilityButtonLabel(k) : k;
-      btn.classList.toggle('gp-mode', gamepadState.connected);
+      keyEl.textContent = brand ? faceLabelFor(brand, ABILITY_POS[k]) : (gamepadState.connected ? abilityButtonLabel(k) : k);
+      btn.classList.toggle('gp-mode', !!brand || gamepadState.connected);
     }
     if(a.type==='toggle'){
-      btn.classList.toggle('flight-on', !!state.player.flight);
+      btn.classList.toggle('flight-on', !!fighter.flight);
       overlay.style.display='none';
-      overlay.textContent = state.player.flight ? 'ON' : 'OFF';
+      overlay.textContent = fighter.flight ? 'ON' : 'OFF';
       overlay.style.display='flex';
-      overlay.style.background = state.player.flight ? 'rgba(60,120,220,.55)' : 'rgba(0,0,0,.5)';
+      overlay.style.background = fighter.flight ? 'rgba(60,120,220,.55)' : 'rgba(0,0,0,.5)';
       return;
     }
-    if(a.type==='timedToggle' && state.player.flight){
+    if(a.type==='timedToggle' && fighter.flight){
       btn.classList.add('flight-on');
       overlay.style.display='flex';
-      overlay.textContent = Math.max(0,(state.player.flightExpire-t)/1000).toFixed(1)+'s';
+      overlay.textContent = Math.max(0,(fighter.flightExpire-t)/1000).toFixed(1)+'s';
       overlay.style.background='rgba(60,120,220,.55)';
       return;
     }
-    if(a.type==='block' && state.player.blocking){
+    if(a.type==='block' && fighter.blocking){
       overlay.style.display='flex';
       overlay.textContent = 'BLOCK';
       overlay.style.background='rgba(76,139,245,.45)';
       return;
     }
-    if(a.type==='chargeSlam' && state.player.bpCharging){
+    if(a.type==='chargeSlam' && fighter.bpCharging){
       overlay.style.display='flex';
-      overlay.textContent = 'CHARGE '+Math.max(0,(state.player.bpChargeEnd-t)/1000).toFixed(1)+'s';
+      overlay.textContent = 'CHARGE '+Math.max(0,(fighter.bpChargeEnd-t)/1000).toFixed(1)+'s';
       overlay.style.background='rgba(138,79,224,.55)';
       return;
     }
-    if(a.type==='chargeSlam' && state.player.bpSlamPending){
+    if(a.type==='chargeSlam' && fighter.bpSlamPending){
       overlay.style.display='flex';
       overlay.textContent = 'SLAM!';
       overlay.style.background='rgba(232,217,255,.36)';
       return;
     }
-    const remain = state.player.cooldowns[k] - t;
+    const remain = fighter.cooldowns[k] - t;
     if(remain > 0){
       overlay.style.display='flex';
       overlay.textContent = (remain/1000).toFixed(1)+'s';
@@ -2356,7 +3017,7 @@ function updateSpecialViz(f){
   f.el.classList.toggle('cap-blocking', !!f.blocking);
   f.el.classList.toggle('bp-charging', !!f.bpCharging);
   f.el.classList.toggle('bp-slam-pending', !!f.bpSlamPending);
-  if(f === state.player){
+  if(f === state.player && !state.pvp){
     const echoOn = f.def.id === 'daredevil';
     arenaEl.classList.toggle('echolocation-mode', echoOn);
     if(echoOn){
@@ -2652,6 +3313,18 @@ function sfx(kind='ability'){
       case 'dodge':
         aNoise(ctx, t, 0.08, 0.12, 'highpass', 3800, 1600, 1.4);
         aTone(ctx, t, 'sine', 700, 1000, 0.06, 0.05);
+        return;
+
+      /* ---------- menu UI ---------- */
+      case 'ui_tick':
+        aTone(ctx, t, 'square', 760, 900, 0.045, 0.05);
+        return;
+      case 'ui_lock':
+        aTone(ctx, t, 'square', 520, 1040, 0.12, 0.09);
+        aTone(ctx, t+0.05, 'triangle', 1040, 1560, 0.14, 0.07);
+        return;
+      case 'ui_back':
+        aTone(ctx, t, 'triangle', 520, 300, 0.09, 0.07);
         return;
 
       /* ---------- countdown ---------- */
@@ -4203,6 +4876,8 @@ function endBattle(winnerSide, reason){
   state.mode = 'ended';
   state.countdown = false;
   battleToken++; // invalidate any pending countdown steps
+  state.pvpPaused = false;
+  document.getElementById('pvp-pause').classList.remove('on');
   state.missiles.forEach(m => { if(m.el) m.el.remove(); });
   state.missiles = [];
   const ov = document.getElementById('countdown-overlay');
@@ -4215,20 +4890,29 @@ function endBattle(winnerSide, reason){
   const loserDef = winnerSide==='player' ? state.bot.def : state.player.def;
   const badge = document.getElementById('go-badge');
   const isWin = winnerSide === 'player';
-  badge.textContent = isWin ? t('go_victory') : t('go_defeat');
-  badge.className = 'go-badge ' + (isWin ? 'win' : 'lose');
+  const isPvp = !!state.pvp;
+  document.querySelector('.gameover-wrap').classList.toggle('pvp', isPvp);
+  if(isPvp){
+    badge.textContent = isWin ? t('go_p1_wins') : t('go_p2_wins');
+    badge.className = 'go-badge win';
+  } else {
+    badge.textContent = isWin ? t('go_victory') : t('go_defeat');
+    badge.className = 'go-badge ' + (isWin ? 'win' : 'lose');
+  }
+  const winTag = isPvp ? `<span class="go-portrait-tag ${isWin ? 'p1' : 'p2'}">${isWin ? 'P1' : 'P2'}</span>` : '';
+  const loseTag = isPvp ? `<span class="go-portrait-tag ${isWin ? 'p2' : 'p1'}">${isWin ? 'P2' : 'P1'}</span>` : '';
   document.getElementById('go-sub').textContent =
     t('go_result_template').replace('{w}', winnerDef.name).replace('{l}', loserDef.name);
   const portraits = document.getElementById('go-portraits');
   portraits.innerHTML = `
     <div class="go-portrait winner">
       <div class="go-portrait-square">${squareInner(winnerDef)}</div>
-      <div class="go-portrait-name">${winnerDef.name}</div>
+      <div class="go-portrait-name">${winnerDef.name}</div>${winTag}
     </div>
     <div class="go-vs">VS</div>
     <div class="go-portrait loser">
       <div class="go-portrait-square">${squareInner(loserDef)}</div>
-      <div class="go-portrait-name">${loserDef.name}</div>
+      <div class="go-portrait-name">${loserDef.name}</div>${loseTag}
     </div>
   `;
   const loser = winnerSide==='player' ? state.bot : state.player;
@@ -4350,7 +5034,13 @@ window.addEventListener('keydown', (e)=>{
     renderSettingsScreen();
     return;
   }
-  if(state.mode !== 'battle') return;
+  if(e.key === 'Escape'){
+    const modal = activeModalEl();
+    if(modal){ const c = modal.querySelector('#modal-close, #code-close'); if(c) c.click(); return; }
+    const back = document.querySelector('.screen.active .fs-back');
+    if(back && state.mode !== 'battle'){ back.click(); return; }
+  }
+  if(state.mode !== 'battle' || state.pvp) return; // 1 V 1 is controller only
   const k = e.key.toLowerCase();
   if(k===KEYBINDS.left || k==='arrowleft') keysHeld.left = true;
   if(k===KEYBINDS.right || k==='arrowright') keysHeld.right = true;
@@ -4409,6 +5099,7 @@ function renderSettingsScreen(){
       const btn = document.createElement('button');
       btn.className = 'lang-btn' + (lang.code === currentLang ? ' active' : '');
       btn.textContent = lang.label;
+      btn.dataset.id = 'lang-' + lang.code;
       btn.onclick = ()=> setLanguage(lang.code);
       langGrid.appendChild(btn);
     });
@@ -4460,10 +5151,11 @@ function detectGamepadBrand(gp){
   if(/nintendo|switch|joy-con|joycon|pro controller|057e/.test(id)) return 'nintendo';
   return 'generic';
 }
-function faceLabel(pos){
-  const table = FACE_BUTTON_LABELS[gamepadState.brand] || FACE_BUTTON_LABELS.generic;
+function faceLabelFor(brand, pos){
+  const table = FACE_BUTTON_LABELS[brand] || FACE_BUTTON_LABELS.generic;
   return table[pos];
 }
+function faceLabel(pos){ return faceLabelFor(gamepadState.brand, pos); }
 function abilityButtonLabel(key){ return faceLabel(ABILITY_POS[key]); }
 function jumpButtonLabel(){ return faceLabel(JUMP_POS); }
 
@@ -4519,33 +5211,96 @@ window.addEventListener('gamepaddisconnected', (e)=>{
 });
 
 let gamepadApiBlocked = false;
-function pollGamepad(){
-  if(gamepadApiBlocked) return;
-  if(!navigator.getGamepads) return;
-  let pads;
+let rawPads = [];      // last navigator.getGamepads() snapshot (may contain nulls)
+let livePads = [];     // connected pads only
+const padState = {};   // gp.index -> { cur:[bool], prev:[bool] } — one shared source of truth for button edges
+const PAD_BACK_BTN = 8; // Select / View / Share — "go back" on screens where every other button is in use
+
+function refreshPads(){
+  if(gamepadApiBlocked || !navigator.getGamepads){ rawPads = []; livePads = []; return false; }
+  let raw;
   try{
-    pads = navigator.getGamepads();
+    raw = navigator.getGamepads();
   }catch(err){
     // Some embedding contexts (e.g. a sandboxed preview iframe) disallow the
     // Gamepad API via Permissions-Policy. Fail silently and stop polling
-    // rather than crashing the render loop — keyboard/touch still work,
-    // and controller support works normally once the file is opened
-    // directly in a regular browser tab/window.
-    gamepadApiBlocked = true;
-    return;
+    // rather than crashing the render loop — keyboard/touch still work.
+    gamepadApiBlocked = true; rawPads = []; livePads = []; return false;
   }
+  rawPads = Array.from(raw || []);
+  livePads = rawPads.filter(gp => gp && gp.connected !== false);
+  const seen = {};
+  livePads.forEach(gp=>{
+    seen[gp.index] = true;
+    const cur = Array.from(gp.buttons || [], b => !!(b && b.pressed));
+    const ps = padState[gp.index];
+    // First sighting: treat whatever is held as "already down" so the press
+    // that woke the controller up doesn't also click something.
+    if(!ps) padState[gp.index] = { cur, prev: cur.slice() };
+    else { ps.prev = ps.cur; ps.cur = cur; }
+  });
+  Object.keys(padState).forEach(k => { if(!seen[k]) delete padState[k]; });
+  return true;
+}
+function btnHeld(idx, b){ const ps = padState[idx]; return !!(ps && ps.cur[b]); }
+function btnEdge(idx, b){ const ps = padState[idx]; return !!(ps && ps.cur[b] && !ps.prev[b]); }
+function anyBtnHeld(idx){ const ps = padState[idx]; return !!(ps && ps.cur.some(Boolean)); }
+function anyClaimEdge(idx){
+  const ps = padState[idx];
+  return !!(ps && ps.cur.some((v,i)=> v && !ps.prev[i] && i !== PAD_BACK_BTN));
+}
+function padDir(gp){
+  const ax = gp.axes[0] || 0, ay = gp.axes[1] || 0;
+  const b = i => !!(gp.buttons[i] && gp.buttons[i].pressed);
+  return {
+    left:  ax < -GAMEPAD_DEADZONE || b(14),
+    right: ax >  GAMEPAD_DEADZONE || b(15),
+    up:    ay < -GAMEPAD_DEADZONE || b(12),
+    down:  ay >  GAMEPAD_DEADZONE || b(13)
+  };
+}
+function livePadByIndex(idx){ return livePads.find(g => g.index === idx) || null; }
+function activeScreenName(){
+  const el = document.querySelector('.screen.active');
+  return el ? el.id.replace('screen-','') : '';
+}
 
-  // Some browsers (notably Firefox) don't reliably fire gamepadconnected
-  // until a button is pressed, so fall back to scanning every frame.
+function pollGamepad(){
+  if(!refreshPads()) return;
+
+  // Legacy single-pad tracker: drives solo play and the button labels.
   if(!gamepadState.connected){
-    for(let i=0;i<pads.length;i++){
-      if(pads[i]){ setGamepadConnected(i, pads[i]); break; }
+    for(let i=0;i<rawPads.length;i++){
+      if(rawPads[i]){ setGamepadConnected(i, rawPads[i]); break; }
     }
+  } else if(!rawPads[gamepadState.index]){
+    setGamepadDisconnected();
   }
-  if(!gamepadState.connected) return;
 
-  const gp = pads[gamepadState.index];
-  if(!gp){ setGamepadDisconnected(); return; }
+  const screen = activeScreenName();
+  if(screen === 'mode') updateModeStatus(false);
+
+  if(state.mode === 'battle' && state.pvp){ pollPvpBattle(); return; }
+  if(screen === 'pair'){ pollPairing(); return; }
+  if(screen === 'versus'){ pollVersusSelect(); return; }
+  if(state.mode === 'battle'){ pollSoloBattle(); return; }
+
+  // Keep the solo-battle edge state fresh outside battle so a button held
+  // through a menu doesn't fire the instant a fight starts.
+  const solo = gamepadState.connected ? rawPads[gamepadState.index] : null;
+  if(solo){
+    [JUMP_POS, ABILITY_POS.E, ABILITY_POS.Q, ABILITY_POS.R].forEach(i=>{
+      gpPrevPressed[i] = !!(solo.buttons[i] && solo.buttons[i].pressed);
+    });
+  }
+  if(screen === 'battle') return; // KO sequence still playing — no menu nav yet
+  livePads.forEach(gp => handleGamepadMenuNav(gp)); // every connected pad can drive the menus
+}
+
+function pollSoloBattle(){
+  if(!gamepadState.connected) return;
+  const gp = rawPads[gamepadState.index];
+  if(!gp) return;
 
   // Left stick / d-pad movement
   const axisX = gp.axes[0] || 0;
@@ -4560,8 +5315,7 @@ function pollGamepad(){
   const wantUp = axisY < -GAMEPAD_DEADZONE || dpadUp;
   const wasUp = gpKeys.up;
   gpKeys.up = wantUp;
-  // Down: drop through a platform on the ground, or descend while flying —
-  // same stick/d-pad reused for the on-screen down control.
+  // Down: drop through a platform on the ground, or descend while flying.
   gpKeys.down = axisY > GAMEPAD_DEADZONE || dpadDown;
 
   // Jump: bottom face button, same rising-edge behavior as the keyboard.
@@ -4570,12 +5324,12 @@ function pollGamepad(){
   const jumpWasPressed = !!gpPrevPressed[JUMP_POS];
   gpPrevPressed[JUMP_POS] = jumpPressed;
   const stickJumpEdge = wantUp && !wasUp;
-  if(state.mode === 'battle' && state.player && (jumpPressed && !jumpWasPressed || stickJumpEdge)
+  if(state.player && (jumpPressed && !jumpWasPressed || stickJumpEdge)
      && state.player.onGround && !state.player.flight){
     state.player.jumpQueued = true;
   }
 
-  if(state.mode === 'battle' && state.player && state.bot){
+  if(state.player && state.bot){
     ['E','Q','R'].forEach(key=>{
       const idx = ABILITY_POS[key];
       const btn = gp.buttons[idx];
@@ -4584,34 +5338,33 @@ function pollGamepad(){
       gpPrevPressed[idx] = pressed;
       if(pressed && !was) tryUseAbility(state.player, state.bot, key);
     });
-  } else {
-    // Keep edge-state fresh even outside battle so a held button doesn't
-    // fire the instant a fight starts.
-    [ABILITY_POS.E, ABILITY_POS.Q, ABILITY_POS.R].forEach(idx=>{
-      const btn = gp.buttons[idx];
-      gpPrevPressed[idx] = !!(btn && btn.pressed);
-    });
-    // Controller navigation of the menu / inventory / instructions / settings screens.
-    handleGamepadMenuNav(gp, axisX, axisY, dpadUp, dpadLeft, dpadRight);
   }
 }
 
 /* =========================================================================
    SECTION: CONTROLLER MENU NAVIGATION
-   Lets the Xbox/PlayStation/Nintendo controller move a focus highlight
-   around buttons, fighter cards, key-bind rows and language options on
-   every non-battle screen, and "click" whatever's focused.
+   Any connected controller can move a focus highlight around buttons,
+   fighter cards, key-bind rows and language options on every non-battle
+   screen, and "click" whatever's focused. Open modals capture the focus
+   (so a fighter's stats popup can be closed from the controller).
+     bottom face button (A / ✕ / B)  = select
+     right face button  (B / ○ / A)  = back / close
+     top face button    (Y / △ / X)  = inspect the focused fighter
    ========================================================================= */
 const GP_NAV_INITIAL_MS = 380; // delay before the held direction starts repeating
 const GP_NAV_REPEAT_MS = 190;
+const GP_INSPECT_POS = 3;
 let gpFocusEl = null;
-let gpNavHeldDir = null;
-let gpNavNextMoveAt = 0;
+const padNav = {};             // gp.index -> { dir, next } — per-pad stick repeat timers
 
+function activeModalEl(){
+  return Array.from(document.querySelectorAll('.modal-overlay')).find(m => !m.classList.contains('hidden')) || null;
+}
 function gpFocusableElements(){
-  const activeScreen = document.querySelector('.screen.active');
-  if(!activeScreen) return [];
-  const nodes = activeScreen.querySelectorAll('button, .char-card:not(.mystery), .lang-btn');
+  const modal = activeModalEl();
+  const scope = modal || document.querySelector('.screen.active');
+  if(!scope) return [];
+  const nodes = scope.querySelectorAll('button, .char-card:not(.mystery), .lang-btn');
   return Array.from(nodes).filter(el=>{
     if(el.disabled) return false;
     const style = getComputedStyle(el);
@@ -4623,27 +5376,35 @@ function gpApplyFocusVisual(list){
 }
 function resetGpMenuFocus(){
   gpFocusEl = null;
-  gpNavHeldDir = null;
+  Object.keys(padNav).forEach(k => { padNav[k].dir = null; });
+}
+function gpFocusById(key){
+  if(!key) return;
+  const el = document.querySelector(`.screen.active [data-id="${key}"]`);
+  if(el) gpFocusEl = el;
 }
 function gpEnsureFocus(){
   const list = gpFocusableElements();
   if(list.length === 0){ gpFocusEl = null; return list; }
-  if(!gpFocusEl || !list.includes(gpFocusEl)) gpFocusEl = list[0];
+  // A re-render (equip, language change…) replaces the DOM node under focus —
+  // find its twin by data-id so focus doesn't snap back to the first item.
+  if(gpFocusEl && !list.includes(gpFocusEl)){
+    const key = gpFocusEl.dataset && gpFocusEl.dataset.id;
+    gpFocusEl = key ? (list.find(el => el.dataset.id === key) || null) : null;
+  }
+  if(!gpFocusEl) gpFocusEl = list.find(el => el.hasAttribute('data-gp-default')) || list[0];
   gpApplyFocusVisual(list);
   return list;
 }
-function gpMoveFocus(dir){
-  const list = gpEnsureFocus();
-  if(list.length === 0) return;
-  if(!gpFocusEl) return;
-  const cur = gpFocusEl.getBoundingClientRect();
+// Nearest element from `fromEl` in a direction — shared by menu focus and the versus cursors.
+function geoPick(fromEl, list, dir){
+  const cur = fromEl.getBoundingClientRect();
   const cx = cur.left + cur.width/2, cy = cur.top + cur.height/2;
   let best = null, bestScore = Infinity;
   list.forEach(el=>{
-    if(el === gpFocusEl) return;
+    if(el === fromEl) return;
     const r = el.getBoundingClientRect();
-    const ex = r.left + r.width/2, ey = r.top + r.height/2;
-    const dx = ex - cx, dy = ey - cy;
+    const dx = (r.left + r.width/2) - cx, dy = (r.top + r.height/2) - cy;
     let primary, secondary, inDirection;
     if(dir === 'up'){ primary = -dy; secondary = Math.abs(dx); inDirection = dy < -4; }
     else if(dir === 'down'){ primary = dy; secondary = Math.abs(dx); inDirection = dy > 4; }
@@ -4653,9 +5414,16 @@ function gpMoveFocus(dir){
     const score = primary + secondary * 1.6;
     if(score < bestScore){ bestScore = score; best = el; }
   });
+  return best;
+}
+function gpMoveFocus(dir){
+  const list = gpEnsureFocus();
+  if(list.length === 0 || !gpFocusEl) return;
+  const best = geoPick(gpFocusEl, list, dir);
   if(best){
     gpFocusEl = best;
     gpApplyFocusVisual(list);
+    sfx('ui_tick');
     best.scrollIntoView({block:'nearest', inline:'nearest'});
   }
 }
@@ -4663,49 +5431,539 @@ function gpActivateFocus(){
   gpEnsureFocus();
   if(gpFocusEl) gpFocusEl.click();
 }
-function handleGamepadMenuNav(gp, axisX, axisY, dpadUp, dpadLeft, dpadRight){
+function gpBack(){
+  const modal = activeModalEl();
+  if(modal){
+    const c = modal.querySelector('#modal-close, #code-close');
+    if(c) c.click();
+    return;
+  }
+  const backEl = document.querySelector('.screen.active .fs-back, .screen.active [data-nav="menu"]');
+  if(backEl){ sfx('ui_back'); backEl.click(); }
+}
+function gpInspect(){
+  if(activeModalEl()) return;
+  gpEnsureFocus();
+  if(gpFocusEl && gpFocusEl.classList.contains('char-card') && gpFocusEl.dataset.id) openCharModal(gpFocusEl.dataset.id);
+}
+function handleGamepadMenuNav(gp){
+  const idx = gp.index;
+  const ns = padNav[idx] || (padNav[idx] = { dir:null, next:0 });
   gpEnsureFocus();
 
-  const dpadDown = !!(gp.buttons[13] && gp.buttons[13].pressed);
-  let dir = null;
-  if(axisY < -GAMEPAD_DEADZONE || dpadUp) dir = 'up';
-  else if(axisY > GAMEPAD_DEADZONE || dpadDown) dir = 'down';
-  else if(axisX < -GAMEPAD_DEADZONE || dpadLeft) dir = 'left';
-  else if(axisX > GAMEPAD_DEADZONE || dpadRight) dir = 'right';
-
-  const now = performance.now();
+  const d = padDir(gp);
+  const dir = d.up ? 'up' : d.down ? 'down' : d.left ? 'left' : d.right ? 'right' : null;
+  const nowT = performance.now();
   if(dir){
-    if(dir !== gpNavHeldDir){
-      gpNavHeldDir = dir;
-      gpNavNextMoveAt = now + GP_NAV_INITIAL_MS;
-      gpMoveFocus(dir);
-    } else if(now >= gpNavNextMoveAt){
-      gpNavNextMoveAt = now + GP_NAV_REPEAT_MS;
-      gpMoveFocus(dir);
+    if(dir !== ns.dir){
+      ns.dir = dir; ns.next = nowT + GP_NAV_INITIAL_MS; gpMoveFocus(dir);
+    } else if(nowT >= ns.next){
+      ns.next = nowT + GP_NAV_REPEAT_MS; gpMoveFocus(dir);
     }
   } else {
-    gpNavHeldDir = null;
+    ns.dir = null;
   }
 
-  // Bottom face button (A / ✕ / B) activates whatever's focused — same
-  // button used to jump in battle, so it stays consistent across the app.
-  const selectBtn = gp.buttons[JUMP_POS];
-  const selectPressed = !!(selectBtn && selectBtn.pressed);
-  const selectWas = !!gpPrevPressed['menuSelect'];
-  gpPrevPressed['menuSelect'] = selectPressed;
-  if(selectPressed && !selectWas) gpActivateFocus();
+  if(btnEdge(idx, JUMP_POS)) gpActivateFocus();
+  if(btnEdge(idx, ABILITY_POS.R)) gpBack();
+  if(btnEdge(idx, GP_INSPECT_POS)) gpInspect();
+}
 
-  // Right face button (B / ○ / A) backs out to the main menu, mirroring
-  // the on-screen Back buttons.
-  const backBtn = gp.buttons[ABILITY_POS.R];
-  const backPressed = !!(backBtn && backBtn.pressed);
-  const backWas = !!gpPrevPressed['menuBack'];
-  gpPrevPressed['menuBack'] = backPressed;
-  if(backPressed && !backWas){
-    const backEl = document.querySelector('.screen.active [data-nav="menu"]');
-    if(backEl) backEl.click();
+/* =========================================================================
+   SECTION: 1 V 1 FRIEND — shared state
+   ========================================================================= */
+// Set to true to let both players pick fighters that aren't unlocked in the
+// active save slot yet.
+const VERSUS_ALLOWS_LOCKED = false;
+const versus = {
+  slots: [null, null],   // [{ index, brand }] — which pad is Player 1 / Player 2
+  armed: {},             // pad index -> true once released, so a held button can't claim a slot
+  readyAt: 0,            // when pairing finishes and fighter select opens
+  sel: [ {cursor:0, locked:false}, {cursor:0, locked:false} ],
+  nav: [ {dir:null, next:0}, {dir:null, next:0} ],
+  splashAt: 0,
+  keys: [ {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false} ],
+  lastPick: null
+};
+function versusPadsPresent(){
+  return versus.slots.every(s => s && livePadByIndex(s.index));
+}
+function versusSelectable(id){ return VERSUS_ALLOWS_LOCKED || isUnlocked(id); }
+function playerLabel(n){ return t('pair_player').replace('{n}', n); }
+
+/* ---------- mode select ---------- */
+let modeShown = -1;
+function renderModeScreen(){
+  const def = CHARACTERS[SAVE.equipped];
+  const art = document.getElementById('mode-chip-art');
+  const txt = document.getElementById('mode-chip-text');
+  if(art) art.innerHTML = def ? squareInner(def) : '';
+  if(txt) txt.textContent = def ? t('mode_playing_as').replace('{name}', def.name) : t('inv_equipped_hint_default');
+  updateModeStatus(true);
+}
+function updateModeStatus(force){
+  const n = Math.min(2, livePads.length);
+  if(!force && n === modeShown) return;
+  modeShown = n;
+  const p1 = document.getElementById('mode-pad-1'), p2 = document.getElementById('mode-pad-2'), tx = document.getElementById('mode-pads-text');
+  if(p1) p1.classList.toggle('on', n >= 1);
+  if(p2) p2.classList.toggle('on', n >= 2);
+  if(tx) tx.textContent = t('mode_pads_count').replace('{n}', n);
+}
+
+/* ---------- pairing: who is Player 1, who is Player 2 ---------- */
+let pairSig = '';
+function startPairing(){
+  versus.slots = [null, null];
+  versus.readyAt = 0;
+  versus.armed = {};
+  livePads.forEach(gp => { versus.armed[gp.index] = !anyBtnHeld(gp.index); });
+  pairSig = '';
+  renderPairing(true);
+}
+function pollPairing(){
+  const nowT = performance.now();
+
+  // Lose a claimed controller and the whole order is void — start again.
+  if(versus.slots.some(s => s && !livePadByIndex(s.index))){
+    versus.slots = [null, null]; versus.readyAt = 0;
+  }
+  // A pad only counts as "pressing" once it has been let go at least once.
+  livePads.forEach(gp=>{
+    if(versus.armed[gp.index] === undefined) versus.armed[gp.index] = false;
+    if(!anyBtnHeld(gp.index)) versus.armed[gp.index] = true;
+  });
+
+  // Select / Back returns to the mode screen.
+  if(livePads.some(gp => btnEdge(gp.index, PAD_BACK_BTN))){ showScreen('mode'); return; }
+
+  const claimedIdx = versus.slots.filter(Boolean).map(s => s.index);
+  const nextSlot = versus.slots[0] ? (versus.slots[1] ? 2 : 1) : 0;
+  // The Player 1/2 menu only opens once two controllers are detected.
+  const canClaim = nextSlot < 2 && (nextSlot > 0 || livePads.length >= 2);
+  if(canClaim){
+    const pressers = livePads
+      .filter(gp => !claimedIdx.includes(gp.index) && versus.armed[gp.index] && anyClaimEdge(gp.index))
+      .sort((a,b) => a.index - b.index);
+    let slot = nextSlot;
+    for(const gp of pressers){
+      if(slot > 1) break;
+      versus.slots[slot] = { index: gp.index, brand: detectGamepadBrand(gp) };
+      sfx(slot === 0 ? 'ui_lock' : 'fight');
+      slot++;
+    }
+  }
+
+  const ready = !!(versus.slots[0] && versus.slots[1]);
+  if(ready){
+    if(!versus.readyAt) versus.readyAt = nowT + 1600;
+    else if(nowT >= versus.readyAt){ versus.readyAt = 0; showScreen('versus'); return; }
+  } else {
+    versus.readyAt = 0;
+  }
+  renderPairing(false);
+}
+function renderPairing(force){
+  const slots = versus.slots;
+  const nextSlot = slots[0] ? (slots[1] ? 2 : 1) : 0;
+  const n = Math.min(2, livePads.length);
+  const sig = [n, slots[0] && slots[0].index, slots[1] && slots[1].index, currentLang].join('|');
+  if(!force && sig === pairSig) return;
+  pairSig = sig;
+
+  const enough = livePads.length >= 2;
+  const ready = nextSlot === 2;
+  const canClaim = nextSlot < 2 && (nextSlot > 0 || enough);
+  let title, sub;
+  if(ready){ title = t('pair_title_ready'); sub = t('pair_sub_ready'); }
+  else if(nextSlot === 0 && !enough){ title = t('pair_title_connect'); sub = `${t('pair_sub_connect')} ${t('mode_pads_count').replace('{n}', n)}.`; }
+  else if(nextSlot === 0){ title = t('pair_title_p1'); sub = t('pair_sub_p1'); }
+  else if(!enough){ title = t('pair_title_p2'); sub = t('pair_sub_wait2'); }
+  else { title = t('pair_title_p2'); sub = t('pair_sub_p2'); }
+  document.getElementById('pair-title').textContent = title;
+  document.getElementById('pair-sub').textContent = sub;
+  document.getElementById('pair-hint').textContent = t('pair_back_hint');
+
+  const unclaimed = livePads.length - slots.filter(Boolean).length;
+  for(let s=0; s<2; s++){
+    const el = document.getElementById('pair-p'+(s+1));
+    const stateEl = document.getElementById('pair-p'+(s+1)+'-state');
+    const brandEl = document.getElementById('pair-p'+(s+1)+'-brand');
+    document.getElementById('pair-p'+(s+1)+'-who').textContent = playerLabel(s+1);
+    let st;
+    if(slots[s]) st = 'locked';
+    else if(canClaim && nextSlot === s && unclaimed > 0) st = 'press';
+    else if(s >= nextSlot && (s - nextSlot) < unclaimed) st = 'detected';
+    else st = 'waiting';
+    el.classList.remove('state-locked','state-press','state-detected','state-waiting');
+    el.classList.add('state-'+st);
+    const label = { locked:t('pair_locked'), press:t('pair_press'), detected:t('pair_detected'), waiting:t('pair_waiting') }[st];
+    stateEl.innerHTML = `<span class="pair-check">✓</span><span>${label}</span>`;
+    brandEl.textContent = slots[s] ? (BRAND_DISPLAY_NAME[slots[s].brand] || BRAND_DISPLAY_NAME.generic) : '';
   }
 }
+
+/* ---------- versus fighter select ---------- */
+function startVersusSelect(){
+  const grid = document.getElementById('vs-grid');
+  grid.innerHTML = '';
+  ROSTER_ORDER.forEach(id=>{
+    const def = CHARACTERS[id];
+    const ok = versusSelectable(id);
+    const card = document.createElement('div');
+    card.className = 'vs-card' + (ok ? '' : ' mystery');
+    card.dataset.id = id;
+    card.dataset.selectable = ok ? '1' : '0';
+    card.innerHTML = ok
+      ? `<div class="char-square">${squareInner(def)}</div><div class="vs-card-name">${def.name}</div><span class="vs-mark m1">1</span><span class="vs-mark m2">2</span>`
+      : `<div class="char-square mystery-square"><span class="mystery-icon">?</span></div><div class="vs-card-name mystery-name">???</div>`;
+    grid.appendChild(card);
+  });
+  const pool = ROSTER_ORDER.filter(versusSelectable);
+  const p1 = pool.includes(SAVE.equipped) ? SAVE.equipped : pool[0];
+  const p2 = pool.find(id => id !== p1) || p1;
+  versus.sel = [ {cursor: ROSTER_ORDER.indexOf(p1), locked:false}, {cursor: ROSTER_ORDER.indexOf(p2), locked:false} ];
+  versus.nav = [ {dir:null, next:0}, {dir:null, next:0} ];
+  versus.splashAt = 0;
+  hideVersusSplash();
+  const anyLocked = ROSTER_ORDER.some(id => !versusSelectable(id));
+  document.getElementById('vs-note').textContent = anyLocked ? t('vs_locked_note') : '';
+  renderVersus();
+}
+function renderVersus(){
+  const cards = Array.from(document.querySelectorAll('#vs-grid .vs-card'));
+  cards.forEach((c,i)=>{
+    c.classList.toggle('cur-1', versus.sel[0].cursor === i);
+    c.classList.toggle('cur-2', versus.sel[1].cursor === i);
+    c.classList.toggle('lock-1', versus.sel[0].locked && versus.sel[0].cursor === i);
+    c.classList.toggle('lock-2', versus.sel[1].locked && versus.sel[1].cursor === i);
+  });
+  renderVersusSide(0);
+  renderVersusSide(1);
+}
+function renderVersusSide(slot){
+  const el = document.getElementById('vs-side-'+(slot+1));
+  const s = versus.sel[slot];
+  const def = CHARACTERS[ROSTER_ORDER[s.cursor]];
+  const brand = versus.slots[slot].brand;
+  const rows = ['E','Q','R'].map(k=>{
+    const a = def.abilities[k];
+    const meta = [];
+    if(a.damage) meta.push(`${a.damage.toLocaleString()} dmg`);
+    if(a.cooldown) meta.push(`${a.cooldown/1000}s`);
+    return `<li><span class="vs-key">${faceLabelFor(brand, ABILITY_POS[k])}</span><span class="vs-ab-name">${a.name}</span><span class="vs-ab-meta">${meta.join(' · ')}</span></li>`;
+  }).join('');
+  const hint = t('vs_hint').replace('{a}', faceLabelFor(brand, JUMP_POS)).replace('{b}', faceLabelFor(brand, ABILITY_POS.R));
+  el.classList.toggle('locked', s.locked);
+  el.style.setProperty('--char-color', def.color);
+  el.innerHTML = `
+    <div class="vs-who">${playerLabel(slot+1)}<span class="vs-pad">${BRAND_DISPLAY_NAME[brand] || BRAND_DISPLAY_NAME.generic}</span></div>
+    <div class="vs-portrait"><div class="char-square">${squareInner(def)}</div>${s.locked ? `<div class="vs-stamp">${t('vs_ready')}</div>` : ''}</div>
+    <div class="vs-name">${def.name}</div>
+    <div class="vs-hp">${def.maxHealth.toLocaleString()} HP</div>
+    <ul class="vs-abilities">${rows}</ul>
+    <div class="vs-status">${s.locked ? t('vs_ready') : t('vs_choosing')}</div>
+    <div class="vs-hintline">${hint}</div>`;
+}
+function versusMove(slot, dir){
+  const cards = Array.from(document.querySelectorAll('#vs-grid .vs-card'));
+  const pool = cards.filter(c => c.dataset.selectable === '1');
+  const cur = cards[versus.sel[slot].cursor];
+  const best = cur ? geoPick(cur, pool, dir) : null;
+  if(best){
+    versus.sel[slot].cursor = cards.indexOf(best);
+    sfx('ui_tick');
+    renderVersus();
+  }
+}
+function showVersusSplash(){
+  const d1 = CHARACTERS[ROSTER_ORDER[versus.sel[0].cursor]], d2 = CHARACTERS[ROSTER_ORDER[versus.sel[1].cursor]];
+  const sp = document.getElementById('vs-splash');
+  sp.innerHTML = `
+    <div class="vsp vsp-1"><div class="char-square">${squareInner(d1)}</div><div class="vsp-name">${d1.name}</div></div>
+    <div class="vsp-vs">VS</div>
+    <div class="vsp vsp-2"><div class="char-square">${squareInner(d2)}</div><div class="vsp-name">${d2.name}</div></div>`;
+  sp.classList.add('on');
+}
+function hideVersusSplash(){
+  const sp = document.getElementById('vs-splash');
+  if(sp){ sp.classList.remove('on'); sp.innerHTML = ''; }
+}
+function pollVersusSelect(){
+  // Either controller dropping out sends everyone back to pairing.
+  if(!versusPadsPresent()){ showScreen('pair'); return; }
+  const nowT = performance.now();
+
+  for(let slot=0; slot<2; slot++){
+    const idx = versus.slots[slot].index;
+    const s = versus.sel[slot];
+    const gp = livePadByIndex(idx);
+    if(btnEdge(idx, PAD_BACK_BTN)){ showScreen('mode'); return; }
+
+    if(!s.locked){
+      const d = padDir(gp);
+      const dir = d.up ? 'up' : d.down ? 'down' : d.left ? 'left' : d.right ? 'right' : null;
+      const ns = versus.nav[slot];
+      if(dir){
+        if(dir !== ns.dir){ ns.dir = dir; ns.next = nowT + GP_NAV_INITIAL_MS; versusMove(slot, dir); }
+        else if(nowT >= ns.next){ ns.next = nowT + GP_NAV_REPEAT_MS; versusMove(slot, dir); }
+      } else { ns.dir = null; }
+      if(btnEdge(idx, JUMP_POS)){
+        s.locked = true; sfx('ui_lock'); renderVersus();
+        if(versus.sel[0].locked && versus.sel[1].locked){
+          versus.splashAt = nowT + 1700; showVersusSplash();
+        }
+      }
+    } else if(btnEdge(idx, ABILITY_POS.R)){
+      s.locked = false; versus.splashAt = 0; hideVersusSplash(); sfx('ui_back'); renderVersus();
+    }
+  }
+
+  if(versus.splashAt && nowT >= versus.splashAt){
+    versus.splashAt = 0;
+    hideVersusSplash();
+    startBattle(ROSTER_ORDER[versus.sel[0].cursor], ROSTER_ORDER[versus.sel[1].cursor], { pvp:true });
+  }
+}
+
+/* ---------- 1 V 1 battle input ---------- */
+function pollPvpBattle(){
+  let missing = -1;
+  for(let slot=0; slot<2; slot++){
+    const info = versus.slots[slot];
+    let gp = livePadByIndex(info.index);
+    if(!gp){
+      // A replacement controller (different index) takes over an empty seat.
+      const spare = livePads.find(g => !versus.slots.some(s => s && s.index === g.index));
+      if(spare){ info.index = spare.index; info.brand = detectGamepadBrand(spare); gp = spare; buildPvpAbilityBars(); }
+    }
+    if(!gp){ missing = slot; continue; }
+    const idx = gp.index;
+    const keys = versus.keys[slot];
+    const d = padDir(gp);
+    const wasUp = keys.up;
+    keys.left = d.left; keys.right = d.right; keys.up = d.up; keys.down = d.down;
+    if(state.pvpPaused) continue;
+
+    const f = slot === 0 ? state.player : state.bot;
+    const other = slot === 0 ? state.bot : state.player;
+    if(!f || f.dead) continue;
+    if((btnEdge(idx, JUMP_POS) || (d.up && !wasUp)) && f.onGround && !f.flight) f.jumpQueued = true;
+    ['E','Q','R'].forEach(k=>{
+      if(btnEdge(idx, ABILITY_POS[k])) tryUseAbility(f, other, k);
+    });
+  }
+
+  if(missing >= 0 && !state.pvpPaused) pausePvp(missing);
+  else if(missing < 0 && state.pvpPaused) resumePvp();
+  if(state.pvpPaused && livePads.some(gp => btnEdge(gp.index, PAD_BACK_BTN))) abortBattle();
+}
+function pausePvp(slot){
+  state.pvpPaused = true;
+  versus.keys.forEach(k => { k.left = k.right = k.up = k.down = false; });
+  document.getElementById('pvp-pause-sub').textContent = t('pvp_paused_sub').replace('{n}', slot + 1);
+  document.getElementById('pvp-pause').classList.add('on');
+}
+function resumePvp(){
+  state.pvpPaused = false;
+  document.getElementById('pvp-pause').classList.remove('on');
+}
+// Leave a running battle (used by the 1 V 1 pause screen).
+function abortBattle(){
+  state.mode = 'menu';
+  state.pvpPaused = false;
+  state.countdown = false;
+  battleToken++;
+  state.missiles.forEach(m => { if(m.el) m.el.remove(); });
+  state.missiles = [];
+  document.getElementById('pvp-pause').classList.remove('on');
+  const ov = document.getElementById('countdown-overlay');
+  if(ov){ ov.classList.remove('on'); ov.innerHTML = ''; }
+  if(arenaEl) arenaEl.classList.remove('echolocation-mode');
+  showScreen('menu');
+}
+function buildPvpAbilityBars(){
+  [[0,'ability-bar-p1',state.player,state.bot],[1,'ability-bar-p2',state.bot,state.player]].forEach(([slot,id,f,other])=>{
+    const bar = document.getElementById(id);
+    if(!bar || !f) return;
+    const brand = versus.slots[slot].brand;
+    bar.innerHTML = '';
+    ['E','Q','R'].forEach(k=>{
+      const a = f.def.abilities[k];
+      const btn = document.createElement('div');
+      btn.className = 'ability-btn gp-mode';
+      btn.dataset.key = k;
+      btn.style.pointerEvents = 'none'; // 1 V 1 is controller only
+      btn.innerHTML = `<span class="ab-key">${faceLabelFor(brand, ABILITY_POS[k])}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
+      bar.appendChild(btn);
+    });
+  });
+}
+
+/* =========================================================================
+   SECTION: MENU DRESSING — bubbles + hero
+   ========================================================================= */
+function initBubbles(){
+  document.querySelectorAll('.bubbles').forEach(box=>{
+    if(box.dataset.ready) return;
+    box.dataset.ready = '1';
+    for(let i=0; i<16; i++){
+      const b = document.createElement('span');
+      b.className = 'bubble';
+      const size = 16 + Math.random()*72;
+      b.style.cssText = `left:${(Math.random()*100).toFixed(1)}%;--s:${size.toFixed(0)}px;--d:${(16+Math.random()*22).toFixed(1)}s;`
+        + `--delay:${(-Math.random()*34).toFixed(1)}s;--drift:${(Math.random()*90-45).toFixed(0)}px;--y:${(Math.random()*88).toFixed(0)}%;`;
+      box.appendChild(b);
+    }
+  });
+}
+function renderMenuHero(){
+  const def = CHARACTERS[SAVE.equipped];
+  const root = document.getElementById('screen-menu');
+  const art = document.getElementById('menu-hero-art');
+  if(!root || !art) return;
+  root.style.setProperty('--hero', def ? def.color : '#f2a541');
+  art.innerHTML = def ? squareInner(def) : '<div class="fallback" style="background:#3a3d54">?</div>';
+  document.getElementById('menu-hero-name').textContent = def ? def.name : t('inv_none');
+  document.getElementById('menu-hero-hp').textContent = def ? `${def.maxHealth.toLocaleString()} HP` : '';
+}
+
+
+/* =========================================================================
+   SECTION: I18N — strings added with the full-screen menus + 1 V 1 Friend
+   (Missing keys always fall back to English, see t().)
+   ========================================================================= */
+const I18N_V5 = {
+  en:{ mode_title:'Choose a mode', mode_practice:'Practice', mode_practice_desc:'Fight a random opponent using your equipped fighter.', mode_playing_as:'Playing as {name}',
+    mode_friend_desc:'Two players, two controllers. Pick your fighters and settle it.', mode_controller_only:'🎮 Controller only', mode_pads_count:'{n} of 2 controllers detected',
+    pair_title_connect:'Connect two controllers', pair_title_p1:'Who is Player 1?', pair_title_p2:'Who is Player 2?', pair_title_ready:'Ready!',
+    pair_sub_connect:'Press any button on each controller so the game can see it.', pair_sub_p1:'Press any button on your controller. The first to press is Player 1.',
+    pair_sub_p2:'Player 2, press any button on your controller.', pair_sub_wait2:'Player 1 is locked in. Waiting for a second controller…', pair_sub_ready:'Loading fighter select…',
+    pair_player:'Player {n}', pair_waiting:'Waiting for controller…', pair_detected:'Controller detected', pair_press:'Press any button', pair_locked:'Locked in',
+    pair_back_hint:'Press the Select / Back button to return to the mode screen.',
+    vs_title:'Choose your fighters', vs_choosing:'Choosing…', vs_ready:'Ready', vs_hint:'Move: stick or D-pad · Lock in: {a} · Undo: {b}',
+    vs_locked_note:'Locked fighters must be unlocked in this save slot first.',
+    pvp_paused:'Controller disconnected', pvp_paused_sub:'Player {n}, reconnect your controller to keep fighting.', pvp_quit:'Quit to menu',
+    go_p1_wins:'Player 1 wins!', go_p2_wins:'Player 2 wins!', go_rematch:'Rematch', go_change_fighters:'Change fighters', menu_change_fighter:'Change fighter',
+    inv_tip:'Tap once to equip. Double-tap to see stats and attacks.', inv_tip_pad:'Press {a} to equip. Double-press it, or press {y}, for stats and attacks.',
+    modal_pad_close:'Press {b} to close' },
+  es:{ mode_title:'Elige un modo', mode_practice:'Práctica', mode_practice_desc:'Lucha contra un rival aleatorio con tu luchador equipado.', mode_playing_as:'Jugando como {name}',
+    mode_friend_desc:'Dos jugadores, dos mandos. Elijan luchadores y decidan quién gana.', mode_controller_only:'🎮 Solo con mando', mode_pads_count:'{n} de 2 mandos detectados',
+    pair_title_connect:'Conecta dos mandos', pair_title_p1:'¿Quién es el Jugador 1?', pair_title_p2:'¿Quién es el Jugador 2?', pair_title_ready:'¡Listos!',
+    pair_sub_connect:'Pulsa cualquier botón en cada mando para que el juego lo detecte.', pair_sub_p1:'Pulsa cualquier botón de tu mando. El primero en pulsar es el Jugador 1.',
+    pair_sub_p2:'Jugador 2, pulsa cualquier botón de tu mando.', pair_sub_wait2:'El Jugador 1 está listo. Esperando un segundo mando…', pair_sub_ready:'Cargando selección de luchadores…',
+    pair_player:'Jugador {n}', pair_waiting:'Esperando mando…', pair_detected:'Mando detectado', pair_press:'Pulsa cualquier botón', pair_locked:'Confirmado',
+    pair_back_hint:'Pulsa el botón Select / Atrás para volver a la pantalla de modos.',
+    vs_title:'Elijan sus luchadores', vs_choosing:'Eligiendo…', vs_ready:'Listo', vs_hint:'Mover: stick o cruceta · Confirmar: {a} · Deshacer: {b}',
+    vs_locked_note:'Los luchadores bloqueados deben desbloquearse primero en esta ranura.',
+    pvp_paused:'Mando desconectado', pvp_paused_sub:'Jugador {n}, vuelve a conectar tu mando para seguir luchando.', pvp_quit:'Salir al menú',
+    go_p1_wins:'¡Gana el Jugador 1!', go_p2_wins:'¡Gana el Jugador 2!', go_rematch:'Revancha', go_change_fighters:'Cambiar luchadores', menu_change_fighter:'Cambiar luchador',
+    inv_tip:'Toca una vez para equipar. Toca dos veces para ver estadísticas y ataques.', inv_tip_pad:'Pulsa {a} para equipar. Púlsalo dos veces, o pulsa {y}, para ver estadísticas y ataques.',
+    modal_pad_close:'Pulsa {b} para cerrar' },
+  zh:{ mode_title:'选择模式', mode_practice:'练习', mode_practice_desc:'使用你装备的战士对战随机对手。', mode_playing_as:'当前角色：{name}',
+    mode_friend_desc:'两名玩家，两个手柄。选好战士，一决高下。', mode_controller_only:'🎮 仅限手柄', mode_pads_count:'已检测到 {n}/2 个手柄',
+    pair_title_connect:'请连接两个手柄', pair_title_p1:'谁是玩家 1？', pair_title_p2:'谁是玩家 2？', pair_title_ready:'准备就绪！',
+    pair_sub_connect:'请在每个手柄上按任意键，让游戏检测到它。', pair_sub_p1:'请在你的手柄上按任意键。最先按键的是玩家 1。',
+    pair_sub_p2:'玩家 2，请在你的手柄上按任意键。', pair_sub_wait2:'玩家 1 已就位，正在等待第二个手柄……', pair_sub_ready:'正在加载战士选择……',
+    pair_player:'玩家 {n}', pair_waiting:'等待手柄……', pair_detected:'已检测到手柄', pair_press:'按任意键', pair_locked:'已锁定',
+    pair_back_hint:'按 Select / 返回键可回到模式选择。',
+    vs_title:'选择你们的战士', vs_choosing:'选择中……', vs_ready:'已就绪', vs_hint:'移动：摇杆或方向键 · 确认：{a} · 取消：{b}',
+    vs_locked_note:'未解锁的战士需先在此存档中解锁。',
+    pvp_paused:'手柄已断开', pvp_paused_sub:'玩家 {n}，请重新连接手柄以继续战斗。', pvp_quit:'退出到菜单',
+    go_p1_wins:'玩家 1 获胜！', go_p2_wins:'玩家 2 获胜！', go_rematch:'再战一局', go_change_fighters:'更换战士', menu_change_fighter:'更换战士',
+    inv_tip:'点按一次装备，双击查看属性和技能。', inv_tip_pad:'按 {a} 装备；连按两次或按 {y} 查看属性和技能。',
+    modal_pad_close:'按 {b} 关闭' },
+  ar:{ mode_title:'اختر الوضع', mode_practice:'تدريب', mode_practice_desc:'قاتل خصمًا عشوائيًا بالمقاتل المجهّز لديك.', mode_playing_as:'تلعب بشخصية {name}',
+    mode_friend_desc:'لاعبان وذراعا تحكم. اختارا مقاتليكما وحسما الأمر.', mode_controller_only:'🎮 بذراع التحكم فقط', mode_pads_count:'تم اكتشاف {n} من 2 من أذرع التحكم',
+    pair_title_connect:'وصّل ذراعي تحكم', pair_title_p1:'من هو اللاعب 1؟', pair_title_p2:'من هو اللاعب 2؟', pair_title_ready:'جاهزان!',
+    pair_sub_connect:'اضغط أي زر على كل ذراع تحكم لكي تتعرف عليها اللعبة.', pair_sub_p1:'اضغط أي زر على ذراعك. أول من يضغط هو اللاعب 1.',
+    pair_sub_p2:'اللاعب 2، اضغط أي زر على ذراعك.', pair_sub_wait2:'تم تثبيت اللاعب 1. بانتظار ذراع تحكم ثانية…', pair_sub_ready:'جارٍ تحميل اختيار المقاتلين…',
+    pair_player:'اللاعب {n}', pair_waiting:'بانتظار ذراع التحكم…', pair_detected:'تم اكتشاف الذراع', pair_press:'اضغط أي زر', pair_locked:'تم التثبيت',
+    pair_back_hint:'اضغط زر Select / الرجوع للعودة إلى شاشة الأوضاع.',
+    vs_title:'اختارا مقاتليكما', vs_choosing:'يختار…', vs_ready:'جاهز', vs_hint:'تحريك: العصا أو الأسهم · تأكيد: {a} · تراجع: {b}',
+    vs_locked_note:'يجب فتح المقاتلين المقفلين في خانة الحفظ هذه أولًا.',
+    pvp_paused:'انقطع اتصال الذراع', pvp_paused_sub:'اللاعب {n}، أعد توصيل ذراعك لمتابعة القتال.', pvp_quit:'الخروج إلى القائمة',
+    go_p1_wins:'فاز اللاعب 1!', go_p2_wins:'فاز اللاعب 2!', go_rematch:'إعادة المباراة', go_change_fighters:'تغيير المقاتلين', menu_change_fighter:'تغيير المقاتل',
+    inv_tip:'المس مرة للتجهيز. المس مرتين لعرض الإحصاءات والهجمات.', inv_tip_pad:'اضغط {a} للتجهيز. اضغطه مرتين، أو اضغط {y}، لعرض الإحصاءات والهجمات.',
+    modal_pad_close:'اضغط {b} للإغلاق' },
+  fr:{ mode_title:'Choisir un mode', mode_practice:'Entraînement', mode_practice_desc:'Affrontez un adversaire aléatoire avec votre combattant équipé.', mode_playing_as:'Vous jouez {name}',
+    mode_friend_desc:'Deux joueurs, deux manettes. Choisissez vos combattants et réglez ça.', mode_controller_only:'🎮 Manette uniquement', mode_pads_count:'{n} manette(s) détectée(s) sur 2',
+    pair_title_connect:'Branchez deux manettes', pair_title_p1:'Qui est le Joueur 1 ?', pair_title_p2:'Qui est le Joueur 2 ?', pair_title_ready:'Prêts !',
+    pair_sub_connect:'Appuyez sur un bouton de chaque manette pour que le jeu la détecte.', pair_sub_p1:'Appuyez sur un bouton de votre manette. Le premier à appuyer est le Joueur 1.',
+    pair_sub_p2:'Joueur 2, appuyez sur un bouton de votre manette.', pair_sub_wait2:'Le Joueur 1 est verrouillé. En attente d’une deuxième manette…', pair_sub_ready:'Chargement de la sélection…',
+    pair_player:'Joueur {n}', pair_waiting:'En attente de manette…', pair_detected:'Manette détectée', pair_press:'Appuyez sur un bouton', pair_locked:'Verrouillé',
+    pair_back_hint:'Appuyez sur le bouton Select / Retour pour revenir aux modes.',
+    vs_title:'Choisissez vos combattants', vs_choosing:'Choix en cours…', vs_ready:'Prêt', vs_hint:'Déplacer : stick ou croix · Valider : {a} · Annuler : {b}',
+    vs_locked_note:'Les combattants verrouillés doivent d’abord être débloqués dans cet emplacement.',
+    pvp_paused:'Manette déconnectée', pvp_paused_sub:'Joueur {n}, reconnectez votre manette pour continuer.', pvp_quit:'Quitter vers le menu',
+    go_p1_wins:'Le Joueur 1 gagne !', go_p2_wins:'Le Joueur 2 gagne !', go_rematch:'Revanche', go_change_fighters:'Changer de combattants', menu_change_fighter:'Changer de combattant',
+    inv_tip:'Touchez une fois pour équiper. Touchez deux fois pour voir stats et attaques.', inv_tip_pad:'Appuyez sur {a} pour équiper. Appuyez deux fois dessus, ou sur {y}, pour voir stats et attaques.',
+    modal_pad_close:'Appuyez sur {b} pour fermer' },
+  de:{ mode_title:'Modus wählen', mode_practice:'Training', mode_practice_desc:'Kämpfe mit deinem ausgerüsteten Kämpfer gegen einen zufälligen Gegner.', mode_playing_as:'Du spielst {name}',
+    mode_friend_desc:'Zwei Spieler, zwei Controller. Wählt eure Kämpfer und tragt es aus.', mode_controller_only:'🎮 Nur mit Controller', mode_pads_count:'{n} von 2 Controllern erkannt',
+    pair_title_connect:'Zwei Controller verbinden', pair_title_p1:'Wer ist Spieler 1?', pair_title_p2:'Wer ist Spieler 2?', pair_title_ready:'Bereit!',
+    pair_sub_connect:'Drücke auf jedem Controller eine beliebige Taste, damit das Spiel ihn erkennt.', pair_sub_p1:'Drücke eine beliebige Taste an deinem Controller. Wer zuerst drückt, ist Spieler 1.',
+    pair_sub_p2:'Spieler 2, drücke eine beliebige Taste an deinem Controller.', pair_sub_wait2:'Spieler 1 steht fest. Warte auf einen zweiten Controller …', pair_sub_ready:'Kämpferauswahl wird geladen …',
+    pair_player:'Spieler {n}', pair_waiting:'Warte auf Controller …', pair_detected:'Controller erkannt', pair_press:'Beliebige Taste drücken', pair_locked:'Bestätigt',
+    pair_back_hint:'Mit der Select-/Zurück-Taste gelangst du zurück zur Modusauswahl.',
+    vs_title:'Wählt eure Kämpfer', vs_choosing:'Wählt …', vs_ready:'Bereit', vs_hint:'Bewegen: Stick oder Steuerkreuz · Bestätigen: {a} · Zurück: {b}',
+    vs_locked_note:'Gesperrte Kämpfer müssen zuerst in diesem Speicherplatz freigeschaltet werden.',
+    pvp_paused:'Controller getrennt', pvp_paused_sub:'Spieler {n}, verbinde deinen Controller neu, um weiterzukämpfen.', pvp_quit:'Zum Menü',
+    go_p1_wins:'Spieler 1 gewinnt!', go_p2_wins:'Spieler 2 gewinnt!', go_rematch:'Revanche', go_change_fighters:'Kämpfer wechseln', menu_change_fighter:'Kämpfer wechseln',
+    inv_tip:'Einmal tippen zum Ausrüsten. Doppeltippen für Werte und Angriffe.', inv_tip_pad:'{a} zum Ausrüsten. Doppelt drücken oder {y} drücken für Werte und Angriffe.',
+    modal_pad_close:'{b} zum Schließen drücken' },
+  pt:{ mode_title:'Escolha um modo', mode_practice:'Treino', mode_practice_desc:'Lute contra um oponente aleatório com o lutador equipado.', mode_playing_as:'Jogando como {name}',
+    mode_friend_desc:'Dois jogadores, dois controles. Escolham seus lutadores e resolvam isso.', mode_controller_only:'🎮 Somente controle', mode_pads_count:'{n} de 2 controles detectados',
+    pair_title_connect:'Conecte dois controles', pair_title_p1:'Quem é o Jogador 1?', pair_title_p2:'Quem é o Jogador 2?', pair_title_ready:'Prontos!',
+    pair_sub_connect:'Aperte qualquer botão em cada controle para o jogo detectá-lo.', pair_sub_p1:'Aperte qualquer botão do seu controle. Quem apertar primeiro é o Jogador 1.',
+    pair_sub_p2:'Jogador 2, aperte qualquer botão do seu controle.', pair_sub_wait2:'O Jogador 1 está confirmado. Aguardando um segundo controle…', pair_sub_ready:'Carregando seleção de lutadores…',
+    pair_player:'Jogador {n}', pair_waiting:'Aguardando controle…', pair_detected:'Controle detectado', pair_press:'Aperte qualquer botão', pair_locked:'Confirmado',
+    pair_back_hint:'Aperte o botão Select / Voltar para retornar aos modos.',
+    vs_title:'Escolham seus lutadores', vs_choosing:'Escolhendo…', vs_ready:'Pronto', vs_hint:'Mover: analógico ou direcional · Confirmar: {a} · Desfazer: {b}',
+    vs_locked_note:'Lutadores bloqueados precisam ser desbloqueados neste slot antes.',
+    pvp_paused:'Controle desconectado', pvp_paused_sub:'Jogador {n}, reconecte seu controle para continuar lutando.', pvp_quit:'Sair para o menu',
+    go_p1_wins:'Jogador 1 venceu!', go_p2_wins:'Jogador 2 venceu!', go_rematch:'Revanche', go_change_fighters:'Trocar lutadores', menu_change_fighter:'Trocar lutador',
+    inv_tip:'Toque uma vez para equipar. Toque duas vezes para ver status e ataques.', inv_tip_pad:'Aperte {a} para equipar. Aperte duas vezes, ou aperte {y}, para ver status e ataques.',
+    modal_pad_close:'Aperte {b} para fechar' },
+  hi:{ mode_title:'मोड चुनें', mode_practice:'अभ्यास', mode_practice_desc:'अपने चुने हुए फ़ाइटर से किसी रैंडम विरोधी से लड़ें।', mode_playing_as:'{name} के रूप में खेल रहे हैं',
+    mode_friend_desc:'दो खिलाड़ी, दो कंट्रोलर। अपने फ़ाइटर चुनें और फ़ैसला करें।', mode_controller_only:'🎮 सिर्फ़ कंट्रोलर', mode_pads_count:'2 में से {n} कंट्रोलर मिले',
+    pair_title_connect:'दो कंट्रोलर जोड़ें', pair_title_p1:'खिलाड़ी 1 कौन है?', pair_title_p2:'खिलाड़ी 2 कौन है?', pair_title_ready:'तैयार!',
+    pair_sub_connect:'हर कंट्रोलर पर कोई भी बटन दबाएँ ताकि गेम उसे पहचान सके।', pair_sub_p1:'अपने कंट्रोलर का कोई भी बटन दबाएँ। सबसे पहले दबाने वाला खिलाड़ी 1 होगा।',
+    pair_sub_p2:'खिलाड़ी 2, अपने कंट्रोलर का कोई भी बटन दबाएँ।', pair_sub_wait2:'खिलाड़ी 1 तय हो गया। दूसरे कंट्रोलर का इंतज़ार…', pair_sub_ready:'फ़ाइटर चयन लोड हो रहा है…',
+    pair_player:'खिलाड़ी {n}', pair_waiting:'कंट्रोलर का इंतज़ार…', pair_detected:'कंट्रोलर मिला', pair_press:'कोई भी बटन दबाएँ', pair_locked:'तय हो गया',
+    pair_back_hint:'मोड स्क्रीन पर लौटने के लिए Select / Back बटन दबाएँ।',
+    vs_title:'अपने फ़ाइटर चुनें', vs_choosing:'चुन रहे हैं…', vs_ready:'तैयार', vs_hint:'चलाएँ: स्टिक या D-pad · पक्का करें: {a} · वापस: {b}',
+    vs_locked_note:'लॉक किए गए फ़ाइटर पहले इस सेव स्लॉट में अनलॉक करने होंगे।',
+    pvp_paused:'कंट्रोलर डिस्कनेक्ट हो गया', pvp_paused_sub:'खिलाड़ी {n}, लड़ाई जारी रखने के लिए अपना कंट्रोलर दोबारा जोड़ें।', pvp_quit:'मेनू पर जाएँ',
+    go_p1_wins:'खिलाड़ी 1 जीता!', go_p2_wins:'खिलाड़ी 2 जीता!', go_rematch:'रीमैच', go_change_fighters:'फ़ाइटर बदलें', menu_change_fighter:'फ़ाइटर बदलें',
+    inv_tip:'चुनने के लिए एक बार टैप करें। स्टैट्स और अटैक देखने के लिए दो बार टैप करें।', inv_tip_pad:'चुनने के लिए {a} दबाएँ। स्टैट्स और अटैक के लिए इसे दो बार दबाएँ या {y} दबाएँ।',
+    modal_pad_close:'बंद करने के लिए {b} दबाएँ' },
+  ja:{ mode_title:'モードを選択', mode_practice:'練習', mode_practice_desc:'装備中のファイターでランダムな相手と戦います。', mode_playing_as:'使用中：{name}',
+    mode_friend_desc:'2人プレイ・コントローラー2台。ファイターを選んで勝負しよう。', mode_controller_only:'🎮 コントローラー専用', mode_pads_count:'コントローラー {n}/2 台を検出',
+    pair_title_connect:'コントローラーを2台接続', pair_title_p1:'プレイヤー1は誰？', pair_title_p2:'プレイヤー2は誰？', pair_title_ready:'準備完了！',
+    pair_sub_connect:'ゲームが認識できるよう、各コントローラーのボタンを何か押してください。', pair_sub_p1:'コントローラーのボタンを何か押してください。最初に押した人がプレイヤー1です。',
+    pair_sub_p2:'プレイヤー2、コントローラーのボタンを何か押してください。', pair_sub_wait2:'プレイヤー1が決定しました。2台目のコントローラーを待っています…', pair_sub_ready:'ファイター選択を読み込み中…',
+    pair_player:'プレイヤー{n}', pair_waiting:'コントローラーを待っています…', pair_detected:'コントローラーを検出', pair_press:'ボタンを押してください', pair_locked:'決定済み',
+    pair_back_hint:'Select / 戻るボタンでモード選択に戻ります。',
+    vs_title:'ファイターを選ぼう', vs_choosing:'選択中…', vs_ready:'準備OK', vs_hint:'移動：スティック／十字キー ・ 決定：{a} ・ 取消：{b}',
+    vs_locked_note:'未解放のファイターは、先にこのセーブスロットで解放してください。',
+    pvp_paused:'コントローラーが切断されました', pvp_paused_sub:'プレイヤー{n}、コントローラーを再接続してください。', pvp_quit:'メニューへ戻る',
+    go_p1_wins:'プレイヤー1の勝利！', go_p2_wins:'プレイヤー2の勝利！', go_rematch:'再戦', go_change_fighters:'ファイター変更', menu_change_fighter:'ファイター変更',
+    inv_tip:'1回タップで装備、ダブルタップでステータスと技を表示します。', inv_tip_pad:'{a}で装備。2回押すか{y}を押すと、ステータスと技を表示します。',
+    modal_pad_close:'{b}で閉じる' }
+};
+Object.keys(I18N_V5).forEach(code => { if(I18N[code]) Object.assign(I18N[code], I18N_V5[code]); });
+
+/* =========================================================================
+   SECTION: SCREEN WIRING — mode select, 1 V 1 actions, double-tap details
+   ========================================================================= */
+document.getElementById('btn-mode-practice').addEventListener('click', startRandomBattle);
+document.getElementById('btn-mode-friend').addEventListener('click', ()=> showScreen('pair'));
+document.getElementById('go-rematch-btn').addEventListener('click', ()=>{
+  if(versus.lastPick) startBattle(versus.lastPick[0], versus.lastPick[1], { pvp:true });
+});
+document.getElementById('go-change-btn').addEventListener('click', ()=> showScreen('versus'));
+document.getElementById('pvp-quit').addEventListener('click', abortBattle);
 
 /* =========================================================================
    SECTION: INPUT — ON-SCREEN D-PAD (press-and-hold)
@@ -4748,7 +6006,7 @@ function dragUpdate(dx, dy){
   }
 }
 wrapper.addEventListener('touchstart', (e)=>{
-  if(state.mode!=='battle') return;
+  if(state.mode!=='battle' || state.pvp) return;
   const t = e.touches[0];
   dragState.active = true; dragState.startX = t.clientX; dragState.startY = t.clientY;
 }, {passive:true});
@@ -4780,6 +6038,22 @@ function gameLoop(ts){
     const p = state.player, b = state.bot;
     const frozen = state.countdown; // nobody moves or attacks until FIGHT!
 
+    if(state.pvp && state.pvpPaused){
+      // A controller dropped out: hold the fight until it's back.
+      renderFighter(p); renderFighter(b); updateHud(); updateAbilityBar();
+      requestAnimationFrame(gameLoop);
+      return;
+    }
+    if(state.pvp){
+      // 1 V 1 Friend — both fighters are driven by their own controller.
+      const k1 = versus.keys[0], k2 = versus.keys[1];
+      const mv = k => (k.left ? -1 : 0) + (k.right ? 1 : 0);
+      const pJump = !frozen && (p.jumpQueued || (p.flight && k1.up));
+      const bJump = !frozen && (b.jumpQueued || (b.flight && k2.up));
+      p.jumpQueued = false; b.jumpQueued = false;
+      updatePhysics(p, frozen ? 0 : mv(k1), pJump, !frozen && p.flight && k1.down, dtF);
+      updatePhysics(b, frozen ? 0 : mv(k2), bJump, !frozen && b.flight && k2.down, dtF);
+    } else {
     // resolve player movement input (keyboard/touch OR controller)
     let pMoveDir = 0;
     if(!frozen){
@@ -4804,12 +6078,13 @@ function gameLoop(ts){
     updatePhysics(b, frozen ? 0 : b.aiMoveDir, bWantJump, bWantDown, dtF);
 
     updateBotFacing(b, p);
+    }
     updateBlock(p); updateBlock(b);
     updateBPCharge(p); updateBPCharge(b);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
-    if(!frozen) updateBotAI(dtF);
+    if(!frozen && !state.pvp) updateBotAI(dtF);
     checkKO();
 
     renderFighter(p);
@@ -4828,6 +6103,7 @@ window.addEventListener('load', rescaleArena);
 /* =========================================================================
    SECTION: INITIAL RENDER
    ========================================================================= */
+initBubbles();
 applyTranslations();
 renderSaveSlots();
 showScreen('save-slots');
