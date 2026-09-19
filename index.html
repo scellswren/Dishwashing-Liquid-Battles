@@ -46,7 +46,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 /* ---------- Full-bleed page screens (menu / inventory / instructions / settings) ---------- */
 /* These break out of #app's centered 1200px column and cover the entire
    viewport so they read well on anything from a phone to a TV/fridge display. */
-#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active{
+#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-save-slots.active{
   position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none;
   display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
   overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; z-index:2;
@@ -96,6 +96,41 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   .btn:hover{transform:translateY(-2px);}
   .btn-secondary:hover{border-color:var(--amber);}
 }
+
+
+/* ---------- Save slot picker ---------- */
+#screen-save-slots.active{align-items:center;justify-content:center;padding:16px;}
+.save-slot-wrap{
+  position:relative;z-index:1;width:min(980px,94vw);max-height:90vh;overflow:auto;
+  background:linear-gradient(145deg,#171a2b,#252944 60%,#11131f);
+  border:1px solid #464b6d;border-radius:22px;padding:clamp(24px,5vw,48px);
+  box-shadow:0 30px 90px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.save-slot-title{text-align:center;color:var(--amber);font-size:clamp(30px,5vw,54px);text-shadow:0 2px 18px rgba(124,58,237,.25);}
+.save-slot-sub{text-align:center;color:var(--muted);font-size:clamp(12px,1.4vw,15px);margin:8px auto 24px;max-width:720px;line-height:1.5;}
+.save-slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.save-slot-card{background:linear-gradient(160deg,#252944,#1b1e30);border:1px solid #3c4160;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:0 10px 25px rgba(0,0,0,.16);}
+.save-slot-card.active{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee inset,0 0 28px #22d3ee22;}
+.save-slot-num{font-family:'Anton';font-size:13px;letter-spacing:.12em;color:#9da4c1;text-transform:uppercase;}
+.save-slot-name{font-family:'Anton';font-size:clamp(22px,2.8vw,32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;}
+.save-slot-status{color:#aeb5d6;font-size:12px;min-height:32px;line-height:1.35;}
+.save-slot-actions{display:flex;gap:8px;margin-top:auto;}
+.save-slot-actions .btn{flex:1;}
+.save-slot-rename{max-width:112px;}
+@media(max-width:760px){.save-slot-grid{grid-template-columns:1fr;}.save-slot-card{padding:16px;}.save-slot-wrap{max-height:94vh;}}
+.current-save-slot{display:none;}
+.menu-save-slots-top{position:fixed !important;top:12px;left:12px;z-index:1000;padding:7px 10px;font-size:11px;border-radius:8px;min-width:92px;box-shadow:0 6px 16px rgba(0,0,0,.28);margin:0;}
+.menu-save-slots-top .btn-icon{font-size:1em;}
+.menu-code-highlight{border-color:#7c3aed;box-shadow:0 0 0 1px #7c3aed55 inset,0 8px 24px #7c3aed22;}
+.menu-code-highlight .btn-icon{filter:drop-shadow(0 0 5px #c4b5fd);}
+
+
+/* ---------- Code modal ---------- */
+.code-entry{display:flex;gap:8px;margin-top:14px;}
+.code-entry input{flex:1;min-width:0;background:#11131f;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:600 14px 'Inter',system-ui,sans-serif;outline:none;}
+.code-entry input:focus{border-color:var(--amber);box-shadow:0 0 0 2px rgba(242,165,65,.15);}
+.code-result{min-height:20px;color:var(--muted);font-size:12px;line-height:1.4;margin-top:10px;}
+.code-result.success{color:#7fe39a;}.code-result.error{color:#ff9296;}
 
 /* ---------- Generic panel screens ---------- */
 .panel{
@@ -866,6 +901,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
   <!-- ============ MAIN MENU ============ -->
   <div id="screen-menu" class="screen active">
+    <button class="btn btn-secondary menu-save-slots-top" id="btn-menu-save-slots"><span class="btn-icon">💾</span><span data-i18n="nav_save_slots">Save Slots</span></button>
     <div class="menu-wrap">
       <h1 class="menu-title">DISHWASHING LIQUID BATTLES</h1>
       <div class="menu-buttons">
@@ -873,7 +909,17 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
         <button class="btn btn-secondary" data-nav="inventory"><span class="btn-icon">🎒</span><span data-i18n="nav_inventory">Inventory</span></button>
         <button class="btn btn-secondary" data-nav="instructions"><span class="btn-icon">📖</span><span data-i18n="nav_instructions">Instructions</span></button>
         <button class="btn btn-secondary" data-nav="settings"><span class="btn-icon">⚙️</span><span data-i18n="nav_settings">Settings</span></button>
+        <button class="btn btn-secondary menu-code-highlight" style="display:flex !important;" id="btn-menu-code"><span class="btn-icon">🔑</span><span data-i18n="nav_code">Code</span></button>
       </div>
+    </div>
+  </div>
+
+  <!-- ============ SAVE SLOT PICKER ============ -->
+  <div id="screen-save-slots" class="screen">
+    <div class="save-slot-wrap">
+      <h1 class="save-slot-title" data-i18n="save_slots_title">Choose a Save Slot</h1>
+      <p class="save-slot-sub" data-i18n="save_slots_sub">Choose which save slot you want to play. Your progress, equipped character, and unlocks are stored separately in each slot.</p>
+      <div id="save-slot-grid" class="save-slot-grid"></div>
     </div>
   </div>
 
@@ -993,6 +1039,20 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
     </div>
   </div>
 
+</div>
+
+<!-- Unlock code modal -->
+<div id="code-modal" class="modal-overlay hidden">
+  <div class="modal" id="code-modal-inner">
+    <h3 data-i18n="code_title">Enter Code</h3>
+    <p style="color:var(--muted);margin:10px 0 0;line-height:1.5;" data-i18n="code_desc">Enter a code to unlock content in the currently selected save slot.</p>
+    <div class="code-entry">
+      <input id="code-input" type="text" autocomplete="off" spellcheck="false" data-i18n-placeholder="code_placeholder" placeholder="Enter code">
+      <button class="btn btn-primary btn-small" id="code-submit" data-i18n="code_submit">Apply</button>
+    </div>
+    <div id="code-result" class="code-result"></div>
+    <div style="text-align:center;margin-top:16px;"><button class="btn btn-secondary btn-small" id="code-close" data-i18n="modal_close">Close</button></div>
+  </div>
 </div>
 
 <!-- Character detail modal (used from inventory/collection) -->
@@ -1139,7 +1199,9 @@ const LANGUAGES = [
   {code:'ja', label:'日本語'}
 ];
 const I18N = {
-  en:{ nav_play:'Play', nav_inventory:'Inventory', nav_instructions:'Instructions', nav_settings:'Settings', nav_back:'Back',
+  en:{ nav_play:'Play', nav_inventory:'Inventory', nav_instructions:'Instructions', nav_settings:'Settings', nav_save_slots:'Save Slots', nav_code:'Code', nav_back:'Back',
+    save_slots_title:'Choose a Save Slot', save_slots_sub:'Choose which save slot you want to play. Your progress, equipped character, and unlocks are stored separately in each slot.', save_slot_play:'Play', save_slot_rename:'Rename', save_slot_empty:'New slot — Spider-Man will be your default character.', save_slot_unlocked:'{count}/{total} characters unlocked', save_slot_active:'Currently selected', save_slot_default_name:'Save Slot {n}', current_save_slot:'Save Slot {n}',
+    code_title:'Enter Code', code_desc:'Enter a code to unlock content in the currently selected save slot.', code_placeholder:'Enter code', code_submit:'Apply', code_success:'All characters are now unlocked in {slot}.', code_error:'That code is not valid.',
     inv_title:'Inventory', inv_caption:'Roster, collection & equipped fighter', inv_equipped_label:'EQUIPPED FIGHTER',
     inv_equipped_hint_default:'Select a fighter below.', inv_none:'None', inv_legend_owned:'Owned', inv_legend_locked:'Locked', inv_equipped_badge:'EQUIPPED',
     inv_ready:'Ready for battle', inv_click_equip:'Click to equip',
@@ -1304,6 +1366,10 @@ function applyTranslations(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     el.textContent = t(el.getAttribute('data-i18n'));
   });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  updateCurrentSaveSlotLabel();
   // Re-render any screens whose content is built dynamically in JS so
   // their strings pick up the new language too.
   if(document.getElementById('screen-inventory').classList.contains('active')) renderInventory();
@@ -1418,55 +1484,176 @@ function platformUnderX(entity){
 
 /* =========================================================================
    SECTION: LOCAL STORAGE / PLAYER PROGRESS
+   Three independent save slots. Slot 1 migrates the previous save format so
+   existing players keep their current roster/equipped fighter.
    ========================================================================= */
 const STORAGE_KEY = 'dishwashingLiquidBattlesSave_v4';
 const LEGACY_STORAGE_KEY = 'brawlArenaLegacySave_v1';
-function loadSave(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw) return JSON.parse(raw);
-  }catch(e){ console.warn('Save read failed', e); }
-  return null;
+const SAVE_SLOTS_KEY = 'dishwashingLiquidBattlesSaveSlots_v1';
+const FIRST_TIME_STARTER = 'spiderman';
+const SAVE_SLOT_COUNT = 3;
+
+function safeJson(raw){
+  try{ return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
 }
-function writeSave(save){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(save)); }catch(e){ console.warn('Save write failed', e); }
+function defaultSaveSlot(index){
+  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], equipped:null };
 }
-let SAVE = loadSave();
-if(!SAVE){
-  try {
-    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
-    SAVE = legacy ? JSON.parse(legacy) : null;
-  } catch(e) {}
+function normalizeSaveSlot(slot, index){
+  const out = Object.assign(defaultSaveSlot(index), slot && typeof slot === 'object' ? slot : {});
+  out.name = String(out.name || `Save Slot ${index+1}`).slice(0, 32);
+  out.unlocked = Array.isArray(out.unlocked) ? [...new Set(out.unlocked.filter(id=>ROSTER_ORDER.includes(id)))] : [];
+  out.equipped = ROSTER_ORDER.includes(out.equipped) ? out.equipped : null;
+  out.used = !!out.used || out.unlocked.length > 0 || !!out.equipped;
+  if(out.used && out.unlocked.length === 0){ out.unlocked = [FIRST_TIME_STARTER]; out.equipped = FIRST_TIME_STARTER; }
+  if(out.used && (!out.equipped || !out.unlocked.includes(out.equipped))){ out.equipped = out.unlocked[0] || FIRST_TIME_STARTER; }
+  return out;
 }
-if(!SAVE){
-  const starter = ROSTER_ORDER[Math.floor(Math.random()*ROSTER_ORDER.length)];
-  SAVE = { unlocked: [starter], equipped: starter };
-  writeSave(SAVE);
+function createDefaultSaveSlots(){
+  return { version:1, activeSlot:1, slots:Array.from({length:SAVE_SLOT_COUNT}, (_,i)=>defaultSaveSlot(i)) };
 }
-// Migrate the old character id without losing the player's unlocked roster.
-if(!SAVE.equipped || !ROSTER_ORDER.includes(SAVE.equipped) || !SAVE.unlocked.includes(SAVE.equipped)) SAVE.equipped = ROSTER_ORDER.find(isUnlocked) || ROSTER_ORDER[0];
-writeSave(SAVE);
-function isUnlocked(id){ return SAVE.unlocked.includes(id); }
+function loadSaveSlots(){
+  const stored = safeJson(localStorage.getItem(SAVE_SLOTS_KEY));
+  if(stored && Array.isArray(stored.slots)){
+    const slots = Array.from({length:SAVE_SLOT_COUNT}, (_,i)=>normalizeSaveSlot(stored.slots[i], i));
+    const active = Math.min(SAVE_SLOT_COUNT, Math.max(1, Number(stored.activeSlot)||1));
+    return {version:1, activeSlot:active, slots};
+  }
+
+  // Migrate the save everyone was using before save slots existed.
+  const previous = safeJson(localStorage.getItem(STORAGE_KEY)) || safeJson(localStorage.getItem(LEGACY_STORAGE_KEY));
+  const fresh = createDefaultSaveSlots();
+  if(previous && typeof previous === 'object'){
+    fresh.slots[0] = normalizeSaveSlot({
+      name:'Save Slot 1', used:true,
+      unlocked:Array.isArray(previous.unlocked) ? previous.unlocked : [],
+      equipped:previous.equipped || null
+    }, 0);
+  }else{
+    // Brand-new players start with Spider-Man, not a random fighter.
+    fresh.slots[0] = normalizeSaveSlot({name:'Save Slot 1', used:true, unlocked:[FIRST_TIME_STARTER], equipped:FIRST_TIME_STARTER}, 0);
+  }
+  writeSaveSlots(fresh);
+  return fresh;
+}
+function writeSaveSlots(data){
+  try{ localStorage.setItem(SAVE_SLOTS_KEY, JSON.stringify(data)); }catch(e){ console.warn('Save slots write failed', e); }
+}
+let SAVE_SLOTS = loadSaveSlots();
+let activeSaveSlot = Math.min(SAVE_SLOT_COUNT, Math.max(1, Number(SAVE_SLOTS.activeSlot)||1));
+let SAVE = normalizeSaveSlot(SAVE_SLOTS.slots[activeSaveSlot-1], activeSaveSlot-1);
+SAVE_SLOTS.slots[activeSaveSlot-1] = SAVE;
+writeSaveSlots(SAVE_SLOTS);
+
+function persistActiveSave(){
+  SAVE_SLOTS.activeSlot = activeSaveSlot;
+  SAVE_SLOTS.slots[activeSaveSlot-1] = normalizeSaveSlot(SAVE, activeSaveSlot-1);
+  SAVE = SAVE_SLOTS.slots[activeSaveSlot-1];
+  writeSaveSlots(SAVE_SLOTS);
+}
+function slotDisplayName(slot, index){
+  return slot && slot.name ? slot.name : `Save Slot ${index+1}`;
+}
+function ensureSaveSlotStarted(index){
+  const slot = SAVE_SLOTS.slots[index];
+  if(!slot.used){
+    slot.used = true;
+    slot.unlocked = [FIRST_TIME_STARTER];
+    slot.equipped = FIRST_TIME_STARTER;
+  }
+  SAVE_SLOTS.slots[index] = normalizeSaveSlot(slot, index);
+}
+function selectSaveSlot(slotNumber){
+  if(slotNumber < 1 || slotNumber > SAVE_SLOT_COUNT) return;
+  const index = slotNumber - 1;
+  ensureSaveSlotStarted(index);
+  activeSaveSlot = slotNumber;
+  SAVE = SAVE_SLOTS.slots[index];
+  SAVE_SLOTS.activeSlot = activeSaveSlot;
+  writeSaveSlots(SAVE_SLOTS);
+  renderSaveSlots();
+  updateCurrentSaveSlotLabel();
+  applyTranslations();
+  showScreen('menu');
+}
+function renameSaveSlot(slotNumber){
+  const index = slotNumber - 1;
+  const slot = SAVE_SLOTS.slots[index];
+  const next = window.prompt('Name this save slot:', slotDisplayName(slot, index));
+  if(next === null) return;
+  const name = next.trim().slice(0, 32);
+  if(!name) return;
+  slot.name = name;
+  SAVE_SLOTS.slots[index] = normalizeSaveSlot(slot, index);
+  writeSaveSlots(SAVE_SLOTS);
+  renderSaveSlots();
+  updateCurrentSaveSlotLabel();
+}
+function updateCurrentSaveSlotLabel(){
+  const el = document.getElementById('current-save-slot-label');
+  if(el) el.textContent = `${slotDisplayName(SAVE_SLOTS.slots[activeSaveSlot-1], activeSaveSlot-1)} • Slot ${activeSaveSlot}`;
+}
+function renderSaveSlots(){
+  const grid = document.getElementById('save-slot-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  SAVE_SLOTS.slots.forEach((slot, index)=>{
+    const number = index+1;
+    const card = document.createElement('div');
+    card.className = 'save-slot-card' + (number===activeSaveSlot ? ' active' : '');
+    const used = slot.used && slot.unlocked.length;
+    const status = used
+      ? t('save_slot_unlocked').replace('{count}', slot.unlocked.length).replace('{total}', ROSTER_ORDER.length)
+      : t('save_slot_empty');
+    card.innerHTML = `
+      <div class="save-slot-num">Slot ${number}${number===activeSaveSlot ? ` • ${t('save_slot_active')}` : ''}</div>
+      <div class="save-slot-name" title="${slotDisplayName(slot,index)}">${slotDisplayName(slot,index)}</div>
+      <div class="save-slot-status">${status}</div>
+      <div class="save-slot-actions">
+        <button class="btn btn-primary btn-small save-slot-play">${t('save_slot_play')}</button>
+        <button class="btn btn-secondary btn-small save-slot-rename">${t('save_slot_rename')}</button>
+      </div>`;
+    card.querySelector('.save-slot-play').onclick = ()=>selectSaveSlot(number);
+    card.querySelector('.save-slot-rename').onclick = (e)=>{ e.stopPropagation(); renameSaveSlot(number); };
+    grid.appendChild(card);
+  });
+}
+function isUnlocked(id){ return Array.isArray(SAVE.unlocked) && SAVE.unlocked.includes(id); }
 function equipCharacter(id){
   if(!isUnlocked(id)) return;
   SAVE.equipped = id;
-  writeSave(SAVE);
+  persistActiveSave();
   renderInventory();
 }
 function unlockCharacter(id){
-  if(!isUnlocked(id)){ SAVE.unlocked.push(id); writeSave(SAVE); }
+  if(!ROSTER_ORDER.includes(id)) return;
+  if(!isUnlocked(id)){ SAVE.unlocked.push(id); }
+  SAVE.used = true;
+  persistActiveSave();
 }
+function unlockAllCharactersWithCode(code){
+  if(code !== 'Water555J*b999TVRemote2') return false;
+  SAVE.used = true;
+  SAVE.unlocked = [...ROSTER_ORDER];
+  if(!SAVE.equipped || !ROSTER_ORDER.includes(SAVE.equipped)) SAVE.equipped = FIRST_TIME_STARTER;
+  persistActiveSave();
+  renderInventory();
+  return true;
+}
+
 
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','inventory','instructions','settings','battle','gameover'];
+const screens = ['menu','save-slots','inventory','instructions','settings','battle','gameover'];
 function showScreen(name){
   screens.forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('active', s===name);
   });
+  if(name==='save-slots') renderSaveSlots();
   if(name==='inventory') renderInventory();
   if(name==='settings') renderSettingsScreen();
+  if(name==='menu') updateCurrentSaveSlotLabel();
   if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
 document.addEventListener('click', (e)=>{
@@ -1474,6 +1661,35 @@ document.addEventListener('click', (e)=>{
   if(nav){ showScreen(nav.getAttribute('data-nav')); }
 });
 document.getElementById('go-play-another-btn').addEventListener('click', startRandomBattle);
+
+function openCodeModal(){
+  const modal = document.getElementById('code-modal');
+  const input = document.getElementById('code-input');
+  const result = document.getElementById('code-result');
+  if(result){ result.textContent=''; result.className='code-result'; }
+  if(input){ input.value=''; setTimeout(()=>input.focus(), 0); }
+  modal.classList.remove('hidden');
+}
+function closeCodeModal(){
+  const modal = document.getElementById('code-modal');
+  modal.classList.add('hidden');
+}
+function submitUnlockCode(){
+  const input = document.getElementById('code-input');
+  const result = document.getElementById('code-result');
+  const ok = unlockAllCharactersWithCode((input.value || '').trim());
+  result.className = 'code-result ' + (ok ? 'success' : 'error');
+  result.textContent = ok
+    ? t('code_success').replace('{slot}', slotDisplayName(SAVE_SLOTS.slots[activeSaveSlot-1], activeSaveSlot-1))
+    : t('code_error');
+  if(ok) input.value = '';
+}
+document.getElementById('btn-menu-save-slots').addEventListener('click', ()=>showScreen('save-slots'));
+document.getElementById('btn-menu-code').addEventListener('click', openCodeModal);
+document.getElementById('code-close').addEventListener('click', closeCodeModal);
+document.getElementById('code-submit').addEventListener('click', submitUnlockCode);
+document.getElementById('code-modal').addEventListener('click', e=>{ if(e.target.id === 'code-modal') closeCodeModal(); });
+document.getElementById('code-input').addEventListener('keydown', e=>{ if(e.key === 'Enter') submitUnlockCode(); });
 
 /* =========================================================================
    SECTION: CHARACTER CARD RENDERING (inventory / collection / select)
@@ -4582,7 +4798,8 @@ window.addEventListener('load', rescaleArena);
    SECTION: INITIAL RENDER
    ========================================================================= */
 applyTranslations();
-showScreen('menu');
+renderSaveSlots();
+showScreen('save-slots');
 </script>
 </body>
 </html>
