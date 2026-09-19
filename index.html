@@ -153,10 +153,6 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .mystery-name{color:#565a78; letter-spacing:3px;}
 .char-cat{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.5px;}
 .lock-badge{font-size:10px; color:var(--muted); margin-top:4px;}
-.equipped-badge{
-  position:absolute; top:6px; left:6px; background:var(--amber); color:#231600; font-family:'Anton',sans-serif;
-  font-size:9px; letter-spacing:.5px; padding:3px 7px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,.4);
-}
 
 /* =========================================================================
    DEVICE-CLASS RESPONSIVENESS
@@ -399,6 +395,13 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .lang-btn:hover{border-color:var(--amber); transform:translateY(-1px);}
 .lang-btn.active{background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600; border-color:var(--amber);}
 
+/* ---------- Controller menu-navigation focus ring ---------- */
+.gp-focused{
+  outline:3px solid var(--amber) !important; outline-offset:3px;
+  box-shadow:0 0 0 5px rgba(242,165,65,.3) !important;
+}
+.char-card.gp-focused{outline-offset:0;}
+
 #battle-topbar{display:flex; justify-content:space-between; align-items:center; flex:0 0 auto;}
 #screen-battle #hud{width:100%;}
 #screen-battle #arena-wrapper{flex:1 1 auto; min-height:0; aspect-ratio:auto; width:100%;}
@@ -485,7 +488,6 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 }
 .char-card.selected{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee inset,0 0 26px #22d3ee22;}
 .char-card.mystery{background:linear-gradient(160deg,#1b1d29,#131420);border:1px dashed #3a3d54;box-shadow:none;}
-.equipped-badge{position:absolute;left:6px;right:6px;bottom:6px;border-radius:7px;padding:4px;background:#22d3eeea;color:#071018;font-weight:900;font-size:9px;letter-spacing:.12em;}
 .char-square{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 10px 20px rgba(0,0,0,.18);}
 #arena-wrapper{aspect-ratio:1280/720;border:1px solid #4b5278;background:#080a12;box-shadow:0 20px 60px rgba(0,0,0,.46);}
 #arena{
@@ -1317,7 +1319,7 @@ function showScreen(name){
   });
   if(name==='inventory') renderInventory();
   if(name==='settings') renderSettingsScreen();
-
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
 document.addEventListener('click', (e)=>{
   const nav = e.target.closest('[data-nav]');
@@ -1348,7 +1350,7 @@ function renderInventory(){
     if(unlocked){
       card.style.setProperty('--char-color', def.color);
       card.innerHTML = `
-        <div class="char-square">${squareInner(def)}${selected ? `<div class="equipped-badge">${t('inv_equipped_badge')}</div>` : ''}</div>
+        <div class="char-square">${squareInner(def)}</div>
         <div class="char-name">${def.name}</div>
         <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
         <div class="lock-badge">${selected ? t('inv_ready') : t('inv_click_equip')}</div>`;
@@ -3643,6 +3645,119 @@ function pollGamepad(){
       const btn = gp.buttons[idx];
       gpPrevPressed[idx] = !!(btn && btn.pressed);
     });
+    // Controller navigation of the menu / inventory / instructions / settings screens.
+    handleGamepadMenuNav(gp, axisX, axisY, dpadUp, dpadLeft, dpadRight);
+  }
+}
+
+/* =========================================================================
+   SECTION: CONTROLLER MENU NAVIGATION
+   Lets the Xbox/PlayStation/Nintendo controller move a focus highlight
+   around buttons, fighter cards, key-bind rows and language options on
+   every non-battle screen, and "click" whatever's focused.
+   ========================================================================= */
+const GP_NAV_INITIAL_MS = 380; // delay before the held direction starts repeating
+const GP_NAV_REPEAT_MS = 190;
+let gpFocusEl = null;
+let gpNavHeldDir = null;
+let gpNavNextMoveAt = 0;
+
+function gpFocusableElements(){
+  const activeScreen = document.querySelector('.screen.active');
+  if(!activeScreen) return [];
+  const nodes = activeScreen.querySelectorAll('button, .char-card:not(.mystery), .lang-btn');
+  return Array.from(nodes).filter(el=>{
+    if(el.disabled) return false;
+    const style = getComputedStyle(el);
+    return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
+  });
+}
+function gpApplyFocusVisual(list){
+  list.forEach(el=> el.classList.toggle('gp-focused', el === gpFocusEl));
+}
+function resetGpMenuFocus(){
+  gpFocusEl = null;
+  gpNavHeldDir = null;
+}
+function gpEnsureFocus(){
+  const list = gpFocusableElements();
+  if(list.length === 0){ gpFocusEl = null; return list; }
+  if(!gpFocusEl || !list.includes(gpFocusEl)) gpFocusEl = list[0];
+  gpApplyFocusVisual(list);
+  return list;
+}
+function gpMoveFocus(dir){
+  const list = gpEnsureFocus();
+  if(list.length === 0) return;
+  if(!gpFocusEl) return;
+  const cur = gpFocusEl.getBoundingClientRect();
+  const cx = cur.left + cur.width/2, cy = cur.top + cur.height/2;
+  let best = null, bestScore = Infinity;
+  list.forEach(el=>{
+    if(el === gpFocusEl) return;
+    const r = el.getBoundingClientRect();
+    const ex = r.left + r.width/2, ey = r.top + r.height/2;
+    const dx = ex - cx, dy = ey - cy;
+    let primary, secondary, inDirection;
+    if(dir === 'up'){ primary = -dy; secondary = Math.abs(dx); inDirection = dy < -4; }
+    else if(dir === 'down'){ primary = dy; secondary = Math.abs(dx); inDirection = dy > 4; }
+    else if(dir === 'left'){ primary = -dx; secondary = Math.abs(dy); inDirection = dx < -4; }
+    else { primary = dx; secondary = Math.abs(dy); inDirection = dx > 4; }
+    if(!inDirection) return;
+    const score = primary + secondary * 1.6;
+    if(score < bestScore){ bestScore = score; best = el; }
+  });
+  if(best){
+    gpFocusEl = best;
+    gpApplyFocusVisual(list);
+    best.scrollIntoView({block:'nearest', inline:'nearest'});
+  }
+}
+function gpActivateFocus(){
+  gpEnsureFocus();
+  if(gpFocusEl) gpFocusEl.click();
+}
+function handleGamepadMenuNav(gp, axisX, axisY, dpadUp, dpadLeft, dpadRight){
+  gpEnsureFocus();
+
+  const dpadDown = !!(gp.buttons[13] && gp.buttons[13].pressed);
+  let dir = null;
+  if(axisY < -GAMEPAD_DEADZONE || dpadUp) dir = 'up';
+  else if(axisY > GAMEPAD_DEADZONE || dpadDown) dir = 'down';
+  else if(axisX < -GAMEPAD_DEADZONE || dpadLeft) dir = 'left';
+  else if(axisX > GAMEPAD_DEADZONE || dpadRight) dir = 'right';
+
+  const now = performance.now();
+  if(dir){
+    if(dir !== gpNavHeldDir){
+      gpNavHeldDir = dir;
+      gpNavNextMoveAt = now + GP_NAV_INITIAL_MS;
+      gpMoveFocus(dir);
+    } else if(now >= gpNavNextMoveAt){
+      gpNavNextMoveAt = now + GP_NAV_REPEAT_MS;
+      gpMoveFocus(dir);
+    }
+  } else {
+    gpNavHeldDir = null;
+  }
+
+  // Bottom face button (A / ✕ / B) activates whatever's focused — same
+  // button used to jump in battle, so it stays consistent across the app.
+  const selectBtn = gp.buttons[JUMP_POS];
+  const selectPressed = !!(selectBtn && selectBtn.pressed);
+  const selectWas = !!gpPrevPressed['menuSelect'];
+  gpPrevPressed['menuSelect'] = selectPressed;
+  if(selectPressed && !selectWas) gpActivateFocus();
+
+  // Right face button (B / ○ / A) backs out to the main menu, mirroring
+  // the on-screen Back buttons.
+  const backBtn = gp.buttons[ABILITY_POS.R];
+  const backPressed = !!(backBtn && backBtn.pressed);
+  const backWas = !!gpPrevPressed['menuBack'];
+  gpPrevPressed['menuBack'] = backPressed;
+  if(backPressed && !backWas){
+    const backEl = document.querySelector('.screen.active [data-nav="menu"]');
+    if(backEl) backEl.click();
   }
 }
 
