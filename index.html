@@ -37,56 +37,105 @@ body{
 }
 
 html{overflow:hidden;}
-#app{height:100vh; display:flex; align-items:center; justify-content:center;}
+#app{height:100vh; height:100dvh; display:flex; align-items:center; justify-content:center; position:relative;}
 h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 #app{width:100%; max-width:1200px; margin:0 auto;}
 .screen{display:none;}
 .screen.active{display:flex; align-items:center; justify-content:center; width:100%; min-height:100%;}
 
-/* ---------- Menu ---------- */
-.menu-wrap{
-  background:linear-gradient(180deg,var(--panel),var(--panel2));
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:40px 28px;
-  text-align:center;
-  box-shadow:var(--shadow);
+/* ---------- Full-bleed page screens (menu / inventory / instructions / settings) ---------- */
+/* These break out of #app's centered 1200px column and cover the entire
+   viewport so they read well on anything from a phone to a TV/fridge display. */
+#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active{
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none;
+  display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
+  overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; z-index:2;
+  background:
+    radial-gradient(1100px 700px at 18% 8%, rgba(76,139,245,.14), transparent 60%),
+    radial-gradient(1100px 700px at 85% 92%, rgba(242,165,65,.13), transparent 60%),
+    radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
 }
-.menu-title{font-size:clamp(38px,7vw,64px); color:var(--amber); text-shadow:3px 3px 0 rgba(0,0,0,.4);}
-.menu-sub{color:var(--muted); margin-top:8px; margin-bottom:28px;}
-.menu-buttons{display:flex; flex-direction:column; gap:14px; max-width:340px; margin:0 auto;}
+.page-wrap{width:100%; max-width:1500px; margin:0 auto; flex:1; display:flex; flex-direction:column;
+  padding:0 clamp(16px,4.5vw,56px) clamp(32px,6vw,72px);}
+
+/* ---------- Menu ---------- */
+#screen-menu.active{align-items:center; justify-content:center;}
+.menu-wrap{
+  position:relative; z-index:1;
+  background:linear-gradient(180deg,rgba(27,29,41,.72),rgba(36,38,57,.72));
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--line);
+  border-radius:clamp(18px,2.4vw,28px);
+  padding:clamp(30px,6vw,68px) clamp(22px,6vw,76px);
+  text-align:center;
+  box-shadow:0 30px 90px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  width:min(620px,92vw);
+  margin:clamp(16px,4vh,40px) auto;
+}
+.menu-title{
+  font-size:clamp(30px,6.4vw,74px); line-height:1.06;
+  background:linear-gradient(180deg,#ffe1a0,var(--amber) 55%,#c97418);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 4px 0 rgba(0,0,0,.4));
+}
+.menu-sub{color:var(--muted); margin-top:10px; margin-bottom:clamp(22px,4vw,36px); font-size:clamp(13px,1.4vw,16px);}
+.menu-buttons{display:flex; flex-direction:column; gap:clamp(10px,1.6vw,16px); max-width:380px; margin:0 auto;}
 .btn{
   border:none; border-radius:12px; padding:14px 18px; font-size:16px; font-weight:800;
   cursor:pointer; color:var(--text); background:var(--panel2); border:1px solid var(--line);
-  transition:transform .08s ease, background .15s ease;
+  transition:transform .08s ease, background .15s ease, box-shadow .15s ease;
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
 }
 .btn:active{transform:scale(.97);}
-.btn-primary{background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600;}
+.btn-primary{background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600; box-shadow:0 10px 26px rgba(242,165,65,.25);}
 .btn-secondary{background:var(--panel2);}
 .btn-danger{background:linear-gradient(180deg,var(--red),#b13437); color:#fff;}
 .btn-small{padding:8px 14px; font-size:13px; border-radius:9px;}
+.btn-icon{font-size:1.05em; line-height:1;}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{transform:translateY(-2px);}
+  .btn-secondary:hover{border-color:var(--amber);}
+}
 
 /* ---------- Generic panel screens ---------- */
 .panel{
   background:linear-gradient(180deg,var(--panel),var(--panel2));
   border:1px solid var(--line); border-radius:18px; padding:24px; box-shadow:var(--shadow);
 }
-.panel-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+.panel-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; gap:14px;}
 .panel-header h2{font-size:28px; color:var(--amber);}
+
+/* Sticky full-bleed header for the page screens */
+#screen-inventory .panel, #screen-instructions .panel, #screen-settings .panel{
+  background:transparent; border:none; box-shadow:none; border-radius:0; padding:0;
+  width:100%; max-width:1500px; margin:0 auto;
+}
+#screen-inventory .panel-header, #screen-instructions .panel-header, #screen-settings .panel-header{
+  position:sticky; top:0; z-index:6;
+  background:rgba(13,14,20,.82); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  margin:0 calc(-1 * clamp(16px,4.5vw,56px)) 20px; padding:clamp(16px,3.6vw,28px) clamp(16px,4.5vw,56px) 16px;
+  border-bottom:1px solid var(--line);
+}
+#screen-inventory .panel-header h2, #screen-instructions .panel-header h2, #screen-settings .panel-header h2{
+  font-size:clamp(24px,3.4vw,38px);
+}
 
 /* ---------- Character grid ---------- */
 .char-grid{
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:14px;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(clamp(130px,17vw,210px),1fr)); gap:clamp(10px,1.8vw,20px);
 }
 .char-card{
-  background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:12px;
-  text-align:center; cursor:pointer; transition:transform .1s ease, border-color .15s ease;
+  background:var(--panel2); border:1px solid var(--line); border-radius:16px; padding:clamp(10px,1.4vw,16px);
+  text-align:center; cursor:pointer; transition:transform .12s ease, border-color .15s ease, box-shadow .15s ease;
+  position:relative;
 }
-.char-card:hover{transform:translateY(-3px); border-color:var(--amber);}
-.char-card.locked{opacity:.45; filter:grayscale(1); cursor:not-allowed;}
+@media (hover:hover) and (pointer:fine){
+  .char-card:not(.mystery):hover{transform:translateY(-4px); border-color:var(--char-color, var(--amber)); box-shadow:0 14px 30px rgba(0,0,0,.35);}
+}
 .char-card.selected{border-color:var(--amber); box-shadow:0 0 0 2px var(--amber) inset;}
+.char-card.mystery{cursor:default; background:linear-gradient(160deg,#1b1d29,#131420); border:1px dashed #3a3d54;}
 .char-square{
-  width:96px; height:96px; margin:0 auto 10px; border-radius:12px; overflow:hidden;
+  width:100%; aspect-ratio:1/1; height:auto; margin:0 auto 10px; border-radius:12px; overflow:hidden;
   background:#2c2f45; display:flex; align-items:center; justify-content:center;
   border:1px solid var(--line); position:relative;
 }
@@ -95,9 +144,67 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   width:100%; height:100%; display:flex; align-items:center; justify-content:center;
   font-family:'Anton',sans-serif; font-size:34px; color:#fff;
 }
-.char-name{font-weight:800; font-size:14px;}
+.mystery-square{
+  background:repeating-linear-gradient(135deg,#20222f,#20222f 9px,#181a25 9px,#181a25 18px);
+  border:1px solid #33364a;
+}
+.mystery-icon{font-family:'Anton',sans-serif; font-size:clamp(30px,5vw,46px); color:#4d5170; text-shadow:0 2px 0 rgba(0,0,0,.4);}
+.char-name{font-weight:800; font-size:clamp(13px,1.5vw,15px);}
+.mystery-name{color:#565a78; letter-spacing:3px;}
 .char-cat{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.5px;}
 .lock-badge{font-size:10px; color:var(--muted); margin-top:4px;}
+.equipped-badge{
+  position:absolute; top:6px; left:6px; background:var(--amber); color:#231600; font-family:'Anton',sans-serif;
+  font-size:9px; letter-spacing:.5px; padding:3px 7px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+
+/* =========================================================================
+   DEVICE-CLASS RESPONSIVENESS
+   Fluid clamp() sizing (above) handles most of the scaling automatically;
+   these breakpoints tune layout/density for specific device classes —
+   phones, tablets/iPads, desktops, and big 10-foot displays like TVs and
+   large kitchen touchscreens (e.g. a Samsung Family Hub fridge).
+   ========================================================================= */
+
+/* Phones (portrait & small landscape) */
+@media (max-width:480px){
+  .char-grid{grid-template-columns:repeat(auto-fill,minmax(108px,1fr));}
+  .menu-buttons{max-width:none;}
+  .loadout-banner{flex-direction:column; align-items:flex-start; gap:10px;}
+  .loadout-hint{text-align:left;}
+}
+
+/* Tablets / iPad */
+@media (min-width:600px) and (max-width:1024px){
+  .char-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+}
+
+/* Large 10-foot displays: TVs and big kitchen touchscreens (smart fridges) */
+@media (min-width:1600px){
+  .menu-wrap{padding:64px 84px;}
+  .btn{padding:18px 26px; font-size:19px; border-radius:14px;}
+  .btn-small{padding:12px 20px; font-size:15px;}
+  .char-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:26px;}
+  .panel-header h2{font-size:44px;}
+  .instructions ul li{font-size:16px; padding:16px 18px;}
+}
+
+/* Coarse-pointer / touch devices (phones, tablets, touchscreen fridges):
+   bigger, easier tap targets since there's no mouse precision. */
+@media (pointer:coarse){
+  .btn{padding:16px 18px;}
+  .char-card{padding:14px;}
+  .kb-key, .lang-btn{padding:12px 14px;}
+}
+
+/* Short landscape viewports (phone rotated, or a low TV overscan area):
+   keep the menu from being taller than the screen. */
+@media (max-height:480px) and (orientation:landscape){
+  #screen-menu.active{align-items:center;}
+  .menu-wrap{padding:20px 28px; margin:8px auto;}
+  .menu-buttons{gap:8px;}
+  .menu-sub{margin-bottom:14px;}
+}
 
 /* ---------- Modal ---------- */
 .modal-overlay{
@@ -117,8 +224,15 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 /* ---------- Instructions ---------- */
 .instructions p{color:var(--muted); line-height:1.6;}
-.instructions ul{color:var(--muted); line-height:1.7;}
-.instructions kbd{background:var(--panel2); border:1px solid var(--line); border-radius:5px; padding:1px 7px; color:var(--text);}
+.instructions .instr-goal{font-size:clamp(14px,1.6vw,17px); margin-bottom:clamp(16px,2.6vw,26px);}
+.instructions ul{color:var(--muted); line-height:1.7; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;}
+.instructions ul li{
+  display:flex; align-items:flex-start; gap:14px;
+  background:var(--panel2); border:1px solid var(--line); border-radius:12px;
+  padding:14px 16px; font-size:clamp(13px,1.4vw,14.5px);
+}
+.instructions .instr-icon{font-size:clamp(18px,2vw,22px); line-height:1; flex-shrink:0; margin-top:1px;}
+.instructions kbd{background:var(--panel); border:1px solid var(--line); border-radius:5px; padding:1px 7px; color:var(--text);}
 
 /* ---------- Battle screen ---------- */
 #screen-battle.active{display:flex; flex-direction:column; gap:6px; height:100vh; width:100%; max-width:1200px; padding:6px; overflow:hidden;}
@@ -346,24 +460,31 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .menu-wrap{position:relative;overflow:hidden;background:linear-gradient(145deg,#171a2b,#252944 60%,#11131f);border-color:#464b6d;box-shadow:0 18px 60px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.05);}
 .menu-wrap:before{content:"";position:absolute;inset:-35%;background:conic-gradient(from 90deg,transparent,#7c3aed22,transparent,#22d3ee1c,transparent);animation:menuSpin 14s linear infinite;pointer-events:none;}
 .menu-wrap>*{position:relative;z-index:1;}
-.menu-title{font-size:clamp(38px,7vw,74px);line-height:.95;text-shadow:0 4px 0 rgba(0,0,0,.35),0 0 28px #7c3aed55;}
-.menu-sub{font-size:15px;}
+.menu-title{font-size:clamp(34px,7vw,80px);line-height:.98;text-shadow:0 4px 0 rgba(0,0,0,.35),0 0 28px #7c3aed55;}
+.menu-sub{font-size:clamp(13px,1.5vw,16px);}
 .btn{box-shadow:0 6px 18px rgba(0,0,0,.18);}
-.btn:hover{transform:translateY(-2px);filter:brightness(1.08);}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-2px);filter:brightness(1.08);} }
 .panel{background:linear-gradient(145deg,#171a2b,#252944 68%,#11131f);border-color:#464b6d;box-shadow:0 18px 60px rgba(0,0,0,.42);}
-.panel-header h2{font-size:34px;text-shadow:0 2px 14px rgba(124,58,237,.25);}
-.inventory-caption{color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:4px;}
-.loadout-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:15px 18px;margin-bottom:18px;border:1px solid #555b84;border-radius:16px;background:linear-gradient(90deg,#7c3aed1c,#22d3ee10);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
+.panel-header h2{text-shadow:0 2px 14px rgba(124,58,237,.25);}
+.inventory-caption{color:var(--muted);font-size:clamp(11px,1.1vw,12px);letter-spacing:.14em;text-transform:uppercase;margin-top:4px;}
+.loadout-banner{display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,2.4vw,24px);padding:clamp(12px,2vw,18px);margin-bottom:clamp(14px,2.4vw,22px);border:1px solid #555b84;border-radius:16px;background:linear-gradient(90deg,#7c3aed1c,#22d3ee10);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
+.loadout-banner-main{display:flex;align-items:center;gap:14px;}
+.loadout-thumb{width:clamp(44px,5vw,64px);height:clamp(44px,5vw,64px);border-radius:12px;overflow:hidden;background:#2c2f45;border:1px solid #555b84;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.loadout-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.loadout-thumb .fallback{font-family:'Anton',sans-serif;font-size:22px;color:#fff;}
 .loadout-label{font-size:10px;letter-spacing:.16em;color:#aeb5d6;font-weight:800;}
-.loadout-name{font-family:'Anton';font-size:28px;color:#fff;margin-top:2px;}
+.loadout-name{font-family:'Anton';font-size:clamp(20px,3vw,30px);color:#fff;margin-top:2px;}
 .loadout-hint{color:#9da4c1;font-size:12px;text-align:right;}
-.inventory-legend{display:flex;align-items:center;gap:7px;color:#969db8;font-size:11px;margin-top:14px;}
+.inventory-legend{display:flex;align-items:center;flex-wrap:wrap;gap:7px;color:#969db8;font-size:11px;margin-top:14px;}
 .legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#5a607c;margin-left:8px;}
 .legend-dot.owned{background:#7c3aed;box-shadow:0 0 8px #7c3aed88;}
 .legend-dot.locked{background:#4b5068;}
 .char-card{position:relative;overflow:hidden;background:linear-gradient(160deg,#252944,#1b1e30);border-color:#3c4160;box-shadow:0 10px 25px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);}
-.char-card:hover{transform:translateY(-5px) scale(1.015);border-color:#7c3aed;box-shadow:0 14px 34px rgba(0,0,0,.25),0 0 0 1px #7c3aed44;}
+@media (hover:hover) and (pointer:fine){
+  .char-card:not(.mystery):hover{transform:translateY(-5px) scale(1.015);border-color:var(--char-color,#7c3aed);box-shadow:0 14px 34px rgba(0,0,0,.25),0 0 0 1px color-mix(in srgb, var(--char-color,#7c3aed) 55%, transparent);}
+}
 .char-card.selected{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee inset,0 0 26px #22d3ee22;}
+.char-card.mystery{background:linear-gradient(160deg,#1b1d29,#131420);border:1px dashed #3a3d54;box-shadow:none;}
 .equipped-badge{position:absolute;left:6px;right:6px;bottom:6px;border-radius:7px;padding:4px;background:#22d3eeea;color:#071018;font-weight:900;font-size:9px;letter-spacing:.12em;}
 .char-square{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 10px 20px rgba(0,0,0,.18);}
 #arena-wrapper{aspect-ratio:1280/720;border:1px solid #4b5278;background:#080a12;box-shadow:0 20px 60px rgba(0,0,0,.46);}
@@ -424,22 +545,6 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.moving{animation:runBob .28s ease-in-out infinite;}
 .fighter.airborne{animation:airFloat .55s ease-in-out infinite;}
 .fighter.stunned{animation:shake .09s linear infinite;filter:saturate(1.3);} 
-.fighter.spidey-punch .fighter-square{animation:spideyPunch .34s cubic-bezier(.2,.9,.25,1);}
-@keyframes spideyPunch{
-  0%{transform:translateX(0) rotate(0) scale(1);}
-  18%{transform:translateX(calc(var(--punch-dir,1) * -5px)) rotate(calc(var(--punch-dir,1) * -3deg)) scale(.98);}
-  52%{transform:translateX(calc(var(--punch-dir,1) * 9px)) rotate(calc(var(--punch-dir,1) * 4deg)) scale(1.045);}
-  78%{transform:translateX(calc(var(--punch-dir,1) * 3px)) rotate(calc(var(--punch-dir,1) * 1deg)) scale(1.015);}
-  100%{transform:translateX(0) rotate(0) scale(1);}
-}
-.fx-web-punch{pointer-events:none;z-index:9;animation:webPunchFade .42s cubic-bezier(.1,.8,.2,1) forwards;}
-.fx-web-punch svg{overflow:visible;filter:drop-shadow(0 0 4px rgba(255,255,255,.9)) drop-shadow(0 0 12px rgba(214,50,59,.55));}
-@keyframes webPunchFade{
-  0%{opacity:0;transform:translateX(calc(var(--web-dir,1) * -14px)) scale(.65);}
-  18%{opacity:1;transform:translateX(calc(var(--web-dir,1) * -2px)) scale(.88);}
-  58%{opacity:1;transform:translateX(calc(var(--web-dir,1) * 16px)) scale(1.06);}
-  100%{opacity:0;transform:translateX(calc(var(--web-dir,1) * 42px)) scale(1.18);}
-}
 .fighter-square{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 22px rgba(0,0,0,.26);}
 .projectile{filter:drop-shadow(0 0 5px currentColor);animation:projectilePulse .18s ease-in-out infinite alternate;}
 .fx-burst{mix-blend-mode:screen;}
@@ -672,62 +777,65 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
     <div class="menu-wrap">
       <h1 class="menu-title">DISHWASHING LIQUID BATTLES</h1>
       <div class="menu-buttons">
-        <button class="btn btn-primary" id="btn-menu-play" data-i18n="nav_play">Play</button>
-        <button class="btn btn-secondary" data-nav="inventory" data-i18n="nav_inventory">Inventory</button>
-        <button class="btn btn-secondary" data-nav="instructions" data-i18n="nav_instructions">Instructions</button>
-        <button class="btn btn-secondary" data-nav="settings" data-i18n="nav_settings">Settings</button>
+        <button class="btn btn-primary" id="btn-menu-play"><span class="btn-icon">▶</span><span data-i18n="nav_play">Play</span></button>
+        <button class="btn btn-secondary" data-nav="inventory"><span class="btn-icon">🎒</span><span data-i18n="nav_inventory">Inventory</span></button>
+        <button class="btn btn-secondary" data-nav="instructions"><span class="btn-icon">📖</span><span data-i18n="nav_instructions">Instructions</span></button>
+        <button class="btn btn-secondary" data-nav="settings"><span class="btn-icon">⚙️</span><span data-i18n="nav_settings">Settings</span></button>
       </div>
     </div>
   </div>
 
   <!-- ============ INVENTORY ============ -->
   <div id="screen-inventory" class="screen">
-    <div class="panel">
+    <div class="page-wrap"><div class="panel">
       <div class="panel-header">
         <div>
         <h2 data-i18n="inv_title">Inventory</h2>
         <div class="inventory-caption" data-i18n="inv_caption">Roster, collection & equipped fighter</div>
       </div>
-      <button class="btn btn-small btn-secondary" data-nav="menu" data-i18n="nav_back">Back</button>
+      <button class="btn btn-small btn-secondary" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
       </div>
       <div class="loadout-banner">
-        <div>
-          <div class="loadout-label" data-i18n="inv_equipped_label">EQUIPPED FIGHTER</div>
-          <div id="equipped-name" class="loadout-name">None</div>
+        <div class="loadout-banner-main">
+          <div id="equipped-thumb" class="loadout-thumb"></div>
+          <div>
+            <div class="loadout-label" data-i18n="inv_equipped_label">EQUIPPED FIGHTER</div>
+            <div id="equipped-name" class="loadout-name">None</div>
+          </div>
         </div>
         <div id="equipped-hint" class="loadout-hint">Select a fighter below.</div>
       </div>
       <div id="inventory-grid" class="char-grid"></div>
       <div class="inventory-legend"><span class="legend-dot owned"></span> <span data-i18n="inv_legend_owned">Owned</span> <span class="legend-dot locked"></span> <span data-i18n="inv_legend_locked">Locked</span></div>
-    </div>
+    </div></div>
   </div>
 
   <!-- ============ INSTRUCTIONS ============ -->
   <div id="screen-instructions" class="screen">
-    <div class="panel instructions">
+    <div class="page-wrap"><div class="panel instructions">
       <div class="panel-header">
         <h2 data-i18n="instr_title">Instructions</h2>
-        <button class="btn btn-small btn-secondary" data-nav="menu" data-i18n="nav_back">Back</button>
+        <button class="btn btn-small btn-secondary" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
       </div>
-      <p><strong data-i18n="instr_goal_label">Goal:</strong> <span data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</span></p>
+      <p class="instr-goal"><strong data-i18n="instr_goal_label">Goal:</strong> <span data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</span></p>
       <ul>
-        <li><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></li>
-        <li><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></li>
-        <li data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</li>
-        <li><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></li>
-        <li data-i18n="instr_cooldown">Every ability has a cooldown shown right on its button — watch the timer count down.</li>
-        <li data-i18n="instr_arena">The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</li>
-        <li data-i18n="instr_roster">Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</li>
+        <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></span></li>
+        <li><span class="instr-icon">✨</span><span><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></span></li>
+        <li><span class="instr-icon">👆</span><span data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</span></li>
+        <li><span class="instr-icon">🎮</span><span><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></span></li>
+        <li><span class="instr-icon">⏱️</span><span data-i18n="instr_cooldown">Every ability has a cooldown shown right on its button — watch the timer count down.</span></li>
+        <li><span class="instr-icon">🧱</span><span data-i18n="instr_arena">The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</span></li>
+        <li><span class="instr-icon">🎒</span><span data-i18n="instr_roster">Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</span></li>
       </ul>
-    </div>
+    </div></div>
   </div>
 
   <!-- ============ SETTINGS ============ -->
   <div id="screen-settings" class="screen">
-    <div class="panel settings-panel">
+    <div class="page-wrap"><div class="panel settings-panel">
       <div class="panel-header">
         <h2 data-i18n="settings_title">Settings</h2>
-        <button class="btn btn-small btn-secondary" data-nav="menu" data-i18n="nav_back">Back</button>
+        <button class="btn btn-small btn-secondary" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
       </div>
 
       <h3 class="settings-subhead" data-i18n="settings_controls_header">Controls</h3>
@@ -738,7 +846,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       <h3 class="settings-subhead" data-i18n="settings_lang_header" style="margin-top:26px;">Language</h3>
       <p class="settings-note" data-i18n="settings_lang_note">Changes the text throughout the app.</p>
       <div id="lang-grid" class="lang-grid"></div>
-    </div>
+    </div></div>
   </div>
 
   <!-- ============ BATTLE ============ -->
@@ -825,17 +933,17 @@ const CHARACTERS = {
   },
   spiderman: {
     id:'spiderman', name:'Spider-Man', img:'SpiderMan.jpg', color:'#d6323b',
-    maxHealth:9000, aiStyle:'mobile',
-    description:'Fast, mobile fighter who mixes web attacks with a devastating close-range super punch.',
+    maxHealth:7500, aiStyle:'mobile',
+    description:'Low health, very high mobility. Wins by darting in, poking with webs, and swinging away.',
     abilities:{
       E:{key:'E', name:'Web Strike', type:'projectile', damage:240, cooldown:500, knockback:5,
          speed:15, w:22, h:8, color:'#e7e7e7',
          sound:'web_shoot', fx:'web_shot', render:'web-strand', trail:'web', web:true,
          hitFx:'web', hitSound:'web_hit', slow:300, desc:'Fast, thin web shot. Basic poke.'},
-      Q:{key:'Q', name:'Web Punch', type:'melee', damage:1000, cooldown:9000, knockback:18, range:106,
-         sound:'web_punch', fx:'web_punch', hitDelay:150,
-         hitFx:'web_punch', hitSound:'web_punch_hit', slow:300,
-         desc:'A powerful super punch that blasts a burst of webs forward for 1000 damage.'},
+      Q:{key:'Q', name:'Web Bomb', type:'projectile', damage:600, cooldown:9000, knockback:11,
+         speed:10, w:34, h:34, color:'#f2f2f2',
+         sound:'web_bomb', fx:'web_bomb', render:'web-net', trail:'web', web:true,
+         hitFx:'web_big', hitSound:'web_splat', slow:300, desc:'A larger web glob with a bigger hit area.'},
       R:{key:'R', name:'Web Swing', type:'mobility', damage:0, cooldown:8000, boostX:18, swingToTop:true,
          sound:'web_swing', fx:'web_swing',
          desc:'Fires a web line to the ceiling and swings you all the way to the top of the arena. Pure mobility — no damage.'}
@@ -883,7 +991,7 @@ const LANGUAGES = [
 const I18N = {
   en:{ nav_play:'Play', nav_inventory:'Inventory', nav_instructions:'Instructions', nav_settings:'Settings', nav_back:'Back',
     inv_title:'Inventory', inv_caption:'Roster, collection & equipped fighter', inv_equipped_label:'EQUIPPED FIGHTER',
-    inv_equipped_hint_default:'Select a fighter below.', inv_none:'None', inv_legend_owned:'Owned', inv_legend_locked:'Locked',
+    inv_equipped_hint_default:'Select a fighter below.', inv_none:'None', inv_legend_owned:'Owned', inv_legend_locked:'Locked', inv_equipped_badge:'EQUIPPED',
     inv_ready:'Ready for battle', inv_click_equip:'Click to equip',
     instr_title:'Instructions', instr_goal_label:'Goal:', instr_goal_text:"knock your opponent's health to 0, or knock them clean out of the arena.",
     instr_jump:'jump', instr_left:'left', instr_right:'right', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
@@ -900,7 +1008,7 @@ const I18N = {
   },
   es:{ nav_play:'Jugar', nav_inventory:'Inventario', nav_instructions:'Instrucciones', nav_settings:'Configuración', nav_back:'Atrás',
     inv_title:'Inventario', inv_caption:'Plantilla, colección y luchador equipado', inv_equipped_label:'LUCHADOR EQUIPADO',
-    inv_equipped_hint_default:'Selecciona un luchador abajo.', inv_none:'Ninguno', inv_legend_owned:'Poseído', inv_legend_locked:'Bloqueado',
+    inv_equipped_hint_default:'Selecciona un luchador abajo.', inv_none:'Ninguno', inv_legend_owned:'Poseído', inv_legend_locked:'Bloqueado', inv_equipped_badge:'EQUIPADO',
     inv_ready:'Listo para combatir', inv_click_equip:'Clic para equipar',
     instr_title:'Instrucciones', instr_goal_label:'Objetivo:', instr_goal_text:'reduce la salud de tu oponente a 0, o sácalo por completo de la arena.',
     instr_jump:'saltar', instr_left:'izquierda', instr_right:'derecha', instr_ability_main:'habilidad principal', instr_ability_sec:'habilidad secundaria', instr_ability_special:'habilidad especial',
@@ -917,7 +1025,7 @@ const I18N = {
   },
   zh:{ nav_play:'开始游戏', nav_inventory:'库存', nav_instructions:'说明', nav_settings:'设置', nav_back:'返回',
     inv_title:'库存', inv_caption:'阵容、收藏与已装备角色', inv_equipped_label:'已装备角色',
-    inv_equipped_hint_default:'请在下方选择一名角色。', inv_none:'无', inv_legend_owned:'已拥有', inv_legend_locked:'未解锁',
+    inv_equipped_hint_default:'请在下方选择一名角色。', inv_none:'无', inv_legend_owned:'已拥有', inv_legend_locked:'未解锁', inv_equipped_badge:'已装备',
     inv_ready:'可以出战', inv_click_equip:'点击装备',
     instr_title:'说明', instr_goal_label:'目标：', instr_goal_text:'将对手的生命值降为0，或将其彻底击出竞技场。',
     instr_jump:'跳跃', instr_left:'左移', instr_right:'右移', instr_ability_main:'主要技能', instr_ability_sec:'次要技能', instr_ability_special:'特殊技能',
@@ -934,7 +1042,7 @@ const I18N = {
   },
   ar:{ nav_play:'لعب', nav_inventory:'المخزون', nav_instructions:'التعليمات', nav_settings:'الإعدادات', nav_back:'رجوع',
     inv_title:'المخزون', inv_caption:'التشكيلة والمجموعة والمقاتل المجهّز', inv_equipped_label:'المقاتل المجهّز',
-    inv_equipped_hint_default:'اختر مقاتلاً أدناه.', inv_none:'لا شيء', inv_legend_owned:'مملوك', inv_legend_locked:'مغلق',
+    inv_equipped_hint_default:'اختر مقاتلاً أدناه.', inv_none:'لا شيء', inv_legend_owned:'مملوك', inv_legend_locked:'مغلق', inv_equipped_badge:'مجهّز',
     inv_ready:'جاهز للقتال', inv_click_equip:'انقر للتجهيز',
     instr_title:'التعليمات', instr_goal_label:'الهدف:', instr_goal_text:'أنزل صحة خصمك إلى 0، أو أخرجه تمامًا من الحلبة.',
     instr_jump:'القفز', instr_left:'يسار', instr_right:'يمين', instr_ability_main:'القدرة الأساسية', instr_ability_sec:'القدرة الثانوية', instr_ability_special:'القدرة الخاصة',
@@ -951,7 +1059,7 @@ const I18N = {
   },
   fr:{ nav_play:'Jouer', nav_inventory:'Inventaire', nav_instructions:'Instructions', nav_settings:'Paramètres', nav_back:'Retour',
     inv_title:'Inventaire', inv_caption:'Effectif, collection et combattant équipé', inv_equipped_label:'COMBATTANT ÉQUIPÉ',
-    inv_equipped_hint_default:'Choisissez un combattant ci-dessous.', inv_none:'Aucun', inv_legend_owned:'Possédé', inv_legend_locked:'Verrouillé',
+    inv_equipped_hint_default:'Choisissez un combattant ci-dessous.', inv_none:'Aucun', inv_legend_owned:'Possédé', inv_legend_locked:'Verrouillé', inv_equipped_badge:'ÉQUIPÉ',
     inv_ready:'Prêt au combat', inv_click_equip:'Cliquez pour équiper',
     instr_title:'Instructions', instr_goal_label:'Objectif :', instr_goal_text:"réduisez la santé de votre adversaire à 0, ou éjectez-le complètement de l'arène.",
     instr_jump:'sauter', instr_left:'gauche', instr_right:'droite', instr_ability_main:'capacité principale', instr_ability_sec:'capacité secondaire', instr_ability_special:'capacité spéciale',
@@ -968,7 +1076,7 @@ const I18N = {
   },
   de:{ nav_play:'Spielen', nav_inventory:'Inventar', nav_instructions:'Anleitung', nav_settings:'Einstellungen', nav_back:'Zurück',
     inv_title:'Inventar', inv_caption:'Kader, Sammlung & ausgerüsteter Kämpfer', inv_equipped_label:'AUSGERÜSTETER KÄMPFER',
-    inv_equipped_hint_default:'Wähle unten einen Kämpfer aus.', inv_none:'Keiner', inv_legend_owned:'Im Besitz', inv_legend_locked:'Gesperrt',
+    inv_equipped_hint_default:'Wähle unten einen Kämpfer aus.', inv_none:'Keiner', inv_legend_owned:'Im Besitz', inv_legend_locked:'Gesperrt', inv_equipped_badge:'AUSGERÜSTET',
     inv_ready:'Kampfbereit', inv_click_equip:'Klicken zum Ausrüsten',
     instr_title:'Anleitung', instr_goal_label:'Ziel:', instr_goal_text:'Senke die Lebenspunkte deines Gegners auf 0 oder befördere ihn komplett aus der Arena.',
     instr_jump:'springen', instr_left:'links', instr_right:'rechts', instr_ability_main:'Hauptfähigkeit', instr_ability_sec:'Zweitfähigkeit', instr_ability_special:'Spezialfähigkeit',
@@ -985,7 +1093,7 @@ const I18N = {
   },
   pt:{ nav_play:'Jogar', nav_inventory:'Inventário', nav_instructions:'Instruções', nav_settings:'Configurações', nav_back:'Voltar',
     inv_title:'Inventário', inv_caption:'Elenco, coleção e lutador equipado', inv_equipped_label:'LUTADOR EQUIPADO',
-    inv_equipped_hint_default:'Selecione um lutador abaixo.', inv_none:'Nenhum', inv_legend_owned:'Possuído', inv_legend_locked:'Bloqueado',
+    inv_equipped_hint_default:'Selecione um lutador abaixo.', inv_none:'Nenhum', inv_legend_owned:'Possuído', inv_legend_locked:'Bloqueado', inv_equipped_badge:'EQUIPADO',
     inv_ready:'Pronto para lutar', inv_click_equip:'Clique para equipar',
     instr_title:'Instruções', instr_goal_label:'Objetivo:', instr_goal_text:'reduza a vida do seu oponente a 0, ou o expulse completamente da arena.',
     instr_jump:'pular', instr_left:'esquerda', instr_right:'direita', instr_ability_main:'habilidade principal', instr_ability_sec:'habilidade secundária', instr_ability_special:'habilidade especial',
@@ -1002,7 +1110,7 @@ const I18N = {
   },
   hi:{ nav_play:'खेलें', nav_inventory:'इन्वेंटरी', nav_instructions:'निर्देश', nav_settings:'सेटिंग्स', nav_back:'वापस',
     inv_title:'इन्वेंटरी', inv_caption:'रोस्टर, संग्रह और सुसज्जित योद्धा', inv_equipped_label:'सुसज्जित योद्धा',
-    inv_equipped_hint_default:'नीचे एक योद्धा चुनें।', inv_none:'कोई नहीं', inv_legend_owned:'स्वामित्व में', inv_legend_locked:'लॉक किया हुआ',
+    inv_equipped_hint_default:'नीचे एक योद्धा चुनें।', inv_none:'कोई नहीं', inv_legend_owned:'स्वामित्व में', inv_legend_locked:'लॉक किया हुआ', inv_equipped_badge:'सुसज्जित',
     inv_ready:'लड़ाई के लिए तैयार', inv_click_equip:'सुसज्जित करने हेतु क्लिक करें',
     instr_title:'निर्देश', instr_goal_label:'लक्ष्य:', instr_goal_text:'अपने प्रतिद्वंद्वी का स्वास्थ्य 0 तक लाएं, या उसे एरिना से पूरी तरह बाहर कर दें।',
     instr_jump:'कूदें', instr_left:'बाएँ', instr_right:'दाएँ', instr_ability_main:'मुख्य क्षमता', instr_ability_sec:'द्वितीयक क्षमता', instr_ability_special:'विशेष क्षमता',
@@ -1019,7 +1127,7 @@ const I18N = {
   },
   ja:{ nav_play:'プレイ', nav_inventory:'インベントリ', nav_instructions:'遊び方', nav_settings:'設定', nav_back:'戻る',
     inv_title:'インベントリ', inv_caption:'ロースター、コレクション、装備中のファイター', inv_equipped_label:'装備中のファイター',
-    inv_equipped_hint_default:'下からファイターを選んでください。', inv_none:'なし', inv_legend_owned:'所持', inv_legend_locked:'未解放',
+    inv_equipped_hint_default:'下からファイターを選んでください。', inv_none:'なし', inv_legend_owned:'所持', inv_legend_locked:'未解放', inv_equipped_badge:'装備中',
     inv_ready:'戦闘準備完了', inv_click_equip:'クリックして装備',
     instr_title:'遊び方', instr_goal_label:'目標：', instr_goal_text:'相手の体力を0にするか、アリーナの外に完全に弾き飛ばそう。',
     instr_jump:'ジャンプ', instr_left:'左', instr_right:'右', instr_ability_main:'メインアビリティ', instr_ability_sec:'サブアビリティ', instr_ability_special:'スペシャルアビリティ',
@@ -1058,8 +1166,13 @@ function renderInventoryHint(){
   const eqDef = CHARACTERS[SAVE.equipped];
   const nameEl = document.getElementById('equipped-name');
   const hintEl = document.getElementById('equipped-hint');
+  const thumbEl = document.getElementById('equipped-thumb');
   if(nameEl) nameEl.textContent = eqDef ? eqDef.name : t('inv_none');
   if(hintEl) hintEl.textContent = eqDef ? `${eqDef.maxHealth.toLocaleString()} HP` : t('inv_equipped_hint_default');
+  if(thumbEl){
+    thumbEl.innerHTML = eqDef ? squareInner(eqDef) : '<span class="fallback" style="background:#3a3d54;">?</span>';
+    thumbEl.style.borderColor = eqDef ? eqDef.color : '';
+  }
 }
 function setLanguage(code){
   if(!I18N[code]) return;
@@ -1231,14 +1344,23 @@ function renderInventory(){
     const unlocked = isUnlocked(id);
     const card = document.createElement('div');
     const selected = equipped===id;
-    card.className = 'char-card' + (unlocked ? '' : ' locked') + (selected ? ' selected equipped' : '');
-    card.innerHTML = `
-      <div class="char-square">${squareInner(def)}${selected ? '<div class="equipped-badge">EQUIPPED</div>' : ''}</div>
-      <div class="char-name">${def.name}</div>
-      <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
-      <div class="lock-badge">${unlocked ? (selected ? t('inv_ready') : t('inv_click_equip')) : t('inv_legend_locked')}</div>`;
+    card.className = 'char-card' + (unlocked ? '' : ' mystery') + (selected ? ' selected equipped' : '');
     if(unlocked){
+      card.style.setProperty('--char-color', def.color);
+      card.innerHTML = `
+        <div class="char-square">${squareInner(def)}${selected ? `<div class="equipped-badge">${t('inv_equipped_badge')}</div>` : ''}</div>
+        <div class="char-name">${def.name}</div>
+        <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
+        <div class="lock-badge">${selected ? t('inv_ready') : t('inv_click_equip')}</div>`;
       card.onclick = ()=>{ equipCharacter(id); openCharModal(id); };
+    } else {
+      // Locked fighters are kept a mystery: no name, no artwork, just a
+      // silhouette placeholder — a little surprise for later.
+      card.innerHTML = `
+        <div class="char-square mystery-square"><span class="mystery-icon">?</span></div>
+        <div class="char-name mystery-name">???</div>
+        <div class="char-cat">&nbsp;</div>
+        <div class="lock-badge">🔒 ${t('inv_legend_locked')}</div>`;
     }
     grid.appendChild(card);
   });
@@ -1849,20 +1971,11 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.15, 0.22, 'bandpass', 5200, 900, 4.5);
         aTone(ctx, t, 'sawtooth', 1500, 340, 0.11, 0.05);
         return;
-      case 'web_punch': { // charged web-assisted punch
-        aNoise(ctx, t, 0.18, 0.24, 'bandpass', 5200, 900, 4.2);
-        aTone(ctx, t, 'sawtooth', 980, 180, 0.18, 0.08);
-        aTone(ctx, t+0.06, 'square', 160, 62, 0.34, 0.18);
-        aNoise(ctx, t+0.055, 0.28, 0.22, 'lowpass', 1800, 180, 0.9);
+      case 'web_bomb': // heavier thwip + glob launch
+        aNoise(ctx, t, 0.24, 0.24, 'bandpass', 3400, 480, 3.2);
+        aTone(ctx, t, 'sawtooth', 780, 190, 0.20, 0.08);
+        aTone(ctx, t+0.05, 'sine', 300, 120, 0.18, 0.07);
         return;
-      }
-      case 'web_punch_hit': { // heavy punch impact + web snap
-        aTone(ctx, t, 'sine', 110, 52, 0.48, 0.24);
-        aNoise(ctx, t, 0.30, 0.26, 'lowpass', 2600, 180, 0.8);
-        aNoise(ctx, t+0.03, 0.14, 0.22, 'bandpass', 4300, 700, 2.4);
-        aTone(ctx, t+0.035, 'triangle', 420, 150, 0.22, 0.08);
-        return;
-      }
       case 'web_swing':
         aNoise(ctx, t, 0.20, 0.20, 'bandpass', 4600, 1000, 4.0);
         aNoise(ctx, t+0.09, 0.34, 0.14, 'bandpass', 700, 2600, 1.1);
@@ -2186,41 +2299,10 @@ function spawnAbilityFx(caster, ability){
       spawnSparks(hx, hy, 4, '#ffffff', 20, 320);
       break;
     }
-    case 'web_punch': {
-      const hx = cx + dir*34, hy = cy-1;
-      caster.el.classList.remove('spidey-punch');
-      caster.el.style.setProperty('--punch-dir', dir);
-      void caster.el.offsetWidth;
-      caster.el.classList.add('spidey-punch');
-      setTimeout(()=>{ if(caster.el) caster.el.classList.remove('spidey-punch'); }, 390);
-
-      const left = Math.min(cx, hx) - 78;
-      const top = hy - 58;
-      const width = Math.abs(hx-cx) + 130;
-      const height = 116;
-      const sx = cx - left, sy = hy - top;
-      const ex = hx - left;
-      const spread = 34;
-      let g = '';
-      // Several thick web strands fire out from the punch and spread around the target.
-      for(let i=0;i<7;i++){
-        const off = (i-3)/3;
-        const ey = sy + off*34;
-        const c1x = sx + (ex-sx)*0.40;
-        const c1y = sy + off*12;
-        const c2x = sx + (ex-sx)*0.72;
-        const c2y = ey - off*10;
-        g += `<path d="M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}"/>`;
-      }
-      // Web rings at the end of the punch for a stronger impact silhouette.
-      for(let r=14;r<=42;r+=14){
-        g += `<ellipse cx="${(ex+8).toFixed(1)}" cy="${sy.toFixed(1)}" rx="${r}" ry="${Math.max(7,r*.48).toFixed(1)}"/>`;
-      }
-      const svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="2.4" opacity=".96">${g}</g><g stroke-width="1.1" opacity=".62">${g}</g></g></svg>`;
-      fxEl('fx-web-punch', `left:${left}px;top:${top}px;width:${width}px;height:${height}px;--web-dir:${dir};transform-origin:${sx}px ${sy}px;`, 470, svg);
-      fxEl('fx-flash', `left:${hx-34}px;top:${hy-34}px;width:68px;height:68px;`, 260);
-      spawnSparks(hx, hy, 12, '#ffffff', 62, 420);
-      spawnSparks(hx + dir*10, hy, 8, '#d6323b', 48, 360);
+    case 'web_bomb': {
+      const hx = cx + dir*26, hy = cy;
+      fxEl('fx-splat', `left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;`, 600, webSplatSvg(52));
+      fxEl('fx-ring', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;border-color:#ffffffaa;`, 540);
       break;
     }
     case 'web_swing': {
@@ -2341,13 +2423,11 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx, cy, 6, '#ffffff', 30, 380);
       break;
     }
-    case 'web_punch': {
-      fxEl('fx-flash', `left:${cx-82}px;top:${cy-82}px;width:164px;height:164px;`, 300);
-      fxEl('fx-ring', `left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;border-color:#ffffff;border-width:5px;box-shadow:0 0 32px #ffffffaa;`, 520);
-      fxEl('fx-splat', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;`, 620, webSplatSvg(108));
-      spawnSparks(cx, cy, 18, '#ffffff', 92, 460);
-      spawnSparks(cx, cy, 10, '#d6323b', 76, 400);
-      shakeArena(9, 320);
+    case 'web_big': {
+      fxEl('fx-splat', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`, 620, webSplatSvg(104));
+      fxEl('fx-ring', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#ffffffcc;`, 560);
+      spawnSparks(cx, cy, 10, '#ffffff', 52, 440);
+      shakeArena(6, 260);
       break;
     }
     case 'missile': {
@@ -3145,17 +3225,15 @@ function updateBotAI(dtF){
       tryUseAbility(bot, player, 'E'); return;
     }
   } else if(style === 'mobile'){
-    // Spider-Man: keep chip damage flowing with Web Strike at range, but only
-    // attempt the heavy Web Punch when the enemy is actually inside punching
-    // range (and on roughly the same vertical level). He can still use Web Swing
-    // to reposition rather than wasting the punch from too far away.
+    // Spider-Man: keep chip damage flowing with Web Strike at range, land the
+    // heavier Web Bomb when it's off cooldown and roughly in line, and swing
+    // away the moment things get dangerous rather than trading blows.
     const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q;
     const dangerClose = adist < 110 && (player.def.aiStyle !== 'mobile'); // player is in real range on us
-    const punchInRange = adist <= qAb.range && Math.abs(player.y - bot.y) < 90;
     if((hpPct < 0.35 || dangerClose) && cdReady(bot,'R',t) && Math.random() < 0.75){
       tryUseAbility(bot, player, 'R'); return;
     }
-    if(cdReady(bot,'Q',t) && punchInRange && Math.random() < 0.55){
+    if(cdReady(bot,'Q',t) && adist < 420 && Math.random() < 0.55){
       tryUseAbility(bot, player, 'Q'); return;
     }
     if(cdReady(bot,'E',t)){
