@@ -2470,7 +2470,7 @@ document.getElementById('code-input').addEventListener('keydown', e=>{ if(e.key 
    SECTION: CHARACTER CARD RENDERING (inventory / collection / select)
    ========================================================================= */
 function squareInner(def){
-  return `<img src="${def.img}" alt="${def.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+  return `<img src="${def.img}" alt="${def.name}" onerror="this.style.display='none'; var f=this.nextElementSibling; if(f) f.style.display='flex';">
           <div class="fallback" style="display:none; background:${def.color}">${def.name[0]}</div>`;
 }
 function renderInventory(){
@@ -5324,15 +5324,12 @@ function jumpButtonLabel(){ return faceLabel(JUMP_POS); }
 let gpBannerTimer = null;
 function flashGamepadBanner(connected){
   const banner = document.getElementById('gamepad-banner');
-  const brandNameEl = document.getElementById('gp-brand-name');
   if(!banner) return;
-  if(connected){
-    brandNameEl.textContent = BRAND_DISPLAY_NAME[gamepadState.brand] || 'Controller';
-    banner.classList.add('show');
-  } else {
-    banner.querySelector('span:last-child').textContent = 'Controller disconnected';
-    banner.classList.add('show');
-  }
+  const msg = connected
+    ? `Controller connected — <span class="gp-brand" id="gp-brand-name">${BRAND_DISPLAY_NAME[gamepadState.brand] || 'Controller'}</span>`
+    : 'Controller disconnected';
+  banner.innerHTML = `<span class="gp-icon">🎮</span><span>${msg}</span>`;
+  banner.classList.add('show');
   clearTimeout(gpBannerTimer);
   gpBannerTimer = setTimeout(()=> banner.classList.remove('show'), 2600);
 }
@@ -6193,7 +6190,7 @@ function gameLoop(ts){
   state.lastTime = ts;
   const dtF = dt / 16.6667;
 
-  pollGamepad();
+  try{ pollGamepad(); }catch(err){ console.error('pollGamepad', err); }
 
   if(state.mode === 'battle'){
     rescaleArena(); // keep in sync with layout/orientation changes; cheap to call each frame
