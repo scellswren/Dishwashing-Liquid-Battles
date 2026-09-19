@@ -821,7 +821,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       </div>
       <p class="instr-goal"><strong data-i18n="instr_goal_label">Goal:</strong> <span data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</span></p>
       <ul>
-        <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span> &nbsp; <kbd>S</kbd>/<kbd>&darr;</kbd> <span data-i18n="instr_down">drop through / descend while flying</span></span></li>
+        <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></span></li>
         <li><span class="instr-icon">✨</span><span><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></span></li>
         <li><span class="instr-icon">👆</span><span data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</span></li>
         <li><span class="instr-icon">🎮</span><span><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></span></li>
@@ -883,7 +883,6 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
       <div id="dpad">
         <button class="dpad-up" data-dir="up">&uarr;</button>
         <button class="dpad-left" data-dir="left">&larr;</button>
-        <button class="dpad-down" data-dir="down">&darr;</button>
         <button class="dpad-right" data-dir="right">&rarr;</button>
       </div>
       <div id="ability-bar"></div>
@@ -997,7 +996,7 @@ const I18N = {
     inv_equipped_hint_default:'Select a fighter below.', inv_none:'None', inv_legend_owned:'Owned', inv_legend_locked:'Locked', inv_equipped_badge:'EQUIPPED',
     inv_ready:'Ready for battle', inv_click_equip:'Click to equip',
     instr_title:'Instructions', instr_goal_label:'Goal:', instr_goal_text:"knock your opponent's health to 0, or knock them clean out of the arena.",
-    instr_jump:'jump', instr_left:'left', instr_right:'right', instr_down:'drop through / descend while flying', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
+    instr_jump:'jump', instr_left:'left', instr_right:'right', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
     instr_touch:'On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.',
     instr_controller_label:'Controller support:', instr_controller_text:'Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.',
     instr_cooldown:'Every ability has a cooldown shown right on its button — watch the timer count down.',
@@ -3908,10 +3907,12 @@ function gameLoop(ts){
     }
     const pWantJump = !frozen && (p.jumpQueued || (p.flight && (keysHeld.up || gpKeys.up)));
     p.jumpQueued = false;
-    // Down works both on the ground (drop through a one-way platform) and
-    // while flying (descend) — same input, updatePhysics picks the right
-    // behavior based on whether the fighter currently has flight active.
-    const pWantDown = !frozen && (keysHeld.down || gpKeys.down);
+    // Down only ever means something while Flight is active (descend).
+    // It's deliberately not wired to ground drop-through: falling through
+    // the main floor platform would sink you below the floor graphic
+    // before the hard arena-bottom clamp catches you, which reads as
+    // falling out of the map.
+    const pWantDown = !frozen && p.flight && (keysHeld.down || gpKeys.down);
     updatePhysics(p, pMoveDir, pWantJump, pWantDown, dtF);
 
     // resolve bot movement input
