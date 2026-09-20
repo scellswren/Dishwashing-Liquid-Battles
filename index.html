@@ -747,16 +747,30 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes portalRingSpin{to{transform:rotate(360deg)}}
 .strange-rune{position:absolute;pointer-events:none;z-index:8;font-family:'Anton';color:#ffd98a;text-shadow:0 0 8px #ff9b2f,0 0 18px #7b58ff;font-size:28px;animation:runeRise .7s ease-out forwards;}
 @keyframes runeRise{from{transform:scale(.4) translateY(14px) rotate(-20deg);opacity:0}25%{opacity:1}to{transform:scale(1.18) translateY(-34px) rotate(20deg);opacity:0}}
-.elastic-arm{position:absolute;height:22px;border-radius:50px;transform-origin:left center;pointer-events:none;z-index:9;background:linear-gradient(180deg,#7fc3ff 0%,#3e7fba 22%,#28598c 55%,#1a3f6b 100%);border:2px solid #0d2038;box-shadow:0 0 10px #9fdcff99,0 0 22px #ffffff33,inset 0 3px 3px #cfeaff99,inset 0 -3px 4px #0a1e3555;overflow:visible;}
-.elastic-arm:before{content:'';position:absolute;inset:3px 8px 3px 30px;border-radius:20px;background:repeating-linear-gradient(90deg,transparent 0 14px,rgba(255,255,255,.30) 15px 17px,transparent 18px 32px);opacity:.8;}
-.elastic-arm:after{content:'';position:absolute;left:30px;right:6px;top:3px;height:4px;border-radius:4px;background:linear-gradient(90deg,#dff2ff99,transparent);}
-.elastic-sleeve{position:absolute;left:0;top:-3px;width:30px;height:28px;border-radius:14px 6px 6px 14px;background:linear-gradient(180deg,#1c4f85,#0f2c4c);box-shadow:inset 0 2px 2px #74c7ff55,0 0 6px #05152655;border-right:2px solid #081729;}
-.elastic-cuff{position:absolute;left:24px;top:-1px;width:7px;height:24px;border-radius:4px;background:#0f2c4c;box-shadow:0 0 4px #78c6ff88, inset 1px 0 2px #3e7fba;}
-.elastic-fist{position:absolute;width:26px;height:24px;border-radius:48% 44% 42% 50%;background:linear-gradient(160deg,#ffe3d1,#f2b992 55%,#c98a5f);border:2px solid #6b3d22;box-shadow:0 0 12px #ffd9b799, inset 0 2px 2px #fff6ec99;}
-.elastic-fingers{position:absolute;right:2px;top:3px;width:12px;height:18px;border-radius:0 8px 8px 0;background:repeating-linear-gradient(180deg,#c98a5f 0 4px,#a86e4a 4px 5px);opacity:.9;}
-.elastic-knuckles{position:absolute;left:2px;top:9px;width:15px;height:6px;border-radius:6px;background:#f2b992;box-shadow:inset 0 1px 1px #fff6ec;}
-@keyframes elasticPunch{0%{transform:scaleX(.12) rotate(4deg);opacity:0}18%{opacity:1}45%{transform:scaleX(1.04) rotate(4deg);opacity:1}72%{transform:scaleX(.98) rotate(4deg);opacity:1}100%{transform:scaleX(.76) rotate(4deg);opacity:0}}
-@keyframes elasticPunchFlip{0%{transform:scaleX(-.12) rotate(-4deg);opacity:0}18%{opacity:1}45%{transform:scaleX(-1.04) rotate(-4deg);opacity:1}72%{transform:scaleX(-.98) rotate(-4deg);opacity:1}100%{transform:scaleX(-.76) rotate(-4deg);opacity:0}}
+.bw-baton-held{position:absolute;right:-30px;top:0px;width:92px;height:72px;z-index:6;pointer-events:none;transform-origin:22% 55%;filter:drop-shadow(0 2px 3px #000b);opacity:0;transform:scaleX(1) rotate(-55deg);}
+.bw-baton-held svg{width:100%;height:100%;display:block;overflow:visible;}
+.bw-baton-swing .bw-baton-held{animation:bwBatonSwing .3s cubic-bezier(.2,.85,.25,1) forwards;}
+.fighter.facing-left .bw-baton-held{right:auto;left:-30px;transform:scaleX(-1) rotate(-55deg);}
+.fighter.facing-left.bw-baton-swing .bw-baton-held{animation:bwBatonSwingLeft .3s cubic-bezier(.2,.85,.25,1) forwards;}
+@keyframes bwBatonSwing{0%{opacity:1;transform:scaleX(1) rotate(-55deg);}45%{transform:scaleX(1) rotate(28deg);}100%{opacity:1;transform:scaleX(1) rotate(14deg);}}
+@keyframes bwBatonSwingLeft{0%{opacity:1;transform:scaleX(-1) rotate(-55deg);}45%{transform:scaleX(-1) rotate(28deg);}100%{opacity:1;transform:scaleX(-1) rotate(14deg);}}
+.mrf-arm-wrap{position:absolute;right:-4px;top:36%;width:0;height:0;z-index:6;pointer-events:none;transform-origin:0 50%;}
+.fighter.facing-left .mrf-arm-wrap{right:auto;left:-4px;transform:scaleX(-1);}
+.mrf-sleeve{position:absolute;left:-14px;top:-16px;width:26px;height:30px;border-radius:13px 6px 6px 13px;background:linear-gradient(180deg,#1c4f85,#0f2c4c);box-shadow:inset 0 2px 2px #74c7ff55;border-right:2px solid #081729;opacity:0;}
+.mrf-tube{position:absolute;left:10px;top:-11px;width:4px;height:22px;border-radius:50px;transform-origin:left center;background:linear-gradient(180deg,#7fc3ff 0%,#3e7fba 22%,#28598c 55%,#1a3f6b 100%);border:2px solid #0d2038;box-shadow:0 0 10px #9fdcff99,inset 0 3px 3px #cfeaff99,inset 0 -3px 4px #0a1e3555;opacity:0;}
+.mrf-tube:before{content:'';position:absolute;inset:3px 6px 3px 20px;border-radius:20px;background:repeating-linear-gradient(90deg,transparent 0 14px,rgba(255,255,255,.30) 15px 17px,transparent 18px 32px);}
+.mrf-cuff{position:absolute;left:22px;top:-13px;width:7px;height:24px;border-radius:4px;background:#0f2c4c;box-shadow:0 0 4px #78c6ff88, inset 1px 0 2px #3e7fba;opacity:0;}
+.mrf-fist{position:absolute;left:6px;top:-17px;width:26px;height:24px;border-radius:48% 44% 42% 50%;background:linear-gradient(160deg,#ffe3d1,#f2b992 55%,#c98a5f);border:2px solid #6b3d22;box-shadow:inset 0 2px 2px #fff6ec99;opacity:0;}
+.mrf-fist .fingers{position:absolute;right:2px;top:3px;width:12px;height:18px;border-radius:0 8px 8px 0;background:repeating-linear-gradient(180deg,#c98a5f 0 4px,#a86e4a 4px 5px);opacity:.9;}
+.mrf-fist .knuckles{position:absolute;left:2px;top:9px;width:15px;height:6px;border-radius:6px;background:#f2b992;box-shadow:inset 0 1px 1px #fff6ec;}
+.mrf-stretching .mrf-sleeve{opacity:1;}
+.mrf-stretching .mrf-tube{opacity:1;animation:mrfTubeGrow .34s cubic-bezier(.15,.8,.2,1) forwards;}
+.mrf-stretching .mrf-cuff{opacity:1;animation:mrfCuffTravel .34s cubic-bezier(.15,.8,.2,1) forwards;}
+.mrf-stretching .mrf-fist{opacity:1;animation:mrfFistTravel .34s cubic-bezier(.15,.8,.2,1) forwards;}
+@keyframes mrfTubeGrow{0%{width:4px;}45%{width:calc(var(--mrf-reach,210px) - 14px);}100%{width:calc(var(--mrf-reach,210px)*.78 - 14px);opacity:0;}}
+@keyframes mrfCuffTravel{0%{transform:translateX(0);}45%{transform:translateX(calc(var(--mrf-reach,210px) - 30px));}100%{transform:translateX(calc(var(--mrf-reach,210px)*.78 - 30px));opacity:0;}}
+@keyframes mrfFistTravel{0%{transform:translateX(0) scale(.4);}20%{transform:translateX(0) scale(1);}45%{transform:translateX(calc(var(--mrf-reach,210px) - 32px)) scale(1);}100%{transform:translateX(calc(var(--mrf-reach,210px)*.78 - 32px)) scale(1);opacity:0;}}
+
 .deadpool-leg{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:deadpoolLegSpin .5s cubic-bezier(.18,.7,.2,1) infinite!important;filter:drop-shadow(0 4px 5px #000b) drop-shadow(0 0 6px #e3364244)!important;}
 .deadpool-leg svg{width:100%;height:100%;display:block;overflow:visible;}
 @keyframes deadpoolLegSpin{0%{transform:rotate(-12deg) translateY(2px)}50%{transform:rotate(170deg) translateY(-2px)}100%{transform:rotate(348deg) translateY(2px)}}
@@ -1040,7 +1054,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
     radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
 }
 .fs-bg{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;}
-.fs-back{position:absolute !important; top:clamp(12px,3vh,28px); left:clamp(16px,3vw,40px); z-index:40; margin:0;}
+.fs-back{position:absolute !important; top:clamp(12px,3vh,28px); left:clamp(16px,3vw,40px); z-index:50; margin:0;}
 [dir="rtl"] .fs-back{left:auto; right:clamp(16px,3vw,40px);}
 
 /* ---------- map picker (mode-select screen) ----------
@@ -2385,7 +2399,7 @@ const CHARACTERS = {
   hulk: {
     id:'hulk', name:'Hulk', img:'Hulk.jpg', color:'#55d65c',
     maxHealth:21250, aiStyle:'hulk', jumpHeightMultiplier:2,
-    description:'The powerhouse. Massive health, a stronger natural jump, crushing melee damage, a ground-shaking slam, and a thunderous scream that drives enemies to the edge and holds them there for 3 seconds.',
+    description:'The powerhouse. Massive health, a stronger natural jump, crushing melee damage, a ground-shaking slam, and a thunderous roar that roots enemies in place.',
     abilities:{
       E:{key:'E', name:'Hulk Smash', type:'hulkSmash', damage:750, cooldown:900, knockback:15, radius:120,
          hitDelay:85, sound:'hulk_smash', fx:'hulk_smash', hitFx:'hulk_smash_hit', hitSound:'hulk_smash_hit',
@@ -2393,9 +2407,9 @@ const CHARACTERS = {
       Q:{key:'Q', name:'Ground Slam', type:'aoe', damage:1800, cooldown:8000, knockback:22, radius:135,
          sound:'hulk_slam', fx:'hulk_slam', hitFx:'hulk_slam_hit', hitSound:'hulk_slam_hit',
          desc:'Hulk pounds the ground, releasing a wide shockwave that launches nearby enemies.'},
-      R:{key:'R', name:'Hulk Scream', type:'hulkScream', cooldown:9000,
+      R:{key:'R', name:'Hulk Roar', type:'hulkScream', cooldown:20000,
          sound:'hulk_scream_roar', fx:'hulk_scream',
-         desc:'Hulk unleashes a massive roar that slides the enemy to the arena edge and pins them there, ears ringing, for 3 seconds.'}
+         desc:'Hulk unleashes a massive roar that roots nearby enemies in place. Fighters over 15,000 max health can still shuffle a little, and anyone over 20,000 max health isn\'t affected at all.'}
     }
   },
   wolverine: {
@@ -3246,7 +3260,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
     flight:false,
     flightExpire:0,
-    hulkScreamUntil:0, hulkScreamEdgeX:0, hulkScreamStartX:null, hulkScreamStartT:0, hulkScreamSlideDur:0,
+    hulkRoarUntil:0, hulkRoarLock:false,
     hitStun:0,
     slowUntil:0, webWrapEl:null,
     turnPending:null,
@@ -3414,6 +3428,8 @@ function buildFighterDOM(f){
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
     ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
     ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
+    ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
+    ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
     ${f.def.id==='mrfantastic' ? '<div class="elasticity-ring" style="display:none;"></div>' : ''}
     <div class="shield-ring"></div>
     <div class="flight-glow"></div>
@@ -3792,7 +3808,7 @@ function updateIllusions(dtF){
   }
 }
 function spawnFourthWallBubble(caster){
-  const lines = ['Suck it, Fox.','Wanna go to Disneyland?','I like Ryan Reynolds.','Orin is short.','Wren is very awesome.','Why is Thor crying?'];
+  const lines = ['Suck it, Fox.','Wanna go to Disneyland?','I like Ryan Reynolds.','Orin is short.','Wren is very awesome.','Why is Thor crying?','She-Hulk needs to stop copying me.','Orin is made of poo.','Terry Crews.','I love to cameo.','Avengers: Doomsday comes out December 18th.','Dishwashing Liquid Battles.','Stop controlling me!','Zip it, Thanos.',"I'm in love with this Spider-Man.",'Kim Jong Un.'];
   const line = lines[Math.floor(Math.random()*lines.length)];
   const el=document.createElement('div');
   el.className='deadpool-fourth-bubble';
@@ -3928,25 +3944,19 @@ function executeAbility(caster, target, ability, t){
     case 'hulkScream': {
       const tg = target || ((caster === state.player) ? state.bot : state.player);
       if(!tg || tg.dead) break;
-      // Slides in the direction Hulk is facing (not just "wherever the target
-      // happened to be standing"), so it reads as him roaring them away from him.
-      // The slide itself takes 2-3 real seconds to cross the arena, then they're
-      // held pinned at the wall briefly after arriving.
-      const leftEdge = BOUND_MIN_X + 4;
-      const rightEdge = BOUND_MAX_X - FIGHTER_SIZE - 4;
-      const edgeX = caster.facing >= 0 ? rightEdge : leftEdge;
-      const slideDist = Math.abs(edgeX - tg.x);
-      const slideDur = Math.max(2000, Math.min(3000, 2000 + slideDist*0.9));
-      const totalPin = slideDur + 450;
-      tg.hulkScreamUntil = t + totalPin;
-      tg.hulkScreamEdgeX = edgeX;
-      tg.hulkScreamStartX = tg.x;
-      tg.hulkScreamStartT = t;
-      tg.hulkScreamSlideDur = slideDur;
-      tg.vx = 0;
-      tg.vy = 0;
-      tg.hitStun = totalPin;
-      tg.onGround = true;
+      const maxHp = tg.def.maxHealth || 0;
+      // No teleporting/sliding across the arena — just a rooted stagger in
+      // place, scaled down (or nullified) against the toughest fighters.
+      if(maxHp > 20000){
+        break; // too sturdy to be bothered by the roar at all
+      }
+      const lightTier = maxHp > 15000; // "a little effect" — can barely move
+      tg.hulkRoarUntil = t + (lightTier ? 900 : 1600);
+      tg.hulkRoarLock = !lightTier;
+      const dirAway = (tg.x >= caster.x) ? 1 : -1;
+      tg.vx = dirAway * (lightTier ? 7 : 17);
+      tg.vy = Math.min(tg.vy, -2);
+      flashHit(tg);
       break;
     }
     case 'melee': {
@@ -5315,45 +5325,21 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
     case 'electric_baton': {
-      const bx = cx + dir*28, by = cy + 2;
-      // A real baton silhouette — dark ridged grip, dark metal shaft, blue
-      // glowing coil rings, and a crackling electrified tip — not just a
-      // grey stick with a lightning doodle on it.
-      const batonSvg = `<svg width="92" height="72" viewBox="0 0 92 72" style="transform:scaleX(${dir})">
-        <defs>
-          <linearGradient id="batonShaft" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#181a20"/>
-            <stop offset=".5" stop-color="#3c4150"/>
-            <stop offset="1" stop-color="#101116"/>
-          </linearGradient>
-          <radialGradient id="batonTip" cx="50%" cy="50%" r="50%">
-            <stop offset="0" stop-color="#f2ffff"/>
-            <stop offset=".4" stop-color="#5ef3ff"/>
-            <stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <g transform="translate(8 9) rotate(-20 40 27)">
-          <rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/>
-          <rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/>
-          <rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/>
-          <rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/>
-          <rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#batonShaft)" stroke="#000" stroke-width="1.4"/>
-          <ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/>
-          <ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/>
-          <ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/>
-          <circle cx="69" cy="27.5" r="11" fill="url(#batonTip)"/>
-          <circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/>
-          <path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/>
-          <path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/>
-        </g>
-      </svg>`;
-      fxEl('electric-baton-fx',
-        `left:${bx-46}px;top:${by-36}px;width:92px;height:72px;`, 300, batonSvg);
-      spawnLightning(bx, by, bx + dir*66, by - 28 + Math.random()*56,
-        {bolts:3, branches:4, width:2.8, life:320, jag:20, segs:7, color:'#5ef3ff'});
-      fxEl('fx-electric-impact', `left:${bx-34}px;top:${by-34}px;width:68px;height:68px;color:#76f7ff;`, 320,
-        '<div class="core"></div><div class="ring"></div>');
-      spawnSparks(bx, by, 16, '#6ef4ff', 64, 420);
+      caster.el.classList.remove('bw-baton-swing');
+      void caster.el.offsetWidth;
+      caster.el.classList.add('bw-baton-swing');
+      setTimeout(()=>caster.el && caster.el.classList.remove('bw-baton-swing'), 300);
+      const tipX = cx + dir*70, tipY = cy - 6;
+      // Strike toward wherever the target actually is, arriving as the swing
+      // connects, instead of a static prop that just pops in near Black Widow.
+      const tx = target ? target.x + FIGHTER_SIZE/2 : tipX + dir*40;
+      const ty = target ? target.y + FIGHTER_SIZE/2 : tipY;
+      setTimeout(()=>{
+        if(state.mode!=='battle'||caster.dead) return;
+        spawnLightning(tipX, tipY, tx, ty,
+          {bolts:3, branches:5, width:3.2, life:340, jag:26, segs:9, color:'#eaffff'});
+        spawnSparks(tipX, tipY, 10, '#bff3ff', 60, 320);
+      }, 140);
       break;
     }
     case 'blackwidow_grapple': {
@@ -5448,26 +5434,22 @@ function spawnAbilityFx(caster, ability, target){
     /* ---------------- Mr. Fantastic ---------------- */
     case 'stretch_punch': {
       const reach=ability.range||210;
-      const ax=cx+dir*6, ay=cy-6;
-      const armAnim = dir>=0 ? 'elasticPunch' : 'elasticPunchFlip';
-      fxEl('elastic-arm', `left:${ax}px;top:${ay}px;width:${reach}px;animation:${armAnim} .34s cubic-bezier(.15,.8,.2,1) forwards;`, 360,
-        '<span class="elastic-sleeve"></span><span class="elastic-cuff"></span>');
-      fxEl('elastic-fist', `left:${ax+dir*reach-13}px;top:${ay-5}px;transform:scaleX(${dir});`, 320,
-        '<span class="elastic-fingers"></span><span class="elastic-knuckles"></span>');
-      spawnSparks(ax+dir*reach,ay,8,'#e9f3ff',50,320);
+      caster.el.style.setProperty('--mrf-reach', reach+'px');
+      caster.el.classList.add('mrf-stretching');
+      setTimeout(()=>caster.el && caster.el.classList.remove('mrf-stretching'), 380);
+      spawnSparks(cx+dir*reach,cy-6,8,'#e9f3ff',50,320);
       break;
     }
     case 'rubber_barrage': {
       const reach=ability.range||230;
-      const armAnim = dir>=0 ? 'elasticPunch' : 'elasticPunchFlip';
-      [0,120,240].forEach((d,i)=>setTimeout(()=>{
+      [0,130,260].forEach((d,i)=>setTimeout(()=>{
         if(state.mode!=='battle'||caster.dead) return;
-        const bax=cx+dir*6, bay=cy-10+i*5;
-        fxEl('elastic-arm', `left:${bax}px;top:${bay}px;width:${reach-i*24}px;animation:${armAnim} .28s cubic-bezier(.15,.8,.2,1) forwards;`, 280,
-          '<span class="elastic-sleeve"></span><span class="elastic-cuff"></span>');
-        fxEl('elastic-fist', `left:${bax+dir*(reach-24-i*16)-13}px;top:${bay-6}px;transform:scaleX(${dir});`, 260,
-          '<span class="elastic-fingers"></span><span class="elastic-knuckles"></span>');
-        spawnSparks(cx+dir*(reach-i*24),cy+i*5,5,'#ffffff',24,220);
+        const r = reach - i*24;
+        caster.el.style.setProperty('--mrf-reach', r+'px');
+        caster.el.classList.remove('mrf-stretching'); void caster.el.offsetWidth;
+        caster.el.classList.add('mrf-stretching');
+        setTimeout(()=>caster.el && caster.el.classList.remove('mrf-stretching'), 300);
+        spawnSparks(cx+dir*r,cy-6,5,'#ffffff',24,220);
       },d));
       break;
     }
@@ -5670,12 +5652,13 @@ function spawnHitFx(target, kind, dirSign){
       break;
     }
     case 'electric_baton_hit': {
-      fxEl('fx-electric-impact', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;color:#76f7ff;`, 460,
+      fxEl('fx-electric-impact', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;color:#eaffff;`, 460,
         '<div class="core"></div><div class="ring"></div>');
-      fxEl('fx-impact-star', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;`, 190, impactStarSvg('#c9fbff', 60, dirSign));
-      spawnLightning(cx, Math.max(0,cy-120), cx, cy, {bolts:2, branches:2, width:2.5, life:280, jag:18, segs:6, color:'#5ef3ff'});
-      spawnSparks(cx, cy, 15, '#76f7ff', 68, 420);
-      shakeArena(8, 280);
+      fxEl('fx-impact-star', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;`, 190, impactStarSvg('#e6feff', 60, dirSign));
+      spawnLightning(cx, Math.max(0,cy-140), cx, cy, {bolts:3, branches:4, width:3, life:320, jag:24, segs:8, color:'#eaffff'});
+      spawnLightning(cx-24, cy-10, cx+24, cy+16, {bolts:2, branches:3, width:2.4, life:260, jag:20, segs:6, color:'#8ff2ff'});
+      spawnSparks(cx, cy, 18, '#9ef7ff', 72, 440);
+      shakeArena(9, 300);
       break;
     }
     case 'dd_club_hit': {
@@ -5840,29 +5823,20 @@ function collidesPlatform(f, plat){
 }
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   const tNow = now();
-  if(f.hulkScreamUntil && tNow < f.hulkScreamUntil){
-    const dur = f.hulkScreamSlideDur || 2500;
-    const elapsed = tNow - (f.hulkScreamStartT || (f.hulkScreamUntil - dur));
-    const p = Math.max(0, Math.min(1, elapsed / dur));
-    const ease = 1 - Math.pow(1 - p, 3); // ease-out: fast start, settles in
-    const startX = (f.hulkScreamStartX != null) ? f.hulkScreamStartX : f.x;
-    const edgeX = (f.hulkScreamEdgeX != null) ? f.hulkScreamEdgeX : f.x;
-    f.x = startX + (edgeX - startX) * ease;
-    // Dragged along the ground, not through the air — keep them planted on
-    // the floor the whole time instead of playing the airborne float pose.
-    f.y = FLOOR_Y;
-    f.vx = 0;
-    f.vy = 0;
-    f.onGround = true;
-    return;
-  }
-  if(f.hulkScreamUntil && tNow >= f.hulkScreamUntil){
-    f.hulkScreamUntil = 0;
-    f.hulkScreamEdgeX = 0;
-    f.hulkScreamStartX = null;
-    f.hulkScreamStartT = 0;
-    f.hulkScreamSlideDur = 0;
-    f.hitStun = Math.min(f.hitStun, 0);
+  if(f.hulkRoarUntil && tNow < f.hulkRoarUntil){
+    if(f.hulkRoarLock){
+      // Fully rooted — no walking, no jumping, no fighting out of it —
+      // but the roar's own knockback still carries them across the arena.
+      moveDir = 0;
+      wantJump = false;
+      f.vx *= 0.985;
+    } else {
+      // "A little effect" — can still shuffle, just very sluggishly.
+      moveDir *= 0.22;
+    }
+  } else if(f.hulkRoarUntil && tNow >= f.hulkRoarUntil){
+    f.hulkRoarUntil = 0;
+    f.hulkRoarLock = false;
   }
   if(f.grappleUntil && now() < f.grappleUntil && !f.flight){
     f.vx = f.grappleVx;
@@ -6911,7 +6885,7 @@ function renderFighter(f){
   f.el.classList.toggle('facing-left', f.facing < 0);
   f.el.classList.toggle('moving', Math.abs(f.vx) > 0.7 && f.hitStun <= 0);
   f.el.classList.toggle('airborne', !f.onGround && !f.flight);
-  f.el.classList.toggle('stunned', f.hitStun > 0 || (f.hulkScreamUntil && now() < f.hulkScreamUntil));
+  f.el.classList.toggle('stunned', f.hitStun > 0 || (f.hulkRoarUntil && now() < f.hulkRoarUntil));
   if(!isSlowed(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
   const pct = Math.max(0, f.health/f.def.maxHealth);
   f.overheadFillEl.style.width = (pct*100)+'%';
