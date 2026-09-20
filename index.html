@@ -2144,6 +2144,62 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .hulk-roar-streak{border-radius:3px; background:linear-gradient(90deg,transparent,#b8ff9c 70%,#ffffff); box-shadow:0 0 10px #55d65c; animation:hulkStreak .44s ease-out forwards;}
 .hulk-roar-streak.rev{background:linear-gradient(270deg,transparent,#b8ff9c 70%,#ffffff);}
 @keyframes hulkStreak{from{opacity:1; transform:scaleX(.25);} to{opacity:0; transform:scaleX(1.35);}}
+
+/* =========================================================================
+   MAIN MENU: ALWAYS FITS THE SCREEN (no scrolling)
+   Everything is sized from the viewport height so all six buttons, the title
+   and the equipped-fighter card fit on phones, tablets, TVs and short
+   landscape windows. Line-height is pinned so the real Anton font (taller
+   default line box) can't push the buttons past the bottom edge.
+   ========================================================================= */
+#screen-menu.active{overflow:hidden; overflow:clip;} /* clip: not even focus/controller navigation can scroll it */
+#screen-menu .menu-stage{
+  height:100%; min-height:0; box-sizing:border-box; grid-template-rows:minmax(0,1fr);
+  padding-top:clamp(56px,9vh,100px); padding-bottom:clamp(12px,3vh,48px);
+}
+#screen-menu .menu-left{min-height:0; gap:clamp(8px,2.6vh,34px);}
+#screen-menu .menu-title{font-size:clamp(28px,min(8vw,10vh),150px); line-height:1;}
+#screen-menu .menu-list{flex:0 1 auto; min-height:0; gap:clamp(3px,.9vh,10px);}
+#screen-menu .menu-item{
+  flex:0 1 auto; min-height:0; line-height:1.15;
+  font-size:clamp(13px,3vh,28px);
+  padding-top:clamp(5px,1.4vh,15px); padding-bottom:clamp(5px,1.4vh,15px);
+}
+#screen-menu .menu-item.primary{
+  font-size:clamp(17px,4vh,38px);
+  padding-top:clamp(6px,1.9vh,20px); padding-bottom:clamp(6px,1.9vh,20px);
+}
+#screen-menu .hero-name{line-height:1.05;}
+
+/* portrait / narrow: title, buttons, then a compact fighter row */
+@media (max-width:760px), (max-aspect-ratio:1/1){
+  #screen-menu .menu-stage{grid-template-rows:auto auto; align-content:start; padding-top:clamp(60px,9vh,76px); gap:clamp(8px,2vh,20px);}
+  #screen-menu .menu-left{gap:clamp(8px,2vh,20px);}
+  #screen-menu .menu-title{font-size:clamp(26px,min(11.5vw,7.2vh),84px);}
+  #screen-menu .menu-item{font-size:clamp(13px,2.5vh,22px); padding-top:clamp(5px,1.1vh,11px); padding-bottom:clamp(5px,1.1vh,11px);}
+  #screen-menu .menu-item.primary{font-size:clamp(16px,3.3vh,30px); padding-top:clamp(6px,1.5vh,14px); padding-bottom:clamp(6px,1.5vh,14px);}
+  #screen-menu .hero-frame{width:clamp(48px,9vh,74px);}
+  #screen-menu .hero-name{font-size:clamp(18px,3.2vh,24px);}
+}
+/* short landscape (phone on its side, small windows) */
+@media (max-height:520px) and (min-aspect-ratio:1/1){
+  /* keep buttons on the left and the fighter on the right, even when the window is under 760px wide */
+  #screen-menu .menu-stage{grid-template-columns:minmax(0,1fr) minmax(0,.9fr); grid-template-rows:minmax(0,1fr); align-content:normal; padding-top:50px; gap:clamp(12px,3vw,24px);}
+  #screen-menu .menu-title{font-size:clamp(20px,8.5vh,40px);}
+  #screen-menu .menu-left{gap:clamp(6px,2vh,12px);}
+  #screen-menu .menu-hero{flex-direction:column; justify-self:center; text-align:center; gap:clamp(6px,2vh,14px); padding:8px;}
+  #screen-menu .hero-frame{width:min(30vw,42vh); border-width:clamp(3px,.5vw,6px);}
+  #screen-menu .hero-name{font-size:clamp(18px,5vh,30px);}
+  #screen-menu .hero-row{justify-content:center;}
+  #screen-menu .fs-slash{width:min(57vw,1000px); right:-7vw; opacity:1;}
+}
+@media (max-height:360px) and (min-aspect-ratio:1/1){
+  #screen-menu .menu-title{font-size:clamp(16px,7vh,24px);}
+  #screen-menu .menu-item{font-size:12px; padding-top:4px; padding-bottom:4px;}
+  #screen-menu .menu-item.primary{font-size:15px; padding-top:5px; padding-bottom:5px;}
+  #screen-menu .hero-frame{width:min(30vw,36vh);}
+  #screen-menu .hero-name{font-size:16px;}
+}
 </style>
 </head>
 <body>
