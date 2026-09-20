@@ -76,24 +76,50 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   font-size:clamp(30px,6.4vw,74px); line-height:1.06;
   background:linear-gradient(180deg,#ffe1a0,var(--amber) 55%,#c97418);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  filter:drop-shadow(0 4px 0 rgba(0,0,0,.4));
+  filter:drop-shadow(0 4px 0 rgba(0,0,0,.4)) drop-shadow(0 0 26px rgba(242,165,65,.35));
+  animation:menuTitleGlow 3.2s ease-in-out infinite;
 }
+@keyframes menuTitleGlow{
+  0%,100%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.4)) drop-shadow(0 0 18px rgba(242,165,65,.28));}
+  50%{filter:drop-shadow(0 4px 0 rgba(0,0,0,.4)) drop-shadow(0 0 34px rgba(242,165,65,.55));}
+}
+@media (prefers-reduced-motion:reduce){ .menu-title{animation:none;} }
 .menu-sub{color:var(--muted); margin-top:10px; margin-bottom:clamp(22px,4vw,36px); font-size:clamp(13px,1.4vw,16px);}
 .menu-buttons{display:flex; flex-direction:column; gap:clamp(10px,1.6vw,16px); max-width:380px; margin:0 auto;}
 .btn{
-  border:none; border-radius:12px; padding:14px 18px; font-size:16px; font-weight:800;
+  position:relative; overflow:hidden; isolation:isolate;
+  border:none; border-radius:13px; padding:14px 18px; font-size:16px; font-weight:800; letter-spacing:.01em;
   cursor:pointer; color:var(--text); background:var(--panel2); border:1px solid var(--line);
-  transition:transform .08s ease, background .15s ease, box-shadow .15s ease;
+  transition:transform .16s cubic-bezier(.2,.8,.3,1), background .15s ease, box-shadow .2s ease, border-color .15s ease;
   display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  box-shadow:0 6px 16px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.06);
 }
+.btn::before{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.4) 50%, transparent 60%);
+  transform:translateX(-140%); transition:transform .55s ease;
+}
+.btn > *{position:relative; z-index:2;}
 .btn:active{transform:scale(.97);}
-.btn-primary{background:linear-gradient(180deg,var(--amber),#d98a2b); color:#231600; box-shadow:0 10px 26px rgba(242,165,65,.25);}
+.btn-primary{
+  background:linear-gradient(180deg,#ffcf7a,var(--amber) 45%,#c97418); color:#241500;
+  box-shadow:0 10px 28px rgba(242,165,65,.35), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.18);
+  animation:btnPrimaryPulse 2.6s ease-in-out infinite;
+}
+@keyframes btnPrimaryPulse{
+  0%,100%{box-shadow:0 10px 28px rgba(242,165,65,.35), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.18);}
+  50%{box-shadow:0 10px 32px rgba(242,165,65,.6), inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(0,0,0,.18);}
+}
+@media (prefers-reduced-motion:reduce){ .btn-primary{animation:none;} }
 .btn-secondary{background:var(--panel2);}
-.btn-danger{background:linear-gradient(180deg,var(--red),#b13437); color:#fff;}
-.btn-small{padding:8px 14px; font-size:13px; border-radius:9px;}
+.btn-danger{background:linear-gradient(180deg,#ff6b70,var(--red) 45%,#b13437); color:#fff; box-shadow:0 10px 24px rgba(229,72,77,.35), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -2px 0 rgba(0,0,0,.15);}
+.btn-small{padding:8px 14px; font-size:13px; border-radius:10px;}
 .btn-icon{font-size:1.05em; line-height:1;}
 @media (hover:hover) and (pointer:fine){
-  .btn:hover{transform:translateY(-2px);}
+  .btn:hover{transform:translateY(-3px); box-shadow:0 14px 28px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);}
+  .btn:hover::before{transform:translateX(140%);}
+  .btn-primary:hover{box-shadow:0 16px 36px rgba(242,165,65,.5), inset 0 1px 0 rgba(255,255,255,.6), inset 0 -2px 0 rgba(0,0,0,.18);}
+  .btn-danger:hover{box-shadow:0 14px 30px rgba(229,72,77,.5), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.15);}
   .btn-secondary:hover{border-color:var(--amber);}
 }
 
@@ -109,8 +135,12 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .save-slot-title{text-align:center;color:var(--amber);font-size:clamp(30px,5vw,54px);text-shadow:0 2px 18px rgba(124,58,237,.25);}
 .save-slot-sub{text-align:center;color:var(--muted);font-size:clamp(12px,1.4vw,15px);margin:8px auto 24px;max-width:720px;line-height:1.5;}
 .save-slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.save-slot-card{background:linear-gradient(160deg,#252944,#1b1e30);border:1px solid #3c4160;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:0 10px 25px rgba(0,0,0,.16);}
+.save-slot-card{background:linear-gradient(160deg,#252944,#1b1e30);border:1px solid #3c4160;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:0 10px 25px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.04);transition:transform .16s cubic-bezier(.2,.8,.3,1), box-shadow .16s ease, border-color .16s ease;}
 .save-slot-card.active{border-color:#22d3ee;box-shadow:0 0 0 2px #22d3ee inset,0 0 28px #22d3ee22;}
+@media (hover:hover) and (pointer:fine){
+  .save-slot-card:hover{transform:translateY(-2px);border-color:#565c86;box-shadow:0 14px 32px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.05);}
+  .save-slot-card.active:hover{border-color:#22d3ee;}
+}
 .save-slot-num{font-family:'Anton';font-size:13px;letter-spacing:.12em;color:#9da4c1;text-transform:uppercase;}
 .save-slot-name{font-family:'Anton';font-size:clamp(22px,2.8vw,32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;}
 .save-slot-status{color:#aeb5d6;font-size:12px;min-height:32px;line-height:1.35;}
@@ -134,11 +164,27 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 /* ---------- Generic panel screens ---------- */
 .panel{
+  position:relative; overflow:hidden;
   background:linear-gradient(180deg,var(--panel),var(--panel2));
-  border:1px solid var(--line); border-radius:18px; padding:24px; box-shadow:var(--shadow);
+  border:1px solid var(--line); border-radius:18px; padding:24px;
+  box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.04);
 }
+.panel::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:3px; z-index:1;
+  background:linear-gradient(90deg, transparent, var(--amber), #ffe1a0, var(--amber), transparent);
+  opacity:.9;
+}
+#screen-inventory .panel::before, #screen-instructions .panel::before, #screen-settings .panel::before{content:none;}
 .panel-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; gap:14px;}
-.panel-header h2{font-size:28px; color:var(--amber);}
+.panel-header h2{
+  font-size:28px; color:var(--amber); position:relative; padding-bottom:8px;
+  text-shadow:0 0 18px rgba(242,165,65,.35);
+}
+.panel-header h2::after{
+  content:''; position:absolute; left:0; bottom:0; width:52px; height:3px; border-radius:3px;
+  background:linear-gradient(90deg, var(--amber), #ffe1a0);
+  box-shadow:0 0 10px rgba(242,165,65,.6);
+}
 
 /* Sticky full-bleed header for the page screens */
 #screen-inventory .panel, #screen-instructions .panel, #screen-settings .panel{
@@ -326,7 +372,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 /* ---------- Wasp / Falcon permanent fighter visuals ---------- */
 .wasp-wings,.falcon-wings{position:absolute;left:50%;top:50%;pointer-events:none;z-index:1;overflow:visible;transform-origin:50% 50%;}
 .wasp-wings{width:94px;height:70px;transform:translate(-50%,-50%) scale(.86);display:none;filter:drop-shadow(0 0 5px rgba(255,225,94,.72)) drop-shadow(0 0 13px rgba(235,75,118,.30));}
-.falcon-wings{width:132px;height:86px;transform:translate(-50%,-50%);display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.65)) drop-shadow(0 0 7px rgba(207,216,227,.24));}
+.falcon-wings{width:132px;height:86px;transform:translate(-50%,-50%);display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.65)) drop-shadow(0 0 8px rgba(224,60,68,.38));}
 .wasp-wings svg,.falcon-wings svg{width:100%;height:100%;display:block;overflow:visible;}
 .fighter.facing-left .wasp-wings,.fighter.facing-left .falcon-wings{transform:translate(-50%,-50%) scaleX(-1);}
 .fighter.facing-left .wasp-wings{transform:translate(-50%,-50%) scaleX(-1) scale(.86);}
@@ -421,6 +467,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .ability-btn{
   position:relative; width:84px; height:64px; border-radius:12px; border:1px solid var(--line);
   background:var(--panel2); color:var(--text); cursor:pointer; overflow:hidden; text-align:left; padding:8px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
 }
 .ability-btn .ab-key{font-family:'Anton'; font-size:16px; color:var(--amber);}
 .ability-btn .ab-nm{font-size:10px; color:var(--text); line-height:1.15; margin-top:2px; display:block;}
@@ -555,10 +602,10 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .menu-wrap>*{position:relative;z-index:1;}
 .menu-title{font-size:clamp(34px,7vw,80px);line-height:.98;text-shadow:0 4px 0 rgba(0,0,0,.35),0 0 28px #7c3aed55;}
 .menu-sub{font-size:clamp(13px,1.5vw,16px);}
-.btn{box-shadow:0 6px 18px rgba(0,0,0,.18);}
-@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-2px);filter:brightness(1.08);} }
-.panel{background:linear-gradient(145deg,#171a2b,#252944 68%,#11131f);border-color:#464b6d;box-shadow:0 18px 60px rgba(0,0,0,.42);}
-.panel-header h2{text-shadow:0 2px 14px rgba(124,58,237,.25);}
+.btn{box-shadow:0 6px 18px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.06);}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-3px);filter:brightness(1.1);} }
+.panel{background:linear-gradient(145deg,#171a2b,#252944 68%,#11131f);border-color:#464b6d;box-shadow:0 18px 60px rgba(0,0,0,.42), 0 0 0 1px rgba(124,58,237,.14), inset 0 1px 0 rgba(255,255,255,.05);}
+.panel-header h2{text-shadow:0 0 20px rgba(242,165,65,.4), 0 2px 14px rgba(124,58,237,.35);}
 .inventory-caption{color:var(--muted);font-size:clamp(11px,1.1vw,12px);letter-spacing:.14em;text-transform:uppercase;margin-top:4px;}
 .loadout-banner{display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,2.4vw,24px);padding:clamp(12px,2vw,18px);margin-bottom:clamp(14px,2.4vw,22px);border:1px solid #555b84;border-radius:16px;background:linear-gradient(90deg,#7c3aed1c,#22d3ee10);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
 .loadout-banner-main{display:flex;align-items:center;gap:14px;}
@@ -640,8 +687,14 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter-square{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 12px 22px rgba(0,0,0,.26);}
 .projectile{filter:drop-shadow(0 0 5px currentColor);animation:projectilePulse .18s ease-in-out infinite alternate;}
 .fx-burst{mix-blend-mode:screen;}
-.ability-btn{background:linear-gradient(145deg,#252a45,#171b2d);border-color:#454b6f;box-shadow:0 7px 18px rgba(0,0,0,.22);}
-.ability-btn:hover{border-color:#7c3aed;transform:translateY(-2px);}
+.ability-btn{background:linear-gradient(145deg,#252a45,#171b2d);border-color:#454b6f;box-shadow:0 7px 18px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06);transition:transform .15s cubic-bezier(.2,.8,.3,1), box-shadow .2s ease, border-color .15s ease, filter .15s ease;}
+.ability-btn:hover{border-color:#7c3aed;transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,.3), 0 0 16px rgba(124,58,237,.35), inset 0 1px 0 rgba(255,255,255,.08);}
+.ability-btn:not(:disabled).ability-ready{animation:abilityReadyGlow 2.4s ease-in-out infinite;}
+@keyframes abilityReadyGlow{
+  0%,100%{box-shadow:0 7px 18px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06), 0 0 0 rgba(124,58,237,0);}
+  50%{box-shadow:0 7px 18px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06), 0 0 12px rgba(124,58,237,.4);}
+}
+@media (prefers-reduced-motion:reduce){ .ability-btn.ability-ready{animation:none;} }
 #dpad button{background:linear-gradient(145deg,#252a45,#171b2d);border-color:#454b6f;box-shadow:0 6px 15px rgba(0,0,0,.2);}
 @keyframes idleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @keyframes runBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(-1deg)}}
@@ -2764,11 +2817,11 @@ const CHARACTERS = {
     maxHealth:9000, aiStyle:'mobile',
     description:'High health, very high mobility. Wins by darting in, poking with webs, and swinging away.',
     abilities:{
-      E:{key:'E', name:'Web Strike', type:'projectile', damage:240, cooldown:500, knockback:5,
+      E:{key:'E', name:'Web Strike', type:'projectile', damage:280, cooldown:500, knockback:5,
          speed:15, w:22, h:8, color:'#e7e7e7',
          sound:'web_shoot', fx:'web_shot', render:'web-strand', trail:'web', web:true,
          hitFx:'web', hitSound:'web_hit', slow:300, desc:'Fast, thin web shot. Basic poke.'},
-      Q:{key:'Q', name:'Web Punch', type:'melee', damage:800, cooldown:9000, knockback:14, range:74,
+      Q:{key:'Q', name:'Web Punch', type:'melee', damage:900, cooldown:9000, knockback:14, range:74,
          hitDelay:90,
          sound:'web_punch', fx:'web_punch', hitFx:'web_punch_hit', hitSound:'web_punch_hit', slow:300,
          desc:'A devastating close-range haymaker wrapped in webbing. Short range, huge damage.'},
@@ -2782,7 +2835,7 @@ const CHARACTERS = {
     maxHealth:10150, aiStyle:'defensive',
     description:'Defensive attacker who fights at range with repulsors and missiles, then opens distance with free flight when things get dangerous.',
     abilities:{
-      E:{key:'E', name:'Repulsor Blast', type:'projectile', damage:320, cooldown:650, knockback:8,
+      E:{key:'E', name:'Repulsor Blast', type:'projectile', damage:380, cooldown:650, knockback:8,
          speed:12, w:24, h:14, color:'#ffd479',
          sound:'repulsor', fx:'repulsor', render:'repulsor', trail:'energy',
          hitFx:'energy', hitSound:'energy_hit', desc:'Medium-range repulsor projectile.'},
@@ -2800,10 +2853,10 @@ const CHARACTERS = {
     maxHealth:25000,
     description:'Cosmic powerhouse. Fires photon energy, lands devastating superhuman punches, and can stay airborne indefinitely with unrestricted flight.',
     abilities:{
-      E:{key:'E', name:'Photon Blast', type:'projectile', damage:1000, cooldown:3000, knockback:10,
+      E:{key:'E', name:'Photon Blast', type:'projectile', damage:1000, cooldown:2000, knockback:10,
          speed:20, w:76, h:22, color:'#ffd95a', render:'captain-photon', trail:'energy',
          sound:'cm_photon', fx:'cm_photon', hitFx:'cm_photon_hit', hitSound:'cm_photon_hit',
-         desc:'Fires a high-energy photon blast for 1,000 damage. Cooldown: 3 seconds.'},
+         desc:'Fires a high-energy photon blast for 1,000 damage. Cooldown: 2 seconds.'},
       Q:{key:'Q', name:'Cosmic Punch', type:'melee', damage:2500, cooldown:15000, knockback:22, range:118,
          hitRange:176, hitVertical:145, hitStartSlack:70, hitDelay:80,
          sound:'cm_punch', fx:'cm_punch', hitFx:'cm_punch_hit', hitSound:'cm_punch_hit',
@@ -2835,7 +2888,7 @@ const CHARACTERS = {
     maxHealth:7750,
     description:'A size-shifting aerial fighter. Fires a Size Disc that enlarges and slows the opponent without increasing their damage, can shrink herself for speed, and can take to the air with her wings.',
     abilities:{
-      E:{key:'E', name:'Size Disc', type:'projectile', damage:250, cooldown:2500, knockback:5,
+      E:{key:'E', name:'Size Disc', type:'projectile', damage:250, cooldown:1100, knockback:5,
          speed:15, w:30, h:30, color:'#ffd34e', render:'wasp-size-disc', trail:'wasp',
          sound:'wasp_size_disc', fx:'wasp_size_disc', hitFx:'wasp_size_hit', hitSound:'wasp_size_hit',
          waspSizeDuration:1500, waspSizeSpeedMultiplier:.62,
@@ -2851,16 +2904,16 @@ const CHARACTERS = {
   falcon: {
     id:'falcon', name:'The Falcon', img:'TheFalcon.jpg', color:'#9aa3af', accentColor:'#dce3ec', aiStyle:'falcon',
     maxHealth:8000,
-    description:'An aerial marksman with permanent mechanical wings. Uses Wing Strike up close, sends Redwing out as a fast ranged attack, and flies freely for short bursts.',
+    description:'An aerial marksman with permanent mechanical wings. Uses Wing Strike up close, deploys Redwing as an attack drone at range, and flies freely for short bursts.',
     abilities:{
       E:{key:'E', name:'Wing Strike', type:'melee', damage:500, cooldown:1500, knockback:9, range:100,
          hitRange:146, hitVertical:125, hitStartSlack:55, hitDelay:70,
          sound:'falcon_wing_strike', fx:'falcon_wing_strike', hitFx:'falcon_wing_hit', hitSound:'falcon_wing_hit',
          desc:'A powerful close-range wing-assisted strike for 500 damage. Cooldown: 1.5 seconds.'},
-      Q:{key:'Q', name:'Redwing', type:'projectile', damage:700, cooldown:4000, knockback:11,
-         speed:17, w:52, h:28, color:'#df3948', render:'falcon-redwing', trail:'falcon',
+      Q:{key:'Q', name:'Redwing', type:'falconDrone', damage:300, cooldown:15000, knockback:4,
+         droneDuration:5000, droneTickInterval:450, speed:22, w:20, h:12, color:'#e5484d',
          sound:'falcon_redwing', fx:'falcon_redwing', hitFx:'falcon_redwing_hit', hitSound:'falcon_redwing_hit',
-         desc:'Launches Redwing at the enemy for 700 damage. Cooldown: 4 seconds.'},
+         desc:'Deploys Redwing as an attack drone that flies circles around the enemy, firing on them for 5 seconds before vanishing. Cooldown: 15 seconds.'},
       R:{key:'R', name:'Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
          sound:'falcon_flight', fx:'falcon_flight',
          desc:'Activates free flight for 5 seconds using Falcon’s wings. Recharges after a 10 second cooldown.'}
@@ -4148,7 +4201,7 @@ function buildFighterDOM(f){
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
     ${f.def.id==='antman' ? '<div class="antman-size-ring"></div>' : ''}
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
-    ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f5f8"/><stop offset=".38" stop-color="#aeb7c2"/><stop offset=".72" stop-color="#5d6672"/><stop offset="1" stop-color="#1b2026"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#171b20" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#e7edf3" stroke-width="1.3" opacity=".7"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
+    ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
@@ -4297,6 +4350,7 @@ function updateAbilityBarFor(bar, fighter, brand){
   ['E','Q','R'].forEach(k=>{
     const btn = bar.querySelector(`[data-key="${k}"]`);
     if(!btn) return;
+    btn.classList.remove('ability-ready');
     const a = fighter.def.abilities[k];
     const overlay = btn.querySelector('.cd-overlay');
     const keyEl = btn.querySelector('.ab-key');
@@ -4306,6 +4360,7 @@ function updateAbilityBarFor(bar, fighter, brand){
     }
     if(a.type==='toggle'){
       btn.classList.toggle('flight-on', !!fighter.flight);
+      btn.classList.add('ability-ready');
       overlay.style.display='none';
       overlay.textContent = fighter.flight ? 'ON' : 'OFF';
       overlay.style.display='flex';
@@ -4352,6 +4407,7 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.textContent = (remain/1000).toFixed(1)+'s';
     } else {
       overlay.style.display='none';
+      btn.classList.add('ability-ready');
     }
   });
 }
@@ -4977,6 +5033,69 @@ function executeAbility(caster, target, ability, t){
         trailTick: 0,
         el: null, fillEl: null
       });
+      break;
+    }
+    case 'falconDrone': {
+      // Redwing launches from Falcon and actually flies out to the enemy —
+      // it circles around them at a distance, strafing in from a new angle
+      // each pass, and fires on them for a few seconds before flying off.
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg) break;
+      const droneW = 52, droneH = 28;
+      // Spawn right at Falcon so the drone visibly launches from him instead
+      // of appearing next to the target.
+      let curX = caster.x + FIGHTER_SIZE/2 - droneW/2;
+      let curY = caster.y + FIGHTER_SIZE/2 - droneH/2 - 20;
+      const droneEl = document.createElement('div');
+      droneEl.className = 'projectile falcon-redwing-projectile falcon-drone-turret';
+      droneEl.style.cssText = `left:${curX}px;top:${curY}px;width:${droneW}px;height:${droneH}px;`
+        + `transition:left .38s cubic-bezier(.32,.68,.22,1), top .38s cubic-bezier(.32,.68,.22,1);`;
+      droneEl.innerHTML = '<div class="redwing-drone"></div>';
+      arenaEl.appendChild(droneEl);
+      const droneId = (state.falconDroneSeq = (state.falconDroneSeq || 0) + 1);
+      caster.activeFalconDroneId = droneId;
+      const cleanup = ()=>{
+        if(!droneEl.parentNode) return;
+        droneEl.style.transition = 'opacity .35s ease, transform .35s ease';
+        droneEl.style.opacity = '0';
+        droneEl.style.transform = 'scale(.5)';
+        setTimeout(()=>{ if(droneEl.parentNode) droneEl.remove(); }, 360);
+      };
+      const duration = ability.droneDuration || 5000;
+      const tickInterval = ability.droneTickInterval || 450;
+      const ticks = Math.max(1, Math.round(duration / tickInterval));
+      let orbitAngle = Math.random() * Math.PI * 2;
+      for(let i=1; i<=ticks; i++){
+        setTimeout(()=>{
+          if(state.mode !== 'battle' || caster.dead || caster.activeFalconDroneId !== droneId){ cleanup(); return; }
+          const liveTarget = (caster === state.player) ? state.bot : state.player;
+          if(liveTarget && !liveTarget.dead){
+            // Sweep to a new point on a wide orbit around the target every
+            // tick, so the drone is continuously flying a circling path
+            // around them rather than sitting still.
+            orbitAngle += 2.1;
+            const orbitRX = 115, orbitRY = 55;
+            const tcx = liveTarget.x + FIGHTER_SIZE/2, tcy = liveTarget.y + FIGHTER_SIZE/2 - 30;
+            curX = tcx + Math.cos(orbitAngle)*orbitRX - droneW/2;
+            curY = tcy + Math.sin(orbitAngle)*orbitRY - droneH/2;
+            droneEl.style.left = curX + 'px';
+            droneEl.style.top = curY + 'px';
+            const shotX = curX + droneW/2, shotY = curY + droneH/2;
+            const dir = dirSignTo({x: shotX}, {x: liveTarget.x});
+            state.projectiles.push({
+              x: shotX, y: shotY - ability.h/2,
+              vx: dir*ability.speed, vy: (tcy - shotY) / 24, w:ability.w, h:ability.h, color: ability.color,
+              damage: ability.damage, knockback: ability.knockback, owner: caster.id,
+              life: 900, returns:false, phase:'out', originX: shotX, casterRef: caster, targetRef: liveTarget,
+              returnDistance:0, render:null, trail:'', web:false,
+              hitFx: ability.hitFx, hitSound: ability.hitSound, slow:0, pierce:false, shieldViz:false,
+              hasHitTarget:false, trailTick:0, el:null
+            });
+            sfx(ability.sound);
+          }
+          if(i === ticks) cleanup();
+        }, i*tickInterval);
+      }
       break;
     }
     case 'wall': {
@@ -7275,10 +7394,13 @@ function spawnHitFx(target, kind, dirSign){
       break;
     }
     case 'falcon_redwing_hit': {
-      fxEl('fx-flash', `left:${cx-68}px;top:${cy-68}px;width:136px;height:136px;background:radial-gradient(circle,#fff,#ff6974 25%,#c82738 54%,transparent 76%);`, 300);
-      fxEl('fx-ring', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#ff8790;border-width:4px;box-shadow:0 0 32px #df3948;`, 480);
-      spawnSparks(cx,cy,18,'#ffd9dc',90,500);
-      shakeArena(8,280);
+      // Small, snappy — this now fires several times a second while the
+      // drone is active, so it stays readable without spamming a full-screen
+      // flash or shake on every single tick.
+      fxEl('fx-flash', `left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;background:radial-gradient(circle,#fff,#ff6974 25%,#c82738 54%,transparent 76%);`, 220);
+      fxEl('fx-ring', `left:${cx-32}px;top:${cy-32}px;width:64px;height:64px;border-color:#ff8790;border-width:3px;box-shadow:0 0 18px #df3948;`, 320);
+      spawnSparks(cx,cy,8,'#ffd9dc',44,340);
+      shakeArena(3,140);
       break;
     }
     case 'antman_punch_hit': {
