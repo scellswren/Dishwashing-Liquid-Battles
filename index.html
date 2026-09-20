@@ -2333,13 +2333,13 @@ const CHARACTERS = {
          sound:'hulk_slam', fx:'hulk_slam', hitFx:'hulk_slam_hit', hitSound:'hulk_slam_hit',
          desc:'Hulk pounds the ground, releasing a wide shockwave that launches nearby enemies.'},
       R:{key:'R', name:'Hulk Scream', type:'hulkScream', cooldown:9000,
-         sound:'hulk_leap', fx:'hulk_scream',
-         desc:'Hulk unleashes a massive roar that drives the enemy to the arena edge and pins them there for 3 seconds.'}
+         sound:'hulk_scream_roar', fx:'hulk_scream',
+         desc:'Hulk unleashes a massive roar that slides the enemy to the arena edge and pins them there, ears ringing, for 3 seconds.'}
     }
   },
   wolverine: {
     id:'wolverine', name:'Wolverine', img:'Wolverine.jpg', color:'#d5aa34',
-    maxHealth:17000, aiStyle:'wolverine', passiveRegen:100,
+    maxHealth:13000, aiStyle:'wolverine', passiveRegen:100,
     description:'Relentless close-range fighter with fast adamantium claws, strong regeneration, a powerful heal, and a fast lunge.',
     abilities:{
       E:{key:'E', name:'Adamantium Claws', type:'melee', damage:380, cooldown:650, knockback:10, range:92,
@@ -3117,7 +3117,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
     flight:false,
     flightExpire:0,
-    hulkScreamUntil:0, hulkScreamEdgeX:0,
+    hulkScreamUntil:0, hulkScreamEdgeX:0, hulkScreamStartX:null, hulkScreamStartT:0, hulkScreamSlideDur:0,
     hitStun:0,
     slowUntil:0, webWrapEl:null,
     turnPending:null,
@@ -3584,17 +3584,25 @@ function executeAbility(caster, target, ability, t){
     case 'hulkScream': {
       const tg = target || ((caster === state.player) ? state.bot : state.player);
       if(!tg || tg.dead) break;
-      const targetCenter = tg.x + FIGHTER_SIZE/2;
+      // Slides in the direction Hulk is facing (not just "wherever the target
+      // happened to be standing"), so it reads as him roaring them away from him.
+      // The slide itself takes 2-3 real seconds to cross the arena, then they're
+      // held pinned at the wall briefly after arriving.
       const leftEdge = BOUND_MIN_X + 4;
       const rightEdge = BOUND_MAX_X - FIGHTER_SIZE - 4;
-      const edgeX = Math.abs(targetCenter - (ARENA_W/2)) < 0.01 ? rightEdge : (targetCenter < ARENA_W/2 ? rightEdge : leftEdge);
-      tg.hulkScreamUntil = t + 3000;
+      const edgeX = caster.facing >= 0 ? rightEdge : leftEdge;
+      const slideDist = Math.abs(edgeX - tg.x);
+      const slideDur = Math.max(2000, Math.min(3000, 2000 + slideDist*0.9));
+      const totalPin = slideDur + 450;
+      tg.hulkScreamUntil = t + totalPin;
       tg.hulkScreamEdgeX = edgeX;
-      tg.x = edgeX;
+      tg.hulkScreamStartX = tg.x;
+      tg.hulkScreamStartT = t;
+      tg.hulkScreamSlideDur = slideDur;
       tg.vx = 0;
       tg.vy = 0;
-      tg.hitStun = 3000;
-      tg.onGround = false;
+      tg.hitStun = totalPin;
+      tg.onGround = true;
       break;
     }
     case 'melee': {
@@ -4193,6 +4201,21 @@ function sfx(kind='ability'){
         aTone(ctx, t, 'triangle', 120, 620, 0.28, 0.14);
         aTone(ctx, t+0.02, 'sine', 90, 42, 0.26, 0.16);
         aNoise(ctx, t, 0.26, 0.16, 'bandpass', 520, 1800, 1.0);
+        return;
+      case 'hulk_scream_roar':
+        // Violent layered roar: sub-bass gut-punch, a rising/falling growl,
+        // gritty edge texture, and a harsh noise rasp — all pushed louder
+        // than a normal ability sound — followed by a ringing tone.
+        aTone(ctx, t, 'sine', 70, 32, 0.35, 0.65);
+        aTone(ctx, t, 'sawtooth', 85, 230, 0.28, 0.48);
+        aTone(ctx, t+0.16, 'sawtooth', 230, 55, 0.9, 0.55);
+        aTone(ctx, t+0.05, 'square', 110, 58, 0.5, 0.26);
+        aNoise(ctx, t, 1.05, 0.5, 'lowpass', 1100, 220, 0.6);
+        aNoise(ctx, t+0.04, 0.75, 0.36, 'bandpass', 1500, 350, 1.4);
+        aNoise(ctx, t+0.02, 0.28, 0.30, 'highpass', 3200, 1200, 1.0);
+        // Ringing aftermath — louder and longer so it actually cuts through.
+        aTone(ctx, t+0.15, 'sine', 3200, 3000, 1.8, 0.09);
+        aTone(ctx, t+0.15, 'sine', 4700, 4500, 1.8, 0.06);
         return;
 
       /* ---------- Wolverine ---------- */
@@ -5230,15 +5253,27 @@ function collidesPlatform(f, plat){
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   const tNow = now();
   if(f.hulkScreamUntil && tNow < f.hulkScreamUntil){
-    f.x = f.hulkScreamEdgeX || f.x;
+    const dur = f.hulkScreamSlideDur || 2500;
+    const elapsed = tNow - (f.hulkScreamStartT || (f.hulkScreamUntil - dur));
+    const p = Math.max(0, Math.min(1, elapsed / dur));
+    const ease = 1 - Math.pow(1 - p, 3); // ease-out: fast start, settles in
+    const startX = (f.hulkScreamStartX != null) ? f.hulkScreamStartX : f.x;
+    const edgeX = (f.hulkScreamEdgeX != null) ? f.hulkScreamEdgeX : f.x;
+    f.x = startX + (edgeX - startX) * ease;
+    // Dragged along the ground, not through the air — keep them planted on
+    // the floor the whole time instead of playing the airborne float pose.
+    f.y = FLOOR_Y;
     f.vx = 0;
     f.vy = 0;
-    f.onGround = false;
+    f.onGround = true;
     return;
   }
   if(f.hulkScreamUntil && tNow >= f.hulkScreamUntil){
     f.hulkScreamUntil = 0;
     f.hulkScreamEdgeX = 0;
+    f.hulkScreamStartX = null;
+    f.hulkScreamStartT = 0;
+    f.hulkScreamSlideDur = 0;
     f.hitStun = Math.min(f.hitStun, 0);
   }
   if(f.grappleUntil && now() < f.grappleUntil && !f.flight){
