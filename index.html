@@ -2144,7 +2144,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 /* =========================================================================
    BATTLE MODE · TOKENS · DIFFICULTY PICKER · UNLOCK CHARACTER · HULK ROAR FX
    ========================================================================= */
-#screen-practice.active, #screen-unlock.active{
+#screen-practice.active, #screen-battle-difficulty.active, #screen-unlock.active{
   position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; min-height:0; z-index:2;
   display:block; overflow-x:hidden; overflow-y:auto; padding:0;
   background:
@@ -2152,7 +2152,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     radial-gradient(1100px 700px at 85% 92%, rgba(242,165,65,.13), transparent 60%),
     radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
 }
-#screen-practice .fs-bg, #screen-unlock .fs-bg{position:fixed;}
+#screen-practice .fs-bg, #screen-battle-difficulty .fs-bg, #screen-unlock .fs-bg{position:fixed;}
 
 /* ---------- token chip (main menu top bar) ---------- */
 .menu-topbar{position:absolute; top:clamp(12px,3vh,28px); left:clamp(22px,6vw,110px); z-index:40; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
@@ -2227,6 +2227,10 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   .diff-card:hover::after{transform:scaleX(1);}
 }
 .diff-card:active{transform:scale(.98);}
+.battle-diff-grid{grid-template-columns:repeat(3,minmax(0,1fr)); max-width:1100px;}
+.battle-diff-card .diff-reward{align-self:flex-start; margin-top:2px; padding:6px 12px; border-radius:999px; font-family:'Anton',sans-serif; font-size:14px; letter-spacing:.04em; background:rgba(242,165,65,.14); border:1px solid rgba(242,165,65,.55); color:#ffe1a0;}
+@media (max-width:1000px){ .battle-diff-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@media (max-width:760px){ .battle-diff-grid{grid-template-columns:1fr;} }
 
 /* ---------- Unlock Character ---------- */
 .unlock-layout{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:clamp(16px,3vw,44px); align-items:start; max-width:1250px;}
@@ -2393,7 +2397,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       </button>
       <button class="split-card mid mode-battle" id="btn-mode-battle">
         <span class="mode-name" data-i18n="mode_battle">Battle</span>
-        <span class="mode-desc" data-i18n="mode_battle_desc">Face a random rival. Three lives each — win to earn 10 tokens.</span>
+        <span class="mode-desc" data-i18n="mode_battle_desc">Choose a difficulty, then face a random rival. Three lives each — win to earn tokens.</span>
         <span class="mode-lives" aria-hidden="true">♥ ♥ ♥</span>
         <span class="mode-chip mode-chip-tokens"><span class="token-coin" aria-hidden="true">🪙</span><span data-token-count>0</span><span data-i18n="tokens_label">tokens</span></span>
         <span class="mode-arrow">▶</span>
@@ -2437,6 +2441,35 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
           <span class="diff-name" data-i18n="diff_hard">Hard</span>
           <span class="diff-rule" data-i18n="diff_hard_rule">Over 15,000 HP + healers</span>
           <span class="diff-desc" data-i18n="diff_hard_desc">The heavyweights, plus anyone with a healing factor.</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BATTLE: CHOOSE DIFFICULTY ============ -->
+  <div id="screen-battle-difficulty" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="page-stage">
+      <header class="page-head">
+        <h2 class="page-title" data-i18n="battle_title">Battle</h2>
+        <div class="page-caption" data-i18n="battle_caption">Pick your opponent difficulty. You get 3 lives each.</div>
+      </header>
+      <div class="diff-grid battle-diff-grid">
+        <button class="diff-card battle-diff-card" data-battle-diff="easy" style="--dc:#3fb96f" data-gp-default>
+          <span class="diff-name" data-i18n="diff_easy">Easy</span>
+          <span class="diff-reward">🪙 10 tokens</span>
+          <span class="diff-desc" data-i18n="battle_easy_desc">Lightweight foes. Win the 3-life battle to earn 10 tokens.</span>
+        </button>
+        <button class="diff-card battle-diff-card" data-battle-diff="medium" style="--dc:#f2a541">
+          <span class="diff-name" data-i18n="diff_medium">Medium</span>
+          <span class="diff-reward">🪙 15 tokens</span>
+          <span class="diff-desc" data-i18n="battle_medium_desc">Solid fighters. Win the 3-life battle to earn 15 tokens.</span>
+        </button>
+        <button class="diff-card battle-diff-card" data-battle-diff="hard" style="--dc:#e5484d">
+          <span class="diff-name" data-i18n="diff_hard">Hard</span>
+          <span class="diff-reward">🪙 25 tokens</span>
+          <span class="diff-desc" data-i18n="battle_hard_desc">Heavyweights and healing-factor fighters. Win to earn 25 tokens.</span>
         </button>
       </div>
     </div>
@@ -2577,7 +2610,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
         <li><span class="instr-icon">⏱️</span><span data-i18n="instr_cooldown">Every ability has a cooldown shown right on its button — watch the timer count down.</span></li>
         <li><span class="instr-icon">🧱</span><span data-i18n="instr_arena">The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</span></li>
         <li><span class="instr-icon">🗺️</span><span>Pick a map — City, Wasteland, or Battleworld — from the mode-select screen before you fight. Watch out for the glowing green toxic waste puddle on Wasteland; standing on it will slowly damage you.</span></li>
-        <li><span class="instr-icon">🪙</span><span><strong>Modes &amp; tokens:</strong> Practice lets you pick Random, Easy, Medium or Hard opponents. Battle gives you and your rival 3 lives each and pays 10 tokens for a win. Spend 100 tokens on Unlock Character to challenge a random fighter — win to unlock them, or get your tokens back if you already own them.</span></li>
+        <li><span class="instr-icon">🪙</span><span><strong>Modes &amp; tokens:</strong> Practice lets you pick Random, Easy, Medium or Hard opponents. Battle lets you pick Easy, Medium or Hard, gives you and your rival 3 lives each, and pays 10, 15 or 25 tokens for a win depending on difficulty. Spend 100 tokens on Unlock Character to challenge a random fighter — win to unlock them, or get your tokens back if you already own them.</span></li>
         <li><span class="instr-icon">🎒</span><span data-i18n="instr_roster">Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</span></li>
       </ul>
       </div>
@@ -3079,7 +3112,7 @@ const CHARACTERS = {
   },
   cyclops: {
     id:'cyclops', name:'Cyclops', img:'Cyclops.jpg', color:'#e64d57', aiStyle:'cyclops',
-    maxHealth:10500,
+    maxHealth:9000,
     description:'A precision optic-blast specialist. His health is moderate, but his beam attacks hit far harder than before and punish a clean line of sight.',
     abilities:{
       E:{key:'E', name:'Optic Beam', type:'projectile', damage:720, cooldown:850, knockback:10,
@@ -3621,7 +3654,7 @@ function unlockCharacter(id){
 }
 /* ---- Tokens (stored per save slot) ---- */
 const BATTLE_LIVES = 3;            // lives each side gets in Battle mode
-const BATTLE_WIN_TOKENS = 10;      // tokens for winning a Battle
+const BATTLE_WIN_TOKENS = { easy:10, medium:15, hard:25 };
 const UNLOCK_COST_TOKENS = 100;    // price of an Unlock Character challenge
 function getTokens(){ return Math.max(0, Math.floor(Number(SAVE.tokens)) || 0); }
 function renderTokenCounters(){
@@ -3655,7 +3688,7 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','mode','practice','unlock','pair','versus','save-slots','inventory','instructions','settings','battle','gameover'];
+const screens = ['menu','mode','practice','battle-difficulty','unlock','pair','versus','save-slots','inventory','instructions','settings','battle','gameover'];
 function showScreen(name){
   // Fighter select needs both controllers still present — otherwise re-pair.
   if(name === 'versus' && !versusPadsPresent()) name = 'pair';
@@ -3817,7 +3850,7 @@ document.getElementById('char-modal').addEventListener('click', e=>{ if(e.target
 // opponent, so you're never stuck fighting the same matchup on repeat.
 function startRandomBattle(){ startPractice('random'); }
 
-/* ---------- Difficulty tiers (Practice) ----------
+/* ---------- Difficulty tiers (Practice + Battle) ----------
      easy    : under 8,000 max health
      medium  : 8,000 - 15,000 max health, EXCEPT anyone with a healing factor
      hard    : over 15,000 max health, plus anyone with a healing factor
@@ -3845,7 +3878,7 @@ function requireEquippedFighter(){
 // What "Play Another" on the results screen repeats.
 let lastSoloMatch = { kind:'practice', diff:'random' };
 function replayLastMatch(){
-  if(lastSoloMatch.kind === 'battle') startLivesBattle();
+  if(lastSoloMatch.kind === 'battle') startBattleDifficulty(lastSoloMatch.diff || 'medium');
   else startPractice(lastSoloMatch.diff);
 }
 
@@ -3856,11 +3889,17 @@ function startPractice(diff){
   startBattle(playerId, pickOpponent(playerId, diff), { kind:'practice' });
 }
 
-// Battle mode: a random rival, three lives each, 10 tokens for the win.
+// Battle mode: choose a difficulty, then fight a random rival from that tier with three lives each.
 function startLivesBattle(){
+  requireEquippedFighter();
+  if(!SAVE.equipped || !isUnlocked(SAVE.equipped)) return;
+  showScreen('battle-difficulty');
+}
+function startBattleDifficulty(diff){
   const playerId = requireEquippedFighter(); if(!playerId) return;
-  lastSoloMatch = { kind:'battle' };
-  startBattle(playerId, pickOpponent(playerId, 'random'), { kind:'battle', lives:BATTLE_LIVES });
+  diff = ['easy','medium','hard'].includes(diff) ? diff : 'medium';
+  lastSoloMatch = { kind:'battle', diff };
+  startBattle(playerId, pickOpponent(playerId, diff), { kind:'battle', lives:BATTLE_LIVES, battleDifficulty:diff });
 }
 
 /* ---------- Unlock Character ----------
@@ -3989,6 +4028,7 @@ function startBattle(playerCharId, botCharId, opts){
   state.maxLives = Math.max(1, Math.floor((opts && opts.lives) || 1));
   state.livesOn = state.maxLives > 1;
   state.lives = { player:state.maxLives, bot:state.maxLives };
+  state.battleDifficulty = (opts && opts.battleDifficulty) || (state.matchKind === 'battle' ? 'medium' : null);
   state.challenge = (opts && opts.challenge) || null;
   state.stampSeq = (state.stampSeq || 0) + 1;
   document.getElementById('screen-battle').classList.toggle('lives-on', state.livesOn);
@@ -8659,8 +8699,9 @@ function settleMatchRewards(isWin, isPvp){
   if(isPvp) return none;
   if(state.matchKind === 'battle'){
     if(!isWin) return { text:t('reward_battle_lose'), tone:'lose' };
-    addTokens(BATTLE_WIN_TOKENS);
-    return { text:t('reward_battle_win').replace('{n}', BATTLE_WIN_TOKENS).replace('{total}', getTokens().toLocaleString()), tone:'gain' };
+    const payout = BATTLE_WIN_TOKENS[state.battleDifficulty] || BATTLE_WIN_TOKENS.medium;
+    addTokens(payout);
+    return { text:t('reward_battle_win').replace('{n}', payout).replace('{total}', getTokens().toLocaleString()), tone:'gain' };
   }
   if(state.matchKind === 'unlock' && state.challenge && !state.challenge.settled){
     state.challenge.settled = true;
@@ -9784,7 +9825,11 @@ const I18N_V6 = {
   en:{
     nav_unlock:'Unlock Character', tokens_label:'tokens',
     mode_practice_desc:'Pick a difficulty, then fight a foe with your equipped fighter.',
-    mode_battle:'Battle', mode_battle_desc:'Face a random rival. Three lives each — win to earn 10 tokens.',
+    mode_battle:'Battle', mode_battle_desc:'Choose a difficulty, then face a random rival. Three lives each — win to earn tokens.',
+    battle_title:'Battle', battle_caption:'Pick your opponent difficulty. You get 3 lives each.',
+    battle_easy_desc:'Lightweight foes. Win the 3-life battle to earn 10 tokens.',
+    battle_medium_desc:'Solid fighters. Win the 3-life battle to earn 15 tokens.',
+    battle_hard_desc:'Heavyweights and healing-factor fighters. Win to earn 25 tokens.',
     practice_title:'Practice', practice_caption:'Pick how tough your opponent will be.',
     diff_random:'Random', diff_random_rule:'Any fighter', diff_random_desc:'Anyone in the roster can show up — easy, medium or hard.',
     diff_easy:'Easy', diff_easy_rule:'Under 8,000 HP', diff_easy_desc:'Lightweight foes. A gentle warm-up.',
@@ -9819,8 +9864,11 @@ Object.assign(I18N.en, I18N_V6.en);
    ========================================================================= */
 document.getElementById('btn-mode-practice').addEventListener('click', ()=> showScreen('practice'));
 document.getElementById('btn-mode-battle').addEventListener('click', ()=> startLivesBattle());
-document.querySelectorAll('.diff-card').forEach(btn=>{
+document.querySelectorAll('#screen-practice .diff-card').forEach(btn=>{
   btn.addEventListener('click', ()=> startPractice(btn.dataset.diff));
+});
+document.querySelectorAll('#screen-battle-difficulty .battle-diff-card').forEach(btn=>{
+  btn.addEventListener('click', ()=> startBattleDifficulty(btn.dataset.battleDiff));
 });
 document.getElementById('btn-unlock-go').addEventListener('click', ()=> startUnlockChallenge());
 document.getElementById('btn-mode-friend').addEventListener('click', ()=> showScreen('pair'));
