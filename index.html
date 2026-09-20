@@ -1634,7 +1634,9 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .vs-center{display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:clamp(12px,2.4vh,24px); padding:clamp(56px,9vh,90px) 6px clamp(16px,3vh,32px); min-width:0; overflow-y:auto; overflow-x:hidden; scroll-behavior:smooth;}
 .vs-center::-webkit-scrollbar{width:9px}.vs-center::-webkit-scrollbar-thumb{background:#515a7f;border-radius:999px}.vs-center::-webkit-scrollbar-track{background:transparent}
 .vs-heading{font-size:clamp(22px,4.2vh,42px); letter-spacing:.07em; text-transform:uppercase; text-align:center; text-shadow:0 3px 0 rgba(0,0,0,.5);}
-.vs-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(10px,1.8vh,20px); width:min(100%,540px);}
+.vs-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(10px,1.8vh,18px); width:min(100%,720px);}
+@media (max-width:1100px){.vs-grid{grid-template-columns:repeat(3,minmax(0,1fr)); width:min(100%,620px);}}
+@media (max-width:700px){.vs-grid{grid-template-columns:repeat(2,minmax(0,1fr)); width:min(100%,520px);}}
 .vs-card{
   position:relative; background:linear-gradient(160deg,#252944,#1b1e30); border:1px solid #3c4160; border-radius:12px; padding:clamp(5px,.9vh,9px); text-align:center;
   transition:box-shadow .12s ease, transform .12s ease;
@@ -1824,6 +1826,77 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 }
 #screen-inventory .char-card.equipped .lock-badge{background:var(--char-color); color:#fff;}
 #screen-inventory .char-card.mystery{--char-color:#3a3d54; box-shadow:none;}
+#screen-inventory .char-card.unlock-animating{
+  z-index:20;
+  border-color:#fff1ab;
+  box-shadow:0 0 0 2px #fff inset,0 0 24px rgba(255,221,104,.65),0 0 58px rgba(242,165,65,.42);
+  animation:inventoryUnlockGlow 2.65s ease both;
+}
+#screen-inventory .char-card.unlock-animating .char-square{filter:brightness(1.05);}
+#screen-inventory .char-card.unlock-revealed .char-square{
+  animation:inventoryUnlockReveal .55s cubic-bezier(.16,.85,.2,1) both;
+}
+.unlock-cover{
+  position:absolute; left:8px; top:8px; width:calc(100% - 16px); aspect-ratio:1/1; z-index:12;
+  display:flex; align-items:center; justify-content:center; overflow:visible; pointer-events:none;
+  border-radius:4px;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(107,115,155,.4),transparent 42%),
+    repeating-linear-gradient(135deg,#20243a 0 8px,#171a2b 8px 16px);
+  border:2px solid #6f7699;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 0 26px rgba(0,0,0,.28),0 8px 18px rgba(0,0,0,.32);
+  transform-origin:50% 50%;
+  animation:unlockCoverSettle .32s ease both;
+}
+.unlock-lock{
+  font-size:clamp(30px,4.8vw,52px); line-height:1; filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 12px rgba(255,233,148,.25));
+  animation:unlockLockPulse .7s ease-in-out infinite alternate;
+}
+.unlock-cover::before,.unlock-cover::after{
+  content:''; position:absolute; left:50%; top:50%; width:76%; height:2px; background:rgba(255,247,191,.68); box-shadow:0 0 8px rgba(255,225,102,.45); opacity:0;
+}
+.unlock-cover::before{transform:translate(-50%,-50%) rotate(27deg);}
+.unlock-cover::after{transform:translate(-50%,-50%) rotate(-41deg) scaleX(.78);}
+.unlock-shard{
+  position:absolute; left:50%; top:50%; width:clamp(12px,1.8vw,22px); height:clamp(18px,2.4vw,30px);
+  clip-path:polygon(50% 0,100% 27%,82% 100%,18% 78%,0 28%);
+  background:linear-gradient(145deg,#eef0ff 0%,#737b9c 54%,#2a2e42 100%);
+  border:1px solid rgba(255,255,255,.4); box-shadow:0 0 9px rgba(255,230,126,.6);
+  opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.8);
+}
+.unlock-shard:nth-of-type(1){--dx:-80px;--dy:-74px;--rot:-48deg;--delay:.02s}
+.unlock-shard:nth-of-type(2){--dx:4px;--dy:-108px;--rot:22deg;--delay:0s}
+.unlock-shard:nth-of-type(3){--dx:92px;--dy:-66px;--rot:66deg;--delay:.04s}
+.unlock-shard:nth-of-type(4){--dx:-108px;--dy:10px;--rot:-94deg;--delay:.06s}
+.unlock-shard:nth-of-type(5){--dx:112px;--dy:8px;--rot:88deg;--delay:.03s}
+.unlock-shard:nth-of-type(6){--dx:-70px;--dy:82px;--rot:-24deg;--delay:.07s}
+.unlock-shard:nth-of-type(7){--dx:12px;--dy:108px;--rot:38deg;--delay:.05s}
+.unlock-shard:nth-of-type(8){--dx:82px;--dy:76px;--rot:102deg;--delay:.08s}
+.unlock-shard:nth-of-type(9){--dx:-28px;--dy:52px;--rot:-82deg;--delay:.1s}
+.unlock-shard:nth-of-type(10){--dx:42px;--dy:-32px;--rot:54deg;--delay:.11s}
+.unlock-breaking .unlock-cover{animation:unlockCoverBreak .72s cubic-bezier(.2,.78,.18,1) forwards;}
+.unlock-breaking .unlock-cover::before,.unlock-breaking .unlock-cover::after{opacity:1;animation:unlockCrackFlash .7s ease-out forwards;}
+.unlock-breaking .unlock-lock{animation:unlockLockBreak .6s cubic-bezier(.18,.9,.2,1) forwards;}
+.unlock-breaking .unlock-shard{animation:unlockShardFly .72s cubic-bezier(.12,.78,.16,1) var(--delay) forwards;}
+@keyframes inventoryUnlockGlow{
+  0%{transform:scale(.985);box-shadow:0 0 0 2px #fff inset,0 0 10px rgba(255,221,104,.3),0 0 22px rgba(242,165,65,.14);}
+  18%{transform:scale(1.018);box-shadow:0 0 0 3px #fff inset,0 0 34px rgba(255,231,135,.9),0 0 76px rgba(242,165,65,.58);}
+  55%{transform:scale(1.01);box-shadow:0 0 0 2px #fff inset,0 0 42px rgba(255,231,135,.82),0 0 62px rgba(242,165,65,.45);}
+  100%{transform:scale(1);box-shadow:0 0 0 1px #fff2bd inset,0 0 22px rgba(255,224,109,.32),0 0 34px rgba(242,165,65,.12);}
+}
+@keyframes unlockCoverSettle{from{opacity:0;transform:scale(1.08) rotate(-2deg)}to{opacity:1;transform:none}}
+@keyframes unlockLockPulse{from{transform:scale(.96);opacity:.82}to{transform:scale(1.05);opacity:1}}
+@keyframes unlockCoverBreak{0%{transform:scale(1);opacity:1}18%{transform:scale(1.035) rotate(-1deg);opacity:1}36%{transform:scale(.99) rotate(1.4deg);opacity:.92}100%{transform:scale(.76) rotate(8deg);opacity:0;filter:blur(2px)}}
+@keyframes unlockLockBreak{0%{transform:scale(1);opacity:1}45%{transform:scale(1.18) rotate(-10deg);opacity:1}100%{transform:scale(.35) rotate(32deg);opacity:0;filter:blur(3px)}}
+@keyframes unlockCrackFlash{0%{opacity:0;transform-origin:center}18%{opacity:1}100%{opacity:0}}
+@keyframes unlockShardFly{0%{opacity:1;transform:translate(-50%,-50%) rotate(0deg) scale(1)}35%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot)) scale(.28)}}
+@keyframes inventoryUnlockReveal{0%{transform:scale(.94);filter:brightness(1.9) saturate(1.35)}55%{transform:scale(1.04);filter:brightness(1.55) saturate(1.22)}100%{transform:scale(1);filter:brightness(1) saturate(1)}}
+@media (prefers-reduced-motion:reduce){
+  #screen-inventory .char-card.unlock-animating{animation:none;box-shadow:0 0 0 2px #fff inset,0 0 28px rgba(255,221,104,.65);}
+  .unlock-cover,.unlock-lock,.unlock-shard{animation:none !important;}
+  .unlock-breaking .unlock-cover{opacity:0;}
+  #screen-inventory .char-card.unlock-revealed .char-square{animation:none;}
+}
 #screen-inventory .char-card.gp-focused, #screen-inventory .char-card:focus-visible{
   outline:none !important; transform:translateY(-6px);
   box-shadow:0 0 0 4px var(--cream), 0 0 32px rgba(246,239,224,.35) !important;
@@ -3182,7 +3255,7 @@ const CHARACTERS = {
     }
   },
 };
-const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool','venom','storm','warmachine','cyclops','captainmarvel','antman','wasp','falcon'];
+const ROSTER_ORDER = ['spiderman','venom','ironman','warmachine','captainamerica','falcon','blackwidow','hawkeye','thor','hulk','blackpanther','captainmarvel','wolverine','storm','cyclops','deadpool','daredevil','drstrange','loki','mrfantastic','antman','wasp'];
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -3568,7 +3641,7 @@ function safeJson(raw){
   try{ return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
 }
 function defaultSaveSlot(index){
-  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], equipped:null, mapId:DEFAULT_MAP_ID, tokens:0 };
+  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], equipped:null, mapId:DEFAULT_MAP_ID, tokens:0, pendingUnlockId:null };
 }
 function normalizeSaveSlot(slot, index){
   const out = Object.assign(defaultSaveSlot(index), slot && typeof slot === 'object' ? slot : {});
@@ -3577,6 +3650,7 @@ function normalizeSaveSlot(slot, index){
   out.equipped = ROSTER_ORDER.includes(out.equipped) ? out.equipped : null;
   out.mapId = MAPS[out.mapId] ? out.mapId : DEFAULT_MAP_ID;
   out.tokens = Math.max(0, Math.floor(Number(out.tokens)) || 0);
+  out.pendingUnlockId = ROSTER_ORDER.includes(out.pendingUnlockId) ? out.pendingUnlockId : null;
   out.used = !!out.used || out.unlocked.length > 0 || !!out.equipped;
   if(out.used && out.unlocked.length === 0){ out.unlocked = [FIRST_TIME_STARTER]; out.equipped = FIRST_TIME_STARTER; }
   if(out.used && (!out.equipped || !out.unlocked.includes(out.equipped))){ out.equipped = out.unlocked[0] || FIRST_TIME_STARTER; }
@@ -3701,7 +3775,10 @@ function equipCharacter(id){
 }
 function unlockCharacter(id){
   if(!ROSTER_ORDER.includes(id)) return;
-  if(!isUnlocked(id)){ SAVE.unlocked.push(id); }
+  if(!isUnlocked(id)){
+    SAVE.unlocked.push(id);
+    SAVE.pendingUnlockId = id;
+  }
   SAVE.used = true;
   persistActiveSave();
 }
@@ -3731,6 +3808,7 @@ function unlockAllCharactersWithCode(code){
   if(code !== 'Water555J*b999TVRemote2') return false;
   SAVE.used = true;
   SAVE.unlocked = [...ROSTER_ORDER];
+  SAVE.pendingUnlockId = null;
   if(!SAVE.equipped || !ROSTER_ORDER.includes(SAVE.equipped)) SAVE.equipped = FIRST_TIME_STARTER;
   persistActiveSave();
   renderInventory();
@@ -3750,7 +3828,7 @@ function showScreen(name){
   });
   if(name!=='versus') hideVersusSplash();
   if(name==='save-slots') renderSaveSlots();
-  if(name==='inventory') renderInventory();
+  if(name==='inventory'){ renderInventory(); queuePendingInventoryUnlock(); }
   if(name==='settings') renderSettingsScreen();
   if(name==='menu'){ updateCurrentSaveSlotLabel(); renderMenuHero(); }
   if(name==='mode') renderModeScreen();
@@ -3783,7 +3861,19 @@ function closeCodeModal(){
 function submitUnlockCode(){
   const input = document.getElementById('code-input');
   const result = document.getElementById('code-result');
-  const ok = unlockAllCharactersWithCode((input.value || '').trim());
+  const code = (input.value || '').trim();
+  if(code === 'YelloCheese%100'){
+    result.className = 'code-result success';
+    result.textContent = 'Animation preview — no characters were unlocked.';
+    input.value = '';
+    window.setTimeout(()=>{
+      closeCodeModal();
+      showScreen('inventory');
+      previewInventoryUnlockAnimation();
+    }, 320);
+    return;
+  }
+  const ok = unlockAllCharactersWithCode(code);
   result.className = 'code-result ' + (ok ? 'success' : 'error');
   result.textContent = ok
     ? t('code_success').replace('{slot}', slotDisplayName(SAVE_SLOTS.slots[activeSaveSlot-1], activeSaveSlot-1))
@@ -3803,6 +3893,82 @@ document.getElementById('code-input').addEventListener('keydown', e=>{ if(e.key 
 function squareInner(def){
   return `<img src="${def.img}" alt="${def.name}" onerror="this.style.display='none'; var f=this.nextElementSibling; if(f) f.style.display='flex';">
           <div class="fallback" style="display:none; background:${def.color}">${def.name[0]}</div>`;
+}
+let inventoryUnlockAnimSeq = 0;
+function buildUnlockCover(){
+  const cover = document.createElement('div');
+  cover.className = 'unlock-cover';
+  const lock = document.createElement('span');
+  lock.className = 'unlock-lock';
+  lock.textContent = '🔒';
+  cover.appendChild(lock);
+  const shards = [
+    [-80,-74,-48,.02],[4,-108,22,0],[92,-66,66,.04],[-108,10,-94,.06],[112,8,88,.03],
+    [-70,82,-24,.07],[12,108,38,.05],[82,76,102,.08],[-28,52,-82,.10],[42,-32,54,.11]
+  ];
+  shards.forEach(([dx,dy,rot,delay])=>{
+    const shard = document.createElement('span');
+    shard.className = 'unlock-shard';
+    shard.style.setProperty('--dx', dx+'px');
+    shard.style.setProperty('--dy', dy+'px');
+    shard.style.setProperty('--rot', rot+'deg');
+    shard.style.setProperty('--delay', delay+'s');
+    cover.appendChild(shard);
+  });
+  return cover;
+}
+function animateInventoryUnlockCard(id, options={}){
+  const { preview=false } = options;
+  const grid = document.getElementById('inventory-grid');
+  if(!grid) return false;
+  const card = grid.querySelector(`.char-card[data-id="${id}"]`);
+  if(!card) return false;
+
+  const seq = ++inventoryUnlockAnimSeq;
+  document.querySelectorAll('#inventory-grid .char-card.unlock-animating').forEach(c=>{
+    c.classList.remove('unlock-animating','unlock-breaking','unlock-revealed');
+    const oldCover = c.querySelector('.unlock-cover');
+    if(oldCover) oldCover.remove();
+  });
+  const oldCover = card.querySelector('.unlock-cover');
+  if(oldCover) oldCover.remove();
+  card.classList.remove('unlock-animating','unlock-breaking','unlock-revealed');
+  void card.offsetWidth;
+  card.classList.add('unlock-animating');
+  card.appendChild(buildUnlockCover());
+  card.scrollIntoView({block:'center', inline:'nearest', behavior:'smooth'});
+
+  window.setTimeout(()=>{
+    if(seq !== inventoryUnlockAnimSeq) return;
+    card.classList.add('unlock-breaking');
+  }, 620);
+
+  window.setTimeout(()=>{
+    if(seq !== inventoryUnlockAnimSeq) return;
+    card.classList.add('unlock-revealed');
+  }, 1160);
+
+  window.setTimeout(()=>{
+    if(seq !== inventoryUnlockAnimSeq) return;
+    card.classList.remove('unlock-animating','unlock-breaking','unlock-revealed');
+    const cover = card.querySelector('.unlock-cover');
+    if(cover) cover.remove();
+    if(!preview && SAVE.pendingUnlockId === id){
+      SAVE.pendingUnlockId = null;
+      persistActiveSave();
+    }
+  }, 2800);
+  return true;
+}
+function queuePendingInventoryUnlock(){
+  const id = SAVE.pendingUnlockId;
+  if(!id) return;
+  window.setTimeout(()=>animateInventoryUnlockCard(id), 90);
+}
+function previewInventoryUnlockAnimation(){
+  const id = ROSTER_ORDER.find(charId => !isUnlocked(charId)) || ROSTER_ORDER[0];
+  if(!id) return;
+  window.setTimeout(()=>animateInventoryUnlockCard(id, {preview:true}), 90);
 }
 function renderInventory(){
   const grid = document.getElementById('inventory-grid');
@@ -3829,6 +3995,7 @@ function renderInventory(){
       if(selected) card.setAttribute('data-gp-default','');
       card.onclick = ()=> handleCardTap(id);
     } else {
+      card.dataset.id = id;
       // Locked fighters are kept a mystery: no name, no artwork, just a
       // silhouette placeholder — a little surprise for later.
       card.innerHTML = `
