@@ -2525,6 +2525,15 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   #screen-menu .hero-frame{width:min(30vw,36vh);}
   #screen-menu .hero-name{font-size:16px;}
 }
+/* ---------- Miles Morales / Winter Soldier ---------- */
+.fighter{transition:opacity .25s ease;}
+.fighter.cloaked{opacity:0 !important; pointer-events:none;}
+.fighter.rolling .fighter-size-body{animation:wsRollSpin .38s linear;}
+@keyframes wsRollSpin{from{transform:rotate(0deg)}to{transform:rotate(calc(var(--rdir,1) * 720deg))}}
+.fighter.shocked .fighter-square{animation:milesShockGlow .11s steps(2,end) infinite alternate;}
+@keyframes milesShockGlow{from{filter:brightness(1.55) saturate(.7) drop-shadow(0 0 6px #7be9ff)}to{filter:brightness(.95) drop-shadow(0 0 11px #fff)}}
+.electric-web-projectile .proj-svg svg{filter:drop-shadow(0 0 4px #4fe5ff) drop-shadow(0 0 9px rgba(79,229,255,.8)); animation:milesWebFlicker .09s steps(2,end) infinite alternate;}
+@keyframes milesWebFlicker{from{opacity:1}to{opacity:.72}}
 </style>
 </head>
 <body>
@@ -3372,8 +3381,46 @@ const CHARACTERS = {
          desc:'Arms the next thrown projectile to bank off a side wall, split into two projectiles, and strike the enemy for double the original damage.'}
     }
   },
+  milesmorales: {
+    id:'milesmorales', name:'Miles Morales', img:'MilesMorales.jpg', color:'#14161b', accentColor:'#39d7ff', aiStyle:'milesmorales',
+    maxHealth:9500, dodgeChance:0.15,
+    description:'Passive: Spider-Sense dodges 15% of incoming attacks. Shocks enemies with electrified webs, crushes them with a bio-electric punch, and can vanish completely.',
+    abilities:{
+      E:{key:'E', name:'Electric Webs', type:'projectile', damage:400, cooldown:800, knockback:7,
+         speed:16, w:24, h:9, color:'#7fe8ff',
+         sound:'miles_web', fx:'miles_web', render:'electric-web', trail:'electric-web', web:true,
+         hitFx:'miles_web_hit', hitSound:'miles_web_hit', slow:600,
+         shock:{ticks:4, interval:250, damage:50},
+         desc:'A stronger web shot crackling with bio-electricity. Deals 400 damage, slows the target, then electrocutes them for 200 extra damage over 1 second.'},
+      Q:{key:'Q', name:'Electric Punch', type:'melee', damage:1400, cooldown:12000, knockback:18, range:88,
+         hitDelay:90,
+         sound:'miles_punch', fx:'miles_punch', hitFx:'miles_punch_hit', hitSound:'miles_punch_hit',
+         desc:'A charged Venom Strike haymaker that deals 1,400 damage at close range.'},
+      R:{key:'R', name:'Camouflage', type:'cloak', damage:0, duration:6000, cooldown:20000,
+         sound:'miles_cloak', fx:'miles_cloak',
+         desc:'Turns Miles fully invisible for 6 seconds. You cannot see yourself, and the enemy cannot see you either. Cooldown: 20 seconds.'}
+    }
+  },
+  wintersoldier: {
+    id:'wintersoldier', name:'Winter Soldier', img:'WinterSoldier.jpg', color:'#5b6b82', accentColor:'#d64545', aiStyle:'wintersoldier',
+    maxHealth:11500, passiveRegen:40,
+    description:'Balanced killer. Passive super-soldier regeneration, a sidearm for range, and a vibranium arm for crushing close-range burst.',
+    abilities:{
+      E:{key:'E', name:'Pistol Shots', type:'projectile', damage:350, cooldown:700, knockback:8,
+         speed:30, w:18, h:6, color:'#e8c887', render:'pistol', trail:'',
+         sound:'ws_pistol', fx:'widow_pistol', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         desc:'Fast, flat-shooting pistol rounds for 350 damage each.'},
+      Q:{key:'Q', name:'Vibranium Arm Punch', type:'melee', damage:1800, cooldown:12000, knockback:22, range:96,
+         hitDelay:90,
+         sound:'ws_punch', fx:'ws_punch', hitFx:'ws_punch_hit', hitSound:'ws_punch_hit',
+         desc:'A metal-arm haymaker that deals 1,800 damage with huge knockback.'},
+      R:{key:'R', name:'Tactical Roll', type:'mobility', boostX:22, boostY:-2, rollMs:380, cooldown:5000,
+         sound:'ws_roll', fx:'ws_roll',
+         desc:'A long combat roll across the arena that covers about half the map. Pure mobility, no damage.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['spiderman','venom','ironman','warmachine','vision','captainamerica','thor','hulk','blackpanther','captainmarvel','wolverine','deadpool','daredevil','bullseye','blackwidow','hawkeye','falcon','storm','cyclops','drstrange','scarletwitch','loki','mrfantastic','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','venom','ironman','warmachine','vision','captainamerica','wintersoldier','falcon','thor','hulk','blackpanther','captainmarvel','wolverine','deadpool','daredevil','bullseye','blackwidow','hawkeye','storm','cyclops','drstrange','scarletwitch','loki','mrfantastic','antman','wasp'];
 
 
 /* =========================================================================
@@ -4319,6 +4366,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     invulnUntil:0,
     hitStun:0,
     slowUntil:0, webWrapEl:null,
+    cloakUntil:0, shockTicksLeft:0, shockNextTick:0, shockInterval:250, shockDamage:0,
     turnPending:null,
     aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0, aiNextFourthWall:0,
     el:null, overheadFillEl:null, shieldEl:null, flightEl:null, thrusterEl:null,
@@ -4632,6 +4680,7 @@ function updateAbilityBarFor(bar, fighter, brand){
       keyEl.textContent = brand ? faceLabelFor(brand, ABILITY_POS[k]) : (gamepadState.connected ? abilityButtonLabel(k) : k);
       btn.classList.toggle('gp-mode', !!brand || gamepadState.connected);
     }
+    overlay.style.fontSize = '';
     if(fighter.abilityLockUntil && t < fighter.abilityLockUntil){
       overlay.style.display='flex';
       overlay.textContent='FROZEN';
@@ -4642,6 +4691,13 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.display='flex';
       overlay.textContent='SEALED '+Math.max(0,(fighter.disabledAbilityUntil-t)/1000).toFixed(1)+'s';
       overlay.style.background='rgba(166,24,43,.72)';
+      return;
+    }
+    if(a.type==='cloak' && isCloaked(fighter)){
+      overlay.style.display='flex';
+      overlay.style.fontSize='11px';
+      overlay.textContent='INVISIBLE '+Math.max(0,(fighter.cloakUntil-t)/1000).toFixed(1)+'s';
+      overlay.style.background='rgba(57,215,255,.45)';
       return;
     }
     if(a.type==='bullseyeRicochet' && fighter.ricochetArmed){
@@ -4968,6 +5024,7 @@ function updateIllusions(dtF){
       continue;
     }
     const target = g.caster===state.player ? state.bot : state.player;
+    if(isCloaked(target)) continue;
     for(const clone of (g.clones || [])) updateLokiCloneAI(g,clone,target,dtF);
   }
 }
@@ -5260,7 +5317,7 @@ function executeAbility(caster, target, ability, t){
         returnDistance: ability.returnDistance || 760,
         render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
         bulletType: ability.bulletType || '',
-        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0,
+        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, shock: ability.shock || null,
         waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
         pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false, precisionAim:!!ability.precisionAim, ricochet:false, ricochetBounced:false,
         trailTick: 0,
@@ -5412,6 +5469,7 @@ function executeAbility(caster, target, ability, t){
     }
     case 'mobility': {
       caster.vx = caster.facing * ability.boostX;
+      if(ability.rollMs){ caster.windBurstUntil = t + ability.rollMs; caster.windBurstVx = caster.facing * ability.boostX; }
       if(ability.swingToTop){
         // Pick exactly the launch speed needed so the arc's apex lands at
         // the top of the arena, regardless of how high up the caster
@@ -5616,6 +5674,11 @@ function executeAbility(caster, target, ability, t){
       }
       break;
     }
+    case 'cloak': {
+      // Miles Morales: fully invisible (even to his own player) and unseen by the AI.
+      caster.cloakUntil = t + (ability.duration || 6000);
+      break;
+    }
     case 'symbioteRegen': {
       const before = caster.health;
       caster.health = Math.min(caster.def.maxHealth, caster.health + ability.heal);
@@ -5648,6 +5711,53 @@ function updateVenomTendril(f){
 }
 /* Shield Block: forces the block off after its max duration even if the
    player never presses the key again, and starts its cooldown from there. */
+/* ---- Miles Morales: Camouflage (invisibility) + Electric Web shock ---- */
+function isCloaked(f){ return !!f && (f.cloakUntil || 0) > now(); }
+function updateCloak(f){
+  if(!f || !f.el) return;
+  const on = isCloaked(f);
+  f.el.classList.toggle('cloaked', on);
+  if(f._cloakWas && !on){
+    const cx = f.x + FIGHTER_SIZE/2, cy = f.y + FIGHTER_SIZE/2;
+    fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#7fe8ff;box-shadow:0 0 24px #39d7ff;`, 460);
+    spawnSparks(cx, cy, 10, '#9ff3ff', 48, 380);
+    sfx('miles_uncloak');
+  }
+  f._cloakWas = on;
+}
+function applyShock(target, cfg){
+  if(!target || target.dead || !cfg) return;
+  target.shockInterval = cfg.interval || 250;
+  target.shockDamage = cfg.damage || 50;
+  target.shockTicksLeft = cfg.ticks || 4;
+  target.shockNextTick = now() + target.shockInterval;
+  if(target.el) target.el.classList.add('shocked');
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  spawnLightning(cx-26, cy-24, cx+26, cy+24, {bolts:2, branches:2, width:2.4, life:260, jag:16, segs:6, color:'#9ff3ff'});
+}
+function updateShock(f){
+  if(!f) return;
+  if(!f.shockTicksLeft){
+    if(f.el && f.el.classList.contains('shocked')) f.el.classList.remove('shocked');
+    return;
+  }
+  if(f.dead || state.countdown) return;
+  const t = now();
+  while(f.shockTicksLeft > 0 && t >= f.shockNextTick){
+    f.shockTicksLeft--; f.shockNextTick += f.shockInterval;
+    if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.shockTicksLeft = 0; break; }
+    f.health = Math.max(0, f.health - f.shockDamage);
+    spawnDamageNumber(f.x+18, f.y, Math.round(f.shockDamage), false);
+    const cx = f.x + FIGHTER_SIZE/2, cy = f.y + FIGHTER_SIZE/2;
+    const a = Math.random()*Math.PI*2;
+    spawnLightning(cx+Math.cos(a)*34, cy+Math.sin(a)*34, cx-Math.cos(a)*34, cy-Math.sin(a)*34, {bolts:1, branches:2, width:2.2, life:220, jag:14, segs:5, color:'#9ff3ff'});
+    spawnSparks(cx, cy, 5, '#9ff3ff', 30, 260);
+    sfx('shock_tick');
+    if(f.health <= 0){ f.shockTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
+  }
+  if(f.shockTicksLeft <= 0 && f.el) f.el.classList.remove('shocked');
+}
+
 function updatePassiveRegen(f, dtF){
   if(!f || f.dead || !f.def.passiveRegen || state.countdown) return;
   if(f.health >= f.def.maxHealth){
@@ -5805,6 +5915,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   sfx(opts.sound || 'hit');
   spawnHitFx(target, opts.hitFx || '', dirSign);
   if(opts.slow) applyWebSlow(target, opts.slow);
+  if(opts.shock && target.health > 0) applyShock(target, opts.shock);
   flashHit(target);
   if(target.health <= 0 && !target.dead){
     onFighterZeroHealth(target, 'ko-health');
@@ -5944,6 +6055,65 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.13, 0.20, 'bandpass', 1700, 380, 1.9);
         aTone(ctx, t, 'sine', 330, 120, 0.12, 0.10);
         return;
+      /* ---------- Miles Morales ---------- */
+      case 'miles_web':
+        aNoise(ctx, t, 0.15, 0.20, 'bandpass', 5200, 900, 4.5);
+        aTone(ctx, t, 'sawtooth', 1500, 340, 0.11, 0.05);
+        aTone(ctx, t, 'square', 900, 2400, 0.10, 0.05);
+        aNoise(ctx, t+0.02, 0.14, 0.12, 'highpass', 6000, 2500, 1.4);
+        return;
+      case 'miles_web_hit':
+        aNoise(ctx, t, 0.13, 0.20, 'bandpass', 1700, 380, 1.9);
+        aTone(ctx, t, 'sawtooth', 420, 1800, 0.16, 0.08);
+        aNoise(ctx, t, 0.22, 0.16, 'highpass', 5600, 1400, 1.4);
+        aTone(ctx, t+0.05, 'square', 1200, 300, 0.14, 0.05);
+        return;
+      case 'shock_tick':
+        aNoise(ctx, t, 0.07, 0.12, 'highpass', 6000, 2400, 1.6);
+        aTone(ctx, t, 'square', 780, 220, 0.06, 0.04);
+        return;
+      case 'miles_punch':
+        aTone(ctx, t, 'sawtooth', 180, 1100, 0.16, 0.07);
+        aNoise(ctx, t, 0.16, 0.16, 'bandpass', 2600, 600, 2.0);
+        return;
+      case 'miles_punch_hit':
+        aTone(ctx, t, 'sine', 160, 40, 0.44, 0.30);
+        aTone(ctx, t, 'square', 920, 240, 0.20, 0.09);
+        aNoise(ctx, t, 0.24, 0.24, 'highpass', 5200, 1100, 1.3);
+        aNoise(ctx, t+0.04, 0.18, 0.14, 'lowpass', 1800, 260, 0.8);
+        return;
+      case 'miles_cloak':
+        aTone(ctx, t, 'sine', 900, 180, 0.40, 0.10);
+        aNoise(ctx, t, 0.30, 0.10, 'bandpass', 3000, 600, 1.2);
+        aTone(ctx, t+0.06, 'triangle', 1400, 260, 0.30, 0.05);
+        return;
+      case 'miles_uncloak':
+        aTone(ctx, t, 'sine', 240, 1000, 0.28, 0.09);
+        aNoise(ctx, t, 0.20, 0.09, 'bandpass', 600, 3200, 1.2);
+        return;
+
+      /* ---------- Winter Soldier ---------- */
+      case 'ws_pistol':
+        aNoise(ctx, t, 0.04, 0.55, 'highpass', 3800, 1800, 0.9);
+        aNoise(ctx, t, 0.10, 0.28, 'lowpass', 1400, 180, 0.85);
+        aTone(ctx, t, 'square', 95, 42, 0.05, 0.07);
+        return;
+      case 'ws_punch':
+        aNoise(ctx, t, 0.12, 0.18, 'bandpass', 1800, 420, 1.6);
+        aTone(ctx, t+0.02, 'triangle', 220, 80, 0.16, 0.08);
+        aTone(ctx, t, 'sawtooth', 300, 120, 0.10, 0.04);
+        return;
+      case 'ws_punch_hit':
+        aTone(ctx, t, 'sine', 150, 34, 0.55, 0.36);
+        aTone(ctx, t, 'square', 90, 40, 0.26, 0.12);
+        [1500, 2100, 2900, 3800].forEach((f,i)=>{ aTone(ctx, t + i*0.004, 'triangle', f, f*0.82, 0.40 - i*0.05, 0.06); });
+        aNoise(ctx, t, 0.26, 0.26, 'highpass', 4800, 1000, 0.9);
+        return;
+      case 'ws_roll':
+        aNoise(ctx, t, 0.22, 0.16, 'bandpass', 2600, 500, 1.8);
+        aTone(ctx, t, 'triangle', 200, 90, 0.20, 0.07);
+        return;
+
       case 'web_splat': // big splat
         aNoise(ctx, t, 0.24, 0.26, 'lowpass', 2200, 300, 0.8);
         aTone(ctx, t, 'sine', 260, 70, 0.26, 0.16);
@@ -6833,6 +7003,20 @@ function webStrandSvg(){
       <path d="M41.4 7.4 L52.6 18.6"/><path d="M52.6 7.4 L41.4 18.6"/>
     </g></svg>`;
 }
+function electricWebStrandSvg(){
+  return `<svg width="66" height="30" viewBox="0 0 66 30">
+    <g stroke="#f2feff" fill="none" stroke-width="1.5" stroke-linecap="round" opacity="0.96">
+      <path d="M1 15 L12 15 L26 15 L40 15"/>
+      <path d="M3 15 L13 9.5 L26 12 L38 14.5"/>
+      <path d="M3 15 L13 20.5 L26 18 L38 15.5"/>
+      <path d="M13 9.5 L13 20.5"/><path d="M26 12 L26 18"/>
+      <circle cx="49" cy="15" r="8"/><circle cx="49" cy="15" r="4.6"/>
+      <path d="M41 15 L57 15"/><path d="M49 7 L49 23"/>
+      <path d="M43.4 9.4 L54.6 20.6"/><path d="M54.6 9.4 L43.4 20.6"/>
+    </g>
+    <path d="M2 15 L9 8 L15 21 L23 7 L30 22 L38 9 L44 17 L52 6 L58 15" stroke="#7fe8ff" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
 function webSplatSvg(size){
   const r = size/2;
   let g = '';
@@ -6990,6 +7174,44 @@ function spawnAbilityFx(caster, ability, target){
       for(let i=0;i<6;i++){
         setTimeout(()=>{ if(state.mode==='battle') spawnAfterimage(who, '#d6323b77', 300); }, 40 + i*52);
       }
+      break;
+    }
+
+    /* ---------------- Miles Morales ---------------- */
+    case 'miles_web': {
+      const hx = cx + dir*24, hy = cy;
+      fxEl('fx-webtick', `left:${hx-14}px;top:${hy-14}px;width:28px;height:28px;`, 360, webSplatSvg(28));
+      spawnLightning(hx-6*dir, hy, hx+dir*30, hy-10+Math.random()*20, {bolts:1, branches:1, width:2, life:200, jag:10, segs:4, color:'#9ff3ff'});
+      spawnSparks(hx, hy, 5, '#7fe8ff', 22, 300);
+      break;
+    }
+    case 'miles_punch': {
+      const hx = cx + dir*34, hy = cy;
+      fxEl('fx-electric-impact', `left:${hx-34}px;top:${hy-34}px;width:68px;height:68px;color:#eaffff;`, 320, '<div class="core"></div><div class="ring"></div>');
+      spawnLightning(cx+dir*10, cy+6, cx+dir*66, cy-8, {bolts:2, branches:2, width:2.8, life:240, jag:14, segs:6, color:'#9ff3ff'});
+      spawnSparks(hx, hy, 8, '#7fe8ff', 34, 300);
+      break;
+    }
+    case 'miles_cloak': {
+      fxEl('fx-ring', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#7fe8ff;border-width:3px;box-shadow:0 0 28px #39d7ff,inset 0 0 22px rgba(57,215,255,.2);`, 520);
+      fxEl('fx-flash', `left:${cx-60}px;top:${cy-60}px;width:120px;height:120px;background:radial-gradient(circle,#ffffffaa,#7fe8ff66 40%,transparent 72%);`, 320);
+      for(let i=0;i<10;i++) setTimeout(()=>{ if(state.mode==='battle'){ const a=Math.random()*Math.PI*2, r=14+Math.random()*34; spawnSparks(cx+Math.cos(a)*r, cy+Math.sin(a)*r, 1, i%2?'#ffffff':'#7fe8ff', 16, 240); } }, i*24);
+      break;
+    }
+
+    /* ---------------- Winter Soldier ---------------- */
+    case 'ws_punch': {
+      const hx = cx + dir*34, hy = cy;
+      fxEl('fx-impact-star', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;`, 200, impactStarSvg('#d8dee8', 60, dir));
+      fxEl('fx-ring', `left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;border-color:#c9d2df;box-shadow:0 0 18px #7f8ea3;`, 300);
+      spawnSparks(hx, hy, 9, '#dfe6f0', 40, 320);
+      break;
+    }
+    case 'ws_roll': {
+      const who = caster;
+      if(who.el){ who.el.style.setProperty('--rdir', String(dir)); who.el.classList.remove('rolling'); void who.el.offsetWidth; who.el.classList.add('rolling'); setTimeout(()=>{ if(who.el) who.el.classList.remove('rolling'); }, 400); }
+      for(let i=0;i<9;i++) setTimeout(()=>{ if(state.mode==='battle' && who.el){ spawnAfterimage(who, '#8b95a688', 260); spawnSparks(who.x+FIGHTER_SIZE/2, who.y+FIGHTER_SIZE-4, 2, '#b9c0cc', 22, 260); } }, 20 + i*42);
+      spawnSparks(cx, caster.y + FIGHTER_SIZE - 4, 6, '#b9c0cc', 28, 300);
       break;
     }
 
@@ -7664,6 +7886,34 @@ function spawnHitFx(target, kind, dirSign){
     case 'web': {
       fxEl('fx-splat', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;`, 600, webSplatSvg(60));
       spawnSparks(cx, cy, 6, '#ffffff', 30, 380);
+      break;
+    }
+    case 'miles_web_hit': {
+      fxEl('fx-splat', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;`, 600, webSplatSvg(60));
+      fxEl('fx-electric-impact', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;color:#eaffff;`, 420, '<div class="core"></div><div class="ring"></div>');
+      spawnLightning(cx-22, cy-16, cx+22, cy+18, {bolts:2, branches:2, width:2.4, life:260, jag:16, segs:6, color:'#9ff3ff'});
+      spawnSparks(cx, cy, 10, '#7fe8ff', 40, 380);
+      break;
+    }
+    case 'miles_punch_hit': {
+      fxEl('fx-flash', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;background:radial-gradient(circle,#fff,#9ff3ff 30%,transparent 74%);`, 300);
+      fxEl('fx-electric-impact', `left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;color:#eaffff;`, 460, '<div class="core"></div><div class="ring"></div>');
+      fxEl('fx-impact-star', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;`, 220, impactStarSvg('#dffbff', 88, dirSign));
+      spawnLightning(cx, Math.max(0,cy-150), cx, cy, {bolts:3, branches:3, width:3, life:320, jag:24, segs:8, color:'#eaffff'});
+      for(let i=0;i<4;i++){ const a=(Math.PI*2*i)/4+Math.random()*.5; spawnLightning(cx, cy, cx+Math.cos(a)*80, cy+Math.sin(a)*80, {bolts:1, branches:2, width:2.4, life:280, jag:20, segs:6, color:'#9ff3ff'}); }
+      spawnSparks(cx, cy, 18, '#9ff3ff', 80, 440);
+      spawnSparks(cx, cy, 8, '#ffffff', 56, 380);
+      shakeArena(11, 320);
+      break;
+    }
+    case 'ws_punch_hit': {
+      fxEl('fx-flash', `left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;background:radial-gradient(circle,#fff,#d8dee8 30%,transparent 74%);`, 300);
+      fxEl('fx-impact-star', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`, 230, impactStarSvg('#e6ebf2', 104, dirSign));
+      fxEl('fx-ring', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#c9d2df;border-width:5px;box-shadow:0 0 28px #7f8ea3;`, 500);
+      fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#d64545;box-shadow:0 0 22px #d6454599;`, 460);
+      spawnSparks(cx, cy, 18, '#dfe6f0', 76, 440);
+      spawnSparks(cx, cy, 8, '#d64545', 52, 380);
+      shakeArena(14, 360);
       break;
     }
     case 'web_big': {
@@ -8516,7 +8766,7 @@ function updateProjectiles(dtF){
         const dir = dirSignTo({x:p.x}, {x:target.x});
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
-          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow});
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock});
         if(p.waspSizeDuration && target.health < healthBefore){
           applyWaspSizeEffect(target, p.waspSizeDuration, p.waspSizeSpeedMultiplier || .62);
         }
@@ -8647,6 +8897,10 @@ function buildProjectileVisual(p){
     p.el.classList.add('web-projectile');
     p.el.style.background = 'transparent';
     p.el.innerHTML = `<div class="proj-svg" style="transform:translate(-50%,-50%) scaleX(${flip});">${webStrandSvg()}</div>`;
+  } else if(p.render === 'electric-web'){
+    p.el.classList.add('web-projectile','electric-web-projectile');
+    p.el.style.background = 'transparent';
+    p.el.innerHTML = `<div class="proj-svg" style="transform:translate(-50%,-50%) scaleX(${flip});">${electricWebStrandSvg()}</div>`;
   } else if(p.render === 'web-net'){
     p.el.classList.add('web-projectile');
     p.el.style.background = 'transparent';
@@ -8728,6 +8982,14 @@ function spawnProjTrail(p){
       + `<line x1="${n*0.5}" y1="0" x2="${n*0.5}" y2="${n}"/><line x1="0" y1="${n*0.5}" x2="${n}" y2="${n*0.5}"/>`
       + `<line x1="${n*0.15}" y1="${n*0.15}" x2="${n*0.85}" y2="${n*0.85}"/><line x1="${n*0.85}" y1="${n*0.15}" x2="${n*0.15}" y2="${n*0.85}"/>`
       + `</g></svg>`);
+  } else if(p.trail === 'electric-web'){
+    const n = Math.max(8, Math.min(18, p.w));
+    fxEl('fx-webtick', `left:${(cx-n/2).toFixed(1)}px;top:${(cy-n/2).toFixed(1)}px;width:${n}px;height:${n}px;`, 320,
+      `<svg width="${n}" height="${n}" viewBox="0 0 ${n} ${n}"><g stroke="#8ff2ff" stroke-width="1.3" fill="none" opacity=".85" stroke-linecap="round">`
+      + `<line x1="${n*0.5}" y1="0" x2="${n*0.5}" y2="${n}"/><line x1="0" y1="${n*0.5}" x2="${n}" y2="${n*0.5}"/>`
+      + `<line x1="${n*0.15}" y1="${n*0.15}" x2="${n*0.85}" y2="${n*0.85}"/><line x1="${n*0.85}" y1="${n*0.15}" x2="${n*0.15}" y2="${n*0.85}"/>`
+      + `</g></svg>`);
+    if(Math.random() < 0.35) spawnSparks(cx, cy, 1, '#9ff3ff', 14, 200);
   } else if(p.render === 'warmachine-missile') {
     const sz=7;
     fxEl('fx-trail', `left:${(cx-sz/2-8).toFixed(1)}px;top:${(cy-sz/2).toFixed(1)}px;width:${sz}px;height:${sz}px;background:radial-gradient(circle,#fff2c8,#ff8f2f 45%,transparent 75%);box-shadow:0 0 10px #ff7a18;`, 260);
@@ -8906,6 +9168,8 @@ const AI_STYLE_RANGE = {
   vision:      500,
   scarletwitch:520,
   bullseye:    620,
+  milesmorales:150,
+  wintersoldier:240,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -8918,6 +9182,7 @@ const AI_STYLE_RANGE = {
    buys you a punish window instead of doing nothing. */
 function updateBotFacing(bot, opp){
   if(!bot || bot.dead || !opp || opp.dead) return;
+  if(isCloaked(opp)) return; // can't see an invisible opponent
   const trueSide = dirSignTo(bot, opp);
   if(trueSide === bot.facing){ bot.turnPending = null; return; }
   if(bot.turnPending && bot.turnPending.dir === trueSide){
@@ -8943,6 +9208,24 @@ function updateBotAI(dtF){
   bot.aiTimer = 60 + Math.random()*50; // quick reactions
 
   const t = now();
+  // Opponent is invisible (Miles Morales' Camouflage): the bot can't see them,
+  // so it just wanders around and makes no aimed attacks until they reappear.
+  if(isCloaked(player)){
+    if(!bot.aiSearchUntil || t > bot.aiSearchUntil){
+      const r = Math.random();
+      bot.aiSearchDir = r < 0.25 ? 0 : (r < 0.625 ? -1 : 1);
+      bot.aiSearchUntil = t + 500 + Math.random()*900;
+    }
+    let mv = bot.aiSearchDir || 0;
+    if(bot.x < 90) mv = 1;
+    if(bot.x > ARENA_W - FIGHTER_SIZE - 90) mv = -1;
+    bot.aiMoveDir = mv;
+    bot.aiJumpPulse = bot.onGround && Math.random() < 0.05;
+    bot.aiDropPulse = false;
+    bot.aiFlyDir = 0;
+    if(mv !== 0) bot.facing = mv;
+    return;
+  }
   // Predict a little ahead using the player's current velocity so the bot
   // leads its approach instead of always chasing where the player *was*.
   const predictedX = player.x + player.vx * 7;
@@ -9338,6 +9621,16 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && (qAb.globalTarget || (adist > eAb.range - 15 && adist <= qAb.range + 15))){ tryUseAbility(bot, player, 'Q'); return; }
     if(cdReady(bot,'E',t) && adist <= eAb.range + 18){ tryUseAbility(bot, player, 'E'); return; }
     if(cdReady(bot,'Q',t) && adist <= qAb.range + 15 && Math.random() < 0.3){ tryUseAbility(bot, player, 'Q'); return; }
+  } else if(style === 'milesmorales'){
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q;
+    if(cdReady(bot,'Q',t) && adist <= qAb.range + 18 && Math.abs(vertical) < 120){ tryUseAbility(bot, player, 'Q'); return; }
+    if(!isCloaked(bot) && cdReady(bot,'R',t) && (adist > 180 || hpPct < 0.5) && Math.random() < 0.35){ tryUseAbility(bot, player, 'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 760){ tryUseAbility(bot, player, 'E'); return; }
+  } else if(style === 'wintersoldier'){
+    const qAb = bot.def.abilities.Q;
+    if(cdReady(bot,'Q',t) && adist <= qAb.range + 18 && Math.abs(vertical) < 120){ tryUseAbility(bot, player, 'Q'); return; }
+    if(cdReady(bot,'R',t) && adist > 450 && Math.random() < 0.4){ tryUseAbility(bot, player, 'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 820){ tryUseAbility(bot, player, 'E'); return; }
   }
 }
 
@@ -9389,6 +9682,7 @@ function loseLife(target, side){
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
   target.slowUntil = 0;
+  target.cloakUntil = 0; target.shockTicksLeft = 0;
   if(target.webWrapEl){ target.webWrapEl.remove(); target.webWrapEl = null; }
   target.hulkRoarUntil = 0; target.hulkRoarLock = false;
   target.hulkSlideDir = 0; target.hulkSlideEnd = 0; target.hulkSlideTier = '';
@@ -9605,6 +9899,7 @@ function renderFighter(f){
   f.el.classList.toggle('bullseye-ricochet-armed', !!f.ricochetArmed);
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
   updateAntmanForm(f);
+  updateCloak(f);
   updateWaspSizeEffect(f);
   if(!isSlowed(f) && !isWaspSizeActive(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
   const pct = Math.max(0, f.health/f.def.maxHealth);
@@ -10779,6 +11074,7 @@ function gameLoop(ts){
     }
     updateHazards(p); updateHazards(b);
     updatePassiveRegen(p, dtF); updatePassiveRegen(b, dtF);
+    updateShock(p); updateShock(b);
     updateBlock(p); updateBlock(b);
     updateShield(p); updateShield(b);
     updateIllusions(dtF);
