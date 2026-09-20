@@ -802,6 +802,27 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.hulk.facing-left .fighter-square,.fighter.venom.facing-left .fighter-square{transform:scaleX(-1) scale(1.3);}
 
 .fighter.hulk .overhead-hp,.fighter.venom .overhead-hp{left:-10px;width:84px;top:-33px;}
+
+/* ---------- Ant-Man live-size states ---------- */
+.fighter.antman .fighter-square{transform:scale(1);transform-origin:50% 100%;border-radius:12px;transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s ease,box-shadow .18s ease;}
+.fighter.antman.facing-left .fighter-square{transform:scaleX(-1) scale(1);}
+.fighter.antman.antman-small .fighter-square{transform:scale(.4);filter:saturate(1.2) brightness(1.08);}
+.fighter.antman.antman-small.facing-left .fighter-square{transform:scaleX(-1) scale(.4);}
+.fighter.antman.antman-big .fighter-square{transform:scale(1.56);transform-origin:50% 100%;border-radius:16px;filter:saturate(1.15) brightness(1.06);box-shadow:0 0 0 2px rgba(220,45,45,.22),0 18px 34px rgba(0,0,0,.35);}
+.fighter.antman.antman-big.facing-left .fighter-square{transform:scaleX(-1) scale(1.56);}
+.fighter.antman.antman-small .overhead-hp{left:-18px;width:100px;top:-20px;}
+.fighter.antman.antman-big .overhead-hp{left:-14px;width:92px;top:-37px;}
+.antman-size-ring{position:absolute;inset:-18px;border-radius:50%;pointer-events:none;opacity:0;z-index:0;}
+.fighter.antman.antman-small .antman-size-ring{opacity:.9;box-shadow:0 0 18px rgba(220,44,44,.45),inset 0 0 16px rgba(255,255,255,.06);border:2px dashed rgba(220,44,44,.8);animation:antmanSmallPulse .7s ease-in-out infinite alternate;}
+.fighter.antman.antman-big .antman-size-ring{opacity:.95;inset:-24px;border:3px solid rgba(210,45,55,.65);box-shadow:0 0 30px rgba(220,45,55,.45),inset 0 0 24px rgba(220,45,55,.12);animation:antmanBigPulse .8s ease-in-out infinite alternate;}
+@keyframes antmanSmallPulse{from{transform:scale(.86);opacity:.52}to{transform:scale(1.08);opacity:.95}}
+@keyframes antmanBigPulse{from{transform:scale(.92);opacity:.55}to{transform:scale(1.06);opacity:1}}
+/* ---------- Captain Marvel / Ant-Man projectiles ---------- */
+.captain-photon-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:none!important;animation:none!important;}
+.captain-photon-core{position:absolute;left:0;top:50%;width:72px;height:18px;transform:translateY(-50%);border-radius:14px;background:linear-gradient(90deg,#fff,#fff7b2 24%,#ffd447 58%,#ff8a2b 82%,transparent);box-shadow:0 0 10px #fff2a8,0 0 22px #ffd43b,0 0 38px rgba(255,156,45,.7);}
+.captain-photon-halo{position:absolute;left:-8px;top:50%;width:86px;height:32px;transform:translateY(-50%);border-radius:50%;border:2px solid rgba(255,244,164,.85);box-shadow:0 0 22px #ffd43b;animation:photonPulse .12s ease-in-out infinite alternate;}
+.captain-photon-tail{position:absolute;right:54px;top:50%;width:42px;height:8px;transform:translateY(-50%);border-radius:8px;background:linear-gradient(90deg,transparent,#ff9f2e88,#fff5b8);filter:blur(1px);}
+@keyframes photonPulse{from{opacity:.68;transform:translateY(-50%) scaleY(.78)}to{opacity:1;transform:translateY(-50%) scaleY(1.16)}}
 .hulk-aura{position:absolute;inset:-26px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(82,255,100,.16),transparent 68%);animation:hulkAura 1s ease-in-out infinite alternate;z-index:-1;}
 @keyframes hulkAura{from{opacity:.35;transform:scale(.92)}to{opacity:.85;transform:scale(1.05)}}
 .loki-dagger-visual{position:relative;width:46px;height:20px;transform:translateX(-2px) rotate(7deg);filter:drop-shadow(0 0 5px #55f4c4) drop-shadow(0 0 10px #21c989);}
@@ -909,6 +930,10 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 .wolverine-slash{pointer-events:none;animation:wolverineSlash .24s cubic-bezier(.15,.8,.2,1) forwards;}
 @keyframes wolverineSlash{from{opacity:0;transform:translateX(-10px) scale(.75) rotate(-18deg)}20%{opacity:1}60%{opacity:1;transform:translateX(8px) scale(1.05) rotate(4deg)}100%{opacity:0;transform:translateX(20px) scale(1.16) rotate(10deg)}}
+.fighter.cm-punching .fighter-square{animation:cmPunch .26s cubic-bezier(.18,.82,.2,1);}
+.fighter.cm-punching.facing-left .fighter-square{animation:cmPunchLeft .26s cubic-bezier(.18,.82,.2,1);}
+@keyframes cmPunch{0%{transform:scale(1) rotate(0)}35%{transform:scale(1.05) translateX(5px) rotate(-3deg)}62%{transform:scale(1.02) translateX(-3px) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes cmPunchLeft{0%{transform:scaleX(-1) scale(1) rotate(0)}35%{transform:scaleX(-1) scale(1.05) translateX(-5px) rotate(3deg)}62%{transform:scaleX(-1) scale(1.02) translateX(3px) rotate(-2deg)}100%{transform:scaleX(-1) scale(1) rotate(0)}}
 .fighter.hulk.hulk-smash .fighter-square{animation:hulkPunch .24s cubic-bezier(.18,.82,.2,1);}
 .fighter.hulk.hulk-smash.facing-left .fighter-square{animation:hulkPunchLeft .24s cubic-bezier(.18,.82,.2,1);}
 @keyframes hulkPunch{0%{transform:scale(1.3) rotate(0)}35%{transform:scale(1.36) rotate(-2deg)}62%{transform:scale(1.29) rotate(2deg)}100%{transform:scale(1.3) rotate(0)}}
@@ -2681,6 +2706,41 @@ const CHARACTERS = {
          desc:'Activates free flight for 5 seconds. Recharges after a 10 second cooldown.'}
     }
   },
+  captainmarvel: {
+    id:'captainmarvel', name:'Captain Marvel', img:'CaptainMarvel.jpg', color:'#f4b82c', accentColor:'#4aa6ff', aiStyle:'captainmarvel',
+    maxHealth:25000,
+    description:'Cosmic powerhouse. Fires photon energy, lands devastating superhuman punches, and can stay airborne indefinitely with unrestricted flight.',
+    abilities:{
+      E:{key:'E', name:'Photon Blast', type:'projectile', damage:1000, cooldown:3000, knockback:10,
+         speed:20, w:76, h:22, color:'#ffd95a', render:'captain-photon', trail:'energy',
+         sound:'cm_photon', fx:'cm_photon', hitFx:'cm_photon_hit', hitSound:'cm_photon_hit',
+         desc:'Fires a high-energy photon blast for 1,000 damage. Cooldown: 3 seconds.'},
+      Q:{key:'Q', name:'Cosmic Punch', type:'melee', damage:2500, cooldown:15000, knockback:22, range:118,
+         hitRange:176, hitVertical:145, hitStartSlack:70, hitDelay:80,
+         sound:'cm_punch', fx:'cm_punch', hitFx:'cm_punch_hit', hitSound:'cm_punch_hit',
+         desc:'A devastating close-range cosmic punch that deals 2,500 damage. Cooldown: 15 seconds.'},
+      R:{key:'R', name:'Flight', type:'toggle', damage:0, cooldown:0,
+         sound:'cm_flight', fx:'cm_flight',
+         desc:'Unlimited powered flight. Toggle it on or off whenever you want — there is no duration and no cooldown.'}
+    }
+  },
+  antman: {
+    id:'antman', name:'Ant-Man', img:'Antman.jpg', color:'#c52b38', accentColor:'#e7e9ee', aiStyle:'antman',
+    maxHealth:8100,
+    description:'A size-shifting fighter. Punches hit differently depending on his form, while shrinking makes him faster and harder to hit and growing makes every hit much heavier.',
+    abilities:{
+      E:{key:'E', name:'Ant-Man Punch', type:'melee', damage:300, dynamicDamage:'antman', cooldown:500, knockback:6, range:92,
+         hitRange:136, hitVertical:125, hitStartSlack:58, hitDelay:65,
+         sound:'antman_punch', fx:'antman_punch', hitFx:'antman_punch_hit', hitSound:'antman_punch_hit',
+         desc:'A fast punch for 300 damage normally, 500 while small, or 1,000 while big.'},
+      Q:{key:'Q', name:'Shrinking', type:'antmanTransform', form:'small', duration:6000, cooldown:12000,
+         sound:'antman_shrink', fx:'antman_shrink',
+         desc:'Shrinks Ant-Man to 40% of his normal size for 6 seconds. Movement speed increases by 30%.'},
+      R:{key:'R', name:'Growing', type:'antmanTransform', form:'big', duration:7000, cooldown:20000,
+         sound:'antman_grow', fx:'antman_grow',
+         desc:'Grows Ant-Man to 20% bigger than Hulk for 7 seconds. Movement speed decreases by 20%.'}
+    }
+  },
   captainamerica: {
     id:'captainamerica', name:'Captain America', img:'CaptainAmerica.jpg', color:'#3b5bdb',
     maxHealth:10000, aiStyle:'balanced',
@@ -2944,7 +3004,7 @@ const CHARACTERS = {
     }
   },
 };
-const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool','venom','storm','warmachine','cyclops'];
+const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool','venom','storm','warmachine','cyclops','captainmarvel','antman'];
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -3774,6 +3834,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     shieldThrown:false,
     blocking:false, blockKey:null, blockExpire:0, blockStart:0,
     bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
+    antmanForm:'normal', antmanTransformUntil:0,
     flight:false,
     flightExpire:0,
     hulkRoarUntil:0, hulkRoarLock:false,
@@ -3948,10 +4009,11 @@ function buildArenaStatic(){
 }
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
+    ${f.def.id==='antman' ? '<div class="antman-size-ring"></div>' : ''}
     <div class="fighter-square">${squareInner(f.def)}</div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
     ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
@@ -4117,6 +4179,15 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.background='rgba(60,120,220,.55)';
       return;
     }
+    if(a.type==='antmanTransform' && fighter.def.id==='antman') {
+      const active = fighter.antmanForm === a.form && fighter.antmanTransformUntil > t;
+      if(active){
+        overlay.style.display='flex';
+        overlay.textContent = `${a.form==='small' ? 'SMALL' : 'BIG'} ${Math.max(0,(fighter.antmanTransformUntil-t)/1000).toFixed(1)}s`;
+        overlay.style.background = a.form==='small' ? 'rgba(197,43,56,.55)' : 'rgba(220,70,70,.55)';
+        return;
+      }
+    }
     if(a.type==='block' && fighter.blocking){
       overlay.style.display='flex';
       overlay.textContent = 'BLOCK';
@@ -4152,6 +4223,7 @@ function cdReady(f, key, t){
   const a = f.def.abilities[key];
   if(a.type==='toggle') return true;
   if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
+  if(a.type==='antmanTransform') return t >= f.cooldowns[key] && !(f.def.id==='antman' && f.antmanForm === a.form && f.antmanTransformUntil > t);
   // Shield Block: always "ready" while already active, so pressing the key
   // again can lower it manually; only gated by cooldown before it's raised.
   if(a.type==='block') return f.blocking ? true : (t >= f.cooldowns[key]);
@@ -4637,6 +4709,9 @@ function executeAbility(caster, target, ability, t){
     }
     case 'melee': {
       // Damage lands on the contact frame of the swing animation, not instantly.
+      const attackDamage = ability.dynamicDamage === 'antman'
+        ? (caster.antmanForm === 'small' ? 500 : (caster.antmanForm === 'big' ? 1000 : 300))
+        : ability.damage;
       // Reach is forgiving (a little slack past the listed range, a taller vertical window,
       // and a swing that started in range still lands if the target shuffles off) - but a
       // swing only counts if it makes sense:
@@ -4663,7 +4738,7 @@ function executeAbility(caster, target, ability, t){
         if(state.mode !== 'battle' || caster.dead || target.dead) return;
         // a swing also knocks incoming missiles out of the air
         damageMissilesInArea(caster.id, caster.x+FIGHTER_SIZE/2 + caster.facing*ability.range*0.5,
-          caster.y+FIGHTER_SIZE/2, ability.range, ability.damage);
+          caster.y+FIGHTER_SIZE/2, ability.range, attackDamage);
         const stillPlanted = Math.abs(caster.x - startX) < 60 && Math.abs(caster.y - startY) < 90;
         const inRange = inReach(0) || (reachedAtStart && stillPlanted && inReach(70));
         const dirNow = dirSignTo(caster, target);
@@ -4673,7 +4748,7 @@ function executeAbility(caster, target, ability, t){
         // never restricts the player's own attacks.
         const facingOk = swingOk();
         if(inRange && facingOk){
-          damageTargetOrWall(target, ability.damage, ability.knockback, dirNow,
+          damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
             {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
         } else {
           // whiff: a small puff of air so the swing still reads
@@ -4780,6 +4855,20 @@ function executeAbility(caster, target, ability, t){
       const healed = Math.round(caster.health - before);
       spawnDamageNumber(caster.x+22, caster.y-10, '+'+healed, true);
       spawnHealFx(caster);
+      break;
+    }
+    case 'antmanTransform': {
+      if(caster.def.id !== 'antman') break;
+      const previous = caster.antmanForm;
+      caster.antmanForm = ability.form;
+      caster.antmanTransformUntil = t + ability.duration;
+      if(caster.el){
+        caster.el.classList.toggle('antman-small', ability.form === 'small');
+        caster.el.classList.toggle('antman-big', ability.form === 'big');
+      }
+      if(previous !== ability.form){
+        spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, ability.form==='small'?16:22, ability.form==='small'?'#ff5a63':'#ffcf73', ability.form==='small'?52:72, 440);
+      }
       break;
     }
     case 'toggle': {
@@ -5596,6 +5685,63 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.34, 0.16, 'highpass', 3000, 600, 0.9);
         return;
 
+      /* ---------- Captain Marvel ---------- */
+      case 'cm_photon': {
+        aTone(ctx,t,'sawtooth',420,1800,0.26,0.10);
+        aTone(ctx,t+0.02,'triangle',760,2500,0.22,0.08);
+        aNoise(ctx,t,0.18,0.17,'highpass',2800,900,1.4);
+        return;
+      }
+      case 'cm_photon_hit': {
+        aTone(ctx,t,'sine',260,46,0.42,0.28);
+        aTone(ctx,t,'square',110,52,0.25,0.12);
+        aNoise(ctx,t,0.24,0.24,'bandpass',2200,420,1.7);
+        aNoise(ctx,t+0.04,0.16,0.14,'highpass',4200,900,1.2);
+        return;
+      }
+      case 'cm_punch': {
+        aNoise(ctx,t,0.16,0.22,'bandpass',2500,420,1.8);
+        aTone(ctx,t+0.04,'triangle',250,80,0.22,0.10);
+        return;
+      }
+      case 'cm_punch_hit': {
+        aTone(ctx,t,'sine',180,30,0.58,0.36);
+        aTone(ctx,t,'square',86,38,0.30,0.14);
+        aNoise(ctx,t,0.28,0.30,'lowpass',1800,120,0.65);
+        aNoise(ctx,t+0.03,0.20,0.16,'highpass',3200,800,1.4);
+        return;
+      }
+      case 'cm_flight': {
+        aTone(ctx,t,'triangle',170,520,0.34,0.11);
+        aTone(ctx,t+0.05,'sine',520,940,0.26,0.08);
+        aNoise(ctx,t,0.28,0.13,'bandpass',900,1800,1.1);
+        return;
+      }
+
+      /* ---------- Ant-Man ---------- */
+      case 'antman_punch': {
+        aNoise(ctx,t,0.10,0.16,'bandpass',2200,520,2.2);
+        aTone(ctx,t+0.03,'triangle',230,95,0.14,0.07);
+        return;
+      }
+      case 'antman_punch_hit': {
+        aTone(ctx,t,'sine',135,42,0.30,0.22);
+        aNoise(ctx,t,0.16,0.20,'bandpass',1800,360,1.8);
+        return;
+      }
+      case 'antman_shrink': {
+        aTone(ctx,t,'sine',420,1100,0.32,0.11);
+        aTone(ctx,t+0.05,'triangle',1600,520,0.24,0.06);
+        aNoise(ctx,t,0.22,0.12,'highpass',2600,900,2.1);
+        return;
+      }
+      case 'antman_grow': {
+        aTone(ctx,t,'sine',80,34,0.62,0.28);
+        aTone(ctx,t,'sawtooth',110,48,0.42,0.10);
+        aNoise(ctx,t,0.35,0.24,'lowpass',1600,120,0.7);
+        return;
+      }
+
       /* ---------- Venom ---------- */
       case 'venom_lash': // wet whip-crack through the symbiote mass
         aNoise(ctx, t, 0.16, 0.22, 'lowpass', 1800, 260, 1.3);
@@ -6163,6 +6309,56 @@ function spawnAbilityFx(caster, ability, target){
         + `border-color:#ffd479;box-shadow:0 0 26px #ff8c3a;`, 560);
       fxEl('fx-flash', `left:${cx-46}px;top:${caster.y+FIGHTER_SIZE-40}px;width:92px;height:80px;`, 320);
       spawnSparks(cx, caster.y + FIGHTER_SIZE, 12, '#ffd479', 60);
+      break;
+    }
+
+    /* ---------------- Captain Marvel ---------------- */
+    case 'cm_photon': {
+      const hx=cx+dir*28, hy=cy;
+      fxEl('charge-glow', `left:${hx-24}px;top:${hy-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff,#ffd95a 40%,transparent 72%);box-shadow:0 0 26px #ffd43b;`, 210);
+      spawnSparks(hx,hy,10,'#fff0a8',34,280);
+      for(let i=0;i<3;i++) setTimeout(()=>{ if(state.mode==='battle' && caster.el){ spawnSparks(caster.x+FIGHTER_SIZE/2+caster.facing*(30+i*18), cy+(Math.random()-.5)*12, 4, i%2?'#74b9ff':'#ffe38a', 22, 200); } }, i*35);
+      break;
+    }
+    case 'cm_punch': {
+      caster.el.classList.remove('cm-punching'); void caster.el.offsetWidth; caster.el.classList.add('cm-punching');
+      setTimeout(()=>{ if(caster.el) caster.el.classList.remove('cm-punching'); }, 320);
+      const hx=cx+dir*36, hy=cy;
+      fxEl('mj-arc-wrap', `left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;transform:scaleX(${dir});`, 320, '<div class="mj-arc" style="border-right-color:#ffe98a;border-top-color:#6db5ff;border-width:9px;"></div>');
+      fxEl('fx-flash', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff,#ffd85a 30%,transparent 74%);`, 240);
+      spawnSparks(hx,hy,12,'#ffd95a',46,320);
+      break;
+    }
+    case 'cm_flight': {
+      const on = caster.flight;
+      fxEl('fx-ring', `left:${cx-58}px;top:${caster.y+FIGHTER_SIZE-26}px;width:116px;height:52px;border-color:#ffd75a;box-shadow:0 0 28px #ffd43b,0 0 46px rgba(77,169,255,.65);`, 520);
+      fxEl('fx-flash', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;background:radial-gradient(circle,#fffbd4 0,#ffd85a 20%,#5eb7ff 46%,transparent 72%);`, 320);
+      spawnSparks(cx, caster.y+FIGHTER_SIZE, 16, on?'#ffd95a':'#74b9ff', 72, 430);
+      break;
+    }
+
+    /* ---------------- Ant-Man ---------------- */
+    case 'antman_punch': {
+      const small = caster.antmanForm==='small', big = caster.antmanForm==='big';
+      const punchColor = big ? '#ff6c5c' : (small ? '#e9edf3' : '#d7dde5');
+      const scale = big ? 1.35 : (small ? 0.72 : 1);
+      fxEl('fx-impact-star', `left:${cx+dir*30-34}px;top:${cy-34}px;width:68px;height:68px;transform:scale(${scale});`, 200, impactStarSvg(punchColor,68,dir));
+      fxEl('fx-ring', `left:${cx+dir*28-28}px;top:${cy-28}px;width:56px;height:56px;border-color:${punchColor};box-shadow:0 0 20px ${punchColor};`, 300);
+      spawnSparks(cx+dir*34,cy, big?14:8,punchColor,big?52:30,320);
+      if(big) shakeArena(5,220);
+      break;
+    }
+    case 'antman_shrink': {
+      for(let i=0;i<12;i++) setTimeout(()=>{ if(state.mode==='battle' && caster.el){ const a=Math.random()*Math.PI*2; const r=18+Math.random()*32; spawnSparks(cx+Math.cos(a)*r, cy+Math.sin(a)*r, 1, i%2?'#ffffff':'#ff5963', 16, 220); } }, i*22);
+      fxEl('fx-ring', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ff5963;border-width:3px;box-shadow:0 0 25px rgba(255,89,99,.75),inset 0 0 22px rgba(255,89,99,.14);`, 500);
+      break;
+    }
+    case 'antman_grow': {
+      fxEl('fx-ring', `left:${cx-76}px;top:${cy-76}px;width:152px;height:152px;border-color:#ffcf73;border-width:5px;box-shadow:0 0 34px #ff8d3a,0 0 58px rgba(255,87,87,.55);`, 620);
+      fxEl('fx-flash', `left:${cx-88}px;top:${cy-88}px;width:176px;height:176px;background:radial-gradient(circle,#fff4d1 0,#ffd479 24%,#ff694b 42%,transparent 74%);`, 360);
+      spawnSparks(cx,cy,24,'#ffd479',110,620);
+      spawnGroundCrack(cx,caster.y+FIGHTER_SIZE,90);
+      shakeArena(8,300);
       break;
     }
 
@@ -6802,6 +6998,28 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx,cy,7,'#ff6572',36,280);
       break;
     }
+    case 'cm_photon_hit': {
+      fxEl('fx-flash', `left:${cx-72}px;top:${cy-72}px;width:144px;height:144px;background:radial-gradient(circle,#fff,#ffe56f 24%,#69b8ff 48%,transparent 76%);`, 300);
+      fxEl('fx-ring', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;border-color:#ffe36b;border-width:5px;box-shadow:0 0 34px #4aa6ff,0 0 44px #ffd43b;`, 520);
+      spawnSparks(cx,cy,20,'#fff0a8',92,520);
+      shakeArena(8,280);
+      break;
+    }
+    case 'cm_punch_hit': {
+      fxEl('fx-flash', `left:${cx-82}px;top:${cy-82}px;width:164px;height:164px;background:radial-gradient(circle,#fff,#ffd95a 24%,#5ba9ff 48%,transparent 76%);`, 320);
+      fxEl('fx-impact-star', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;`, 250, impactStarSvg('#fff0a3',128,dirSign));
+      fxEl('fx-ring', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#ffd95a;border-width:6px;box-shadow:0 0 34px #ffd43b,0 0 42px #4aa6ff;`, 560);
+      spawnSparks(cx,cy,24,'#ffe58a',118,620);
+      shakeArena(13,400);
+      break;
+    }
+    case 'antman_punch_hit': {
+      fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;background:radial-gradient(circle,#fff,#ffcf73 24%,#ff5a52 52%,transparent 76%);`, 260);
+      fxEl('fx-impact-star', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`, 220, impactStarSvg('#ffe2a2',96,dirSign));
+      fxEl('fx-ring', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;border-color:#ff8d65;box-shadow:0 0 25px #ff4f4f;`, 430);
+      spawnSparks(cx,cy,14,'#ffd7a0',68,420);
+      break;
+    }
     case 'venom_lash_hit': {
       // A wet, splattering symbiote impact — dark irregular splat with a
       // green afterglow, plus a spray of goo droplets instead of clean sparks.
@@ -6992,7 +7210,7 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     // so you can always fight your way out of a hitstun chain instead of just
     // riding the knockback wherever it sends you.
     if(moveDir !== 0){
-      const diSpeed = (f.flight ? FLY_SPEED : MOVE_SPEED) * 0.55;
+      const diSpeed = (f.flight ? FLY_SPEED : MOVE_SPEED) * fighterSpeedMultiplier(f) * 0.55;
       f.vx += moveDir * diSpeed * dtF;
     }
     if(wantJump && f.onGround && !f.flight){
@@ -7006,9 +7224,9 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     const slowMul = isSlowed(f) ? WEB_SLOW_FACTOR : 1; // webs only affect movement speed
     const blockMul = f.blocking ? 0.65 : 1; // Captain America: -35% movement speed while Shield Block is active
     if(f.flight){
-      f.vx = moveDir * FLY_SPEED * slowMul;
+      f.vx = moveDir * FLY_SPEED * fighterSpeedMultiplier(f) * slowMul;
     } else {
-      const spd = MOVE_SPEED * slowMul * blockMul;
+      const spd = MOVE_SPEED * fighterSpeedMultiplier(f) * slowMul * blockMul;
       f.vx = moveDir * spd + (f.vx - moveDir*spd) * 0.75; // blend so knockback still shows briefly
       if(Math.abs(f.vx - moveDir*spd) < 0.3) f.vx = moveDir*spd;
     }
@@ -7032,7 +7250,7 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     let vertDir = 0;
     if(wantJump) vertDir -= 1;
     if(wantDown) vertDir += 1;
-    f.vy = vertDir * FLY_SPEED * (isSlowed(f) ? WEB_SLOW_FACTOR : 1);
+    f.vy = vertDir * FLY_SPEED * fighterSpeedMultiplier(f) * (isSlowed(f) ? WEB_SLOW_FACTOR : 1);
   } else if(!(f.grappleUntil && now() < f.grappleUntil)){
     f.vy += GRAVITY * dtF;
   }
@@ -7122,6 +7340,24 @@ function updateShield(f){
   if(f.shieldEl) f.shieldEl.style.display = active && f.def.id !== 'mrfantastic' ? 'block' : 'none';
   if(f.elasticityEl) f.elasticityEl.style.display = active && f.def.id === 'mrfantastic' ? 'block' : 'none';
   if(f.shield && now() >= f.shield.expire) f.shield = null;
+}
+function updateAntmanForm(f){
+  if(!f || f.def.id !== 'antman') return;
+  const t = now();
+  if(f.antmanTransformUntil && t >= f.antmanTransformUntil){
+    f.antmanForm = 'normal';
+    f.antmanTransformUntil = 0;
+  }
+  if(f.el){
+    f.el.classList.toggle('antman-small', f.antmanForm === 'small');
+    f.el.classList.toggle('antman-big', f.antmanForm === 'big');
+  }
+}
+function fighterSpeedMultiplier(f){
+  if(!f || f.def.id !== 'antman') return 1;
+  if(f.antmanForm === 'small') return 1.30;
+  if(f.antmanForm === 'big') return 0.80;
+  return 1;
 }
 function updateFlightGlow(f){
   const t = now();
@@ -7310,6 +7546,9 @@ function buildProjectileVisual(p){
       + `<path d="${d}" stroke="#d8f4ff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
       + `<path d="${ptsToPath(b1)}" stroke="#eaf9ff" stroke-width="2.2" fill="none" stroke-linecap="round"/>`
       + `<path d="${ptsToPath(b2)}" stroke="#eaf9ff" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>`;
+  } else if(p.render === 'captain-photon'){
+    p.el.classList.add('captain-photon-projectile');
+    p.el.innerHTML = '<div class="captain-photon-core"></div><div class="captain-photon-halo"></div><div class="captain-photon-tail"></div>';
   } else if(p.render === 'cyclops-beam' || p.render === 'cyclops-heavy'){
     p.el.classList.add('cyclops-projectile');
     if(p.render === 'cyclops-heavy') p.el.classList.add('heavy');
@@ -7555,6 +7794,8 @@ const AI_STYLE_RANGE = {
   hawkeye:     520,
   blackwidow:  300,
   venom:       110,  // Venom wants to be in tendril-grab range, closer than that for the lash
+  captainmarvel: 520,
+  antman:      105,
   storm:       420,
   warmachine:  320,
   cyclops:     560,
@@ -7977,6 +8218,23 @@ function updateBotAI(dtF){
     if(cdReady(bot,'R',t) && (hpPct < 0.48 || adist < 150) && Math.random() < 0.8){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && adist > 170 && adist < 1000){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 1100){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'captainmarvel'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(rAb.type==='toggle' && !bot.flight && (Math.abs(vertical)>95 || adist>380 || hpPct<0.5) && Math.random()<0.62){ tryUseAbility(bot,player,'R'); return; }
+    if(rAb.type==='toggle' && bot.flight && adist<145 && Math.abs(vertical)<65 && Math.random()<0.08){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist <= qAb.range + 25 && Math.abs(vertical)<150){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 1050){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'antman'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(bot.antmanForm==='big' && bot.antmanTransformUntil>t && cdReady(bot,'E',t) && adist <= eAb.range + 30){ tryUseAbility(bot,player,'E'); return; }
+    if(bot.antmanForm==='small' && bot.antmanTransformUntil>t && cdReady(bot,'E',t) && adist <= eAb.range + 20){ tryUseAbility(bot,player,'E'); return; }
+    if(bot.antmanForm==='normal'){
+      if(cdReady(bot,'R',t) && ((hpPct>0.35 && adist<220) || hpPct<0.55) && Math.random()<0.45){ tryUseAbility(bot,player,'R'); return; }
+      if(cdReady(bot,'Q',t) && (adist>180 || hpPct<0.35) && Math.random()<0.55){ tryUseAbility(bot,player,'Q'); return; }
+    }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + (bot.antmanForm==='big'?35:20)){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'R',t) && bot.antmanForm==='small' && Math.random()<0.18){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && bot.antmanForm==='big' && Math.random()<0.12){ tryUseAbility(bot,player,'Q'); return; }
   } else if(style === 'venom'){
     // Venom: hook the opponent with the tendril grab from just outside lash range to
     // haul them in for the slam, lash whenever they're already close, and regenerate
@@ -8039,6 +8297,7 @@ function loseLife(target, side){
   target.hulkRoarUntil = 0; target.hulkRoarLock = false;
   target.hulkSlideDir = 0; target.hulkSlideEnd = 0; target.hulkSlideTier = '';
   target.flight = false; target.flightExpire = 0;
+  target.antmanForm = 'normal'; target.antmanTransformUntil = 0;
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
   target.shield = null;
   target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
@@ -8244,6 +8503,7 @@ function renderFighter(f){
   f.el.classList.toggle('airborne', !f.onGround && !f.flight);
   f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil));
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
+  updateAntmanForm(f);
   if(!isSlowed(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
   const pct = Math.max(0, f.health/f.def.maxHealth);
   f.overheadFillEl.style.width = (pct*100)+'%';
