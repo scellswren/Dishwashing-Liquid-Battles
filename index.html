@@ -365,7 +365,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   position:absolute; inset:-6px; border-radius:50%; border:3px solid #6cd0ff; box-shadow:0 0 14px #6cd0ff;
   opacity:.85; pointer-events:none; display:none;
 }
-.fighter .flight-glow{position:absolute; inset:-4px; border-radius:12px; box-shadow:0 0 16px 4px #ffce6b; display:none; pointer-events:none;}
+.fighter .flight-glow{position:absolute; inset:-4px; border-radius:12px; box-shadow:0 0 16px 4px rgba(120,210,255,.75); display:none; pointer-events:none;}
 .fighter-size-body{position:absolute;inset:0;width:64px;height:64px;transform-origin:50% 100%;pointer-events:none;z-index:2;}
 .fighter.wasp .fighter-size-body,.fighter.falcon .fighter-size-body{z-index:2;}
 
@@ -376,6 +376,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .wasp-wings svg,.falcon-wings svg{width:100%;height:100%;display:block;overflow:visible;}
 .fighter.facing-left .wasp-wings,.fighter.facing-left .falcon-wings{transform:translate(-50%,-50%) scaleX(-1);}
 .fighter.facing-left .wasp-wings{transform:translate(-50%,-50%) scaleX(-1) scale(.86);}
+.fighter.vision .flight-glow{box-shadow:0 0 18px 5px rgba(255,211,55,.88),0 0 38px rgba(255,194,0,.42);}
 .fighter.falcon .flight-glow,.fighter.wasp .flight-glow{display:none!important;}
 .fighter.wasp.flight-active .wasp-wings{display:block;animation:waspWingBeat .22s ease-in-out infinite alternate;}
 .fighter.falcon.flight-active .falcon-wings{animation:falconWingBeat .32s ease-in-out infinite alternate;}
@@ -927,6 +928,60 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.wasp.wasp-small.wasp-enlarged .wasp-size-mark{inset:-16px;}
 /* ---------- Captain Marvel / Ant-Man projectiles ---------- */
 .captain-photon-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:none!important;animation:none!important;}
+/* ---------- Vision / Scarlet Witch / Bullseye ---------- */
+.vision-mind-beam{
+  position:absolute; height:42px; border-radius:18px; pointer-events:none; z-index:5; overflow:visible;
+  background:linear-gradient(90deg,rgba(255,255,230,.99) 0%,rgba(255,249,145,.99) 16%,rgba(255,224,58,.99) 48%,rgba(255,193,0,.94) 78%,rgba(255,214,45,.30) 100%);
+  box-shadow:0 0 8px #fff7b0,0 0 22px rgba(255,218,52,.95),0 0 54px rgba(255,186,20,.70),0 0 90px rgba(255,210,60,.28);
+  animation:visionBeamPulse .12s ease-in-out infinite alternate;
+}
+.vision-mind-beam.reverse{transform:scaleX(-1);}
+.vision-mind-beam::before{content:'';position:absolute;left:-8px;right:-8px;top:-16px;height:74px;border-radius:27px;background:radial-gradient(ellipse,#fff4a866 0%,#ffd42e55 34%,transparent 74%);filter:blur(5px);}
+.vision-mind-beam::after{content:'';position:absolute;left:4px;right:4px;top:10px;height:4px;border-radius:4px;background:rgba(255,255,248,.98);box-shadow:0 0 8px #fff,0 0 16px #fff5a8,0 0 28px #ffd83d;}
+@keyframes visionBeamPulse{from{filter:brightness(.98)}to{filter:brightness(1.16)}}
+.fighter.vision-punching .fighter-square{animation:visionPunchPose .34s cubic-bezier(.16,.82,.2,1);filter:brightness(1.12) saturate(1.18);}
+@keyframes visionPunchPose{0%{transform:translateX(0) scale(1)}28%{transform:translateX(5px) scale(1.05)}58%{transform:translateX(-3px) scale(1.02)}100%{transform:translateX(0) scale(1)}}
+.vision-punch-wave{position:absolute;border:5px solid #b9ffe8;border-radius:50%;box-shadow:0 0 18px #52f5b5,0 0 42px rgba(82,245,181,.68),inset 0 0 20px rgba(210,255,241,.22);pointer-events:none;z-index:7;animation:visionPunchWave .42s cubic-bezier(.15,.8,.2,1) forwards;}
+@keyframes visionPunchWave{from{opacity:1;transform:translate(-50%,-50%) scale(.2)}to{opacity:0;transform:translate(-50%,-50%) scale(1.55)}}
+.hex-freeze-aura{position:absolute;inset:-28px;border-radius:50%;pointer-events:none;opacity:0;z-index:0;background:radial-gradient(circle,rgba(255,38,61,.30),rgba(255,38,61,.08) 48%,transparent 76%);filter:blur(1px);}
+.fighter.hex-frozen .hex-freeze-aura{opacity:1;animation:hexAuraPulse .38s ease-in-out infinite alternate;}
+@keyframes hexAuraPulse{from{transform:scale(.93);filter:blur(2px);opacity:.62}to{transform:scale(1.08);filter:blur(0);opacity:1}}
+.scarlet-chaos-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:scarletChaosSpin .24s linear infinite!important;filter:none!important;}
+.scarlet-chaos-projectile::before{content:'';position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(circle at 36% 36%,#fff 0 9%,#ffb5bf 12%,#ff4a61 38%,#ad1027 68%,transparent 78%);box-shadow:0 0 12px #ff334f,0 0 26px rgba(255,52,79,.82);}
+.scarlet-chaos-projectile::after{content:'';position:absolute;inset:0;border:2px solid #ffd5da;border-radius:50%;box-shadow:0 0 10px #ff8390,inset 0 0 7px #fff4f5;transform:rotate(45deg) scaleY(.7);}
+@keyframes scarletChaosSpin{from{transform:rotate(0deg) scale(.94)}to{transform:rotate(360deg) scale(1.06)}}
+.vision-beam-node{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff8c7;box-shadow:0 0 12px #fff,0 0 24px #ffd72e,0 0 34px #ffb300;pointer-events:none;z-index:6;animation:visionNode .22s ease-out forwards;}
+@keyframes visionNode{from{transform:scale(.6);opacity:.95}to{transform:scale(1.8);opacity:0}}
+.fighter.hex-frozen .fighter-square{filter:saturate(1.25) brightness(.88) drop-shadow(0 0 9px #ff334d);}
+.fighter.hex-frozen::after{content:'';position:absolute;inset:-18px;border-radius:18px;pointer-events:none;background:radial-gradient(circle,rgba(255,56,77,.3),rgba(255,34,58,.08) 48%,transparent 74%);box-shadow:0 0 28px rgba(255,35,63,.75),inset 0 0 18px rgba(255,70,90,.26);animation:scarletFreezePulse .38s ease-in-out infinite alternate;z-index:4;}
+@keyframes scarletFreezePulse{from{opacity:.72;transform:scale(.98)}to{opacity:1;transform:scale(1.04)}}
+.scarlet-hex-burst{position:absolute;border-radius:50%;pointer-events:none;z-index:7;border:4px solid #ff4d5e;box-shadow:0 0 18px #ff334d,0 0 42px rgba(255,43,63,.75),inset 0 0 26px rgba(255,53,68,.25);animation:scarletHexPulse .55s cubic-bezier(.2,.8,.2,1) forwards;}
+.scarlet-hex-burst::before,.scarlet-hex-burst::after{content:'';position:absolute;inset:10%;border:2px solid rgba(255,190,198,.7);transform:rotate(30deg);}
+.scarlet-hex-burst::after{transform:rotate(90deg);}
+@keyframes scarletHexPulse{from{transform:scale(.2);opacity:1}to{transform:scale(1.55);opacity:0}}
+.scarlet-disable-tag{position:absolute;font-family:'Anton',sans-serif;font-size:17px;color:#ff6a7c;text-shadow:0 0 10px #ff2745,1px 1px 0 #000;pointer-events:none;z-index:8;animation:scarletDisableTag 1.1s ease-out forwards;}
+@keyframes scarletDisableTag{from{transform:translateY(0) scale(.7);opacity:0}25%{transform:translateY(-10px) scale(1);opacity:1}100%{transform:translateY(-36px) scale(.92);opacity:0}}
+.bullseye-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.72))!important;animation:none!important;}
+.bullseye-projectile .be-item{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:100%;}
+.be-knife{background:linear-gradient(90deg,#181a20 0 20%,#dfe5ee 21% 76%,#fff 77% 88%,transparent 89%);clip-path:polygon(0 37%,21% 37%,21% 28%,34% 28%,34% 45%,100% 50%,34% 55%,34% 72%,21% 72%,21% 63%,0 63%);filter:drop-shadow(0 0 4px #f4f8ff66);}
+.be-spoon{width:72%!important;height:72%!important;left:14%!important;background:linear-gradient(90deg,#777d86,#eef2f5 42%,#8b929a);border-radius:48% 48% 44% 44% / 46% 46% 36% 36%;transform:translateY(-58%) rotate(35deg)!important;box-shadow:0 0 4px #fff6;}
+.be-spoon::after{content:'';position:absolute;left:43%;top:58%;width:11%;height:52%;background:linear-gradient(90deg,#737983,#eef1f3,#767c83);border-radius:8px;}
+.be-cheese{width:74%!important;height:66%!important;left:13%!important;background:linear-gradient(180deg,#e8b84a,#c27c29 70%,#8d4b1d);border:2px solid #f7d26a;border-radius:7px;transform:translateY(-50%) rotate(7deg)!important;box-shadow:inset 0 4px 0 rgba(255,238,160,.45),0 0 8px #ffbf4a66;}
+.be-cheese::before{content:'';position:absolute;left:7px;right:8px;top:8px;height:7px;background:#f2cf66;border-radius:8px;box-shadow:0 7px 0 #e4b94f,10px 13px 0 #f3d36d;opacity:.9;}
+.be-fork{background:linear-gradient(90deg,#717780,#eef2f4 48%,#8a9098);clip-path:polygon(0 40%,48% 40%,48% 12%,56% 12%,56% 40%,67% 40%,67% 12%,75% 12%,75% 40%,86% 40%,86% 12%,94% 12%,94% 40%,100% 40%,100% 62%,48% 62%,48% 90%,34% 90%,34% 62%,0 62%);}
+.be-brick{width:82%!important;height:58%!important;left:9%!important;background:linear-gradient(180deg,#c86d5c,#7b2f2b);border:2px solid #4b1a1b;border-radius:5px;transform:translateY(-50%) rotate(-10deg)!important;box-shadow:inset 0 4px 0 #e18c7b,0 0 8px #ff604c55;}
+.be-screwdriver{background:linear-gradient(90deg,#cf6f25 0 34%,#efefef 35% 88%,#7d848c 89%);clip-path:polygon(0 28%,35% 28%,35% 18%,48% 18%,48% 42%,100% 50%,48% 58%,48% 82%,35% 82%,35% 72%,0 72%);}
+.be-card{width:68%!important;height:84%!important;left:16%!important;background:linear-gradient(135deg,#fff,#d9dde5);border:2px solid #7e8792;border-radius:5px;transform:translateY(-50%) rotate(18deg)!important;box-shadow:0 0 7px #ffffff88;}
+.be-scissors{background:transparent;border:3px solid #9da6ae;border-radius:50%;clip-path:polygon(0 0,55% 35%,100% 0,100% 28%,62% 50%,100% 72%,100% 100%,55% 65%,0 100%,0 72%,38% 50%,0 28%);}
+.be-mug{width:58%!important;height:58%!important;left:21%!important;background:linear-gradient(180deg,#eef1f3,#9aa1aa);border:2px solid #646c75;border-radius:7px;transform:translateY(-50%) rotate(-12deg)!important;}
+.be-mug::after{content:'';position:absolute;right:-17px;top:20%;width:22px;height:36px;border:4px solid #9aa1aa;border-left:0;border-radius:0 16px 16px 0;}
+.bullseye-ricochet-armed .fighter-square{box-shadow:0 0 0 2px #ffda77,0 0 28px rgba(255,170,52,.65),0 14px 28px rgba(0,0,0,.3)!important;}
+.ricochet-mark{position:absolute;inset:-8px;border:2px dashed #ffd56a;border-radius:15px;box-shadow:0 0 18px #ffae45;pointer-events:none;z-index:3;opacity:0;}
+.bullseye-ricochet-armed .ricochet-mark{opacity:1;animation:ricochetMarkPulse .7s ease-in-out infinite alternate;}
+@keyframes ricochetMarkPulse{from{opacity:.5;transform:scale(.97) rotate(-1deg)}to{opacity:1;transform:scale(1.04) rotate(1deg)}}
+.ricochet-shard{position:absolute;width:22px;height:6px;border-radius:4px;background:linear-gradient(90deg,#fff7c2,#ffbe5e);box-shadow:0 0 8px #ffb548;pointer-events:none;z-index:7;animation:ricochetShard .42s cubic-bezier(.18,.82,.18,1) forwards;}
+@keyframes ricochetShard{from{opacity:1;transform:translate(0,0) rotate(0)}to{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot));}}
+
 .captain-photon-core{position:absolute;left:0;top:50%;width:72px;height:18px;transform:translateY(-50%);border-radius:14px;background:linear-gradient(90deg,#fff,#fff7b2 24%,#ffd447 58%,#ff8a2b 82%,transparent);box-shadow:0 0 10px #fff2a8,0 0 22px #ffd43b,0 0 38px rgba(255,156,45,.7);}
 .captain-photon-halo{position:absolute;left:-8px;top:50%;width:86px;height:32px;transform:translateY(-50%);border-radius:50%;border:2px solid rgba(255,244,164,.85);box-shadow:0 0 22px #ffd43b;animation:photonPulse .12s ease-in-out infinite alternate;}
 .captain-photon-tail{position:absolute;right:54px;top:50%;width:42px;height:8px;transform:translateY(-50%);border-radius:8px;background:linear-gradient(90deg,transparent,#ff9f2e88,#fff5b8);filter:blur(1px);}
@@ -3254,8 +3309,72 @@ const CHARACTERS = {
          desc:'Fires a controlled optic burst in front of Cyclops, blasting him backward and upward. Grants a brief damage-proof window during the recoil. Pure mobility — no damage.'}
     }
   },
+
+  vision: {
+    id:'vision', name:'Vision', img:'Vision.jpg', color:'#38e5ae', accentColor:'#b7ffe8', aiStyle:'vision',
+    maxHealth:14500,
+    description:'Synthetic Avenger powered by the Mind Stone. Channels a sustained energy beam, delivers a devastating Vibranium Punch, and can fly without limits.',
+    abilities:{
+      E:{key:'E', name:'Mind Stone Beam', type:'visionBeam', damage:100, tickMs:200, duration:2000, cooldown:6000,
+         beamLength:1080, beamWidth:42, knockback:0, color:'#ffd52f',
+         sound:'vision_beam', tickSound:'vision_beam_tick', endSound:'vision_beam_end', fx:'vision_beam',
+         desc:'Fires a continuous Mind Stone laser for 2 seconds. While an enemy remains in the beam, they take 100 damage every 0.2 seconds. Cooldown: 6 seconds.'},
+      Q:{key:'Q', name:'Vibranium Punch', type:'visionPunch', damage:1900, cooldown:15000, cooldownOnMiss:7000, knockback:21, range:128,
+         hitRange:154, hitVertical:132,
+         sound:'vision_punch', fx:'vision_punch', hitFx:'vision_punch_hit', hitSound:'vision_punch_hit',
+         desc:'A crushing close-range punch for 1,900 damage. Hitting the enemy starts a 15 second cooldown; a miss only costs 7 seconds.'},
+      R:{key:'R', name:'Flight', type:'toggle', damage:0, cooldown:0, sound:'vision_flight', fx:'vision_flight',
+         desc:'Unlimited flight. Toggle it on or off whenever you want — no cooldown and no duration.'}
+    }
+  },
+  scarletwitch: {
+    id:'scarletwitch', name:'Scarlet Witch', img:'ScarletWitch.jpg', color:'#e33b4f', accentColor:'#ff8b9c', aiStyle:'scarletwitch',
+    maxHealth:32500,
+    description:'A reality-warping powerhouse. Her chaos magic hits extremely hard and can freeze enemies or tear away one of their abilities for a long time.',
+    abilities:{
+      E:{key:'E', name:'Chaos Bolt', type:'projectile', damage:1100, cooldown:2200, knockback:10,
+         speed:18, w:34, h:18, color:'#ff475d', render:'scarlet-chaos', trail:'scarlet',
+         sound:'scarlet_bolt', fx:'scarlet_bolt', hitFx:'scarlet_hit', hitSound:'scarlet_hit',
+         desc:'Launches a fast chaos-energy bolt for 1,100 damage. Cooldown: 2.2 seconds.'},
+      Q:{key:'Q', name:'Hex Burst', type:'scarletHexBurst', damage:3000, cooldown:25000, knockback:24, radius:175, duration:4000,
+         sound:'scarlet_hex', fx:'scarlet_hex', hitFx:'scarlet_hex_hit', hitSound:'scarlet_hex_hit',
+         desc:'Unleashes 3,000 damage. On hit, the enemy glows red, becomes completely frozen, and cannot use abilities for 4 seconds. Cooldown: 25 seconds.'},
+      R:{key:'R', name:'What attack?', type:'scarletDisable', damage:0, cooldown:45000, duration:20000,
+         sound:'scarlet_disable', fx:'scarlet_disable',
+         desc:'Randomly disables one of the enemy’s E/Q/R abilities for 20 seconds. Cooldown: 45 seconds.'}
+    }
+  },
+  bullseye: {
+    id:'bullseye', name:'Bullseye', img:'Bullseye.jpg', color:'#2f6fe4', accentColor:'#aed4ff', aiStyle:'bullseye',
+    maxHealth:5200,
+    description:'Elite precision thrower. His passive aim makes thrown objects extremely difficult to evade without ever turning them into homing projectiles.',
+    abilities:{
+      E:{key:'E', name:'Knife Throw', type:'bullseyeProjectile', damage:250, cooldown:650, knockback:6,
+         speed:42, w:44, h:16, color:'#2f6fe4', render:'bullseye-item', itemType:'knife', precisionAim:true,
+         sound:'bullseye_knife', fx:'bullseye_throw', hitFx:'bullseye_hit', hitSound:'bullseye_hit',
+         desc:'Throws a knife at extreme speed for 250 damage. Bullseye’s passive gives the throw perfect physical aim without homing.'},
+      Q:{key:'Q', name:'100%', type:'bullseyeOdds', cooldown:5500, knockback:7, speed:38, w:46, h:22, precisionAim:true,
+         items:[
+           {type:'spoon',name:'Spoon',damage:180},
+           {type:'fork',name:'Fork',damage:320},
+           {type:'grilled-cheese',name:'Grilled Cheese',damage:420},
+           {type:'mug',name:'Mug',damage:260},
+           {type:'knife',name:'Heavy Knife',damage:500},
+           {type:'card',name:'Playing Card',damage:220},
+           {type:'screwdriver',name:'Screwdriver',damage:600},
+           {type:'scissors',name:'Scissors',damage:650},
+           {type:'brick',name:'Brick',damage:750}
+         ],
+         sound:'bullseye_random', fx:'bullseye_random', hitFx:'bullseye_hit', hitSound:'bullseye_hit',
+         desc:'Throws a random everyday object. Every item has its own damage value, from harmless-looking utensils up to a 750-damage brick.'},
+      R:{key:'R', name:'Ricochet', type:'bullseyeRicochet', damage:0, cooldown:20000,
+         sound:'bullseye_ricochet', fx:'bullseye_ricochet',
+         desc:'Arms the next thrown projectile to bank off a side wall, split into two projectiles, and strike the enemy for double the original damage.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['spiderman','venom','ironman','warmachine','captainamerica','falcon','blackwidow','hawkeye','thor','hulk','blackpanther','captainmarvel','wolverine','storm','cyclops','deadpool','daredevil','drstrange','loki','mrfantastic','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','venom','ironman','warmachine','vision','captainamerica','thor','hulk','blackpanther','captainmarvel','wolverine','deadpool','daredevil','bullseye','blackwidow','hawkeye','falcon','storm','cyclops','drstrange','scarletwitch','loki','mrfantastic','antman','wasp'];
+
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -4189,6 +4308,12 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     waspSizeUntil:0, waspSizeSpeedMultiplier:.62,
     flight:false,
     flightExpire:0,
+    activeVisionBeam:null,
+    hexFrozenUntil:0,
+    abilityLockUntil:0,
+    disabledAbilityKey:null,
+    disabledAbilityUntil:0,
+    ricochetArmed:false,
     hulkRoarUntil:0, hulkRoarLock:false,
     hulkSlideDir:0, hulkSlideEnd:0, hulkSlideTier:'', _slideFxT:0,
     invulnUntil:0,
@@ -4214,26 +4339,6 @@ const state = {
 };
 
 function now(){ return performance.now(); }
-// #region debug-point A:bot-debug-report
-const DEBUG_SERVER_URL = 'http://127.0.0.1:7777/event';
-const DEBUG_SESSION_ID = 'bot-platform-tweak';
-const DEBUG_RUN_ID = 'pre-fix';
-function debugReport(hypothesisId, location, msg, data){
-  fetch(DEBUG_SERVER_URL, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      sessionId: DEBUG_SESSION_ID,
-      runId: DEBUG_RUN_ID,
-      hypothesisId,
-      location,
-      msg,
-      data: data || {},
-      ts: Date.now()
-    })
-  }).catch(()=>{});
-}
-// #endregion
 
 function startBattle(playerCharId, botCharId, opts){
   // 1 V 1 Friend: Player 2 is a second human (same 'bot' owner id, no AI).
@@ -4362,7 +4467,7 @@ function buildArenaStatic(){
 }
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -4378,6 +4483,8 @@ function buildFighterDOM(f){
     ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
     ${f.def.id==='mrfantastic' ? '<div class="elasticity-ring" style="display:none;"></div>' : ''}
     <div class="shield-ring"></div>
+    <div class="hex-freeze-aura"></div>
+    <div class="ricochet-mark"></div>
     <div class="flight-glow"></div>
     <div class="thruster"></div>
   `;
@@ -4525,6 +4632,25 @@ function updateAbilityBarFor(bar, fighter, brand){
       keyEl.textContent = brand ? faceLabelFor(brand, ABILITY_POS[k]) : (gamepadState.connected ? abilityButtonLabel(k) : k);
       btn.classList.toggle('gp-mode', !!brand || gamepadState.connected);
     }
+    if(fighter.abilityLockUntil && t < fighter.abilityLockUntil){
+      overlay.style.display='flex';
+      overlay.textContent='FROZEN';
+      overlay.style.background='rgba(180,25,45,.68)';
+      return;
+    }
+    if(fighter.disabledAbilityKey === k && fighter.disabledAbilityUntil > t){
+      overlay.style.display='flex';
+      overlay.textContent='SEALED '+Math.max(0,(fighter.disabledAbilityUntil-t)/1000).toFixed(1)+'s';
+      overlay.style.background='rgba(166,24,43,.72)';
+      return;
+    }
+    if(a.type==='bullseyeRicochet' && fighter.ricochetArmed){
+      overlay.style.display='flex';
+      overlay.textContent='ARMED';
+      overlay.style.background='rgba(219,132,32,.62)';
+      btn.classList.add('flight-on');
+      return;
+    }
     if(a.type==='toggle'){
       btn.classList.toggle('flight-on', !!fighter.flight);
       btn.classList.add('ability-ready');
@@ -4584,6 +4710,8 @@ function updateAbilityBarFor(bar, fighter, brand){
    ========================================================================= */
 function cdReady(f, key, t){
   const a = f.def.abilities[key];
+  if(f.abilityLockUntil && t < f.abilityLockUntil) return false;
+  if(f.disabledAbilityKey === key && f.disabledAbilityUntil && t < f.disabledAbilityUntil) return false;
   if(a.type==='toggle') return true;
   if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
   if(a.type==='antmanTransform') return t >= f.cooldowns[key] && !((f.def.id==='antman' || f.def.id==='wasp') && f.antmanForm === a.form && f.antmanTransformUntil > t);
@@ -4660,6 +4788,16 @@ function tryUseAbility(caster, target, key){
   if(caster.dead) return false;
   if(state.countdown) return false; // nobody acts until FIGHT!
   const ability = caster.def.abilities[key];
+  if(caster.abilityLockUntil && t < caster.abilityLockUntil) return false;
+  if(caster.disabledAbilityKey === key && caster.disabledAbilityUntil && t < caster.disabledAbilityUntil){
+    if(caster.el){
+      const tag = document.createElement('div'); tag.className='scarlet-disable-tag'; tag.textContent='DISABLED';
+      tag.style.left=(caster.x+6)+'px'; tag.style.top=(caster.y-20)+'px'; arenaEl.appendChild(tag);
+      setTimeout(()=>{ if(tag.parentNode) tag.remove(); }, 900);
+    }
+    sfx('ability_denied');
+    return false;
+  }
   // While actively blocking or channeling Energy Redistribution, nothing
   // else can be used except the ability itself (to lower the block).
   if(caster.blocking && ability.type !== 'block') return false;
@@ -4673,9 +4811,10 @@ function tryUseAbility(caster, target, key){
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
   sfx(ability.sound || fallbackSound);
   spawnAbilityFx(caster, ability, target);
-  executeAbility(caster, target, ability, t);
+  const result = executeAbility(caster, target, ability, t) || null;
   if(ability.type !== 'toggle' && ability.type !== 'block'){
-    caster.cooldowns[key] = t + ability.cooldown;
+    const cd = (result && result.hit === false && ability.cooldownOnMiss) ? ability.cooldownOnMiss : ability.cooldown;
+    caster.cooldowns[key] = t + cd;
   }
   return true;
 }
@@ -4994,6 +5133,118 @@ function executeAbility(caster, target, ability, t){
       spawnFourthWallBubble(caster);
       break;
     }
+    case 'visionBeam': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      const beam = { caster, target:tg, start:t, end:t+(ability.duration||2000), nextTick:t+(ability.tickMs||200), tickMs:ability.tickMs||200,
+        length:ability.beamLength||1080, width:ability.beamWidth||42, damage:ability.damage||100, knockback:ability.knockback||0, el:null };
+      if(caster.activeVisionBeam && caster.activeVisionBeam.el) caster.activeVisionBeam.el.remove();
+      caster.activeVisionBeam = beam;
+      break;
+    }
+    case 'visionPunch': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead) return {hit:false};
+      const dx = (tg.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
+      const vertical = Math.abs(tg.y-caster.y);
+      const inRange = Math.abs(dx) <= (ability.hitRange||154) && vertical < (ability.hitVertical||132) && !attackBlockedByFloor(caster,tg);
+      const facingOk = caster.isBot ? ((dx>=0?1:-1)===caster.facing) : (Math.abs(dx)<24 || (dx>=0?1:-1)===caster.facing);
+      if(caster.el){ caster.el.classList.remove('vision-punching'); void caster.el.offsetWidth; caster.el.classList.add('vision-punching'); setTimeout(()=>{ if(caster.el) caster.el.classList.remove('vision-punching'); },340); }
+      if(inRange && facingOk){
+        damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound});
+        return {hit:true};
+      }
+      fxEl('fx-burst',`left:${caster.x+caster.facing*58}px;top:${caster.y+18}px;width:34px;height:34px;background:radial-gradient(circle,#ffffff44,transparent 70%);`,320);
+      return {hit:false};
+    }
+    case 'scarletHexBurst': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      spawnAoeFx(caster, ability.radius);
+      if(!tg || tg.dead) break;
+      const dx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
+      const dist = Math.hypot(dx,dy);
+      if(dist <= ability.radius && !attackBlockedByFloor(caster,tg)){
+        damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound});
+        if(!tg.dead){
+          tg.hexFrozenUntil = t + (ability.duration||4000);
+          tg.abilityLockUntil = t + (ability.duration||4000);
+          tg.vx = 0; tg.vy = 0; tg.flight = false; tg.flightExpire = 0; tg.grappleUntil = 0; tg.hitStun = 0;
+          if(tg.el) tg.el.classList.add('hex-frozen');
+          const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+          const ring=fxEl('scarlet-hex-burst',`left:${cx-74}px;top:${cy-74}px;width:148px;height:148px;`,560);
+          for(let i=0;i<18;i++) setTimeout(()=>{
+            if(state.mode==='battle' && tg.el && tg.hexFrozenUntil>now()) spawnSparks(cx+(Math.random()-.5)*54,cy+(Math.random()-.5)*54,2,i%2?'#ff8a98':'#ff334f',26,220);
+          },i*95);
+          shakeArena(9,300);
+        }
+      }
+      break;
+    }
+    case 'scarletDisable': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead) break;
+      const keys=['E','Q','R'];
+      const pick=keys[Math.floor(Math.random()*keys.length)];
+      tg.disabledAbilityKey=pick;
+      tg.disabledAbilityUntil=t+(ability.duration||20000);
+      const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+      fxEl('scarlet-hex-burst',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;`,420);
+      const tag=document.createElement('div'); tag.className='scarlet-disable-tag'; tag.textContent=pick+' DISABLED'; tag.style.left=(tg.x+2)+'px'; tag.style.top=(tg.y-20)+'px'; arenaEl.appendChild(tag);
+      setTimeout(()=>{if(tag.parentNode)tag.remove();},1100);
+      spawnSparks(cx,cy,14,'#ff4058',58,360);
+      break;
+    }
+    case 'bullseyeRicochet': {
+      caster.ricochetArmed = true;
+      if(caster.el){ caster.el.classList.add('bullseye-ricochet-armed'); }
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,12,'#ffd66e',72,320);
+      break;
+    }
+    case 'bullseyeProjectile':
+    case 'bullseyeOdds': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead) break;
+      let item = ability.itemType ? {type:ability.itemType,name:'Knife',damage:ability.damage} : null;
+      if(ability.items) item = ability.items[Math.floor(Math.random()*ability.items.length)];
+      const fromX=caster.x+FIGHTER_SIZE/2, fromY=caster.y+FIGHTER_SIZE/2;
+      const tx=tg.x+FIGHTER_SIZE/2, ty=tg.y+FIGHTER_SIZE/2;
+      const dx0=tx-fromX, dy0=ty-fromY;
+      const speed=ability.speed || 20;
+      const travelFrames=Math.max(5,Math.hypot(dx0,dy0)/speed);
+      // Bullseye leads the target once at release. The projectile never curves;
+      // the passive is represented by an excellent physical release rather than homing.
+      const leadFrames=Math.min(26,Math.max(5,travelFrames*.92));
+      const predictedX=tx + (tg.vx||0)*leadFrames;
+      const predictedY=ty + (tg.vy||0)*Math.min(18,leadFrames*.72);
+      const adx=predictedX-fromX, ady=predictedY-fromY, len=Math.max(1,Math.hypot(adx,ady));
+      const dir=adx>=0?1:-1;
+      const damage=item.damage;
+      const ric=caster.ricochetArmed;
+      caster.ricochetArmed=false;
+      if(ric && caster.el) caster.el.classList.remove('bullseye-ricochet-armed');
+      const p={
+        x:fromX-ability.w/2,y:fromY-ability.h/2,vx:(adx/len)*speed,vy:(ady/len)*speed,w:ability.w,h:ability.h,color:'#e9edf2',damage,knockback:ability.knockback||6,
+        owner:caster.id,life:5200,returns:false,phase:'out',originX:caster.x,casterRef:caster,targetRef:tg,returnDistance:0,
+        render:'bullseye-item',itemType:item.type,itemName:item.name,bulletType:'',trail:'bullseye',web:false,hitFx:ability.hitFx,hitSound:ability.hitSound,slow:0,pierce:false,shieldViz:false,hasHitTarget:false,trailTick:0,el:null,
+        precisionAim:true,guaranteedAim:true,precisionRadius:ric ? 50 : 46,ricochet:ric,ricochetBounced:false,ricochetWidth:ability.w,ricochetHeight:ability.h,guaranteeAt:Math.hypot(adx,ady),releaseX:fromX,releaseY:fromY
+      };
+      if(ric){
+        const wallX = caster.x < ARENA_W/2 ? BOUND_MAX_X-4 : BOUND_MIN_X+4;
+        p.x=fromX-ability.w/2; p.y=fromY-ability.h/2;
+        p.vx=(wallX-fromX>=0?1:-1)*speed;
+        p.vy=(predictedY-fromY)/Math.max(1,Math.abs(wallX-fromX)/speed);
+        p.ricochetWallX=wallX;
+        p.precisionAim=false;
+        // The armed throw must actually bank off the wall and split before it can
+        // land on the enemy. Without this, the leftover "guaranteed hit at release
+        // distance" check (meant for a normal straight throw) fires as soon as the
+        // projectile has travelled as far as the enemy *was*, short-circuiting the
+        // whole ability and hitting them directly instead of ricocheting.
+        p.guaranteedAim=false;
+      }
+      state.projectiles.push(p);
+      if(!ability.fx) spawnMuzzleFx(caster);
+      break;
+    }
     case 'projectile': {
       // A bot fires wherever it's actually facing (which briefly lags the
       // real target during the flank-reaction window — see updateBotFacing),
@@ -5011,7 +5262,7 @@ function executeAbility(caster, target, ability, t){
         bulletType: ability.bulletType || '',
         hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0,
         waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
-        pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false,
+        pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false, precisionAim:!!ability.precisionAim, ricochet:false, ricochetBounced:false,
         trailTick: 0,
         el:null
       });
@@ -5504,7 +5755,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   }
   opts = opts || {};
   // Daredevil passive: Evasion — a clean dodge, no damage, no knockback.
-  if(target.def.dodgeChance && Math.random() < target.def.dodgeChance){
+  if(!opts.guaranteedHit && target.def.dodgeChance && Math.random() < target.def.dodgeChance){
     spawnDodgeFx(target, dirSign);
     sfx('dodge');
     return;
@@ -5813,6 +6064,48 @@ function sfx(kind='ability'){
         aTone(ctx,t,'triangle',260,760,0.30,0.11);
         aNoise(ctx,t,0.32,0.13,'bandpass',2800,1500,1.2);
         return;
+
+      /* ---------- Vision ---------- */
+      case 'vision_beam':
+        aTone(ctx,t,'sine',220,680,0.42,0.12); aTone(ctx,t+0.05,'triangle',880,1320,0.44,0.07); aNoise(ctx,t,0.32,0.10,'bandpass',1100,3600,1.6); return;
+      case 'vision_beam_tick':
+        aTone(ctx,t,'triangle',1200,720,0.08,0.055); aNoise(ctx,t,0.07,0.08,'highpass',4200,1000,1.2); return;
+      case 'vision_beam_hit':
+        aTone(ctx,t,'sine',170,42,0.22,0.14); aNoise(ctx,t,0.12,0.14,'bandpass',2100,600,2.0); return;
+      case 'vision_beam_end':
+        aTone(ctx,t,'triangle',720,170,0.24,0.08); aNoise(ctx,t,0.18,0.08,'highpass',3200,1200,1.7); return;
+      case 'vision_punch':
+        aNoise(ctx,t,0.16,0.24,'bandpass',3200,640,2.2); aTone(ctx,t+0.04,'triangle',340,90,0.24,0.10); return;
+      case 'vision_punch_hit':
+        aTone(ctx,t,'sine',105,28,0.64,0.34); aTone(ctx,t,'square',74,34,0.28,0.11); aNoise(ctx,t,0.30,0.26,'lowpass',2600,180,0.75); return;
+      case 'vision_flight':
+        aTone(ctx,t,'triangle',170,760,0.36,0.12); aTone(ctx,t+0.06,'sine',820,1180,0.28,0.07); aNoise(ctx,t,0.28,0.11,'bandpass',900,2300,1.4); return;
+
+      /* ---------- Scarlet Witch ---------- */
+      case 'scarlet_bolt':
+        aTone(ctx,t,'sawtooth',500,1040,0.20,0.10); aTone(ctx,t+0.03,'triangle',980,360,0.16,0.06); aNoise(ctx,t,0.14,0.10,'highpass',3600,1000,1.8); return;
+      case 'scarlet_hit':
+        aTone(ctx,t,'sine',130,34,0.54,0.30); aNoise(ctx,t,0.24,0.26,'bandpass',1800,420,1.5); return;
+      case 'scarlet_hex':
+        aTone(ctx,t,'sine',90,42,0.72,0.34); aTone(ctx,t+0.03,'sawtooth',180,760,0.46,0.12); aNoise(ctx,t,0.48,0.20,'bandpass',1200,3000,1.0); return;
+      case 'scarlet_hex_hit':
+        aTone(ctx,t,'sine',62,24,0.82,0.38); aTone(ctx,t,'square',100,35,0.42,0.14); aNoise(ctx,t,0.50,0.30,'lowpass',3100,180,0.74); return;
+      case 'scarlet_disable':
+        aTone(ctx,t,'triangle',260,1480,0.34,0.10); aTone(ctx,t+0.06,'square',1240,280,0.14,0.07); aNoise(ctx,t,0.34,0.12,'bandpass',900,3900,1.3); return;
+      case 'ability_denied':
+        aTone(ctx,t,'square',220,110,0.10,0.07); aTone(ctx,t+0.05,'square',150,85,0.10,0.06); return;
+
+      /* ---------- Bullseye ---------- */
+      case 'bullseye_knife':
+        aNoise(ctx,t,0.09,0.22,'highpass',5200,1500,2.2); aTone(ctx,t,'triangle',980,520,0.11,0.06); return;
+      case 'bullseye_random':
+        aTone(ctx,t,'triangle',420,980,0.18,0.08); aNoise(ctx,t,0.16,0.10,'bandpass',2400,800,2.4); return;
+      case 'bullseye_hit':
+        aTone(ctx,t,'square',210,72,0.16,0.10); aNoise(ctx,t,0.14,0.18,'bandpass',2800,620,2.2); return;
+      case 'bullseye_ricochet':
+        aTone(ctx,t,'sawtooth',380,1160,0.30,0.10); aTone(ctx,t+0.04,'triangle',1180,430,0.26,0.07); return;
+      case 'bullseye_ricochet_hit':
+        aTone(ctx,t,'sine',150,34,0.48,0.23); aNoise(ctx,t,0.28,0.22,'highpass',4200,1200,1.8); return;
 
       /* ---------- Loki ---------- */
       case 'loki_dagger':
@@ -6824,6 +7117,57 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Vision ---------------- */
+    case 'vision_beam': {
+      const hx=cx+dir*28, hy=cy;
+      fxEl('fx-flash',`left:${hx-34}px;top:${hy-34}px;width:68px;height:68px;background:radial-gradient(circle,#ffffff,#7dffcf 30%,transparent 74%);`,260);
+      fxEl('fx-ring',`left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;border-color:#8affe0;box-shadow:0 0 30px #37e9ab;`,480);
+      spawnSparks(hx,hy,12,'#dffff5',44,320);
+      break;
+    }
+    case 'vision_punch': {
+      const hx=cx+dir*38,hy=cy;
+      fxEl('mj-arc-wrap',`left:${cx-76}px;top:${cy-76}px;width:152px;height:152px;transform:scaleX(${dir});`,300,'<div class="mj-arc" style="border-right-color:#8fffe1;border-top-color:#d6fff3;border-width:10px;"></div>');
+      fxEl('vision-punch-wave',`left:${hx}px;top:${hy}px;width:74px;height:74px;`,420);
+      fxEl('fx-flash',`left:${hx-34}px;top:${hy-34}px;width:68px;height:68px;background:radial-gradient(circle,#fff,#8cffdc 26%,transparent 74%);`,240);
+      spawnSparks(hx,hy,15,'#c9ffef',56,360); shakeArena(8,250);
+      break;
+    }
+    case 'vision_flight': {
+      fxEl('fx-ring',`left:${cx-62}px;top:${caster.y+FIGHTER_SIZE-28}px;width:124px;height:52px;border-color:#8dffe0;box-shadow:0 0 30px #39efb2,0 0 52px rgba(60,255,182,.38);`,520);
+      fxEl('fx-flash',`left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;background:radial-gradient(circle,#fff,#71ffd0 26%,transparent 72%);`,300);
+      spawnSparks(cx,caster.y+FIGHTER_SIZE,18,'#c9fff0',82,440); break;
+    }
+
+    /* ---------------- Scarlet Witch ---------------- */
+    case 'scarlet_bolt': {
+      const hx=cx+dir*28,hy=cy;
+      fxEl('fx-flash',`left:${hx-28}px;top:${hy-28}px;width:56px;height:56px;background:radial-gradient(circle,#fff,#ff6b7e 30%,transparent 72%);`,240);
+      spawnSparks(hx,hy,10,'#ffd3da',40,300); break;
+    }
+    case 'scarlet_hex': {
+      fxEl('scarlet-hex-burst',`left:${cx-80}px;top:${cy-80}px;width:160px;height:160px;`,560);
+      fxEl('fx-flash',`left:${cx-88}px;top:${cy-88}px;width:176px;height:176px;background:radial-gradient(circle,#fff,#ff566c 24%,transparent 72%);`,300);
+      spawnSparks(cx,cy,20,'#ff9aa8',92,420); shakeArena(12,420); break;
+    }
+    case 'scarlet_disable': {
+      fxEl('fx-ring',`left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;border-color:#ff4c63;box-shadow:0 0 26px #ff334d, inset 0 0 24px rgba(255,54,74,.2);`,620);
+      spawnSparks(cx,cy,16,'#ff6172',72,360); break;
+    }
+
+    /* ---------------- Bullseye ---------------- */
+    case 'bullseye_throw': {
+      fxEl('fx-flash',`left:${cx+dir*16-18}px;top:${cy-18}px;width:36px;height:36px;background:radial-gradient(circle,#fff,#dce5ef 38%,transparent 74%);`,180);
+      spawnSparks(cx+dir*20,cy,8,'#eef3f7',36,240); break;
+    }
+    case 'bullseye_random': {
+      fxEl('fx-ring',`left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;border-color:#ffd66e;box-shadow:0 0 22px #ffb934;`,420);
+      spawnSparks(cx,cy,12,'#fff1bd',54,300); break;
+    }
+    case 'bullseye_ricochet': {
+      fxEl('fx-ring',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#ffd76e;border-width:3px;box-shadow:0 0 28px #ffb332;`,500);
+      spawnSparks(cx,cy,14,'#ffe5a0',82,340); break;
+    }
     /* ---------------- Wasp ---------------- */
     case 'wasp_size_disc': {
       const hx=cx+dir*28, hy=cy;
@@ -7732,6 +8076,16 @@ function collidesPlatform(f, plat){
 }
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   const tNow = now();
+  if(f.hexFrozenUntil && tNow < f.hexFrozenUntil){
+    // Scarlet Witch's Hex Burst is a real freeze: no walking, jumping, flight,
+    // grapple travel, gravity drift, or knockback movement can move the victim.
+    f.vx = 0; f.vy = 0; f.flight = false; f.flightExpire = 0; f.grappleUntil = 0;
+    return;
+  } else if(f.hexFrozenUntil && tNow >= f.hexFrozenUntil){
+    f.hexFrozenUntil = 0;
+    f.abilityLockUntil = 0;
+    if(f.el) f.el.classList.remove('hex-frozen');
+  }
   if(f.hulkSlideDir){
     // Being blasted toward the nearest side wall by Hulk Roar — no steering, no jumping.
     moveDir = 0;
@@ -7835,17 +8189,6 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
         f.vy = 0;
         f.onGround = true;
         f.standingPlatform = plat;
-        // #region debug-point D:bot-landed
-        if(f.isBot){
-          debugReport('D', 'Game:updatePhysics:landing', '[DEBUG] Bot landed on platform', {
-            x: Math.round(f.x),
-            y: Math.round(f.y),
-            platformY: plat.y,
-            platformX: plat.x,
-            platformW: plat.w
-          });
-        }
-        // #endregion
       }
     }
   }
@@ -7962,15 +8305,86 @@ function updateFlightGlow(f){
     f.flight = false;
     f.flightExpire = 0;
   }
+  const flightVisual = f.flight && ['ironman','warmachine','wasp','falcon','vision'].includes(f.def.id);
   if(f.el) f.el.classList.toggle('flight-active', !!f.flight);
-  if(f.flightEl) f.flightEl.style.display = (f.flight && f.def.id !== 'wasp' && f.def.id !== 'falcon') ? 'block' : 'none';
+  if(f.flightEl) f.flightEl.style.display = (flightVisual && !['wasp','falcon'].includes(f.def.id)) ? 'block' : 'none';
   if(f.waspWingsEl) f.waspWingsEl.style.display = (f.flight && f.def.id === 'wasp') ? 'block' : 'none';
-  if(f.thrusterEl) f.thrusterEl.style.display = (f.flight && f.def.id !== 'wasp' && f.def.id !== 'falcon') ? 'block' : 'none';
+  if(f.thrusterEl) f.thrusterEl.style.display = (flightVisual && !['wasp','falcon'].includes(f.def.id)) ? 'block' : 'none';
 }
 
 /* =========================================================================
    SECTION: PROJECTILES
    ========================================================================= */
+/* =========================================================================
+   SECTION: VISION BEAM (Mind Stone Beam)
+   ========================================================================= */
+function updateVisionBeams(dtF){
+  const fighters=[state.player,state.bot];
+  const t=now();
+  fighters.forEach(f=>{
+    if(!f || !f.activeVisionBeam) return;
+    const b=f.activeVisionBeam;
+    const expired = t>=b.end;
+    if(f.dead || state.mode!=='battle'){
+      if(b.el) b.el.remove();
+      sfx('vision_beam_end');
+      f.activeVisionBeam=null;
+      return;
+    }
+
+    const cx=f.x+FIGHTER_SIZE/2, cy=f.y+FIGHTER_SIZE/2, dir=f.facing<0?-1:1;
+    if(!b.el){
+      b.el=document.createElement('div');
+      b.el.className='vision-mind-beam';
+      arenaEl.appendChild(b.el);
+      sfx('vision_beam');
+    }
+    b.el.classList.toggle('reverse', dir<0);
+    const y=cy-b.width/2;
+    b.el.style.left=(dir>0 ? cx : cx-b.length)+'px';
+    b.el.style.top=y+'px';
+    b.el.style.width=b.length+'px';
+    b.el.style.height=b.width+'px';
+
+    if((!b.nextTick || t>=b.nextTick) && !state.countdown){
+      // Exactly one damage tick per 0.2s, with a maximum of ten ticks during
+      // the full 2 second channel. Catch-up is capped so tab/screen stalls
+      // cannot dump a large burst of damage into a target in one frame.
+      if(!b.nextTick) b.nextTick=t+b.tickMs;
+      let guard=0;
+      while(b.nextTick<=Math.min(t,b.end) && guard++<3){
+        const tg=b.target;
+        if(tg && !tg.dead){
+          // Use the target's actual fighter rectangle rather than only its
+          // centre point. This makes the beam reliably hit on the visible
+          // character body and avoids false misses at the beam edge.
+          const left=tg.x, right=tg.x+FIGHTER_SIZE;
+          const top=tg.y, bottom=tg.y+FIGHTER_SIZE;
+          const beamLeft=dir>0 ? cx : cx-b.length;
+          const beamRight=dir>0 ? cx+b.length : cx;
+          const beamTop=cy-b.width/2;
+          const beamBottom=cy+b.width/2;
+          const overlapsX=right>=beamLeft && left<=beamRight;
+          const overlapsY=bottom>=beamTop && top<=beamBottom;
+          if(overlapsX && overlapsY){
+            applyDamage(tg,b.damage,b.knockback,dir,{hitFx:'vision_beam_hit',sound:'vision_beam_hit'});
+            const nx=Math.max(BOUND_MIN_X,Math.min(BOUND_MAX_X,tg.x+FIGHTER_SIZE/2))+(Math.random()-.5)*8;
+            const ny=tg.y+FIGHTER_SIZE/2+(Math.random()-.5)*16;
+            fxEl('vision-beam-node',`left:${nx-5}px;top:${ny-5}px;width:10px;height:10px;`,190);
+            sfx('vision_beam_tick');
+          }
+        }
+        b.nextTick += b.tickMs;
+      }
+    }
+    if(expired){
+      if(b.el) b.el.remove();
+      sfx('vision_beam_end');
+      f.activeVisionBeam=null;
+    }
+  });
+}
+
 function updateProjectiles(dtF){
   for(let i=state.projectiles.length-1; i>=0; i--){
     const p = state.projectiles[i];
@@ -8005,6 +8419,39 @@ function updateProjectiles(dtF){
       p.life -= dtF*16.67;
       p.x += p.vx*dtF;
       p.y += p.vy*dtF;
+    }
+
+    // Bullseye Ricochet deliberately banks off a side wall before splitting.
+    if(p.ricochet && !p.ricochetBounced){
+      const hitSide = (p.vx < 0 && p.x <= BOUND_MIN_X) || (p.vx > 0 && p.x + p.w >= BOUND_MAX_X);
+      const hitChosen = Number.isFinite(p.ricochetWallX) && Math.abs((p.x + p.w/2) - p.ricochetWallX) <= Math.max(10,Math.abs(p.vx)*dtF*1.5);
+      if(hitSide || hitChosen){
+        p.x = p.vx>0 ? BOUND_MAX_X-p.w : BOUND_MIN_X;
+        p.ricochetBounced=true;
+        const tg=p.targetRef || target;
+        if(tg && !tg.dead){
+          const sx=p.x+p.w/2, sy=p.y+p.h/2, tx=tg.x+FIGHTER_SIZE/2, ty=tg.y+FIGHTER_SIZE/2;
+          const adx=tx-sx, ady=ty-sy, base=Math.atan2(ady,adx), spread=0.13, speed=Math.max(18,Math.hypot(p.vx,p.vy));
+          for(let j=-1;j<=1;j+=2){
+            const ang=base+j*spread;
+            state.projectiles.push({
+              x:sx-p.w/2,y:sy-p.h/2,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,w:p.w,h:p.h,color:p.color,
+              damage:p.damage,knockback:p.knockback,owner:p.owner,life:3400,returns:false,phase:'out',originX:sx,casterRef:p.casterRef,targetRef:tg,returnDistance:0,
+              render:p.render,itemType:p.itemType,itemName:p.itemName,trail:'bullseye',web:false,hitFx:p.hitFx,hitSound:p.hitSound,slow:0,pierce:false,shieldViz:false,hasHitTarget:false,trailTick:0,el:null,precisionAim:true,guaranteedAim:true,precisionRadius:50,ricochet:false,ricochetBounced:true,guaranteeAt:Math.hypot(tx-sx,ty-sy),releaseX:sx,releaseY:sy
+            });
+          }
+          for(let j=0;j<12;j++){
+            const a=Math.random()*Math.PI*2; const frag= document.createElement('div'); frag.className='ricochet-shard'; frag.style.left=sx+'px'; frag.style.top=sy+'px'; frag.style.setProperty('--dx',(Math.cos(a)*(28+Math.random()*58))+'px'); frag.style.setProperty('--dy',(Math.sin(a)*(18+Math.random()*38))+'px'); frag.style.setProperty('--rot',(Math.random()*260-130)+'deg'); arenaEl.appendChild(frag); setTimeout(()=>{if(frag.parentNode)frag.remove();},480);
+          }
+          fxEl('fx-ring',`left:${sx-34}px;top:${sy-34}px;width:68px;height:68px;border-color:#ffd66e;box-shadow:0 0 28px #ffb22e;`,360);
+          spawnSparks(sx,sy,16,'#ffe29a',68,320);
+          sfx('bullseye_ricochet_hit');
+          shakeArena(4,180);
+        }
+        if(p.el) p.el.remove();
+        state.projectiles.splice(i,1);
+        continue;
+      }
     }
 
     // Wall collision
@@ -8083,6 +8530,39 @@ function updateProjectiles(dtF){
           continue;
         }
       }
+      // Bullseye passive: 100% physical accuracy. The projectile still travels in a
+      // straight, visibly ballistic line at very high speed; there is no steering/homing.
+      // We intersect its swept segment against the target's actual body, with a forgiving
+      // radius only for extremely fast motion between frames.
+      if(p.precisionAim && p.guaranteedAim && !p.hasHitTarget){
+        const tcx=target.x+FIGHTER_SIZE/2, tcy=target.y+FIGHTER_SIZE/2;
+        const prevX=p.x-p.vx*dtF+p.w/2, prevY=p.y-p.vy*dtF+p.h/2;
+        const pcx=p.x+p.w/2, pcy=p.y+p.h/2;
+        const sx=pcx-prevX, sy=pcy-prevY;
+        const segLenSq=sx*sx+sy*sy;
+        const u=segLenSq ? Math.max(0,Math.min(1,((tcx-prevX)*sx+(tcy-prevY)*sy)/segLenSq)) : 0;
+        const nearX=prevX+sx*u, nearY=prevY+sy*u;
+        const precisionRadius=p.precisionRadius || 46;
+        const near=Math.hypot(nearX-tcx,nearY-tcy)<=precisionRadius;
+        if(near){
+          applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true});
+          p.hasHitTarget=true;
+          if(p.el){p.el.remove();}
+          state.projectiles.splice(i,1);
+          continue;
+        }
+      }
+      if(p.guaranteedAim && !p.hasHitTarget && Number.isFinite(p.guaranteeAt)){
+        const pcx=p.x+p.w/2, pcy=p.y+p.h/2;
+        const travelled=Math.hypot(pcx-p.releaseX,pcy-p.releaseY);
+        if(travelled >= Math.max(1,p.guaranteeAt-4)){
+          applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true});
+          p.hasHitTarget=true;
+          if(p.el){p.el.remove();}
+          state.projectiles.splice(i,1);
+          continue;
+        }
+      }
     }
 
     // Captain America's shield also hits on the way BACK: whoever is in its path as it
@@ -8114,7 +8594,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -8216,6 +8696,15 @@ function buildProjectileVisual(p){
     p.el.style.background='transparent';
     p.el.style.boxShadow='none';
     p.el.innerHTML='<div class="redwing-drone"></div>';
+  } else if(p.render === 'scarlet-chaos'){
+    p.el.classList.add('scarlet-chaos-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+  } else if(p.render === 'bullseye-item'){
+    p.el.classList.add('bullseye-projectile');
+    const cls = {'knife':'be-knife','spoon':'be-spoon','grilled-cheese':'be-cheese','fork':'be-fork','brick':'be-brick','screwdriver':'be-screwdriver','card':'be-card','scissors':'be-scissors','mug':'be-mug'}[p.itemType] || 'be-knife';
+    p.el.innerHTML = `<div class="be-item ${cls}"></div>`;
+    p.el.title = p.itemName || '';
   } else if(p.render === 'deadpool-leg'){ 
     p.el.classList.add('deadpool-leg');
     p.el.innerHTML=`<svg viewBox="0 0 80 50"><defs><linearGradient id="dpLegSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b31928"/><stop offset=".42" stop-color="#ed3f4d"/><stop offset=".7" stop-color="#82111d"/><stop offset="1" stop-color="#2a1116"/></linearGradient><linearGradient id="dpBoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#252a31"/><stop offset=".6" stop-color="#0f1116"/><stop offset="1" stop-color="#030405"/></linearGradient></defs><path d="M9 18 Q15 9 25 8 L44 15 Q53 18 59 26 L52 33 L38 31 L29 39 L14 36 L6 29 Z" fill="url(#dpLegSuit)" stroke="#11151b" stroke-width="2.2"/><path d="M14 14 Q23 11 31 14 L38 29 L27 36 L17 34 L10 28 Z" fill="#15181d" opacity=".8"/><path d="M35 30 L48 19" stroke="#e33642" stroke-width="3" stroke-linecap="round"/><path d="M53 24 L68 29 Q74 31 76 37 L69 41 L51 35 Z" fill="url(#dpBoot)" stroke="#07090c" stroke-width="2.2"/><path d="M51 34 L68 39" stroke="#d3d7de" stroke-width="1.4" opacity=".55"/><circle cx="27" cy="13" r="3" fill="#1a0b0e"/><path d="M20 20 L31 29" stroke="#ff7a84" stroke-width="1.2" opacity=".5"/></svg>`;
@@ -8414,6 +8903,9 @@ const AI_STYLE_RANGE = {
   storm:       420,
   warmachine:  320,
   cyclops:     560,
+  vision:      500,
+  scarletwitch:520,
+  bullseye:    620,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -8482,22 +8974,6 @@ function updateBotAI(dtF){
   const sameLevel = !botPlat || !playerPlat || botPlat === playerPlat || Math.abs(vertical) < 60;
   let path = null;
   let decision = sameLevel ? 'same-level' : 'needs-route';
-
-  // #region debug-point A:bot-ai-snapshot
-  debugReport('A', 'Game:updateBotAI:entry', '[DEBUG] Bot AI snapshot', {
-    botX: Math.round(bot.x),
-    botY: Math.round(bot.y),
-    playerX: Math.round(player.x),
-    playerY: Math.round(player.y),
-    vertical: Math.round(vertical),
-    botPlatIdx,
-    playerPlatIdx,
-    sameLevel,
-    onGround: !!bot.onGround,
-    aiMoveDir: bot.aiMoveDir,
-    style
-  });
-  // #endregion
 
   if(bot.flight){
     // Flight bypasses the platform graph entirely — a flying fighter isn't
@@ -8639,33 +9115,9 @@ function updateBotAI(dtF){
   if(bot.x < 70) moveDir = 1;
   if(bot.x > ARENA_W - FIGHTER_SIZE - 70) moveDir = -1;
 
-  // #region debug-point B:bot-ai-route
-  debugReport('B', 'Game:updateBotAI:decision', '[DEBUG] Bot route decision', {
-    decision,
-    botPlatIdx,
-    playerPlatIdx,
-    path,
-    usingPlatformRoute,
-    vertical: Math.round(vertical),
-    adist: Math.round(adist)
-  });
-  // #endregion
-
   bot.aiMoveDir = moveDir;
   bot.aiJumpPulse = jumpPulse;
   bot.aiDropPulse = dropPulse;
-
-  // #region debug-point C:bot-ai-output
-  debugReport('C', 'Game:updateBotAI:output', '[DEBUG] Bot AI output', {
-    moveDir,
-    jumpPulse,
-    dropPulse,
-    onGround: !!bot.onGround,
-    facing: bot.facing,
-    x: Math.round(bot.x),
-    y: Math.round(bot.y)
-  });
-  // #endregion
 
   /* ---------------- shoot down an incoming missile ---------------- */
   if(missile && cdReady(bot,'E',t)){
@@ -8862,6 +9314,21 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist > 150 && adist < 900){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist <= eAb.range + 28 && Math.abs(vertical)<135){ tryUseAbility(bot,player,'E'); return; }
     if(bot.flight && cdReady(bot,'Q',t) && adist < 950){ tryUseAbility(bot,player,'Q'); return; }
+  } else if(style === 'vision'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
+    if(qAb && cdReady(bot,'Q',t) && adist <= (qAb.range||140)+24 && Math.abs(vertical)<140){ tryUseAbility(bot,player,'Q'); return; }
+    if(!bot.flight && cdReady(bot,'R',t) && (Math.abs(vertical)>95 || adist>520) && Math.random()<0.55){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'scarletwitch'){
+    const qAb=bot.def.abilities.Q;
+    if(cdReady(bot,'Q',t) && adist <= (qAb.radius||175)+30){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'R',t) && Math.random()<0.18){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 1100){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'bullseye'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && !bot.ricochetArmed && adist>260 && Math.random()<0.14){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist>170 && adist<1000){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist<1100){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'venom'){
     // Venom: hook the opponent with the tendril grab from just outside lash range to
     // haul them in for the slam, lash whenever they're already close, and regenerate
@@ -8919,6 +9386,8 @@ function loseLife(target, side){
   target.health = target.def.maxHealth;
   target.invulnUntil = now() + RESPAWN_INVULN_MS;
   target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
+  if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
+  target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
   target.slowUntil = 0;
   if(target.webWrapEl){ target.webWrapEl.remove(); target.webWrapEl = null; }
   target.hulkRoarUntil = 0; target.hulkRoarLock = false;
@@ -9131,7 +9600,9 @@ function renderFighter(f){
   f.el.classList.toggle('facing-left', f.facing < 0);
   f.el.classList.toggle('moving', Math.abs(f.vx) > 0.7 && f.hitStun <= 0);
   f.el.classList.toggle('airborne', !f.onGround && !f.flight);
-  f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil));
+  f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil) || (f.hexFrozenUntil && now() < f.hexFrozenUntil));
+  f.el.classList.toggle('hex-frozen', !!f.hexFrozenUntil && now() < f.hexFrozenUntil);
+  f.el.classList.toggle('bullseye-ricochet-armed', !!f.ricochetArmed);
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
   updateAntmanForm(f);
   updateWaspSizeEffect(f);
@@ -10313,6 +10784,7 @@ function gameLoop(ts){
     updateIllusions(dtF);
     updateBPCharge(p); updateBPCharge(b);
     updateVenomTendril(p); updateVenomTendril(b);
+    updateVisionBeams(dtF);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
