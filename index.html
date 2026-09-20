@@ -2000,6 +2000,150 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   .menu-stage{padding-top:76px;}
   .menu-title{font-size:clamp(38px,13vw,84px);}
 }
+
+/* =========================================================================
+   BATTLE MODE · TOKENS · DIFFICULTY PICKER · UNLOCK CHARACTER · HULK ROAR FX
+   ========================================================================= */
+#screen-practice.active, #screen-unlock.active{
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; min-height:0; z-index:2;
+  display:block; overflow-x:hidden; overflow-y:auto; padding:0;
+  background:
+    radial-gradient(1100px 700px at 18% 8%, rgba(76,139,245,.14), transparent 60%),
+    radial-gradient(1100px 700px at 85% 92%, rgba(242,165,65,.13), transparent 60%),
+    radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
+}
+#screen-practice .fs-bg, #screen-unlock .fs-bg{position:fixed;}
+
+/* ---------- token chip (main menu top bar) ---------- */
+.menu-topbar{position:absolute; top:clamp(12px,3vh,28px); left:clamp(22px,6vw,110px); z-index:40; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+[dir="rtl"] .menu-topbar{left:auto; right:clamp(22px,6vw,110px);}
+.menu-topbar .menu-save-slots-top{position:static !important;}
+.token-chip{
+  display:inline-flex; align-items:center; gap:7px; padding:9px 14px; border-radius:999px;
+  font-size:12px; font-weight:800; color:#ffe1a0;
+  background:rgba(15,16,22,.6); border:1px solid rgba(242,165,65,.55);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.token-chip .token-coin{font-size:14px; line-height:1;}
+.token-chip [data-token-count]{font-family:'Anton',sans-serif; font-size:15px; letter-spacing:.04em; color:#fff;}
+
+/* ---------- mode select: three cards (Practice | Battle | 1 V 1 Friend) ---------- */
+.mode-battle{--accent:#e5484d;
+  background:
+    radial-gradient(rgba(255,255,255,.09) 1.2px,transparent 1.5px) 0 0/16px 16px,
+    linear-gradient(160deg,rgba(229,72,77,.55),rgba(229,72,77,.10) 62%),#12131d;}
+.mode-lives{font-size:clamp(16px,2.6vh,22px); color:#ff6b70; letter-spacing:2px; text-shadow:0 0 10px rgba(255,91,98,.6); line-height:1;}
+.mode-chip-tokens{padding:7px 16px; gap:8px;}
+.mode-chip-tokens [data-token-count]{font-family:'Anton',sans-serif; letter-spacing:.04em; color:#fff;}
+.split-card.mid .mode-arrow{right:calc(var(--slant) + 22px); transform:translateX(-12px);}
+@media (min-width:761px) and (min-aspect-ratio:1/1){
+  .split-stage.three .split-card{width:calc(33.3333% + var(--slant)/2 - 4px);}
+  .split-stage.three .split-card.mid{
+    left:calc(33.3333% - var(--slant)/2 + 4px); width:calc(33.3333% + var(--slant) - 8px);
+    clip-path:polygon(var(--slant) 0,100% 0,calc(100% - var(--slant)) 100%,0 100%);
+    padding-left:calc(var(--slant) * .9 + 24px); padding-right:calc(var(--slant) * .9 + 20px);
+  }
+  .split-stage.three .split-card.left{padding-left:clamp(20px,3.4vw,72px);}
+  .split-stage.three .split-card.right{padding-right:clamp(20px,3.4vw,72px);}
+  .split-stage.three .mode-name{font-size:clamp(26px,min(4.6vw,9.5vh),82px);}
+  .split-stage.three .mode-desc{font-size:clamp(13px,1.9vh,17px);}
+}
+@media (max-width:760px), (max-aspect-ratio:1/1){
+  /* the map bar + "Choose a mode" heading own the top ~125px; the three cards split what is left */
+  .split-stage.three .split-card.left{top:125px; bottom:calc((100% - 125px) * .6667); padding-top:12px !important;}
+  .split-stage.three .split-card.mid{top:calc(125px + (100% - 125px) * .3333); bottom:calc((100% - 125px) * .3333);}
+  .split-stage.three .split-card.right{top:calc(125px + (100% - 125px) * .6667); bottom:0;}
+  .split-stage.three .split-card{gap:7px;}
+  .split-stage.three .mode-name{font-size:clamp(26px,8vw,48px);}
+  .split-stage.three .mode-desc{font-size:13px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+}
+
+/* ---------- practice difficulty picker ---------- */
+.diff-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(12px,1.8vw,24px); max-width:1300px; margin-top:clamp(4px,1.5vh,16px);}
+@media (max-width:1000px){ .diff-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@media (max-width:560px){ .diff-grid{grid-template-columns:1fr;} }
+.diff-card{
+  --dc:#4c8bf5;
+  position:relative; display:flex; flex-direction:column; justify-content:flex-end; gap:8px; text-align:start;
+  min-height:clamp(150px,32vh,320px); padding:clamp(16px,2.6vh,30px); margin:0; border:0; border-top:6px solid var(--dc); border-radius:0;
+  font:inherit; color:var(--text); cursor:pointer; overflow:hidden;
+  background:
+    radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px,
+    linear-gradient(160deg,color-mix(in srgb,var(--dc) 46%,#151728),color-mix(in srgb,var(--dc) 8%,#0f1016) 72%);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 24px),calc(100% - 24px) 100%,0 100%);
+  transition:transform .16s ease, filter .16s ease;
+}
+.diff-card::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:8px; background:var(--dc);
+  transform:scaleX(0); transform-origin:left; transition:transform .26s cubic-bezier(.2,.8,.2,1);
+}
+.diff-name{font-family:'Anton',sans-serif; font-size:clamp(32px,5.4vh,58px); line-height:1; text-transform:uppercase; letter-spacing:.03em; text-shadow:0 3px 0 rgba(0,0,0,.4);}
+.diff-rule{align-self:flex-start; padding:4px 12px; border-radius:999px; font-size:clamp(12px,1.8vh,14px); font-weight:800; background:rgba(0,0,0,.4); border:1px solid color-mix(in srgb,var(--dc) 70%,#fff); }
+.diff-desc{color:#d9dcea; font-size:clamp(13px,1.9vh,16px); line-height:1.45; font-weight:600;}
+.diff-card.gp-focused, .diff-card:focus-visible{outline:none !important; transform:translateY(-6px); filter:brightness(1.2);}
+.diff-card.gp-focused::after, .diff-card:focus-visible::after{transform:scaleX(1);}
+@media (hover:hover) and (pointer:fine){
+  .diff-card:hover{transform:translateY(-6px); filter:brightness(1.2);}
+  .diff-card:hover::after{transform:scaleX(1);}
+}
+.diff-card:active{transform:scale(.98);}
+
+/* ---------- Unlock Character ---------- */
+.unlock-layout{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:clamp(16px,3vw,44px); align-items:start; max-width:1250px;}
+@media (max-width:860px){ .unlock-layout{grid-template-columns:1fr;} }
+.unlock-card{
+  display:flex; flex-direction:column; gap:clamp(10px,1.8vh,18px);
+  padding:clamp(20px,3.2vh,36px) clamp(20px,3vw,40px); border-top:6px solid var(--amber);
+  background:
+    radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px,
+    linear-gradient(160deg,rgba(242,165,65,.4),rgba(242,165,65,.06) 68%),#12131d;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 26px),calc(100% - 26px) 100%,0 100%);
+}
+.unlock-label{font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#e8d7b0;}
+.unlock-balance{display:flex; align-items:center; gap:14px; font-family:'Anton',sans-serif; font-size:clamp(46px,9vh,96px); line-height:1; color:#fff; text-shadow:0 4px 0 rgba(0,0,0,.4);}
+.unlock-balance .token-coin{font-size:.8em;}
+.unlock-progress{height:10px; border-radius:6px; background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.14); overflow:hidden;}
+.unlock-progress-fill{height:100%; width:0; background:linear-gradient(90deg,var(--amber),#ffe1a0); transition:width .3s ease;}
+.unlock-progress-text{font-size:13px; font-weight:800; color:#e8d7b0; margin-top:-4px;}
+.unlock-go{width:100%; justify-content:space-between; padding:clamp(14px,2.2vh,20px) 20px; font-family:'Anton',sans-serif; font-weight:400; font-size:clamp(17px,2.6vh,24px); letter-spacing:.06em; text-transform:uppercase;}
+.unlock-go .unlock-cost{padding:4px 12px; border-radius:999px; background:rgba(0,0,0,.22); font-size:.8em; letter-spacing:.03em;}
+.unlock-go.is-short{filter:saturate(.35) brightness(.85);}
+.unlock-msg{min-height:1.4em; font-weight:800; font-size:14px; color:var(--muted);}
+.unlock-msg.ok{color:#8dffba;}
+.unlock-msg.warn{color:#ffd58a;}
+.unlock-rules-title{font-size:clamp(22px,3.2vh,32px); color:var(--amber); text-transform:uppercase; margin-bottom:clamp(10px,1.6vh,16px);}
+.instructions.unlock-rules ul{grid-template-columns:1fr !important;}
+
+/* ---------- results screen reward line ---------- */
+.go-reward{display:none; margin:-6px auto 20px; padding:9px 20px; border-radius:999px; font-weight:800; font-size:clamp(14px,2.2vh,18px); max-width:min(600px,94%); background:rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.2);}
+.go-reward.on{display:inline-block;}
+.go-reward.gain{color:#ffe1a0; border-color:rgba(242,165,65,.7); background:rgba(242,165,65,.14);}
+.go-reward.lose{color:#ff9ea1; border-color:rgba(229,72,77,.55); background:rgba(229,72,77,.12);}
+
+/* ---------- Battle mode HUD: lives ---------- */
+.hud-lives{display:none; gap:4px; margin-top:5px; font-size:15px; line-height:1;}
+#screen-battle.lives-on .hud-lives{display:flex;}
+.hud-side.opp .hud-lives{justify-content:flex-end;}
+.hud-heart{color:#ff5b62; text-shadow:0 0 8px rgba(255,91,98,.65); transition:color .25s ease;}
+.hud-heart.lost{color:#4b4f68; text-shadow:none;}
+.hud-heart.pop{animation:heartPop .55s ease-out;}
+@keyframes heartPop{0%{transform:scale(2); color:#fff;} 100%{transform:scale(1);}}
+.count-num.count-ko.life-stamp{font-size:clamp(34px,8vw,92px); letter-spacing:3px; white-space:nowrap;}
+.count-num.count-ko.life-stamp.good{color:#ffe27a; text-shadow:0 0 30px #f2a541, 0 0 90px #e5484d, 0 8px 0 rgba(0,0,0,.5);}
+/* brief invulnerability after losing a life */
+.fighter.invuln .fighter-square{opacity:.78;}
+.fighter.invuln::after{
+  content:''; position:absolute; inset:-9px; border-radius:16px; pointer-events:none; z-index:3;
+  border:3px solid rgba(190,228,255,.95); box-shadow:0 0 18px 4px rgba(120,190,255,.75), inset 0 0 14px rgba(120,190,255,.5);
+  animation:invulnPulse .5s ease-in-out infinite alternate;
+}
+.fighter.hulk.invuln::after{inset:-22px;}
+@keyframes invulnPulse{from{opacity:.45; transform:scale(.96);} to{opacity:1; transform:scale(1.05);}}
+
+/* ---------- Hulk Roar: speed streaks behind the blasted fighter ---------- */
+.hulk-roar-streak{border-radius:3px; background:linear-gradient(90deg,transparent,#b8ff9c 70%,#ffffff); box-shadow:0 0 10px #55d65c; animation:hulkStreak .44s ease-out forwards;}
+.hulk-roar-streak.rev{background:linear-gradient(270deg,transparent,#b8ff9c 70%,#ffffff);}
+@keyframes hulkStreak{from{opacity:1; transform:scaleX(.25);} to{opacity:0; transform:scaleX(1.35);}}
 </style>
 </head>
 <body>
@@ -2009,13 +2153,17 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   <!-- ============ MAIN MENU ============ -->
   <div id="screen-menu" class="screen active">
     <div class="fs-bg" aria-hidden="true"><div class="fs-slash"></div><div class="bubbles"></div></div>
-    <button class="btn btn-secondary menu-save-slots-top" id="btn-menu-save-slots"><span class="btn-icon">💾</span><span data-i18n="nav_save_slots">Save Slots</span></button>
+    <div class="menu-topbar">
+      <button class="btn btn-secondary menu-save-slots-top" id="btn-menu-save-slots"><span class="btn-icon">💾</span><span data-i18n="nav_save_slots">Save Slots</span></button>
+      <div class="token-chip"><span class="token-coin" aria-hidden="true">🪙</span><span data-token-count>0</span><span data-i18n="tokens_label">tokens</span></div>
+    </div>
     <div class="menu-stage">
       <div class="menu-left">
         <h1 class="menu-title"><span>Dishwashing</span> <span>Liquid</span> <span>Battles</span></h1>
         <nav class="menu-list">
           <button class="menu-item primary" id="btn-menu-play" data-gp-default><span class="mi-icon">▶</span><span data-i18n="nav_play">Play</span></button>
           <button class="menu-item" data-nav="inventory"><span class="mi-icon">🎒</span><span data-i18n="nav_inventory">Inventory</span></button>
+          <button class="menu-item" data-nav="unlock"><span class="mi-icon">🔓</span><span data-i18n="nav_unlock">Unlock Character</span></button>
           <button class="menu-item" data-nav="instructions"><span class="mi-icon">📖</span><span data-i18n="nav_instructions">Instructions</span></button>
           <button class="menu-item" data-nav="settings"><span class="mi-icon">⚙️</span><span data-i18n="nav_settings">Settings</span></button>
           <button class="menu-item menu-code-highlight" id="btn-menu-code"><span class="mi-icon">🔑</span><span data-i18n="nav_code">Code</span></button>
@@ -2040,11 +2188,18 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <button class="map-pill" data-map="battleworld"><span class="map-swatch swatch-battleworld"></span>Battleworld</button>
     </div>
     <h2 class="mode-heading" data-i18n="mode_title">Choose a mode</h2>
-    <div class="split-stage">
+    <div class="split-stage three">
       <button class="split-card left mode-practice" id="btn-mode-practice" data-gp-default>
         <span class="mode-name" data-i18n="mode_practice">Practice</span>
         <span class="mode-desc" data-i18n="mode_practice_desc">Fight a random opponent using your equipped fighter.</span>
         <span class="mode-chip"><span class="mode-chip-art" id="mode-chip-art"></span><span id="mode-chip-text"></span></span>
+        <span class="mode-arrow">▶</span>
+      </button>
+      <button class="split-card mid mode-battle" id="btn-mode-battle">
+        <span class="mode-name" data-i18n="mode_battle">Battle</span>
+        <span class="mode-desc" data-i18n="mode_battle_desc">Face a random rival. Three lives each — win to earn 10 tokens.</span>
+        <span class="mode-lives" aria-hidden="true">♥ ♥ ♥</span>
+        <span class="mode-chip mode-chip-tokens"><span class="token-coin" aria-hidden="true">🪙</span><span data-token-count>0</span><span data-i18n="tokens_label">tokens</span></span>
         <span class="mode-arrow">▶</span>
       </button>
       <button class="split-card right mode-friend" id="btn-mode-friend">
@@ -2054,6 +2209,74 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
         <span class="mode-tag" data-i18n="mode_controller_only">🎮 Controller only</span>
         <span class="mode-arrow">▶</span>
       </button>
+    </div>
+  </div>
+
+  <!-- ============ PRACTICE: CHOOSE DIFFICULTY ============ -->
+  <div id="screen-practice" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="page-stage">
+      <header class="page-head">
+        <h2 class="page-title" data-i18n="practice_title">Practice</h2>
+        <div class="page-caption" data-i18n="practice_caption">Pick how tough your opponent will be.</div>
+      </header>
+      <div class="diff-grid">
+        <button class="diff-card" data-diff="random" style="--dc:#4c8bf5" data-gp-default>
+          <span class="diff-name" data-i18n="diff_random">Random</span>
+          <span class="diff-rule" data-i18n="diff_random_rule">Any fighter</span>
+          <span class="diff-desc" data-i18n="diff_random_desc">Anyone in the roster can show up — easy, medium or hard.</span>
+        </button>
+        <button class="diff-card" data-diff="easy" style="--dc:#3fb96f">
+          <span class="diff-name" data-i18n="diff_easy">Easy</span>
+          <span class="diff-rule" data-i18n="diff_easy_rule">Under 8,000 HP</span>
+          <span class="diff-desc" data-i18n="diff_easy_desc">Lightweight foes. A gentle warm-up.</span>
+        </button>
+        <button class="diff-card" data-diff="medium" style="--dc:#f2a541">
+          <span class="diff-name" data-i18n="diff_medium">Medium</span>
+          <span class="diff-rule" data-i18n="diff_medium_rule">8,000 – 15,000 HP</span>
+          <span class="diff-desc" data-i18n="diff_medium_desc">Solid fighters, but nobody with a healing factor.</span>
+        </button>
+        <button class="diff-card" data-diff="hard" style="--dc:#e5484d">
+          <span class="diff-name" data-i18n="diff_hard">Hard</span>
+          <span class="diff-rule" data-i18n="diff_hard_rule">Over 15,000 HP + healers</span>
+          <span class="diff-desc" data-i18n="diff_hard_desc">The heavyweights, plus anyone with a healing factor.</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ UNLOCK CHARACTER ============ -->
+  <div id="screen-unlock" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="page-stage">
+      <header class="page-head">
+        <h2 class="page-title" data-i18n="unlock_title">Unlock Character</h2>
+        <div class="page-caption" data-i18n="unlock_caption">Spend tokens to challenge a random fighter</div>
+      </header>
+      <div class="unlock-layout">
+        <section class="unlock-card">
+          <div class="unlock-label" data-i18n="unlock_balance_label">Your tokens</div>
+          <div class="unlock-balance"><span class="token-coin" aria-hidden="true">🪙</span><span data-token-count>0</span></div>
+          <div class="unlock-progress"><div class="unlock-progress-fill" id="unlock-progress-fill"></div></div>
+          <div class="unlock-progress-text" id="unlock-progress-text"></div>
+          <button class="btn btn-primary unlock-go" id="btn-unlock-go" data-gp-default>
+            <span data-i18n="unlock_go">Unlock Character</span><span class="unlock-cost">🪙 100</span>
+          </button>
+          <div class="unlock-msg" id="unlock-msg" role="status" aria-live="polite"></div>
+        </section>
+        <section class="instructions unlock-rules">
+          <h3 class="unlock-rules-title" data-i18n="unlock_rules_title">How it works</h3>
+          <ul>
+            <li><span class="instr-icon">🎲</span><span data-i18n="unlock_rule_1">Spend 100 tokens to face one random fighter from the whole roster.</span></li>
+            <li><span class="instr-icon">🔓</span><span data-i18n="unlock_rule_2">Beat them and they join your roster.</span></li>
+            <li><span class="instr-icon">↩️</span><span data-i18n="unlock_rule_3">Beat someone you already own and your 100 tokens come straight back.</span></li>
+            <li><span class="instr-icon">💸</span><span data-i18n="unlock_rule_4">Lose and the tokens are gone.</span></li>
+            <li><span class="instr-icon">🪙</span><span data-i18n="unlock_rule_5">Earn tokens by winning Battle mode — 10 tokens per win.</span></li>
+          </ul>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -2158,6 +2381,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
         <li><span class="instr-icon">⏱️</span><span data-i18n="instr_cooldown">Every ability has a cooldown shown right on its button — watch the timer count down.</span></li>
         <li><span class="instr-icon">🧱</span><span data-i18n="instr_arena">The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</span></li>
         <li><span class="instr-icon">🗺️</span><span>Pick a map — City, Wasteland, or Battleworld — from the mode-select screen before you fight. Watch out for the glowing green toxic waste puddle on Wasteland; standing on it will slowly damage you.</span></li>
+        <li><span class="instr-icon">🪙</span><span><strong>Modes &amp; tokens:</strong> Practice lets you pick Random, Easy, Medium or Hard opponents. Battle gives you and your rival 3 lives each and pays 10 tokens for a win. Spend 100 tokens on Unlock Character to challenge a random fighter — win to unlock them, or get your tokens back if you already own them.</span></li>
         <li><span class="instr-icon">🎒</span><span data-i18n="instr_roster">Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</span></li>
       </ul>
       </div>
@@ -2204,6 +2428,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
           </div>
           <div class="healthbar-track"><div class="healthbar-fill" id="hud-player-bar"></div></div>
           <div class="hp-num" id="hud-player-hp"></div>
+          <div class="hud-lives" id="hud-player-lives"></div>
         </div>
         <div class="hud-side opp" id="hud-opp">
           <div class="hud-name-row">
@@ -2212,6 +2437,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
           </div>
           <div class="healthbar-track"><div class="healthbar-fill" id="hud-opp-bar"></div></div>
           <div class="hp-num" id="hud-opp-hp"></div>
+          <div class="hud-lives" id="hud-opp-lives"></div>
         </div>
       </div>
     </div>
@@ -2243,8 +2469,10 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <h1 class="go-badge" id="go-badge">Victory!</h1>
       <div class="go-portraits" id="go-portraits"></div>
       <p class="go-sub" id="go-sub"></p>
+      <p class="go-reward" id="go-reward" role="status"></p>
       <div class="go-buttons">
         <button class="btn btn-primary solo-only" id="go-play-another-btn" data-i18n="go_play_another">Play Another</button>
+        <button class="btn btn-primary solo-only" id="go-unlock-again-btn" data-nav="unlock" data-i18n="go_unlock_again" style="display:none">Unlock Another</button>
         <button class="btn btn-primary pvp-only" id="go-rematch-btn" data-i18n="go_rematch">Rematch</button>
         <button class="btn btn-secondary pvp-only" id="go-change-btn" data-i18n="go_change_fighters">Change fighters</button>
         <button class="btn btn-secondary" data-nav="menu" data-i18n="go_return_menu">Return to Menu</button>
@@ -2399,7 +2627,7 @@ const CHARACTERS = {
   hulk: {
     id:'hulk', name:'Hulk', img:'Hulk.jpg', color:'#55d65c',
     maxHealth:21250, aiStyle:'hulk', jumpHeightMultiplier:2,
-    description:'The powerhouse. Massive health, a stronger natural jump, crushing melee damage, a ground-shaking slam, and a thunderous roar that roots enemies in place.',
+    description:'The powerhouse. Massive health, a stronger natural jump, crushing melee damage, a ground-shaking slam, and a thunderous roar that blasts enemies to the edge of the map and pins them there.',
     abilities:{
       E:{key:'E', name:'Hulk Smash', type:'hulkSmash', damage:750, cooldown:900, knockback:15, radius:120,
          hitDelay:85, sound:'hulk_smash', fx:'hulk_smash', hitFx:'hulk_smash_hit', hitSound:'hulk_smash_hit',
@@ -2409,7 +2637,7 @@ const CHARACTERS = {
          desc:'Hulk pounds the ground, releasing a wide shockwave that launches nearby enemies.'},
       R:{key:'R', name:'Hulk Roar', type:'hulkScream', cooldown:20000,
          sound:'hulk_scream_roar', fx:'hulk_scream',
-         desc:'Hulk unleashes a massive roar that roots nearby enemies in place. Fighters over 15,000 max health can still shuffle a little, and anyone over 20,000 max health isn\'t affected at all.'}
+         desc:'Hulk unleashes a massive roar that blasts the enemy to whichever side of the map they are closest to and pins them there. Fighters under 15,000 max health cannot move at all, fighters from 15,000 to 20,000 can only shuffle a little, and anyone over 20,000 max health is not affected at all.'}
     }
   },
   wolverine: {
@@ -2736,6 +2964,7 @@ function applyTranslations(){
   if(scr === 'mode') renderModeScreen();
   if(scr === 'pair') renderPairing(true);
   if(scr === 'versus') renderVersus();
+  if(scr === 'unlock') renderUnlockScreen();
 }
 function renderInventoryHint(){
   const eqDef = CHARACTERS[SAVE.equipped];
@@ -2916,7 +3145,7 @@ function safeJson(raw){
   try{ return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
 }
 function defaultSaveSlot(index){
-  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], equipped:null, mapId:DEFAULT_MAP_ID };
+  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], equipped:null, mapId:DEFAULT_MAP_ID, tokens:0 };
 }
 function normalizeSaveSlot(slot, index){
   const out = Object.assign(defaultSaveSlot(index), slot && typeof slot === 'object' ? slot : {});
@@ -2924,6 +3153,7 @@ function normalizeSaveSlot(slot, index){
   out.unlocked = Array.isArray(out.unlocked) ? [...new Set(out.unlocked.filter(id=>ROSTER_ORDER.includes(id)))] : [];
   out.equipped = ROSTER_ORDER.includes(out.equipped) ? out.equipped : null;
   out.mapId = MAPS[out.mapId] ? out.mapId : DEFAULT_MAP_ID;
+  out.tokens = Math.max(0, Math.floor(Number(out.tokens)) || 0);
   out.used = !!out.used || out.unlocked.length > 0 || !!out.equipped;
   if(out.used && out.unlocked.length === 0){ out.unlocked = [FIRST_TIME_STARTER]; out.equipped = FIRST_TIME_STARTER; }
   if(out.used && (!out.equipped || !out.unlocked.includes(out.equipped))){ out.equipped = out.unlocked[0] || FIRST_TIME_STARTER; }
@@ -3029,7 +3259,7 @@ function renderSaveSlots(){
     card.innerHTML = `
       <div class="save-slot-num">Slot ${number}${number===activeSaveSlot ? ` • ${t('save_slot_active')}` : ''}</div>
       <div class="save-slot-name" title="${slotDisplayName(slot,index)}">${slotDisplayName(slot,index)}</div>
-      <div class="save-slot-status">${status}</div>
+      <div class="save-slot-status">${status}${used ? ' · 🪙 ' + (slot.tokens || 0) : ''}</div>
       <div class="save-slot-actions">
         <button class="btn btn-primary btn-small save-slot-play">${t('save_slot_play')}</button>
         <button class="btn btn-secondary btn-small save-slot-rename">${t('save_slot_rename')}</button>
@@ -3052,6 +3282,28 @@ function unlockCharacter(id){
   SAVE.used = true;
   persistActiveSave();
 }
+/* ---- Tokens (stored per save slot) ---- */
+const BATTLE_LIVES = 3;            // lives each side gets in Battle mode
+const BATTLE_WIN_TOKENS = 10;      // tokens for winning a Battle
+const UNLOCK_COST_TOKENS = 100;    // price of an Unlock Character challenge
+function getTokens(){ return Math.max(0, Math.floor(Number(SAVE.tokens)) || 0); }
+function renderTokenCounters(){
+  const n = getTokens().toLocaleString();
+  document.querySelectorAll('[data-token-count]').forEach(el => { el.textContent = n; });
+}
+function addTokens(n){
+  SAVE.tokens = getTokens() + Math.max(0, Math.floor(n));
+  persistActiveSave();
+  renderTokenCounters();
+}
+function spendTokens(n){
+  if(getTokens() < n) return false;
+  SAVE.tokens = getTokens() - n;
+  persistActiveSave();
+  renderTokenCounters();
+  return true;
+}
+
 function unlockAllCharactersWithCode(code){
   if(code !== 'Water555J*b999TVRemote2') return false;
   SAVE.used = true;
@@ -3066,7 +3318,7 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','mode','pair','versus','save-slots','inventory','instructions','settings','battle','gameover'];
+const screens = ['menu','mode','practice','unlock','pair','versus','save-slots','inventory','instructions','settings','battle','gameover'];
 function showScreen(name){
   // Fighter select needs both controllers still present — otherwise re-pair.
   if(name === 'versus' && !versusPadsPresent()) name = 'pair';
@@ -3079,6 +3331,8 @@ function showScreen(name){
   if(name==='settings') renderSettingsScreen();
   if(name==='menu'){ updateCurrentSaveSlotLabel(); renderMenuHero(); }
   if(name==='mode') renderModeScreen();
+  if(name==='unlock') renderUnlockScreen();
+  renderTokenCounters();
   if(name==='pair') startPairing();
   if(name==='versus') startVersusSelect();
   if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
@@ -3087,7 +3341,7 @@ document.addEventListener('click', (e)=>{
   const nav = e.target.closest('[data-nav]');
   if(nav){ showScreen(nav.getAttribute('data-nav')); }
 });
-document.getElementById('go-play-another-btn').addEventListener('click', startRandomBattle);
+document.getElementById('go-play-another-btn').addEventListener('click', ()=> replayLastMatch());
 
 function openCodeModal(){
   const modal = document.getElementById('code-modal');
@@ -3224,12 +3478,88 @@ document.getElementById('char-modal').addEventListener('click', e=>{ if(e.target
 // button: always battles with whichever fighter is currently equipped
 // (equipping happens in Inventory, not here) against a fresh random
 // opponent, so you're never stuck fighting the same matchup on repeat.
-function startRandomBattle(){
-  const playerId = SAVE.equipped;
-  if(!playerId || !isUnlocked(playerId)){ showScreen('inventory'); return; }
-  const botPool = ROSTER_ORDER.filter(id => id !== playerId);
-  const botId = botPool[Math.floor(Math.random()*botPool.length)];
-  startBattle(playerId, botId);
+function startRandomBattle(){ startPractice('random'); }
+
+/* ---------- Difficulty tiers (Practice) ----------
+     easy    : under 8,000 max health
+     medium  : 8,000 - 15,000 max health, EXCEPT anyone with a healing factor
+     hard    : over 15,000 max health, plus anyone with a healing factor
+   "Healing factor" = passive regeneration (Wolverine, Deadpool). To make a future fighter
+   count as one, give it passiveRegen or `healingFactor:true`.                          */
+const DIFFICULTIES = ['random','easy','medium','hard'];
+function hasHealingFactor(def){ return !!def && (!!def.healingFactor || (def.passiveRegen || 0) > 0); }
+function difficultyOf(def){
+  if(def.maxHealth > 15000 || hasHealingFactor(def)) return 'hard';
+  if(def.maxHealth < 8000) return 'easy';
+  return 'medium';
+}
+// Opponents are drawn from the whole roster (owned or not), never a mirror of your own fighter.
+function pickOpponent(playerId, diff){
+  let pool = ROSTER_ORDER.filter(id => id !== playerId && (diff === 'random' || difficultyOf(CHARACTERS[id]) === diff));
+  if(!pool.length) pool = ROSTER_ORDER.filter(id => id !== playerId);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function requireEquippedFighter(){
+  const id = SAVE.equipped;
+  if(!id || !isUnlocked(id)){ showScreen('inventory'); return null; }
+  return id;
+}
+
+// What "Play Another" on the results screen repeats.
+let lastSoloMatch = { kind:'practice', diff:'random' };
+function replayLastMatch(){
+  if(lastSoloMatch.kind === 'battle') startLivesBattle();
+  else startPractice(lastSoloMatch.diff);
+}
+
+function startPractice(diff){
+  const playerId = requireEquippedFighter(); if(!playerId) return;
+  diff = DIFFICULTIES.includes(diff) ? diff : 'random';
+  lastSoloMatch = { kind:'practice', diff };
+  startBattle(playerId, pickOpponent(playerId, diff), { kind:'practice' });
+}
+
+// Battle mode: a random rival, three lives each, 10 tokens for the win.
+function startLivesBattle(){
+  const playerId = requireEquippedFighter(); if(!playerId) return;
+  lastSoloMatch = { kind:'battle' };
+  startBattle(playerId, pickOpponent(playerId, 'random'), { kind:'battle', lives:BATTLE_LIVES });
+}
+
+/* ---------- Unlock Character ----------
+   Pay 100 tokens, face one random fighter (single health bar).
+     win + not owned  -> unlocked
+     win + owned      -> tokens refunded
+     lose             -> tokens are gone                                              */
+function setUnlockMessage(text, tone){
+  const el = document.getElementById('unlock-msg');
+  if(!el) return;
+  el.textContent = text || '';
+  el.className = 'unlock-msg' + (tone ? ' ' + tone : '');
+}
+function renderUnlockScreen(){
+  renderTokenCounters();
+  const owned = SAVE.unlocked.length, total = ROSTER_ORDER.length, tokens = getTokens();
+  const prog = document.getElementById('unlock-progress-text');
+  if(prog) prog.textContent = t('unlock_progress').replace('{n}', owned).replace('{total}', total);
+  const fill = document.getElementById('unlock-progress-fill');
+  if(fill) fill.style.width = Math.round(owned / total * 100) + '%';
+  const btn = document.getElementById('btn-unlock-go');
+  if(btn) btn.classList.toggle('is-short', tokens < UNLOCK_COST_TOKENS || owned >= total);
+  if(owned >= total) setUnlockMessage(t('unlock_all_done'), '');
+  else if(tokens < UNLOCK_COST_TOKENS){
+    const need = UNLOCK_COST_TOKENS - tokens;
+    setUnlockMessage(t(need === 1 ? 'unlock_need_one' : 'unlock_need_more').replace('{n}', need), 'warn');
+  }
+  else setUnlockMessage(t('unlock_ready'), 'ok');
+}
+function startUnlockChallenge(){
+  const playerId = requireEquippedFighter(); if(!playerId) return;
+  if(SAVE.unlocked.length >= ROSTER_ORDER.length || getTokens() < UNLOCK_COST_TOKENS){ renderUnlockScreen(); return; }
+  // Paid up front and saved straight away, so refreshing the page mid-fight can't dodge the cost.
+  spendTokens(UNLOCK_COST_TOKENS);
+  const botId = pickOpponent(playerId, 'random');
+  startBattle(playerId, botId, { kind:'unlock', challenge:{ botId, cost:UNLOCK_COST_TOKENS, settled:false } });
 }
 document.getElementById('btn-menu-play').addEventListener('click', ()=> showScreen('mode'));
 
@@ -3261,6 +3591,8 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     flight:false,
     flightExpire:0,
     hulkRoarUntil:0, hulkRoarLock:false,
+    hulkSlideDir:0, hulkSlideEnd:0, hulkSlideTier:'', _slideFxT:0,
+    invulnUntil:0,
     hitStun:0,
     slowUntil:0, webWrapEl:null,
     turnPending:null,
@@ -3311,6 +3643,15 @@ function startBattle(playerCharId, botCharId, opts){
   state.pvpPaused = false;
   document.getElementById('pvp-pause').classList.remove('on');
   document.getElementById('screen-battle').classList.toggle('pvp', pvp);
+  // NOTE: state.mode === 'battle' means "a fight is running" everywhere in this file.
+  // The Battle GAME MODE (3 lives) is tracked separately as state.matchKind === 'battle'.
+  state.matchKind = pvp ? 'pvp' : ((opts && opts.kind) || 'practice');
+  state.maxLives = Math.max(1, Math.floor((opts && opts.lives) || 1));
+  state.livesOn = state.maxLives > 1;
+  state.lives = { player:state.maxLives, bot:state.maxLives };
+  state.challenge = (opts && opts.challenge) || null;
+  state.stampSeq = (state.stampSeq || 0) + 1;
+  document.getElementById('screen-battle').classList.toggle('lives-on', state.livesOn);
   state.player = makeFighter(playerCharId, false, 250);
   state.bot = pvp ? makeFighter(botCharId, false, 950, 'bot') : makeFighter(botCharId, true, 950);
   if(pvp){
@@ -3329,6 +3670,7 @@ function startBattle(playerCharId, botCharId, opts){
   buildFighterDOM(state.bot);
   arenaEl.classList.remove('echolocation-mode');
   updateHudNames();
+  renderLivesHud();
   if(pvp) buildPvpAbilityBars(); else buildAbilityBar();
   state.mode = 'battle';
   state.lastTime = 0;
@@ -3632,6 +3974,66 @@ function cdReady(f, key, t){
   if(a.type==='chargeSlam') return !f.bpCharging && !f.bpSlamPending && t >= f.cooldowns[key];
   return t >= f.cooldowns[key];
 }
+/* ---- Hulk Roar tuning -------------------------------------------------
+   Tiers are decided by the target's MAX health (so a fighter can't slip between
+   tiers just by being hurt mid-fight):
+     under 15,000        -> blasted to the nearest side wall, then fully rooted
+     15,000 - 20,000     -> blasted to the nearest side wall, then can only shuffle a little
+     over 20,000         -> the roar does nothing at all                          */
+const HULK_ROAR = {
+  rootBelowHp: 15000,
+  immuneAboveHp: 20000,
+  slideSpeed: 24,       // px per frame while being blasted toward the wall
+  slideMaxMs: 900,      // safety cap in case something blocks the slide
+  rootMs: 2600,         // fully rooted at the wall
+  lightMs: 1600,        // sluggish at the wall
+  lightMoveScale: 0.22  // walking speed multiplier for the sluggish tier
+};
+function hulkRoarTier(def){
+  const hp = (def && def.maxHealth) || 0;
+  if(hp > HULK_ROAR.immuneAboveHp) return 'immune';
+  if(hp >= HULK_ROAR.rootBelowHp) return 'light';
+  return 'root';
+}
+// True while a fighter is being blasted to the wall or is pinned/sluggish afterwards.
+function isRoarHeld(f, t){ return !!f && (!!f.hulkSlideDir || (!!f.hulkRoarUntil && t < f.hulkRoarUntil)); }
+// Abilities that would carry a fighter across the arena. They are locked while roared,
+// otherwise a "rooted" fighter could just teleport / leap / grapple straight out of it.
+const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal'];
+
+function finishHulkSlide(f, hitWall){
+  const tier = f.hulkSlideTier;
+  const dir = f.hulkSlideDir;
+  f.hulkSlideDir = 0; f.hulkSlideEnd = 0; f.hulkSlideTier = '';
+  f.vx = 0;
+  f.hulkRoarUntil = now() + (tier === 'root' ? HULK_ROAR.rootMs : HULK_ROAR.lightMs);
+  f.hulkRoarLock = (tier === 'root');
+  if(hitWall && f.el){
+    const wx = dir < 0 ? BOUND_MIN_X : BOUND_MAX_X + FIGHTER_SIZE;
+    const cy = f.y + FIGHTER_SIZE/2;
+    fxEl('fx-ring', `left:${wx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#bfffae;border-width:4px;box-shadow:0 0 30px #55d65c;`, 520);
+    spawnSparks(wx, cy, 16, '#b1ff9c', 90, 480);
+    shakeArena(10, 320);
+    sfx('hulk_slam_hit');
+    flashHit(f);
+  }
+}
+function spawnHulkSlideStartFx(tg, dir){
+  const cx = tg.x + FIGHTER_SIZE/2, cy = tg.y + FIGHTER_SIZE/2;
+  fxEl('fx-ring', `left:${cx-60}px;top:${cy-60}px;width:120px;height:120px;border-color:#bfffae;border-width:4px;box-shadow:0 0 28px #55d65c;`, 520);
+  for(let i=0;i<4;i++){
+    const oy = -30 + i*20;
+    fxEl('hulk-roar-streak' + (dir < 0 ? ' rev' : ''),
+      `left:${dir > 0 ? cx-150 : cx}px;top:${cy+oy}px;width:150px;height:4px;transform-origin:${dir > 0 ? 'right' : 'left'} center;`, 440);
+  }
+  spawnSparks(cx, cy, 14, '#b1ff9c', 70, 420);
+}
+function spawnRoarShrugFx(tg){
+  const cx = tg.x + FIGHTER_SIZE/2, cy = tg.y + FIGHTER_SIZE/2;
+  fxEl('fx-ring', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#cfd3e6;border-width:3px;box-shadow:0 0 16px #8a90ad;`, 520);
+  spawnDamageNumber(tg.x + 2, tg.y - 20, 'UNFAZED', true);
+}
+
 function tryUseAbility(caster, target, key){
   const t = now();
   if(caster.dead) return false;
@@ -3643,6 +4045,8 @@ function tryUseAbility(caster, target, key){
   // Energy Redistribution no longer locks Black Panther out: he can keep moving and
   // use his other abilities while channeling. The channel itself can't be re-triggered
   // (cdReady blocks Q until the whole charge + slam has resolved).
+  // Roared fighters cannot use abilities that would move them across the arena.
+  if(MOVEMENT_ABILITY_TYPES.includes(ability.type) && isRoarHeld(caster, t)) return false;
   if(!cdReady(caster, key, t)) return false;
   const fallbackSound = ability.type==='jump' ? 'jump' : ability.type==='wall' ? 'wall'
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
@@ -3943,20 +4347,26 @@ function executeAbility(caster, target, ability, t){
     }
     case 'hulkScream': {
       const tg = target || ((caster === state.player) ? state.bot : state.player);
-      if(!tg || tg.dead) break;
-      const maxHp = tg.def.maxHealth || 0;
-      // No teleporting/sliding across the arena — just a rooted stagger in
-      // place, scaled down (or nullified) against the toughest fighters.
-      if(maxHp > 20000){
-        break; // too sturdy to be bothered by the roar at all
+      if(!tg || !tg.def || tg.dead || tg === caster) break;
+      const tier = hulkRoarTier(tg.def);
+      // Over 20,000 max health (or freshly respawned): the roar has no effect at all.
+      if(tier === 'immune' || (tg.invulnUntil && t < tg.invulnUntil)){
+        spawnRoarShrugFx(tg);
+        break;
       }
-      const lightTier = maxHp > 15000; // "a little effect" — can barely move
-      tg.hulkRoarUntil = t + (lightTier ? 900 : 1600);
-      tg.hulkRoarLock = !lightTier;
-      const dirAway = (tg.x >= caster.x) ? 1 : -1;
-      tg.vx = dirAway * (lightTier ? 7 : 17);
-      tg.vy = Math.min(tg.vy, -2);
+      // Blast them toward whichever side wall they are closest to. updatePhysics()
+      // carries the slide out frame by frame, then pins them there when they arrive.
+      const slideDir = ((tg.x + FIGHTER_SIZE/2) < ARENA_W/2) ? -1 : 1;
+      tg.hulkSlideDir = slideDir;
+      tg.hulkSlideTier = tier;
+      tg.hulkSlideEnd = t + HULK_ROAR.slideMaxMs;
+      tg.hulkRoarUntil = 0;
+      tg.hulkRoarLock = false;
+      tg.grappleUntil = 0;
+      tg.hitStun = 0;
+      tg.turnPending = null;
       flashHit(tg);
+      spawnHulkSlideStartFx(tg, slideDir);
       break;
     }
     case 'melee': {
@@ -4239,6 +4649,7 @@ function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
 
 function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.dead) return;
+  if(target.invulnUntil && now() < target.invulnUntil) return; // just respawned (Battle mode)
   opts = opts || {};
   // Daredevil passive: Evasion — a clean dodge, no damage, no knockback.
   if(target.def.dodgeChance && Math.random() < target.def.dodgeChance){
@@ -4258,7 +4669,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     sfx('bp_absorb');
     flashHit(target);
     if(target.health <= 0 && !target.dead){
-      endBattle(target === state.player ? 'bot' : 'player', 'ko-health');
+      onFighterZeroHealth(target, 'ko-health');
     }
     return;
   }
@@ -4293,7 +4704,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   if(opts.slow) applyWebSlow(target, opts.slow);
   flashHit(target);
   if(target.health <= 0 && !target.dead){
-    endBattle(target === state.player ? 'bot' : 'player', 'ko-health');
+    onFighterZeroHealth(target, 'ko-health');
   }
 }
 
@@ -4307,13 +4718,14 @@ const HAZARD_TICK_MS = 550;
 const HAZARD_DAMAGE = { toxic: 5 };
 function applyHazardDamage(target, dmg){
   if(!target || target.dead) return;
+  if(target.invulnUntil && now() < target.invulnUntil) return;
   target.health = Math.max(0, target.health - dmg);
   spawnDamageNumber(target.x+18, target.y, Math.round(dmg), false);
   spawnSparks(target.x+FIGHTER_SIZE/2, target.y+FIGHTER_SIZE-6, 4, '#9dff5c', 20, 320);
   flashHit(target);
   sfx('hit');
   if(target.health <= 0 && !target.dead){
-    endBattle(target === state.player ? 'bot' : 'player', 'ko-hazard');
+    onFighterZeroHealth(target, 'ko-hazard');
   }
 }
 function updateHazards(f){
@@ -5823,16 +6235,19 @@ function collidesPlatform(f, plat){
 }
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   const tNow = now();
-  if(f.hulkRoarUntil && tNow < f.hulkRoarUntil){
+  if(f.hulkSlideDir){
+    // Being blasted toward the nearest side wall by Hulk Roar — no steering, no jumping.
+    moveDir = 0;
+    wantJump = false;
+  } else if(f.hulkRoarUntil && tNow < f.hulkRoarUntil){
     if(f.hulkRoarLock){
-      // Fully rooted — no walking, no jumping, no fighting out of it —
-      // but the roar's own knockback still carries them across the arena.
+      // Pinned at the wall — cannot walk or jump at all.
       moveDir = 0;
       wantJump = false;
       f.vx *= 0.985;
     } else {
-      // "A little effect" — can still shuffle, just very sluggishly.
-      moveDir *= 0.22;
+      // Sluggish tier (15,000 - 20,000 max health): can still shuffle, just very slowly.
+      moveDir *= HULK_ROAR.lightMoveScale;
     }
   } else if(f.hulkRoarUntil && tNow >= f.hulkRoarUntil){
     f.hulkRoarUntil = 0;
@@ -5873,6 +6288,14 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
       f.vy = JUMP_VEL * jumpMul;
       f.onGround = false;
     }
+  }
+
+  // Hulk Roar slide: overrides every other horizontal influence until the wall is reached.
+  const slideStartX = f.x;
+  if(f.hulkSlideDir){
+    f.vx = f.hulkSlideDir * HULK_ROAR.slideSpeed;
+    f._slideFxT = (f._slideFxT || 0) + dtF;
+    if(f._slideFxT >= 1.6 && f.el){ f._slideFxT = 0; spawnAfterimage(f, '#55d65c77', 300); }
   }
 
   // Vertical
@@ -5948,6 +6371,13 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     f.y = FLOOR_Y;
     if(f.vy > 0) f.vy = 0;
     if(!f.flight){ f.onGround = true; f.standingPlatform = PLATFORMS[0]; }
+  }
+
+  // Hulk Roar slide ends when the fighter reaches the wall (or gets blocked / times out).
+  if(f.hulkSlideDir){
+    const atWall = f.hulkSlideDir < 0 ? f.x <= BOUND_MIN_X + 1 : f.x >= BOUND_MAX_X - 1;
+    const blocked = Math.abs(f.x - slideStartX) < 0.5;
+    if(atWall || blocked || tNow >= f.hulkSlideEnd) finishHulkSlide(f, atWall);
   }
 
   // Facing — for a human player, facing simply follows the movement key you
@@ -6773,6 +7203,127 @@ function updateBotAI(dtF){
 function checkKO(){
   // Ring-outs are gone: the arena is walled in, so health is the only way out.
 }
+
+/* =========================================================================
+   SECTION: BATTLE MODE LIVES + MATCH REWARDS
+   Every place a fighter's health can reach 0 funnels through
+   onFighterZeroHealth(). In a normal fight that ends the match as before; in
+   Battle mode it costs a life instead, and only the last life ends the match.
+   ========================================================================= */
+const RESPAWN_INVULN_MS = 2000;
+
+function fighterSide(f){ return f === state.player ? 'player' : (f === state.bot ? 'bot' : null); }
+
+function onFighterZeroHealth(target, reason){
+  if(!target || target.dead || state.mode !== 'battle') return;
+  const side = fighterSide(target);
+  if(state.livesOn && side){
+    state.lives[side] = Math.max(0, state.lives[side] - 1);
+    renderLivesHud(side);
+    if(state.lives[side] > 0){ loseLife(target, side); return; }
+  }
+  endBattle(target === state.player ? 'bot' : 'player', reason);
+}
+
+function loseLife(target, side){
+  const opp = side === 'player' ? state.bot : state.player;
+  const col = target.def.color || '#ffffff';
+
+  // Knock-out burst where they fell.
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  sfx('ko');
+  shakeArena(12, 420);
+  fxEl('fx-flash', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;`, 420);
+  fxEl('fx-ring', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;border-color:${col};box-shadow:0 0 36px ${col};`, 600);
+  spawnSparks(cx, cy, 22, col, 110, 800);
+  spawnSparks(cx, cy, 10, '#ffffff', 70, 600);
+
+  // Fresh bar, clean slate (cooldowns are kept so a new life isn't a free reset of everything).
+  target.health = target.def.maxHealth;
+  target.invulnUntil = now() + RESPAWN_INVULN_MS;
+  target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
+  target.slowUntil = 0;
+  if(target.webWrapEl){ target.webWrapEl.remove(); target.webWrapEl = null; }
+  target.hulkRoarUntil = 0; target.hulkRoarLock = false;
+  target.hulkSlideDir = 0; target.hulkSlideEnd = 0; target.hulkSlideTier = '';
+  target.flight = false; target.flightExpire = 0;
+  target.shield = null;
+  target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
+  target.bpCharging = false; target.bpSlamPending = false; target.bpAbsorbed = 0;
+  target.grappleUntil = 0;
+  target.turnPending = null;
+  target.regenAccumulator = 0;
+  if(target.def.id === 'loki') clearLokiDuplications(target);
+
+  // Respawn on the side of the arena AWAY from the opponent so nobody gets spawn-camped.
+  const oppCenter = opp ? opp.x + FIGHTER_SIZE/2 : ARENA_W/2;
+  target.x = oppCenter < ARENA_W/2 ? 950 : 250;
+  target.y = 380;
+  target.facing = target.x < ARENA_W/2 ? 1 : -1;
+  const nx = target.x + FIGHTER_SIZE/2, ny = target.y + FIGHTER_SIZE/2;
+  fxEl('fx-ring', `left:${nx-50}px;top:${ny-50}px;width:100px;height:100px;border-color:#bfe4ff;border-width:3px;box-shadow:0 0 26px #78beff;`, 620);
+  spawnSparks(nx, ny, 12, '#bfe4ff', 60, 600);
+
+  showLifeStamp(side === 'player' ? t('life_lost') : t('enemy_down'), side === 'player');
+}
+
+function showLifeStamp(text, bad){
+  const ov = document.getElementById('countdown-overlay');
+  if(!ov) return;
+  const seq = state.stampSeq = (state.stampSeq || 0) + 1;
+  ov.innerHTML = '';
+  ov.classList.add('on');
+  const item = document.createElement('div');
+  item.className = 'count-item';
+  item.innerHTML = `<div class="count-num count-ko life-stamp${bad ? '' : ' good'}">${text}</div>`;
+  ov.appendChild(item);
+  setTimeout(()=>{
+    if(seq !== state.stampSeq) return;   // a newer banner, or the match ended
+    ov.classList.remove('on');
+    ov.innerHTML = '';
+  }, 1200);
+}
+
+function renderLivesHud(popSide){
+  [['player','hud-player-lives'], ['bot','hud-opp-lives']].forEach(([side, id])=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(!state.livesOn){ el.innerHTML = ''; el.removeAttribute('aria-label'); return; }
+    const left = state.lives[side];
+    let html = '';
+    for(let i = 0; i < state.maxLives; i++){
+      const lost = i >= left;
+      const pop = popSide === side && i === left;
+      html += `<span class="hud-heart${lost ? ' lost' : ''}${pop ? ' pop' : ''}">♥</span>`;
+    }
+    el.innerHTML = html;
+    el.setAttribute('aria-label', `${left} of ${state.maxLives} lives left`);
+  });
+}
+
+// Returns { text, tone } for the results screen and applies any tokens / unlocks.
+function settleMatchRewards(isWin, isPvp){
+  const none = { text:'', tone:'' };
+  if(isPvp) return none;
+  if(state.matchKind === 'battle'){
+    if(!isWin) return { text:t('reward_battle_lose'), tone:'lose' };
+    addTokens(BATTLE_WIN_TOKENS);
+    return { text:t('reward_battle_win').replace('{n}', BATTLE_WIN_TOKENS).replace('{total}', getTokens().toLocaleString()), tone:'gain' };
+  }
+  if(state.matchKind === 'unlock' && state.challenge && !state.challenge.settled){
+    state.challenge.settled = true;
+    const { botId, cost } = state.challenge;
+    const name = CHARACTERS[botId].name;
+    if(!isWin) return { text:t('reward_unlock_lose').replace('{cost}', cost), tone:'lose' };
+    if(isUnlocked(botId)){
+      addTokens(cost);
+      return { text:t('reward_unlock_refund').replace('{name}', name).replace('{cost}', cost), tone:'gain' };
+    }
+    unlockCharacter(botId);
+    return { text:t('reward_unlock_new').replace('{name}', name), tone:'gain' };
+  }
+  return none;
+}
 function endBattle(winnerSide, reason){
   if(state.mode !== 'battle') return;
   state.illusions.forEach(g => (g.clones || g.illusions || []).forEach(i => { if(i.el) i.el.remove(); }));
@@ -6780,6 +7331,7 @@ function endBattle(winnerSide, reason){
   state.mode = 'ended';
   state.countdown = false;
   battleToken++; // invalidate any pending countdown steps
+  state.stampSeq = (state.stampSeq || 0) + 1; // cancel any pending "life lost" banner
   state.pvpPaused = false;
   document.getElementById('pvp-pause').classList.remove('on');
   state.missiles.forEach(m => { if(m.el) m.el.remove(); });
@@ -6796,6 +7348,18 @@ function endBattle(winnerSide, reason){
   const isWin = winnerSide === 'player';
   const isPvp = !!state.pvp;
   document.querySelector('.gameover-wrap').classList.toggle('pvp', isPvp);
+  // Tokens / unlocks are settled the moment the fight ends, then the results screen explains them.
+  const reward = settleMatchRewards(isWin, isPvp);
+  const rewardEl = document.getElementById('go-reward');
+  if(rewardEl){
+    rewardEl.textContent = reward.text;
+    rewardEl.className = 'go-reward' + (reward.text ? ' on ' + reward.tone : '');
+  }
+  const isUnlockRun = state.matchKind === 'unlock';
+  const againBtn = document.getElementById('go-play-another-btn');
+  const unlockAgainBtn = document.getElementById('go-unlock-again-btn');
+  if(againBtn) againBtn.style.display = isUnlockRun ? 'none' : '';
+  if(unlockAgainBtn) unlockAgainBtn.style.display = isUnlockRun ? '' : 'none';
   if(isPvp){
     badge.textContent = isWin ? t('go_p1_wins') : t('go_p2_wins');
     badge.className = 'go-badge win';
@@ -6885,7 +7449,8 @@ function renderFighter(f){
   f.el.classList.toggle('facing-left', f.facing < 0);
   f.el.classList.toggle('moving', Math.abs(f.vx) > 0.7 && f.hitStun <= 0);
   f.el.classList.toggle('airborne', !f.onGround && !f.flight);
-  f.el.classList.toggle('stunned', f.hitStun > 0 || (f.hulkRoarUntil && now() < f.hulkRoarUntil));
+  f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil));
+  f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
   if(!isSlowed(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
   const pct = Math.max(0, f.health/f.def.maxHealth);
   f.overheadFillEl.style.width = (pct*100)+'%';
@@ -7858,12 +8423,52 @@ const I18N_V5 = {
     modal_pad_close:'{b}で閉じる' }
 };
 Object.keys(I18N_V5).forEach(code => { if(I18N[code]) Object.assign(I18N[code], I18N_V5[code]); });
+
+/* Strings for Battle mode, difficulty picker, tokens and Unlock Character.
+   English only for now — every other language falls back to these via t(). */
+const I18N_V6 = {
+  en:{
+    nav_unlock:'Unlock Character', tokens_label:'tokens',
+    mode_practice_desc:'Pick a difficulty, then fight a foe with your equipped fighter.',
+    mode_battle:'Battle', mode_battle_desc:'Face a random rival. Three lives each — win to earn 10 tokens.',
+    practice_title:'Practice', practice_caption:'Pick how tough your opponent will be.',
+    diff_random:'Random', diff_random_rule:'Any fighter', diff_random_desc:'Anyone in the roster can show up — easy, medium or hard.',
+    diff_easy:'Easy', diff_easy_rule:'Under 8,000 HP', diff_easy_desc:'Lightweight foes. A gentle warm-up.',
+    diff_medium:'Medium', diff_medium_rule:'8,000 – 15,000 HP', diff_medium_desc:'Solid fighters, but nobody with a healing factor.',
+    diff_hard:'Hard', diff_hard_rule:'Over 15,000 HP + healers', diff_hard_desc:'The heavyweights, plus anyone with a healing factor.',
+    unlock_title:'Unlock Character', unlock_caption:'Spend tokens to challenge a random fighter',
+    unlock_balance_label:'Your tokens', unlock_go:'Unlock Character',
+    unlock_rules_title:'How it works',
+    unlock_rule_1:'Spend 100 tokens to face one random fighter from the whole roster.',
+    unlock_rule_2:'Beat them and they join your roster.',
+    unlock_rule_3:'Beat someone you already own and your 100 tokens come straight back.',
+    unlock_rule_4:'Lose and the tokens are gone.',
+    unlock_rule_5:'Earn tokens by winning Battle mode — 10 tokens per win.',
+    unlock_progress:'{n} of {total} fighters unlocked', unlock_ready:'Ready when you are.',
+    unlock_need_more:'You need {n} more tokens. Win Battle mode to earn them.',
+    unlock_need_one:'You need 1 more token. Win Battle mode to earn it.',
+    unlock_all_done:'You have already unlocked every fighter!',
+    life_lost:'LIFE LOST', enemy_down:'ENEMY DOWN',
+    reward_battle_win:'+{n} tokens! You now have {total}.',
+    reward_battle_lose:'You ran out of lives — no tokens this time.',
+    reward_unlock_new:'{name} unlocked! Find them in your Inventory.',
+    reward_unlock_refund:'You already own {name}, so your {cost} tokens are back.',
+    reward_unlock_lose:'You lost — the {cost} tokens are gone.',
+    go_unlock_again:'Unlock Another'
+  }
+};
+Object.assign(I18N.en, I18N_V6.en);
 ({en:'Dodge',es:'Esquiva',zh:'闪避',ar:'مراوغة',fr:'Esquive',de:'Ausweichen',pt:'Esquiva',hi:'चकमा',ja:'回避'}) && Object.entries({en:'Dodge',es:'Esquiva',zh:'闪避',ar:'مراوغة',fr:'Esquive',de:'Ausweichen',pt:'Esquiva',hi:'चकमा',ja:'回避'}).forEach(([c,v])=>{ if(I18N[c]) I18N[c].modal_dodge_label = v; });
 
 /* =========================================================================
    SECTION: SCREEN WIRING — mode select, 1 V 1 actions, double-tap details
    ========================================================================= */
-document.getElementById('btn-mode-practice').addEventListener('click', startRandomBattle);
+document.getElementById('btn-mode-practice').addEventListener('click', ()=> showScreen('practice'));
+document.getElementById('btn-mode-battle').addEventListener('click', ()=> startLivesBattle());
+document.querySelectorAll('.diff-card').forEach(btn=>{
+  btn.addEventListener('click', ()=> startPractice(btn.dataset.diff));
+});
+document.getElementById('btn-unlock-go').addEventListener('click', ()=> startUnlockChallenge());
 document.getElementById('btn-mode-friend').addEventListener('click', ()=> showScreen('pair'));
 
 /* =========================================================================
