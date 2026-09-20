@@ -489,6 +489,12 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 .ability-ring{position:absolute;border:3px solid;border-radius:50%;animation:abilityRing .5s cubic-bezier(.15,.7,.2,1) forwards;pointer-events:none;z-index:4;}
 .spark{position:absolute;width:8px;height:8px;border-radius:50%;box-shadow:0 0 14px currentColor;animation:sparkFly .5s ease-out forwards;z-index:7;}
+.goo-drop{position:absolute;border-radius:60% 40% 55% 45%;background:radial-gradient(circle at 35% 30%, #3dffa0cc, #0d0f10 72%);box-shadow:0 0 6px #3dffa055;animation:gooDropFall .4s cubic-bezier(.3,.7,.35,1) forwards;z-index:7;}
+@keyframes gooDropFall{
+  0%{transform:translate(0,0) scale(1); opacity:1;}
+  55%{transform:translate(var(--dx),var(--dy)) scale(.85); opacity:.9;}
+  100%{transform:translate(calc(var(--dx)*1.05), calc(var(--dy) + var(--fall))) scale(.3); opacity:0;}
+}
 .epic-projectile{will-change:transform,filter;box-shadow:0 0 12px currentColor,0 0 24px currentColor;filter:drop-shadow(0 0 7px currentColor) saturate(1.3);}
 .ability-btn{transition:transform .12s ease,filter .12s ease,box-shadow .12s ease,border-color .12s ease;}
 .ability-btn:active{transform:translateY(-1px) scale(.97);filter:brightness(1.25);box-shadow:0 0 25px #7c3aed66;}
@@ -2814,8 +2820,25 @@ const CHARACTERS = {
          desc:'Deadpool says a random fourth-wall-breaking line in a speech bubble. It does absolutely nothing, and has no cooldown.'}
     }
   },
+  venom: {
+    id:'venom', name:'Venom', img:'Venom.jpg', color:'#0d0f10', accentColor:'#3dffa0', aiStyle:'venom',
+    maxHealth:15500,
+    description:'A living symbiote bruiser. Whips enemies with a lashing tendril up close, hooks them from a distance and yanks them in for a slam, then knits itself back together in a roiling black mass when hurt.',
+    abilities:{
+      E:{key:'E', name:'Symbiote Lash', type:'melee', damage:550, cooldown:1500, knockback:11, range:100,
+         hitDelay:80,
+         sound:'venom_lash', fx:'venom_lash', hitFx:'venom_lash_hit', hitSound:'venom_lash_hit',
+         desc:'A whip-crack lash of hardened symbiote mass. Slightly longer reach than most close-range strikes.'},
+      Q:{key:'Q', name:'Tendril Grab & Slam', type:'tendrilGrab', damage:1400, cooldown:14000, knockback:16, range:320,
+         sound:'venom_tendril_shoot', fx:'venom_tendril_shoot', hitFx:'venom_slam_hit', hitSound:'venom_slam_hit',
+         desc:'Fires a barbed tendril out to 320px. If it hooks the opponent, it hauls them in and slams them into the ground for heavy damage. Whiffs harmlessly if nothing is caught.'},
+      R:{key:'R', name:'Symbiote Regeneration', type:'symbioteRegen', heal:1800, reduction:.4, duration:3000, cooldown:30000,
+         sound:'venom_regen', fx:'venom_regen',
+         desc:'The symbiote mass roils and knits itself back together, healing 1,800 health and reducing incoming damage by 40% for 3 seconds.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool'];
+const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool','venom'];
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -4603,7 +4626,66 @@ function executeAbility(caster, target, ability, t){
       caster.bpSlamAbility = ability;
       break;
     }
+    case 'tendrilGrab': {
+      // Venom's Tendril Grab & Slam: a barbed symbiote tendril shoots out to
+      // ability.range. If it reaches the target, it hooks them and reels them
+      // in using the same grapple physics fields the game already drives any
+      // fighter with (see updatePhysics), then the slam itself resolves once
+      // the pull finishes (updateVenomTendril). Out of range, it's a clean whiff.
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead){ break; }
+      const cx = caster.x+FIGHTER_SIZE/2, cy = caster.y+FIGHTER_SIZE/2;
+      const tx = tg.x+FIGHTER_SIZE/2, ty = tg.y+FIGHTER_SIZE/2;
+      const dist = Math.hypot(tx-cx, ty-cy);
+      if(dist <= ability.range && !attackBlockedByFloor(caster, tg)){
+        const dx = cx-tx, dy = cy-ty;
+        const pd = Math.max(1, Math.hypot(dx,dy));
+        const pullMs = Math.min(480, Math.max(240, dist*1.1));
+        const speed = Math.min(30, Math.max(15, dist / (pullMs/16.6667)));
+        tg.grappleVx = (dx/pd) * speed;
+        tg.grappleVy = (dy/pd) * speed * 0.35 - 3; // slight lift so they arc in instead of dragging along the ground
+        tg.grappleUntil = t + pullMs;
+        tg.onGround = false;
+        tg.hitStun = Math.min(420, pullMs);
+        caster.venomSlamPending = { target: tg, ability, resolveAt: t + pullMs };
+        spawnVenomTendrilFx(caster, tg, true);
+      } else {
+        const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*Math.min(ability.range, 150);
+        const wy = caster.y + FIGHTER_SIZE/2;
+        spawnVenomTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
+        fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#3dffa044,transparent 70%);`, 380);
+      }
+      break;
+    }
+    case 'symbioteRegen': {
+      const before = caster.health;
+      caster.health = Math.min(caster.def.maxHealth, caster.health + ability.heal);
+      const healed = Math.round(caster.health - before);
+      spawnDamageNumber(caster.x+22, caster.y-10, '+'+healed, true);
+      caster.shield = { reduction: ability.reduction, expire: t + ability.duration };
+      spawnVenomRegenFx(caster);
+      break;
+    }
   }
+}
+/* Venom's Tendril Grab & Slam: resolves the slam once the reel-in physics
+   (driven by grappleVx/grappleVy/grappleUntil on the hooked target) finishes. */
+function updateVenomTendril(f){
+  const pending = f.venomSlamPending;
+  if(!pending) return;
+  if(state.mode !== 'battle' || f.dead){ f.venomSlamPending = null; return; }
+  const tg = pending.target;
+  if(!tg || tg.dead){ f.venomSlamPending = null; return; }
+  if(now() < pending.resolveAt) return;
+  f.venomSlamPending = null;
+  const ability = pending.ability;
+  const dist = Math.hypot((tg.x-f.x),(tg.y-f.y));
+  // Generous connect check: the whole point already landed when the hook first
+  // fired, so only skip the slam if the target somehow escaped the floor check
+  // entirely (e.g. got yanked through a platform boundary).
+  if(attackBlockedByFloor(f, tg) && dist > ability.range) return;
+  const dir = dirSignTo(f, tg);
+  damageTargetOrWall(tg, ability.damage, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound});
 }
 /* Shield Block: forces the block off after its max duration even if the
    player never presses the key again, and starts its cooldown from there. */
@@ -5243,6 +5325,39 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.34, 0.16, 'highpass', 3000, 600, 0.9);
         return;
 
+      /* ---------- Venom ---------- */
+      case 'venom_lash': // wet whip-crack through the symbiote mass
+        aNoise(ctx, t, 0.16, 0.22, 'lowpass', 1800, 260, 1.3);
+        aNoise(ctx, t+0.10, 0.05, 0.20, 'highpass', 3400, 1200, 2.0);
+        aTone(ctx, t, 'sawtooth', 180, 60, 0.14, 0.06);
+        return;
+      case 'venom_lash_hit': // squelchy wet thud
+        aTone(ctx, t, 'sine', 130, 34, 0.30, 0.22);
+        aNoise(ctx, t, 0.20, 0.26, 'lowpass', 1200, 160, 0.7);
+        aNoise(ctx, t+0.03, 0.10, 0.16, 'bandpass', 700, 260, 3.0);
+        return;
+      case 'venom_tendril_shoot': { // stretching, sucking launch as the tendril extends and hooks in
+        aNoise(ctx, t, 0.22, 0.20, 'bandpass', 900, 2400, 2.4);
+        aTone(ctx, t, 'sawtooth', 90, 260, 0.24, 0.08);
+        aNoise(ctx, t+0.14, 0.08, 0.18, 'highpass', 3000, 1000, 2.0);
+        return;
+      }
+      case 'venom_slam_hit': { // heavy wet slam + goo splash
+        aTone(ctx, t, 'sine', 150, 30, 0.55, 0.34);
+        aTone(ctx, t, 'square', 80, 34, 0.30, 0.13);
+        aNoise(ctx, t, 0.34, 0.30, 'lowpass', 1600, 140, 0.6);
+        aNoise(ctx, t+0.05, 0.20, 0.20, 'bandpass', 900, 220, 2.2);
+        aNoise(ctx, t+0.12, 0.14, 0.12, 'highpass', 2600, 700, 1.6);
+        return;
+      }
+      case 'venom_regen': { // low gurgling, bubbling reformation as the mass knits back together
+        aTone(ctx, t, 'sine', 90, 220, 0.55, 0.14);
+        aNoise(ctx, t, 0.50, 0.16, 'bandpass', 350, 900, 1.4);
+        aNoise(ctx, t+0.18, 0.16, 0.14, 'bandpass', 220, 600, 2.0);
+        aNoise(ctx, t+0.34, 0.12, 0.10, 'bandpass', 260, 700, 2.2);
+        return;
+      }
+
       /* ---------- legacy / generic ---------- */
       case 'hit':
         aTone(ctx, t, 'square', 140, 62, 0.13, 0.13);
@@ -5371,6 +5486,78 @@ function spawnLightning(x1, y1, x2, y2, opts){
     `left:${minX.toFixed(1)}px;top:${minY.toFixed(1)}px;width:${w.toFixed(1)}px;height:${h.toFixed(1)}px;--bl:${o.life}ms;`,
     o.life + 60,
     `<svg width="${w.toFixed(1)}" height="${h.toFixed(1)}" viewBox="0 0 ${w.toFixed(1)} ${h.toFixed(1)}">${paths}</svg>`);
+}
+/* ---------------- Venom: symbiote tendril SVG helpers ---------------- */
+// A single sinewy strand used for the close-range lash: thick black body,
+// a green underlayer so it reads against the dark arena, and a sharpened
+// barbed tip.
+function venomTendrilStrandSvg(w, h){
+  const y = h/2;
+  const pts = boltPoints(10, y, w-16, y, 6, 9);
+  const d = ptsToPath(pts);
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <path d="${d}" stroke="#0d0f10" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" stroke="#1c8a55" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+    <path d="${d}" stroke="#3dffa0" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+    <path d="M ${(w-18).toFixed(1)} ${(y-7).toFixed(1)} L ${(w-3).toFixed(1)} ${y.toFixed(1)} L ${(w-18).toFixed(1)} ${(y+7).toFixed(1)} Z" fill="#0d0f10" stroke="#3dffa0" stroke-width="1.2"/>
+  </svg>`;
+}
+// The longer tendril thrown out by Tendril Grab & Slam. Drawn as a jagged
+// organic rope from Venom to the target (or to empty air on a whiff), with
+// small barbed cross-ticks along its length and a hooked/open tip depending
+// on whether it actually connected.
+function spawnVenomTendrilFx(caster, targetPoint, connected){
+  const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
+  const tx = targetPoint.x + FIGHTER_SIZE/2, ty = targetPoint.y + FIGHTER_SIZE/2;
+  const pad = 30;
+  const minX = Math.min(cx,tx) - pad, minY = Math.min(cy,ty) - pad;
+  const w = Math.abs(tx-cx) + pad*2, h = Math.abs(ty-cy) + pad*2;
+  const pts = boltPoints(cx-minX, cy-minY, tx-minX, ty-minY, 7, 14);
+  const d = ptsToPath(pts);
+  let barbs = '';
+  for(let i=1;i<pts.length-1;i++){
+    const px = pts[i][0], py = pts[i][1];
+    const nx = -(pts[i+1][1]-pts[i-1][1]), ny = (pts[i+1][0]-pts[i-1][0]);
+    const nl = Math.hypot(nx,ny) || 1;
+    barbs += `<line x1="${(px-(nx/nl)*5).toFixed(1)}" y1="${(py-(ny/nl)*5).toFixed(1)}" x2="${(px+(nx/nl)*5).toFixed(1)}" y2="${(py+(ny/nl)*5).toFixed(1)}" stroke="#0d0f10" stroke-width="2"/>`;
+  }
+  const tipColor = connected ? '#3dffa0' : '#5c6b64';
+  const svg = `<svg width="${w.toFixed(1)}" height="${h.toFixed(1)}" viewBox="0 0 ${w.toFixed(1)} ${h.toFixed(1)}">
+    <path d="${d}" stroke="#0d0f10" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" stroke="#1c8a55" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    ${barbs}
+    <circle cx="${(tx-minX).toFixed(1)}" cy="${(ty-minY).toFixed(1)}" r="7" fill="${tipColor}" opacity="0.92"/>
+  </svg>`;
+  fxEl('fx-webline', `left:${minX.toFixed(1)}px;top:${minY.toFixed(1)}px;width:${w.toFixed(1)}px;height:${h.toFixed(1)}px;`, connected ? 480 : 320, svg);
+  spawnGooDroplets(tx, ty, connected ? 10 : 5, connected ? 40 : 22, connected ? 420 : 300);
+  if(connected) shakeArena(4, 200);
+}
+// Small heal-confirmation burst for Symbiote Regeneration, in Venom's own
+// black/green palette rather than the generic green heal burst.
+function spawnVenomRegenFx(caster){
+  const el = document.createElement('div');
+  el.className = 'fx fx-burst';
+  const size = 74;
+  el.style.cssText = `left:${caster.x+FIGHTER_SIZE/2-size/2}px; top:${caster.y+FIGHTER_SIZE/2-size/2}px; width:${size}px; height:${size}px; background:radial-gradient(circle, #3dffa088, #0d0f10aa 55%, transparent 75%);`;
+  arenaEl.appendChild(el);
+  setTimeout(()=>el.remove(), 500);
+}
+// Dark, gooey droplets that ooze and drip rather than fly outward like
+// sparks — used for Venom's lash, tendril grab, and regeneration.
+function spawnGooDroplets(cx, cy, n, spread, life){
+  life = life || 400;
+  for(let i=0;i<n;i++){
+    const ang = Math.random()*Math.PI*2;
+    const d = spread * (0.3 + Math.random()*0.9);
+    const size = 4 + Math.random()*5;
+    const el = document.createElement('div');
+    el.className = 'fx goo-drop';
+    el.style.cssText = `left:${(cx-size/2).toFixed(1)}px;top:${(cy-size/2).toFixed(1)}px;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;`
+      + `--dx:${(Math.cos(ang)*d).toFixed(1)}px;--dy:${(Math.sin(ang)*d - 6).toFixed(1)}px;--fall:${(18+Math.random()*22).toFixed(1)}px;`
+      + `animation-duration:${life}ms;`;
+    arenaEl.appendChild(el);
+    setTimeout(()=>{ if(el.parentNode) el.remove(); }, life + 40);
+  }
 }
 
 /* --- web geometry -------------------------------------------------------- */
@@ -5952,6 +6139,44 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Venom ---------------- */
+    case 'venom_lash': {
+      // A whip-crack tendril lashes out from Venom — a fast sinewy black
+      // strand with a glowing green tip that snaps forward, plus a spray of
+      // dark goo droplets along its length. Pure overlay FX (no rigged body
+      // sprite for Venom yet), same approach used for Black Panther's claws.
+      const reach = ability.range || 100;
+      const hx = cx + dir*reach*0.82, hy = cy - 2;
+      fxEl('melee-weapon-fx', `left:${cx-8}px;top:${cy-30}px;width:${reach+40}px;height:60px;transform-origin:8px 30px;transform:scaleX(${dir});`,
+        220, venomTendrilStrandSvg(reach+40, 60));
+      spawnGooDroplets(hx, hy, 9, 46, 360);
+      spawnSparks(hx, hy, 5, '#3dffa0', 30, 300);
+      break;
+    }
+    case 'venom_tendril_shoot': {
+      // Cast-time visual only; the connecting tendril line (whether it hooks
+      // the target or whiffs into empty space) is drawn by spawnVenomTendrilFx
+      // once executeAbility knows the outcome, from the ability's own case in
+      // the resolution switch just below.
+      fxEl('charge-glow',
+        `left:${cx-16}px;top:${cy-16}px;width:32px;height:32px;`
+        + `background:radial-gradient(circle,#7dffc0,#0d0f10 60%,transparent 78%);box-shadow:0 0 20px #3dffa0;`, 200);
+      spawnGooDroplets(cx, cy, 4, 20, 260);
+      break;
+    }
+    case 'venom_regen': {
+      // The symbiote mass roils across Venom's body — a dark pulsing ring,
+      // oozing droplets curling inward, and a green healing glow underneath
+      // so it still reads as restorative rather than damaging.
+      fxEl('fx-ring', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;border-color:#3dffa0;box-shadow:0 0 26px #1c8a55, inset 0 0 22px #0d0f10cc;`, 620);
+      fxEl('fx-flash', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#173a2a,#0d0f10 60%,transparent 80%);`, 340);
+      for(let i=0;i<5;i++){
+        setTimeout(()=>{ if(state.mode==='battle') spawnGooDroplets(cx + (Math.random()-0.5)*40, cy + (Math.random()-0.5)*40, 3, 18, 420); }, i*90);
+      }
+      spawnSparks(cx, cy, 10, '#3dffa0', 40, 480);
+      break;
+    }
+
     /* ---------------- fallback (keeps any future ability covered) --------- */
     default: {
       const col = ability.color || caster.def.color || '#fff';
@@ -6164,6 +6389,36 @@ function spawnHitFx(target, kind, dirSign){
       fxEl('fx-ring', `left:${cx-28}px;top:${cy-28}px;width:56px;height:56px;border-color:#ff6572;box-shadow:0 0 18px #ff6572;`, 280);
       spawnDamageNumber(target.x+22,target.y-12,'-1000',false);
       spawnSparks(cx,cy,7,'#ff6572',36,280);
+      break;
+    }
+    case 'venom_lash_hit': {
+      // A wet, splattering symbiote impact — dark irregular splat with a
+      // green afterglow, plus a spray of goo droplets instead of clean sparks.
+      const splat = `<svg width="100" height="100" viewBox="0 0 100 100">
+        <g fill="#0d0f10" opacity="0.92">
+          <ellipse cx="50" cy="50" rx="30" ry="24" transform="rotate(${(Math.random()*40-20).toFixed(1)} 50 50)"/>
+          <circle cx="${(28+Math.random()*10).toFixed(1)}" cy="${(30+Math.random()*10).toFixed(1)}" r="${(8+Math.random()*5).toFixed(1)}"/>
+          <circle cx="${(66+Math.random()*10).toFixed(1)}" cy="${(62+Math.random()*10).toFixed(1)}" r="${(7+Math.random()*5).toFixed(1)}"/>
+        </g>
+        <ellipse cx="50" cy="50" rx="16" ry="12" fill="#1c8a55" opacity="0.6"/>
+      </svg>`;
+      fxEl('fx-splat', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;`, 520, splat);
+      fxEl('fx-impact-star', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;`, 200, impactStarSvg('#3dffa0',68,dirSign));
+      spawnGooDroplets(cx, cy, 12, 58, 460);
+      shakeArena(6, 240);
+      break;
+    }
+    case 'venom_slam_hit': {
+      // The payoff of Tendril Grab & Slam — a heavy ground-shaking impact
+      // wrapped in a big dark symbiote burst, a wide green shockwave ring,
+      // and a much bigger splash of goo than the basic lash.
+      fxEl('fx-flash', `left:${cx-76}px;top:${cy-76}px;width:152px;height:152px;background:radial-gradient(circle,#173a2a,#0d0f10 55%,transparent 78%);`, 320);
+      fxEl('fx-ring', `left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;border-color:#3dffa0;border-width:5px;box-shadow:0 0 32px #1c8a55;`, 560);
+      fxEl('fx-impact-star', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;`, 240, impactStarSvg('#0d0f10',100,dirSign));
+      spawnGooDroplets(cx, cy, 20, 90, 560);
+      spawnSparks(cx, cy, 10, '#3dffa0', 60, 420);
+      spawnGroundCrack(cx, target.y + FIGHTER_SIZE, 100);
+      shakeArena(13, 380);
       break;
     }
     default: {
@@ -6846,6 +7101,7 @@ const AI_STYLE_RANGE = {
   wolverine:   100,
   hawkeye:     520,
   blackwidow:  300,
+  venom:       110,  // Venom wants to be in tendril-grab range, closer than that for the lash
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -7250,6 +7506,15 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist > 120 && adist < 850 && bot.health > 1500 && Math.random() < 0.42){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist <= eAb.range + 20){ tryUseAbility(bot,player,'E'); return; }
     if(now() >= (bot.aiNextFourthWall||0) && Math.random() < 0.08){ tryUseAbility(bot,player,'R'); bot.aiNextFourthWall = now()+1400; return; }
+  } else if(style === 'venom'){
+    // Venom: hook the opponent with the tendril grab from just outside lash range to
+    // haul them in for the slam, lash whenever they're already close, and regenerate
+    // behind the damage-reduction window once he's actually taking a beating.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q, rAb = bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && hpPct < 0.45 && Math.random() < 0.6){ tryUseAbility(bot, player, 'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > eAb.range - 15 && adist <= qAb.range + 15){ tryUseAbility(bot, player, 'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 18){ tryUseAbility(bot, player, 'E'); return; }
+    if(cdReady(bot,'Q',t) && adist <= qAb.range + 15 && Math.random() < 0.3){ tryUseAbility(bot, player, 'Q'); return; }
   }
 }
 
@@ -8677,6 +8942,7 @@ function gameLoop(ts){
     updateShield(p); updateShield(b);
     updateIllusions(dtF);
     updateBPCharge(p); updateBPCharge(b);
+    updateVenomTendril(p); updateVenomTendril(b);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
