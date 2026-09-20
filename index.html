@@ -733,6 +733,48 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .afterimage{border-radius:11px; pointer-events:none; animation:aiFade .36s ease-out forwards;}
 @keyframes aiFade{0%{opacity:.48;transform:scale(1)}100%{opacity:0;transform:scale(.82)}}
 
+/* ---------- New character visuals ---------- */
+.loki-clone{z-index:7;}
+.strange-portal,.loki-portal{position:absolute;border-radius:50%;pointer-events:none;z-index:8;overflow:visible;animation:strangePortalOpen .48s cubic-bezier(.2,.85,.2,1) forwards;}
+.strange-portal{background:radial-gradient(circle,rgba(10,8,6,.35) 0 60%,transparent 68%);border:3px solid #ffb04a;box-shadow:0 0 6px #fff2b0,0 0 16px #ff9f2f,inset 0 0 14px #ff9f2f88,0 0 34px #ff6a00,0 0 58px #ff7b1855;}
+.strange-portal:before{content:'';position:absolute;inset:-8%;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0 7deg,#ffd37c 7.6deg 9deg,transparent 9.6deg 15deg,#ff7a18 15.6deg 16.5deg,transparent 17deg 24deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));filter:drop-shadow(0 0 4px #ff8c22);animation:portalRuneSpin 1.5s linear infinite;}
+.strange-portal:after{content:'';position:absolute;inset:11%;border-radius:50%;border:2px solid transparent;background:conic-gradient(from 20deg,transparent 0 9%,#ffbf55 10% 13%,transparent 14% 27%,#ff7a18 28% 31%,transparent 32% 44%,#ffd27a 45% 48%,transparent 49% 63%,#ff8f22 64% 67%,transparent 68% 82%,#ffc15c 83% 86%,transparent 87%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;filter:drop-shadow(0 0 6px #ff9f2f);animation:portalRingSpin .9s linear infinite reverse;}
+.loki-portal{background:radial-gradient(circle,#050e0b 0 57%,transparent 59%),radial-gradient(circle,rgba(49,255,164,.28) 0 62%,transparent 68%);border:4px solid #36f0a6;box-shadow:0 0 8px #d6fff1,0 0 18px #36f0a6,0 0 36px #08b978,0 0 60px #11e89c55;}
+.loki-portal:before{content:'';position:absolute;inset:-8%;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0 6deg,#9dffd8 7deg 9deg,transparent 10deg 16deg,#18d98e 17deg 18.5deg,transparent 19deg 26deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));filter:drop-shadow(0 0 5px #35e9a1);animation:portalRuneSpin 1.2s linear infinite reverse;}
+.loki-portal:after{content:'';position:absolute;inset:12%;border-radius:50%;border:2px solid transparent;background:conic-gradient(from 10deg,transparent 0 8%,#b8ffe2 9% 12%,transparent 13% 25%,#26e7a0 26% 30%,transparent 31% 46%,#7dffca 47% 50%,transparent 51% 64%,#21d88f 65% 69%,transparent 70% 84%,#adffdc 85% 88%,transparent 89%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;filter:drop-shadow(0 0 6px #35e9a1);animation:portalRingSpin 1s linear infinite;}
+@keyframes strangePortalOpen{0%{transform:scale(.08) rotate(-40deg);opacity:0;filter:brightness(2)}45%{opacity:1;filter:brightness(1.35)}100%{transform:scale(1) rotate(0);opacity:1;filter:brightness(1)}}
+@keyframes portalRuneSpin{to{transform:rotate(360deg)}}
+@keyframes portalRingSpin{to{transform:rotate(360deg)}}
+.strange-rune{position:absolute;pointer-events:none;z-index:8;font-family:'Anton';color:#ffd98a;text-shadow:0 0 8px #ff9b2f,0 0 18px #7b58ff;font-size:28px;animation:runeRise .7s ease-out forwards;}
+@keyframes runeRise{from{transform:scale(.4) translateY(14px) rotate(-20deg);opacity:0}25%{opacity:1}to{transform:scale(1.18) translateY(-34px) rotate(20deg);opacity:0}}
+.elastic-arm{position:absolute;height:22px;border-radius:50px;transform-origin:left center;pointer-events:none;z-index:9;background:linear-gradient(180deg,#7fc3ff 0%,#3e7fba 22%,#28598c 55%,#1a3f6b 100%);border:2px solid #0d2038;box-shadow:0 0 10px #9fdcff99,0 0 22px #ffffff33,inset 0 3px 3px #cfeaff99,inset 0 -3px 4px #0a1e3555;overflow:visible;animation:elasticPunch .34s cubic-bezier(.15,.8,.2,1) forwards;}
+.elastic-arm:before{content:'';position:absolute;inset:3px 8px 3px 30px;border-radius:20px;background:repeating-linear-gradient(90deg,transparent 0 14px,rgba(255,255,255,.30) 15px 17px,transparent 18px 32px);opacity:.8;}
+.elastic-arm:after{content:'';position:absolute;left:30px;right:6px;top:3px;height:4px;border-radius:4px;background:linear-gradient(90deg,#dff2ff99,transparent);}
+.elastic-sleeve{position:absolute;left:0;top:-3px;width:30px;height:28px;border-radius:14px 6px 6px 14px;background:linear-gradient(180deg,#1c4f85,#0f2c4c);box-shadow:inset 0 2px 2px #74c7ff55,0 0 6px #05152655;border-right:2px solid #081729;}
+.elastic-cuff{position:absolute;left:24px;top:-1px;width:7px;height:24px;border-radius:4px;background:#0f2c4c;box-shadow:0 0 4px #78c6ff88, inset 1px 0 2px #3e7fba;}
+.elastic-fist{position:absolute;width:26px;height:24px;border-radius:48% 44% 42% 50%;background:linear-gradient(160deg,#ffe3d1,#f2b992 55%,#c98a5f);border:2px solid #6b3d22;box-shadow:0 0 12px #ffd9b799, inset 0 2px 2px #fff6ec99;}
+.elastic-fingers{position:absolute;right:2px;top:3px;width:12px;height:18px;border-radius:0 8px 8px 0;background:repeating-linear-gradient(180deg,#c98a5f 0 4px,#a86e4a 4px 5px);opacity:.9;}
+.elastic-knuckles{position:absolute;left:2px;top:9px;width:15px;height:6px;border-radius:6px;background:#f2b992;box-shadow:inset 0 1px 1px #fff6ec;}
+@keyframes elasticPunch{0%{transform:scaleX(.12);opacity:0}18%{opacity:1}45%{transform:scaleX(1.04);opacity:1}72%{transform:scaleX(.98);opacity:1}100%{transform:scaleX(.76);opacity:0}}
+.deadpool-leg{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:deadpoolLegSpin .5s cubic-bezier(.18,.7,.2,1) infinite!important;filter:drop-shadow(0 4px 5px #000b) drop-shadow(0 0 6px #e3364244)!important;}
+.deadpool-leg svg{width:100%;height:100%;display:block;overflow:visible;}
+@keyframes deadpoolLegSpin{0%{transform:rotate(-12deg) translateY(2px)}50%{transform:rotate(170deg) translateY(-2px)}100%{transform:rotate(348deg) translateY(2px)}}
+.deadpool-katana-held{position:absolute;right:-26px;top:-4px;width:92px;height:78px;z-index:6;pointer-events:none;transform-origin:35% 65%;filter:drop-shadow(0 2px 3px #000b);}
+.deadpool-katana-held svg{width:100%;height:100%;display:block;overflow:visible;}
+.deadpool-katana-swing .deadpool-katana-held{animation:deadpoolKatanaSwing .32s cubic-bezier(.18,.82,.2,1) forwards;}
+@keyframes deadpoolKatanaSwing{0%{transform:rotate(-48deg) translate(-2px,-4px)}28%{transform:rotate(-20deg) translate(0,-2px)}58%{transform:rotate(40deg) translate(4px,1px)}100%{transform:rotate(18deg) translate(0,0)}}
+.fighter.facing-left .deadpool-katana-held{right:auto;left:-26px;transform:scaleX(-1);}
+.deadpool-katana-swing .deadpool-katana-held{animation:deadpoolKatanaSwing .32s cubic-bezier(.18,.82,.2,1) forwards;}
+.fighter.facing-left.deadpool-katana-swing .deadpool-katana-held{animation:deadpoolKatanaSwingLeft .32s cubic-bezier(.18,.82,.2,1) forwards;}
+@keyframes deadpoolKatanaSwingLeft{0%{transform:scaleX(-1) rotate(-48deg) translate(-2px,-4px)}28%{transform:scaleX(-1) rotate(-20deg) translate(0,-2px)}58%{transform:scaleX(-1) rotate(40deg) translate(4px,1px)}100%{transform:scaleX(-1) rotate(18deg) translate(0,0)}}
+.deadpool-slash-fx{animation:deadpoolSlashFx .33s cubic-bezier(.16,.8,.2,1) forwards;}
+@keyframes deadpoolSlashFx{0%{opacity:0;transform:scale(.45) rotate(-18deg)}18%{opacity:1}62%{opacity:1;transform:scale(1.05) rotate(8deg)}100%{opacity:0;transform:scale(1.22) rotate(18deg)}}
+.deadpool-fourth-bubble{position:absolute;z-index:30;min-width:130px;max-width:235px;padding:9px 13px;border-radius:16px;background:linear-gradient(180deg,#fff,#f1f2f6);color:#111827;border:2px solid #111827;font-weight:900;font-size:13px;line-height:1.1;box-shadow:0 6px 18px #0007;pointer-events:none;animation:fourthBubble 2.25s cubic-bezier(.18,.8,.2,1) forwards;}
+.deadpool-fourth-bubble:after{content:'';position:absolute;left:24px;bottom:-10px;width:15px;height:15px;background:#fff;transform:rotate(45deg);border-right:2px solid #111827;border-bottom:2px solid #111827;}
+@keyframes fourthBubble{0%{opacity:0;transform:translateY(10px) scale(.78)}12%{opacity:1;transform:translateY(0) scale(1)}78%{opacity:1;transform:translateY(-20px) scale(1)}100%{opacity:0;transform:translateY(-44px) scale(.96)}}
+.elasticity-ring{position:absolute;inset:-10px;border:3px solid #d8e3ef;border-radius:50%;box-shadow:0 0 18px #cbd5e1, inset 0 0 18px #ffffff33;animation:elasticityPulse 1.05s ease-in-out infinite alternate;pointer-events:none;z-index:3;}
+@keyframes elasticityPulse{from{opacity:.45;transform:scale(.97)}to{opacity:.9;transform:scale(1.03)}}
+
 /* ---------- New roster visuals ---------- */
 .fighter.hulk .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;box-shadow:0 0 0 2px rgba(105,255,108,.18),0 16px 30px rgba(0,0,0,.32);}
 .fighter.hulk.facing-left .fighter-square{transform:scaleX(-1) scale(1.3);}
@@ -740,6 +782,14 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.hulk .overhead-hp{left:-10px;width:84px;top:-33px;}
 .hulk-aura{position:absolute;inset:-26px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(82,255,100,.16),transparent 68%);animation:hulkAura 1s ease-in-out infinite alternate;z-index:-1;}
 @keyframes hulkAura{from{opacity:.35;transform:scale(.92)}to{opacity:.85;transform:scale(1.05)}}
+.loki-dagger-visual{position:relative;width:46px;height:20px;transform:translateX(-2px) rotate(7deg);filter:drop-shadow(0 0 5px #55f4c4) drop-shadow(0 0 10px #21c989);}
+.loki-dagger-visual .dagger-aura{position:absolute;left:2px;top:2px;width:42px;height:16px;border-radius:50%;background:radial-gradient(ellipse at 65% 50%,#c7fff066,transparent 72%);filter:blur(3px);}
+.loki-dagger-visual svg{position:absolute;left:0;top:0;width:46px;height:20px;overflow:visible;}
+.strange-rune-projectile{font-family:'Anton';font-size:28px;line-height:22px;color:#ffd37c;text-shadow:0 0 7px #ff9d2e,0 0 14px #785cff;animation:runeProjectile 0.45s linear infinite;}
+@keyframes runeProjectile{from{transform:rotate(0deg) scale(.94)}to{transform:rotate(360deg) scale(1.08)}}
+.fighter.deadpool-fourth-wall .fighter-square{animation:fourthWallPose .42s cubic-bezier(.2,.8,.2,1);}
+@keyframes fourthWallPose{0%{transform:rotate(0) scale(1)}35%{transform:rotate(-7deg) scale(1.08)}72%{transform:rotate(6deg) scale(1.02)}100%{transform:rotate(0) scale(1)}}
+
 .arrow-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.55))!important;}
 .arrow-projectile .arrow-shaft{height:4px!important;width:40px!important;background:linear-gradient(90deg,#8d623d 0 28%,#e5e8ef 29% 82%,#b8c0cb 83%)!important;box-shadow:none!important;}
 .arrow-projectile .arrow-head{right:-3px!important;border-top-width:7px!important;border-bottom-width:7px!important;border-left-width:13px!important;}
@@ -1373,7 +1423,8 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .vs-side.locked .vs-status{color:var(--pc);}
 .vs-hintline{font-size:clamp(10px,1.5vh,12px); color:var(--muted); font-weight:600; line-height:1.4;}
 
-.vs-center{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(12px,2.4vh,24px); padding:clamp(56px,9vh,90px) 6px clamp(16px,3vh,32px); min-width:0;}
+.vs-center{display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:clamp(12px,2.4vh,24px); padding:clamp(56px,9vh,90px) 6px clamp(16px,3vh,32px); min-width:0; overflow-y:auto; overflow-x:hidden; scroll-behavior:smooth;}
+.vs-center::-webkit-scrollbar{width:9px}.vs-center::-webkit-scrollbar-thumb{background:#515a7f;border-radius:999px}.vs-center::-webkit-scrollbar-track{background:transparent}
 .vs-heading{font-size:clamp(22px,4.2vh,42px); letter-spacing:.07em; text-transform:uppercase; text-align:center; text-shadow:0 3px 0 rgba(0,0,0,.5);}
 .vs-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(10px,1.8vh,20px); width:min(100%,540px);}
 .vs-card{
@@ -1416,7 +1467,7 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 @media (max-width:900px), (max-aspect-ratio:1/1){
   :root{--slant:0px;}
   .vs-stage{grid-template-columns:1fr 1fr; grid-template-rows:auto 1fr;}
-  .vs-center{grid-column:1 / -1; grid-row:1; padding-top:60px;}
+  .vs-center{grid-column:1 / -1; grid-row:1; padding-top:60px; min-height:0; max-height:54vh; width:100%;}
   .vs-side{clip-path:none !important; grid-row:2; padding:14px 16px !important; align-items:stretch; text-align:start !important;}
   .vs-side.p2 .vs-who, .vs-side.p2 .vs-abilities li{flex-direction:row;}
   .vs-abilities, .vs-hintline{display:none;}
@@ -1887,7 +1938,13 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 *::-webkit-scrollbar-thumb{background:rgba(246,239,224,.22); border-radius:999px; border:3px solid transparent; background-clip:content-box;}
 *::-webkit-scrollbar-thumb:hover{background:rgba(242,165,65,.75); background-clip:content-box;}
 *::-webkit-scrollbar-corner{background:transparent;}
+
 html, body{overflow:hidden;}
+/* Battle is a fixed full-screen canvas. Never show page/nested scrollbars while fighting. */
+body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden !important;}
+#screen-battle.active, #screen-battle.active *{scrollbar-width:none !important;-ms-overflow-style:none !important;}
+#screen-battle.active::-webkit-scrollbar, #screen-battle.active *::-webkit-scrollbar{width:0 !important;height:0 !important;display:none !important;background:transparent !important;}
+
 
 /* Health bars: slanted, segmented, glossy, with a trailing "damage" chunk */
 #screen-battle .hud-side{padding:8px 16px 9px; border-radius:8px;}
@@ -2391,8 +2448,75 @@ const CHARACTERS = {
          desc:'Fires a grapple toward the opponent and quickly pulls Black Widow into position.'}
     }
   },
+  loki: {
+    id:'loki', name:'Loki', img:'Loki.jpg', color:'#41d09c', aiStyle:'trickster',
+    maxHealth:14000,
+    description:'A deceptive magic fighter. Throws Mystic Daggers, creates two attacking duplicates, and can teleport to a random part of the arena.',
+    abilities:{
+      E:{key:'E', name:'Mystic Daggers', type:'projectile', damage:450, cooldown:800, knockback:7,
+         speed:16, w:44, h:18, color:'#6affc8', render:'loki-dagger', trail:'loki',
+         sound:'loki_dagger', fx:'loki_dagger', hitFx:'loki_hit', hitSound:'loki_hit',
+         desc:'Rapid green mystical daggers that travel straight through the arena.'},
+      Q:{key:'Q', name:'Loki Duplication', type:'lokiDuplication', cooldown:11000, duration:4000,
+         sound:'loki_duplication', fx:'loki_duplication',
+         desc:'Summons two attacking Loki duplicates for 4 seconds. They can only use Mystic Daggers, then vanish. Cooldown: 11 seconds.'},
+      R:{key:'R', name:'Teleport', type:'randomTeleport', cooldown:7000,
+         sound:'loki_teleport', fx:'loki_teleport',
+         desc:'Teleports Loki to a random safe part of the map.'}
+    }
+  },
+  drstrange: {
+    id:'drstrange', name:'Doctor Strange', img:'DrStrange.jpg', color:'#7d63ff', aiStyle:'mage',
+    maxHealth:17000,
+    description:'A powerful mystic fighter with hard-hitting runic magic and a portal for instant repositioning.',
+    abilities:{
+      E:{key:'E', name:'Ancient Rune Blast', type:'projectile', damage:600, cooldown:1000, knockback:10,
+         speed:15, w:34, h:22, color:'#ffbf5f', render:'strange-rune-blast', trail:'strange',
+         sound:'strange_rune', fx:'strange_rune', hitFx:'strange_hit', hitSound:'strange_hit',
+         desc:'Launches a glowing Ancient Rune Blast for 600 damage.'},
+      Q:{key:'Q', name:'Mystic Blast', type:'aoe', damage:2000, cooldown:19000, knockback:20, radius:145,
+         sound:'strange_blast', fx:'strange_blast', hitFx:'strange_blast_hit', hitSound:'strange_blast_hit',
+         desc:'A massive mystical explosion around Doctor Strange. 2,000 damage, but a 19 second cooldown.'},
+      R:{key:'R', name:'Portal', type:'portal', cooldown:12000,
+         sound:'strange_portal', fx:'strange_portal',
+         desc:'Opens a portal and instantly teleports Doctor Strange to the opposite side of the arena.'}
+    }
+  },
+  mrfantastic: {
+    id:'mrfantastic', name:'Mr. Fantastic', img:'MrFantastic.jpg', color:'#64a9ff', aiStyle:'stretch',
+    maxHealth:8500,
+    description:'A flexible fighter who extends his body across the arena, follows up with a rapid barrage, and temporarily becomes extremely resistant to damage.',
+    abilities:{
+      E:{key:'E', name:'Stretch Punch', type:'stretchPunch', damage:450, cooldown:850, knockback:9, range:210,
+         hitDelay:100, sound:'stretch_punch', fx:'stretch_punch', hitFx:'stretch_hit', hitSound:'stretch_hit',
+         desc:'Reaches a very long distance with a powerful stretching punch for 450 damage.'},
+      Q:{key:'Q', name:'Rubber Barrage', type:'elasticBarrage', damage:1000, cooldown:8000, knockback:11, range:230,
+         sound:'rubber_barrage', fx:'rubber_barrage', hitFx:'stretch_hit', hitSound:'stretch_hit',
+         desc:'Three rapid stretching punches land in succession for 1,000 total damage.'},
+      R:{key:'R', name:'Elasticity', type:'shield', reduction:.5, duration:4000, cooldown:12000,
+         sound:'elasticity', fx:'elasticity',
+         desc:'Hardens his body into an elastic defensive state, reducing incoming damage by 50% for 4 seconds.'}
+    }
+  },
+  deadpool: {
+    id:'deadpool', name:'Deadpool', img:'Deadpool.jpg', color:'#e33642', aiStyle:'deadpool', passiveRegen:200,
+    maxHealth:11500,
+    description:'A chaotic close-range fighter with fast regeneration, a damaging leg throw that hurts himself too, and a completely pointless fourth-wall break.',
+    abilities:{
+      E:{key:'E', name:'Katana Slash', type:'melee', damage:500, cooldown:850, knockback:11, range:96,
+         hitDelay:70, sound:'deadpool_katana', fx:'deadpool_katana', hitFx:'deadpool_katana_hit', hitSound:'deadpool_katana_hit',
+         desc:'A fast, hard katana slash at close range.'},
+      Q:{key:'Q', name:'Leg Throw', type:'deadpoolLegThrow', damage:2000, selfDamage:1000, cooldown:9000, knockback:18,
+         speed:15, w:46, h:28, color:'#d9273e', render:'deadpool-leg', trail:'deadpool',
+         sound:'deadpool_leg', fx:'deadpool_leg', hitFx:'deadpool_leg_hit', hitSound:'deadpool_leg_hit',
+         desc:'Throws Deadpool\'s leg for 2,000 damage. Deadpool also takes 1,000 damage when he throws it.'},
+      R:{key:'R', name:'Breaking the Fourth Wall', type:'fourthWall', cooldown:0,
+         sound:'fourth_wall', fx:'fourth_wall',
+         desc:'Deadpool says a random fourth-wall-breaking line in a speech bubble. It does absolutely nothing, and has no cooldown.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow'];
+const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool'];
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -3115,6 +3239,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     grappleVx:0, grappleVy:0, grappleUntil:0,
     cooldowns:{E:0,Q:0,R:0},
     shield:null,
+    elasticityEl:null,
     shieldThrown:false,
     blocking:false, blockKey:null, blockExpire:0, blockStart:0,
     bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
@@ -3124,7 +3249,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     hitStun:0,
     slowUntil:0, webWrapEl:null,
     turnPending:null,
-    aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0,
+    aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0, aiNextFourthWall:0,
     el:null, overheadFillEl:null, shieldEl:null, flightEl:null, thrusterEl:null,
   };
 }
@@ -3136,7 +3261,7 @@ const state = {
   mode:'menu', // 'battle'
   countdown:false,
   player:null, bot:null,
-  projectiles:[], walls:[], missiles:[], fxNodes:[],
+  projectiles:[], walls:[], missiles:[], illusions:[], fxNodes:[],
   lastTime:0,
   scaleFactor:1,
   input:{left:false,right:false,down:false,up:false},
@@ -3181,6 +3306,7 @@ function startBattle(playerCharId, botCharId, opts){
   state.projectiles = [];
   state.walls = [];
   state.missiles = [];
+  state.illusions = [];
   setActiveMap(SAVE.mapId);
   clearArenaDOM();
   buildArenaStatic();
@@ -3286,6 +3412,8 @@ function buildFighterDOM(f){
     <div class="fighter-square">${squareInner(f.def)}</div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
     ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
+    ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
+    ${f.def.id==='mrfantastic' ? '<div class="elasticity-ring" style="display:none;"></div>' : ''}
     <div class="shield-ring"></div>
     <div class="flight-glow"></div>
     <div class="thruster"></div>
@@ -3294,6 +3422,7 @@ function buildFighterDOM(f){
   f.el = el;
   f.overheadFillEl = el.querySelector('.overhead-hp .fill');
   f.shieldEl = el.querySelector('.shield-ring');
+  f.elasticityEl = el.querySelector('.elasticity-ring');
   f.flightEl = el.querySelector('.flight-glow');
   f.thrusterEl = el.querySelector('.thruster');
 }
@@ -3531,8 +3660,219 @@ function attackBlockedByFloor(a, b){
   return PLATFORMS.some(pl => segHitsRect(x1,y1,x2,y2, pl.x, pl.y, pl.x+pl.w, pl.y+pl.h));
 }
 
+function randomArenaPlatformPoint(excludePlatform){
+  const candidates = PLATFORMS.filter((p, i)=> p !== excludePlatform && p.w > 140);
+  const list = candidates.length ? candidates : PLATFORMS.filter(p=>p.w>140);
+  const p = list[Math.floor(Math.random()*list.length)] || PLATFORMS[0];
+  const minX = Math.max(BOUND_MIN_X+8, p.x+8);
+  const maxX = Math.min(BOUND_MAX_X-FIGHTER_SIZE-8, p.x+p.w-FIGHTER_SIZE-8);
+  const x = maxX >= minX ? minX + Math.random()*(maxX-minX) : p.x;
+  return {x, y:p.y-FIGHTER_SIZE-1, platform:p};
+}
+function teleportToRandomPlatform(caster){
+  const from = platformUnderX(caster);
+  const dest = randomArenaPlatformPoint(from);
+  const ox = caster.x+FIGHTER_SIZE/2, oy = caster.y+FIGHTER_SIZE/2;
+  caster.x = dest.x; caster.y = dest.y; caster.vx = 0; caster.vy = 0; caster.onGround = false;
+  caster.turnPending = null;
+  const portalClass = caster.def.id === 'loki' ? 'loki-portal' : 'strange-portal';
+  fxEl(portalClass, `left:${ox-38}px;top:${oy-38}px;width:76px;height:76px;`, 430);
+  fxEl(portalClass, `left:${caster.x+FIGHTER_SIZE/2-38}px;top:${caster.y+FIGHTER_SIZE/2-38}px;width:76px;height:76px;`, 430);
+  if(caster.el) spawnAfterimage(caster, caster.def.id==='loki' ? '#55f4c488' : '#8b68ff88', 360);
+  spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,14,caster.def.id==='loki'?'#5dffd0':'#c1a5ff',60,360);
+}
+function teleportThroughPortal(caster){
+  const ox = caster.x, oy = caster.y;
+  const current = platformUnderX(caster);
+  const targetX = BOUND_MAX_X - (caster.x - BOUND_MIN_X) - FIGHTER_SIZE;
+  let best = null, bestScore = Infinity;
+  for(const p of PLATFORMS){
+    if(p===current) continue;
+    const x = Math.max(BOUND_MIN_X+8, Math.min(BOUND_MAX_X-FIGHTER_SIZE-8, targetX));
+    if(x+FIGHTER_SIZE < p.x || x > p.x+p.w) continue;
+    const score = Math.abs(p.y-caster.y);
+    if(score < bestScore){ bestScore = score; best = {x,y:p.y-FIGHTER_SIZE-1}; }
+  }
+  if(!best){ const candidates = PLATFORMS.filter(p=>p!==current); const p = candidates[Math.floor(Math.random()*candidates.length)]||PLATFORMS[0]; best={x:Math.max(BOUND_MIN_X+8,Math.min(BOUND_MAX_X-FIGHTER_SIZE-8,p.x+p.w/2-FIGHTER_SIZE/2)),y:p.y-FIGHTER_SIZE-1}; }
+  fxEl('strange-portal', `left:${ox+FIGHTER_SIZE/2-42}px;top:${oy+FIGHTER_SIZE/2-42}px;width:84px;height:84px;`, 460);
+  caster.x=best.x; caster.y=best.y; caster.vx=0; caster.vy=0; caster.onGround=false;
+  fxEl('strange-portal', `left:${caster.x+FIGHTER_SIZE/2-42}px;top:${caster.y+FIGHTER_SIZE/2-42}px;width:84px;height:84px;`, 460);
+  spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,18,'#ffcf73',78,380);
+}
+function spawnLokiDuplications(caster, duration){
+  clearLokiDuplications(caster);
+  const group = {owner:caster.id, caster, expires:now()+duration, clones:[]};
+  const offsets = [-112, 112];
+  offsets.forEach((offset, i)=>{
+    const x = Math.max(BOUND_MIN_X+12, Math.min(BOUND_MAX_X-FIGHTER_SIZE-12, caster.x + offset));
+    const clone = makeFighter('loki', true, x, `loki-clone-${caster.id}-${Date.now()}-${i}`);
+    clone.isLokiClone = true;
+    clone.cloneOwnerId = caster.id;
+    clone.cloneNextDagger = now() + 250 + i*220;
+    clone.cloneIndex = i;
+    clone.facing = caster.facing;
+    clone.y = caster.y;
+    buildFighterDOM(clone);
+    clone.el.classList.add('loki-clone');
+    // Clones are temporary combatants, not full HUD characters.
+    const hp = clone.el.querySelector('.overhead-hp');
+    if(hp) hp.style.display='none';
+    group.clones.push(clone);
+  });
+  state.illusions.push(group);
+  spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,18,'#5dffd0',90,440);
+}
+function clearLokiDuplications(caster){
+  state.illusions = state.illusions.filter(g=>{
+    if(g.caster===caster || g.owner===caster.id){
+      (g.clones || []).forEach(clone=>clone.el && clone.el.remove());
+      return false;
+    }
+    return true;
+  });
+}
+function fireLokiCloneDagger(clone, target, ownerId){
+  const ability = clone.def.abilities.E;
+  if(!target || target.dead || clone.dead || now() < clone.cloneNextDagger) return;
+  const dir = dirSignTo(clone,target);
+  clone.facing = dir;
+  sfx(ability.sound || 'loki_dagger');
+  spawnAbilityFx(clone, ability, target);
+  state.projectiles.push({
+    x:clone.x+FIGHTER_SIZE/2, y:clone.y+FIGHTER_SIZE/2-ability.h/2,
+    vx:dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color,
+    damage:ability.damage, knockback:ability.knockback, owner:ownerId,
+    icon:'', life:4200, returns:false, phase:'out', originX:clone.x,
+    casterRef:clone, targetRef:target, returnDistance:0, render:'loki-dagger', trail:'loki',
+    web:false, hitFx:ability.hitFx, hitSound:ability.hitSound, slow:0, pierce:false,
+    shieldViz:false, hasHitTarget:false, trailTick:0, el:null
+  });
+  clone.cloneNextDagger = now() + Math.max(500, ability.cooldown);
+}
+function updateLokiCloneAI(group, clone, target, dtF){
+  if(!clone || clone.dead || !target || target.dead) return;
+  const dx = target.x - clone.x;
+  const dy = target.y - clone.y;
+  const adist = Math.abs(dx);
+  const desiredDir = dx >= 0 ? 1 : -1;
+  clone.facing = desiredDir;
+  // Move and reposition the same way the real Loki does: hold a mid-range
+  // kiting distance, hop between platform levels, and dash-jump around
+  // rather than just walking straight at (or away from) the target.
+  const preferred = AI_STYLE_RANGE['trickster'] || 260;
+  let moveDir = 0;
+  if(adist > preferred + 90) moveDir = desiredDir;
+  else if(adist < preferred - 70) moveDir = -desiredDir;
+  else moveDir = Math.random() < 0.5 ? desiredDir : (Math.random() < 0.5 ? -desiredDir : 0);
+  let jump = false;
+  const targetPlat = platformUnderX(target);
+  const clonePlat = platformUnderX(clone);
+  if(dy < -65 && targetPlat && clonePlat && targetPlat !== clonePlat) jump = true;
+  else if(clone.onGround && Math.random() < 0.05) jump = true; // playful hopping, like the real trickster AI
+  clone.aiMoveDir = moveDir;
+  updatePhysics(clone, moveDir, jump, false, dtF);
+  if(Math.abs(dx) < 820 && Math.abs(dy) < 260 && now() >= clone.cloneNextDagger){
+    fireLokiCloneDagger(clone, target, group.owner);
+  }
+  renderFighter(clone);
+}
+function updateIllusions(dtF){
+  if(!state.illusions.length) return;
+  const t=now();
+  for(let gi=state.illusions.length-1;gi>=0;gi--){
+    const g=state.illusions[gi];
+    if(!g.caster || g.caster.dead || t>=g.expires || state.mode!=='battle'){
+      (g.clones || []).forEach(clone=>clone.el && clone.el.remove());
+      state.illusions.splice(gi,1);
+      continue;
+    }
+    const target = g.caster===state.player ? state.bot : state.player;
+    for(const clone of (g.clones || [])) updateLokiCloneAI(g,clone,target,dtF);
+  }
+}
+function spawnFourthWallBubble(caster){
+  const lines = ['Suck it, Fox.','Wanna go to Disneyland?','I like Ryan Reynolds.','Orin is short.','Wren is very awesome.','Why is Thor crying?'];
+  const line = lines[Math.floor(Math.random()*lines.length)];
+  const el=document.createElement('div');
+  el.className='deadpool-fourth-bubble';
+  el.textContent=line;
+  el.style.left=Math.max(8,Math.min(ARENA_W-243,caster.x+10+Math.random()*24))+'px';
+  el.style.top=Math.max(20,caster.y-66)+'px';
+  arenaEl.appendChild(el);
+  setTimeout(()=>el.remove(),2350);
+}
+
 function executeAbility(caster, target, ability, t){
   switch(ability.type){
+    case 'lokiDuplication': {
+      spawnLokiDuplications(caster, ability.duration || 4000);
+      break;
+    }
+    case 'randomTeleport': {
+      teleportToRandomPlatform(caster);
+      break;
+    }
+    case 'portal': {
+      teleportThroughPortal(caster);
+      break;
+    }
+    case 'stretchPunch': {
+      const startX = caster.x, startY = caster.y, faceAtStart = caster.facing;
+      const resolve = ()=>{
+        if(state.mode !== 'battle' || caster.dead || target.dead) return;
+        const dx = (target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
+        const vertical = Math.abs(target.y-caster.y);
+        const facingOk = caster.isBot ? ((dx >= 0 ? 1 : -1) === caster.facing) : (Math.abs(dx) < 24 || (dx >= 0 ? 1 : -1) === faceAtStart);
+        const movedTooFar = Math.abs(caster.x-startX)>80 || Math.abs(caster.y-startY)>100;
+        if(Math.abs(dx) <= ability.range + 35 && vertical < 120 && facingOk && !movedTooFar && !attackBlockedByFloor(caster,target)){
+          damageTargetOrWall(target, ability.damage, ability.knockback, dirSignTo(caster,target), {hitFx:ability.hitFx,sound:ability.hitSound});
+        } else {
+          fxEl('fx-burst', `left:${caster.x+caster.facing*140}px;top:${caster.y+16}px;width:34px;height:34px;background:radial-gradient(circle,#ffffff55,transparent 70%);`, 300);
+        }
+      };
+      const delay = ability.hitDelay || 0;
+      if(delay) setTimeout(resolve, delay); else resolve();
+      break;
+    }
+    case 'elasticBarrage': {
+      const who = caster, tg = target;
+      [0, 130, 260].forEach((delay, idx)=>{
+        setTimeout(()=>{
+          if(state.mode !== 'battle' || who.dead || tg.dead) return;
+          const dx = (tg.x+FIGHTER_SIZE/2)-(who.x+FIGHTER_SIZE/2);
+          const vertical = Math.abs(tg.y-who.y);
+          const facingOk = who.isBot ? ((dx>=0?1:-1)===who.facing) : true;
+          const hit = Math.abs(dx) <= ability.range + 30 && vertical < 125 && facingOk && !attackBlockedByFloor(who,tg);
+          if(hit){
+            const dmg = idx===2 ? 334 : 333;
+            damageTargetOrWall(tg, dmg, ability.knockback, dirSignTo(who,tg), {hitFx:ability.hitFx,sound:ability.hitSound});
+          }
+        }, delay);
+      });
+      break;
+    }
+    case 'deadpoolLegThrow': {
+      // The self-damage happens as the leg is thrown, even if the projectile misses.
+      if(!caster.dead && ability.selfDamage){
+        applyDamage(caster, ability.selfDamage, 5, -caster.facing, {hitFx:'deadpool_recoil', sound:'deadpool_recoil'});
+        if(caster.dead) break;
+      }
+      const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
+      state.projectiles.push({
+        x:caster.x+FIGHTER_SIZE/2, y:caster.y+FIGHTER_SIZE/2-ability.h/2,
+        vx:dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color,
+        damage:ability.damage, knockback:ability.knockback, owner:caster.id,
+        life:4200, returns:false, phase:'out', originX:caster.x, casterRef:caster, targetRef:target,
+        returnDistance:0, render:ability.render, trail:ability.trail, web:false,
+        hitFx:ability.hitFx, hitSound:ability.hitSound, slow:0, pierce:false, shieldViz:false, hasHitTarget:false,
+        trailTick:0, el:null
+      });
+      break;
+    }
+    case 'fourthWall': {
+      spawnFourthWallBubble(caster);
+      break;
+    }
     case 'projectile': {
       // A bot fires wherever it's actually facing (which briefly lags the
       // real target during the flank-reaction window — see updateBotFacing),
@@ -4121,6 +4461,96 @@ function sfx(kind='ability'){
       case 'flight_on':
         aTone(ctx, t, 'triangle', 170, 520, 0.36, 0.13);
         aNoise(ctx, t, 0.48, 0.13, 'lowpass', 600, 2400, 0.8);
+        return;
+
+      /* ---------- Loki ---------- */
+      case 'loki_dagger':
+        aNoise(ctx,t,0.16,0.18,'highpass',5000,1200,2.4);
+        aTone(ctx,t,'triangle',860,420,0.13,0.07);
+        return;
+      case 'loki_duplication':
+        aTone(ctx,t,'sine',220,880,0.30,0.10);
+        aTone(ctx,t+0.05,'triangle',760,1280,0.34,0.07);
+        aNoise(ctx,t,0.34,0.12,'bandpass',1400,4200,1.7);
+        return;
+      case 'loki_teleport':
+        aTone(ctx,t,'sine',260,1100,0.26,0.12);
+        aNoise(ctx,t,0.26,0.15,'bandpass',2200,5200,1.7);
+        aTone(ctx,t+0.12,'triangle',1200,480,0.20,0.06);
+        return;
+      case 'loki_hit':
+        aTone(ctx,t,'square',210,62,0.14,0.13);
+        aNoise(ctx,t,0.14,0.18,'bandpass',2800,700,2.2);
+        return;
+
+      /* ---------- Doctor Strange ---------- */
+      case 'strange_rune':
+        aTone(ctx,t,'triangle',420,1200,0.28,0.10);
+        aNoise(ctx,t,0.20,0.10,'bandpass',1800,4200,2.0);
+        return;
+      case 'strange_blast':
+        aTone(ctx,t,'sine',180,34,0.68,0.34);
+        aTone(ctx,t+0.02,'triangle',420,1500,0.34,0.12);
+        aNoise(ctx,t,0.42,0.22,'bandpass',1800,5200,1.2);
+        return;
+      case 'strange_portal':
+        aTone(ctx,t,'sine',150,920,0.36,0.12);
+        aTone(ctx,t+0.05,'triangle',700,320,0.30,0.08);
+        aNoise(ctx,t,0.38,0.12,'bandpass',1100,3600,1.4);
+        return;
+      case 'strange_hit': case 'strange_blast_hit':
+        aTone(ctx,t,'sine',240,54,0.34,0.18);
+        aTone(ctx,t,'triangle',1200,500,0.16,0.08);
+        aNoise(ctx,t,0.20,0.17,'highpass',3800,1300,1.4);
+        return;
+
+      /* ---------- Mr. Fantastic ---------- */
+      case 'stretch_punch':
+        aNoise(ctx,t,0.18,0.16,'bandpass',3200,700,2.5);
+        aTone(ctx,t,'triangle',300,90,0.18,0.08);
+        return;
+      case 'rubber_barrage':
+        aNoise(ctx,t,0.12,0.15,'bandpass',4200,900,2.8);
+        aTone(ctx,t,'triangle',380,140,0.16,0.07);
+        return;
+      case 'elasticity':
+        aTone(ctx,t,'sine',260,820,0.40,0.10);
+        aTone(ctx,t+0.08,'triangle',820,1380,0.35,0.06);
+        aNoise(ctx,t,0.34,0.09,'bandpass',800,3400,1.8);
+        return;
+      case 'stretch_hit':
+        aTone(ctx,t,'square',180,54,0.15,0.13);
+        aNoise(ctx,t,0.15,0.18,'bandpass',2400,620,2.3);
+        return;
+
+      /* ---------- Deadpool ---------- */
+      case 'deadpool_katana':
+        aNoise(ctx,t,0.20,0.22,'highpass',5400,1400,2.3);
+        aTone(ctx,t,'triangle',520,190,0.18,0.08);
+        return;
+      case 'deadpool_katana_hit':
+        aTone(ctx,t,'sine',170,42,0.24,0.17);
+        aNoise(ctx,t,0.18,0.22,'bandpass',3100,650,2.2);
+        return;
+      case 'deadpool_leg':
+        aNoise(ctx,t,0.16,0.18,'bandpass',2400,700,2.0);
+        aTone(ctx,t,'square',280,70,0.13,0.08);
+        return;
+      case 'deadpool_recoil':
+        aTone(ctx,t,'sine',110,42,0.24,0.18);
+        aNoise(ctx,t,0.16,0.18,'lowpass',1800,240,0.8);
+        return;
+      case 'deadpool_leg_hit':
+        aTone(ctx,t,'sine',130,28,0.58,0.30);
+        aTone(ctx,t,'square',70,26,0.34,0.13);
+        aNoise(ctx,t,0.35,0.30,'lowpass',2800,160,0.7);
+        return;
+      case 'fourth_wall':
+        // Comedic fourth-wall pop: record-scratch snap + tiny comic sparkle + punchy blip.
+        aNoise(ctx,t,0.08,0.24,'highpass',4200,1000,1.2);
+        aTone(ctx,t,'square',980,150,0.12,0.10);
+        aTone(ctx,t+0.07,'triangle',1260,720,0.18,0.07);
+        aTone(ctx,t+0.14,'sine',620,980,0.16,0.05);
         return;
 
       /* ---------- Captain America ---------- */
@@ -4973,6 +5403,102 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Loki ---------------- */
+    case 'loki_dagger': {
+      const hx=cx+dir*24, hy=cy;
+      for(let i=0;i<3;i++) fxEl('strange-rune', `left:${hx-12+i*8}px;top:${hy-18-i*3}px;transform:rotate(${dir*(25+i*14)}deg);color:#6affc8;`, 520, i===0?'✦':'•');
+      spawnSparks(hx,hy,7,'#69ffd0',34,260);
+      break;
+    }
+    case 'loki_duplication': {
+      for(let i=0;i<2;i++){
+        const ang = i===0 ? -28 : 28;
+        fxEl('fx-ring', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#55f4c4;box-shadow:0 0 30px #55f4c4;transform:rotate(${ang}deg);`, 620);
+      }
+      spawnSparks(cx,cy,20,'#5dffd0',110,520);
+      break;
+    }
+    case 'loki_teleport': {
+      spawnAfterimage(caster,'#55f4c488',360);
+      spawnSparks(cx,cy,16,'#69ffd0',84,420);
+      break;
+    }
+
+    /* ---------------- Doctor Strange ---------------- */
+    case 'strange_rune': {
+      for(let i=0;i<7;i++) fxEl('strange-rune', `left:${cx+dir*(14+i*7)}px;top:${cy-26+i*2}px;`, 520, ['◈','✦','ᚱ'][i%3]);
+      fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#ffca6a;box-shadow:0 0 24px #ff9d2e;`, 360);
+      break;
+    }
+    case 'strange_blast': {
+      const R=ability.radius||145;
+      fxEl('fx-ring', `left:${cx-R}px;top:${cy-R}px;width:${R*2}px;height:${R*2}px;border-color:#ffcf73;box-shadow:0 0 40px #7d63ff,inset 0 0 36px rgba(255,190,80,.35);`, 650);
+      fxEl('fx-flash', `left:${cx-100}px;top:${cy-100}px;width:200px;height:200px;background:radial-gradient(circle,#fff7d9,#ffbd55 26%,#775dff 56%,transparent 76%);`, 360);
+      spawnSparks(cx,cy,24,'#ffda88',100,600);
+      shakeArena(10,360);
+      break;
+    }
+    case 'strange_portal': {
+      fxEl('strange-portal', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`, 500);
+      for(let i=0;i<10;i++) fxEl('strange-rune', `left:${cx-20+(Math.random()*40)}px;top:${cy-20+(Math.random()*40)}px;`, 550, ['ᚱ','◈','✦'][i%3]);
+      break;
+    }
+
+    /* ---------------- Mr. Fantastic ---------------- */
+    case 'stretch_punch': {
+      const reach=ability.range||210;
+      const ax=cx+dir*6, ay=cy-6;
+      fxEl('elastic-arm', `left:${ax}px;top:${ay}px;width:${reach}px;transform:scaleX(${dir}) rotate(4deg);`, 360,
+        '<span class="elastic-sleeve"></span><span class="elastic-cuff"></span>');
+      fxEl('elastic-fist', `left:${ax+dir*reach-13}px;top:${ay-5}px;transform:scaleX(${dir});`, 320,
+        '<span class="elastic-fingers"></span><span class="elastic-knuckles"></span>');
+      spawnSparks(ax+dir*reach,ay,8,'#e9f3ff',50,320);
+      break;
+    }
+    case 'rubber_barrage': {
+      const reach=ability.range||230;
+      [0,120,240].forEach((d,i)=>setTimeout(()=>{
+        if(state.mode!=='battle'||caster.dead) return;
+        const bax=cx+dir*6, bay=cy-10+i*5;
+        fxEl('elastic-arm', `left:${bax}px;top:${bay}px;width:${reach-i*24}px;transform:scaleX(${dir}) rotate(${i%2?4:-4}deg);`, 280,
+          '<span class="elastic-sleeve"></span><span class="elastic-cuff"></span>');
+        fxEl('elastic-fist', `left:${bax+dir*(reach-24-i*16)-13}px;top:${bay-6}px;transform:scaleX(${dir});`, 260,
+          '<span class="elastic-fingers"></span><span class="elastic-knuckles"></span>');
+        spawnSparks(cx+dir*(reach-i*24),cy+i*5,5,'#ffffff',24,220);
+      },d));
+      break;
+    }
+    case 'elasticity': {
+      fxEl('fx-ring', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#dce8f6;box-shadow:0 0 26px #c8d8ec,inset 0 0 20px #fff4;`, 500);
+      spawnSparks(cx,cy,12,'#eaf4ff',55,420);
+      break;
+    }
+
+    /* ---------------- Deadpool ---------------- */
+    case 'deadpool_katana': {
+      if(caster.el){
+        caster.el.classList.add('deadpool-katana-swing');
+        setTimeout(()=>caster.el && caster.el.classList.remove('deadpool-katana-swing'),320);
+      }
+      const slash=`<svg width="150" height="102" viewBox="0 0 150 102" style="transform:scaleX(${dir})"><path d="M18 80 Q55 14 126 22" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" opacity=".9"/><path d="M18 80 Q55 14 126 22" stroke="#e33642" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"/><path d="M30 73 Q64 20 120 27" stroke="#ffbdc3" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/></svg>`;
+      fxEl('melee-weapon-fx deadpool-slash-fx', `left:${cx+dir*20-75}px;top:${cy-51}px;width:150px;height:102px;`, 330, slash);
+      spawnSparks(cx+dir*48,cy-4,13,'#ff9ea8',58,360);
+      shakeArena(3.5,150);
+      break;
+    }
+    case 'deadpool_leg': {
+      fxEl('fx-flash', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff,#ff5b69 35%,transparent 75%);`, 250);
+      spawnSparks(cx,cy,10,'#ff6572',42,300);
+      break;
+    }
+    case 'fourth_wall': {
+      const who=caster;
+      caster.el.classList.add('deadpool-fourth-wall');
+      setTimeout(()=>who.el&&who.el.classList.remove('deadpool-fourth-wall'),420);
+      for(let i=0;i<6;i++) setTimeout(()=>{ if(state.mode==='battle') spawnSparks(cx,cy,3,'#fff',22,260); },i*55);
+      break;
+    }
+
     /* ---------------- fallback (keeps any future ability covered) --------- */
     default: {
       const col = ability.color || caster.def.color || '#fff';
@@ -5153,6 +5679,37 @@ function spawnHitFx(target, kind, dirSign){
       fxEl('fx-flash', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;`, 260);
       fxEl('fx-ring', `left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;border-color:#e0e0e0;box-shadow:0 0 20px #c53030;`, 400);
       spawnSparks(cx, cy, 9, '#e0e0e0', 40, 320);
+      break;
+    }
+    case 'loki_hit': {
+      fxEl('fx-impact-star', `left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;`, 220, impactStarSvg('#8affdb',72,dirSign));
+      fxEl('fx-ring', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#55f4c4;box-shadow:0 0 24px #55f4c4;`, 360);
+      spawnSparks(cx,cy,12,'#7effd8',52,320);
+      break;
+    }
+    case 'strange_hit': case 'strange_blast_hit': {
+      fxEl('fx-flash', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;background:radial-gradient(circle,#fff7d6,#ffbd55 28%,#7d63ff 56%,transparent 78%);`, 300);
+      fxEl('fx-ring', `left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;border-color:#ffd278;box-shadow:0 0 26px #7d63ff;`, 420);
+      spawnSparks(cx,cy,16,'#ffd278',64,420);
+      break;
+    }
+    case 'stretch_hit': {
+      fxEl('fx-impact-star', `left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;`, 210, impactStarSvg('#f0f5ff',72,dirSign));
+      fxEl('fx-ring', `left:${cx-32}px;top:${cy-32}px;width:64px;height:64px;border-color:#dce7f7;box-shadow:0 0 20px #b7c8da;`, 350);
+      spawnSparks(cx,cy,10,'#e5efff',45,300);
+      break;
+    }
+    case 'deadpool_katana_hit': case 'deadpool_leg_hit': {
+      fxEl('fx-flash', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;background:radial-gradient(circle,#fff,#ff5d6b 36%,transparent 74%);`, 260);
+      fxEl('fx-impact-star', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;`, 220, impactStarSvg('#ff9aa3',88,dirSign));
+      spawnSparks(cx,cy,14,'#ff6572',58,380);
+      shakeArena(7,260);
+      break;
+    }
+    case 'deadpool_recoil': {
+      fxEl('fx-ring', `left:${cx-28}px;top:${cy-28}px;width:56px;height:56px;border-color:#ff6572;box-shadow:0 0 18px #ff6572;`, 280);
+      spawnDamageNumber(target.x+22,target.y-12,'-1000',false);
+      spawnSparks(cx,cy,7,'#ff6572',36,280);
       break;
     }
     default: {
@@ -5426,7 +5983,8 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
 
 function updateShield(f){
   const active = f.shield && now() < f.shield.expire;
-  f.shieldEl.style.display = active ? 'block' : 'none';
+  if(f.shieldEl) f.shieldEl.style.display = active && f.def.id !== 'mrfantastic' ? 'block' : 'none';
+  if(f.elasticityEl) f.elasticityEl.style.display = active && f.def.id === 'mrfantastic' ? 'block' : 'none';
   if(f.shield && now() >= f.shield.expire) f.shield = null;
 }
 function updateFlightGlow(f){
@@ -5625,6 +6183,22 @@ function buildProjectileVisual(p){
     if(p.render === 'explosive-arrow') p.el.classList.add('explosive');
     p.el.innerHTML = '<div class="arrow-shaft"></div><div class="arrow-head"></div><div class="arrow-tail"></div>';
     p.el.style.color = p.color || '#fff';
+  } else if(p.render === 'loki-dagger'){
+    p.el.classList.add('epic-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none';
+    p.el.innerHTML='<div class="loki-dagger-visual"><i class="dagger-aura"></i><svg viewBox="0 0 46 20" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lokiBladeGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#186b4a"/><stop offset=".35" stop-color="#3fe6a3"/><stop offset=".6" stop-color="#daffee"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>'
+      +'<path d="M4 10 L11 6.5 L11 13.5 Z" fill="#0d2b22" stroke="#39e6a0" stroke-width="0.6"/>'
+      +'<rect x="10.5" y="8" width="4.5" height="4" rx="0.8" fill="#d9ffef" stroke="#1c8e63" stroke-width="0.6"/>'
+      +'<path d="M15 8.6 L40 9.3 L46 10 L40 10.7 L15 11.4 Z" fill="url(#lokiBladeGrad)" stroke="#eafff6" stroke-width="0.4"/>'
+      +'<path d="M16 9.6 L39 10 L16 10.4 Z" fill="#ffffff" opacity=".85"/>'
+      +'</svg></div>';
+  } else if(p.render === 'strange-rune-blast'){
+    p.el.classList.add('epic-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none';
+    p.el.innerHTML='<div class="strange-rune-projectile">◈</div>';
+  } else if(p.render === 'deadpool-leg'){ 
+    p.el.classList.add('deadpool-leg');
+    p.el.innerHTML=`<svg viewBox="0 0 80 50"><defs><linearGradient id="dpLegSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b31928"/><stop offset=".42" stop-color="#ed3f4d"/><stop offset=".7" stop-color="#82111d"/><stop offset="1" stop-color="#2a1116"/></linearGradient><linearGradient id="dpBoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#252a31"/><stop offset=".6" stop-color="#0f1116"/><stop offset="1" stop-color="#030405"/></linearGradient></defs><path d="M9 18 Q15 9 25 8 L44 15 Q53 18 59 26 L52 33 L38 31 L29 39 L14 36 L6 29 Z" fill="url(#dpLegSuit)" stroke="#11151b" stroke-width="2.2"/><path d="M14 14 Q23 11 31 14 L38 29 L27 36 L17 34 L10 28 Z" fill="#15181d" opacity=".8"/><path d="M35 30 L48 19" stroke="#e33642" stroke-width="3" stroke-linecap="round"/><path d="M53 24 L68 29 Q74 31 76 37 L69 41 L51 35 Z" fill="url(#dpBoot)" stroke="#07090c" stroke-width="2.2"/><path d="M51 34 L68 39" stroke="#d3d7de" stroke-width="1.4" opacity=".55"/><circle cx="27" cy="13" r="3" fill="#1a0b0e"/><path d="M20 20 L31 29" stroke="#ff7a84" stroke-width="1.2" opacity=".5"/></svg>`;
   } else if(p.render === 'pistol'){
     p.el.classList.add('pistol-projectile');
     p.el.innerHTML = '<div class="bullet-core"></div><div class="bullet-trail"></div>';
@@ -6193,6 +6767,26 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist <= qAb.range + 18){ tryUseAbility(bot, player, 'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 760){ tryUseAbility(bot, player, 'E'); return; }
     if(cdReady(bot,'R',t) && (hpPct < 0.32 || adist > 420 || Math.abs(vertical) > 110) && Math.random() < 0.7){ tryUseAbility(bot, player, 'R'); return; }
+  } else if(style === 'trickster'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist < 520 && Math.random() < 0.28){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'R',t) && (hpPct < 0.45 || adist < 95) && Math.random() < 0.55){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'mage'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist <= qAb.radius + 25){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 850){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'R',t) && (adist > 420 || Math.abs(vertical)>130 || hpPct < 0.35)){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'stretch'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
+    if(cdReady(bot,'R',t) && hpPct < 0.48){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist <= qAb.range + 25){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 25){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'deadpool'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist > 120 && adist < 850 && bot.health > 1500 && Math.random() < 0.42){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 20){ tryUseAbility(bot,player,'E'); return; }
+    if(now() >= (bot.aiNextFourthWall||0) && Math.random() < 0.08){ tryUseAbility(bot,player,'R'); bot.aiNextFourthWall = now()+1400; return; }
   }
 }
 
@@ -6204,6 +6798,8 @@ function checkKO(){
 }
 function endBattle(winnerSide, reason){
   if(state.mode !== 'battle') return;
+  state.illusions.forEach(g => (g.clones || g.illusions || []).forEach(i => { if(i.el) i.el.remove(); }));
+  state.illusions = [];
   state.mode = 'ended';
   state.countdown = false;
   battleToken++; // invalidate any pending countdown steps
@@ -6970,6 +7566,8 @@ function renderVersus(){
   });
   renderVersusSide(0);
   renderVersusSide(1);
+  const active = cards[versus.sel[0].cursor] || cards[versus.sel[1].cursor];
+  if(active){ active.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'}); }
 }
 function renderVersusSide(slot){
   const el = document.getElementById('vs-side-'+(slot+1));
@@ -7438,6 +8036,8 @@ function gameLoop(ts){
     updateHazards(p); updateHazards(b);
     updatePassiveRegen(p, dtF); updatePassiveRegen(b, dtF);
     updateBlock(p); updateBlock(b);
+    updateShield(p); updateShield(b);
+    updateIllusions(dtF);
     updateBPCharge(p); updateBPCharge(b);
     updateProjectiles(dtF);
     updateMissiles(dtF);
