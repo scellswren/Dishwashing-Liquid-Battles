@@ -320,6 +320,54 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   opacity:.85; pointer-events:none; display:none;
 }
 .fighter .flight-glow{position:absolute; inset:-4px; border-radius:12px; box-shadow:0 0 16px 4px #ffce6b; display:none; pointer-events:none;}
+.fighter-size-body{position:absolute;inset:0;width:64px;height:64px;transform-origin:50% 100%;pointer-events:none;z-index:2;}
+.fighter.wasp .fighter-size-body,.fighter.falcon .fighter-size-body{z-index:2;}
+
+/* ---------- Wasp / Falcon permanent fighter visuals ---------- */
+.wasp-wings,.falcon-wings{position:absolute;left:50%;top:50%;pointer-events:none;z-index:1;overflow:visible;transform-origin:50% 50%;}
+.wasp-wings{width:94px;height:70px;transform:translate(-50%,-50%) scale(.86);display:none;filter:drop-shadow(0 0 5px rgba(255,225,94,.72)) drop-shadow(0 0 13px rgba(235,75,118,.30));}
+.falcon-wings{width:132px;height:86px;transform:translate(-50%,-50%);display:block;filter:drop-shadow(0 3px 3px rgba(0,0,0,.65)) drop-shadow(0 0 7px rgba(207,216,227,.24));}
+.wasp-wings svg,.falcon-wings svg{width:100%;height:100%;display:block;overflow:visible;}
+.fighter.facing-left .wasp-wings,.fighter.facing-left .falcon-wings{transform:translate(-50%,-50%) scaleX(-1);}
+.fighter.facing-left .wasp-wings{transform:translate(-50%,-50%) scaleX(-1) scale(.86);}
+.fighter.falcon .flight-glow,.fighter.wasp .flight-glow{display:none!important;}
+.fighter.wasp.flight-active .wasp-wings{display:block;animation:waspWingBeat .22s ease-in-out infinite alternate;}
+.fighter.falcon.flight-active .falcon-wings{animation:falconWingBeat .32s ease-in-out infinite alternate;}
+@keyframes waspWingBeat{from{transform:translate(-50%,-50%) scaleX(1) scaleY(.88) rotate(-2deg);opacity:.82}to{transform:translate(-50%,-50%) scaleX(1) scaleY(1.08) rotate(3deg);opacity:1}}
+@keyframes falconWingBeat{from{transform:translate(-50%,-50%) scaleX(1) scaleY(.94) rotate(-1deg)}to{transform:translate(-50%,-50%) scaleX(1) scaleY(1.05) rotate(2deg)}}
+.fighter.facing-left.falcon.flight-active .falcon-wings{animation:falconWingBeatLeft .32s ease-in-out infinite alternate;}
+@keyframes falconWingBeatLeft{from{transform:translate(-50%,-50%) scaleX(-1) scaleY(.94) rotate(1deg)}to{transform:translate(-50%,-50%) scaleX(-1) scaleY(1.05) rotate(-2deg)}}
+.fighter.facing-left.wasp.flight-active .wasp-wings{animation:waspWingBeatLeft .22s ease-in-out infinite alternate;}
+@keyframes waspWingBeatLeft{from{transform:translate(-50%,-50%) scaleX(-1) scale(.86) scaleY(.88) rotate(2deg);opacity:.82}to{transform:translate(-50%,-50%) scaleX(-1) scale(.86) scaleY(1.08) rotate(-3deg);opacity:1}}
+
+/* Wasp's Size Disc temporarily enlarges the opponent without granting any damage buff. */
+.fighter.wasp-enlarged .fighter-size-body{transform:scale(1.42);}
+.fighter.wasp-enlarged .fighter-size-body .fighter-square{filter:saturate(1.1) brightness(1.04);}
+.fighter.wasp-enlarged .wasp-size-mark{opacity:1;animation:waspSizePulse .55s ease-in-out infinite alternate;}
+.wasp-size-mark{position:absolute;inset:-23px;border:2px solid rgba(255,222,86,.88);border-radius:50%;box-shadow:0 0 20px rgba(255,192,61,.64),inset 0 0 16px rgba(255,213,82,.14);pointer-events:none;opacity:0;z-index:0;}
+@keyframes waspSizePulse{from{transform:scale(.92);opacity:.48}to{transform:scale(1.07);opacity:1}}
+
+/* Size Disc projectile. */
+.wasp-size-disc-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;}
+.wasp-size-disc-projectile .size-disc{position:absolute;inset:1px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffef0 0 11%,#ffe16b 18%,#f1b52d 43%,#c45b22 70%,#5e1f20 100%);border:2px solid #fff3a5;box-shadow:0 0 8px #ffd34f,0 0 18px rgba(255,161,39,.8),inset 0 0 6px #fff7c2;animation:sizeDiscSpin .34s linear infinite;}
+.wasp-size-disc-projectile .size-disc::before{content:'';position:absolute;inset:5px;border:1px dashed rgba(255,255,255,.78);border-radius:50%;}
+.wasp-size-disc-projectile .size-disc::after{content:'✦';position:absolute;left:50%;top:50%;transform:translate(-50%,-55%);font-size:12px;color:#fffef0;text-shadow:0 0 5px #fff1a8;}
+@keyframes sizeDiscSpin{to{transform:rotate(360deg);}}
+
+/* Falcon Redwing projectile. */
+.falcon-redwing-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;}
+.falcon-redwing-projectile .redwing-drone{position:absolute;left:0;top:2px;width:100%;height:24px;transform-origin:50% 50%;filter:drop-shadow(0 0 6px rgba(225,50,61,.72));animation:redwingHover .22s ease-in-out infinite alternate;}
+.falcon-redwing-projectile .redwing-drone:before{content:'';position:absolute;left:7px;top:7px;width:30px;height:11px;border-radius:7px 9px 8px 5px;background:linear-gradient(180deg,#e6ebf0,#8a929f 50%,#2e333b);border:1px solid #15191f;box-shadow:inset 0 2px 2px rgba(255,255,255,.65),0 0 6px rgba(226,48,61,.58);}
+.falcon-redwing-projectile .redwing-drone:after{content:'';position:absolute;left:2px;top:2px;width:42px;height:22px;border-radius:50%;border:2px solid rgba(224,47,58,.82);box-shadow:0 0 10px rgba(224,47,58,.68),inset 0 0 7px rgba(224,47,58,.22);}
+@keyframes redwingHover{from{transform:translateY(-1px) rotate(-2deg)}to{transform:translateY(2px) rotate(2deg)}}
+
+/* Falcon's physical wing strike. */
+.fighter.falcon.falcon-wing-strike .falcon-wings{animation:falconWingStrike .32s cubic-bezier(.16,.82,.2,1) forwards;}
+@keyframes falconWingStrike{0%{transform:translate(-50%,-50%) scaleX(1) scaleY(.94) rotate(0)}35%{transform:translate(-50%,-50%) scaleX(1.1) scaleY(1.16) rotate(-7deg)}65%{transform:translate(-50%,-50%) scaleX(1.16) scaleY(.88) rotate(10deg)}100%{transform:translate(-50%,-50%) scaleX(1) scaleY(1) rotate(0)}}
+.fighter.facing-left.falcon.falcon-wing-strike .falcon-wings{animation:falconWingStrikeLeft .32s cubic-bezier(.16,.82,.2,1) forwards;}
+@keyframes falconWingStrikeLeft{0%{transform:translate(-50%,-50%) scaleX(-1) scaleY(.94) rotate(0)}35%{transform:translate(-50%,-50%) scaleX(-1.1) scaleY(1.16) rotate(7deg)}65%{transform:translate(-50%,-50%) scaleX(-1.16) scaleY(.88) rotate(-10deg)}100%{transform:translate(-50%,-50%) scaleX(-1) scaleY(1) rotate(0)}}
+.falcon-wing-arc{pointer-events:none;z-index:10;animation:falconWingArc .28s cubic-bezier(.12,.82,.2,1) forwards;}
+@keyframes falconWingArc{0%{opacity:0;transform:scale(.55) rotate(-16deg)}18%{opacity:1}62%{opacity:.95;transform:scale(1.04) rotate(5deg)}100%{opacity:0;transform:scale(1.18) rotate(14deg)}}
 .thor-hammer{position:absolute; width:30px; height:46px; right:-8px; top:25px; z-index:5; pointer-events:none; transform:rotate(16deg); transform-origin:50% 78%; filter:drop-shadow(0 3px 2px rgba(0,0,0,.45));}
 .thor-hammer .hammer-handle{position:absolute; left:12px; top:18px; width:7px; height:27px; border-radius:4px; background:linear-gradient(90deg,#5b3a22,#9b693d 42%,#4b2e1b 100%);}
 .thor-hammer .hammer-head{position:absolute; left:1px; top:4px; width:29px; height:18px; border-radius:4px 5px 5px 4px; background:linear-gradient(180deg,#edf3f8,#aeb8c4 48%,#707a86); border:2px solid #5d6670; box-shadow:inset 0 2px 0 rgba(255,255,255,.65);}
@@ -349,6 +397,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .dmg-num{position:absolute; font-weight:800; font-family:'Anton'; font-size:20px; color:#fff;
   text-shadow:1px 1px 0 #000,-1px -1px 0 #000; pointer-events:none; animation:floatUp .8s ease-out forwards;}
 .dmg-num.heal{color:#7fe39a;}
+.dmg-num.size-tag{color:#ffe36b;text-shadow:1px 1px 0 #000,-1px -1px 0 #000,0 0 8px rgba(255,190,55,.55);font-size:17px;}
 @keyframes floatUp{ from{transform:translateY(0); opacity:1;} to{transform:translateY(-46px); opacity:0;} }
 
 .fx{position:absolute; pointer-events:none;}
@@ -817,6 +866,12 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.antman.antman-big .antman-size-ring{opacity:.95;inset:-24px;border:3px solid rgba(210,45,55,.65);box-shadow:0 0 30px rgba(220,45,55,.45),inset 0 0 24px rgba(220,45,55,.12);animation:antmanBigPulse .8s ease-in-out infinite alternate;}
 @keyframes antmanSmallPulse{from{transform:scale(.86);opacity:.52}to{transform:scale(1.08);opacity:.95}}
 @keyframes antmanBigPulse{from{transform:scale(.92);opacity:.55}to{transform:scale(1.06);opacity:1}}
+.fighter.wasp.wasp-small .fighter-size-body{transform:scale(.4);transform-origin:50% 100%;}
+.fighter.wasp.wasp-small .fighter-square{filter:saturate(1.2) brightness(1.08);}
+.fighter.wasp.wasp-small .wasp-wings{transform:translate(-50%,-50%) scale(.48);}
+.fighter.facing-left.wasp.wasp-small .wasp-wings{transform:translate(-50%,-50%) scaleX(-1) scale(.48);}
+.fighter.wasp.wasp-small.wasp-enlarged .fighter-size-body{transform:scale(.568);}
+.fighter.wasp.wasp-small.wasp-enlarged .wasp-size-mark{inset:-16px;}
 /* ---------- Captain Marvel / Ant-Man projectiles ---------- */
 .captain-photon-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:none!important;animation:none!important;}
 .captain-photon-core{position:absolute;left:0;top:50%;width:72px;height:18px;transform:translateY(-50%);border-radius:14px;background:linear-gradient(90deg,#fff,#fff7b2 24%,#ffd447 58%,#ff8a2b 82%,transparent);box-shadow:0 0 10px #fff2a8,0 0 22px #ffd43b,0 0 38px rgba(255,156,45,.7);}
@@ -965,6 +1020,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes webWrapIn{from{transform:scale(1.55); opacity:0;}to{transform:scale(1); opacity:1;}}
 @keyframes webWrapPulse{from{opacity:.75}to{opacity:1}}
 .fighter.slowed .fighter-square{filter:saturate(.55) brightness(.88);}
+.fighter.wasp-enlarged.slowed .fighter-square{filter:saturate(.72) brightness(.92);}
 .fx-webline{pointer-events:none; z-index:6; animation:weblineFade .5s ease-out forwards;}
 .fx-webline svg{overflow:visible; filter:drop-shadow(0 0 3px rgba(255,255,255,.8));}
 @keyframes weblineFade{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
@@ -2741,6 +2797,42 @@ const CHARACTERS = {
          desc:'Grows Ant-Man to 20% bigger than Hulk for 7 seconds. Movement speed decreases by 20%.'}
     }
   },
+  wasp: {
+    id:'wasp', name:'The Wasp', img:'TheWasp.jpg', color:'#f2c94c', accentColor:'#e84f73', aiStyle:'wasp',
+    maxHealth:7750,
+    description:'A size-shifting aerial fighter. Fires a Size Disc that enlarges and slows the opponent without increasing their damage, can shrink herself for speed, and can take to the air with her wings.',
+    abilities:{
+      E:{key:'E', name:'Size Disc', type:'projectile', damage:250, cooldown:2500, knockback:5,
+         speed:15, w:30, h:30, color:'#ffd34e', render:'wasp-size-disc', trail:'wasp',
+         sound:'wasp_size_disc', fx:'wasp_size_disc', hitFx:'wasp_size_hit', hitSound:'wasp_size_hit',
+         waspSizeDuration:1500, waspSizeSpeedMultiplier:.62,
+         desc:'Fires a disc for 250 damage. On hit, the enemy becomes 42% larger and 38% slower for 1.5 seconds, but gains no damage or other buffs.'},
+      Q:{key:'Q', name:'Shrinking', type:'antmanTransform', form:'small', duration:6000, cooldown:12000,
+         sound:'wasp_shrink', fx:'wasp_shrink',
+         desc:'Shrinks The Wasp to 40% of her normal size for 6 seconds. Movement speed increases by 30%.'},
+      R:{key:'R', name:'Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
+         sound:'wasp_flight', fx:'wasp_flight',
+         desc:'Activates her Wasp wings and enables free flight for 5 seconds. Recharges after a 10 second cooldown.'}
+    }
+  },
+  falcon: {
+    id:'falcon', name:'The Falcon', img:'TheFalcon.jpg', color:'#9aa3af', accentColor:'#dce3ec', aiStyle:'falcon',
+    maxHealth:8000,
+    description:'An aerial marksman with permanent mechanical wings. Uses Wing Strike up close, sends Redwing out as a fast ranged attack, and flies freely for short bursts.',
+    abilities:{
+      E:{key:'E', name:'Wing Strike', type:'melee', damage:500, cooldown:1500, knockback:9, range:100,
+         hitRange:146, hitVertical:125, hitStartSlack:55, hitDelay:70,
+         sound:'falcon_wing_strike', fx:'falcon_wing_strike', hitFx:'falcon_wing_hit', hitSound:'falcon_wing_hit',
+         desc:'A powerful close-range wing-assisted strike for 500 damage. Cooldown: 1.5 seconds.'},
+      Q:{key:'Q', name:'Redwing', type:'projectile', damage:700, cooldown:4000, knockback:11,
+         speed:17, w:52, h:28, color:'#df3948', render:'falcon-redwing', trail:'falcon',
+         sound:'falcon_redwing', fx:'falcon_redwing', hitFx:'falcon_redwing_hit', hitSound:'falcon_redwing_hit',
+         desc:'Launches Redwing at the enemy for 700 damage. Cooldown: 4 seconds.'},
+      R:{key:'R', name:'Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
+         sound:'falcon_flight', fx:'falcon_flight',
+         desc:'Activates free flight for 5 seconds using Falcon’s wings. Recharges after a 10 second cooldown.'}
+    }
+  },
   captainamerica: {
     id:'captainamerica', name:'Captain America', img:'CaptainAmerica.jpg', color:'#3b5bdb',
     maxHealth:10000, aiStyle:'balanced',
@@ -3004,7 +3096,7 @@ const CHARACTERS = {
     }
   },
 };
-const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool','venom','storm','warmachine','cyclops','captainmarvel','antman'];
+const ROSTER_ORDER = ['thor','spiderman','ironman','captainamerica','blackpanther','daredevil','hulk','wolverine','hawkeye','blackwidow','loki','drstrange','mrfantastic','deadpool','venom','storm','warmachine','cyclops','captainmarvel','antman','wasp','falcon'];
 
 /* =========================================================================
    SECTION: I18N — LANGUAGE / TRANSLATIONS
@@ -3835,6 +3927,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     blocking:false, blockKey:null, blockExpire:0, blockStart:0,
     bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
     antmanForm:'normal', antmanTransformUntil:0,
+    waspSizeUntil:0, waspSizeSpeedMultiplier:.62,
     flight:false,
     flightExpire:0,
     hulkRoarUntil:0, hulkRoarLock:false,
@@ -4009,12 +4102,15 @@ function buildArenaStatic(){
 }
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
     ${f.def.id==='antman' ? '<div class="antman-size-ring"></div>' : ''}
-    <div class="fighter-square">${squareInner(f.def)}</div>
+    ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
+    ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f5f8"/><stop offset=".38" stop-color="#aeb7c2"/><stop offset=".72" stop-color="#5d6672"/><stop offset="1" stop-color="#1b2026"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#171b20" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#e7edf3" stroke-width="1.3" opacity=".7"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
+    <div class="wasp-size-mark"></div>
+    <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
     ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
     ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
@@ -4032,6 +4128,10 @@ function buildFighterDOM(f){
   f.elasticityEl = el.querySelector('.elasticity-ring');
   f.flightEl = el.querySelector('.flight-glow');
   f.thrusterEl = el.querySelector('.thruster');
+  f.waspWingsEl = el.querySelector('.wasp-wings');
+  f.falconWingsEl = el.querySelector('.falcon-wings');
+  f.waspSizeMarkEl = el.querySelector('.wasp-size-mark');
+  f.sizeBodyEl = el.querySelector('.fighter-size-body');
 }
 
 /* Scale the fixed-size arena to fit its responsive wrapper */
@@ -4179,7 +4279,7 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.background='rgba(60,120,220,.55)';
       return;
     }
-    if(a.type==='antmanTransform' && fighter.def.id==='antman') {
+    if(a.type==='antmanTransform' && (fighter.def.id==='antman' || fighter.def.id==='wasp')) {
       const active = fighter.antmanForm === a.form && fighter.antmanTransformUntil > t;
       if(active){
         overlay.style.display='flex';
@@ -4223,7 +4323,7 @@ function cdReady(f, key, t){
   const a = f.def.abilities[key];
   if(a.type==='toggle') return true;
   if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
-  if(a.type==='antmanTransform') return t >= f.cooldowns[key] && !(f.def.id==='antman' && f.antmanForm === a.form && f.antmanTransformUntil > t);
+  if(a.type==='antmanTransform') return t >= f.cooldowns[key] && !((f.def.id==='antman' || f.def.id==='wasp') && f.antmanForm === a.form && f.antmanTransformUntil > t);
   // Shield Block: always "ready" while already active, so pressing the key
   // again can lower it manually; only gated by cooldown before it's raised.
   if(a.type==='block') return f.blocking ? true : (t >= f.cooldowns[key]);
@@ -4647,6 +4747,7 @@ function executeAbility(caster, target, ability, t){
         render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
         bulletType: ability.bulletType || '',
         hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0,
+        waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
         pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false,
         trailTick: 0,
         el:null
@@ -4858,16 +4959,18 @@ function executeAbility(caster, target, ability, t){
       break;
     }
     case 'antmanTransform': {
-      if(caster.def.id !== 'antman') break;
+      if(caster.def.id !== 'antman' && caster.def.id !== 'wasp') break;
       const previous = caster.antmanForm;
       caster.antmanForm = ability.form;
       caster.antmanTransformUntil = t + ability.duration;
       if(caster.el){
-        caster.el.classList.toggle('antman-small', ability.form === 'small');
-        caster.el.classList.toggle('antman-big', ability.form === 'big');
+        caster.el.classList.toggle('antman-small', caster.def.id === 'antman' && ability.form === 'small');
+        caster.el.classList.toggle('antman-big', caster.def.id === 'antman' && ability.form === 'big');
+        caster.el.classList.toggle('wasp-small', caster.def.id === 'wasp' && ability.form === 'small');
       }
       if(previous !== ability.form){
-        spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, ability.form==='small'?16:22, ability.form==='small'?'#ff5a63':'#ffcf73', ability.form==='small'?52:72, 440);
+        const c = caster.def.id === 'wasp' ? '#ffe36b' : (ability.form==='small'?'#ff5a63':'#ffcf73');
+        spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, ability.form==='small'?16:22, c, ability.form==='small'?52:72, 440);
       }
       break;
     }
@@ -5048,6 +5151,7 @@ function updateSpecialViz(f){
   f.el.classList.toggle('cap-blocking', !!f.blocking);
   f.el.classList.toggle('bp-charging', !!f.bpCharging);
   f.el.classList.toggle('bp-slam-pending', !!f.bpSlamPending);
+  f.el.classList.toggle('wasp-enlarged', isWaspSizeActive(f));
 }
 
 function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
@@ -5718,6 +5822,63 @@ function sfx(kind='ability'){
         return;
       }
 
+      /* ---------- Wasp ---------- */
+      case 'wasp_size_disc': {
+        aTone(ctx,t,'sine',360,980,0.18,0.10);
+        aTone(ctx,t+0.02,'triangle',920,1450,0.18,0.08);
+        aNoise(ctx,t,0.12,0.12,'highpass',2200,800,2.0);
+        return;
+      }
+      case 'wasp_size_hit': {
+        aTone(ctx,t,'sine',210,48,0.36,0.24);
+        aTone(ctx,t,'square',560,220,0.18,0.08);
+        aNoise(ctx,t,0.20,0.18,'bandpass',1200,260,1.6);
+        return;
+      }
+      case 'wasp_shrink': {
+        aTone(ctx,t,'sine',520,1300,0.28,0.12);
+        aTone(ctx,t+0.04,'triangle',1800,620,0.22,0.07);
+        aNoise(ctx,t,0.18,0.12,'highpass',3200,1000,2.0);
+        return;
+      }
+      case 'wasp_flight': {
+        aTone(ctx,t,'triangle',240,700,0.30,0.10);
+        aTone(ctx,t+0.05,'sine',720,1120,0.22,0.07);
+        aNoise(ctx,t,0.24,0.13,'bandpass',1500,2200,1.6);
+        return;
+      }
+
+      /* ---------- Falcon ---------- */
+      case 'falcon_wing_strike': {
+        aNoise(ctx,t,0.14,0.18,'bandpass',900,380,1.3);
+        aTone(ctx,t+0.03,'triangle',200,72,0.20,0.10);
+        aNoise(ctx,t+0.06,0.08,0.12,'highpass',2400,1100,1.8);
+        return;
+      }
+      case 'falcon_wing_hit': {
+        aTone(ctx,t,'sine',150,36,0.38,0.28);
+        aNoise(ctx,t,0.20,0.22,'bandpass',1300,280,1.5);
+        return;
+      }
+      case 'falcon_redwing': {
+        aTone(ctx,t,'sawtooth',260,920,0.22,0.10);
+        aTone(ctx,t+0.04,'triangle',620,1100,0.18,0.07);
+        aNoise(ctx,t,0.14,0.12,'highpass',2600,1000,1.8);
+        return;
+      }
+      case 'falcon_redwing_hit': {
+        aTone(ctx,t,'sine',190,44,0.38,0.26);
+        aTone(ctx,t,'square',95,38,0.24,0.12);
+        aNoise(ctx,t,0.24,0.24,'bandpass',1500,300,1.4);
+        return;
+      }
+      case 'falcon_flight': {
+        aTone(ctx,t,'triangle',160,520,0.28,0.09);
+        aTone(ctx,t+0.06,'sine',420,760,0.22,0.08);
+        aNoise(ctx,t,0.28,0.13,'bandpass',800,1700,1.15);
+        return;
+      }
+
       /* ---------- Ant-Man ---------- */
       case 'antman_punch': {
         aNoise(ctx,t,0.10,0.16,'bandpass',2200,520,2.2);
@@ -6334,6 +6495,46 @@ function spawnAbilityFx(caster, ability, target){
       fxEl('fx-ring', `left:${cx-58}px;top:${caster.y+FIGHTER_SIZE-26}px;width:116px;height:52px;border-color:#ffd75a;box-shadow:0 0 28px #ffd43b,0 0 46px rgba(77,169,255,.65);`, 520);
       fxEl('fx-flash', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;background:radial-gradient(circle,#fffbd4 0,#ffd85a 20%,#5eb7ff 46%,transparent 72%);`, 320);
       spawnSparks(cx, caster.y+FIGHTER_SIZE, 16, on?'#ffd95a':'#74b9ff', 72, 430);
+      break;
+    }
+
+    /* ---------------- Wasp ---------------- */
+    case 'wasp_size_disc': {
+      const hx=cx+dir*28, hy=cy;
+      fxEl('fx-flash', `left:${hx-24}px;top:${hy-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff9cf,#ffd34e 34%,transparent 72%);`, 220);
+      fxEl('fx-ring', `left:${hx-20}px;top:${hy-20}px;width:40px;height:40px;border-color:#ffe06c;border-width:3px;box-shadow:0 0 18px #ffbe33;`, 320);
+      spawnSparks(hx,hy,9,'#ffe37d',34,280);
+      break;
+    }
+    case 'wasp_shrink': {
+      for(let i=0;i<14;i++) setTimeout(()=>{ if(state.mode==='battle' && caster.el){ const a=Math.random()*Math.PI*2; const r=16+Math.random()*32; spawnSparks(cx+Math.cos(a)*r,cy+Math.sin(a)*r,1,i%2?'#fff9c4':'#e84f73',16,210); } },i*20);
+      fxEl('fx-ring', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ffe36b;border-width:3px;box-shadow:0 0 24px rgba(255,214,87,.75),0 0 34px rgba(232,79,115,.28);`, 500);
+      break;
+    }
+    case 'wasp_flight': {
+      fxEl('fx-ring', `left:${cx-50}px;top:${caster.y+FIGHTER_SIZE-22}px;width:100px;height:44px;border-color:#ffe36b;box-shadow:0 0 24px #ffd34e,0 0 34px rgba(232,79,115,.35);`, 500);
+      for(let i=0;i<10;i++) setTimeout(()=>{ if(state.mode==='battle' && caster.el && caster.flight){ spawnSparks(cx+(Math.random()-.5)*42, caster.y+FIGHTER_SIZE-8, 2, i%2?'#fff5ad':'#e84f73', 38, 240); } }, i*24);
+      break;
+    }
+
+    /* ---------------- Falcon ---------------- */
+    case 'falcon_wing_strike': {
+      caster.el.classList.remove('falcon-wing-strike'); void caster.el.offsetWidth; caster.el.classList.add('falcon-wing-strike');
+      setTimeout(()=>{ if(caster.el) caster.el.classList.remove('falcon-wing-strike'); }, 360);
+      fxEl('falcon-wing-arc', `left:${cx+dir*42-62}px;top:${cy-62}px;width:124px;height:124px;transform:scaleX(${dir});`, 320, '<svg width="124" height="124" viewBox="0 0 124 124"><path d="M18 86 Q48 22 105 40" fill="none" stroke="#eef3f7" stroke-width="8" stroke-linecap="round" opacity=".9"/><path d="M22 92 Q52 33 111 52" fill="none" stroke="#aeb7c3" stroke-width="3" stroke-linecap="round"/><path d="M42 75 L20 98 M60 61 L38 97 M78 53 L66 92" stroke="#e2e8ef" stroke-width="2" stroke-linecap="round" opacity=".85"/></svg>');
+      spawnSparks(cx+dir*35,cy,10,'#e6edf4',46,360);
+      break;
+    }
+    case 'falcon_redwing': {
+      const hx=cx+dir*28, hy=cy;
+      fxEl('fx-flash', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff,#ff5967 30%,transparent 72%);`, 220);
+      fxEl('fx-ring', `left:${hx-28}px;top:${hy-28}px;width:56px;height:56px;border-color:#e44b58;box-shadow:0 0 24px #d82d3d;`, 360);
+      spawnSparks(hx,hy,8,'#ffd4d8',34,260);
+      break;
+    }
+    case 'falcon_flight': {
+      fxEl('fx-ring', `left:${cx-58}px;top:${caster.y+FIGHTER_SIZE-28}px;width:116px;height:52px;border-color:#dce6ef;border-width:4px;box-shadow:0 0 28px rgba(213,225,237,.64);`, 520);
+      spawnSparks(cx,caster.y+FIGHTER_SIZE,14,'#e6edf4',70,420);
       break;
     }
 
@@ -7013,6 +7214,33 @@ function spawnHitFx(target, kind, dirSign){
       shakeArena(13,400);
       break;
     }
+    case 'wasp_size_hit': {
+      fxEl('fx-flash', `left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;background:radial-gradient(circle,#fff9cf,#ffe36b 26%,#e84f73 52%,transparent 76%);`, 280);
+      fxEl('fx-ring', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;border-color:#ffe06a;border-width:5px;box-shadow:0 0 30px #ffc93d,0 0 42px rgba(232,79,115,.45);`, 560);
+      fxEl('fx-ring', `left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;border-color:#fff3b0;border-width:2px;`, 460);
+      spawnSparks(cx,cy,18,'#ffe889',88,500);
+      const tag=document.createElement('div');
+      tag.className='dmg-num size-tag';
+      tag.textContent='BIG + SLOW';
+      tag.style.left=(target.x+8)+'px'; tag.style.top=(target.y-18)+'px';
+      arenaEl.appendChild(tag);
+      setTimeout(()=>tag.remove(),850);
+      break;
+    }
+    case 'falcon_wing_hit': {
+      fxEl('fx-flash', `left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;background:radial-gradient(circle,#fff,#dce5ed 28%,#7f8995 55%,transparent 76%);`, 260);
+      fxEl('fx-ring', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#edf2f6;border-width:5px;box-shadow:0 0 28px rgba(225,235,243,.82);`, 440);
+      spawnSparks(cx,cy,15,'#eaf0f4',72,420);
+      shakeArena(7,260);
+      break;
+    }
+    case 'falcon_redwing_hit': {
+      fxEl('fx-flash', `left:${cx-68}px;top:${cy-68}px;width:136px;height:136px;background:radial-gradient(circle,#fff,#ff6974 25%,#c82738 54%,transparent 76%);`, 300);
+      fxEl('fx-ring', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#ff8790;border-width:4px;box-shadow:0 0 32px #df3948;`, 480);
+      spawnSparks(cx,cy,18,'#ffd9dc',90,500);
+      shakeArena(8,280);
+      break;
+    }
     case 'antman_punch_hit': {
       fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;background:radial-gradient(circle,#fff,#ffcf73 24%,#ff5a52 52%,transparent 76%);`, 260);
       fxEl('fx-impact-star', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`, 220, impactStarSvg('#ffe2a2',96,dirSign));
@@ -7342,22 +7570,62 @@ function updateShield(f){
   if(f.shield && now() >= f.shield.expire) f.shield = null;
 }
 function updateAntmanForm(f){
-  if(!f || f.def.id !== 'antman') return;
+  if(!f || (f.def.id !== 'antman' && f.def.id !== 'wasp')) return;
   const t = now();
   if(f.antmanTransformUntil && t >= f.antmanTransformUntil){
     f.antmanForm = 'normal';
     f.antmanTransformUntil = 0;
   }
   if(f.el){
-    f.el.classList.toggle('antman-small', f.antmanForm === 'small');
-    f.el.classList.toggle('antman-big', f.antmanForm === 'big');
+    f.el.classList.toggle('antman-small', f.def.id === 'antman' && f.antmanForm === 'small');
+    f.el.classList.toggle('antman-big', f.def.id === 'antman' && f.antmanForm === 'big');
+    f.el.classList.toggle('wasp-small', f.def.id === 'wasp' && f.antmanForm === 'small');
+  }
+}
+function isWaspSizeActive(f){ return !!f && (f.waspSizeUntil || 0) > now(); }
+function applyWaspSizeEffect(target, duration, speedMultiplier){
+  if(!target || target.dead) return;
+  const t=now();
+  target.waspSizeUntil = Math.max(target.waspSizeUntil || 0, t + duration);
+  target.waspSizeSpeedMultiplier = speedMultiplier || target.waspSizeSpeedMultiplier || .62;
+  if(target.el){
+    target.el.classList.add('wasp-enlarged');
+    target.el.classList.add('slowed');
+  }
+  clearTimeout(target._waspSizeTimer);
+  target._waspSizeTimer=setTimeout(()=>{
+    if(!target || target.waspSizeUntil > now()) return;
+    target.waspSizeUntil=0;
+    if(target.el){
+      target.el.classList.remove('wasp-enlarged');
+      if(!target.webWrapEl) target.el.classList.remove('slowed');
+    }
+  }, duration+30);
+}
+function updateWaspSizeEffect(f){
+  if(!f) return;
+  const active=isWaspSizeActive(f);
+  if(!active && f.waspSizeUntil){
+    f.waspSizeUntil=0;
+    if(f.el){
+      f.el.classList.remove('wasp-enlarged');
+      if(!f.webWrapEl) f.el.classList.remove('slowed');
+    }
+  }
+  if(f.el){
+    f.el.classList.toggle('wasp-enlarged', active);
+    if(active) f.el.classList.add('slowed');
   }
 }
 function fighterSpeedMultiplier(f){
-  if(!f || f.def.id !== 'antman') return 1;
-  if(f.antmanForm === 'small') return 1.30;
-  if(f.antmanForm === 'big') return 0.80;
-  return 1;
+  if(!f) return 1;
+  let mult=1;
+  if(f.def.id === 'antman' || f.def.id === 'wasp'){
+    if(f.antmanForm === 'small') mult *= 1.30;
+    else if(f.antmanForm === 'big') mult *= 0.80;
+  }
+  if(isWaspSizeActive(f)) mult *= (f.waspSizeSpeedMultiplier || .62);
+  return mult;
 }
 function updateFlightGlow(f){
   const t = now();
@@ -7365,8 +7633,10 @@ function updateFlightGlow(f){
     f.flight = false;
     f.flightExpire = 0;
   }
-  f.flightEl.style.display = f.flight ? 'block' : 'none';
-  if(f.thrusterEl) f.thrusterEl.style.display = f.flight ? 'block' : 'none';
+  if(f.el) f.el.classList.toggle('flight-active', !!f.flight);
+  if(f.flightEl) f.flightEl.style.display = (f.flight && f.def.id !== 'wasp' && f.def.id !== 'falcon') ? 'block' : 'none';
+  if(f.waspWingsEl) f.waspWingsEl.style.display = (f.flight && f.def.id === 'wasp') ? 'block' : 'none';
+  if(f.thrusterEl) f.thrusterEl.style.display = (f.flight && f.def.id !== 'wasp' && f.def.id !== 'falcon') ? 'block' : 'none';
 }
 
 /* =========================================================================
@@ -7468,8 +7738,12 @@ function updateProjectiles(dtF){
       const overlapY = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
       if(overlapX && overlapY && !p.hasHitTarget){
         const dir = dirSignTo({x:p.x}, {x:target.x});
+        const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
           {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow});
+        if(p.waspSizeDuration && target.health < healthBefore){
+          applyWaspSizeEffect(target, p.waspSizeDuration, p.waspSizeSpeedMultiplier || .62);
+        }
         p.hasHitTarget = true;
         if(p.returns){
           p.phase = 'return';
@@ -7511,7 +7785,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -7603,6 +7877,16 @@ function buildProjectileVisual(p){
     p.el.classList.add('epic-projectile');
     p.el.style.background='transparent'; p.el.style.boxShadow='none';
     p.el.innerHTML='<div class="strange-rune-projectile">◈</div>';
+  } else if(p.render === 'wasp-size-disc'){
+    p.el.classList.add('wasp-size-disc-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML='<div class="size-disc"></div>';
+  } else if(p.render === 'falcon-redwing'){
+    p.el.classList.add('falcon-redwing-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML='<div class="redwing-drone"></div>';
   } else if(p.render === 'deadpool-leg'){ 
     p.el.classList.add('deadpool-leg');
     p.el.innerHTML=`<svg viewBox="0 0 80 50"><defs><linearGradient id="dpLegSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b31928"/><stop offset=".42" stop-color="#ed3f4d"/><stop offset=".7" stop-color="#82111d"/><stop offset="1" stop-color="#2a1116"/></linearGradient><linearGradient id="dpBoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#252a31"/><stop offset=".6" stop-color="#0f1116"/><stop offset="1" stop-color="#030405"/></linearGradient></defs><path d="M9 18 Q15 9 25 8 L44 15 Q53 18 59 26 L52 33 L38 31 L29 39 L14 36 L6 29 Z" fill="url(#dpLegSuit)" stroke="#11151b" stroke-width="2.2"/><path d="M14 14 Q23 11 31 14 L38 29 L27 36 L17 34 L10 28 Z" fill="#15181d" opacity=".8"/><path d="M35 30 L48 19" stroke="#e33642" stroke-width="3" stroke-linecap="round"/><path d="M53 24 L68 29 Q74 31 76 37 L69 41 L51 35 Z" fill="url(#dpBoot)" stroke="#07090c" stroke-width="2.2"/><path d="M51 34 L68 39" stroke="#d3d7de" stroke-width="1.4" opacity=".55"/><circle cx="27" cy="13" r="3" fill="#1a0b0e"/><path d="M20 20 L31 29" stroke="#ff7a84" stroke-width="1.2" opacity=".5"/></svg>`;
@@ -7796,6 +8080,8 @@ const AI_STYLE_RANGE = {
   venom:       110,  // Venom wants to be in tendril-grab range, closer than that for the lash
   captainmarvel: 520,
   antman:      105,
+  wasp:       420,
+  falcon:     360,
   storm:       420,
   warmachine:  320,
   cyclops:     560,
@@ -8235,6 +8521,18 @@ function updateBotAI(dtF){
     if(cdReady(bot,'E',t) && adist <= eAb.range + (bot.antmanForm==='big'?35:20)){ tryUseAbility(bot,player,'E'); return; }
     if(cdReady(bot,'R',t) && bot.antmanForm==='small' && Math.random()<0.18){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && bot.antmanForm==='big' && Math.random()<0.12){ tryUseAbility(bot,player,'Q'); return; }
+  } else if(style === 'wasp'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && !bot.flight && (Math.abs(vertical)>95 || adist>420 || hpPct<0.45) && Math.random()<0.65){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && (adist<260 || hpPct<0.55) && Math.random()<0.52){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 880){ tryUseAbility(bot,player,'E'); return; }
+    if(bot.flight && cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'falcon'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && !bot.flight && (Math.abs(vertical)>105 || adist>390 || hpPct<0.40) && Math.random()<0.62){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 150 && adist < 900){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 28 && Math.abs(vertical)<135){ tryUseAbility(bot,player,'E'); return; }
+    if(bot.flight && cdReady(bot,'Q',t) && adist < 950){ tryUseAbility(bot,player,'Q'); return; }
   } else if(style === 'venom'){
     // Venom: hook the opponent with the tendril grab from just outside lash range to
     // haul them in for the slam, lash whenever they're already close, and regenerate
@@ -8298,6 +8596,8 @@ function loseLife(target, side){
   target.hulkSlideDir = 0; target.hulkSlideEnd = 0; target.hulkSlideTier = '';
   target.flight = false; target.flightExpire = 0;
   target.antmanForm = 'normal'; target.antmanTransformUntil = 0;
+  target.waspSizeUntil = 0; target.waspSizeSpeedMultiplier = .62;
+  target.el && target.el.classList.remove('wasp-enlarged','wasp-small');
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
   target.shield = null;
   target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
@@ -8504,7 +8804,8 @@ function renderFighter(f){
   f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil));
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
   updateAntmanForm(f);
-  if(!isSlowed(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
+  updateWaspSizeEffect(f);
+  if(!isSlowed(f) && !isWaspSizeActive(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
   const pct = Math.max(0, f.health/f.def.maxHealth);
   f.overheadFillEl.style.width = (pct*100)+'%';
   f.overheadFillEl.style.background = pct<=0.25 ? '#e5484d' : (pct<=0.55 ? '#f2cd6e' : '#3fb96f');
