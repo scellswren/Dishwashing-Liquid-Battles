@@ -910,11 +910,14 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes bladeSlashFx{0%{opacity:0;transform:scale(.5) rotate(-16deg)}16%{opacity:1}60%{opacity:1;transform:scale(1.06) rotate(6deg)}100%{opacity:0;transform:scale(1.2) rotate(16deg)}}
 
 /* ---------- New roster visuals ---------- */
-.fighter.hulk .fighter-square,.fighter.venom .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
+.fighter.hulk .fighter-square,.fighter.thing .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
+.fighter.venom .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
 .fighter.hulk .fighter-square{box-shadow:0 0 0 2px rgba(105,255,108,.18),0 16px 30px rgba(0,0,0,.32);}
-.fighter.hulk.facing-left .fighter-square,.fighter.venom.facing-left .fighter-square{transform:scaleX(-1) scale(1.3);}
+.fighter.hulk.facing-left .fighter-square,.fighter.thing.facing-left .fighter-square{transform:scaleX(-1) scale(1.3);}
+.fighter.venom.facing-left .fighter-square{transform:scaleX(-1) scale(1.3);}
 
-.fighter.hulk .overhead-hp,.fighter.venom .overhead-hp{left:-10px;width:84px;top:-33px;}
+.fighter.hulk .overhead-hp,.fighter.thing .overhead-hp{left:-10px;width:84px;top:-33px;}
+.fighter.venom .overhead-hp{left:-10px;width:84px;top:-33px;}
 
 /* ---------- Ant-Man live-size states ---------- */
 .fighter.antman .fighter-square{transform:scale(1);transform-origin:50% 100%;border-radius:12px;transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s ease,box-shadow .18s ease;}
@@ -1049,6 +1052,62 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .goblin-pumpkin-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:goblinPumpkinSpin .34s linear infinite!important;filter:drop-shadow(0 0 7px #42ff59)!important;}
 .goblin-pumpkin-projectile svg{display:block;width:100%;height:100%;overflow:visible;}
 @keyframes goblinPumpkinSpin{from{transform:rotate(-6deg) scale(.96)}to{transform:rotate(354deg) scale(1.05)}}
+
+/* ---------- Human Torch: full fire-form visuals when Flame On is active ---------- */
+.fighter.humantorch .fighter-square img{transition:filter .25s ease;}
+.fighter.humantorch.flight-active .fighter-square img{
+  filter:sepia(1) saturate(7) hue-rotate(-24deg) brightness(1.18)
+    drop-shadow(0 0 9px #ff4b16) drop-shadow(0 0 18px #ff7a1f) drop-shadow(0 0 30px #ffb43d99);
+}
+.fighter.humantorch.flight-active .fighter-square{animation:torchFlicker .42s ease-in-out infinite alternate;}
+@keyframes torchFlicker{
+  from{filter:drop-shadow(0 0 8px #ff5b1f) drop-shadow(0 0 18px #ff8b2d55)}
+  to{filter:drop-shadow(0 0 18px #ff9d32) drop-shadow(0 0 30px #ff5b1f66)}
+}
+/* A broad, layered fire shell keeps the whole body aflame rather than making
+   Flame On look like a single glowing blob. The soft outer heat sits behind
+   the fighter, while several irregular tongues lick around the silhouette. */
+.torch-flame{
+  position:absolute; left:50%; bottom:-8px; width:112px; height:106px;
+  transform:translateX(-50%); pointer-events:none; z-index:1; overflow:visible;
+  opacity:0; transition:opacity .18s ease;
+  filter:drop-shadow(0 0 7px #ff4f1f) drop-shadow(0 0 18px #ff8b2f88);
+}
+.fighter.humantorch.flight-active .torch-flame{opacity:1;}
+.torch-flame:before{
+  content:''; position:absolute; inset:3px -2px 0;
+  background:
+    radial-gradient(ellipse at 50% 72%, rgba(255,248,196,.98) 0 7%, rgba(255,196,61,.9) 18%, rgba(255,92,25,.66) 42%, transparent 69%),
+    radial-gradient(ellipse at 18% 82%, rgba(255,112,29,.7) 0 15%, transparent 48%),
+    radial-gradient(ellipse at 82% 80%, rgba(255,75,19,.72) 0 16%, transparent 48%);
+  filter:blur(3.5px); border-radius:46% 54% 40% 60% / 58% 52% 48% 42%;
+  animation:torchHeatPulse .32s ease-in-out infinite alternate;
+}
+.torch-flame > i{
+  position:absolute; bottom:5px; display:block; width:25px; height:78px;
+  border-radius:52% 48% 48% 52% / 70% 64% 36% 30%;
+  background:
+    radial-gradient(ellipse at 50% 88%, #fffde0 0 10%, #ffd65a 18%, #ff8d2c 44%, #ff4b1e 70%, transparent 100%);
+  filter:blur(1.2px); mix-blend-mode:screen; transform-origin:50% 100%;
+  animation:torchTongue .38s ease-in-out infinite alternate;
+}
+.torch-flame > i:nth-child(1){left:6px;height:70px;width:22px;transform:rotate(-11deg) scaleY(.9);animation-delay:-.11s;}
+.torch-flame > i:nth-child(2){left:24px;height:94px;width:27px;transform:rotate(-5deg);animation-delay:-.03s;}
+.torch-flame > i:nth-child(3){left:43px;height:101px;width:30px;transform:rotate(1deg) scaleX(1.08);animation-delay:-.19s;}
+.torch-flame > i:nth-child(4){right:24px;height:90px;width:27px;transform:rotate(6deg);animation-delay:-.08s;}
+.torch-flame > i:nth-child(5){right:5px;height:67px;width:21px;transform:rotate(12deg) scaleY(.92);animation-delay:-.23s;}
+.torch-flame > i:after{
+  content:''; position:absolute; left:20%; top:12%; width:60%; height:72%;
+  background:radial-gradient(ellipse at 50% 80%, #fff 0 8%, #fff3a4 20%, rgba(255,210,65,.88) 42%, transparent 72%);
+  filter:blur(2.2px); border-radius:50%; opacity:.82;
+}
+@keyframes torchHeatPulse{from{transform:scale(.96,.98);opacity:.78}to{transform:scale(1.05,1.06);opacity:1}}
+@keyframes torchTongue{
+  0%{margin-bottom:-2px;transform:rotate(var(--r,-4deg)) skewX(-2deg) scale(.94,.92);opacity:.78;}
+  48%{margin-bottom:3px;transform:rotate(calc(var(--r,-4deg) * -1)) skewX(3deg) scale(1.05,1.12);opacity:.98;}
+  100%{margin-bottom:-1px;transform:rotate(var(--r,-4deg)) skewX(-4deg) scale(.96,1.04);opacity:.84;}
+}
+.torch-flame > i:nth-child(1){--r:-11deg}.torch-flame > i:nth-child(2){--r:-5deg}.torch-flame > i:nth-child(3){--r:1deg}.torch-flame > i:nth-child(4){--r:6deg}.torch-flame > i:nth-child(5){--r:12deg}
 
 /* ---------- Captain Marvel / Ant-Man projectiles ---------- */
 .captain-photon-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:none!important;animation:none!important;}
@@ -3725,8 +3784,44 @@ const CHARACTERS = {
          desc:'Bends light around herself to turn completely invisible for 5 seconds. Cooldown: 10 seconds.'}
     }
   },
+  thing: {
+    id:'thing', name:'The Thing', img:'TheThing.jpg', color:'#e8823a', accentColor:'#3a5fae', aiStyle:'thing',
+    maxHealth:14300, knockbackTakenMult:1/3,
+    description:'A rock-hard powerhouse, built as big and brutal as the Hulk. Hits harder up close, bulldozes through a Clobberin\' Time charge, and briefly hardens further behind Unbreakable. Passive: 3x knockback resistance -- he takes only one third of the usual knockback from every source.',
+    abilities:{
+      E:{key:'E', name:'Rock Fists', type:'melee', damage:650, cooldown:1000, knockback:13, range:110,
+         hitRange:175, hitVertical:135, hitStartSlack:60, hitDelay:60,
+         sound:'thing_rock_fists', fx:'thing_rock_fists', hitFx:'thing_rock_hit', hitSound:'thing_rock_hit',
+         desc:'A pair of heavy, rock-hard punches for 650 damage. Cooldown: 1 second.'},
+      Q:{key:'Q', name:'Clobberin\' Time', type:'thingCharge', damage:2300, cooldown:10500, knockback:28, range:145,
+         boostX:34, boostY:-4, dashMs:260, hitDelay:230,
+         sound:'thing_clobber', fx:'thing_clobber', hitFx:'thing_clobber_hit', hitSound:'thing_clobber_hit',
+         desc:'Bulldozes forward and slams into the enemy for 2,300 damage with massive knockback. His main way of closing distance. Cooldown: 10.5 seconds.'},
+      R:{key:'R', name:'Unbreakable', type:'shield', reduction:.45, duration:4000, cooldown:14000,
+         sound:'thing_unbreakable', fx:'thing_unbreakable',
+         desc:'Hardens his rocky hide further, reducing incoming damage by 45% for 4 seconds. Cooldown: 14 seconds.'}
+    }
+  },
+  humantorch: {
+    id:'humantorch', name:'Human Torch', img:'HumanTorch.jpg', color:'#ff6a2b', accentColor:'#ffd24a', aiStyle:'humantorch',
+    maxHealth:8000,
+    description:'Starts every fight in plain human form. The moment he flames on, he ignites into a blazing red silhouette and takes to the sky — flinging fireballs, detonating a point-blank nova, and free-flying with a scorching touch.',
+    abilities:{
+      E:{key:'E', name:'Fireball', type:'projectile', damage:440, cooldown:1000, knockback:6,
+         speed:22, w:34, h:22, color:'#ff7a2e', render:'torch-fireball', trail:'fire',
+         burnDamage:150, burnTicks:3, burnTickMs:500,
+         sound:'torch_fireball', fx:'torch_fireball', hitFx:'torch_fireball_hit', hitSound:'torch_fireball_hit',
+         desc:'Hurls a blazing fireball for 440 damage, plus 150 burn damage over the next 1.5 seconds. Cooldown: 1 second.'},
+      Q:{key:'Q', name:'Nova Blast', type:'aoe', damage:1500, cooldown:9000, knockback:16, radius:130,
+         sound:'torch_nova', fx:'torch_nova', hitFx:'torch_nova_hit', hitSound:'torch_nova_hit',
+         desc:'Detonates a point-blank fiery explosion around himself for 1,500 damage to anyone caught in it. Cooldown: 9 seconds.'},
+      R:{key:'R', name:'Flame On', type:'toggle', damage:0, cooldown:0, touchBurn:15,
+         sound:'torch_flameon', fx:'torch_flameon',
+         desc:'Ignites into his blazing fire form and takes flight, no cooldown and no duration limit. While flaming on, brushing against an enemy sears them for a small burn tick.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','invisiblewoman','antman','wasp','starlord','groot'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','invisiblewoman','thing','humantorch','antman','wasp','starlord','groot'];
 
 
 /* =========================================================================
@@ -4954,7 +5049,7 @@ function activateHeldWeapon(f, selector, duration, direction){
 
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -4966,6 +5061,7 @@ function buildFighterDOM(f){
     ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
     ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
     ${f.def.id==='groot' ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
+    ${f.def.id==='humantorch' ? '<div class="torch-flame" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
@@ -5259,7 +5355,7 @@ function hulkRoarTier(def){
 function isRoarHeld(f, t){ return !!f && (!!f.hulkSlideDir || (!!f.hulkRoarUntil && t < f.hulkRoarUntil)); }
 // Abilities that would carry a fighter across the arena. They are locked while roared,
 // otherwise a "rooted" fighter could just teleport / leap / grapple straight out of it.
-const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst'];
+const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst','thingCharge'];
 
 function finishHulkSlide(f, hitWall){
   const tier = f.hulkSlideTier;
@@ -5553,6 +5649,32 @@ function executeAbility(caster, target, ability, t){
       if(delay) setTimeout(resolve, delay); else resolve();
       break;
     }
+    case 'thingCharge': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead) break;
+      const dir = caster.isBot ? caster.facing : dirSignTo(caster, tg);
+      caster.facing = dir; if(caster.el) caster.el.classList.toggle('facing-left', dir < 0);
+      // Bulldozes forward like Cyclops' recoil / Black Panther's dash: an
+      // authoritative self-launch that ordinary movement can't cancel mid-charge.
+      caster.windBurstUntil = t + (ability.dashMs || 260);
+      caster.windBurstVx = dir * (ability.boostX || 30);
+      caster.vx = caster.windBurstVx;
+      if(ability.boostY) caster.vy = ability.boostY;
+      caster.onGround = false;
+      spawnAbilityFx(caster, {fx:'thing_clobber'}, tg);
+      const startX = caster.x;
+      const resolve = ()=>{
+        if(state.mode !== 'battle' || caster.dead || tg.dead) return;
+        const dx = (tg.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
+        const vertical = Math.abs(tg.y-caster.y);
+        const inRange = Math.abs(dx) <= (ability.range || 120) && vertical < 130 && !attackBlockedByFloor(caster,tg);
+        if(inRange){
+          damageTargetOrWall(tg, ability.damage, ability.knockback, dirSignTo(caster,tg), {hitFx:ability.hitFx, sound:ability.hitSound});
+        }
+      };
+      setTimeout(resolve, ability.hitDelay || 230);
+      break;
+    }
     case 'elasticBarrage': {
       const who = caster, tg = target;
       [0, 130, 260].forEach((delay, idx)=>{
@@ -5640,7 +5762,8 @@ function executeAbility(caster, target, ability, t){
       const dist = Math.hypot(dx,dy);
       if(dist <= (ability.range || 430) && !attackBlockedByFloor(caster,tg)){
         const dir = dx >= 0 ? 1 : -1;
-        const push = ability.knockback || 31;
+        const kbMult = (typeof tg.def.knockbackTakenMult === 'number') ? tg.def.knockbackTakenMult : 1;
+        const push = (ability.knockback || 31) * kbMult;
         tg.windBurstUntil = t + (ability.pushDuration || 620);
         tg.windBurstVx = dir * push;
         tg.vx = tg.windBurstVx;
@@ -5700,11 +5823,12 @@ function executeAbility(caster, target, ability, t){
         // it overrides vx every frame for a short window, so the target's own
         // movement/AI input can't fight it and cancel the push out on the
         // very next frame like ordinary hitstun knockback can.
-        const pushVx = dir * (ability.launchX || 34) * pushScale;
+        const kbMult = (typeof tg.def.knockbackTakenMult === 'number') ? tg.def.knockbackTakenMult : 1;
+        const pushVx = dir * (ability.launchX || 34) * pushScale * kbMult;
         tg.windBurstUntil = t + Math.round(420 * pushScale);
         tg.windBurstVx = pushVx;
         tg.vx = pushVx;
-        tg.vy = -(ability.launchY || 16) * pushScale;
+        tg.vy = -(ability.launchY || 16) * pushScale * kbMult;
         tg.onGround = false;
         tg.hitStun = Math.max(tg.hitStun || 0, Math.round(420 * pushScale));
       }
@@ -5883,6 +6007,7 @@ function executeAbility(caster, target, ability, t){
         hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, shock: ability.shock || null,
         waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
         pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false, precisionAim:!!ability.precisionAim, ricochet:false, ricochetBounced:false,
+        burnDamage: ability.burnDamage || 0, burnTicks: ability.burnTicks || 0, burnTickMs: ability.burnTickMs || 500,
         trailTick: 0,
         el:null
       });
@@ -6432,6 +6557,55 @@ function updatePsiWarp(f){
   if(f.psiTicksLeft <= 0 && f.el) f.el.classList.remove('psi-warped');
 }
 
+/* ---- Human Torch: Fireball burn + Flame On contact scorch (shared DoT tick) ---- */
+function applyBurn(target, cfg){
+  if(!target || target.dead || !cfg) return;
+  target.burnInterval = cfg.interval || 500;
+  target.burnDamage = cfg.damage || 0;
+  target.burnTicksLeft = cfg.ticks || 0;
+  target.burnNextTick = now() + target.burnInterval;
+}
+function updateBurn(f){
+  if(!f || !f.burnTicksLeft) return;
+  if(f.dead || state.countdown) return;
+  const t = now();
+  while(f.burnTicksLeft > 0 && t >= f.burnNextTick){
+    f.burnTicksLeft--; f.burnNextTick += f.burnInterval;
+    if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.burnTicksLeft = 0; break; }
+    f.health = Math.max(0, f.health - f.burnDamage);
+    spawnDamageNumber(f.x+18, f.y-8, Math.round(f.burnDamage), false);
+    spawnSparks(f.x+FIGHTER_SIZE/2, f.y+FIGHTER_SIZE/2, 3, '#ff8a2b', 22, 260);
+    sfx('shock_tick');
+    if(f.health <= 0){ f.burnTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
+  }
+}
+// While flaming on, brushing against the opponent sears them for a small,
+// throttled contact tick — his flight itself carries a little threat.
+function updateTorchTouch(a, b){
+  if(!a || !b || a.dead || b.dead || state.countdown) return;
+  if(a.def.id !== 'humantorch' || !a.flight) return;
+  const t = now();
+  if(a.torchTouchNext && t < a.torchTouchNext) return;
+  const overlapX = (a.x+FIGHTER_SIZE) > b.x && a.x < (b.x+FIGHTER_SIZE);
+  const overlapY = (a.y+FIGHTER_SIZE) > b.y && a.y < (b.y+FIGHTER_SIZE);
+  if(overlapX && overlapY){
+    const dmg = (a.def.abilities.R && a.def.abilities.R.touchBurn) || 15;
+    applyDamage(b, dmg, 3, dirSignTo(a,b), {hitFx:'torch_fireball_hit', sound:'torch_fireball_hit'});
+    a.torchTouchNext = t + 400;
+  }
+}
+// Loose embers trailing off Human Torch whenever he's flaming on, on top of
+// the CSS flame tongues, so the fire reads as a real moving effect.
+function updateTorchFlameFx(f){
+  if(!f || f.dead || f.def.id !== 'humantorch' || !f.flight || state.countdown) return;
+  const tNow = now();
+  if(f.torchEmberNext && tNow < f.torchEmberNext) return;
+  f.torchEmberNext = tNow + 85;
+  const cx = f.x + FIGHTER_SIZE/2 + (Math.random()-0.5)*30;
+  const cy = f.y + FIGHTER_SIZE - 6 + (Math.random()-0.5)*12;
+  fxEl('fx-trail', `left:${(cx-5).toFixed(1)}px;top:${(cy-5).toFixed(1)}px;width:10px;height:10px;background:radial-gradient(circle,#fff6d8,#ffae4a 40%,#ff5a1e 72%,transparent 84%);box-shadow:0 0 10px #ff5a1e,0 0 18px #ff5a1e77;`, 420);
+}
+
 
 /* ---------- Star-Lord Laser Bomb + Groot Ball runtime ---------- */
 function updateLaserBombs(dtF){
@@ -6693,8 +6867,9 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   }
   target.health = Math.max(0, target.health - actual);
   spawnDamageNumber(target.x+18, target.y, Math.round(actual), false);
-  target.vx += dirSign * knockback * 2.6;
-  target.vy = -knockback * 1.5;
+  const kbMult = (typeof target.def.knockbackTakenMult === 'number') ? target.def.knockbackTakenMult : 1;
+  target.vx += dirSign * knockback * 2.6 * kbMult;
+  target.vy = -knockback * 1.5 * kbMult;
   target.onGround = false;
   target.hitStun = Math.min(420, 90 + knockback*10);
   sfx(opts.sound || 'hit');
@@ -7215,6 +7390,28 @@ function sfx(kind='ability'){
         aTone(ctx,t,'sawtooth',380,1160,0.30,0.10); aTone(ctx,t+0.04,'triangle',1180,430,0.26,0.07); return;
       case 'bullseye_ricochet_hit':
         aTone(ctx,t,'sine',150,34,0.48,0.23); aNoise(ctx,t,0.28,0.22,'highpass',4200,1200,1.8); return;
+
+      /* ---------- The Thing ---------- */
+      case 'thing_rock_fists':
+        aTone(ctx,t,'square',150,70,0.14,0.14); aNoise(ctx,t,0.12,0.22,'bandpass',900,260,2.0); return;
+      case 'thing_rock_hit':
+        aTone(ctx,t,'sine',95,30,0.30,0.26); aNoise(ctx,t,0.16,0.30,'lowpass',1400,180,0.8); return;
+      case 'thing_clobber':
+        aTone(ctx,t,'sawtooth',80,220,0.30,0.22); aNoise(ctx,t,0.22,0.20,'bandpass',700,220,1.6); return;
+      case 'thing_clobber_hit':
+        aTone(ctx,t,'sine',80,22,0.62,0.44); aTone(ctx,t,'square',58,26,0.34,0.18); aNoise(ctx,t,0.40,0.34,'lowpass',2400,150,0.7); return;
+      case 'thing_unbreakable':
+        aTone(ctx,t,'triangle',180,340,0.30,0.16); aNoise(ctx,t,0.20,0.14,'bandpass',1000,300,1.4); return;
+
+      /* ---------- Human Torch ---------- */
+      case 'torch_fireball':
+        aTone(ctx,t,'sawtooth',600,1400,0.16,0.10); aNoise(ctx,t,0.20,0.18,'bandpass',2200,700,2.2); return;
+      case 'torch_fireball_hit':
+        aTone(ctx,t,'sine',180,50,0.26,0.20); aNoise(ctx,t,0.24,0.24,'bandpass',2600,600,2.0); return;
+      case 'torch_nova':
+        aTone(ctx,t,'sine',100,26,0.5,0.36); aNoise(ctx,t,0.42,0.30,'bandpass',1800,400,1.4); aNoise(ctx,t+0.02,0.30,0.20,'highpass',3200,900,1.8); return;
+      case 'torch_flameon':
+        aTone(ctx,t,'sawtooth',260,900,0.34,0.14); aNoise(ctx,t,0.30,0.16,'bandpass',2000,600,1.8); return;
 
       /* ---------- Loki ---------- */
       case 'loki_dagger':
@@ -8541,6 +8738,35 @@ function spawnAbilityFx(caster, ability, target){
       fxEl('fx-ring',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#ffd76e;border-width:3px;box-shadow:0 0 28px #ffb332;`,500);
       spawnSparks(cx,cy,14,'#ffe5a0',82,340); break;
     }
+    /* ---------------- The Thing ---------------- */
+    case 'thing_rock_fists': {
+      const hx=cx+dir*34,hy=cy;
+      fxEl('fx-flash',`left:${hx-26}px;top:${hy-26}px;width:52px;height:52px;background:radial-gradient(circle,#fff,#ffb46a 32%,transparent 74%);`,200);
+      spawnSparks(hx,hy,8,'#e8823a',40,260); break;
+    }
+    case 'thing_clobber': {
+      fxEl('fx-ring',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#e8823a;border-width:4px;box-shadow:0 0 30px #c9611f;`,420);
+      spawnSparks(cx,cy,16,'#d97a3a',70,360); shakeArena(6,220); break;
+    }
+    case 'thing_unbreakable': {
+      fxEl('fx-ring',`left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;border-color:#8a5a2c;border-width:4px;box-shadow:0 0 26px #b97a3a, inset 0 0 20px rgba(200,140,70,.3);`,560);
+      spawnSparks(cx,cy,14,'#c9975a',60,380); break;
+    }
+    /* ---------------- Human Torch ---------------- */
+    case 'torch_fireball': {
+      const hx=cx+dir*30,hy=cy;
+      fxEl('fx-flash',`left:${hx-24}px;top:${hy-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff,#ff8a2b 32%,transparent 74%);`,200);
+      spawnSparks(hx,hy,10,'#ff7a2e',44,300); break;
+    }
+    case 'torch_nova': {
+      fxEl('fx-flash',`left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;background:radial-gradient(circle,#fff,#ff8a2b 26%,transparent 72%);`,320);
+      fxEl('fx-ring',`left:${cx-96}px;top:${cy-96}px;width:192px;height:192px;border-color:#ff6a2b;border-width:4px;box-shadow:0 0 40px #ff5a1e;`,520);
+      spawnSparks(cx,cy,26,'#ffae4a',110,440); shakeArena(11,340); break;
+    }
+    case 'torch_flameon': {
+      fxEl('fx-ring',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#ff8a2b;border-width:3px;box-shadow:0 0 30px #ff5a1e;`,460);
+      spawnSparks(cx,cy,16,'#ffae4a',64,360); break;
+    }
     /* ---------------- Wasp ---------------- */
     case 'wasp_size_disc': {
       const hx=cx+dir*28, hy=cy;
@@ -9510,6 +9736,32 @@ function spawnHitFx(target, kind, dirSign){
       shakeArena(13, 380);
       break;
     }
+    case 'thing_rock_hit': {
+      fxEl('fx-flash', `left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;background:radial-gradient(circle,#fff,#e8823a 34%,transparent 74%);`, 220);
+      spawnSparks(cx, cy, 12, '#c9611f', 60, 320);
+      shakeArena(4, 180);
+      break;
+    }
+    case 'thing_clobber_hit': {
+      fxEl('fx-flash', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;background:radial-gradient(circle,#fff,#e8823a 30%,#8a5a2c 60%,transparent 82%);`, 300);
+      fxEl('fx-ring', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;border-color:#e8823a;border-width:5px;box-shadow:0 0 30px #c9611f;`, 420);
+      spawnSparks(cx, cy, 20, '#d97a3a', 90, 420);
+      spawnGroundCrack(cx, target.y + FIGHTER_SIZE, 90);
+      shakeArena(12, 340);
+      break;
+    }
+    case 'torch_fireball_hit': {
+      fxEl('fx-flash', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#fff,#ff8a2b 32%,#ff5a1e 62%,transparent 80%);`, 260);
+      spawnSparks(cx, cy, 14, '#ff8a2b', 60, 340);
+      break;
+    }
+    case 'torch_nova_hit': {
+      fxEl('fx-flash', `left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;background:radial-gradient(circle,#fff,#ff8a2b 30%,#ff5a1e 60%,transparent 82%);`, 320);
+      fxEl('fx-ring', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;border-color:#ff6a2b;border-width:5px;box-shadow:0 0 34px #ff5a1e;`, 460);
+      spawnSparks(cx, cy, 20, '#ffae4a', 90, 400);
+      shakeArena(9, 300);
+      break;
+    }
     case 'gambit_card_hit': {
       // Purple boom on impact — bigger, layered burst instead of a plain flash.
       fxEl('fx-flash', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#f3e0ff,#9b30ff 45%,#4a1580 74%,transparent 88%);`, 320);
@@ -10238,6 +10490,10 @@ function updateProjectiles(dtF){
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
           {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock});
+        if(p.burnDamage && target.health < healthBefore){
+          const ticks = Math.max(1, p.burnTicks || 1);
+          applyBurn(target, {interval: p.burnTickMs || 500, ticks, damage: p.burnDamage / ticks});
+        }
         if(p.waspSizeDuration && target.health < healthBefore){
           applyWaspSizeEffect(target, p.waspSizeDuration, p.waspSizeSpeedMultiplier || .62);
         }
@@ -10391,6 +10647,10 @@ function buildProjectileVisual(p){
   } else if(p.render === 'captain-photon'){
     p.el.classList.add('captain-photon-projectile');
     p.el.innerHTML = '<div class="captain-photon-core"></div><div class="captain-photon-halo"></div><div class="captain-photon-tail"></div>';
+  } else if(p.render === 'torch-fireball'){
+    p.el.style.background = 'transparent';
+    p.el.style.boxShadow = 'none';
+    p.el.innerHTML = '<div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#fff6d8,#ffae4a 34%,#ff5a1e 66%,transparent 82%);box-shadow:0 0 10px #ff8a2b,0 0 22px #ff5a1e,0 0 34px rgba(255,90,30,.7);"></div>';
   } else if(p.render === 'cyclops-beam' || p.render === 'cyclops-heavy'){
     p.el.classList.add('cyclops-projectile');
     if(p.render === 'cyclops-heavy') p.el.classList.add('heavy');
@@ -10533,6 +10793,8 @@ function spawnProjTrail(p){
     fxEl('fx-trail', `left:${cx-8}px;top:${cy-7}px;width:16px;height:14px;background:radial-gradient(circle,#d8dce2aa,#7d8590 28%,transparent 74%);filter:blur(1px);`, 420);
   } else if(p.trail === 'goblin-pumpkin'){
     fxEl('fx-trail', `left:${(cx-6).toFixed(1)}px;top:${(cy-6).toFixed(1)}px;width:12px;height:12px;background:radial-gradient(circle,#fff8c8,#5cff66 38%,transparent 74%);box-shadow:0 0 12px #56ff69,0 0 22px #26d63c66;`, 300);
+  } else if(p.trail === 'fire'){
+    fxEl('fx-trail', `left:${(cx-7).toFixed(1)}px;top:${(cy-7).toFixed(1)}px;width:14px;height:14px;background:radial-gradient(circle,#fff6d8,#ff8a2b 40%,transparent 76%);box-shadow:0 0 12px #ff5a1e,0 0 24px #ff5a1e66;`, 320);
   } else if(p.trail === 'web'){
     const n = Math.max(8, Math.min(20, p.w));
     fxEl('fx-webtick', `left:${(cx-n/2).toFixed(1)}px;top:${(cy-n/2).toFixed(1)}px;width:${n}px;height:${n}px;`, 400,
@@ -10733,6 +10995,8 @@ const AI_STYLE_RANGE = {
   starlord:400,
   groot:90,
   invisiblewoman:480,
+  thing:90,
+  humantorch:400,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -11227,6 +11491,23 @@ function updateBotAI(dtF){
     if(cdReady(bot,'R',t) && (hpPct < 0.4 || adist < 130) && Math.random() < 0.45){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && adist > 110 && adist < 620 && Math.abs(vertical) < 130){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'thing'){
+    // The Thing: stay glued to melee range poking with Rock Fists, use
+    // Clobberin' Time to bulldoze in whenever the player is out of E range,
+    // and harden behind Unbreakable when he's in real danger — he can't
+    // dodge well, so tanking the next hit is his main defensive tool.
+    const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q;
+    if(cdReady(bot,'R',t) && hpPct < 0.35 && Math.random() < 0.6){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 20 && Math.abs(vertical) < 120){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'Q',t) && adist > eAb.range && adist < 500 && Math.abs(vertical) < 140){ tryUseAbility(bot,player,'Q'); return; }
+  } else if(style === 'humantorch'){
+    // Human Torch: flame on immediately and stay airborne, poke with
+    // Fireball at range, and dive in for a point-blank Nova Blast whenever
+    // the player is close enough to eat the whole radius.
+    const qAb = bot.def.abilities.Q;
+    if(!bot.flight && cdReady(bot,'R',t)){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist <= qAb.radius + 20 && Math.abs(vertical) < 90){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 950){ tryUseAbility(bot,player,'E'); return; }
   }
 }
 
@@ -12688,6 +12969,9 @@ function gameLoop(ts){
     updateLaserBombs(dtF);
     updateShock(p); updateShock(b);
     updatePsiWarp(p); updatePsiWarp(b);
+    updateBurn(p); updateBurn(b);
+    updateTorchTouch(p, b); updateTorchTouch(b, p);
+    updateTorchFlameFx(p); updateTorchFlameFx(b);
     updateBlock(p); updateBlock(b);
     updateShield(p); updateShield(b);
     updateIllusions(dtF);
