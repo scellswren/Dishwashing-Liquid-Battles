@@ -3129,7 +3129,7 @@ const CHARACTERS = {
     maxHealth:4500,
     description:'S.H.I.E.L.D. tactical fighter with rapid pistol fire, a heavy bazooka, and a grappling hook.',
     abilities:{
-      E:{key:'E', name:'Glok', type:'projectile', damage:100, cooldown:200, knockback:3,
+      E:{key:'E', name:'Glok', type:'projectile', damage:100, cooldown:200, knockback:0.4,
          speed:31, w:18, h:6, color:'#d8dde7', render:'bullet', bulletType:'fmj', trail:'',
          sound:'nickfury_glock', fx:'nickfury_glock', hitFx:'pistol_hit', hitSound:'pistol_hit',
          desc:'Rapid pistol fire for 100 damage with a 0.2 second cooldown.'},
@@ -3650,10 +3650,10 @@ const CHARACTERS = {
     maxHealth:8500,
     description:'Half-Celestial outlaw. Fires both Element Blasters at once, plants sticky Laser Bombs, and rockets around on his boots. Deadly at range, fragile up close.',
     abilities:{
-      E:{key:'E', name:'Blasters', type:'projectile', dual:true, damage:150, cooldown:875, knockback:3,
+      E:{key:'E', name:'Blasters', type:'projectile', dual:true, damage:300, cooldown:875, knockback:3,
          speed:28, w:26, h:7, color:'#ff5a3c', render:'starlord-bolt', trail:'starlord',
          sound:'starlord_blasters', fx:'starlord_blasters', hitFx:'starlord_hit', hitSound:'starlord_hit',
-         desc:'Draws both Element Blasters and fires from each one at the same time: 150 damage per blaster, 300 total. Cooldown: 0.875 seconds.'},
+         desc:'Draws both Element Blasters and fires from each one at the same time. The volley lands as a single 300 damage hit. Cooldown: 0.875 seconds.'},
       Q:{key:'Q', name:'Laser Bomb', type:'laserBomb', damage:1800, radius:150, knockback:16, fuse:3000, cooldown:13000,
          sound:'starlord_bomb_throw', fx:'starlord_bomb',
          desc:'Throws a sticky bomb that clings to the enemy or to the ground/platform where it lands. It beeps faster and faster, then explodes 3 seconds later for 1,800 damage. Cooldown: 13 seconds.'},
@@ -3670,9 +3670,9 @@ const CHARACTERS = {
       E:{key:'E', name:'Vine Lash', type:'melee', damage:450, cooldown:1200, knockback:9, range:120, hitDelay:130,
          sound:'groot_lash', fx:'groot_lash', hitFx:'groot_lash_hit', hitSound:'groot_lash_hit',
          desc:'Whips a long vine forward for 450 damage. Reaches further than a normal melee attack. Cooldown: 1.2 seconds.'},
-      Q:{key:'Q', name:'Root Eruption', type:'rootWave', damage:1700, cooldown:16000, knockback:14, waveRange:640, rootMs:1000,
+      Q:{key:'Q', name:'Root Eruption', type:'rootWave', damage:1700, cooldown:16000, knockback:14, waveRange:640, flingVy:22,
          sound:'groot_roots', fx:'groot_roots',
-         desc:'Roots burst out of the ground in a wave toward the enemy for 1,700 damage and pin them in place for 1 second. Jump over it! Cooldown: 16 seconds.'},
+         desc:'Roots burst out of the ground in a wave toward the enemy for 1,700 damage and fling anyone they hit high into the air. Jump over it! Cooldown: 16 seconds.'},
       R:{key:'R', name:'Groot Ball', type:'grootBall', duration:7000, speedMult:2.4, cooldown:24000,
          sound:'groot_ball', fx:'groot_ball',
          desc:'Curls into a ball and rolls at high speed for 7 seconds. No attacking while rolled, but the healing factor rises to 200 HP/s. Cooldown: 24 seconds (starts when the ball ends).'}
@@ -5779,7 +5779,7 @@ function executeAbility(caster, target, ability, t){
       for(const yOff of (ability.dual ? [-9, 9] : [0])) state.projectiles.push({
         x: caster.x + FIGHTER_SIZE/2, y: caster.y + FIGHTER_SIZE/2 - ability.h/2 + yOff,
         vx: dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color||'#ffffff',
-        damage: ability.damage, knockback: ability.knockback, owner: caster.id,
+        damage: (ability.dual && yOff > 0) ? 0 : ability.damage, visualOnly: !!(ability.dual && yOff > 0), knockback: ability.knockback, owner: caster.id,
         icon: ability.icon || '',
         life: 4200, returns: !!ability.returns, phase:'out', originX: caster.x, casterRef: caster, targetRef: target,
         returnDistance: ability.returnDistance || 760,
@@ -6005,8 +6005,16 @@ function executeAbility(caster, target, ability, t){
             const oy = (target.y + FIGHTER_SIZE) > baseY - h && target.y < baseY + 14;
             if(ox && oy){
               struck = true;
+              const shielded = state.walls.some(w => w.owner === target.id);
               damageTargetOrWall(target, ability.damage, ability.knockback, dir, {hitFx:'groot_root_hit', sound:'groot_root_hit'});
-              if(!target.dead){ target.rootedUntil = now() + ability.rootMs; target.vx = 0; }
+              if(!target.dead && !shielded){
+                // the roots heave the enemy straight up
+                target.flight = false; target.flightExpire = 0; target.grappleUntil = 0;
+                target.vy = -ability.flingVy; target.vx = dir*1.5; target.onGround = false;
+                target.hitStun = 700;
+                spawnSparks(target.x + FIGHTER_SIZE/2, target.y + FIGHTER_SIZE, 14, '#a9793f', 70, 460);
+                spawnSparks(target.x + FIGHTER_SIZE/2, target.y + FIGHTER_SIZE, 8, '#7fc44a', 55, 460);
+              }
             }
           }
         }, i*stepMs);
@@ -10091,6 +10099,7 @@ function updateProjectiles(dtF){
       const overlapY = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
       if(overlapX && overlapY && !p.hasHitTarget){
         const dir = dirSignTo({x:p.x}, {x:target.x});
+        if(p.visualOnly){ spawnSparks(p.x + p.w/2, p.y + p.h/2, 5, '#ff8a5c', 30, 260); if(p.el) p.el.remove(); state.projectiles.splice(i,1); continue; }
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
           {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock});
