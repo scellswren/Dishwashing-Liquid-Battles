@@ -1076,6 +1076,34 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes scarletChaosSpin{from{transform:rotate(0deg) scale(.94)}to{transform:rotate(360deg) scale(1.06)}}
 .vision-beam-node{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff8c7;box-shadow:0 0 12px #fff,0 0 24px #ffd72e,0 0 34px #ffb300;pointer-events:none;z-index:6;animation:visionNode .22s ease-out forwards;}
 @keyframes visionNode{from{transform:scale(.6);opacity:.95}to{transform:scale(1.8);opacity:0}}
+
+/* ---------- Invisible Woman: bent-light beam + psionic warp ---------- */
+.iw-light-beam{
+  position:absolute; border-radius:10px; pointer-events:none; z-index:5; overflow:visible;
+  background:linear-gradient(90deg,rgba(255,255,255,.98) 0%,rgba(214,241,255,.96) 26%,rgba(255,255,255,.94) 52%,rgba(200,229,255,.55) 82%,transparent 100%);
+  box-shadow:0 -8px 16px -6px rgba(255,110,220,.6), 0 8px 16px -6px rgba(90,190,255,.6), 0 0 10px #fff, 0 0 26px rgba(200,230,255,.9), 0 0 56px rgba(150,205,255,.5);
+  animation:iwBeamShimmer .09s linear infinite alternate;
+}
+.iw-light-beam.reverse{transform:scaleX(-1);}
+.iw-light-beam::before{content:'';position:absolute;left:-16px;right:-16px;top:-18px;bottom:-18px;border-radius:26px;background:conic-gradient(from 0deg,#ff86e0,#86e8ff,#fff29e,#ff86e0);opacity:.32;filter:blur(10px);animation:iwPrismSpin 1.05s linear infinite;}
+.iw-light-beam::after{content:'';position:absolute;left:3px;right:3px;top:44%;height:3px;border-radius:3px;background:#fff;box-shadow:0 0 10px #fff,0 0 20px #cdeaff,0 0 30px #ffd0f5;}
+@keyframes iwBeamShimmer{from{filter:brightness(1) hue-rotate(0deg)}to{filter:brightness(1.3) hue-rotate(22deg)}}
+@keyframes iwPrismSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.iw-beam-node{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 20px #9be3ff,0 0 30px #ff9be8;pointer-events:none;z-index:6;animation:visionNode .22s ease-out forwards;}
+.psi-warp-ring{position:absolute;left:0;top:0;border:3px solid #c98bff;border-radius:50%;box-shadow:0 0 18px #b46bff,0 0 40px rgba(180,107,255,.6),inset 0 0 16px rgba(255,255,255,.4);pointer-events:none;z-index:9;transform:translate(-50%,-50%);animation:psiWarpRing .5s cubic-bezier(.15,.8,.2,1) forwards;}
+@keyframes psiWarpRing{from{opacity:1;transform:translate(-50%,-50%) scale(.15)}to{opacity:0;transform:translate(-50%,-50%) scale(2.4)}}
+.psi-lens-flash{position:absolute;border-radius:50%;pointer-events:none;z-index:8;background:radial-gradient(circle,#fff 0%,#e6c9ff 30%,transparent 72%);box-shadow:0 0 40px #fff,0 0 80px #c98bff;animation:psiLensFlash .26s ease-out forwards;}
+@keyframes psiLensFlash{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.8)}}
+.fighter.psi-warped{animation:psiWarpDistort .46s ease-in-out infinite alternate;}
+.fighter.psi-warped .fighter-square{filter:saturate(1.35) hue-rotate(0deg) drop-shadow(0 0 10px #c98bff);}
+@keyframes psiWarpDistort{from{transform:skewX(0deg)}to{transform:skewX(2.4deg)}}
+.fighter.psi-warped::after{content:'';position:absolute;inset:-16px;border-radius:18px;pointer-events:none;z-index:4;background:radial-gradient(circle,rgba(201,139,255,.28),rgba(201,139,255,.06) 50%,transparent 76%);box-shadow:0 0 24px rgba(201,139,255,.6),inset 0 0 16px rgba(234,246,255,.3);animation:psiAuraPulse .46s ease-in-out infinite alternate;}
+@keyframes psiAuraPulse{from{transform:scale(.94);opacity:.6}to{transform:scale(1.08);opacity:1}}
+.iw-laser-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 6px #bfe6ff) drop-shadow(0 0 14px #ff9be8);animation:iwLaserPulse .07s linear infinite alternate;}
+.iw-laser-core{position:absolute;inset:22% 4%;border-radius:50%;background:linear-gradient(90deg,#fff 0%,#eaf6ff 38%,#bfe6ff 68%,#fff 100%);box-shadow:0 0 10px #fff,0 0 20px #bfe6ff,0 0 30px #ff9be8;}
+.iw-laser-fringe{position:absolute;inset:6% 0;border-radius:50%;background:linear-gradient(90deg,#ff86e066 0%,transparent 32%,transparent 68%,#86e8ff66 100%);mix-blend-mode:screen;}
+.iw-laser-tail{position:absolute;right:88%;top:22%;width:85%;height:56%;background:linear-gradient(90deg,transparent,#bfe6ff99);filter:blur(2px);}
+@keyframes iwLaserPulse{from{filter:brightness(1) drop-shadow(0 0 6px #bfe6ff) drop-shadow(0 0 14px #ff9be8)}to{filter:brightness(1.35) drop-shadow(0 0 9px #fff) drop-shadow(0 0 20px #ff9be8)}}
 .fighter.hex-frozen .fighter-square{filter:saturate(1.25) brightness(.88) drop-shadow(0 0 9px #ff334d);}
 .fighter.hex-frozen::after{content:'';position:absolute;inset:-18px;border-radius:18px;pointer-events:none;background:radial-gradient(circle,rgba(255,56,77,.3),rgba(255,34,58,.08) 48%,transparent 74%);box-shadow:0 0 28px rgba(255,35,63,.75),inset 0 0 18px rgba(255,70,90,.26);animation:scarletFreezePulse .38s ease-in-out infinite alternate;z-index:4;}
 @keyframes scarletFreezePulse{from{opacity:.72;transform:scale(.98)}to{opacity:1;transform:scale(1.04)}}
@@ -3680,8 +3708,25 @@ const CHARACTERS = {
          desc:'Curls into a ball and rolls at high speed for 7 seconds. No attacking while rolled, but the healing factor rises to 200 HP/s. Cooldown: 24 seconds (starts when the ball ends).'}
     }
   },
+  invisiblewoman: {
+    id:'invisiblewoman', name:'Invisible Woman', img:'InvisibleWoman.jpg', color:'#1f5fae', accentColor:'#eaf6ff', aiStyle:'invisiblewoman',
+    maxHealth:12050,
+    description:'Fantastic Four field leader who bends light itself. Fires a refracted Light Beam, seizes foes in a telekinetic Psionic Push, and can vanish completely.',
+    abilities:{
+      E:{key:'E', name:'Light Beam', type:'projectile', damage:590, cooldown:1300, knockback:4,
+         speed:34, w:44, h:8, color:'#eaf6ff', render:'iw-laser', trail:'',
+         sound:'vision_beam_tick', hitFx:'vision_beam_hit', hitSound:'vision_beam_hit',
+         desc:'Fires a fast, focused bolt of bent light for 590 damage.'},
+      Q:{key:'Q', name:'Psionic Push', type:'psiPush', damage:2300, cooldown:25000, duration:4000, tickMs:400, launchX:34, launchY:16,
+         sound:'starlord_bomb_throw', fx:'psi_push',
+         desc:'Seizes the enemy in a telekinetic field and hurls them the way you\'re holding — left/right to send them that direction, hold down to slam them, otherwise up and away. Leaves them warped for 4 seconds, dealing 2,300 damage over time. Cooldown: 25 seconds.'},
+      R:{key:'R', name:'Invisibility', type:'cloak', damage:0, duration:5000, cooldown:10000,
+         sound:'miles_cloak', fx:'miles_cloak',
+         desc:'Bends light around herself to turn completely invisible for 5 seconds. Cooldown: 10 seconds.'}
+    }
+  },
 };
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp','starlord','groot'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','invisiblewoman','antman','wasp','starlord','groot'];
 
 
 /* =========================================================================
@@ -4633,6 +4678,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     hitStun:0,
     slowUntil:0, webWrapEl:null,
     cloakUntil:0, shockTicksLeft:0, shockNextTick:0, shockInterval:250, shockDamage:0,
+    psiTicksLeft:0, psiNextTick:0, psiInterval:400, psiDamage:0,
     turnPending:null,
     aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0, aiNextFourthWall:0,
     el:null, overheadFillEl:null, shieldEl:null, flightEl:null, thrusterEl:null,
@@ -5628,9 +5674,33 @@ function executeAbility(caster, target, ability, t){
     case 'visionBeam': {
       const tg = target || ((caster === state.player) ? state.bot : state.player);
       const beam = { caster, target:tg, start:t, end:t+(ability.duration||2000), nextTick:t+(ability.tickMs||200), tickMs:ability.tickMs||200,
-        length:ability.beamLength||1080, width:ability.beamWidth||42, damage:ability.damage||100, knockback:ability.knockback||0, el:null };
+        length:ability.beamLength||1080, width:ability.beamWidth||42, damage:ability.damage||100, knockback:ability.knockback||0, el:null,
+        beamClass: ability.beamClass || 'vision-mind-beam', nodeClass: ability.nodeClass || 'vision-beam-node',
+        hitFx: ability.hitFx || 'vision_beam_hit', startSound: ability.sound || 'vision_beam',
+        hitSound: ability.hitSound || 'vision_beam_hit', tickSound: ability.tickSound || 'vision_beam_tick',
+        endSound: ability.endSound || 'vision_beam_end' };
       if(caster.activeVisionBeam && caster.activeVisionBeam.el) caster.activeVisionBeam.el.remove();
       caster.activeVisionBeam = beam;
+      break;
+    }
+    case 'psiPush': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead) break;
+      // Player can steer the shove by holding a direction as it's cast (facing/left/right
+      // for which way they fly, up/down for whether they arc up or slam down); a bot
+      // just uses its facing. This makes the push feel aimed rather than automatic.
+      const heldLeft = !caster.isBot && (keysHeld.left || gpKeys.left);
+      const heldRight = !caster.isBot && (keysHeld.right || gpKeys.right);
+      const heldDown = !caster.isBot && (keysHeld.down || gpKeys.down);
+      const dir = caster.isBot ? caster.facing : (heldLeft ? -1 : heldRight ? 1 : dirSignTo(caster, tg));
+      caster.facing = dir; if(caster.el) caster.el.classList.toggle('facing-left', dir < 0);
+      tg.vx = dir * (ability.launchX || 34);
+      tg.vy = (heldDown ? 1 : -1) * (ability.launchY || 16);
+      tg.onGround = false;
+      tg.hitStun = Math.max(tg.hitStun || 0, 500);
+      spawnPsiPushFx(caster, tg, dir);
+      const ticks = Math.max(1, Math.round((ability.duration||4000) / (ability.tickMs||400)));
+      applyPsiWarp(tg, { interval: ability.tickMs||400, ticks, damage: (ability.damage||2300)/ticks });
       break;
     }
     case 'visionPunch': {
@@ -6310,6 +6380,46 @@ function updateShock(f){
     if(f.health <= 0){ f.shockTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
   }
   if(f.shockTicksLeft <= 0 && f.el) f.el.classList.remove('shocked');
+}
+
+/* ---- Invisible Woman: Psionic Push (telekinetic launch + lingering warp DoT) ---- */
+function spawnPsiPushFx(caster, target, dir){
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  for(let i=0;i<4;i++) setTimeout(()=>{
+    fxEl('psi-warp-ring', `left:${cx}px;top:${cy}px;width:${26+i*26}px;height:${26+i*26}px;`, 480);
+  }, i*40);
+  spawnSparks(cx, cy, 16, '#c98bff', 70, 420);
+  spawnSparks(cx, cy, 10, '#eaf6ff', 50, 380);
+  fxEl('psi-lens-flash', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;`, 260);
+}
+function applyPsiWarp(target, cfg){
+  if(!target || target.dead || !cfg) return;
+  target.psiInterval = cfg.interval || 400;
+  target.psiDamage = cfg.damage || 200;
+  target.psiTicksLeft = cfg.ticks || 10;
+  target.psiNextTick = now() + target.psiInterval;
+  if(target.el) target.el.classList.add('psi-warped');
+}
+function updatePsiWarp(f){
+  if(!f) return;
+  if(!f.psiTicksLeft){
+    if(f.el && f.el.classList.contains('psi-warped')) f.el.classList.remove('psi-warped');
+    return;
+  }
+  if(f.dead || state.countdown) return;
+  const t = now();
+  while(f.psiTicksLeft > 0 && t >= f.psiNextTick){
+    f.psiTicksLeft--; f.psiNextTick += f.psiInterval;
+    if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.psiTicksLeft = 0; break; }
+    f.health = Math.max(0, f.health - f.psiDamage);
+    spawnDamageNumber(f.x+18, f.y, Math.round(f.psiDamage), false);
+    const cx = f.x + FIGHTER_SIZE/2, cy = f.y + FIGHTER_SIZE/2;
+    fxEl('psi-warp-ring', `left:${cx}px;top:${cy}px;width:34px;height:34px;`, 420);
+    spawnSparks(cx, cy, 4, '#c98bff', 26, 300);
+    sfx('shock_tick');
+    if(f.health <= 0){ f.psiTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
+  }
+  if(f.psiTicksLeft <= 0 && f.el) f.el.classList.remove('psi-warped');
 }
 
 
@@ -9823,7 +9933,7 @@ function updateVisionBeams(dtF){
     const expired = t>=b.end;
     if(f.dead || state.mode!=='battle'){
       if(b.el) b.el.remove();
-      sfx('vision_beam_end');
+      sfx(b.endSound || 'vision_beam_end');
       f.activeVisionBeam=null;
       return;
     }
@@ -9831,9 +9941,9 @@ function updateVisionBeams(dtF){
     const cx=f.x+FIGHTER_SIZE/2, cy=f.y+FIGHTER_SIZE/2, dir=f.facing<0?-1:1;
     if(!b.el){
       b.el=document.createElement('div');
-      b.el.className='vision-mind-beam';
+      b.el.className=b.beamClass || 'vision-mind-beam';
       arenaEl.appendChild(b.el);
-      sfx('vision_beam');
+      sfx(b.startSound || 'vision_beam');
     }
     b.el.classList.toggle('reverse', dir<0);
     const y=cy-b.width/2;
@@ -9863,11 +9973,11 @@ function updateVisionBeams(dtF){
           const overlapsX=right>=beamLeft && left<=beamRight;
           const overlapsY=bottom>=beamTop && top<=beamBottom;
           if(overlapsX && overlapsY){
-            applyDamage(tg,b.damage,b.knockback,dir,{hitFx:'vision_beam_hit',sound:'vision_beam_hit'});
+            applyDamage(tg,b.damage,b.knockback,dir,{hitFx:b.hitFx||'vision_beam_hit',sound:b.hitSound||'vision_beam_hit'});
             const nx=Math.max(BOUND_MIN_X,Math.min(BOUND_MAX_X,tg.x+FIGHTER_SIZE/2))+(Math.random()-.5)*8;
             const ny=tg.y+FIGHTER_SIZE/2+(Math.random()-.5)*16;
-            fxEl('vision-beam-node',`left:${nx-5}px;top:${ny-5}px;width:10px;height:10px;`,190);
-            sfx('vision_beam_tick');
+            fxEl(b.nodeClass||'vision-beam-node',`left:${nx-5}px;top:${ny-5}px;width:10px;height:10px;`,190);
+            sfx(b.tickSound || 'vision_beam_tick');
           }
         }
         b.nextTick += b.tickMs;
@@ -9875,7 +9985,7 @@ function updateVisionBeams(dtF){
     }
     if(expired){
       if(b.el) b.el.remove();
-      sfx('vision_beam_end');
+      sfx(b.endSound || 'vision_beam_end');
       f.activeVisionBeam=null;
     }
   });
@@ -10195,7 +10305,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -10308,6 +10418,11 @@ function buildProjectileVisual(p){
     p.el.style.background='transparent';
     p.el.style.boxShadow='none';
     p.el.innerHTML = '<div class="sl-bolt-core"></div><div class="sl-bolt-tail"></div>';
+  } else if(p.render === 'iw-laser'){
+    p.el.classList.add('iw-laser-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML = '<div class="iw-laser-core"></div><div class="iw-laser-fringe"></div><div class="iw-laser-tail"></div>';
   } else if(p.render === 'cap-shield'){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
@@ -10607,6 +10722,7 @@ const AI_STYLE_RANGE = {
   nickfury:420,
   starlord:400,
   groot:90,
+  invisiblewoman:480,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -11097,6 +11213,10 @@ function updateBotAI(dtF){
     if(cdReady(bot,'R',t) && adist > 420 && Math.random() < 0.35){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && adist > 80 && adist < 640 && Math.abs(vertical) < 100){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist <= eAb.range + 30){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'invisiblewoman'){
+    if(cdReady(bot,'R',t) && (hpPct < 0.4 || adist < 130) && Math.random() < 0.45){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 110 && adist < 620 && Math.abs(vertical) < 130){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
   }
 }
 
@@ -11148,7 +11268,8 @@ function loseLife(target, side){
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
   target.slowUntil = 0;
-  target.cloakUntil = 0; target.shockTicksLeft = 0;
+  target.cloakUntil = 0; target.shockTicksLeft = 0; target.psiTicksLeft = 0;
+  if(target.el) target.el.classList.remove('psi-warped');
   if(target.webWrapEl){ target.webWrapEl.remove(); target.webWrapEl = null; }
   target.hulkRoarUntil = 0; target.hulkRoarLock = false;
   target.hulkSlideDir = 0; target.hulkSlideEnd = 0; target.hulkSlideTier = '';
@@ -12556,6 +12677,7 @@ function gameLoop(ts){
     updateGrootBall(p); updateGrootBall(b);
     updateLaserBombs(dtF);
     updateShock(p); updateShock(b);
+    updatePsiWarp(p); updatePsiWarp(b);
     updateBlock(p); updateBlock(b);
     updateShield(p); updateShield(b);
     updateIllusions(dtF);
