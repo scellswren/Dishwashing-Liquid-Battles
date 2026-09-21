@@ -936,6 +936,59 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.facing-left.wasp.wasp-small .wasp-wings{transform:translate(-50%,-50%) scaleX(-1) scale(.48);}
 .fighter.wasp.wasp-small.wasp-enlarged .fighter-size-body{transform:scale(.568);}
 .fighter.wasp.wasp-small.wasp-enlarged .wasp-size-mark{inset:-16px;}
+/* ---------- Red Skull / Nick Fury high-quality combat visuals ---------- */
+.redskull-hydra-projectile,.redskull-infinite-projectile,.nickfury-bazooka-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;}
+.redskull-hydra-projectile{filter:drop-shadow(0 0 7px #ff334f);animation:redSkullBlastPulse .22s ease-in-out infinite alternate;}
+.redskull-hydra-core{position:absolute;inset:20% 8%;border-radius:50% 44% 44% 50%;background:linear-gradient(90deg,#7c0716,#ff5665 40%,#fff0f1 58%,#e3233c 76%,#8d0719);box-shadow:0 0 10px #ff344e,0 0 24px #ff213caa;}
+.redskull-hydra-halo{position:absolute;inset:4% 0;border-radius:50%;background:radial-gradient(ellipse,#ff667744 0%,#d9233b22 40%,transparent 72%);}
+.redskull-hydra-tail{position:absolute;right:82%;top:33%;width:70%;height:34%;background:linear-gradient(90deg,transparent,#ff344f77,#ff6f7e);filter:blur(3px);}
+.redskull-infinite-projectile{filter:drop-shadow(0 0 10px #46adff) drop-shadow(0 0 24px #1c8fff77);animation:infiniteBeamPulse .16s ease-in-out infinite alternate;}
+.redskull-infinite-outer{position:absolute;inset:4% 0;border-radius:18px;background:linear-gradient(90deg,#2589ff77,#72cbffcc 28%,#dff6ff 50%,#72cbffcc 72%,#2589ff77);filter:blur(4px);}
+.redskull-infinite-core{position:absolute;inset:22% 0;border-radius:12px;background:linear-gradient(90deg,#1785ff,#9edfff 30%,#fff 50%,#9edfff 70%,#1785ff);box-shadow:0 0 9px #dff7ff,0 0 22px #3daeff;}
+.redskull-infinite-hot{position:absolute;inset:38% 0;border-radius:10px;background:#fff;box-shadow:0 0 12px #fff,0 0 30px #64c2ff;}
+.nickfury-bazooka-projectile{filter:drop-shadow(0 3px 5px rgba(0,0,0,.7));}
+.fury-rocket{position:absolute;inset:0;}
+.fury-rocket-nose{position:absolute;left:72%;top:20%;width:25%;height:60%;background:linear-gradient(180deg,#c6ced7,#6e7884);clip-path:polygon(0 0,100% 50%,0 100%);border:1px solid #1a1f25;}
+.fury-rocket-body{position:absolute;left:12%;top:28%;width:65%;height:44%;border-radius:3px;background:linear-gradient(180deg,#87939f,#38414c 45%,#151a20);border:1px solid #080a0d;}
+.fury-rocket-fin.top{position:absolute;left:15%;top:5%;width:22%;height:29%;background:#454e59;clip-path:polygon(0 100%,100% 0,100% 100%);}
+.fury-rocket-fin.bottom{position:absolute;left:15%;top:66%;width:22%;height:29%;background:#454e59;clip-path:polygon(0 0,100% 0,100% 100%);}
+.fury-rocket-flame{position:absolute;left:-2%;top:38%;width:27%;height:24%;border-radius:55% 15% 15% 55%;background:linear-gradient(90deg,transparent,#ff9f3d,#fff2a0);filter:drop-shadow(0 0 8px #ff862b);animation:rocketFlame .12s ease-in-out infinite alternate;}
+.redskull-space-portal{position:absolute;pointer-events:none;border-radius:50%;z-index:30;display:flex;align-items:center;justify-content:center;animation:spacePortalSpin .55s cubic-bezier(.2,.7,.2,1) forwards;}
+.space-ring{position:absolute;inset:5px;border:3px solid #5bb9ff;border-radius:50%;box-shadow:0 0 25px #2f9dff, inset 0 0 22px #277eea99;transform:rotate(25deg) scale(.88);animation:spaceRingPulse .5s ease-out forwards;}
+.space-core{position:absolute;width:30%;height:30%;border-radius:7px;background:linear-gradient(145deg,#d5f3ff,#56b5ff 42%,#1764c6);box-shadow:0 0 22px #58bdff,0 0 45px #2488ff;transform:rotate(45deg);animation:spaceCorePulse .42s ease-out forwards;}
+.space-rays{position:absolute;inset:-16px;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg,transparent 17deg,#65c3ff88 18deg,#65c3ff 20deg,transparent 22deg,transparent 37deg);filter:blur(1px);animation:spaceRays .5s linear;}
+.redskull-space-charge{position:absolute;pointer-events:none;z-index:31;border-radius:50%;border:2px solid #5db8ff;box-shadow:0 0 35px #2d9aff88;animation:spaceCharge .48s ease-out forwards;}
+.space-charge-core{position:absolute;left:50%;top:50%;width:22px;height:22px;transform:translate(-50%,-50%) rotate(45deg);background:linear-gradient(135deg,#e3f7ff,#4aaeff,#1554ac);box-shadow:0 0 18px #65c4ff;}
+.space-charge-ring{position:absolute;inset:8px;border:3px dashed #b9e6ff;border-radius:50%;animation:spaceChargeRing .44s linear;}
+.redskull-beam-charge{position:absolute;border-radius:50%;pointer-events:none;display:flex;align-items:center;justify-content:center;animation:beamCharge .34s ease-out;}
+.beam-charge-core{width:45%;height:45%;border-radius:50%;background:#dff7ff;box-shadow:0 0 16px #75c8ff,0 0 34px #268fff;}
+.nickfury-gun-fx,.redskull-gun-fx,.nickfury-bazooka-fx{position:absolute;pointer-events:none;z-index:26;transform-origin:center;animation:weaponAppear .18s ease-out;}
+/* Held firearms: these live inside the fighter DOM, so they stay locked to the
+   character's hand rather than floating at the attack's original world position. */
+.held-ranged-weapon{position:absolute;left:0;top:0;width:64px;height:64px;display:none;pointer-events:none;z-index:6;overflow:visible;transform-origin:50% 50%;filter:drop-shadow(0 3px 4px rgba(0,0,0,.72));}
+.held-ranged-weapon.active{display:block;animation:heldWeaponIn .12s ease-out both;}
+.held-ranged-weapon svg{position:absolute;display:block;overflow:visible;}
+/* Every gun is drawn pointing RIGHT with its barrel on the fighter's centre line (y=32),
+   which is exactly where the bullet spawns. Mirroring around the fighter's centre keeps
+   the gun locked to the body when he faces left. */
+.fighter.facing-left .held-ranged-weapon{transform:scaleX(-1);}
+.fighter.redskull .held-redskull-gun svg{left:28px;top:18px;width:84px;height:40px;}
+.fighter.nickfury .held-nickfury-gun svg{left:32px;top:23.5px;width:64px;height:34px;}
+.fighter.nickfury .held-nickfury-bazooka svg{left:2px;top:16px;width:116px;height:44px;}
+@keyframes heldWeaponIn{from{opacity:0;filter:brightness(1.35) drop-shadow(0 3px 4px rgba(0,0,0,.72))}to{opacity:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.72))}}
+.fury-grapple-line{z-index:24;}
+@keyframes weaponAppear{from{opacity:0;transform:scale(.72) translateX(-10px)}to{opacity:1;transform:scale(1) translateX(0)}}
+@keyframes redSkullBlastPulse{from{transform:scale(.92)}to{transform:scale(1.06)}}
+@keyframes infiniteBeamPulse{from{transform:scaleY(.9)}to{transform:scaleY(1.08)}}
+@keyframes rocketFlame{from{transform:scaleX(.88);opacity:.75}to{transform:scaleX(1.12);opacity:1}}
+@keyframes spacePortalSpin{from{opacity:0;transform:scale(.25) rotate(-90deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+@keyframes spaceRingPulse{from{transform:rotate(25deg) scale(.55);opacity:.15}to{transform:rotate(150deg) scale(1);opacity:1}}
+@keyframes spaceCorePulse{from{transform:rotate(45deg) scale(.3);opacity:.2}to{transform:rotate(225deg) scale(1);opacity:1}}
+@keyframes spaceRays{from{transform:rotate(0deg);opacity:.2}to{transform:rotate(180deg);opacity:1}}
+@keyframes spaceCharge{from{opacity:0;transform:scale(.45)}to{opacity:1;transform:scale(1.2)}}
+@keyframes spaceChargeRing{from{transform:rotate(0deg) scale(.6)}to{transform:rotate(280deg) scale(1)}}
+@keyframes beamCharge{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+
 /* ---------- Green Goblin / film-inspired combat glider ---------- */
 .fighter.greengoblin{z-index:8;}
 .fighter.greengoblin .fighter-square{border-color:#3d7648;box-shadow:0 0 0 1px rgba(116,255,128,.20),0 12px 24px rgba(0,0,0,.35),0 0 22px rgba(51,255,81,.12);}
@@ -3021,6 +3074,42 @@ const CHARACTERS = {
          desc:'Overcharges the glider, making Goblin move 2x faster for 5 seconds. Cooldown: 15 seconds.'}
     }
   },
+  redskull: {
+    id:'redskull', name:'Red Skull', img:'RedSkull.jpg', color:'#d92535', accentColor:'#4fa9ff', aiStyle:'redskull',
+    maxHealth:9500,
+    description:'Hydra commander wielding a powerful energy weapon and the Space Stone.',
+    abilities:{
+      E:{key:'E', name:'Hydra Blast', type:'projectile', damage:300, cooldown:1250, knockback:7,
+         speed:15, w:34, h:14, color:'#d92535', render:'redskull-hydra-blast', trail:'redskull-hydra',
+         sound:'redskull_hydra', fx:'redskull_hydra', hitFx:'redskull_hydra_hit', hitSound:'redskull_hydra_hit',
+         desc:'Red Skull raises a Hydra weapon for a moment and fires a red energy blast for 300 damage. Cooldown: 1.25 seconds.'},
+      Q:{key:'Q', name:'Infinite Power', type:'projectile', damage:1700, cooldown:14000, knockback:18,
+         speed:22, w:150, h:28, color:'#53b7ff', render:'redskull-infinite-beam', trail:'redskull-beam',
+         sound:'redskull_infinite', fx:'redskull_infinite', hitFx:'redskull_infinite_hit', hitSound:'redskull_infinite_hit',
+         desc:'Fires a huge blue energy beam for 1,700 damage. Cooldown: 14 seconds.'},
+      R:{key:'R', name:'Space Stone Teleport', type:'spaceTeleport', cooldown:18000,
+         sound:'redskull_space', fx:'redskull_space',
+         desc:'Uses the Space Stone to teleport Red Skull to a random part of the map. Cooldown: 18 seconds.'}
+    }
+  },
+  nickfury: {
+    id:'nickfury', name:'Nick Fury', img:'NickFury.jpg', color:'#3b4250', accentColor:'#b5c9e8', aiStyle:'nickfury',
+    maxHealth:4500,
+    description:'S.H.I.E.L.D. tactical fighter with rapid pistol fire, a heavy bazooka, and a grappling hook.',
+    abilities:{
+      E:{key:'E', name:'Glok', type:'projectile', damage:100, cooldown:200, knockback:3,
+         speed:31, w:18, h:6, color:'#d8dde7', render:'bullet', bulletType:'fmj', trail:'',
+         sound:'nickfury_glock', fx:'nickfury_glock', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         desc:'Rapid pistol fire for 100 damage with a 0.2 second cooldown.'},
+      Q:{key:'Q', name:'Bazooka', type:'projectile', damage:600, cooldown:23000, knockback:15,
+         speed:13, w:58, h:22, color:'#87919f', render:'nickfury-bazooka', trail:'bazooka-smoke',
+         sound:'nickfury_bazooka', fx:'nickfury_bazooka', hitFx:'nickfury_bazooka_hit', hitSound:'nickfury_bazooka_hit',
+         desc:'Fires a heavy bazooka rocket for 600 damage. Cooldown: 23 seconds.'},
+      R:{key:'R', name:'Grapple', type:'grapple', cooldown:5000,
+         sound:'grapple', fx:'nickfury_grapple',
+         desc:'Fires a grappling hook and rapidly pulls Nick Fury toward the opponent, like Black Widow and Hawkeye.'}
+    }
+  },
   ironman: {
     id:'ironman', name:'Iron Man', img:'IronMan.jpg', color:'#d6432b',
     maxHealth:10150, aiStyle:'defensive',
@@ -3525,7 +3614,7 @@ const CHARACTERS = {
     }
   },
 };
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp'];
 
 
 /* =========================================================================
@@ -4623,9 +4712,89 @@ function buildArenaStatic(){
     arenaEl.appendChild(el);
   });
 }
+function redSkullHeldGunSvg(){
+  // Hydra energy pistol. Barrel axis = y14 (svg) -> lands on the fighter's centre line.
+  return `<svg viewBox="0 0 84 40" aria-hidden="true">
+    <defs>
+      <linearGradient id="rsBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#626c79"/><stop offset=".45" stop-color="#282d36"/><stop offset="1" stop-color="#0a0c10"/></linearGradient>
+      <linearGradient id="rsBarrel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ebf1"/><stop offset=".5" stop-color="#8f98a4"/><stop offset="1" stop-color="#39404a"/></linearGradient>
+      <radialGradient id="rsGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#ff6a78"/><stop offset="1" stop-color="#d9233b" stop-opacity="0"/></radialGradient>
+    </defs>
+    <path d="M17 21 L34 21 L27 38 Q26.3 39.5 24 39.5 L12.5 39.5 Q10.6 39.5 11 37.6 Z" fill="#14181e" stroke="#05070a" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M14.5 27 L28 27 M13.4 31.5 L26 31.5" stroke="#3a414b" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M37 22 v4.5 q0 3.2 3.6 3.2 h5.4 v-7.7" fill="none" stroke="#05070a" stroke-width="2.4" stroke-linejoin="round"/>
+    <rect x="4" y="5" width="50" height="17" rx="5" fill="url(#rsBody)" stroke="#05070a" stroke-width="2"/>
+    <rect x="10" y="1.5" width="22" height="4.2" rx="1.6" fill="#9aa3ae" stroke="#05070a" stroke-width="1.4"/>
+    <rect x="9" y="7" width="40" height="1.6" rx=".8" fill="#c7ced7" opacity=".4"/>
+    <rect x="16" y="11.2" width="30" height="3.6" rx="1.8" fill="#e0283f"/>
+    <rect x="17" y="11.9" width="28" height="1.2" rx=".6" fill="#ffc4ca" opacity=".85"/>
+    <circle cx="11" cy="14.5" r="2.7" fill="#d33143" stroke="#05070a" stroke-width="1.2"/>
+    <rect x="52" y="8.5" width="26" height="11" rx="3" fill="url(#rsBarrel)" stroke="#0b0e12" stroke-width="2"/>
+    <rect x="58" y="6.8" width="3" height="14.4" rx="1" fill="#3b424c" stroke="#0b0e12" stroke-width="1.2"/>
+    <rect x="65" y="6.8" width="3" height="14.4" rx="1" fill="#3b424c" stroke="#0b0e12" stroke-width="1.2"/>
+    <rect x="72" y="6.8" width="3" height="14.4" rx="1" fill="#3b424c" stroke="#0b0e12" stroke-width="1.2"/>
+    <circle cx="79" cy="14" r="5" fill="url(#rsGlow)"/>
+    <circle cx="79" cy="14" r="2.3" fill="#fff"/>
+  </svg>`;
+}
+function nickFuryHeldGunSvg(){
+  // Semi-auto pistol. Barrel axis = y8.5 (svg) -> lands on the fighter's centre line.
+  return `<svg viewBox="0 0 64 34" aria-hidden="true">
+    <defs><linearGradient id="nfSlide" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f6874"/><stop offset=".5" stop-color="#232930"/><stop offset="1" stop-color="#0b0d11"/></linearGradient></defs>
+    <path d="M14 13 L30 13 L22 32 Q21.3 33 20 33 L9 33 Q7.6 33 8 31.6 Z" fill="#171b21" stroke="#05070b" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M13.5 20 L27 20 M11.6 25 L23.6 25" stroke="#3a414b" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M34 13 v5 q0 3.6 -3.6 3.6 h-5" fill="none" stroke="#05070b" stroke-width="2.2" stroke-linejoin="round"/>
+    <rect x="4" y="3" width="54" height="11" rx="2.5" fill="url(#nfSlide)" stroke="#05070b" stroke-width="2"/>
+    <rect x="56" y="5.7" width="5" height="5.6" rx="1" fill="#8b95a1" stroke="#05070b" stroke-width="1.2"/>
+    <rect x="6" y=".6" width="5" height="2.8" rx=".8" fill="#0a0c10"/>
+    <rect x="50" y=".6" width="4" height="2.8" rx=".8" fill="#0a0c10"/>
+    <rect x="26" y="4.7" width="13" height="3.6" rx=".8" fill="#05070b"/>
+    <path d="M8 5.2 V12 M10.6 5.2 V12 M13.2 5.2 V12 M15.8 5.2 V12" stroke="#000" stroke-width="1" opacity=".5"/>
+    <rect x="18" y="4.2" width="36" height="1.2" rx=".6" fill="#c9d0d9" opacity=".35"/>
+  </svg>`;
+}
+function nickFuryHeldBazookaSvg(){
+  // Shoulder-fired launcher. Tube axis = y16 (svg) -> lands on the fighter's centre line.
+  return `<svg viewBox="0 0 116 44" aria-hidden="true">
+    <defs><linearGradient id="nfTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#76828f"/><stop offset=".45" stop-color="#4b555f"/><stop offset="1" stop-color="#262d35"/></linearGradient></defs>
+    <path d="M38 26 L49 26 L46.5 42 Q46 43 44.5 43 L38.5 43 Q37 43 37.3 41.5 Z" fill="#1c2229" stroke="#090b0f" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="63" y="26" width="9" height="13" rx="2.5" fill="#1c2229" stroke="#090b0f" stroke-width="2"/>
+    <rect x="28" y="0.8" width="28" height="6" rx="2" fill="#20262d" stroke="#090b0f" stroke-width="1.6"/>
+    <circle cx="56" cy="3.8" r="2.4" fill="#5ec8ff"/>
+    <rect x="10" y="6" width="86" height="20" rx="5" fill="url(#nfTube)" stroke="#0b0e12" stroke-width="2.5"/>
+    <rect x="16" y="8.6" width="74" height="3" rx="1.5" fill="#cbd3dc" opacity=".45"/>
+    <rect x="24" y="5" width="3" height="22" rx="1" fill="#252c34"/>
+    <rect x="58" y="5" width="3" height="22" rx="1" fill="#252c34"/>
+    <rect x="74" y="6" width="8" height="20" fill="#d6a52b"/>
+    <path d="M74 12 L82 6 M74 20 L82 14 M74 26 L82 20" stroke="#15181c" stroke-width="2.2"/>
+    <rect x="3" y="3" width="9" height="26" rx="3" fill="#2b323b" stroke="#0b0e12" stroke-width="2"/>
+    <ellipse cx="6" cy="16" rx="2" ry="8" fill="#07090c"/>
+    <rect x="94" y="3" width="14" height="26" rx="3" fill="#5c6672" stroke="#0b0e12" stroke-width="2"/>
+    <ellipse cx="107" cy="16" rx="2.6" ry="9" fill="#07090c"/>
+  </svg>`;
+}
+function activateHeldWeapon(f, selector, duration, direction){
+  if(!f || !f.el) return;
+  const el = f.el.querySelector(selector);
+  if(!el) return;
+  const token = String((Number(el.dataset.weaponToken||0)+1));
+  el.dataset.weaponToken = token;
+  // Turn the fighter toward the shot. The gun is mirrored by the .facing-left class
+  // (see CSS), so body, gun and bullet all end up pointing the same way.
+  if(direction) f.facing = direction < 0 ? -1 : 1;
+  f.el.classList.toggle('facing-left', f.facing < 0);
+  // Only one held gun at a time (Nick Fury has a pistol AND a bazooka).
+  f.el.querySelectorAll('.held-ranged-weapon.active').forEach(w=>{ if(w !== el) w.classList.remove('active'); });
+  el.style.transform = '';
+  el.classList.add('active');
+  setTimeout(()=>{
+    if(el.dataset.weaponToken === token) el.classList.remove('active');
+  }, duration);
+}
+
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -4633,6 +4802,8 @@ function buildFighterDOM(f){
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
     ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
+    ${f.def.id==='redskull' ? `<div class="held-ranged-weapon held-redskull-gun" aria-hidden="true">${redSkullHeldGunSvg()}</div>` : ''}
+    ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
@@ -5028,6 +5199,27 @@ function randomArenaPlatformPoint(excludePlatform){
   const x = maxX >= minX ? minX + Math.random()*(maxX-minX) : p.x;
   return {x, y:p.y-FIGHTER_SIZE-1, platform:p};
 }
+function teleportWithSpaceStone(caster){
+  const from = platformUnderX(caster);
+  const dest = randomArenaPlatformPoint(from);
+  const ox = caster.x + FIGHTER_SIZE/2, oy = caster.y + FIGHTER_SIZE/2;
+
+  fxEl('redskull-space-portal', `left:${ox-48}px;top:${oy-48}px;width:96px;height:96px;`, 650,
+    '<div class="space-ring"></div><div class="space-core"></div><div class="space-rays"></div>');
+  spawnSparks(ox, oy, 20, '#62b8ff', 110, 460);
+
+  caster.x = dest.x;
+  caster.y = dest.y;
+  caster.vx = 0;
+  caster.vy = 0;
+  caster.onGround = false;
+  caster.turnPending = null;
+
+  fxEl('redskull-space-portal', `left:${caster.x+FIGHTER_SIZE/2-48}px;top:${caster.y+FIGHTER_SIZE/2-48}px;width:96px;height:96px;`, 700,
+    '<div class="space-ring"></div><div class="space-core"></div><div class="space-rays"></div>');
+  spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 24, '#72c5ff', 120, 520);
+  spawnAfterimage(caster, '#55aaff88', 500);
+}
 function teleportToRandomPlatform(caster){
   const from = platformUnderX(caster);
   const dest = randomArenaPlatformPoint(from);
@@ -5170,6 +5362,10 @@ function executeAbility(caster, target, ability, t){
     }
     case 'randomTeleport': {
       teleportToRandomPlatform(caster);
+      break;
+    }
+    case 'spaceTeleport': {
+      teleportWithSpaceStone(caster);
       break;
     }
     case 'portal': {
@@ -6198,6 +6394,44 @@ function sfx(kind='ability'){
         aTone(ctx, t, 'triangle', 190, 900, 0.34, 0.14);
         aNoise(ctx, t, 0.36, 0.16, 'bandpass', 500, 3400, 1.3);
         aTone(ctx, t, 'sine', 120, 60, 0.30, 0.16);
+        return;
+
+      /* ---------- Red Skull ---------- */
+      case 'redskull_hydra':
+        aNoise(ctx,t,0.08,0.34,'highpass',4200,1700,1.1);
+        aTone(ctx,t,'sawtooth',120,70,0.18,0.08);
+        return;
+      case 'redskull_hydra_hit':
+        aTone(ctx,t,'square',140,48,0.30,0.18);
+        aNoise(ctx,t,0.22,0.23,'bandpass',2400,700,1.4);
+        return;
+      case 'redskull_infinite':
+        aTone(ctx,t,'sawtooth',210,1180,0.50,0.10);
+        aNoise(ctx,t,0.42,0.16,'bandpass',5000,1200,1.8);
+        return;
+      case 'redskull_infinite_hit':
+        aTone(ctx,t,'sine',90,38,0.58,0.30);
+        aNoise(ctx,t,0.38,0.24,'lowpass',3000,180,0.9);
+        aNoise(ctx,t+0.03,0.16,0.17,'highpass',5200,1500,1.4);
+        return;
+      case 'redskull_space':
+        aTone(ctx,t,'triangle',240,980,0.44,0.08);
+        aNoise(ctx,t,0.34,0.12,'bandpass',3600,1100,1.6);
+        return;
+
+      /* ---------- Nick Fury ---------- */
+      case 'nickfury_glock':
+        aNoise(ctx,t,0.035,0.48,'highpass',4300,2100,0.9);
+        aNoise(ctx,t,0.07,0.22,'lowpass',1100,180,0.8);
+        return;
+      case 'nickfury_bazooka':
+        aNoise(ctx,t,0.22,0.20,'bandpass',2100,650,1.5);
+        aTone(ctx,t,'sawtooth',95,42,0.38,0.12);
+        return;
+      case 'nickfury_bazooka_hit':
+        aTone(ctx,t,'sine',120,36,0.46,0.28);
+        aNoise(ctx,t,0.30,0.27,'lowpass',2600,170,0.9);
+        aNoise(ctx,t+0.03,0.14,0.15,'highpass',4500,1200,1.1);
         return;
 
       /* ---------- Green Goblin ---------- */
@@ -7394,6 +7628,83 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Red Skull ---------------- */
+    case 'redskull_hydra': {
+      const gunX = cx + dir*38, gunY = cy - 10;
+      const gunSvg = `<svg viewBox="0 0 96 52" width="96" height="52" aria-hidden="true">
+        <defs><linearGradient id="rsgun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#646d79"/><stop offset=".45" stop-color="#20242c"/><stop offset="1" stop-color="#080a0e"/></linearGradient></defs>
+        <g transform="translate(5 6) rotate(${dir<0?180:0} 43 20)">
+          <rect x="8" y="16" width="57" height="12" rx="4" fill="url(#rsgun)" stroke="#05070a" stroke-width="2"/>
+          <rect x="60" y="13" width="24" height="7" rx="3" fill="#99a0aa" stroke="#11151a" stroke-width="2"/>
+          <rect x="54" y="25" width="15" height="22" rx="3" transform="rotate(-12 54 25)" fill="#161a20"/>
+          <path d="M70 8 L88 8 L85 15 L69 15 Z" fill="#b5bcc5" stroke="#0b0e12" stroke-width="2"/>
+          <circle cx="33" cy="22" r="3" fill="#ba2636"/>
+        </g>
+      </svg>`;
+      activateHeldWeapon(caster, '.held-redskull-gun', 1000, caster.isBot ? caster.facing : dirSignTo(caster, target));
+      fxEl('fx-flash', `left:${cx+dir*75-17}px;top:${cy-17}px;width:34px;height:34px;background:radial-gradient(circle,#fff,#ffb3b8 24%,#e62d42 48%,transparent 76%);`, 150);
+      spawnSparks(cx+dir*75, cy, 8, '#ff6976', 34, 240);
+      break;
+    }
+    case 'redskull_infinite': {
+      const x = cx + dir*34, y = cy-4;
+      fxEl('redskull-beam-charge', `left:${x-22}px;top:${y-22}px;width:44px;height:44px;border-color:#66c8ff;border-width:3px;box-shadow:0 0 28px #359cff;`, 340,
+        '<div class="beam-charge-core"></div>');
+      spawnLightning(x, y, x+dir*72, y-4, {bolts:2, branches:3, width:2.2, life:260, jag:18, segs:6, color:'#8fd7ff'});
+      break;
+    }
+    case 'redskull_space': {
+      fxEl('redskull-space-charge', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;`, 480,
+        '<div class="space-charge-core"></div><div class="space-charge-ring"></div>');
+      spawnSparks(cx,cy,14,'#5fb8ff',78,390);
+      break;
+    }
+
+    /* ---------------- Nick Fury ---------------- */
+    case 'nickfury_glock': {
+      const gunX = cx + dir*35, gunY = cy - 6;
+      const gunSvg = `<svg viewBox="0 0 78 44" width="78" height="44" aria-hidden="true">
+        <defs><linearGradient id="fgun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f4650"/><stop offset=".55" stop-color="#191d24"/><stop offset="1" stop-color="#07090d"/></linearGradient></defs>
+        <g transform="rotate(${dir<0?180:0} 39 22)">
+          <rect x="12" y="12" width="44" height="9" rx="3" fill="url(#fgun)" stroke="#05070b" stroke-width="2"/>
+          <rect x="53" y="10" width="16" height="5" rx="2" fill="#79818d"/>
+          <path d="M28 20 L43 20 L38 39 Q35 42 31 39 Z" fill="#15191e" stroke="#05070b" stroke-width="2"/>
+          <rect x="7" y="10" width="8" height="12" rx="2" fill="#0c0e12"/>
+        </g>
+      </svg>`;
+      activateHeldWeapon(caster, '.held-nickfury-gun', 1000, caster.isBot ? caster.facing : dirSignTo(caster, target));
+      fxEl('fx-flash', `left:${cx+dir*62-11}px;top:${cy-11}px;width:22px;height:22px;background:radial-gradient(circle,#fff8d6,#ffd76b 38%,transparent 74%);`, 80);
+      break;
+    }
+    case 'nickfury_bazooka': {
+      const x = cx + dir*30, y = cy-7;
+      const bazookaSvg = `<svg viewBox="0 0 110 58" width="110" height="58" aria-hidden="true">
+        <g transform="translate(5 6) rotate(${dir<0?180:0} 50 23)">
+          <rect x="13" y="15" width="68" height="14" rx="6" fill="#4e5964" stroke="#0b0e12" stroke-width="2.5"/>
+          <rect x="24" y="11" width="43" height="5" rx="2" fill="#9ba4ad"/>
+          <path d="M25 28 L40 28 L37 46 L27 46 Z" fill="#20262d" stroke="#090b0f" stroke-width="2"/>
+          <rect x="67" y="12" width="18" height="19" rx="3" fill="#697581" stroke="#0d1014" stroke-width="2"/>
+          <path d="M82 14 L100 20 L100 24 L82 31 Z" fill="#adb5bf"/>
+        </g>
+      </svg>`;
+      activateHeldWeapon(caster, '.held-nickfury-bazooka', 1000, caster.isBot ? caster.facing : dirSignTo(caster, target));
+      spawnSparks(cx+dir*80,cy,10,'#ffcc77',48,260);
+      break;
+    }
+    case 'nickfury_grapple': {
+      const tg = target || {x:cx+dir*180,y:cy-90};
+      const tx = tg.x + FIGHTER_SIZE/2, ty = tg.y + FIGHTER_SIZE/2;
+      const minX = Math.min(cx,tx)-16, minY = Math.min(cy,ty)-16;
+      const w = Math.max(32, Math.abs(tx-cx)+32), h = Math.max(32, Math.abs(ty-cy)+32);
+      const lineSvg = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+        <line x1="${cx-minX}" y1="${cy-minY}" x2="${tx-minX}" y2="${ty-minY}" stroke="#d9e0ea" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="${tx-minX}" cy="${ty-minY}" r="7" fill="#d9e0ea" stroke="#738095" stroke-width="3"/>
+      </svg>`;
+      fxEl('fx-grapple-line fury-grapple-line', `left:${minX}px;top:${minY}px;width:${w}px;height:${h}px;`, 620, lineSvg);
+      spawnSparks(cx+dir*18,cy,5,'#dfe7ff',28,250);
+      break;
+    }
+
     /* ---------------- Green Goblin ---------------- */
     case 'goblin_pumpkin': {
       const hx=cx+dir*22, hy=cy;
@@ -8237,6 +8548,31 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'redskull_hydra_hit': {
+      fxEl('fx-flash',`left:${cx-55}px;top:${cy-55}px;width:110px;height:110px;background:radial-gradient(circle,#fff,#ff9da8 18%,#d92535 44%,transparent 75%);`,300);
+      fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ff4b5e;border-width:5px;box-shadow:0 0 34px #e51e36;`,520);
+      spawnSparks(cx,cy,15,'#ff6675',75,440);
+      shakeArena(8,300);
+      break;
+    }
+    case 'redskull_infinite_hit': {
+      fxEl('fx-flash',`left:${cx-86}px;top:${cy-86}px;width:172px;height:172px;background:radial-gradient(circle,#fff,#d7f3ff 18%,#55b8ff 44%,transparent 77%);`,360);
+      fxEl('fx-ring',`left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;border-color:#63c2ff;border-width:6px;box-shadow:0 0 40px #299cff;`,620);
+      for(let i=0;i<7;i++){
+        const a=(Math.PI*2*i)/7+Math.random()*.3;
+        spawnLightning(cx,cy,cx+Math.cos(a)*115,cy+Math.sin(a)*115,{bolts:1,branches:2,width:2.8,life:300,jag:25,segs:7,color:'#c9efff'});
+      }
+      spawnSparks(cx,cy,22,'#8ed4ff',110,520);
+      shakeArena(14,380);
+      break;
+    }
+    case 'nickfury_bazooka_hit': {
+      fxEl('fx-flash',`left:${cx-86}px;top:${cy-86}px;width:172px;height:172px;background:radial-gradient(circle,#fffbd5 0%,#ffd06c 24%,#ff7a45 43%,transparent 75%);`,320);
+      fxEl('fx-ring',`left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;border-color:#ffad59;border-width:6px;box-shadow:0 0 36px #ff7336;`,580);
+      spawnSparks(cx,cy,24,'#ffd27a',110,520);
+      shakeArena(12,360);
+      break;
+    }
     case 'goblin_pumpkin_hit': {
       fxEl('fx-flash',`left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;background:radial-gradient(circle,#fff,#a7ffac 22%,#45ff59 44%,transparent 74%);`,300);
       fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#69ff75;border-width:5px;box-shadow:0 0 34px #38ff4f;`,500);
@@ -9394,7 +9730,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -9510,6 +9846,21 @@ function buildProjectileVisual(p){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
     p.el.innerHTML = ddClubSvg();
+  } else if(p.render === 'redskull-hydra-blast'){
+    p.el.classList.add('redskull-hydra-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML = '<div class="redskull-hydra-core"></div><div class="redskull-hydra-halo"></div><div class="redskull-hydra-tail"></div>';
+  } else if(p.render === 'redskull-infinite-beam'){
+    p.el.classList.add('redskull-infinite-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML = '<div class="redskull-infinite-outer"></div><div class="redskull-infinite-core"></div><div class="redskull-infinite-hot"></div>';
+  } else if(p.render === 'nickfury-bazooka'){
+    p.el.classList.add('nickfury-bazooka-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML = '<div class="fury-rocket"><span class="fury-rocket-nose"></span><span class="fury-rocket-body"></span><span class="fury-rocket-fin top"></span><span class="fury-rocket-fin bottom"></span><span class="fury-rocket-flame"></span></div>';
   } else if(p.render === 'hawkeye-arrow' || p.render === 'explosive-arrow'){
     p.el.classList.add('arrow-projectile');
     if(p.render === 'explosive-arrow') p.el.classList.add('explosive');
@@ -9577,7 +9928,13 @@ function buildProjectileVisual(p){
 }
 function spawnProjTrail(p){
   const cx = p.x + p.w/2, cy = p.y + p.h/2;
-  if(p.trail === 'goblin-pumpkin'){
+  if(p.trail === 'redskull-hydra'){
+    fxEl('fx-trail', `left:${cx-5}px;top:${cy-5}px;width:10px;height:10px;background:radial-gradient(circle,#ffb6bc,#e32f42 38%,transparent 75%);box-shadow:0 0 13px #ff334c,0 0 28px #ff1f3f77;`, 260);
+  } else if(p.trail === 'redskull-beam'){
+    fxEl('fx-trail', `left:${cx-10}px;top:${cy-8}px;width:20px;height:16px;background:radial-gradient(ellipse,#dff5ff,#55b7ff 40%,transparent 76%);box-shadow:0 0 14px #52b6ff,0 0 30px #2096ff66;`, 230);
+  } else if(p.trail === 'bazooka-smoke'){
+    fxEl('fx-trail', `left:${cx-8}px;top:${cy-7}px;width:16px;height:14px;background:radial-gradient(circle,#d8dce2aa,#7d8590 28%,transparent 74%);filter:blur(1px);`, 420);
+  } else if(p.trail === 'goblin-pumpkin'){
     fxEl('fx-trail', `left:${(cx-6).toFixed(1)}px;top:${(cy-6).toFixed(1)}px;width:12px;height:12px;background:radial-gradient(circle,#fff8c8,#5cff66 38%,transparent 74%);box-shadow:0 0 12px #56ff69,0 0 22px #26d63c66;`, 300);
   } else if(p.trail === 'web'){
     const n = Math.max(8, Math.min(20, p.w));
@@ -9774,6 +10131,8 @@ const AI_STYLE_RANGE = {
   bullseye:    620,
   milesmorales:150,
   wintersoldier:240,
+  redskull:520,
+  nickfury:420,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -10199,6 +10558,16 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && bot.gliderMounted && adist > 100 && Math.abs(vertical) < 125 && Math.random() < 0.22){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 980){ tryUseAbility(bot,player,'E'); return; }
     if(bot.gliderLaunched && cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'redskull'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && (hpPct < 0.35 || adist < 180 || Math.abs(vertical) > 160) && Math.random() < 0.5){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 220 && adist < 1150){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 1100){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'nickfury'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist > 260 && adist < 900){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'R',t) && (adist > 420 || Math.abs(vertical) > 110 || hpPct < 0.35) && Math.random() < 0.72){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 980){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'wasp'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
     if(cdReady(bot,'R',t) && !bot.flight && (Math.abs(vertical)>95 || adist>420 || hpPct<0.45) && Math.random()<0.65){ tryUseAbility(bot,player,'R'); return; }
