@@ -940,11 +940,18 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.greengoblin{z-index:8;}
 .fighter.greengoblin .fighter-square{border-color:#3d7648;box-shadow:0 0 0 1px rgba(116,255,128,.20),0 12px 24px rgba(0,0,0,.35),0 0 22px rgba(51,255,81,.12);}
 .fighter.greengoblin .flight-glow{display:none!important;}
-.goblin-glider{position:absolute;left:-48px;top:6px;width:160px;height:86px;z-index:1;pointer-events:none;transform-origin:50% 50%;filter:drop-shadow(0 5px 4px rgba(0,0,0,.65)) drop-shadow(0 0 8px rgba(70,255,90,.16));overflow:visible;}
+/* Mounted position: lift Goblin slightly so the glider's platform is clearly visible underneath him. */
+.fighter.greengoblin:not(.goblin-glider-off) .fighter-size-body{transform:translateY(-7px);}
+
+.goblin-glider{position:absolute;left:-48px;top:18px;width:160px;height:86px;z-index:0;pointer-events:none;transform-origin:50% 50%;filter:drop-shadow(0 5px 4px rgba(0,0,0,.65)) drop-shadow(0 0 8px rgba(70,255,90,.16));overflow:visible;}
 .goblin-glider svg{display:block;width:100%;height:100%;overflow:visible;}
-.fighter.facing-left .goblin-glider{transform:scaleX(-1);}
+.fighter.facing-left .goblin-glider.mounted{transform:scaleX(-1);}
+.goblin-glider.mounted{z-index:0;}
+.goblin-glider.mounted:before{content:'';position:absolute;left:50%;top:41%;width:28px;height:18px;transform:translateX(-50%);border-radius:7px 7px 4px 4px;background:linear-gradient(180deg,#314137,#101713);border:2px solid #6f8f77;box-shadow:0 3px 0 rgba(0,0,0,.35),0 0 8px rgba(93,255,108,.12);}
+.goblin-glider.mounted:after{content:'';position:absolute;left:50%;top:50%;width:38px;height:10px;transform:translate(-50%,-50%);border-radius:50%;background:linear-gradient(180deg,#9cfca7,#277c36 48%,#08120b 100%);border:1px solid #0c2a12;box-shadow:0 2px 0 rgba(0,0,0,.4);opacity:.92;}
 .goblin-glider.launched{position:absolute;z-index:5;width:124px;height:70px;left:0;top:0;transform:none;transition:none;}
 .goblin-glider.launched.reverse{transform:scaleX(-1);}
+.goblin-glider.launched.returning{z-index:5;}
 .goblin-glider.mounted svg{animation:goblinGliderFloat .72s ease-in-out infinite alternate;}
 .goblin-glider.boosted svg{animation:goblinGliderBoost .18s ease-in-out infinite alternate;}
 .goblin-glider.launched:after{content:'';position:absolute;left:50%;bottom:4px;width:54px;height:8px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,#caffcf 0%,#4cff63 24%,rgba(52,255,74,.08) 74%,transparent);filter:blur(2px);}
@@ -5444,6 +5451,10 @@ function executeAbility(caster, target, ability, t){
         owner:caster.id,
         wallHit:false,
         remountAt:0,
+        returnStartAt:0,
+        returnDuration:560,
+        returnStartX:0,
+        returnStartY:0,
         bornAt:t
       };
       caster.vy = -8.5;
@@ -9092,7 +9103,14 @@ function updateGoblinGlider(f, dtF){
       g.wallHit = true;
       g.x = g.vx > 0 ? BOUND_MAX_X - g.w : BOUND_MIN_X;
       g.vx = 0;
-      g.remountAt = Math.max(t + 340, g.bornAt + (f.def.abilities.Q.duration || 2100));
+      g.vy = 0;
+      // After a brief wall impact pause, the glider physically flies back to
+      // Goblin instead of disappearing/snapping back under him.
+      g.remountAt = Math.max(t + 220, g.bornAt + (f.def.abilities.Q.duration || 2100));
+      g.returnStartAt = g.remountAt;
+      g.returnDuration = 560;
+      g.returnStartX = g.x;
+      g.returnStartY = g.y;
       fxEl('fx-flash', `left:${g.x+g.w/2-52}px;top:${g.y+g.h/2-52}px;width:104px;height:104px;background:radial-gradient(circle,#ffffff,#67ff78 28%,transparent 72%);`, 300);
       fxEl('fx-ring', `left:${g.x+g.w/2-38}px;top:${g.y+g.h/2-38}px;width:76px;height:76px;border-color:#71ff82;box-shadow:0 0 30px #43ff5b;`, 500);
       spawnSparks(g.x+g.w/2,g.y+g.h/2,16,'#84ff93',80,420);
@@ -9109,29 +9127,57 @@ function updateGoblinGlider(f, dtF){
       }
     }
   } else if(t >= g.remountAt){
-    // Bring the glider back under Goblin after the wall run so the ability
-    // always leaves him off the glider for a noticeable couple of seconds.
-    if(f.gliderEl && f.gliderEl.parentNode) f.gliderEl.parentNode.removeChild(f.gliderEl);
-    f.el.appendChild(f.gliderEl);
-    f.gliderEl.style.left='';
-    f.gliderEl.style.top='';
-    f.gliderEl.style.width='';
-    f.gliderEl.style.height='';
-    f.gliderEl.classList.remove('launched','reverse');
-    f.gliderEl.classList.add('mounted');
-    f.gliderMounted = true;
-    f.gliderLaunched = false;
-    f.gliderLaunch = null;
-    f.flight = true;
-    f.flightExpire = 0;
-    f.gliderBoostUntil = 0;
-    f.el.classList.remove('goblin-glider-boost');
-    f.vx = 0;
-    f.vy = 0;
-    f.onGround = false;
-    spawnSparks(f.x+FIGHTER_SIZE/2,f.y+FIGHTER_SIZE/2,13,'#b7ffbd',62,420);
-    fxEl('fx-ring', `left:${f.x-14}px;top:${f.y-14}px;width:92px;height:92px;border-color:#7cff8b;border-width:3px;box-shadow:0 0 26px #43ff5b88;`, 480);
-    sfx('goblin_glider_return');
+    // Physically fly the glider from the wall back toward Goblin. The target
+    // is recomputed every frame, so it follows him instead of snapping to an
+    // old position if he moves while the glider is returning.
+    const targetX = f.x + FIGHTER_SIZE/2 - g.w/2;
+    const targetY = f.y + FIGHTER_SIZE/2 - g.h/2 + 2;
+    if(!g.returning){
+      g.returning = true;
+      g.returnStartAt = t;
+      g.returnStartX = g.x;
+      g.returnStartY = g.y;
+      g.returnDuration = 560;
+      if(f.gliderEl){
+        f.gliderEl.classList.add('returning');
+        f.gliderEl.classList.remove('reverse');
+        f.gliderEl.style.transform = `rotate(${Math.atan2(targetY-g.y,targetX-g.x)}rad)`;
+      }
+      sfx('goblin_glider_return');
+    }
+    const p = Math.min(1, (t - g.returnStartAt) / g.returnDuration);
+    const eased = 1 - Math.pow(1-p, 3);
+    g.x = g.returnStartX + (targetX - g.returnStartX) * eased;
+    g.y = g.returnStartY + (targetY - g.returnStartY) * eased;
+    if(f.gliderEl){
+      f.gliderEl.style.left = g.x + 'px';
+      f.gliderEl.style.top = g.y + 'px';
+      const ang = Math.atan2(targetY-g.y,targetX-g.x);
+      f.gliderEl.style.transform = `rotate(${ang}rad)`;
+    }
+    if(p >= 1){
+      if(f.gliderEl && f.gliderEl.parentNode) f.gliderEl.parentNode.removeChild(f.gliderEl);
+      f.el.appendChild(f.gliderEl);
+      f.gliderEl.style.left='';
+      f.gliderEl.style.top='';
+      f.gliderEl.style.width='';
+      f.gliderEl.style.height='';
+      f.gliderEl.style.transform='';
+      f.gliderEl.classList.remove('launched','reverse','returning');
+      f.gliderEl.classList.add('mounted');
+      f.gliderMounted = true;
+      f.gliderLaunched = false;
+      f.gliderLaunch = null;
+      f.flight = true;
+      f.flightExpire = 0;
+      f.gliderBoostUntil = 0;
+      f.el.classList.remove('goblin-glider-boost');
+      f.vx = 0;
+      f.vy = 0;
+      f.onGround = false;
+      spawnSparks(f.x+FIGHTER_SIZE/2,f.y+FIGHTER_SIZE/2,13,'#b7ffbd',62,420);
+      fxEl('fx-ring', `left:${f.x-14}px;top:${f.y-14}px;width:92px;height:92px;border-color:#7cff8b;border-width:3px;box-shadow:0 0 26px #43ff5b88;`, 480);
+    }
   }
   if(f.gliderLaunched && !g.wallHit){
     f.gliderEl.style.left = g.x + 'px';
