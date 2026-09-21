@@ -936,6 +936,26 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.facing-left.wasp.wasp-small .wasp-wings{transform:translate(-50%,-50%) scaleX(-1) scale(.48);}
 .fighter.wasp.wasp-small.wasp-enlarged .fighter-size-body{transform:scale(.568);}
 .fighter.wasp.wasp-small.wasp-enlarged .wasp-size-mark{inset:-16px;}
+/* ---------- Green Goblin / film-inspired combat glider ---------- */
+.fighter.greengoblin{z-index:8;}
+.fighter.greengoblin .fighter-square{border-color:#3d7648;box-shadow:0 0 0 1px rgba(116,255,128,.20),0 12px 24px rgba(0,0,0,.35),0 0 22px rgba(51,255,81,.12);}
+.fighter.greengoblin .flight-glow{display:none!important;}
+.goblin-glider{position:absolute;left:-48px;top:6px;width:160px;height:86px;z-index:1;pointer-events:none;transform-origin:50% 50%;filter:drop-shadow(0 5px 4px rgba(0,0,0,.65)) drop-shadow(0 0 8px rgba(70,255,90,.16));overflow:visible;}
+.goblin-glider svg{display:block;width:100%;height:100%;overflow:visible;}
+.fighter.facing-left .goblin-glider{transform:scaleX(-1);}
+.goblin-glider.launched{position:absolute;z-index:5;width:124px;height:70px;left:0;top:0;transform:none;transition:none;}
+.goblin-glider.launched.reverse{transform:scaleX(-1);}
+.goblin-glider.mounted svg{animation:goblinGliderFloat .72s ease-in-out infinite alternate;}
+.goblin-glider.boosted svg{animation:goblinGliderBoost .18s ease-in-out infinite alternate;}
+.goblin-glider.launched:after{content:'';position:absolute;left:50%;bottom:4px;width:54px;height:8px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,#caffcf 0%,#4cff63 24%,rgba(52,255,74,.08) 74%,transparent);filter:blur(2px);}
+.fighter.greengoblin.goblin-glider-boost .goblin-glider.mounted{filter:drop-shadow(0 5px 4px rgba(0,0,0,.65)) drop-shadow(0 0 14px rgba(74,255,92,.55));}
+.fighter.greengoblin.goblin-glider-off .fighter-square{filter:brightness(1.05) saturate(1.04);}
+@keyframes goblinGliderFloat{from{transform:translateY(2px) rotate(-1deg)}to{transform:translateY(-3px) rotate(1.5deg)}}
+@keyframes goblinGliderBoost{from{transform:translateY(1px) scale(1.01)}to{transform:translateY(-2px) scale(1.04)}}
+.goblin-pumpkin-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:goblinPumpkinSpin .34s linear infinite!important;filter:drop-shadow(0 0 7px #42ff59)!important;}
+.goblin-pumpkin-projectile svg{display:block;width:100%;height:100%;overflow:visible;}
+@keyframes goblinPumpkinSpin{from{transform:rotate(-6deg) scale(.96)}to{transform:rotate(354deg) scale(1.05)}}
+
 /* ---------- Captain Marvel / Ant-Man projectiles ---------- */
 .captain-photon-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:none!important;animation:none!important;}
 /* ---------- Vision / Scarlet Witch / Bullseye ---------- */
@@ -2977,6 +2997,23 @@ const CHARACTERS = {
          desc:'Fires a web line to the ceiling and swings you all the way to the top of the arena. Pure mobility — no damage.'}
     }
   },
+  greengoblin: {
+    id:'greengoblin', name:'Green Goblin', img:'GreenGoblin.jpg', color:'#48d06a', accentColor:'#b7ffbd', aiStyle:'greengoblin',
+    maxHealth:10000,
+    description:'Aerial supervillain riding a razor-sharp combat glider. Hurls explosive green pumpkin bombs, sends his glider screaming across the arena to impale enemies, and can overcharge the glider for 5 seconds of double speed.',
+    abilities:{
+      E:{key:'E', name:'Pumpkin Bomb', type:'projectile', damage:300, cooldown:950, knockback:7,
+         speed:14, w:32, h:32, color:'#5dff68', render:'goblin-pumpkin', trail:'goblin-pumpkin',
+         sound:'goblin_pumpkin', fx:'goblin_pumpkin', hitFx:'goblin_pumpkin_hit', hitSound:'goblin_pumpkin_hit',
+         desc:'Throws a green pumpkin bomb for 300 damage.'},
+      Q:{key:'Q', name:'Glider Impalement', type:'gliderImpalement', damage:1250, cooldown:8500, speed:18, duration:2100,
+         sound:'goblin_glider_launch', fx:'goblin_glider_launch', hitFx:'goblin_glider_hit', hitSound:'goblin_glider_hit',
+         desc:'Goblin hops off his glider while it rockets straight ahead until it reaches the arena wall. The glider deals 1,250 damage on contact, then returns so Goblin can remount.'},
+      R:{key:'R', name:'Glider Boost', type:'gliderBoost', damage:0, cooldown:15000, duration:5000,
+         sound:'goblin_boost', fx:'goblin_boost',
+         desc:'Overcharges the glider, making Goblin move 2x faster for 5 seconds. Cooldown: 15 seconds.'}
+    }
+  },
   ironman: {
     id:'ironman', name:'Iron Man', img:'IronMan.jpg', color:'#d6432b',
     maxHealth:10150, aiStyle:'defensive',
@@ -3481,7 +3518,7 @@ const CHARACTERS = {
     }
   },
 };
-const ROSTER_ORDER = ['spiderman','milesmorales','venom','ironman','warmachine','vision','captainamerica','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp'];
 
 
 /* =========================================================================
@@ -4394,7 +4431,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
   return {
     def, id: idOverride || (isBot ? 'bot' : 'player'),
     isBot,
-    x: spawnX, y: 380,
+    x: spawnX, y: def.id === 'greengoblin' ? 300 : 380,
     vx:0, vy:0,
     facing: isBot ? -1 : 1,
     onGround:false,
@@ -4414,8 +4451,13 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     bpCharging:false, bpChargeEnd:0, bpAbsorbed:0, bpSlamAbility:null, bpSlamPending:false, bpSlamAt:0,
     antmanForm:'normal', antmanTransformUntil:0,
     waspSizeUntil:0, waspSizeSpeedMultiplier:.62,
-    flight:false,
+    flight:def.id === 'greengoblin',
     flightExpire:0,
+    gliderMounted:def.id === 'greengoblin',
+    gliderLaunched:false,
+    gliderLaunch:null,
+    gliderEl:null,
+    gliderBoostUntil:0,
     activeVisionBeam:null,
     hexFrozenUntil:0,
     abilityLockUntil:0,
@@ -4576,13 +4618,14 @@ function buildArenaStatic(){
 }
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
     ${f.def.id==='antman' ? '<div class="antman-size-ring"></div>' : ''}
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
+    ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
@@ -4608,6 +4651,7 @@ function buildFighterDOM(f){
   f.waspWingsEl = el.querySelector('.wasp-wings');
   f.falconWingsEl = el.querySelector('.falcon-wings');
   f.waspSizeMarkEl = el.querySelector('.wasp-size-mark');
+  f.gliderEl = el.querySelector('.goblin-glider');
   f.sizeBodyEl = el.querySelector('.fighter-size-body');
 }
 
@@ -4785,6 +4829,13 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.background='rgba(60,120,220,.55)';
       return;
     }
+    if(a.type==='gliderBoost' && fighter.gliderBoostUntil > t){
+      btn.classList.add('flight-on');
+      overlay.style.display='flex';
+      overlay.textContent='2X '+Math.max(0,(fighter.gliderBoostUntil-t)/1000).toFixed(1)+'s';
+      overlay.style.background='rgba(52,235,80,.48)';
+      return;
+    }
     if(a.type==='antmanTransform' && (fighter.def.id==='antman' || fighter.def.id==='wasp')) {
       const active = fighter.antmanForm === a.form && fighter.antmanTransformUntil > t;
       if(active){
@@ -4832,6 +4883,8 @@ function cdReady(f, key, t){
   if(f.disabledAbilityKey === key && f.disabledAbilityUntil && t < f.disabledAbilityUntil) return false;
   if(a.type==='toggle') return true;
   if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
+  if(a.type==='gliderImpalement') return f.def.id === 'greengoblin' && f.gliderMounted && !f.gliderLaunched && t >= f.cooldowns[key];
+  if(a.type==='gliderBoost') return f.def.id === 'greengoblin' && f.gliderMounted && !f.gliderLaunched && t >= f.cooldowns[key];
   if(a.type==='antmanTransform') return t >= f.cooldowns[key] && !((f.def.id==='antman' || f.def.id==='wasp') && f.antmanForm === a.form && f.antmanTransformUntil > t);
   // Shield Block: always "ready" while already active, so pressing the key
   // again can lower it manually; only gated by cooldown before it's raised.
@@ -5362,6 +5415,50 @@ function executeAbility(caster, target, ability, t){
       }
       state.projectiles.push(p);
       if(!ability.fx) spawnMuzzleFx(caster);
+      break;
+    }
+    case 'gliderImpalement': {
+      if(caster.def.id !== 'greengoblin' || !caster.gliderMounted || caster.gliderLaunched) break;
+      const dir = caster.facing < 0 ? -1 : 1;
+      const gliderW = 124, gliderH = 70;
+      if(caster.gliderEl){
+        caster.gliderEl.classList.remove('mounted');
+        caster.gliderEl.classList.add('launched');
+        caster.gliderEl.classList.toggle('reverse', dir < 0);
+        arenaEl.appendChild(caster.gliderEl);
+        caster.gliderEl.style.left = (caster.x + FIGHTER_SIZE/2 - gliderW/2 + dir*16) + 'px';
+        caster.gliderEl.style.top = (caster.y + FIGHTER_SIZE/2 - gliderH/2) + 'px';
+      }
+      caster.gliderMounted = false;
+      caster.gliderLaunched = true;
+      caster.flight = false;
+      caster.flightExpire = 0;
+      caster.gliderBoostUntil = 0;
+      caster.gliderLaunch = {
+        x: caster.x + FIGHTER_SIZE/2 - gliderW/2 + dir*16,
+        y: caster.y + FIGHTER_SIZE/2 - gliderH/2,
+        vx: dir * ability.speed,
+        vy: 0,
+        w: gliderW, h: gliderH,
+        hitTarget:false,
+        owner:caster.id,
+        wallHit:false,
+        remountAt:0,
+        bornAt:t
+      };
+      caster.vy = -8.5;
+      caster.onGround = false;
+      spawnSparks(caster.x+FIGHTER_SIZE/2+dir*26, caster.y+FIGHTER_SIZE-5, 14, '#baffc1', 46, 460);
+      shakeArena(7, 240);
+      break;
+    }
+    case 'gliderBoost': {
+      if(caster.def.id !== 'greengoblin' || !caster.gliderMounted || caster.gliderLaunched) break;
+      caster.gliderBoostUntil = t + (ability.duration || 5000);
+      if(caster.el) caster.el.classList.add('goblin-glider-boost');
+      spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2+8, 20, '#62ff72', 68, 520);
+      fxEl('fx-ring', `left:${caster.x-26}px;top:${caster.y-26}px;width:116px;height:116px;border-color:#57ff72;border-width:3px;box-shadow:0 0 34px #36f75a99;`, 620);
+      shakeArena(5, 220);
       break;
     }
     case 'projectile': {
@@ -6092,6 +6189,38 @@ function sfx(kind='ability'){
         aTone(ctx, t, 'sine', 120, 60, 0.30, 0.16);
         return;
 
+      /* ---------- Green Goblin ---------- */
+      case 'goblin_pumpkin':
+        aNoise(ctx,t,0.16,0.20,'bandpass',1200,260,1.5);
+        aTone(ctx,t,'triangle',360,120,0.16,0.08);
+        return;
+      case 'goblin_pumpkin_hit':
+        aTone(ctx,t,'sine',150,44,0.42,0.26);
+        aNoise(ctx,t,0.22,0.24,'bandpass',2100,260,1.8);
+        aNoise(ctx,t+0.02,0.16,0.14,'highpass',4200,1200,1.2);
+        return;
+      case 'goblin_glider_launch':
+        aNoise(ctx,t,0.30,0.20,'bandpass',4600,700,2.0);
+        aTone(ctx,t,'sawtooth',250,980,0.24,0.06);
+        return;
+      case 'goblin_glider_hit':
+        aTone(ctx,t,'sine',95,30,0.56,0.33);
+        aNoise(ctx,t,0.30,0.28,'lowpass',2500,180,0.8);
+        aNoise(ctx,t+0.04,0.16,0.18,'highpass',5000,1500,1.2);
+        return;
+      case 'goblin_glider_wall':
+        aTone(ctx,t,'triangle',120,44,0.46,0.22);
+        aNoise(ctx,t,0.24,0.19,'bandpass',3100,700,1.4);
+        return;
+      case 'goblin_glider_return':
+        aNoise(ctx,t,0.16,0.13,'bandpass',2500,700,2.2);
+        return;
+      case 'goblin_boost':
+        aTone(ctx,t,'sawtooth',180,1260,0.42,0.09);
+        aNoise(ctx,t,0.28,0.15,'bandpass',5200,1400,1.6);
+        return;
+
+      /* ---------- Spider-Man ---------- */
       /* ---------- Spider-Man ---------- */
       case 'web_shoot': // thwip
         aNoise(ctx, t, 0.15, 0.22, 'bandpass', 5200, 900, 4.5);
@@ -7254,6 +7383,23 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Green Goblin ---------------- */
+    case 'goblin_pumpkin': {
+      const hx=cx+dir*22, hy=cy;
+      spawnSparks(hx,hy,7,'#73ff80',30,320);
+      fxEl('fx-ring',`left:${hx-22}px;top:${hy-22}px;width:44px;height:44px;border-color:#6bff75;box-shadow:0 0 20px #33ff55;`,360);
+      break;
+    }
+    case 'goblin_glider_launch': {
+      spawnSparks(cx+dir*20,cy+16,16,'#67ff78',70,420);
+      fxEl('fx-ring',`left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;border-color:#57ff6a;border-width:3px;box-shadow:0 0 30px #3bff5d88;`,420);
+      break;
+    }
+    case 'goblin_boost': {
+      spawnSparks(cx,cy+18,18,'#69ff79',92,500);
+      break;
+    }
+
     /* ---------------- Spider-Man ---------------- */
     case 'web_shot': {
       const hx = cx + dir*24, hy = cy;
@@ -8080,6 +8226,21 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'goblin_pumpkin_hit': {
+      fxEl('fx-flash',`left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;background:radial-gradient(circle,#fff,#a7ffac 22%,#45ff59 44%,transparent 74%);`,300);
+      fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#69ff75;border-width:5px;box-shadow:0 0 34px #38ff4f;`,500);
+      for(let i=0;i<2;i++) spawnSparks(cx,cy,10,'#76ff83',70,420);
+      shakeArena(7,280);
+      break;
+    }
+    case 'goblin_glider_hit': {
+      fxEl('fx-flash',`left:${cx-82}px;top:${cy-82}px;width:164px;height:164px;background:radial-gradient(circle,#fff,#b8ffbd 20%,#38ff50 46%,transparent 76%);`,330);
+      fxEl('fx-impact-star',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;`,250,impactStarSvg('#adffb5',116,dirSign));
+      fxEl('fx-ring',`left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;border-color:#79ff86;border-width:6px;box-shadow:0 0 36px #32ff4a;`,560);
+      spawnSparks(cx,cy,22,'#7dff89',96,500);
+      shakeArena(15,420);
+      break;
+    }
     case 'mjolnir': {
       fxEl('fx-flash', `left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;`, 320);
       fxEl('fx-ring', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#eaf7ff;box-shadow:0 0 34px #7cc4ff;`, 560);
@@ -8657,7 +8818,8 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     const slowMul = isSlowed(f) ? WEB_SLOW_FACTOR : 1; // webs only affect movement speed
     const blockMul = f.blocking ? 0.65 : 1; // Captain America: -35% movement speed while Shield Block is active
     if(f.flight){
-      f.vx = moveDir * FLY_SPEED * fighterSpeedMultiplier(f) * slowMul;
+      const gliderSpeedMul = (f.def.id === 'greengoblin' && f.gliderMounted && f.gliderBoostUntil > tNow) ? 2 : 1;
+      f.vx = moveDir * FLY_SPEED * fighterSpeedMultiplier(f) * slowMul * gliderSpeedMul;
     } else {
       const spd = MOVE_SPEED * fighterSpeedMultiplier(f) * slowMul * blockMul;
       f.vx = moveDir * spd + (f.vx - moveDir*spd) * 0.75; // blend so knockback still shows briefly
@@ -8683,7 +8845,8 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     let vertDir = 0;
     if(wantJump) vertDir -= 1;
     if(wantDown) vertDir += 1;
-    f.vy = vertDir * FLY_SPEED * fighterSpeedMultiplier(f) * (isSlowed(f) ? WEB_SLOW_FACTOR : 1);
+    const gliderSpeedMul = (f.def.id === 'greengoblin' && f.gliderMounted && f.gliderBoostUntil > tNow) ? 2 : 1;
+    f.vy = vertDir * FLY_SPEED * fighterSpeedMultiplier(f) * (isSlowed(f) ? WEB_SLOW_FACTOR : 1) * gliderSpeedMul;
   } else if(!(f.grappleUntil && now() < f.grappleUntil)){
     f.vy += GRAVITY * dtF;
   }
@@ -8823,7 +8986,7 @@ function fighterSpeedMultiplier(f){
 }
 function updateFlightGlow(f){
   const t = now();
-  if(f.flight && f.flightExpire && t >= f.flightExpire){
+  if(f.flight && f.flightExpire && t >= f.flightExpire && f.def.id !== 'greengoblin'){
     f.flight = false;
     f.flightExpire = 0;
   }
@@ -8905,6 +9068,75 @@ function updateVisionBeams(dtF){
       f.activeVisionBeam=null;
     }
   });
+}
+
+function updateGoblinGlider(f, dtF){
+  if(!f || f.def.id !== 'greengoblin') return;
+  if(f.dead){
+    if(f.gliderEl && f.gliderEl.parentNode && f.gliderEl.parentNode !== f.el) f.gliderEl.parentNode.removeChild(f.gliderEl);
+    f.gliderLaunched = false;
+    f.gliderLaunch = null;
+    f.gliderMounted = false;
+    f.gliderBoostUntil = 0;
+    return;
+  }
+  if(!f.gliderLaunched || !f.gliderLaunch || !f.gliderEl) return;
+  const g = f.gliderLaunch;
+  const t = now();
+  const enemy = (f === state.player) ? state.bot : state.player;
+  if(!g.wallHit){
+    g.x += g.vx * dtF;
+    g.y += g.vy * dtF;
+    const hitWall = (g.vx > 0 && g.x + g.w >= BOUND_MAX_X) || (g.vx < 0 && g.x <= BOUND_MIN_X);
+    if(hitWall){
+      g.wallHit = true;
+      g.x = g.vx > 0 ? BOUND_MAX_X - g.w : BOUND_MIN_X;
+      g.vx = 0;
+      g.remountAt = Math.max(t + 340, g.bornAt + (f.def.abilities.Q.duration || 2100));
+      fxEl('fx-flash', `left:${g.x+g.w/2-52}px;top:${g.y+g.h/2-52}px;width:104px;height:104px;background:radial-gradient(circle,#ffffff,#67ff78 28%,transparent 72%);`, 300);
+      fxEl('fx-ring', `left:${g.x+g.w/2-38}px;top:${g.y+g.h/2-38}px;width:76px;height:76px;border-color:#71ff82;box-shadow:0 0 30px #43ff5b;`, 500);
+      spawnSparks(g.x+g.w/2,g.y+g.h/2,16,'#84ff93',80,420);
+      sfx('goblin_glider_wall');
+      shakeArena(10, 300);
+    }
+    if(enemy && !enemy.dead && !g.hitTarget){
+      const hit = g.x < enemy.x+FIGHTER_SIZE && g.x+g.w > enemy.x && g.y < enemy.y+FIGHTER_SIZE && g.y+g.h > enemy.y;
+      if(hit){
+        g.hitTarget = true;
+        damageTargetOrWall(enemy, f.def.abilities.Q.damage, 18, g.vx >= 0 ? 1 : -1, {hitFx:'goblin_glider_hit',sound:'goblin_glider_hit'});
+        fxEl('fx-flash', `left:${enemy.x-22}px;top:${enemy.y-22}px;width:108px;height:108px;background:radial-gradient(circle,#fff,#74ff80 30%,transparent 72%);`, 280);
+        spawnSparks(enemy.x+FIGHTER_SIZE/2,enemy.y+FIGHTER_SIZE/2,18,'#7cff89',88,460);
+      }
+    }
+  } else if(t >= g.remountAt){
+    // Bring the glider back under Goblin after the wall run so the ability
+    // always leaves him off the glider for a noticeable couple of seconds.
+    if(f.gliderEl && f.gliderEl.parentNode) f.gliderEl.parentNode.removeChild(f.gliderEl);
+    f.el.appendChild(f.gliderEl);
+    f.gliderEl.style.left='';
+    f.gliderEl.style.top='';
+    f.gliderEl.style.width='';
+    f.gliderEl.style.height='';
+    f.gliderEl.classList.remove('launched','reverse');
+    f.gliderEl.classList.add('mounted');
+    f.gliderMounted = true;
+    f.gliderLaunched = false;
+    f.gliderLaunch = null;
+    f.flight = true;
+    f.flightExpire = 0;
+    f.gliderBoostUntil = 0;
+    f.el.classList.remove('goblin-glider-boost');
+    f.vx = 0;
+    f.vy = 0;
+    f.onGround = false;
+    spawnSparks(f.x+FIGHTER_SIZE/2,f.y+FIGHTER_SIZE/2,13,'#b7ffbd',62,420);
+    fxEl('fx-ring', `left:${f.x-14}px;top:${f.y-14}px;width:92px;height:92px;border-color:#7cff8b;border-width:3px;box-shadow:0 0 26px #43ff5b88;`, 480);
+    sfx('goblin_glider_return');
+  }
+  if(f.gliderLaunched && !g.wallHit){
+    f.gliderEl.style.left = g.x + 'px';
+    f.gliderEl.style.top = g.y + 'px';
+  }
 }
 
 function updateProjectiles(dtF){
@@ -9127,10 +9359,48 @@ function updateProjectiles(dtF){
   }
 }
 
+function goblinGliderSvg(id){
+  const uid = 'ggg_' + String(id||'x').replace(/[^a-z0-9_]/gi,'_');
+  return `<svg viewBox="0 0 160 86" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="${uid}_metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eff3f4"/><stop offset=".28" stop-color="#77828a"/><stop offset=".55" stop-color="#c2c8ca"/><stop offset="1" stop-color="#31383d"/></linearGradient>
+      <linearGradient id="${uid}_green" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cff9d"/><stop offset=".35" stop-color="#3fe45d"/><stop offset="1" stop-color="#0c6f2a"/></linearGradient>
+      <linearGradient id="${uid}_dark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#465157"/><stop offset=".6" stop-color="#141a1d"/><stop offset="1" stop-color="#050809"/></linearGradient>
+      <filter id="${uid}_glow"><feGaussianBlur stdDeviation="2.7"/></filter>
+    </defs>
+    <path d="M73 40 C52 22 26 15 6 20 L25 34 L8 42 L38 47 C51 49 63 48 76 45 Z" fill="url(#${uid}_metal)" stroke="#151a1d" stroke-width="2.1"/>
+    <path d="M87 40 C108 22 134 15 154 20 L135 34 L152 42 L122 47 C109 49 97 48 84 45 Z" fill="url(#${uid}_metal)" stroke="#151a1d" stroke-width="2.1"/>
+    <path d="M78 13 L84 4 L92 13 L88 24 L72 24 Z" fill="url(#${uid}_green)" stroke="#0d3317" stroke-width="1.7"/>
+    <path d="M80 26 L58 38 L31 39 L13 31 L39 27 L68 24 Z" fill="url(#${uid}_dark)" stroke="#121719" stroke-width="1.7"/>
+    <path d="M80 26 L102 38 L129 39 L147 31 L121 27 L92 24 Z" fill="url(#${uid}_dark)" stroke="#121719" stroke-width="1.7"/>
+    <path d="M66 43 Q80 55 94 43 L87 31 L73 31 Z" fill="url(#${uid}_green)" stroke="#17271a" stroke-width="1.8"/>
+    <path d="M30 37 L58 42 M130 37 L102 42" stroke="#e6ebed" stroke-width="1.6" opacity=".75"/>
+    <path d="M4 20 L17 17 M156 20 L143 17" stroke="#f3f6f7" stroke-width="1.3" opacity=".72"/>
+    <ellipse cx="69" cy="48" rx="9" ry="3.5" fill="#64ff73" opacity=".65" filter="url(#${uid}_glow)"/>
+    <ellipse cx="91" cy="48" rx="9" ry="3.5" fill="#64ff73" opacity=".65" filter="url(#${uid}_glow)"/>
+    <circle cx="80" cy="28" r="4.2" fill="#0d1113" stroke="#dfe4e7" stroke-width="1.2"/>
+  </svg>`;
+}
+function goblinPumpkinSvg(){
+  return `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs><radialGradient id="gPump" cx="32%" cy="26%" r="72%"><stop offset="0" stop-color="#d5ffd6"/><stop offset=".15" stop-color="#7dff86"/><stop offset=".48" stop-color="#38d955"/><stop offset=".82" stop-color="#138b34"/><stop offset="1" stop-color="#073e1a"/></radialGradient></defs>
+    <ellipse cx="25" cy="27" rx="18" ry="19" fill="url(#gPump)" stroke="#d4ffd6" stroke-width="1.7"/>
+    <path d="M13 12 Q25 7 37 12 M10 19 Q25 12 40 19 M8 28 Q25 21 42 28 M11 37 Q25 31 39 37" fill="none" stroke="#75ff80" stroke-opacity=".72" stroke-width="2.1"/>
+    <path d="M23 9 Q25 3 31 3 L30 10" fill="#4cae4f" stroke="#173f1b" stroke-width="1.2"/>
+    <path d="M18 23 L22 22 L20 28 L24 28 L18 35 L19 29 L15 29 Z" fill="#042c12"/><path d="M29 22 L36 23 L33 27 L36 31 L28 34 L30 28 L26 27 Z" fill="#042c12"/>
+  </svg>`;
+}
+
 /* Distinct look per projectile type — webs, repulsor bolts, generic energy. */
 function buildProjectileVisual(p){
   const flip = p.vx < 0 ? -1 : 1;
-  if(p.render === 'bullet'){
+  if(p.render === 'goblin-pumpkin'){
+    p.el.classList.add('goblin-pumpkin-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.style.overflow='visible';
+    p.el.innerHTML = goblinPumpkinSvg();
+  } else if(p.render === 'bullet'){
     p.el.classList.add('bullet-projectile');
     p.el.style.background='transparent';
     p.el.style.boxShadow='none';
@@ -9261,7 +9531,9 @@ function buildProjectileVisual(p){
 }
 function spawnProjTrail(p){
   const cx = p.x + p.w/2, cy = p.y + p.h/2;
-  if(p.trail === 'web'){
+  if(p.trail === 'goblin-pumpkin'){
+    fxEl('fx-trail', `left:${(cx-6).toFixed(1)}px;top:${(cy-6).toFixed(1)}px;width:12px;height:12px;background:radial-gradient(circle,#fff8c8,#5cff66 38%,transparent 74%);box-shadow:0 0 12px #56ff69,0 0 22px #26d63c66;`, 300);
+  } else if(p.trail === 'web'){
     const n = Math.max(8, Math.min(20, p.w));
     fxEl('fx-webtick', `left:${(cx-n/2).toFixed(1)}px;top:${(cy-n/2).toFixed(1)}px;width:${n}px;height:${n}px;`, 400,
       `<svg width="${n}" height="${n}" viewBox="0 0 ${n} ${n}"><g stroke="#ffffff" stroke-width="1.2" fill="none" opacity=".75" stroke-linecap="round">`
@@ -9871,6 +10143,16 @@ function updateBotAI(dtF){
     if(cdReady(bot,'E',t) && adist <= eAb.range + (bot.antmanForm==='big'?35:20)){ tryUseAbility(bot,player,'E'); return; }
     if(cdReady(bot,'R',t) && bot.antmanForm==='small' && Math.random()<0.18){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && bot.antmanForm==='big' && Math.random()<0.12){ tryUseAbility(bot,player,'Q'); return; }
+  } else if(style === 'greengoblin'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    // Goblin lives in the air: keep position aggressively aligned vertically
+    // while strafing, use the pumpkin constantly, and save the glider charge
+    // for a clean straight-line run.
+    bot.aiFlyDir = Math.abs(vertical) > 70 ? (vertical > 0 ? 1 : -1) : 0;
+    if(cdReady(bot,'R',t) && bot.gliderMounted && (adist > 240 || hpPct < 0.65) && Math.random() < 0.42){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && bot.gliderMounted && adist > 100 && Math.abs(vertical) < 125 && Math.random() < 0.22){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 980){ tryUseAbility(bot,player,'E'); return; }
+    if(bot.gliderLaunched && cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'wasp'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
     if(cdReady(bot,'R',t) && !bot.flight && (Math.abs(vertical)>95 || adist>420 || hpPct<0.45) && Math.random()<0.65){ tryUseAbility(bot,player,'R'); return; }
@@ -10194,6 +10476,18 @@ function renderFighter(f){
   updateShield(f);
   updateFlightGlow(f);
   updateSpecialViz(f);
+  if(f.def.id === 'greengoblin') {
+    const tRender = now();
+    if(f.gliderBoostUntil && tRender >= f.gliderBoostUntil){
+      f.gliderBoostUntil = 0;
+      f.el.classList.remove('goblin-glider-boost');
+    }
+    f.el.classList.toggle('goblin-glider-off', !f.gliderMounted);
+    if(f.gliderEl && f.gliderMounted && f.gliderEl.parentNode === f.el){
+      f.gliderEl.classList.toggle('boosted', f.gliderBoostUntil > tRender);
+      f.gliderEl.classList.remove('reverse');
+    }
+  }
   f.el.classList.toggle('grapple-ready', !!f.grappleUntil && now() < f.grappleUntil);
 }
 
@@ -11367,6 +11661,8 @@ function gameLoop(ts){
     updateBPCharge(p); updateBPCharge(b);
     updateVenomTendril(p); updateVenomTendril(b);
     updateVisionBeams(dtF);
+    updateGoblinGlider(p, dtF);
+    updateGoblinGlider(b, dtF);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
