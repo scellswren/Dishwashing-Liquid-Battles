@@ -3719,7 +3719,7 @@ const CHARACTERS = {
          desc:'Fires a fast, focused bolt of bent light for 590 damage.'},
       Q:{key:'Q', name:'Psionic Push', type:'psiPush', damage:2300, cooldown:25000, duration:4000, tickMs:400, launchX:34, launchY:16,
          sound:'starlord_bomb_throw', fx:'psi_push',
-         desc:'Seizes the enemy in a telekinetic field and hurls them the way you\'re holding — left/right to send them that direction, hold down to slam them, otherwise up and away. Leaves them warped for 4 seconds, dealing 2,300 damage over time. Cooldown: 25 seconds.'},
+         desc:'Seizes the enemy in a telekinetic field and hurls them in whichever direction you\'re facing. Fighters over 18,000 max health are barely moved, and 25,000+ are not pushed at all. Leaves them warped for 4 seconds, dealing 2,300 damage over time regardless. Cooldown: 25 seconds.'},
       R:{key:'R', name:'Invisibility', type:'cloak', damage:0, duration:5000, cooldown:10000,
          sound:'miles_cloak', fx:'miles_cloak',
          desc:'Bends light around herself to turn completely invisible for 5 seconds. Cooldown: 10 seconds.'}
@@ -5686,18 +5686,28 @@ function executeAbility(caster, target, ability, t){
     case 'psiPush': {
       const tg = target || ((caster === state.player) ? state.bot : state.player);
       if(!tg || tg.dead) break;
-      // Player can steer the shove by holding a direction as it's cast (facing/left/right
-      // for which way they fly, up/down for whether they arc up or slam down); a bot
-      // just uses its facing. This makes the push feel aimed rather than automatic.
-      const heldLeft = !caster.isBot && (keysHeld.left || gpKeys.left);
-      const heldRight = !caster.isBot && (keysHeld.right || gpKeys.right);
-      const heldDown = !caster.isBot && (keysHeld.down || gpKeys.down);
-      const dir = caster.isBot ? caster.facing : (heldLeft ? -1 : heldRight ? 1 : dirSignTo(caster, tg));
+      // The shove always follows the caster's facing, full stop. No steering
+      // by held direction keys anymore -- that entire old scheme is gone.
+      const dir = caster.facing < 0 ? -1 : 1;
       caster.facing = dir; if(caster.el) caster.el.classList.toggle('facing-left', dir < 0);
-      tg.vx = dir * (ability.launchX || 34);
-      tg.vy = (heldDown ? 1 : -1) * (ability.launchY || 16);
-      tg.onGround = false;
-      tg.hitStun = Math.max(tg.hitStun || 0, 500);
+      // Heavier fighters resist the telekinetic launch: 25,000+ max health is
+      // immune to the shove, over 18,000 gets a much weaker one. The warp
+      // damage below is unaffected either way.
+      const tgMax = (tg.def && tg.def.maxHealth) || 0;
+      const pushScale = tgMax >= 25000 ? 0 : (tgMax > 18000 ? 0.35 : 1);
+      if(pushScale > 0){
+        // Use the same authoritative-launch mechanism as Storm's Wind Burst:
+        // it overrides vx every frame for a short window, so the target's own
+        // movement/AI input can't fight it and cancel the push out on the
+        // very next frame like ordinary hitstun knockback can.
+        const pushVx = dir * (ability.launchX || 34) * pushScale;
+        tg.windBurstUntil = t + Math.round(420 * pushScale);
+        tg.windBurstVx = pushVx;
+        tg.vx = pushVx;
+        tg.vy = -(ability.launchY || 16) * pushScale;
+        tg.onGround = false;
+        tg.hitStun = Math.max(tg.hitStun || 0, Math.round(420 * pushScale));
+      }
       spawnPsiPushFx(caster, tg, dir);
       const ticks = Math.max(1, Math.round((ability.duration||4000) / (ability.tickMs||400)));
       applyPsiWarp(tg, { interval: ability.tickMs||400, ticks, damage: (ability.damage||2300)/ticks });
