@@ -1106,7 +1106,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .yondu-controlled-arrow .yaka-red-glow{animation:yakaRedPulse .22s ease-in-out infinite alternate;}
 .yondu-controlled-arrow::before{content:'';position:absolute;left:-40px;top:34%;width:40px;height:32%;background:linear-gradient(90deg,transparent,rgba(255,86,66,.48) 60%,rgba(255,150,120,.68));filter:blur(1.6px);pointer-events:none;}
 @keyframes yakaRedPulse{from{opacity:.68}to{opacity:1;filter:brightness(1.18)}}
-.yondu-yaka-projectile{width:112px!important;height:20px!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.55)) drop-shadow(0 0 6px rgba(255,70,55,.55));}
+.yondu-yaka-projectile{width:112px!important;height:20px!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.55)) drop-shadow(0 0 6px rgba(255,70,55,.55));}
 .yondu-yaka-projectile .yondu-yaka-svg{width:100%;height:100%;display:block;overflow:visible;}
 .yondu-yaka-projectile .yaka-red-glow{animation:yakaRedPulse .22s ease-in-out infinite alternate;}
 .yondu-yaka-projectile::before{content:'';position:absolute;left:-52px;top:36%;width:52px;height:28%;background:linear-gradient(90deg,transparent,rgba(255,86,66,.5) 60%,rgba(255,150,120,.7));filter:blur(1.6px);pointer-events:none;}
@@ -1139,6 +1139,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .yondu-hit-core{position:absolute;left:50%;top:50%;width:16px;height:16px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#ffffff,#d9faff 42%,transparent 78%);box-shadow:0 0 18px #7fe2ff,0 0 34px rgba(84,196,255,.6);animation:yonduHitCore .28s ease-out forwards;}
 .yondu-hit-crack{position:absolute;inset:0;}
 @keyframes yonduHitCore{from{transform:translate(-50%,-50%) scale(.35);opacity:1}to{transform:translate(-50%,-50%) scale(1.9);opacity:0}}
+@keyframes yonduArrowTrailFade{0%{opacity:.85}100%{opacity:0}}
 
 /* ---------- Human Torch: full fire-form visuals when Flame On is active ---------- */
 .fighter.humantorch .fighter-square img{transition:filter .25s ease;}
@@ -11307,7 +11308,8 @@ function updateProjectiles(dtF){
 
     if(p.trail){
       p.trailTick = (p.trailTick || 0) + dtF;
-      if(p.trailTick >= 2){ p.trailTick = 0; spawnProjTrail(p); }
+      const trailThreshold = (p.render === 'yondu-yaka-arrow') ? 1 : 2;
+      if(p.trailTick >= trailThreshold){ p.trailTick = 0; spawnProjTrail(p); }
     }
   }
 }
@@ -11552,7 +11554,8 @@ function spawnProjTrail(p){
   } else if(p.render === 'gamora-energy') {
     fxEl('fx-trail', `left:${(cx-10).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:20px;height:8px;background:radial-gradient(ellipse,#fffbd7,#8fff64 45%,transparent 78%);box-shadow:0 0 12px #73ff59,0 0 26px #53d63e66;`, 240);
   } else if(p.render === 'yondu-yaka-arrow') {
-    fxEl('fx-trail', `left:${(cx-20).toFixed(1)}px;top:${(cy-3).toFixed(1)}px;width:40px;height:6px;background:linear-gradient(90deg,transparent,#ab1d26 44%,#ff3f45 78%,#ffd7b0);box-shadow:0 0 8px #d62a31,0 0 18px #b2171e88;`, 220);
+    const ang = Math.atan2(p.vy, p.vx);
+    fxEl('fx-trail', `left:${(cx-24).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:48px;height:8px;transform:rotate(${ang}rad) scale(1)!important;transform-origin:right center!important;background:linear-gradient(90deg,transparent,#8f0f16 30%,#c8181f 55%,#ff4a44 80%,#ffcfae);box-shadow:0 0 10px #d6262b,0 0 22px rgba(214,38,43,.75);animation:yonduArrowTrailFade .26s linear forwards;`, 260);
   } else if(p.render === 'yondu-bolt') {
     fxEl('fx-trail', `left:${(cx-9).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:18px;height:8px;background:radial-gradient(ellipse,#ffffff,#62d6ff 45%,transparent 78%);box-shadow:0 0 12px #51cfff,0 0 22px #22a9ff66;`, 240);
   } else if(p.render === 'warmachine-missile') {
