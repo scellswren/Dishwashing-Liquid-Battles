@@ -3563,11 +3563,11 @@ const CHARACTERS = {
     maxHealth:5200,
     description:'Elite precision thrower. His passive aim makes thrown objects extremely difficult to evade without ever turning them into homing projectiles.',
     abilities:{
-      E:{key:'E', name:'Knife Throw', type:'bullseyeProjectile', damage:250, cooldown:650, knockback:6,
+      E:{key:'E', name:'Knife Throw', type:'bullseyeProjectile', damage:250, cooldown:2000, knockback:6,
          speed:42, w:44, h:16, color:'#2f6fe4', render:'bullseye-item', itemType:'knife', precisionAim:true,
          sound:'bullseye_knife', fx:'bullseye_throw', hitFx:'bullseye_hit', hitSound:'bullseye_hit',
-         desc:'Throws a knife at extreme speed for 250 damage. Bullseye’s passive gives the throw perfect physical aim without homing.'},
-      Q:{key:'Q', name:'100%', type:'bullseyeOdds', cooldown:5500, knockback:7, speed:38, w:46, h:22, precisionAim:true,
+         desc:'Throws a knife at extreme speed for 250 damage. Bullseye’s passive gives the throw perfect physical aim without homing. Cooldown: 2 seconds.'},
+      Q:{key:'Q', name:'100%', type:'bullseyeOdds', cooldown:7000, knockback:7, speed:38, w:46, h:22, precisionAim:true,
          items:[
            {type:'spoon',name:'Spoon',damage:180},
            {type:'fork',name:'Fork',damage:320},
@@ -3580,7 +3580,7 @@ const CHARACTERS = {
            {type:'brick',name:'Brick',damage:750}
          ],
          sound:'bullseye_random', fx:'bullseye_random', hitFx:'bullseye_hit', hitSound:'bullseye_hit',
-         desc:'Throws a random everyday object. Every item has its own damage value, from harmless-looking utensils up to a 750-damage brick.'},
+         desc:'Throws a random everyday object. Every item has its own damage value, from harmless-looking utensils up to a 750-damage brick. Cooldown: 7 seconds.'},
       R:{key:'R', name:'Ricochet', type:'bullseyeRicochet', damage:0, cooldown:20000,
          sound:'bullseye_ricochet', fx:'bullseye_ricochet',
          desc:'Arms the next thrown projectile to bank off a side wall, split into two projectiles, and strike the enemy for double the original damage.'}
