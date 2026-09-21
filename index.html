@@ -975,6 +975,38 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.redskull .held-redskull-gun svg{left:28px;top:18px;width:84px;height:40px;}
 .fighter.nickfury .held-nickfury-gun svg{left:32px;top:23.5px;width:64px;height:34px;}
 .fighter.nickfury .held-nickfury-bazooka svg{left:2px;top:16px;width:116px;height:44px;}
+
+/* ---------- Star-Lord / Groot ---------- */
+.fighter.starlord .held-starlord-gun svg{width:52px;height:26px;}
+.fighter.starlord .held-starlord-gun.a svg{left:32px;top:15.7px;}
+.fighter.starlord .held-starlord-gun.b svg{left:24px;top:33.7px;}
+.starlord-bolt-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 5px #ff5a3c) drop-shadow(0 0 12px #c81e3a88);}
+.sl-bolt-core{position:absolute;inset:0;border-radius:3px 50% 50% 3px;background:linear-gradient(90deg,#a3122a,#ff5a3c 45%,#fff2d6 85%,#fff);}
+.sl-bolt-tail{position:absolute;right:92%;top:20%;width:90%;height:60%;background:linear-gradient(90deg,transparent,#ff5a3c99);filter:blur(2px);}
+.sl-bomb{position:absolute;width:18px;height:18px;z-index:28;pointer-events:none;}
+.sl-bomb-body{position:absolute;inset:1px;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 30%,#dfe4ea,#7a838f 45%,#2a3038);border:2px solid #14171b;box-shadow:0 2px 4px rgba(0,0,0,.6);}
+.sl-bomb-body::after{content:'';position:absolute;left:0;right:0;top:6px;height:4px;background:#8e1f30;}
+.sl-bomb-led{position:absolute;left:6px;top:6px;width:6px;height:6px;border-radius:50%;background:#ff2b3d;box-shadow:0 0 8px #ff2b3d,0 0 16px #ff2b3d;opacity:.3;z-index:2;}
+.sl-bomb.flash .sl-bomb-led{opacity:1;}
+.sl-bomb-ring{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px;border-radius:50%;border:2px solid #ff3b4d;opacity:0;}
+.sl-bomb.stuck .sl-bomb-ring{animation:slBombRing var(--pulse,.5s) ease-out infinite;}
+@keyframes slBombRing{from{transform:scale(.8);opacity:.9}to{transform:scale(3.6);opacity:0}}
+.sl-boots-flame{border-radius:45% 45% 60% 60%;background:linear-gradient(180deg,#fff7c2,#ffb03a 38%,#ff5a2a 70%,transparent);mix-blend-mode:screen;transform-origin:50% 0;animation:slFlame .42s ease-out forwards;}
+@keyframes slFlame{from{transform:scaleY(.3);opacity:1}to{transform:scaleY(1.5);opacity:0}}
+.groot-lash-fx svg{width:100%;height:100%;overflow:visible;transform-origin:0 50%;animation:grootLashSwing .32s ease-out forwards;}
+@keyframes grootLashSwing{0%{transform:scaleX(.1) rotate(-14deg);opacity:0}30%{opacity:1;transform:scaleX(1.05) rotate(4deg)}100%{transform:scaleX(1) rotate(10deg);opacity:0}}
+.groot-root{position:absolute;z-index:21;pointer-events:none;transform-origin:50% 100%;animation:grootRootRise .78s cubic-bezier(.2,.9,.2,1) forwards;}
+.groot-root svg{width:100%;height:100%;display:block;overflow:visible;}
+@keyframes grootRootRise{0%{transform:scaleY(.05) rotate(var(--tilt,0deg))}22%{transform:scaleY(1.06) rotate(var(--tilt,0deg))}70%{transform:scaleY(1) rotate(var(--tilt,0deg));opacity:1}100%{transform:scaleY(.2) rotate(var(--tilt,0deg));opacity:0}}
+.groot-ball{position:absolute;left:2px;top:4px;width:60px;height:60px;display:none;z-index:5;pointer-events:none;filter:drop-shadow(0 4px 5px rgba(0,0,0,.6));}
+.groot-ball svg{width:100%;height:100%;display:block;animation:grootRoll .5s linear infinite;animation-play-state:paused;}
+.fighter.groot-balled .groot-ball{display:block;animation:grootBallIn .25s ease-out both;}
+.fighter.groot-balled.moving .groot-ball svg{animation-play-state:running;}
+.fighter.groot-balled.facing-left .groot-ball svg{animation-direction:reverse;}
+.fighter.groot-balled .fighter-square{visibility:hidden!important;}
+@keyframes grootRoll{to{transform:rotate(360deg)}}
+@keyframes grootBallIn{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.fighter.rooted::after{content:'';position:absolute;left:-8px;right:-8px;bottom:-6px;height:52px;pointer-events:none;z-index:7;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 50'><g fill='none' stroke='%235b3a1c' stroke-width='5' stroke-linecap='round'><path d='M6 50 Q0 30 14 18 Q22 10 12 2'/><path d='M26 50 Q34 32 24 20 Q18 12 28 6'/><path d='M54 50 Q46 30 58 20 Q64 12 54 4'/><path d='M74 50 Q80 32 66 20 Q60 12 70 4'/></g><g fill='%2378c24a' stroke='%232f6b1c' stroke-width='1'><ellipse cx='12' cy='3' rx='5' ry='2.4'/><ellipse cx='28' cy='7' rx='5' ry='2.4'/><ellipse cx='54' cy='5' rx='5' ry='2.4'/><ellipse cx='70' cy='5' rx='5' ry='2.4'/></g></svg>") center bottom/100% 100% no-repeat;}
 @keyframes heldWeaponIn{from{opacity:0;filter:brightness(1.35) drop-shadow(0 3px 4px rgba(0,0,0,.72))}to{opacity:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.72))}}
 .fury-grapple-line{z-index:24;}
 @keyframes weaponAppear{from{opacity:0;transform:scale(.72) translateX(-10px)}to{opacity:1;transform:scale(1) translateX(0)}}
@@ -3613,8 +3645,41 @@ const CHARACTERS = {
          desc:'A fast forward lunge for closing distance or escaping danger. Pure mobility — no damage.'}
     }
   },
+  starlord: {
+    id:'starlord', name:'Star-Lord', img:'StarLord.jpg', color:'#7a1f2b', accentColor:'#e8b84a', aiStyle:'starlord',
+    maxHealth:8500,
+    description:'Half-Celestial outlaw. Fires both Element Blasters at once, plants sticky Laser Bombs, and rockets around on his boots. Deadly at range, fragile up close.',
+    abilities:{
+      E:{key:'E', name:'Blasters', type:'projectile', dual:true, damage:150, cooldown:875, knockback:3,
+         speed:28, w:26, h:7, color:'#ff5a3c', render:'starlord-bolt', trail:'starlord',
+         sound:'starlord_blasters', fx:'starlord_blasters', hitFx:'starlord_hit', hitSound:'starlord_hit',
+         desc:'Draws both Element Blasters and fires from each one at the same time: 150 damage per blaster, 300 total. Cooldown: 0.875 seconds.'},
+      Q:{key:'Q', name:'Laser Bomb', type:'laserBomb', damage:1800, radius:150, knockback:16, fuse:3000, cooldown:13000,
+         sound:'starlord_bomb_throw', fx:'starlord_bomb',
+         desc:'Throws a sticky bomb that clings to the enemy or to the ground/platform where it lands. It beeps faster and faster, then explodes 3 seconds later for 1,800 damage. Cooldown: 13 seconds.'},
+      R:{key:'R', name:'Rocket Boots', type:'mobility', boostX:15, boostY:-12, rollMs:420, botDashAway:true, cooldown:10000,
+         sound:'starlord_boots', fx:'starlord_boots',
+         desc:'Blasts off on his jet boots in a fast hopping dash to escape or reposition. Cooldown: 10 seconds.'}
+    }
+  },
+  groot: {
+    id:'groot', name:'Groot', img:'Groot.jpg', color:'#6b4423', accentColor:'#8fd05a', aiStyle:'groot',
+    maxHealth:13500, passiveRegen:50, ballRegen:200,
+    description:'Towering Flora colossus with a healing factor (50 HP/s, 200 HP/s while rolled up). Long-reach vine lashes, a wave of erupting roots, and a fast rolling Groot Ball.',
+    abilities:{
+      E:{key:'E', name:'Vine Lash', type:'melee', damage:450, cooldown:1200, knockback:9, range:120, hitDelay:130,
+         sound:'groot_lash', fx:'groot_lash', hitFx:'groot_lash_hit', hitSound:'groot_lash_hit',
+         desc:'Whips a long vine forward for 450 damage. Reaches further than a normal melee attack. Cooldown: 1.2 seconds.'},
+      Q:{key:'Q', name:'Root Eruption', type:'rootWave', damage:1700, cooldown:16000, knockback:14, waveRange:640, rootMs:1000,
+         sound:'groot_roots', fx:'groot_roots',
+         desc:'Roots burst out of the ground in a wave toward the enemy for 1,700 damage and pin them in place for 1 second. Jump over it! Cooldown: 16 seconds.'},
+      R:{key:'R', name:'Groot Ball', type:'grootBall', duration:7000, speedMult:2.4, cooldown:24000,
+         sound:'groot_ball', fx:'groot_ball',
+         desc:'Curls into a ball and rolls at high speed for 7 seconds. No attacking while rolled, but the healing factor rises to 200 HP/s. Cooldown: 24 seconds (starts when the ball ends).'}
+    }
+  },
 };
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','antman','wasp','starlord','groot'];
 
 
 /* =========================================================================
@@ -4612,6 +4677,7 @@ function startBattle(playerCharId, botCharId, opts){
     versus.keys.forEach(k => { k.left = k.right = k.up = k.down = false; });
   }
   state.projectiles = [];
+  state.laserBombs = [];
   state.walls = [];
   state.missiles = [];
   state.illusions = [];
@@ -4773,28 +4839,61 @@ function nickFuryHeldBazookaSvg(){
     <ellipse cx="107" cy="16" rx="2.6" ry="9" fill="#07090c"/>
   </svg>`;
 }
+function starLordBlasterSvg(){
+  // Element Blaster, drawn pointing RIGHT. Barrel axis = y9 (svg).
+  return `<svg viewBox="0 0 64 32" aria-hidden="true">
+    <defs>
+      <linearGradient id="slChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f9"/><stop offset=".45" stop-color="#9ba4af"/><stop offset="1" stop-color="#454c56"/></linearGradient>
+      <linearGradient id="slMaroon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b02e42"/><stop offset="1" stop-color="#4a0f1a"/></linearGradient>
+    </defs>
+    <path d="M13 16 L28 16 L23.5 30 Q22.8 31.6 21 31.6 L13.6 31.6 Q11.6 31.6 12 29.6 Z" fill="url(#slMaroon)" stroke="#1a0508" stroke-width="1.8" stroke-linejoin="round"/>
+    <path d="M30 15 v4 q0 3 -3 3 h-4" fill="none" stroke="#2a1216" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M8 5 Q8 2 11.5 2 L38 2 L38 16 L13 16 Q8 16 8 12 Z" fill="url(#slChrome)" stroke="#20252c" stroke-width="1.8" stroke-linejoin="round"/>
+    <rect x="12" y="3.6" width="24" height="2.4" rx="1" fill="#8e1f30"/>
+    <rect x="15" y="9" width="18" height="3.2" rx="1.6" fill="#ffd25a"/>
+    <rect x="16" y="9.5" width="16" height="1" rx=".5" fill="#fff6cf"/>
+    <path d="M9.5 8 V13 M11.5 8 V13" stroke="#20252c" stroke-width="1" opacity=".6"/>
+    <rect x="36" y="4.6" width="22" height="8.8" rx="3" fill="url(#slChrome)" stroke="#20252c" stroke-width="1.8"/>
+    <rect x="43" y="3.4" width="3" height="11.2" rx="1" fill="#5b636e" stroke="#20252c" stroke-width="1"/>
+    <rect x="49" y="3.4" width="3" height="11.2" rx="1" fill="#5b636e" stroke="#20252c" stroke-width="1"/>
+    <rect x="56" y="3.6" width="6" height="10.8" rx="2" fill="#2b3038" stroke="#0e1013" stroke-width="1.2"/>
+    <circle cx="61" cy="9" r="2.2" fill="#ffb14a"/>
+  </svg>`;
+}
+function grootBallSvg(){
+  return `<svg viewBox="0 0 64 64" aria-hidden="true">
+    <defs><radialGradient id="gbBark" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#c39560"/><stop offset=".5" stop-color="#7a5230"/><stop offset="1" stop-color="#3a2412"/></radialGradient></defs>
+    <circle cx="32" cy="32" r="29" fill="url(#gbBark)" stroke="#24140a" stroke-width="2.5"/>
+    <g fill="none" stroke="#3a2412" stroke-width="2.2" stroke-linecap="round" opacity=".85">
+      <path d="M7 25 Q32 12 57 25"/><path d="M5 38 Q32 52 59 38"/><path d="M32 4 Q20 32 32 60"/><path d="M32 4 Q44 32 32 60"/><path d="M14 11 Q30 30 16 54"/>
+    </g>
+    <ellipse cx="22" cy="24" rx="3.2" ry="4.4" fill="#2b170a" opacity=".7"/>
+    <ellipse cx="43" cy="42" rx="3" ry="4" fill="#2b170a" opacity=".7"/>
+    <g stroke="#2f6b1c" stroke-width="1.3"><ellipse cx="46" cy="10" rx="8" ry="3.6" transform="rotate(-38 46 10)" fill="#72c84a"/><ellipse cx="52" cy="18" rx="7" ry="3.2" transform="rotate(-8 52 18)" fill="#5fb23c"/><ellipse cx="14" cy="50" rx="7" ry="3.2" transform="rotate(40 14 50)" fill="#72c84a"/></g>
+  </svg>`;
+}
 function activateHeldWeapon(f, selector, duration, direction){
   if(!f || !f.el) return;
-  const el = f.el.querySelector(selector);
-  if(!el) return;
-  const token = String((Number(el.dataset.weaponToken||0)+1));
-  el.dataset.weaponToken = token;
+  const els = Array.from(f.el.querySelectorAll(selector));
+  if(!els.length) return;
   // Turn the fighter toward the shot. The gun is mirrored by the .facing-left class
   // (see CSS), so body, gun and bullet all end up pointing the same way.
   if(direction) f.facing = direction < 0 ? -1 : 1;
   f.el.classList.toggle('facing-left', f.facing < 0);
-  // Only one held gun at a time (Nick Fury has a pistol AND a bazooka).
-  f.el.querySelectorAll('.held-ranged-weapon.active').forEach(w=>{ if(w !== el) w.classList.remove('active'); });
-  el.style.transform = '';
-  el.classList.add('active');
-  setTimeout(()=>{
-    if(el.dataset.weaponToken === token) el.classList.remove('active');
-  }, duration);
+  // Only one held-weapon set at a time (Nick Fury has a pistol AND a bazooka).
+  f.el.querySelectorAll('.held-ranged-weapon.active').forEach(w=>{ if(!els.includes(w)) w.classList.remove('active'); });
+  els.forEach(el=>{
+    const token = String((Number(el.dataset.weaponToken||0)+1));
+    el.dataset.weaponToken = token;
+    el.style.transform = '';
+    el.classList.add('active');
+    setTimeout(()=>{ if(el.dataset.weaponToken === token) el.classList.remove('active'); }, duration);
+  });
 }
 
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -4804,6 +4903,8 @@ function buildFighterDOM(f){
     ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
     ${f.def.id==='redskull' ? `<div class="held-ranged-weapon held-redskull-gun" aria-hidden="true">${redSkullHeldGunSvg()}</div>` : ''}
     ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
+    ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
+    ${f.def.id==='groot' ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
@@ -5138,6 +5239,7 @@ function tryUseAbility(caster, target, key){
   if(state.countdown) return false; // nobody acts until FIGHT!
   const ability = caster.def.abilities[key];
   if(caster.abilityLockUntil && t < caster.abilityLockUntil) return false;
+  if(caster.grootBallUntil && t < caster.grootBallUntil) return false; // curled up in the Groot Ball: no attacking
   if(caster.disabledAbilityKey === key && caster.disabledAbilityUntil && t < caster.disabledAbilityUntil){
     if(caster.el){
       const tag = document.createElement('div'); tag.className='scarlet-disable-tag'; tag.textContent='DISABLED';
@@ -5674,8 +5776,8 @@ function executeAbility(caster, target, ability, t){
       // so a shot fired the instant you cross behind it can genuinely miss.
       // The player's own shots still auto-aim at the true target, same as before.
       const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
-      state.projectiles.push({
-        x: caster.x + FIGHTER_SIZE/2, y: caster.y + FIGHTER_SIZE/2 - ability.h/2,
+      for(const yOff of (ability.dual ? [-9, 9] : [0])) state.projectiles.push({
+        x: caster.x + FIGHTER_SIZE/2, y: caster.y + FIGHTER_SIZE/2 - ability.h/2 + yOff,
         vx: dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color||'#ffffff',
         damage: ability.damage, knockback: ability.knockback, owner: caster.id,
         icon: ability.icon || '',
@@ -5834,8 +5936,9 @@ function executeAbility(caster, target, ability, t){
       break;
     }
     case 'mobility': {
-      caster.vx = caster.facing * ability.boostX;
-      if(ability.rollMs){ caster.windBurstUntil = t + ability.rollMs; caster.windBurstVx = caster.facing * ability.boostX; }
+      const dashDir = (ability.botDashAway && caster.isBot) ? -caster.facing : caster.facing;
+      caster.vx = dashDir * ability.boostX;
+      if(ability.rollMs){ caster.windBurstUntil = t + ability.rollMs; caster.windBurstVx = dashDir * ability.boostX; }
       if(ability.swingToTop){
         // Pick exactly the launch speed needed so the arc's apex lands at
         // the top of the arena, regardless of how high up the caster
@@ -5853,6 +5956,68 @@ function executeAbility(caster, target, ability, t){
     }
     case 'shield': {
       caster.shield = { reduction: ability.reduction, expire: t + ability.duration };
+      break;
+    }
+    case 'laserBomb': {
+      // Sticky grenade: lobbed on an arc toward the enemy. It sticks to whatever it touches
+      // first (the fighter, a wall, a platform or the floor), beeps, then explodes.
+      const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
+      const sx = caster.x + FIGHTER_SIZE/2 + dir*28, sy = caster.y + FIGHTER_SIZE/2 - 6;
+      const g = 0.3, vxB = 15;
+      const dxT = (target.x + FIGHTER_SIZE/2) - sx, dyT = (target.y + FIGHTER_SIZE/2) - sy;
+      const flight = Math.max(8, Math.min(60, Math.abs(dxT)/vxB));
+      const vyB = Math.max(-13, Math.min(9, (dyT - 0.5*g*flight*flight)/flight));
+      (state.laserBombs = state.laserBombs || []).push({
+        x:sx, y:sy, vx:dir*vxB, vy:vyB, g, owner:caster.id, casterRef:caster, targetRef:target,
+        state:'flying', ability, el:null, spin:0, attached:null
+      });
+      break;
+    }
+    case 'rootWave': {
+      // Roots erupt from the ground in a wave marching toward the enemy. Only the surface
+      // Groot is standing on is affected, so jumping over the wave dodges it.
+      const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
+      const baseY = caster.y + FIGHTER_SIZE;
+      const startX = caster.x + FIGHTER_SIZE/2 + dir*50;
+      const spacing = 36, count = Math.round(ability.waveRange/spacing), stepMs = 42;
+      const rootSvg = `<svg viewBox="0 0 36 120" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="grRoot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a2412"/><stop offset=".5" stop-color="#8a5e36"/><stop offset="1" stop-color="#3a2412"/></linearGradient></defs>
+        <path d="M5 120 C3 82 14 62 10 32 C9 19 15 9 18 0 C22 10 30 20 27 35 C24 62 34 86 31 120 Z" fill="url(#grRoot)" stroke="#20120a" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M11 60 l-8 -6 M25 48 l8 -6 M12 88 l-8 -5" stroke="#20120a" stroke-width="2.4" stroke-linecap="round"/>
+        <ellipse cx="18" cy="8" rx="7" ry="3.2" transform="rotate(-30 18 8)" fill="#72c84a" stroke="#2f6b1c" stroke-width="1"/></svg>`;
+      let struck = false;
+      for(let i=0;i<count;i++){
+        setTimeout(()=>{
+          if(state.mode !== 'battle') return;
+          const rx = startX + dir*i*spacing;
+          if(rx < BOUND_MIN_X || rx > BOUND_MAX_X + FIGHTER_SIZE) return;
+          const h = 84 + Math.round(Math.random()*40);
+          const root = document.createElement('div');
+          root.className = 'groot-root';
+          root.style.cssText = `left:${rx-18}px;top:${baseY-h}px;width:36px;height:${h}px;--tilt:${(Math.random()*16-8).toFixed(1)}deg;`;
+          root.innerHTML = rootSvg;
+          arenaEl.appendChild(root);
+          setTimeout(()=>{ if(root.parentNode) root.remove(); }, 800);
+          spawnSparks(rx, baseY, 3, '#a9793f', 22, 260);
+          if(i % 3 === 0) sfx('groot_root_pop');
+          if(!struck && target && !target.dead){
+            const ox = (target.x + FIGHTER_SIZE) > rx-24 && target.x < rx+24;
+            const oy = (target.y + FIGHTER_SIZE) > baseY - h && target.y < baseY + 14;
+            if(ox && oy){
+              struck = true;
+              damageTargetOrWall(target, ability.damage, ability.knockback, dir, {hitFx:'groot_root_hit', sound:'groot_root_hit'});
+              if(!target.dead){ target.rootedUntil = now() + ability.rootMs; target.vx = 0; }
+            }
+          }
+        }, i*stepMs);
+      }
+      break;
+    }
+    case 'grootBall': {
+      caster.grootBallUntil = t + ability.duration;
+      caster.grootBallSpeed = ability.speedMult;
+      if(caster.el) caster.el.classList.add('groot-balled');
+      caster.vx = caster.facing * 6;
       break;
     }
     case 'missile': {
@@ -6124,6 +6289,117 @@ function updateShock(f){
   if(f.shockTicksLeft <= 0 && f.el) f.el.classList.remove('shocked');
 }
 
+
+/* ---------- Star-Lord Laser Bomb + Groot Ball runtime ---------- */
+function updateLaserBombs(dtF){
+  const list = state.laserBombs;
+  if(!list || !list.length) return;
+  const tNow = now();
+  for(let i=list.length-1;i>=0;i--){
+    const b = list[i];
+    const tgt = b.targetRef;
+    if(!b.el){
+      b.el = document.createElement('div');
+      b.el.className = 'sl-bomb';
+      b.el.innerHTML = '<div class="sl-bomb-body"></div><div class="sl-bomb-led"></div><div class="sl-bomb-ring"></div>';
+      arenaEl.appendChild(b.el);
+    }
+    if(b.state === 'flying'){
+      b.vy += b.g*dtF;
+      const py = b.y;
+      b.x += b.vx*dtF; b.y += b.vy*dtF;
+      b.spin += 24*dtF;
+      let stuck = false;
+      if(tgt && !tgt.dead && b.x > tgt.x-6 && b.x < tgt.x+FIGHTER_SIZE+6 && b.y > tgt.y-6 && b.y < tgt.y+FIGHTER_SIZE+6){
+        b.attached = tgt; b.ox = b.x - tgt.x; b.oy = b.y - tgt.y; stuck = true;
+      }
+      if(!stuck){
+        for(const w of state.walls){
+          if(w.owner === b.owner) continue;
+          if(b.x > w.x && b.x < w.x+w.w && b.y > w.y && b.y < w.y+w.h){ stuck = true; break; }
+        }
+      }
+      if(!stuck && b.vy > 0){
+        for(const plat of PLATFORMS){
+          if(b.x > plat.x && b.x < plat.x+plat.w && py <= plat.y+2 && b.y >= plat.y){ b.y = plat.y - 8; stuck = true; break; }
+        }
+      }
+      if(!stuck && b.y > PLATFORMS[0].y - 8){ b.y = PLATFORMS[0].y - 8; stuck = true; }
+      if(!stuck && (b.x < BOUND_MIN_X || b.x > BOUND_MAX_X + FIGHTER_SIZE)){
+        b.x = Math.max(BOUND_MIN_X, Math.min(BOUND_MAX_X + FIGHTER_SIZE, b.x)); stuck = true;
+      }
+      if(stuck){
+        b.state = 'stuck'; b.stuckAt = tNow; b.nextBeep = tNow; b.spin = 0;
+        b.el.classList.add('stuck');
+        sfx('starlord_bomb_stick');
+        spawnSparks(b.x, b.y, 6, '#ffd08a', 26, 240);
+      }
+    } else {
+      if(b.attached && b.attached.dead) b.attached = null;
+      if(b.attached){ b.x = b.attached.x + b.ox; b.y = b.attached.y + b.oy; }
+      const fuse = b.ability.fuse, elapsed = tNow - b.stuckAt;
+      if(tNow >= b.nextBeep){
+        const interval = elapsed < 1500 ? 500 : (elapsed < 2400 ? 280 : 130);
+        sfx(elapsed > 2400 ? 'starlord_beep_hi' : 'starlord_beep');
+        b.el.classList.add('flash');
+        setTimeout(()=>{ if(b.el) b.el.classList.remove('flash'); }, Math.min(90, interval-20));
+        b.el.style.setProperty('--pulse', interval+'ms');
+        b.nextBeep = tNow + interval;
+      }
+      if(elapsed >= fuse){
+        explodeLaserBomb(b);
+        if(b.el) b.el.remove();
+        list.splice(i,1);
+        continue;
+      }
+    }
+    b.el.style.left = (b.x-9)+'px';
+    b.el.style.top = (b.y-9)+'px';
+    b.el.style.transform = b.state === 'flying' ? `rotate(${b.spin}deg)` : '';
+  }
+}
+function explodeLaserBomb(b){
+  const ab = b.ability, x = b.x, y = b.y;
+  sfx('starlord_bomb_explode');
+  fxEl('fx-flash', `left:${x-110}px;top:${y-110}px;width:220px;height:220px;background:radial-gradient(circle,#fff,#ffe0a8 18%,#ff6a3c 42%,#a3122a 62%,transparent 78%);`, 420);
+  fxEl('fx-ring', `left:${x-ab.radius}px;top:${y-ab.radius}px;width:${ab.radius*2}px;height:${ab.radius*2}px;border-color:#ff5a3c;border-width:6px;box-shadow:0 0 40px #c81e3a;`, 600);
+  fxEl('fx-ring', `left:${x-ab.radius*0.6}px;top:${y-ab.radius*0.6}px;width:${ab.radius*1.2}px;height:${ab.radius*1.2}px;border-color:#ffd08a;border-width:4px;`, 480);
+  spawnSparks(x, y, 26, '#ff9a5a', 120, 560);
+  spawnSparks(x, y, 12, '#ffe0a8', 80, 420);
+  shakeArena(12, 380);
+  const tg = b.targetRef;
+  if(state.mode === 'battle' && tg && !tg.dead){
+    const cxT = tg.x + FIGHTER_SIZE/2, cyT = tg.y + FIGHTER_SIZE/2;
+    if(b.attached === tg || Math.hypot(cxT - x, cyT - y) <= ab.radius){
+      damageTargetOrWall(tg, ab.damage, ab.knockback, cxT >= x ? 1 : -1, {hitFx:'starlord_bomb_hit', sound:'starlord_hit'});
+    }
+  }
+}
+function updateGrootBall(f){
+  if(!f || !f.grootBallUntil) return;
+  const t = now();
+  if(f.dead || t >= f.grootBallUntil){ endGrootBall(f); return; }
+  const rolling = Math.abs(f.vx) > 1.2 && f.onGround;
+  if(rolling){
+    f._gbDust = (f._gbDust||0) + 1;
+    if(f._gbDust >= 5){ f._gbDust = 0; spawnSparks(f.x + FIGHTER_SIZE/2 - Math.sign(f.vx)*20, f.y + FIGHTER_SIZE - 4, 2, '#a9793f', 16, 260); }
+    if(t > (f._gbSnd||0)){ f._gbSnd = t + 380; sfx('groot_roll'); }
+  }
+}
+function endGrootBall(f){
+  f.grootBallUntil = 0;
+  if(f.el) f.el.classList.remove('groot-balled');
+  if(!f.dead && f.cooldowns){
+    // the 24s cooldown starts when the ball ends
+    f.cooldowns.R = now() + (f.def.abilities.R.cooldown || 24000);
+    sfx('groot_ball_end');
+    spawnSparks(f.x + FIGHTER_SIZE/2, f.y + FIGHTER_SIZE/2, 10, '#7fc44a', 50, 380);
+  }
+}
+function regenRateOf(f){
+  return (f.grootBallUntil && now() < f.grootBallUntil && f.def.ballRegen) ? f.def.ballRegen : f.def.passiveRegen;
+}
+
 function updatePassiveRegen(f, dtF){
   if(!f || f.dead || !f.def.passiveRegen || state.countdown) return;
   if(f.health >= f.def.maxHealth){
@@ -6132,7 +6408,7 @@ function updatePassiveRegen(f, dtF){
     return;
   }
   const before = f.health;
-  f.health = Math.min(f.def.maxHealth, f.health + f.def.passiveRegen * (dtF*16.6667/1000));
+  f.health = Math.min(f.def.maxHealth, f.health + regenRateOf(f) * (dtF*16.6667/1000));
   f.regenAccumulator = (f.regenAccumulator || 0) + dtF*16.6667;
   if(f.regenAccumulator >= 1000 || f.health >= f.def.maxHealth){
     const healed = Math.max(1, Math.round(f.health - before));
@@ -6418,6 +6694,90 @@ function sfx(kind='ability'){
         aTone(ctx,t,'triangle',240,980,0.44,0.08);
         aNoise(ctx,t,0.34,0.12,'bandpass',3600,1100,1.6);
         return;
+
+      /* ---------- Star-Lord ---------- */
+      case 'starlord_blasters':
+        aTone(ctx,t,'sawtooth',1500,260,0.10,0.10);
+        aNoise(ctx,t,0.06,0.20,'highpass',4200,1800,1.0);
+        aTone(ctx,t+0.022,'sawtooth',1300,220,0.10,0.09);
+        aNoise(ctx,t+0.022,0.06,0.16,'highpass',4000,1600,1.0);
+        return;
+      case 'starlord_hit':
+        aTone(ctx,t,'square',320,90,0.12,0.11);
+        aNoise(ctx,t,0.10,0.16,'bandpass',2600,700,1.3);
+        return;
+      case 'starlord_bomb_throw':
+        aNoise(ctx,t,0.16,0.14,'bandpass',600,2000,1.2);
+        aTone(ctx,t,'triangle',300,560,0.14,0.07);
+        return;
+      case 'starlord_bomb_stick':
+        aTone(ctx,t,'sine',170,60,0.14,0.20);
+        aTone(ctx,t,'square',2600,1800,0.04,0.06);
+        aNoise(ctx,t,0.05,0.12,'highpass',3000,1500,1.0);
+        return;
+      case 'starlord_beep':
+        aTone(ctx,t,'square',1250,1250,0.07,0.09);
+        return;
+      case 'starlord_beep_hi':
+        aTone(ctx,t,'square',1900,1900,0.06,0.11);
+        return;
+      case 'starlord_bomb_explode':
+        aTone(ctx,t,'sine',130,28,0.75,0.36);
+        aTone(ctx,t,'sawtooth',220,50,0.32,0.10);
+        aNoise(ctx,t,0.60,0.30,'lowpass',3200,160,0.8);
+        aNoise(ctx,t+0.02,0.32,0.18,'highpass',5000,1400,1.0);
+        return;
+      case 'starlord_boots':
+        aNoise(ctx,t,0.42,0.20,'bandpass',400,2600,1.1);
+        aTone(ctx,t,'sawtooth',90,240,0.36,0.10);
+        return;
+
+      /* ---------- Groot ---------- */
+      case 'groot_lash':
+        aNoise(ctx,t,0.14,0.20,'highpass',3200,1300,1.0);
+        aTone(ctx,t,'triangle',720,180,0.16,0.07);
+        return;
+      case 'groot_lash_hit':
+        aTone(ctx,t,'triangle',210,70,0.18,0.26);
+        aNoise(ctx,t,0.14,0.20,'bandpass',1500,420,1.2);
+        return;
+      case 'groot_roots':
+        aNoise(ctx,t,0.9,0.26,'lowpass',700,120,0.7);
+        aTone(ctx,t,'sine',75,42,0.8,0.26);
+        for(let i=0;i<7;i++) aTone(ctx,t+0.06+i*0.09,'triangle',240-i*12,90,0.08,0.08);
+        return;
+      case 'groot_root_pop':
+        aTone(ctx,t,'triangle',230,90,0.07,0.07);
+        aNoise(ctx,t,0.06,0.09,'bandpass',900,300,1.2);
+        return;
+      case 'groot_root_hit':
+        aTone(ctx,t,'sine',115,38,0.5,0.30);
+        aNoise(ctx,t,0.30,0.22,'bandpass',900,200,1.1);
+        aTone(ctx,t,'triangle',300,110,0.10,0.14);
+        return;
+      case 'groot_ball':
+        aTone(ctx,t,'triangle',160,470,0.30,0.12);
+        aNoise(ctx,t,0.30,0.14,'bandpass',300,1500,1.1);
+        return;
+      case 'groot_roll':
+        aNoise(ctx,t,0.20,0.06,'lowpass',420,160,0.8);
+        return;
+      case 'groot_ball_end':
+        aTone(ctx,t,'triangle',480,180,0.26,0.10);
+        aNoise(ctx,t,0.22,0.10,'bandpass',1200,300,1.4);
+        return;
+      case 'groot_voice': { // "I... am... Groot": three formant-filtered pulses
+        const o=ctx.createOscillator(), f1=ctx.createBiquadFilter(), f2=ctx.createBiquadFilter(), g=ctx.createGain();
+        o.type='sawtooth';
+        o.frequency.setValueAtTime(92,t); o.frequency.linearRampToValueAtTime(108,t+0.3); o.frequency.linearRampToValueAtTime(82,t+0.95);
+        f1.type='bandpass'; f1.Q.value=4; f1.frequency.setValueAtTime(420,t); f1.frequency.linearRampToValueAtTime(760,t+0.3); f1.frequency.linearRampToValueAtTime(380,t+0.95);
+        f2.type='bandpass'; f2.Q.value=6; f2.frequency.setValueAtTime(1100,t); f2.frequency.linearRampToValueAtTime(1500,t+0.3); f2.frequency.linearRampToValueAtTime(800,t+0.95);
+        g.gain.setValueAtTime(0.0001,t);
+        [[0,0.2],[0.3,0.2],[0.55,0.42]].forEach(([st,d])=>{ g.gain.linearRampToValueAtTime(1.5,t+st+0.03); g.gain.linearRampToValueAtTime(0.0001,t+st+d); });
+        o.connect(f1); f1.connect(f2); f2.connect(g); g.connect(ctx.destination);
+        o.start(t); o.stop(t+1.05);
+        return;
+      }
 
       /* ---------- Nick Fury ---------- */
       case 'nickfury_glock':
@@ -7705,6 +8065,59 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Star-Lord ---------------- */
+    case 'starlord_blasters': {
+      activateHeldWeapon(caster, '.held-starlord-gun', 900, caster.isBot ? caster.facing : dirSignTo(caster, target));
+      const d = caster.facing;
+      [[50,-9],[42,9]].forEach(([mx,my])=>{
+        fxEl('fx-flash', `left:${cx+d*mx-15}px;top:${cy+my-15}px;width:30px;height:30px;background:radial-gradient(circle,#fff,#ffd08a 28%,#ff5a3c 55%,transparent 78%);`, 110);
+        spawnSparks(cx+d*mx, cy+my, 5, '#ff8a5c', 26, 200);
+      });
+      break;
+    }
+    case 'starlord_bomb': {
+      if(!caster.isBot && target){ caster.facing = dirSignTo(caster, target); caster.el.classList.toggle('facing-left', caster.facing < 0); }
+      spawnSparks(cx+caster.facing*30, cy-6, 6, '#ffd08a', 28, 220);
+      break;
+    }
+    case 'starlord_boots': {
+      for(let i=0;i<2;i++){
+        fxEl('sl-boots-flame', `left:${cx-24+i*30}px;top:${caster.y+56}px;width:18px;height:38px;`, 440);
+      }
+      spawnSparks(cx, caster.y+60, 12, '#ffb03a', 52, 340);
+      for(let i=0;i<4;i++){
+        setTimeout(()=>{ if(state.mode==='battle' && caster.el) spawnAfterimage(caster, '#a3283a88', 300); }, 50 + i*60);
+      }
+      break;
+    }
+
+    /* ---------------- Groot ---------------- */
+    case 'groot_lash': {
+      const d = (!caster.isBot && target) ? dirSignTo(caster, target) : caster.facing;
+      const len = 156;
+      const vine = `<svg viewBox="0 0 156 56" aria-hidden="true">
+        <path d="M2 30 C40 6 92 52 148 24" fill="none" stroke="#4d3018" stroke-width="8" stroke-linecap="round"/>
+        <path d="M2 30 C40 6 92 52 148 24" fill="none" stroke="#8b5e34" stroke-width="3.4" stroke-linecap="round"/>
+        <g stroke="#2f6b1c" stroke-width="1.2"><ellipse cx="46" cy="14" rx="8" ry="3.6" transform="rotate(-30 46 14)" fill="#72c84a"/><ellipse cx="90" cy="42" rx="8" ry="3.6" transform="rotate(28 90 42)" fill="#5fb23c"/><ellipse cx="122" cy="28" rx="7" ry="3.2" transform="rotate(-20 122 28)" fill="#72c84a"/></g>
+        <path d="M148 24 l9 -5 -3 9z" fill="#2b170a"/></svg>`;
+      fxEl('groot-lash-fx', `left:${d>0 ? cx+6 : cx-6-len}px;top:${cy-32}px;width:${len}px;height:56px;transform:scaleX(${d});`, 340, vine);
+      break;
+    }
+    case 'groot_roots': {
+      if(!caster.isBot && target){ caster.facing = dirSignTo(caster, target); caster.el.classList.toggle('facing-left', caster.facing < 0); }
+      fxEl('fx-ring', `left:${cx-46}px;top:${caster.y+50}px;width:92px;height:26px;border-color:#8fd05a;border-width:3px;box-shadow:0 0 16px #5fa63a;`, 460);
+      spawnSparks(cx+caster.facing*18, caster.y+62, 12, '#a9793f', 52, 400);
+      shakeArena(6, 260);
+      break;
+    }
+    case 'groot_ball': {
+      fxEl('fx-ring', `left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;border-color:#8fd05a;border-width:4px;box-shadow:0 0 24px #5fa63a;`, 460);
+      spawnSparks(cx, cy, 12, '#7fc44a', 60, 440);
+      spawnSparks(cx, cy, 8, '#a9793f', 50, 440);
+      setTimeout(()=>{ if(state.mode==='battle') sfx('groot_voice'); }, 90);
+      break;
+    }
+
     /* ---------------- Green Goblin ---------------- */
     case 'goblin_pumpkin': {
       const hx=cx+dir*22, hy=cy;
@@ -8548,6 +8961,32 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'starlord_hit': {
+      fxEl('fx-flash',`left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff,#ffd08a 25%,#ff5a3c 52%,transparent 78%);`,200);
+      spawnSparks(cx,cy,8,'#ff8a5c',42,300);
+      break;
+    }
+    case 'starlord_bomb_hit': {
+      fxEl('fx-flash',`left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;background:radial-gradient(circle,#fff,#ffd9a0 20%,#ff6a3c 45%,#a3122a 62%,transparent 78%);`,380);
+      fxEl('fx-ring',`left:${cx-75}px;top:${cy-75}px;width:150px;height:150px;border-color:#ff5a3c;border-width:6px;box-shadow:0 0 36px #c81e3a;`,560);
+      spawnSparks(cx,cy,20,'#ff9a5a',100,520);
+      break;
+    }
+    case 'groot_lash_hit': {
+      fxEl('fx-ring',`left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;border-color:#8fd05a;border-width:4px;box-shadow:0 0 18px #5fa63a;`,380);
+      spawnSparks(cx,cy,10,'#b98a4c',50,380);
+      spawnSparks(cx,cy,6,'#7fc44a',46,420);
+      shakeArena(4,160);
+      break;
+    }
+    case 'groot_root_hit': {
+      fxEl('fx-flash',`left:${cx-60}px;top:${cy-60}px;width:120px;height:120px;background:radial-gradient(circle,#f3ffd9,#8fd05a 30%,#5b3a1c 58%,transparent 78%);`,320);
+      fxEl('fx-ring',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#8fd05a;border-width:5px;box-shadow:0 0 28px #5fa63a;`,520);
+      spawnSparks(cx,cy,16,'#a9793f',80,460);
+      spawnSparks(cx,cy,8,'#7fc44a',60,460);
+      shakeArena(9,300);
+      break;
+    }
     case 'redskull_hydra_hit': {
       fxEl('fx-flash',`left:${cx-55}px;top:${cy-55}px;width:110px;height:110px;background:radial-gradient(circle,#fff,#ff9da8 18%,#d92535 44%,transparent 75%);`,300);
       fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ff4b5e;border-width:5px;box-shadow:0 0 34px #e51e36;`,520);
@@ -9116,6 +9555,7 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     f.abilityLockUntil = 0;
     if(f.el) f.el.classList.remove('hex-frozen');
   }
+  if(f.rootedUntil && tNow < f.rootedUntil){ moveDir = 0; wantJump = false; f.vx *= 0.5; } // pinned by Groot's roots
   if(f.hulkSlideDir){
     // Being blasted toward the nearest side wall by Hulk Roar — no steering, no jumping.
     moveDir = 0;
@@ -9329,6 +9769,7 @@ function fighterSpeedMultiplier(f){
     else if(f.antmanForm === 'big') mult *= 0.80;
   }
   if(isWaspSizeActive(f)) mult *= (f.waspSizeSpeedMultiplier || .62);
+  if(f.grootBallUntil && now() < f.grootBallUntil) mult *= (f.grootBallSpeed || 2.4);
   return mult;
 }
 function updateFlightGlow(f){
@@ -9730,7 +10171,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -9838,6 +10279,11 @@ function buildProjectileVisual(p){
     const tailGrad = flip > 0 ? '90deg' : '270deg';
     p.el.innerHTML = `<div class="repulsor-tail" style="${tailSide}background:linear-gradient(${tailGrad},rgba(255,212,121,0),rgba(255,212,121,.85));"></div>`
       + `<div class="repulsor-core"></div>`;
+  } else if(p.render === 'starlord-bolt'){
+    p.el.classList.add('starlord-bolt-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML = '<div class="sl-bolt-core"></div><div class="sl-bolt-tail"></div>';
   } else if(p.render === 'cap-shield'){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
@@ -9928,7 +10374,9 @@ function buildProjectileVisual(p){
 }
 function spawnProjTrail(p){
   const cx = p.x + p.w/2, cy = p.y + p.h/2;
-  if(p.trail === 'redskull-hydra'){
+  if(p.trail === 'starlord'){
+    fxEl('fx-trail', `left:${cx-4}px;top:${cy-4}px;width:8px;height:8px;background:radial-gradient(circle,#fff0d0,#ff5a3c 45%,transparent 76%);box-shadow:0 0 8px #ff4a30;`, 200);
+  } else if(p.trail === 'redskull-hydra'){
     fxEl('fx-trail', `left:${cx-5}px;top:${cy-5}px;width:10px;height:10px;background:radial-gradient(circle,#ffb6bc,#e32f42 38%,transparent 75%);box-shadow:0 0 13px #ff334c,0 0 28px #ff1f3f77;`, 260);
   } else if(p.trail === 'redskull-beam'){
     fxEl('fx-trail', `left:${cx-10}px;top:${cy-8}px;width:20px;height:16px;background:radial-gradient(ellipse,#dff5ff,#55b7ff 40%,transparent 76%);box-shadow:0 0 14px #52b6ff,0 0 30px #2096ff66;`, 230);
@@ -10133,6 +10581,8 @@ const AI_STYLE_RANGE = {
   wintersoldier:240,
   redskull:520,
   nickfury:420,
+  starlord:400,
+  groot:90,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -10614,6 +11064,15 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist <= qAb.range + 18 && Math.abs(vertical) < 120){ tryUseAbility(bot, player, 'Q'); return; }
     if(cdReady(bot,'R',t) && adist > 450 && Math.random() < 0.4){ tryUseAbility(bot, player, 'R'); return; }
     if(cdReady(bot,'E',t) && adist < 820){ tryUseAbility(bot, player, 'E'); return; }
+  } else if(style === 'starlord'){
+    if(cdReady(bot,'R',t) && adist < 170 && Math.random() < 0.5){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 120 && adist < 720){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 780){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'groot'){
+    const eAb = bot.def.abilities.E;
+    if(cdReady(bot,'R',t) && adist > 420 && Math.random() < 0.35){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 80 && adist < 640 && Math.abs(vertical) < 100){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 30){ tryUseAbility(bot,player,'E'); return; }
   }
 }
 
@@ -10879,6 +11338,7 @@ function renderFighter(f){
   f.el.classList.toggle('airborne', !f.onGround && !f.flight);
   f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil) || (f.hexFrozenUntil && now() < f.hexFrozenUntil));
   f.el.classList.toggle('hex-frozen', !!f.hexFrozenUntil && now() < f.hexFrozenUntil);
+  f.el.classList.toggle('rooted', !!f.rootedUntil && now() < f.rootedUntil);
   f.el.classList.toggle('bullseye-ricochet-armed', !!f.ricochetArmed);
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
   updateAntmanForm(f);
@@ -12069,6 +12529,8 @@ function gameLoop(ts){
     }
     updateHazards(p); updateHazards(b);
     updatePassiveRegen(p, dtF); updatePassiveRegen(b, dtF);
+    updateGrootBall(p); updateGrootBall(b);
+    updateLaserBombs(dtF);
     updateShock(p); updateShock(b);
     updateBlock(p); updateBlock(b);
     updateShield(p); updateShield(b);
