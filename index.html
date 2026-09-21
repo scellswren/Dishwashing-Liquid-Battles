@@ -980,6 +980,8 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.starlord .held-starlord-gun svg{width:52px;height:26px;}
 .fighter.starlord .held-starlord-gun.a svg{left:32px;top:15.7px;}
 .fighter.starlord .held-starlord-gun.b svg{left:24px;top:33.7px;}
+.fighter.starlord .held-starlord-gun.active svg{animation:starlordGunKick .32s cubic-bezier(.2,.8,.3,1) both;}
+@keyframes starlordGunKick{0%{transform:translateX(0) rotate(0deg);}22%{transform:translateX(-6px) rotate(-8deg);}60%{transform:translateX(1px) rotate(2deg);}100%{transform:translateX(0) rotate(0deg);}}
 .starlord-bolt-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 5px #ff5a3c) drop-shadow(0 0 12px #c81e3a88);}
 .sl-bolt-core{position:absolute;inset:0;border-radius:3px 50% 50% 3px;background:linear-gradient(90deg,#a3122a,#ff5a3c 45%,#fff2d6 85%,#fff);}
 .sl-bolt-tail{position:absolute;right:92%;top:20%;width:90%;height:60%;background:linear-gradient(90deg,transparent,#ff5a3c99);filter:blur(2px);}
@@ -3650,10 +3652,10 @@ const CHARACTERS = {
     maxHealth:8500,
     description:'Half-Celestial outlaw. Fires both Element Blasters at once, plants sticky Laser Bombs, and rockets around on his boots. Deadly at range, fragile up close.',
     abilities:{
-      E:{key:'E', name:'Blasters', type:'projectile', dual:true, damage:300, cooldown:875, knockback:3,
+      E:{key:'E', name:'Blasters', type:'projectile', dual:true, damage:320, cooldown:875, knockback:3,
          speed:28, w:26, h:7, color:'#ff5a3c', render:'starlord-bolt', trail:'starlord',
          sound:'starlord_blasters', fx:'starlord_blasters', hitFx:'starlord_hit', hitSound:'starlord_hit',
-         desc:'Draws both Element Blasters and fires from each one at the same time. The volley lands as a single 300 damage hit. Cooldown: 0.875 seconds.'},
+         desc:'Draws both Element Blasters and fires from each one at the same time. The volley lands as a single 320 damage hit. Cooldown: 0.875 seconds.'},
       Q:{key:'Q', name:'Laser Bomb', type:'laserBomb', damage:1800, radius:150, knockback:16, fuse:3000, cooldown:13000,
          sound:'starlord_bomb_throw', fx:'starlord_bomb',
          desc:'Throws a sticky bomb that clings to the enemy or to the ground/platform where it lands. It beeps faster and faster, then explodes 3 seconds later for 1,800 damage. Cooldown: 13 seconds.'},
@@ -4840,24 +4842,37 @@ function nickFuryHeldBazookaSvg(){
   </svg>`;
 }
 function starLordBlasterSvg(){
-  // Element Blaster, drawn pointing RIGHT. Barrel axis = y9 (svg).
+  // Element Blaster, drawn pointing RIGHT, modeled on the Guardians prop replica:
+  // blue/maroon color-shift rear cap, chrome frame, twin gold cylinders, ridged
+  // barrel shroud with vents, silver muzzle cap, angled black grip w/ trigger guard.
   return `<svg viewBox="0 0 64 32" aria-hidden="true">
     <defs>
-      <linearGradient id="slChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f9"/><stop offset=".45" stop-color="#9ba4af"/><stop offset="1" stop-color="#454c56"/></linearGradient>
-      <linearGradient id="slMaroon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b02e42"/><stop offset="1" stop-color="#4a0f1a"/></linearGradient>
+      <linearGradient id="slCap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2540"/><stop offset=".55" stop-color="#4d5fa8"/><stop offset="1" stop-color="#1b2140"/></linearGradient>
+      <linearGradient id="slSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7ccd3"/><stop offset=".45" stop-color="#6d727a"/><stop offset="1" stop-color="#24262b"/></linearGradient>
+      <linearGradient id="slGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7dd97"/><stop offset=".5" stop-color="#cf9e42"/><stop offset="1" stop-color="#7c5619"/></linearGradient>
+      <linearGradient id="slGrip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#43464d"/><stop offset="1" stop-color="#0e0f12"/></linearGradient>
     </defs>
-    <path d="M13 16 L28 16 L23.5 30 Q22.8 31.6 21 31.6 L13.6 31.6 Q11.6 31.6 12 29.6 Z" fill="url(#slMaroon)" stroke="#1a0508" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M30 15 v4 q0 3 -3 3 h-4" fill="none" stroke="#2a1216" stroke-width="2" stroke-linejoin="round"/>
-    <path d="M8 5 Q8 2 11.5 2 L38 2 L38 16 L13 16 Q8 16 8 12 Z" fill="url(#slChrome)" stroke="#20252c" stroke-width="1.8" stroke-linejoin="round"/>
-    <rect x="12" y="3.6" width="24" height="2.4" rx="1" fill="#8e1f30"/>
-    <rect x="15" y="9" width="18" height="3.2" rx="1.6" fill="#ffd25a"/>
-    <rect x="16" y="9.5" width="16" height="1" rx=".5" fill="#fff6cf"/>
-    <path d="M9.5 8 V13 M11.5 8 V13" stroke="#20252c" stroke-width="1" opacity=".6"/>
-    <rect x="36" y="4.6" width="22" height="8.8" rx="3" fill="url(#slChrome)" stroke="#20252c" stroke-width="1.8"/>
-    <rect x="43" y="3.4" width="3" height="11.2" rx="1" fill="#5b636e" stroke="#20252c" stroke-width="1"/>
-    <rect x="49" y="3.4" width="3" height="11.2" rx="1" fill="#5b636e" stroke="#20252c" stroke-width="1"/>
-    <rect x="56" y="3.6" width="6" height="10.8" rx="2" fill="#2b3038" stroke="#0e1013" stroke-width="1.2"/>
-    <circle cx="61" cy="9" r="2.2" fill="#ffb14a"/>
+    <path d="M2 10.5 Q2 5 7.2 5 L14 5 L14 15.4 L6.4 15.4 Q2 15.4 2 11.2 Z" fill="url(#slCap)" stroke="#0a0b14" stroke-width="1.2"/>
+    <path d="M13 5.2 L40 5.6 Q44.5 5.7 44.5 9.4 L44.5 12 L13 15.2 Z" fill="url(#slSteel)" stroke="#0b0c0f" stroke-width="1.2" stroke-linejoin="round"/>
+    <rect x="18" y="7.6" width="24" height="9" rx="4.4" fill="url(#slGold)" stroke="#4a3510" stroke-width="1"/>
+    <line x1="29" y1="7.8" x2="29" y2="16.4" stroke="#5c4118" stroke-width="1"/>
+    <line x1="23.6" y1="8.4" x2="23.6" y2="15.8" stroke="#fbeec0" stroke-width=".8" opacity=".65"/>
+    <line x1="35" y1="8.4" x2="35" y2="15.8" stroke="#fbeec0" stroke-width=".8" opacity=".65"/>
+    <path d="M40 6.6 L58 8.1 Q62.4 8.5 62.4 12.1 Q62.4 15.7 58 16.1 L40 17.3 Z" fill="url(#slSteel)" stroke="#0b0c0f" stroke-width="1.2" stroke-linejoin="round"/>
+    <g stroke="#0b0c0f" stroke-width="1" opacity=".85">
+      <line x1="45.5" y1="9.6" x2="45.5" y2="14.7"/>
+      <line x1="49" y1="9.8" x2="49" y2="14.9"/>
+      <line x1="52.5" y1="10" x2="52.5" y2="15.1"/>
+    </g>
+    <circle cx="61" cy="12.1" r="3.4" fill="#dde2e8" stroke="#0b0c0f" stroke-width="1.1"/>
+    <circle cx="61" cy="12.1" r="1.4" fill="#4a4f57"/>
+    <path d="M14 14.4 L26.4 15 Q29.4 15.5 27.7 18.4 L20.2 30.2 Q19 32 16.6 31.6 L12.5 30.8 Q10.5 30.3 11 28.1 L13.4 16.2 Z" fill="url(#slGrip)" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M20.4 16.8 Q26.4 17.4 25.3 21.4 Q24.2 25 19.4 24.5" fill="none" stroke="#0b0c0f" stroke-width="1.7"/>
+    <g stroke="#000" stroke-width=".7" opacity=".5">
+      <line x1="14.6" y1="19.2" x2="19.2" y2="20.8"/>
+      <line x1="14" y1="22.8" x2="18.5" y2="24.3"/>
+      <line x1="13.3" y1="26.3" x2="17.6" y2="27.6"/>
+    </g>
   </svg>`;
 }
 function grootBallSvg(){
