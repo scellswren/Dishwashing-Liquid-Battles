@@ -5339,7 +5339,7 @@ function cdReady(f, key, t){
 const HULK_ROAR = {
   rootBelowHp: 15000,
   immuneAboveHp: 20000,
-  slideSpeed: 24,       // px per frame while being blasted toward the wall
+  slideSpeed: 12,       // px per frame while being blasted toward the wall
   slideMaxMs: 900,      // safety cap in case something blocks the slide
   rootMs: 2600,         // fully rooted at the wall
   lightMs: 1600,        // sluggish at the wall
@@ -5640,7 +5640,7 @@ function executeAbility(caster, target, ability, t){
         const facingOk = caster.isBot ? ((dx >= 0 ? 1 : -1) === caster.facing) : (Math.abs(dx) < 24 || (dx >= 0 ? 1 : -1) === faceAtStart);
         const movedTooFar = Math.abs(caster.x-startX)>80 || Math.abs(caster.y-startY)>100;
         if(Math.abs(dx) <= ability.range + 35 && vertical < 120 && facingOk && !movedTooFar && !attackBlockedByFloor(caster,target)){
-          damageTargetOrWall(target, ability.damage, ability.knockback, dirSignTo(caster,target), {hitFx:ability.hitFx,sound:ability.hitSound});
+          damageTargetOrWall(target, ability.damage, ability.knockback, dirSignTo(caster,target), {hitFx:ability.hitFx,sound:ability.hitSound,ranged:isRangedAbility(ability)});
         } else {
           fxEl('fx-burst', `left:${caster.x+caster.facing*140}px;top:${caster.y+16}px;width:34px;height:34px;background:radial-gradient(circle,#ffffff55,transparent 70%);`, 300);
         }
@@ -5669,7 +5669,7 @@ function executeAbility(caster, target, ability, t){
         const vertical = Math.abs(tg.y-caster.y);
         const inRange = Math.abs(dx) <= (ability.range || 120) && vertical < 130 && !attackBlockedByFloor(caster,tg);
         if(inRange){
-          damageTargetOrWall(tg, ability.damage, ability.knockback, dirSignTo(caster,tg), {hitFx:ability.hitFx, sound:ability.hitSound});
+          damageTargetOrWall(tg, ability.damage, ability.knockback, dirSignTo(caster,tg), {hitFx:ability.hitFx, sound:ability.hitSound,ranged:isRangedAbility(ability)});
         }
       };
       setTimeout(resolve, ability.hitDelay || 230);
@@ -5686,7 +5686,7 @@ function executeAbility(caster, target, ability, t){
           const hit = Math.abs(dx) <= ability.range + 30 && vertical < 125 && facingOk && !attackBlockedByFloor(who,tg);
           if(hit){
             const dmg = idx===2 ? 334 : 333;
-            damageTargetOrWall(tg, dmg, ability.knockback, dirSignTo(who,tg), {hitFx:ability.hitFx,sound:ability.hitSound});
+            damageTargetOrWall(tg, dmg, ability.knockback, dirSignTo(who,tg), {hitFx:ability.hitFx,sound:ability.hitSound,ranged:isRangedAbility(ability)});
           }
         }, delay);
       });
@@ -5763,7 +5763,7 @@ function executeAbility(caster, target, ability, t){
       if(dist <= (ability.range || 430) && !attackBlockedByFloor(caster,tg)){
         const dir = dx >= 0 ? 1 : -1;
         const kbMult = (typeof tg.def.knockbackTakenMult === 'number') ? tg.def.knockbackTakenMult : 1;
-        const push = (ability.knockback || 31) * kbMult;
+        const push = (ability.knockback || 31) * RANGED_KNOCKBACK_MULT * kbMult;
         tg.windBurstUntil = t + (ability.pushDuration || 620);
         tg.windBurstVx = dir * push;
         tg.vx = tg.windBurstVx;
@@ -5824,11 +5824,11 @@ function executeAbility(caster, target, ability, t){
         // movement/AI input can't fight it and cancel the push out on the
         // very next frame like ordinary hitstun knockback can.
         const kbMult = (typeof tg.def.knockbackTakenMult === 'number') ? tg.def.knockbackTakenMult : 1;
-        const pushVx = dir * (ability.launchX || 34) * pushScale * kbMult;
+        const pushVx = dir * (ability.launchX || 34) * pushScale * RANGED_KNOCKBACK_MULT * kbMult;
         tg.windBurstUntil = t + Math.round(420 * pushScale);
         tg.windBurstVx = pushVx;
         tg.vx = pushVx;
-        tg.vy = -(ability.launchY || 16) * pushScale * kbMult;
+        tg.vy = -(ability.launchY || 16) * pushScale * RANGED_KNOCKBACK_MULT * kbMult;
         tg.onGround = false;
         tg.hitStun = Math.max(tg.hitStun || 0, Math.round(420 * pushScale));
       }
@@ -5846,7 +5846,7 @@ function executeAbility(caster, target, ability, t){
       const facingOk = caster.isBot ? ((dx>=0?1:-1)===caster.facing) : (Math.abs(dx)<24 || (dx>=0?1:-1)===caster.facing);
       if(caster.el){ caster.el.classList.remove('vision-punching'); void caster.el.offsetWidth; caster.el.classList.add('vision-punching'); setTimeout(()=>{ if(caster.el) caster.el.classList.remove('vision-punching'); },340); }
       if(inRange && facingOk){
-        damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound});
+        damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound,ranged:isRangedAbility(ability)});
         return {hit:true};
       }
       fxEl('fx-burst',`left:${caster.x+caster.facing*58}px;top:${caster.y+18}px;width:34px;height:34px;background:radial-gradient(circle,#ffffff44,transparent 70%);`,320);
@@ -5859,7 +5859,7 @@ function executeAbility(caster, target, ability, t){
       const dx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
       const dist = Math.hypot(dx,dy);
       if(dist <= ability.radius && !attackBlockedByFloor(caster,tg)){
-        damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound});
+        damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound,ranged:isRangedAbility(ability)});
         if(!tg.dead){
           tg.hexFrozenUntil = t + (ability.duration||4000);
           tg.abilityLockUntil = t + (ability.duration||4000);
@@ -6033,7 +6033,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && !attackBlockedByFloor(caster, target)){
           const dir = dirSignTo(caster, target);
           damageTargetOrWall(target, ability.damage, ability.knockback, dir,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability)});
         } else {
           const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*70;
           fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#ffffff44,transparent 70%);`, 380);
@@ -6109,7 +6109,7 @@ function executeAbility(caster, target, ability, t){
         const facingOk = swingOk();
         if(inRange && facingOk){
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability)});
         } else {
           // whiff: a small puff of air so the swing still reads
           const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*52;
@@ -6129,7 +6129,7 @@ function executeAbility(caster, target, ability, t){
       if(dist <= ability.radius && !target.dead && !attackBlockedByFloor(caster, target)){
         const dir = dirSignTo(caster, target);
         damageTargetOrWall(target, ability.damage, ability.knockback, dir,
-          {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow});
+          {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability)});
       }
       break;
     }
@@ -6226,11 +6226,11 @@ function executeAbility(caster, target, ability, t){
             if(ox && oy){
               struck = true;
               const shielded = state.walls.some(w => w.owner === target.id);
-              damageTargetOrWall(target, ability.damage, ability.knockback, dir, {hitFx:'groot_root_hit', sound:'groot_root_hit'});
+              damageTargetOrWall(target, ability.damage, ability.knockback, dir, {hitFx:'groot_root_hit', sound:'groot_root_hit', ranged:true});
               if(!target.dead && !shielded){
                 // the roots heave the enemy straight up
                 target.flight = false; target.flightExpire = 0; target.grappleUntil = 0;
-                target.vy = -ability.flingVy; target.vx = dir*1.5; target.onGround = false;
+                target.vy = -ability.flingVy * RANGED_KNOCKBACK_MULT; target.vx = dir*1.5; target.onGround = false;
                 target.hitStun = 700;
                 spawnSparks(target.x + FIGHTER_SIZE/2, target.y + FIGHTER_SIZE, 14, '#a9793f', 70, 460);
                 spawnSparks(target.x + FIGHTER_SIZE/2, target.y + FIGHTER_SIZE, 8, '#7fc44a', 55, 460);
@@ -6466,7 +6466,7 @@ function updateVenomTendril(f){
   // entirely (e.g. got yanked through a platform boundary).
   if(!ability.globalTarget && attackBlockedByFloor(f, tg) && dist > ability.range) return;
   const dir = dirSignTo(f, tg);
-  damageTargetOrWall(tg, ability.damage, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound});
+  damageTargetOrWall(tg, ability.damage, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound, ranged:isRangedAbility(ability)});
 }
 /* Shield Block: forces the block off after its max duration even if the
    player never presses the key again, and starts its cooldown from there. */
@@ -6688,7 +6688,7 @@ function explodeLaserBomb(b){
   if(state.mode === 'battle' && tg && !tg.dead){
     const cxT = tg.x + FIGHTER_SIZE/2, cyT = tg.y + FIGHTER_SIZE/2;
     if(b.attached === tg || Math.hypot(cxT - x, cyT - y) <= ab.radius){
-      damageTargetOrWall(tg, ab.damage, ab.knockback, cxT >= x ? 1 : -1, {hitFx:'starlord_bomb_hit', sound:'starlord_hit'});
+      damageTargetOrWall(tg, ab.damage, ab.knockback, cxT >= x ? 1 : -1, {hitFx:'starlord_bomb_hit', sound:'starlord_hit', ranged:true});
     }
   }
 }
@@ -6785,7 +6785,7 @@ function updateBPCharge(f){
     const dist = Math.hypot((target.x-f.x),(target.y-f.y));
     if(dist <= ability.radius && !attackBlockedByFloor(f, target)){
       const dir = dirSignTo(f, target);
-      damageTargetOrWall(target, dmg, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound});
+      damageTargetOrWall(target, dmg, ability.knockback, dir, {hitFx: ability.hitFx, sound: ability.hitSound, ranged:isRangedAbility(ability)});
     }
   }
 }
@@ -6798,6 +6798,21 @@ function updateSpecialViz(f){
   f.el.classList.toggle('bp-charging', !!f.bpCharging);
   f.el.classList.toggle('bp-slam-pending', !!f.bpSlamPending);
   f.el.classList.toggle('wasp-enlarged', isWaspSizeActive(f));
+}
+
+// Knockback tuning: close-range attacks retain most of their existing force,
+// while ranged attacks (especially bullets, arrows, knives and other projectiles)
+// are intentionally much less able to launch the target across the arena.
+const RANGED_KNOCKBACK_MULT = 0.22;
+const CLOSE_KNOCKBACK_MULT = 0.90;
+function isRangedAbility(ability){
+  if(!ability) return false;
+  const type = ability.type || '';
+  if(['projectile','missile','bulletStorm','missileBarrage','falconDrone','bullseyeProjectile','bullseyeOdds'].includes(type)) return true;
+  if(['stretchPunch','elasticBarrage','rootWave','visionBeam','laserBomb','scarletHexBurst','tendrilGrab'].includes(type)) return true;
+  if(Number.isFinite(ability.range) && ability.range >= 180) return true;
+  if(Number.isFinite(ability.waveRange) && ability.waveRange >= 300) return true;
+  return false;
 }
 
 function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
@@ -6868,10 +6883,16 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   target.health = Math.max(0, target.health - actual);
   spawnDamageNumber(target.x+18, target.y, Math.round(actual), false);
   const kbMult = (typeof target.def.knockbackTakenMult === 'number') ? target.def.knockbackTakenMult : 1;
-  target.vx += dirSign * knockback * 2.6 * kbMult;
-  target.vy = -knockback * 1.5 * kbMult;
+  const profileMult = opts.ranged ? RANGED_KNOCKBACK_MULT : CLOSE_KNOCKBACK_MULT;
+  const effectiveKnockback = knockback * profileMult;
+  const addedKbVx = dirSign * effectiveKnockback * 2.6 * kbMult;
+  // Knockback from repeated projectiles must not stack into a movement-speed bug.
+  // Ranged hits have a deliberately tight velocity cap; melee keeps a much wider cap.
+  const kbVxCap = (opts.ranged ? 3.0 : 8.5) * kbMult;
+  target.vx = Math.max(-kbVxCap, Math.min(kbVxCap, target.vx + addedKbVx));
+  target.vy = -effectiveKnockback * 1.5 * kbMult;
   target.onGround = false;
-  target.hitStun = Math.min(420, 90 + knockback*10);
+  target.hitStun = Math.min(420, 90 + effectiveKnockback*10);
   sfx(opts.sound || 'hit');
   spawnHitFx(target, opts.hitFx || '', dirSign);
   if(opts.slow) applyWebSlow(target, opts.slow);
@@ -9982,13 +10003,17 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   if(f.hitStun > 0){
     f.hitStun -= dtF*16.67;
     f.vx *= 0.92;
-    // Knockback never fully locks you out — held movement keys still nudge you,
-    // so you can always fight your way out of a hitstun chain instead of just
-    // riding the knockback wherever it sends you.
+    // During hitstun, player input provides gentle steering instead of being
+    // added to the knockback velocity every frame. Rapid-fire attacks used to
+    // make this accumulate into absurd movement speeds.
     if(moveDir !== 0){
       const diSpeed = (f.flight ? FLY_SPEED : MOVE_SPEED) * fighterSpeedMultiplier(f) * 0.55;
-      f.vx += moveDir * diSpeed * dtF;
+      const steerBlend = 0.08;
+      f.vx += (moveDir * diSpeed - f.vx) * steerBlend * dtF;
     }
+    // Never let repeated hits create a runaway horizontal speed while stunned.
+    const hitstunCap = (f.flight ? FLY_SPEED : MOVE_SPEED) * fighterSpeedMultiplier(f) * 0.95;
+    if(Math.abs(f.vx) > hitstunCap) f.vx = Math.sign(f.vx) * hitstunCap;
     if(wantJump && f.onGround && !f.flight){
       const jumpMul = Math.sqrt(Math.max(1, f.def.jumpHeightMultiplier || 1));
       f.vy = JUMP_VEL * jumpMul;
@@ -10235,7 +10260,7 @@ function updateVisionBeams(dtF){
           const overlapsX=right>=beamLeft && left<=beamRight;
           const overlapsY=bottom>=beamTop && top<=beamBottom;
           if(overlapsX && overlapsY){
-            applyDamage(tg,b.damage,b.knockback,dir,{hitFx:b.hitFx||'vision_beam_hit',sound:b.hitSound||'vision_beam_hit'});
+            applyDamage(tg,b.damage,b.knockback,dir,{hitFx:b.hitFx||'vision_beam_hit',sound:b.hitSound||'vision_beam_hit',ranged:true});
             const nx=Math.max(BOUND_MIN_X,Math.min(BOUND_MAX_X,tg.x+FIGHTER_SIZE/2))+(Math.random()-.5)*8;
             const ny=tg.y+FIGHTER_SIZE/2+(Math.random()-.5)*16;
             fxEl(b.nodeClass||'vision-beam-node',`left:${nx-5}px;top:${ny-5}px;width:10px;height:10px;`,190);
@@ -10489,7 +10514,7 @@ function updateProjectiles(dtF){
         if(p.visualOnly){ spawnSparks(p.x + p.w/2, p.y + p.h/2, 5, '#ff8a5c', 30, 260); if(p.el) p.el.remove(); state.projectiles.splice(i,1); continue; }
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
-          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock});
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock, ranged:true});
         if(p.burnDamage && target.health < healthBefore){
           const ticks = Math.max(1, p.burnTicks || 1);
           applyBurn(target, {interval: p.burnTickMs || 500, ticks, damage: p.burnDamage / ticks});
@@ -10522,7 +10547,7 @@ function updateProjectiles(dtF){
         const precisionRadius=p.precisionRadius || 46;
         const near=Math.hypot(nearX-tcx,nearY-tcy)<=precisionRadius;
         if(near){
-          applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true});
+          applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true,ranged:true});
           p.hasHitTarget=true;
           if(p.el){p.el.remove();}
           state.projectiles.splice(i,1);
@@ -10533,7 +10558,7 @@ function updateProjectiles(dtF){
         const pcx=p.x+p.w/2, pcy=p.y+p.h/2;
         const travelled=Math.hypot(pcx-p.releaseX,pcy-p.releaseY);
         if(travelled >= Math.max(1,p.guaranteeAt-4)){
-          applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true});
+          applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true,ranged:true});
           p.hasHitTarget=true;
           if(p.el){p.el.remove();}
           state.projectiles.splice(i,1);
@@ -10550,7 +10575,7 @@ function updateProjectiles(dtF){
       const ry = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
       if(!(rx && ry)) p.retClear = true;
       else if(p.retClear && !p.hasHitReturn){
-        applyDamage(target, p.damage, p.knockback, p.vx >= 0 ? 1 : -1, {hitFx: p.hitFx, sound: p.hitSound});
+        applyDamage(target, p.damage, p.knockback, p.vx >= 0 ? 1 : -1, {hitFx: p.hitFx, sound: p.hitSound, ranged:true});
         p.hasHitReturn = true;
       }
     }
@@ -10869,7 +10894,7 @@ function updateMissiles(dtF){
     if(hitX && hitY){
       const dmg = Math.max(0, Math.round(m.health)); // damage = health it had left
       const dir = (tcx >= mcx) ? 1 : -1;
-      applyDamage(target, dmg, m.knockback, dir, {hitFx:'missile', sound:'missile_boom'});
+      applyDamage(target, dmg, m.knockback, dir, {hitFx:'missile', sound:'missile_boom', ranged:true});
       destroyMissile(i, false);
       continue;
     }
