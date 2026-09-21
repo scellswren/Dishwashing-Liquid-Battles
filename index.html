@@ -1053,6 +1053,93 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .goblin-pumpkin-projectile svg{display:block;width:100%;height:100%;overflow:visible;}
 @keyframes goblinPumpkinSpin{from{transform:rotate(-6deg) scale(.96)}to{transform:rotate(354deg) scale(1.05)}}
 
+/* ---------- Drax / Gamora / Yondu visuals ---------- */
+.fighter.drax .fighter-square{border-color:#52755a;box-shadow:0 0 0 1px rgba(151,218,163,.18),0 12px 24px rgba(0,0,0,.38),0 0 22px rgba(91,205,121,.16);}
+.drax-blades-held{position:absolute;left:-15px;top:-7px;width:120px;height:70px;z-index:7;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.65)) drop-shadow(0 0 7px rgba(203,255,210,.38));}
+.drax-blades-held svg{width:100%;height:100%;overflow:visible;}
+.drax-blades-held path:first-child{fill:#f0f6f3;stroke:#2d3830;stroke-width:2;}
+.drax-blades-held path:last-child{fill:#d5ded8;stroke:#2d3830;stroke-width:2;}
+.fighter.facing-left .drax-blades-held{transform:scaleX(-1);}
+.drax-slash-arc{position:absolute;pointer-events:none;z-index:8;border:5px solid transparent;border-right-color:#eaffef;border-top-color:#9fefa9;border-radius:50%;box-shadow:0 0 14px #77d98a;animation:draxSlashArc .28s ease-out forwards;}
+@keyframes draxSlashArc{from{opacity:.15;transform:scaleX(var(--sx,1)) scale(.55) rotate(-30deg)}to{opacity:0;transform:scaleX(var(--sx,1)) scale(1.18) rotate(26deg)}}
+.drax-slashing .fighter-square{animation:draxBodySlash .28s cubic-bezier(.16,.82,.2,1);}
+@keyframes draxBodySlash{0%{transform:scale(1.3) rotate(0)}35%{transform:scale(1.3) rotate(-5deg)}65%{transform:scale(1.3) rotate(5deg)}100%{transform:scale(1.3) rotate(0)}}
+.drax-charging .fighter-square{filter:saturate(1.22) brightness(1.08);animation:draxChargeBody .30s ease-in-out;}
+@keyframes draxChargeBody{0%,100%{transform:scale(1.3)}45%{transform:scale(1.34) translateX(5px)}70%{transform:scale(1.36) translateX(-3px)}}
+.drax-charge-ring{position:absolute;border:4px solid;border-radius:50%;animation:draxChargeRing .4s ease-out forwards;pointer-events:none;}
+@keyframes draxChargeRing{from{transform:scale(.35);opacity:1}to{transform:scale(1.25);opacity:0}}
+.drax-hit-cross{position:absolute;pointer-events:none;z-index:9;}
+.drax-hit-cut{position:absolute;left:50%;top:50%;width:70%;height:4px;background:linear-gradient(90deg,transparent,#eafff0,#9fefa9,transparent);box-shadow:0 0 8px #82c98d;border-radius:3px;}
+.drax-hit-cut.c1{animation:draxHitCut1 .22s ease-out forwards;}
+.drax-hit-cut.c2{animation:draxHitCut2 .22s ease-out .04s forwards;}
+@keyframes draxHitCut1{0%{transform:translate(-50%,-50%) rotate(28deg) scaleX(0);opacity:0}30%{opacity:1}60%{transform:translate(-50%,-50%) rotate(28deg) scaleX(1);opacity:1}100%{transform:translate(-50%,-50%) rotate(28deg) scaleX(1);opacity:0}}
+@keyframes draxHitCut2{0%{transform:translate(-50%,-50%) rotate(-24deg) scaleX(0);opacity:0}30%{opacity:1}60%{transform:translate(-50%,-50%) rotate(-24deg) scaleX(1);opacity:1}100%{transform:translate(-50%,-50%) rotate(-24deg) scaleX(1);opacity:0}}
+.fighter.gamora .fighter-square{border-color:#76548c;box-shadow:0 0 0 1px rgba(217,176,255,.18),0 10px 22px rgba(0,0,0,.36),0 0 22px rgba(181,255,122,.12);}
+.gamora-gun-held{position:absolute;left:0;top:0;width:100px;height:44px;z-index:7;pointer-events:none;display:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.72));transform-origin:20% 50%;}
+.gamora-gun-held.active{display:block;animation:gamoraGunKick .18s ease-out both;}
+.fighter.facing-left .gamora-gun-held{transform:scaleX(-1);}
+@keyframes gamoraGunKick{0%{transform:translateX(0)}35%{transform:translateX(-5px)}100%{transform:translateX(0)}}
+.gamora-slash-arc{position:absolute;border:4px solid transparent;border-right-color:#e6ffbc;border-top-color:#b1ff72;border-radius:48%;box-shadow:0 0 15px #9eff55;pointer-events:none;animation:gamoraSlashArc .24s ease-out forwards;}
+@keyframes gamoraSlashArc{from{opacity:0;transform:scale(.45) rotate(-25deg)}25%{opacity:1}100%{opacity:0;transform:scale(1.15) rotate(28deg)}}
+.gamora-slashing .fighter-square{animation:gamoraBodySlash .24s cubic-bezier(.2,.85,.25,1);}
+@keyframes gamoraBodySlash{0%{transform:translateX(0) rotate(0)}38%{transform:translateX(5px) rotate(-7deg)}65%{transform:translateX(-2px) rotate(4deg)}100%{transform:none}}
+.gamora-gun-muzzle{position:absolute;border-radius:50%;background:radial-gradient(circle,#fffdf0 0 12%,#d8ff9e 26%,#6aff72 46%,transparent 74%);box-shadow:0 0 14px #d5ff88,0 0 30px rgba(113,255,101,.56);animation:gamoraMuzzle .22s ease-out forwards;pointer-events:none;}
+@keyframes gamoraMuzzle{from{transform:scale(.35);opacity:1}to{transform:scale(1.25);opacity:0}}
+.gamora-energy-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 8px #b5ff6c);animation:gamoraEnergyFly .18s ease-in-out infinite alternate;}
+.gamora-energy-core{position:absolute;left:5%;right:5%;top:28%;height:44%;border-radius:50%;background:linear-gradient(90deg,#72ff66,#efff9d 48%,#ffffff);box-shadow:0 0 8px #efffae,0 0 22px #7cff54;}
+.gamora-energy-ring{position:absolute;inset:-3px;border:2px solid rgba(215,255,160,.86);border-radius:50%;}
+.gamora-energy-tail{position:absolute;right:86%;top:20%;width:90%;height:60%;background:linear-gradient(90deg,transparent,#8aff6cbb);filter:blur(3px);}
+@keyframes gamoraEnergyFly{from{transform:scaleX(.95)}to{transform:scaleX(1.06)}}
+.gamora-hit-slash{position:absolute;border:4px solid transparent;border-left-color:#eaffca;border-bottom-color:#baff83;border-radius:50%;transform:rotate(-25deg);animation:gamoraHitSlash .24s ease-out forwards;pointer-events:none;}
+@keyframes gamoraHitSlash{from{opacity:1;transform:rotate(-25deg) scale(.5)}to{opacity:0;transform:rotate(20deg) scale(1.15)}}
+.fighter.yondu .fighter-square{border-color:#4a8dc6;box-shadow:0 0 0 1px rgba(137,225,255,.18),0 10px 24px rgba(0,0,0,.38),0 0 26px rgba(80,195,255,.16);}
+.yondu-suit-overlay{position:absolute;inset:-8px;border-radius:16px;border:2px solid rgba(119,224,255,.6);opacity:0;pointer-events:none;z-index:9;overflow:hidden;box-shadow:0 0 18px #52caff55,inset 0 0 18px rgba(117,224,255,.12);}
+.yondu-suit-overlay:before{content:'';position:absolute;inset:4px;border:1px dashed rgba(219,248,255,.48);border-radius:13px;animation:yonduSuitSpin 1.1s linear infinite;}
+.yondu-suit-overlay span{position:absolute;left:-20%;width:140%;height:2px;background:linear-gradient(90deg,transparent,#9eeeff,transparent);filter:blur(.5px);opacity:.75;animation:yonduScan 1.0s linear infinite;}
+.yondu-suit-overlay span:nth-child(2){animation-delay:-.34s;opacity:.5}.yondu-suit-overlay span:nth-child(3){animation-delay:-.68s;opacity:.34}
+.fighter.holo-suit-active .yondu-suit-overlay{opacity:1;animation:yonduSuitPulse .5s ease-in-out infinite alternate;}
+@keyframes yonduSuitPulse{from{filter:brightness(.92);transform:scale(.98)}to{filter:brightness(1.22);transform:scale(1.025)}}
+@keyframes yonduSuitSpin{to{transform:rotate(360deg)}}
+@keyframes yonduScan{from{top:-8%}to{top:108%}}
+.yondu-controlled-arrow{position:absolute;width:118px;height:24px;z-index:12;pointer-events:none;transform-origin:10px 12px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.65)) drop-shadow(0 0 5px rgba(240,55,48,.72));}
+.yondu-controlled-arrow .yondu-yaka-svg{width:100%;height:100%;display:block;overflow:visible;}
+.yondu-controlled-arrow .yaka-red-glow{animation:yakaRedPulse .22s ease-in-out infinite alternate;}
+.yondu-controlled-arrow::before{content:'';position:absolute;left:-40px;top:34%;width:40px;height:32%;background:linear-gradient(90deg,transparent,rgba(255,86,66,.48) 60%,rgba(255,150,120,.68));filter:blur(1.6px);pointer-events:none;}
+@keyframes yakaRedPulse{from{opacity:.68}to{opacity:1;filter:brightness(1.18)}}
+.yondu-yaka-projectile{width:112px!important;height:20px!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 2px 2px rgba(0,0,0,.55)) drop-shadow(0 0 6px rgba(255,70,55,.55));}
+.yondu-yaka-projectile .yondu-yaka-svg{width:100%;height:100%;display:block;overflow:visible;}
+.yondu-yaka-projectile .yaka-red-glow{animation:yakaRedPulse .22s ease-in-out infinite alternate;}
+.yondu-yaka-projectile::before{content:'';position:absolute;left:-52px;top:36%;width:52px;height:28%;background:linear-gradient(90deg,transparent,rgba(255,86,66,.5) 60%,rgba(255,150,120,.7));filter:blur(1.6px);pointer-events:none;}
+.yondu-yaka-trail{position:absolute;pointer-events:none;z-index:4;width:78px;height:8px;border-radius:50%;background:linear-gradient(90deg,transparent,rgba(202,36,40,.18) 18%,rgba(255,56,48,.72) 70%,rgba(255,201,165,.86));filter:blur(2px);transform-origin:right center;animation:yakaTrail .18s ease-out forwards;}
+@keyframes yakaTrail{from{opacity:.05;transform:scaleX(.25)}to{opacity:.72;transform:scaleX(1)}}
+.yondu-launch-ring{position:absolute;inset:7px;border:2px solid #a9ecff;border-radius:50%;box-shadow:0 0 18px #53cfff;animation:yonduLaunch .4s ease-out forwards;}
+.yondu-launch-core{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);border-radius:50%;background:#e9fdff;box-shadow:0 0 14px #4bd4ff,0 0 32px #32bbff;animation:yonduCore .3s ease-out forwards;}
+@keyframes yonduLaunch{from{transform:scale(.3);opacity:1}to{transform:scale(1.2);opacity:0}}
+@keyframes yonduCore{from{transform:translate(-50%,-50%) scale(.4)}to{transform:translate(-50%,-50%) scale(1.8);opacity:0}}
+.yondu-suit-burst,.yondu-suit-break,.yondu-arrow-hit,.yondu-arrow-launch{position:absolute;pointer-events:none;display:flex;align-items:center;justify-content:center;z-index:20;}
+.yondu-suit-ring{position:absolute;inset:8px;border:3px solid #9deeff;border-radius:50%;box-shadow:0 0 22px #3dc9ff,inset 0 0 20px #8be7ff33;animation:yonduSuitBurst .52s ease-out forwards;}
+.yondu-suit-scan{position:absolute;inset:22%;border:2px dashed #d9f9ff;border-radius:50%;animation:yonduSuitScanBurst .5s linear forwards;}
+.yondu-suit-hit-ring{position:absolute;inset:12px;border:4px solid #dffaff;border-radius:50%;box-shadow:0 0 26px #70dfff;animation:yonduHitSuit .36s ease-out forwards;}
+.yondu-break-core{width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 0 20px #b6f4ff,0 0 40px #39c5ff;animation:yonduBreak .42s ease-out forwards;}
+@keyframes yonduSuitBurst{from{transform:scale(.4);opacity:1}to{transform:scale(1.12);opacity:0}}
+@keyframes yonduSuitScanBurst{from{transform:rotate(0) scale(.35);opacity:1}to{transform:rotate(120deg) scale(1.4);opacity:0}}
+@keyframes yonduHitSuit{from{transform:scale(.5);opacity:1}to{transform:scale(1.4);opacity:0}}
+@keyframes yonduBreak{from{transform:scale(.5);opacity:1}to{transform:scale(1.9);opacity:0}}
+.yondu-bolt-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 7px #63d9ff);}
+.yondu-bolt-core{position:absolute;left:3%;right:3%;top:28%;height:44%;border-radius:50%;background:linear-gradient(90deg,#4bbfff,#e5fbff 50%,#7bd8ff);box-shadow:0 0 8px #7ee2ff,0 0 18px #39bfff;}
+.yondu-bolt-tail{position:absolute;right:90%;top:25%;width:100%;height:50%;background:linear-gradient(90deg,transparent,#54cbffaa);filter:blur(2.5px);}
+.yondu-arrow-hit{border:3px solid #d9faff;border-radius:50%;box-shadow:0 0 26px #55d6ff;animation:yonduArrowHit .35s ease-out forwards;}
+@keyframes yonduArrowHit{from{transform:scale(.25);opacity:1}to{transform:scale(1.35);opacity:0}}
+.yondu-snap-flash{position:absolute;pointer-events:none;z-index:14;}
+.yondu-snap-core{position:absolute;left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#ffffff,#b8f1ff 45%,transparent 78%);box-shadow:0 0 16px #59d0ff,0 0 30px rgba(46,168,255,.55);animation:yonduSnapCore .22s ease-out forwards;}
+.yondu-snap-ring{position:absolute;inset:4px;border:2px solid #ff6b62;border-radius:50%;box-shadow:0 0 12px #ff4a3f;animation:yonduSnapRing .24s ease-out forwards;}
+@keyframes yonduSnapCore{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(-50%,-50%) scale(1.6);opacity:0}}
+@keyframes yonduSnapRing{from{transform:scale(.4);opacity:1}to{transform:scale(1.3);opacity:0}}
+.yondu-hit-flash{position:absolute;pointer-events:none;z-index:16;}
+.yondu-hit-core{position:absolute;left:50%;top:50%;width:16px;height:16px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#ffffff,#d9faff 42%,transparent 78%);box-shadow:0 0 18px #7fe2ff,0 0 34px rgba(84,196,255,.6);animation:yonduHitCore .28s ease-out forwards;}
+.yondu-hit-crack{position:absolute;inset:0;}
+@keyframes yonduHitCore{from{transform:translate(-50%,-50%) scale(.35);opacity:1}to{transform:translate(-50%,-50%) scale(1.9);opacity:0}}
+
 /* ---------- Human Torch: full fire-form visuals when Flame On is active ---------- */
 .fighter.humantorch .fighter-square img{transition:filter .25s ease;}
 .fighter.humantorch.flight-active .fighter-square img{
@@ -2745,6 +2832,44 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 @keyframes milesShockGlow{from{filter:brightness(1.55) saturate(.7) drop-shadow(0 0 6px #7be9ff)}to{filter:brightness(.95) drop-shadow(0 0 11px #fff)}}
 .electric-web-projectile .proj-svg svg{filter:drop-shadow(0 0 4px #4fe5ff) drop-shadow(0 0 9px rgba(79,229,255,.8)); animation:milesWebFlicker .09s steps(2,end) infinite alternate;}
 @keyframes milesWebFlicker{from{opacity:1}to{opacity:.72}}
+
+/* Drax / Gamora / Yondu visual polish and bug fixes */
+.drax-blades-held{display:none;}
+.fighter.drax.drax-slashing .drax-blades-held{display:block;}
+.drax-blades-held .drax-blade{transform-origin:center;transform-box:fill-box;}
+.drax-blades-held .blade-one{animation:draxBladeOne .32s cubic-bezier(.12,.8,.18,1) both;}
+.drax-blades-held .blade-two{animation:draxBladeTwo .32s cubic-bezier(.12,.8,.18,1) both .025s;}
+@keyframes draxBladeOne{0%{transform:translate(-14px,17px) rotate(-58deg) scale(.62);opacity:0}18%{opacity:1}55%{transform:translate(5px,-1px) rotate(24deg) scale(1.02)}100%{transform:translate(13px,3px) rotate(54deg) scale(.88);opacity:0}}
+@keyframes draxBladeTwo{0%{transform:translate(-7px,22px) rotate(-44deg) scale(.56);opacity:0}22%{opacity:1}58%{transform:translate(9px,4px) rotate(38deg) scale(1.05)}100%{transform:translate(17px,7px) rotate(68deg) scale(.86);opacity:0}}
+.drax-fury-aura{position:absolute;border-radius:50%;pointer-events:none;z-index:0;}
+.drax-fury-core{position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle,#ffffffcc 0 7%,#b9ffc8aa 18%,#6be78944 43%,transparent 74%);filter:blur(2px);animation:draxFuryCore .42s ease-in-out infinite alternate;}
+.drax-fury-ring{position:absolute;inset:8%;border:3px solid #a8ffb7aa;border-radius:50%;box-shadow:0 0 26px #62e47e88,inset 0 0 16px #62e47e33;animation:draxFuryRing .7s ease-out infinite;}
+.drax-fury-ring.ring-two{inset:23%;border-width:2px;animation-delay:-.32s;animation-duration:.52s;}
+@keyframes draxFuryCore{from{transform:scale(.86);opacity:.62}to{transform:scale(1.14);opacity:1}}
+@keyframes draxFuryRing{from{transform:scale(.52) rotate(0deg);opacity:.9}to{transform:scale(1.08) rotate(60deg);opacity:0}}
+.drax-charge-streak{position:absolute;pointer-events:none;z-index:3;animation:draxChargeStreak .16s ease-out forwards;}
+@keyframes draxChargeStreak{from{transform:translateX(0) scaleX(.4);opacity:0}35%{opacity:.85}to{transform:translateX(-15px) scaleX(1);opacity:0}}
+.gamora-energy-projectile{width:54px!important;height:19px!important;overflow:visible!important;}
+.gamora-energy-aura{position:absolute;inset:-55% -14%;border-radius:50%;background:radial-gradient(ellipse,#d9ff9e44 0 25%,#8dff6a22 44%,transparent 72%);filter:blur(2px);animation:gamoraEnergyAura .24s ease-in-out infinite alternate;}
+.gamora-energy-spark{position:absolute;left:42%;top:16%;width:8%;height:68%;border-radius:50%;background:#fffbd4;box-shadow:0 0 9px #c9ff9b;animation:gamoraEnergySpark .16s ease-in-out infinite alternate;}
+.gamora-energy-projectile .gamora-energy-ring{inset:0;border-width:1.5px;animation:gamoraEnergyRing .34s linear infinite;}
+.gamora-energy-projectile .gamora-energy-tail{right:74%;width:155%;filter:blur(3px);}
+@keyframes gamoraEnergyAura{from{transform:scaleX(.9);opacity:.62}to{transform:scaleX(1.08);opacity:1}}
+@keyframes gamoraEnergyRing{to{transform:rotate(360deg)}}
+@keyframes gamoraEnergySpark{from{transform:scaleY(.8);opacity:.55}to{transform:scaleY(1.25);opacity:1}}
+.gamora-gun-held{--gamora-gun-flip:1;}
+.fighter.facing-left .gamora-gun-held{--gamora-gun-flip:-1;}
+@keyframes gamoraGunKick{0%{transform:scaleX(var(--gamora-gun-flip)) translateX(0)}35%{transform:scaleX(var(--gamora-gun-flip)) translateX(-5px)}100%{transform:scaleX(var(--gamora-gun-flip)) translateX(0)}}
+.yondu-bolt-projectile{width:48px!important;height:14px!important;overflow:visible!important;}
+.yondu-bolt-aura{position:absolute;inset:-75% -20%;border-radius:50%;background:radial-gradient(ellipse,#b8f4ff50,#45c9ff24 45%,transparent 72%);filter:blur(2px);animation:yonduBoltAura .2s ease-in-out infinite alternate;}
+.yondu-bolt-projectile .yondu-bolt-core{top:32%;height:36%;box-shadow:0 0 8px #c1f5ff,0 0 22px #40c7ff,0 0 38px #2aaaff66;}
+.yondu-bolt-projectile .yondu-bolt-tail{right:72%;width:165%;height:62%;top:19%;filter:blur(2.8px);}
+.yondu-bolt-tip{position:absolute;right:-1px;top:25%;width:0;height:0;border-top:3.5px solid transparent;border-bottom:3.5px solid transparent;border-left:10px solid #efffff;filter:drop-shadow(0 0 5px #68dfff);animation:yonduBoltTip .2s ease-in-out infinite alternate;}
+@keyframes yonduBoltAura{from{transform:scaleX(.9);opacity:.55}to{transform:scaleX(1.15);opacity:1}}
+@keyframes yonduBoltTip{from{transform:scale(1)}to{transform:scale(1.12)}}
+.drax-fury-active .fighter-square{animation:draxFuryPulse .38s ease-in-out infinite alternate!important;filter:saturate(1.25) brightness(1.06) drop-shadow(0 0 8px #72e58a)!important;}
+@keyframes draxFuryPulse{from{box-shadow:0 0 18px rgba(100,220,120,.18)}to{box-shadow:0 0 38px rgba(91,235,121,.42),0 0 58px rgba(80,220,110,.12)}}
+
 </style>
 </head>
 <body>
@@ -3784,6 +3909,61 @@ const CHARACTERS = {
          desc:'Bends light around herself to turn completely invisible for 5 seconds. Cooldown: 10 seconds.'}
     }
   },
+  drax: {
+    id:'drax', name:'Drax the Destroyer', img:'Drax.jpg', color:'#4f8b5b', accentColor:'#d7e4d4', aiStyle:'drax',
+    maxHealth:11350,
+    description:'A relentless Destroyer who lives in close quarters. Twin blades carve through nearby enemies, a brutal charge closes the gap, and Drax\'s Fury boosts his damage for a short burst.',
+    abilities:{
+      E:{key:'E', name:'Twin Blades', type:'melee', damage:310, cooldown:700, knockback:8, range:105,
+         hitRange:168, hitVertical:135, hitStartSlack:55, hitDelay:55,
+         sound:'drax_twin_blades', fx:'drax_twin_blades', hitFx:'drax_blade_hit', hitSound:'drax_blade_hit',
+         desc:'A fast double-blade slash for 310 damage.'},
+      Q:{key:'Q', name:'Destroyer Charge', type:'thingCharge', damage:980, cooldown:8000, knockback:16, range:145,
+         boostX:30, boostY:-3, dashMs:245, hitDelay:205,
+         sound:'drax_charge', fx:'drax_charge', hitFx:'drax_charge_hit', hitSound:'drax_charge_hit',
+         desc:'Charges forward and crashes into the enemy for 980 damage.'},
+      R:{key:'R', name:'Drax\'s Fury', type:'draxFury', damage:0, cooldown:18000, duration:5000, damageMult:1.35,
+         sound:'drax_fury', fx:'drax_fury',
+         desc:'Enters a furious 5-second battle rage, increasing Drax\'s attack damage by 35%.'}
+    }
+  },
+  gamora: {
+    id:'gamora', name:'Gamora', img:'Gamora.jpg', color:'#5e386f', accentColor:'#b6ff7a', aiStyle:'gamora',
+    maxHealth:7800,
+    description:'An agile assassin with quick sword work, a long-range energy gun, and a huge vertical leap for repositioning.',
+    abilities:{
+      E:{key:'E', name:'Godslayer Slash', type:'melee', damage:285, cooldown:620, knockback:7, range:100,
+         hitRange:160, hitVertical:135, hitStartSlack:55, hitDelay:50,
+         sound:'gamora_slash', fx:'gamora_slash', hitFx:'gamora_slash_hit', hitSound:'gamora_slash_hit',
+         desc:'A rapid Godslayer sword slash for 285 damage.'},
+      Q:{key:'Q', name:'Energy Gun', type:'projectile', damage:750, cooldown:11000, knockback:6,
+         speed:24, w:38, h:13, color:'#d9ff91', render:'gamora-energy', trail:'gamora-energy',
+         sound:'gamora_energy', fx:'gamora_energy', hitFx:'gamora_energy_hit', hitSound:'gamora_energy_hit',
+         desc:'Fires a powerful long-range energy shot for 750 damage. Every hit deals 750 damage. Cooldown: 11 seconds.'},
+      R:{key:'R', name:'Super Leap', type:'jump', damage:0, cooldown:8500, jumpVel:-31,
+         sound:'gamora_super_leap', fx:'gamora_super_leap',
+         desc:'Jumps extremely high. Pure mobility — no damage.'}
+    }
+  },
+  yondu: {
+    id:'yondu', name:'Yondu', img:'Yondu.jpg', color:'#2367a7', accentColor:'#8dd9ff', aiStyle:'yondu',
+    maxHealth:8250,
+    description:'A medium-level ranged fighter who commands a Yaka Arrow remotely while standing still, then protects himself with a holographic space suit that stops weaker attacks outright.',
+    abilities:{
+      E:{key:'E', name:'Yaka Arrow', type:'projectile', damage:325, cooldown:850, knockback:2,
+         speed:16, w:112, h:20, color:'#a9262c', render:'yondu-yaka-arrow', trail:'yondu-red-arrow',
+         returns:true, returnDistance:760, homing:true, homingTurn:0.24, instantTurn:true, precisionAim:true,
+         sound:'yondu_snap', fx:'yondu_snap', hitFx:'yondu_snap_hit', hitSound:'yondu_snap_hit',
+         desc:'Fires the physical Yaka Arrow with strong automatic aim, then recalls it to Yondu.'},
+      Q:{key:'Q', name:'Whistling Arrow', type:'yonduArrowControl', damage:1000, cooldown:20000, knockback:4,
+         speed:9.2, returnSpeed:24, controlAccel:0.85, controlFriction:0.80, damageInterval:1000,
+         sound:'yondu_arrow_fire', fx:'yondu_arrow', hitFx:'yondu_arrow_hit', hitSound:'yondu_arrow_hit',
+         desc:'Yondu stands still while you directly control the physical Yaka Arrow with the movement keys. Each target can be damaged once per second. Press Q again to recall it; taking a hit also recalls it.'},
+      R:{key:'R', name:'Holographic Space Suit', type:'holoSuit', damage:0, cooldown:17000, duration:4000, threshold:1000,
+         sound:'yondu_suit_on', fx:'yondu_suit',
+         desc:'Projects a holographic suit for 4 seconds. Attacks dealing 1,000 damage or less do nothing. An attack over 1,000 damage breaks the suit immediately.'}
+    }
+  },
   thing: {
     id:'thing', name:'The Thing', img:'TheThing.jpg', color:'#e8823a', accentColor:'#3a5fae', aiStyle:'thing',
     maxHealth:14300, knockbackTakenMult:1/3,
@@ -3821,7 +4001,7 @@ const CHARACTERS = {
     }
   },
 };
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','invisiblewoman','thing','humantorch','antman','wasp','starlord','groot'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','deadpool','gambit','rogue','blade','storm','cyclops','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','yondu','antman','wasp'];
 
 
 /* =========================================================================
@@ -4336,9 +4516,33 @@ function renderSaveSlots(){
 function isUnlocked(id){ return Array.isArray(SAVE.unlocked) && SAVE.unlocked.includes(id); }
 function equipCharacter(id){
   if(!isUnlocked(id)) return;
+  if(SAVE.equipped === id){
+    renderInventoryHint();
+    return;
+  }
   SAVE.equipped = id;
   persistActiveSave();
-  renderInventory();
+
+  // Do not rebuild the entire inventory when equipping a fighter. Rebuilding
+  // recreates every <img>, which makes the character cards visibly reload.
+  // Just update the selected state and the equipped-fighter panel in place.
+  const grid = document.getElementById('inventory-grid');
+  if(grid){
+    grid.querySelectorAll('.char-card[data-id]').forEach(card=>{
+      const selected = card.dataset.id === id;
+      card.classList.toggle('selected', selected);
+      card.classList.toggle('equipped', selected);
+      if(selected) card.setAttribute('data-gp-default','');
+      else card.removeAttribute('data-gp-default');
+
+      const badge = card.querySelector('.lock-badge');
+      if(badge && !card.classList.contains('mystery')){
+        badge.textContent = selected ? t('inv_ready') : t('inv_click_equip');
+      }
+    });
+  }
+  renderInventoryHint();
+  renderInventoryTip();
 }
 function unlockCharacter(id){
   if(!ROSTER_ORDER.includes(id)) return;
@@ -4747,6 +4951,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     grappleVx:0, grappleVy:0, grappleUntil:0,
     cooldowns:{E:0,Q:0,R:0},
     windBurstUntil:0, windBurstVx:0, invulnAbilityUntil:0,
+    chargeState:null, draxFuryUntil:0,
     shield:null,
     elasticityEl:null,
     shieldThrown:false,
@@ -4775,6 +4980,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     cloakUntil:0, shockTicksLeft:0, shockNextTick:0, shockInterval:250, shockDamage:0,
     psiTicksLeft:0, psiNextTick:0, psiInterval:400, psiDamage:0,
     turnPending:null,
+    yonduArrow:null, holoSuitUntil:0,
     aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0, aiNextFourthWall:0,
     el:null, overheadFillEl:null, shieldEl:null, flightEl:null, thrusterEl:null,
   };
@@ -5049,7 +5255,7 @@ function activateHeldWeapon(f, selector, duration, direction){
 
 function buildFighterDOM(f){
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -5062,6 +5268,9 @@ function buildFighterDOM(f){
     ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
     ${f.def.id==='groot' ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
     ${f.def.id==='humantorch' ? '<div class="torch-flame" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' : ''}
+    ${f.def.id==='drax' ? '<div class="drax-blades-held" aria-hidden="true"><svg viewBox="0 0 120 70"><g class="drax-blade blade-one"><path d="M32 51 C40 30 51 15 76 7 L69 21 C57 29 50 40 45 57 Z"/></g><g class="drax-blade blade-two"><path d="M58 58 C70 38 84 27 108 22 L101 37 C86 41 76 49 69 62 Z"/></g></svg></div>' : ''}
+    ${f.def.id==='gamora' ? '<div class="gamora-gun-held" aria-hidden="true"><svg viewBox="0 0 100 44"><path d="M10 20h42l11-7h24v11H63l-9 7H38l-2-9H10z" fill="#756b83"/><path d="M58 13l8-8h13l-8 11z" fill="#c8f7ff"/><path d="M68 20h27l-8 5H68z" fill="#7bdcff"/><circle cx="84" cy="18" r="3" fill="#fff6b0"/></svg></div>' : ''}
+    ${f.def.id==='yondu' ? '<div class="yondu-suit-overlay" aria-hidden="true"><span></span><span></span><span></span></div>' : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
@@ -5235,6 +5444,12 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.background='rgba(166,24,43,.72)';
       return;
     }
+    if(a.type==='yonduArrowControl' && fighter.yonduArrow){
+      overlay.style.display='flex'; overlay.textContent='CONTROL'; overlay.style.background='rgba(58,201,255,.48)'; return;
+    }
+    if(a.type==='holoSuit' && fighter.holoSuitUntil > t){
+      overlay.style.display='flex'; overlay.textContent='SUIT '+Math.max(0,(fighter.holoSuitUntil-t)/1000).toFixed(1)+'s'; overlay.style.background='rgba(93,232,255,.42)'; return;
+    }
     if(a.type==='cloak' && isCloaked(fighter)){
       overlay.style.display='flex';
       overlay.style.fontSize='11px';
@@ -5355,7 +5570,7 @@ function hulkRoarTier(def){
 function isRoarHeld(f, t){ return !!f && (!!f.hulkSlideDir || (!!f.hulkRoarUntil && t < f.hulkRoarUntil)); }
 // Abilities that would carry a fighter across the arena. They are locked while roared,
 // otherwise a "rooted" fighter could just teleport / leap / grapple straight out of it.
-const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst','thingCharge'];
+const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl'];
 
 function finishHulkSlide(f, hitWall){
   const tier = f.hulkSlideTier;
@@ -5395,7 +5610,13 @@ function tryUseAbility(caster, target, key){
   if(caster.dead) return false;
   if(state.countdown) return false; // nobody acts until FIGHT!
   const ability = caster.def.abilities[key];
+  if(caster.yonduArrow){
+    if(ability.type==='yonduArrowControl' && caster.yonduArrow.phase === 'control'){ recallYonduArrow(caster, true); return true; }
+    if(caster.yonduArrow.phase === 'return') return false;
+    return false;
+  }
   if(caster.abilityLockUntil && t < caster.abilityLockUntil) return false;
+  if(caster.chargeState) return false;
   if(caster.grootBallUntil && t < caster.grootBallUntil) return false; // curled up in the Groot Ball: no attacking
   if(caster.disabledAbilityKey === key && caster.disabledAbilityUntil && t < caster.disabledAbilityUntil){
     if(caster.el){
@@ -5649,30 +5870,50 @@ function executeAbility(caster, target, ability, t){
       if(delay) setTimeout(resolve, delay); else resolve();
       break;
     }
+    case 'yonduArrowControl': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      const d = caster.isBot ? caster.facing : (tg && !tg.dead ? dirSignTo(caster,tg) : caster.facing);
+      const ar = {
+        x:caster.x+FIGHTER_SIZE/2+d*70-14, y:caster.y+FIGHTER_SIZE/2-10,
+        w:118, h:24, vx:d*0.1, vy:0, owner:caster.id, casterRef:caster, targetRef:tg,
+        damage:ability.damage||1000, knockback:ability.knockback||4, nextDamageById:new Map(),
+        life:Infinity, phase:'control', el:null, angle:0, returnSpeed:ability.returnSpeed||13,
+        nextTrail:0
+      };
+      caster.yonduArrow = ar;
+      caster.facing = d;
+      caster.vx = 0; caster.vy = 0;
+      spawnYonduArrow(caster, ar);
+      spawnSparks(ar.x, ar.y+12, 10, '#ff6d64', 56, 320);
+      break;
+    }
+    case 'holoSuit': {
+      caster.holoSuitUntil = t + (ability.duration || 4000);
+      caster.vx = 0;
+      spawnHoloSuitFx(caster, true);
+      break;
+    }
+    case 'draxFury': {
+      caster.draxFuryUntil = t + (ability.duration || 5000);
+      caster.hitStun = 0;
+      caster.vx *= 0.55;
+      caster.vy = Math.min(caster.vy, -2);
+      break;
+    }
     case 'thingCharge': {
       const tg = target || ((caster === state.player) ? state.bot : state.player);
       if(!tg || tg.dead) break;
       const dir = caster.isBot ? caster.facing : dirSignTo(caster, tg);
-      caster.facing = dir; if(caster.el) caster.el.classList.toggle('facing-left', dir < 0);
-      // Bulldozes forward like Cyclops' recoil / Black Panther's dash: an
-      // authoritative self-launch that ordinary movement can't cancel mid-charge.
-      caster.windBurstUntil = t + (ability.dashMs || 260);
+      caster.facing = dir;
+      if(caster.el) caster.el.classList.toggle('facing-left', dir < 0);
+      const dashMs = ability.dashMs || 260;
+      caster.chargeState = {targetRef:tg, ability, dir, startedAt:t, endAt:t+dashMs, lastX:caster.x, lastY:caster.y, hit:false};
+      caster.abilityLockUntil = t + dashMs + 60;
+      caster.windBurstUntil = t + dashMs;
       caster.windBurstVx = dir * (ability.boostX || 30);
       caster.vx = caster.windBurstVx;
-      if(ability.boostY) caster.vy = ability.boostY;
+      caster.vy = ability.boostY || 0;
       caster.onGround = false;
-      spawnAbilityFx(caster, {fx:'thing_clobber'}, tg);
-      const startX = caster.x;
-      const resolve = ()=>{
-        if(state.mode !== 'battle' || caster.dead || tg.dead) return;
-        const dx = (tg.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
-        const vertical = Math.abs(tg.y-caster.y);
-        const inRange = Math.abs(dx) <= (ability.range || 120) && vertical < 130 && !attackBlockedByFloor(caster,tg);
-        if(inRange){
-          damageTargetOrWall(tg, ability.damage, ability.knockback, dirSignTo(caster,tg), {hitFx:ability.hitFx, sound:ability.hitSound,ranged:isRangedAbility(ability)});
-        }
-      };
-      setTimeout(resolve, ability.hitDelay || 230);
       break;
     }
     case 'elasticBarrage': {
@@ -5995,13 +6236,26 @@ function executeAbility(caster, target, ability, t){
       // so a shot fired the instant you cross behind it can genuinely miss.
       // The player's own shots still auto-aim at the true target, same as before.
       const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
+      // A homing shot (Yondu's Yaka Arrow) launches with its tip already pointed
+      // straight at the real target — both x and y — instead of flying dead level
+      // and only turning once airborne. Combined with instant homing in-flight
+      // (see updateProjectiles), the tip stays locked on the enemy the whole time.
+      let launchVx = dir*ability.speed, launchVy = 0;
+      if(ability.homing && target){
+        const spawnCx = caster.x + FIGHTER_SIZE/2, spawnCy = caster.y + FIGHTER_SIZE/2;
+        const tcx = target.x + FIGHTER_SIZE/2, tcy = target.y + FIGHTER_SIZE/2;
+        const ang = Math.atan2(tcy - spawnCy, tcx - spawnCx);
+        launchVx = Math.cos(ang)*ability.speed;
+        launchVy = Math.sin(ang)*ability.speed;
+      }
       for(const yOff of (ability.dual ? [-9, 9] : [0])) state.projectiles.push({
         x: caster.x + FIGHTER_SIZE/2, y: caster.y + FIGHTER_SIZE/2 - ability.h/2 + yOff,
-        vx: dir*ability.speed, vy:0, w:ability.w, h:ability.h, color:ability.color||'#ffffff',
+        vx: launchVx, vy:launchVy, w:ability.w, h:ability.h, color:ability.color||'#ffffff',
         damage: (ability.dual && yOff > 0) ? 0 : ability.damage, visualOnly: !!(ability.dual && yOff > 0), knockback: ability.knockback, owner: caster.id,
         icon: ability.icon || '',
         life: 4200, returns: !!ability.returns, phase:'out', originX: caster.x, casterRef: caster, targetRef: target,
         returnDistance: ability.returnDistance || 760,
+        homing: !!ability.homing, homingTurn: ability.homingTurn || 0, instantTurn: !!ability.instantTurn,
         render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
         bulletType: ability.bulletType || '',
         hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, shock: ability.shock || null,
@@ -6109,7 +6363,7 @@ function executeAbility(caster, target, ability, t){
         const facingOk = swingOk();
         if(inRange && facingOk){
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability)});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability), attacker:caster});
         } else {
           // whiff: a small puff of air so the swing still reads
           const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*52;
@@ -6798,6 +7052,10 @@ function updateSpecialViz(f){
   f.el.classList.toggle('bp-charging', !!f.bpCharging);
   f.el.classList.toggle('bp-slam-pending', !!f.bpSlamPending);
   f.el.classList.toggle('wasp-enlarged', isWaspSizeActive(f));
+  f.el.classList.toggle('holo-suit-active', !!f.holoSuitUntil && now() < f.holoSuitUntil);
+  f.el.classList.toggle('yondu-arrow-active', !!f.yonduArrow);
+  f.el.classList.toggle('drax-fury-active', f.def.id === 'drax' && f.draxFuryUntil > now());
+  f.el.classList.toggle('drax-charging', !!f.chargeState);
 }
 
 // Knockback tuning: close-range attacks retain most of their existing force,
@@ -6809,7 +7067,7 @@ function isRangedAbility(ability){
   if(!ability) return false;
   const type = ability.type || '';
   if(['projectile','missile','bulletStorm','missileBarrage','falconDrone','bullseyeProjectile','bullseyeOdds'].includes(type)) return true;
-  if(['stretchPunch','elasticBarrage','rootWave','visionBeam','laserBomb','scarletHexBurst','tendrilGrab'].includes(type)) return true;
+  if(['stretchPunch','elasticBarrage','rootWave','visionBeam','laserBomb','scarletHexBurst','tendrilGrab','yonduArrowControl'].includes(type)) return true;
   if(Number.isFinite(ability.range) && ability.range >= 180) return true;
   if(Number.isFinite(ability.waveRange) && ability.waveRange >= 300) return true;
   return false;
@@ -6861,6 +7119,9 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     return;
   }
   let actual = dmg;
+  if(opts.attacker && opts.attacker.def && opts.attacker.def.id === 'drax' && opts.attacker.draxFuryUntil > now()){
+    actual *= opts.attacker.def.abilities.R.damageMult || 1.35;
+  }
   // Captain America's Shield Block: no-sells anything at or under the
   // threshold; anything harder breaks the block and deals full damage.
   if(target.blocking){
@@ -6877,11 +7138,19 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
       sfx('shield_break');
     }
   }
+  if(target.holoSuitUntil && now() < target.holoSuitUntil){
+    if(dmg <= 1000){ spawnHoloSuitFx(target, false); sfx('yondu_suit_block'); return; }
+    target.holoSuitUntil = 0;
+    if(target.el) target.el.classList.remove('holo-suit-active');
+    spawnHoloSuitBreakFx(target);
+    sfx('yondu_suit_break');
+  }
   if(target.shield && now() < target.shield.expire){
     actual = dmg * (1 - target.shield.reduction);
   }
   target.health = Math.max(0, target.health - actual);
   spawnDamageNumber(target.x+18, target.y, Math.round(actual), false);
+  if(target.yonduArrow) cancelYonduArrow(target, false);
   const kbMult = (typeof target.def.knockbackTakenMult === 'number') ? target.def.knockbackTakenMult : 1;
   const profileMult = opts.ranged ? RANGED_KNOCKBACK_MULT : CLOSE_KNOCKBACK_MULT;
   const effectiveKnockback = knockback * profileMult;
@@ -6924,6 +7193,34 @@ function applyHazardDamage(target, dmg){
     onFighterZeroHealth(target, 'ko-hazard');
   }
 }
+function updateThingCharge(f){
+  if(!f || f.dead || !f.chargeState) return;
+  const c=f.chargeState, t=now(), target=c.targetRef;
+  const minX=Math.min(c.lastX,f.x), maxX=Math.max(c.lastX+FIGHTER_SIZE,f.x+FIGHTER_SIZE);
+  if(target && !target.dead && !c.hit){
+    const crossed=minX <= target.x+FIGHTER_SIZE && maxX >= target.x;
+    const vertical=Math.abs((f.y+FIGHTER_SIZE/2)-(target.y+FIGHTER_SIZE/2));
+    if(crossed && vertical<128 && !attackBlockedByFloor(f,target)){
+      c.hit=true;
+      damageTargetOrWall(target,c.ability.damage,c.ability.knockback,c.dir,{hitFx:c.ability.hitFx,sound:c.ability.hitSound,ranged:false,attacker:f,guaranteedHit:true});
+      f.vx=c.dir*Math.min(7,Math.abs(c.ability.boostX||30)*0.24);
+      f.vy=Math.min(f.vy,-2);
+      f.windBurstUntil=0;
+      f.chargeState=null;
+      f.abilityLockUntil=t+70;
+      spawnSparks(f.x+FIGHTER_SIZE/2+c.dir*30,f.y+FIGHTER_SIZE/2,12,f.def.id==='drax'?'#c9ffd0':'#ffe0a8',78,420);
+      return;
+    }
+  }
+  c.lastX=f.x; c.lastY=f.y;
+  if(t>=c.endAt || !target || target.dead){
+    f.chargeState=null;
+    f.windBurstUntil=0;
+    f.vx*=0.48;
+    f.abilityLockUntil=Math.min(f.abilityLockUntil||t,t+40);
+  }
+}
+
 function updateHazards(f){
   if(!f || f.dead) return;
   const hazard = f.standingPlatform && f.standingPlatform.hazard;
@@ -7952,6 +8249,88 @@ function sfx(kind='ability'){
         aTone(ctx, t, 'square', 140, 62, 0.13, 0.13);
         aNoise(ctx, t, 0.12, 0.10, 'bandpass', 1300, 300, 1.4);
         return;
+      case 'drax_twin_blades': // two quick overlapping blade whooshes
+        aNoise(ctx,t,0.10,0.15,'bandpass',2400,900,1.8);
+        aTone(ctx,t,'sawtooth',180,90,0.12,0.11);
+        aNoise(ctx,t+0.06,0.09,0.14,'bandpass',2600,1000,1.9);
+        aTone(ctx,t+0.06,'triangle',320,140,0.10,0.10);
+        return;
+      case 'drax_blade_hit': // twin cuts landing — two crisp slices plus a body thud
+        aTone(ctx,t,'triangle',120,55,0.18,0.16);
+        aNoise(ctx,t,0.10,0.13,'highpass',2200,1100,0.6);
+        aNoise(ctx,t+0.05,0.08,0.11,'highpass',2600,1300,0.6);
+        aTone(ctx,t+0.02,'sine',110,42,0.16,0.10);
+        return;
+      case 'drax_charge': // building rumble into a heavy footfall launch
+        aTone(ctx,t,'sawtooth',85,170,0.28,0.16);
+        aNoise(ctx,t,0.22,0.12,'lowpass',900,280,0.6);
+        aNoise(ctx,t+0.02,0.16,0.10,'bandpass',600,220,1.3);
+        return;
+      case 'drax_fury': // guttural roar swelling with a low power surge
+        aTone(ctx,t,'sawtooth',70,210,0.42,0.14);
+        aTone(ctx,t+0.08,'triangle',130,520,0.50,0.10);
+        aNoise(ctx,t+0.16,0.18,0.08,'lowpass',750,180,0.7);
+        aNoise(ctx,t,0.30,0.09,'bandpass',300,700,1.2);
+        return;
+      case 'drax_charge_hit': // full-body slam — low boom, crunch, and a bark of noise
+        aTone(ctx,t,'square',72,38,0.24,0.20);
+        aTone(ctx,t+0.04,'triangle',180,60,0.25,0.12);
+        aNoise(ctx,t,0.16,0.20,'lowpass',1400,180,0.8);
+        aNoise(ctx,t+0.06,0.10,0.10,'bandpass',900,260,1.6);
+        return;
+      case 'drax_super_leap':
+      case 'gamora_super_leap':
+        aTone(ctx,t,'triangle',220,620,0.22,0.11); aNoise(ctx,t,0.12,0.08,'highpass',2200,800,0.4); return;
+      case 'gamora_slash': // sharp double-edged sword swish with a metallic ring
+        aTone(ctx,t,'sawtooth',430,160,0.11,0.09);
+        aTone(ctx,t+0.03,'triangle',820,260,0.11,0.08);
+        aNoise(ctx,t,0.09,0.13,'bandpass',2800,1200,2.0);
+        return;
+      case 'gamora_slash_hit': // fast, clean slice landing
+        aTone(ctx,t,'triangle',170,70,0.16,0.13);
+        aNoise(ctx,t,0.08,0.14,'highpass',3000,1400,1.4);
+        return;
+      case 'gamora_energy': // charged shot with a rising whine and crack
+        aTone(ctx,t,'sine',380,920,0.20,0.10);
+        aTone(ctx,t+0.05,'square',760,1040,0.15,0.07);
+        aNoise(ctx,t,0.10,0.10,'highpass',2400,1000,1.8);
+        return;
+      case 'gamora_energy_hit': // energy bolt punching through with a bright zap
+        aTone(ctx,t,'sine',920,260,0.18,0.10);
+        aNoise(ctx,t,0.10,0.09,'highpass',2600,900,0.45);
+        aTone(ctx,t+0.02,'square',1400,400,0.10,0.06);
+        return;
+      case 'yondu_snap': // a sharp finger-snap crack, then a thin whistling launch
+        aNoise(ctx,t,0.045,0.20,'highpass',3600,2200,3.2);
+        aTone(ctx,t,'square',900,1500,0.03,0.10);
+        aTone(ctx,t+0.02,'sine',1400,2600,0.16,0.07);
+        return;
+      case 'yondu_snap_hit': // small metallic dart punching in — tick, thock, ring
+        aNoise(ctx,t,0.03,0.18,'highpass',4200,2600,2.8);
+        aTone(ctx,t,'triangle',760,250,0.12,0.09);
+        aTone(ctx,t+0.015,'sine',2200,900,0.10,0.06);
+        aNoise(ctx,t+0.02,0.07,0.09,'bandpass',1400,500,1.6);
+        return;
+      case 'yondu_arrow_fire': // whistling launch of the controlled arrow, rising pitch
+        aTone(ctx,t,'sine',190,740,0.24,0.11);
+        aTone(ctx,t+0.07,'triangle',720,1180,0.35,0.08);
+        aNoise(ctx,t,0.20,0.07,'bandpass',1800,3200,2.2);
+        return;
+      case 'yondu_arrow_hit': // dart strike with a light metallic ring
+        aTone(ctx,t,'square',260,70,0.16,0.10);
+        aTone(ctx,t+0.03,'sine',820,340,0.14,0.08);
+        aNoise(ctx,t,0.05,0.10,'highpass',3200,1800,2.0);
+        return;
+      case 'yondu_arrow_cancel':
+        aTone(ctx,t,'sine',580,180,0.20,0.08); return;
+      case 'yondu_arrow_return':
+        aTone(ctx,t,'triangle',920,260,0.22,0.09); aTone(ctx,t+0.05,'sine',460,980,0.28,0.07); return;
+      case 'yondu_suit_on':
+        aTone(ctx,t,'sine',240,900,0.34,0.10); aTone(ctx,t+0.05,'triangle',520,1160,0.30,0.07); return;
+      case 'yondu_suit_block':
+        aTone(ctx,t,'sine',1000,550,0.16,0.09); return;
+      case 'yondu_suit_break':
+        aNoise(ctx,t,0.20,0.13,'highpass',2600,700,0.55); aTone(ctx,t+0.04,'sawtooth',520,95,0.28,0.11); return;
       case 'jump':
         aTone(ctx, t, 'triangle', 260, 520, 0.12, 0.11);
         return;
@@ -8449,6 +8828,82 @@ function spawnAbilityFx(caster, ability, target){
       for(let i=0;i<4;i++){
         setTimeout(()=>{ if(state.mode==='battle' && caster.el) spawnAfterimage(caster, '#a3283a88', 300); }, 50 + i*60);
       }
+      break;
+    }
+
+    /* ---------------- Drax / Gamora / Yondu ---------------- */
+    case 'drax_twin_blades': {
+      // Two blades, two staggered arcs — the first swing reads clearly, then the
+      // second follows a beat later so it doesn't just look like one slash.
+      if(caster.el){ caster.el.classList.remove('drax-slashing'); void caster.el.offsetWidth; caster.el.classList.add('drax-slashing'); setTimeout(()=>caster.el&&caster.el.classList.remove('drax-slashing'),330); }
+      fxEl('drax-slash-arc',`left:${cx-8}px;top:${cy-48}px;width:116px;height:96px;transform:scaleX(${dir});`,300);
+      spawnSparks(cx+dir*34,cy+4,8,'#effff0',52,280);
+      const who = caster;
+      setTimeout(()=>{
+        if(state.mode!=='battle' || who.dead) return;
+        const cx2 = who.x + FIGHTER_SIZE/2, cy2 = who.y + FIGHTER_SIZE/2;
+        fxEl('drax-slash-arc',`left:${cx2-8}px;top:${cy2-40}px;width:116px;height:96px;transform:scaleX(${dir}) rotate(14deg);`,280);
+        spawnSparks(cx2+dir*30,cy2-6,6,'#d5ffd9',46,260);
+      }, 70);
+      break;
+    }
+    case 'drax_charge': {
+      if(caster.el){ caster.el.classList.add('drax-charging'); setTimeout(()=>caster.el&&caster.el.classList.remove('drax-charging'),360); }
+      fxEl('drax-charge-ring',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#b7efbd;box-shadow:0 0 30px #74c987,inset 0 0 18px #74c98755;`,460);
+      for(let i=0;i<4;i++) setTimeout(()=>{ if(caster.dead||state.mode!=='battle') return; fxEl('drax-charge-streak',`left:${caster.x-caster.facing*(24+i*19)}px;top:${caster.y+18+i*7}px;width:${58+i*13}px;height:5px;background:linear-gradient(90deg,transparent,#b7ffbeaa,#f2fff3);border-radius:5px;`,150); },i*42);
+      spawnSparks(cx-dir*28,cy+22,18,'#caffcf',92,420);
+      break;
+    }
+    case 'drax_fury': {
+      fxEl('drax-fury-aura',`left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;`,720,'<div class="drax-fury-core"></div><div class="drax-fury-ring"></div><div class="drax-fury-ring ring-two"></div>');
+      spawnSparks(cx,cy,24,'#d7ffdb',112,760);
+      fxEl('fx-ring',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#9dffae;box-shadow:0 0 38px #65d77e;`,520);
+      break;
+    }
+    case 'gamora_slash': {
+      if(caster.el){ caster.el.classList.remove('gamora-slashing'); void caster.el.offsetWidth; caster.el.classList.add('gamora-slashing'); setTimeout(()=>caster.el&&caster.el.classList.remove('gamora-slashing'),250); }
+      fxEl('gamora-slash-arc',`left:${cx-12}px;top:${cy-58}px;width:126px;height:116px;transform:scaleX(${dir});`,270);
+      // a bright steel glint riding along the blade's edge, on top of the arc
+      fxEl('fx-flash',`left:${cx+dir*20-10}px;top:${cy-30}px;width:20px;height:20px;background:radial-gradient(circle,#fff,#eaffca 45%,transparent 78%);`,160);
+      spawnSparks(cx+dir*38,cy,7,'#d5ff9a',44,240);
+      break;
+    }
+    case 'gamora_energy': {
+      const hx=cx+dir*28;
+      fxEl('gamora-gun-muzzle',`left:${hx-20}px;top:${cy-20}px;width:40px;height:40px;`,250);
+      fxEl('fx-flash',`left:${hx-12}px;top:${cy-12}px;width:24px;height:24px;background:radial-gradient(circle,#fff,#d8ff9e 40%,transparent 76%);`,180);
+      spawnSparks(hx,cy,8,'#dcffae',46,300);
+      if(caster.el){ const gun=caster.el.querySelector('.gamora-gun-held'); if(gun){ gun.classList.add('active'); setTimeout(()=>gun.classList.remove('active'),180); } }
+      break;
+    }
+    case 'gamora_super_leap': {
+      fxEl('fx-ring',`left:${cx-40}px;top:${caster.y+34}px;width:80px;height:24px;border-color:#c8ff8e;border-width:3px;box-shadow:0 0 18px #9eff55;`,360);
+      spawnSparks(cx,cy+20,16,'#d8ffad',68,400);
+      break;
+    }
+    case 'yondu_snap': {
+      // A quick whistle-crack as Yondu snaps his fingers to launch the arrow.
+      // The flash kicks out along the arrow's actual aim line (matching the new
+      // homing launch angle) instead of a generic puff to the side.
+      let ang = dir >= 0 ? 0 : Math.PI;
+      if(target){
+        const tcx = target.x + FIGHTER_SIZE/2, tcy = target.y + FIGHTER_SIZE/2;
+        let a = Math.atan2(tcy - cy, tcx - cx);
+        if((Math.cos(a) >= 0) !== (dir >= 0)) a = Math.PI - a;
+        ang = a;
+      }
+      const hx = cx + Math.cos(ang)*28, hy = cy + Math.sin(ang)*28;
+      fxEl('yondu-snap-flash', `left:${hx-18}px;top:${hy-18}px;width:36px;height:36px;transform:rotate(${ang}rad);`, 220, '<div class="yondu-snap-core"></div><div class="yondu-snap-ring"></div>');
+      spawnSparks(hx,hy,9,'#b8f1ff',46,280);
+      spawnSparks(hx,hy,5,'#ff6b62',30,220);
+      break;
+    }
+    case 'yondu_arrow': {
+      fxEl('yondu-arrow-launch',`left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;`,420,'<div class="yondu-launch-ring"></div><div class="yondu-launch-core"></div>');
+      break;
+    }
+    case 'yondu_suit': {
+      spawnHoloSuitFx(caster,true);
       break;
     }
 
@@ -9351,6 +9806,51 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'drax_blade_hit': {
+      // Twin blades land as two quick X-crossed cuts, not one generic ring.
+      fxEl('fx-ring',`left:${cx-32}px;top:${cy-32}px;width:64px;height:64px;border-color:#e9ffe9;box-shadow:0 0 20px #82c98d;`,260);
+      fxEl('drax-hit-cross',`left:${cx-30}px;top:${cy-26}px;width:60px;height:52px;transform:scaleX(${dirSign||1});`,240,'<div class="drax-hit-cut c1"></div><div class="drax-hit-cut c2"></div>');
+      spawnSparks(cx,cy,9,'#f4fff5',48,260);
+      spawnSparks(cx-(dirSign||1)*10,cy,5,'#bff2c4',34,220);
+      break;
+    }
+    case 'drax_charge_hit': {
+      fxEl('fx-flash',`left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;background:radial-gradient(circle,#fff,#b9f5c2 35%,transparent 74%);`,300);
+      fxEl('fx-ring',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#b7efbd;box-shadow:0 0 30px #74c987;`,340);
+      spawnSparks(cx,cy,14,'#b7ffbe',72,320);
+      spawnSparks(cx,cy,8,'#eafff0',96,360);
+      shakeArena(6,220);
+      break;
+    }
+    case 'gamora_slash_hit': {
+      fxEl('gamora-hit-slash',`left:${cx-52}px;top:${cy-44}px;width:104px;height:88px;`,260);
+      spawnSparks(cx,cy,8,'#ddffad',46,250);
+      spawnSparks(cx+(dirSign||1)*14,cy-6,5,'#fdffe0',30,210);
+      break;
+    }
+    case 'gamora_energy_hit': {
+      fxEl('fx-ring',`left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;border-color:#d8ff9c;box-shadow:0 0 25px #a9ff47;`,300);
+      fxEl('fx-flash',`left:${cx-26}px;top:${cy-26}px;width:52px;height:52px;background:radial-gradient(circle,#fff,#e6ff9c 40%,transparent 76%);`,220);
+      spawnSparks(cx,cy,10,'#ecffc8',58,300);
+      break;
+    }
+    case 'yondu_snap_hit': {
+      // A tight metallic thwack where the Yaka Arrow actually punches in — a small
+      // white-hot core plus a burst of icy/red sparks instead of one plain ring.
+      fxEl('yondu-hit-flash',`left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;`,300,'<div class="yondu-hit-core"></div>');
+      fxEl('fx-ring',`left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;border-color:#bcefff;box-shadow:0 0 18px #54c8ff;`,260);
+      spawnSparks(cx,cy,8,'#d9f8ff',44,250);
+      spawnSparks(cx,cy,5,'#ff8a80',30,220);
+      break;
+    }
+    case 'yondu_arrow_hit': {
+      fxEl('yondu-arrow-hit',`left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;`,360,'<div></div>');
+      fxEl('yondu-hit-flash',`left:${cx-22}px;top:${cy-22}px;width:44px;height:44px;`,280,'<div class="yondu-hit-core"></div>');
+      spawnSparks(cx,cy,11,'#c3f3ff',68,320);
+      spawnSparks(cx,cy,6,'#ff8a80',34,240);
+      shakeArena(3,160);
+      break;
+    }
     case 'starlord_hit': {
       fxEl('fx-flash',`left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff,#ffd08a 25%,#ff5a3c 52%,transparent 78%);`,200);
       spawnSparks(cx,cy,8,'#ff8a5c',42,300);
@@ -9971,6 +10471,11 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     f.abilityLockUntil = 0;
     if(f.el) f.el.classList.remove('hex-frozen');
   }
+  if(f.yonduArrow && f.yonduArrow.phase === 'control'){
+    f.vx = 0; f.vy = 0; moveDir = 0; wantJump = false; wantDown = false;
+    return;
+  }
+  if(f.holoSuitUntil && tNow >= f.holoSuitUntil){ f.holoSuitUntil = 0; }
   if(f.rootedUntil && tNow < f.rootedUntil){ moveDir = 0; wantJump = false; f.vx *= 0.5; } // pinned by Groot's roots
   if(f.hulkSlideDir){
     // Being blasted toward the nearest side wall by Hulk Roar — no steering, no jumping.
@@ -10382,11 +10887,213 @@ function updateGoblinGlider(f, dtF){
   }
 }
 
+function yonduYakaArrowSvg(uid='yaka'){
+  // The real Yaka Arrow is a slim bronze dart with a needle point and a Kree-tech
+  // control band that glows red when Yondu is steering it — not a fletched hunting
+  // arrow, so the silhouette is thin, metallic and sharp end-to-end.
+  const g='yaka_'+String(uid).replace(/[^a-z0-9_]/gi,'_');
+  return `<svg class="yondu-yaka-svg" viewBox="0 0 140 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="${g}_shaft" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#4c341a"/><stop offset=".22" stop-color="#c68f47"/><stop offset=".5" stop-color="#f9e2ae"/><stop offset=".78" stop-color="#b3763a"/><stop offset="1" stop-color="#4c341a"/>
+      </linearGradient>
+      <linearGradient id="${g}_shade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffffff" stop-opacity=".6"/><stop offset=".42" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity=".4"/>
+      </linearGradient>
+      <linearGradient id="${g}_tip" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#7c8188"/><stop offset=".5" stop-color="#f6f8f9"/><stop offset="1" stop-color="#454a50"/>
+      </linearGradient>
+      <linearGradient id="${g}_red" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#4c090e"/><stop offset=".3" stop-color="#c21d28"/><stop offset=".62" stop-color="#ff5b47"/><stop offset="1" stop-color="#6c0f15"/>
+      </linearGradient>
+      <filter id="${g}_glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    </defs>
+
+    <!-- rear stabiliser fins -->
+    <path d="M2 14 L17 7 L12.5 14 L17 21 Z" fill="url(#${g}_shaft)" stroke="#33230f" stroke-width=".8"/>
+    <path d="M5.5 14 L15 10.6 L13 14 L15 17.4 Z" fill="#22160a" opacity=".6"/>
+
+    <!-- main shaft -->
+    <rect x="15" y="11.3" width="90" height="5.4" rx="2.7" fill="url(#${g}_shaft)" stroke="#33230f" stroke-width=".6"/>
+    <rect x="15" y="11.3" width="90" height="5.4" rx="2.7" fill="url(#${g}_shade)"/>
+    <rect x="33.5" y="11.1" width="2" height="5.8" fill="#2c1e0e" opacity=".65"/>
+    <rect x="87.5" y="11.1" width="2" height="5.8" fill="#2c1e0e" opacity=".65"/>
+
+    <!-- Yondu's whistle-control band, glows brighter while the arrow is airborne -->
+    <g class="yaka-red-glow">
+      <rect x="51" y="9" width="22" height="10" rx="4" fill="url(#${g}_red)" filter="url(#${g}_glow)" opacity=".9"/>
+      <rect x="54.5" y="11.4" width="15" height="5.2" rx="2.4" fill="#ffbdb2" opacity=".92"/>
+    </g>
+
+    <!-- needle head -->
+    <path d="M99 6 L134 14 L99 22 L108.5 14 Z" fill="url(#${g}_tip)" stroke="#2e3236" stroke-width=".8"/>
+    <path d="M100.5 14 L131.5 14" stroke="#fffaf0" stroke-width="1" opacity=".7"/>
+  </svg>`;
+}
+
+function spawnYonduArrow(caster, ar){
+  if(ar.el) ar.el.remove();
+  const el=document.createElement('div');
+  el.className='yondu-controlled-arrow';
+  el.innerHTML=yonduYakaArrowSvg(caster.id || 'controlled');
+  arenaEl.appendChild(el);
+  ar.el=el;
+}
+function recallYonduArrow(caster, byButton=false){
+  if(!caster || !caster.yonduArrow) return;
+  const ar=caster.yonduArrow;
+  if(ar.phase==='return') return;
+  ar.phase='return';
+  ar.nextDamageById=new Map();
+  ar.returnSpeed=Math.max(9, ar.returnSpeed || 13);
+  ar.vx=0; ar.vy=0;
+  if(state.mode==='battle'){
+    const cx=ar.x+ar.w/2, cy=ar.y+ar.h/2;
+    fxEl('fx-ring',`left:${cx-28}px;top:${cy-28}px;width:56px;height:56px;border-color:#ef5a4f;box-shadow:0 0 22px #d52d35;`,320);
+    spawnSparks(cx,cy,7,'#ff7669',42,300);
+    sfx(byButton ? 'yondu_arrow_cancel' : 'yondu_arrow_return');
+  }
+}
+function cancelYonduArrow(caster, byButton){
+  // Kept as the compatibility entry point used by the damage system. It now recalls
+  // the physical arrow instead of deleting it, so every Yondu arrow use returns home.
+  recallYonduArrow(caster, !!byButton);
+}
+function finishYonduArrow(caster, ar){
+  if(ar.el && ar.el.parentNode) ar.el.remove();
+  caster.yonduArrow=null;
+  ar.el=null;
+  if(state.mode==='battle'){
+    const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+    fxEl('fx-ring',`left:${cx-22}px;top:${cy-22}px;width:44px;height:44px;border-color:#f04a43;box-shadow:0 0 18px #c52b33;`,220);
+    spawnSparks(cx,cy,5,'#ff7b72',30,220);
+  }
+}
+function updateYonduArrow(f, dtF){
+  if(!f || !f.yonduArrow || f.dead || state.mode!=='battle') return;
+  const ar=f.yonduArrow, a=f.def.abilities.Q, t=now();
+  const step=dtF;
+
+  if(ar.phase==='return'){
+    const tx=f.x+FIGHTER_SIZE/2-ar.w/2, ty=f.y+FIGHTER_SIZE/2-ar.h/2;
+    const dx=tx-ar.x, dy=ty-ar.y, dist=Math.hypot(dx,dy);
+    if(dist <= Math.max(16, (ar.returnSpeed||13)*step*1.7)){
+      ar.x=tx; ar.y=ty;
+      if(ar.el){ar.el.style.left=ar.x+'px'; ar.el.style.top=ar.y+'px'; ar.el.style.transform=`rotate(${Math.atan2(dy,dx)||0}rad)`;}
+      finishYonduArrow(f,ar);
+      return;
+    }
+    const speed=Math.max(9,ar.returnSpeed||13);
+    ar.vx=dx/dist*speed; ar.vy=dy/dist*speed;
+    ar.x+=ar.vx*step; ar.y+=ar.vy*step;
+    ar.angle=Math.atan2(ar.vy,ar.vx);
+    if(ar.el){
+      ar.el.style.left=ar.x+'px'; ar.el.style.top=ar.y+'px';
+      ar.el.style.transform=`rotate(${ar.angle}rad)`;
+    }
+    if(t >= (ar.nextTrail||0)){
+      ar.nextTrail=t+38;
+      fxEl('yondu-yaka-trail',`left:${ar.x+18}px;top:${ar.y+8}px;`,150);
+    }
+    return;
+  }
+
+  let mx=0,my=0;
+  if(f.isBot){
+    const tg=state.player;
+    if(tg && !tg.dead){
+      mx=Math.sign((tg.x+FIGHTER_SIZE/2)-(ar.x+ar.w/2));
+      my=Math.sign((tg.y+FIGHTER_SIZE/2)-(ar.y+ar.h/2));
+    }
+  } else {
+    if(keysHeld.left || gpKeys.left) mx-=1;
+    if(keysHeld.right || gpKeys.right) mx+=1;
+    if(keysHeld.up || gpKeys.up) my-=1;
+    if(keysHeld.down || gpKeys.down) my+=1;
+  }
+  if(mx||my){
+    const len=Math.hypot(mx,my)||1;
+    const speed=a.speed || 4.6;
+    const desiredX=(mx/len)*speed, desiredY=(my/len)*speed;
+    const blend=Math.min(1,(a.controlAccel||0.72)*dtF);
+    ar.vx += (desiredX-ar.vx)*blend;
+    ar.vy += (desiredY-ar.vy)*blend;
+  } else {
+    const friction=Math.pow(a.controlFriction||0.82,dtF);
+    ar.vx*=friction; ar.vy*=friction;
+  }
+
+  const maxSpeed=a.speed||4.6;
+  const mag=Math.hypot(ar.vx,ar.vy);
+  if(mag>maxSpeed){ ar.vx=ar.vx/mag*maxSpeed; ar.vy=ar.vy/mag*maxSpeed; }
+  ar.x += ar.vx*step; ar.y += ar.vy*step;
+  if(Math.hypot(ar.vx,ar.vy)>0.2) ar.angle=Math.atan2(ar.vy,ar.vx);
+  ar.x=Math.max(BOUND_MIN_X,Math.min(BOUND_MAX_X-ar.w,ar.x));
+  ar.y=Math.max(8,Math.min(ARENA_H-ar.h-8,ar.y));
+  if(ar.el){
+    ar.el.style.left=ar.x+'px'; ar.el.style.top=ar.y+'px';
+    ar.el.style.transform=`rotate(${ar.angle||0}rad)`;
+  }
+  if(t >= (ar.nextTrail || 0)){
+    ar.nextTrail=t+42;
+    fxEl('yondu-yaka-trail',`left:${ar.x+20}px;top:${ar.y+8}px;`,150);
+  }
+
+  const targets=[state.player,state.bot];
+  for(const tg of targets){
+    if(!tg || tg===f || tg.dead) continue;
+    const overlap=(ar.x+ar.w)>tg.x && ar.x<(tg.x+FIGHTER_SIZE) && (ar.y+ar.h)>tg.y && ar.y<(tg.y+FIGHTER_SIZE);
+    if(!overlap) continue;
+    const last=ar.nextDamageById.get(tg.id)||0;
+    if(t < last) continue;
+    ar.nextDamageById.set(tg.id,t+(a.damageInterval||1000));
+    damageTargetOrWall(tg,a.damage,a.knockback,dirSignTo(f,tg),{hitFx:a.hitFx,sound:a.hitSound,ranged:true});
+    if(!f.yonduArrow) break;
+  }
+}
+function spawnHoloSuitFx(caster, on){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  if(on){
+    fxEl('yondu-suit-burst',`left:${cx-60}px;top:${cy-60}px;width:120px;height:120px;`,520,'<div class="yondu-suit-ring"></div><div class="yondu-suit-scan"></div>');
+    spawnSparks(cx,cy,16,'#95e8ff',76,420);
+  }else{
+    fxEl('yondu-suit-burst',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`,420,'<div class="yondu-suit-hit-ring"></div>');
+    spawnSparks(cx,cy,10,'#d9f7ff',48,300);
+  }
+}
+function spawnHoloSuitBreakFx(target){
+  const cx=target.x+FIGHTER_SIZE/2, cy=target.y+FIGHTER_SIZE/2;
+  fxEl('yondu-suit-break',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;`,560,'<div class="yondu-break-core"></div>');
+  spawnSparks(cx,cy,22,'#a6ecff',110,520);
+  shakeArena(5,220);
+}
 function updateProjectiles(dtF){
   for(let i=state.projectiles.length-1; i>=0; i--){
     const p = state.projectiles[i];
     const owner = p.casterRef;
     const target = (p.owner === 'player') ? state.bot : state.player;
+
+    if(p.homing && p.phase === 'out' && p.targetRef && !p.targetRef.dead){
+      const tx=p.targetRef.x+FIGHTER_SIZE/2, ty=p.targetRef.y+FIGHTER_SIZE/2;
+      const pcx=p.x+p.w/2, pcy=p.y+p.h/2;
+      const desired=Math.atan2(ty-pcy,tx-pcx);
+      const speed=Math.max(10,Math.hypot(p.vx,p.vy));
+      if(p.instantTurn){
+        // Locked-on tracking: the tip snaps to face the real target every single
+        // frame instead of gradually turning, so it never visibly lags behind
+        // or points somewhere other than the enemy.
+        p.vx=Math.cos(desired)*speed; p.vy=Math.sin(desired)*speed;
+      } else {
+        const current=Math.atan2(p.vy,p.vx);
+        let diff=desired-current;
+        while(diff>Math.PI) diff-=Math.PI*2;
+        while(diff<-Math.PI) diff+=Math.PI*2;
+        const maxTurn=(p.homingTurn||0.18)*dtF;
+        const turn=Math.max(-maxTurn,Math.min(maxTurn,diff));
+        const ang=current+turn;
+        p.vx=Math.cos(ang)*speed; p.vy=Math.sin(ang)*speed;
+      }
+    }
 
     if(p.returns && p.phase === 'out'){
       p.life -= dtF*16.67;
@@ -10549,9 +11256,8 @@ function updateProjectiles(dtF){
         if(near){
           applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true,ranged:true});
           p.hasHitTarget=true;
-          if(p.el){p.el.remove();}
-          state.projectiles.splice(i,1);
-          continue;
+          if(p.returns){ p.phase='return'; p.life=1800; }
+          else { if(p.el){p.el.remove();} state.projectiles.splice(i,1); continue; }
         }
       }
       if(p.guaranteedAim && !p.hasHitTarget && Number.isFinite(p.guaranteeAt)){
@@ -10560,9 +11266,8 @@ function updateProjectiles(dtF){
         if(travelled >= Math.max(1,p.guaranteeAt-4)){
           applyDamage(target,p.damage,p.knockback,p.vx>=0?1:-1,{hitFx:p.hitFx,sound:p.hitSound,guaranteedHit:true,ranged:true});
           p.hasHitTarget=true;
-          if(p.el){p.el.remove();}
-          state.projectiles.splice(i,1);
-          continue;
+          if(p.returns){ p.phase='return'; p.life=1800; }
+          else { if(p.el){p.el.remove();} state.projectiles.splice(i,1); continue; }
         }
       }
     }
@@ -10596,7 +11301,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -10669,9 +11374,18 @@ function buildProjectileVisual(p){
       + `<path d="${d}" stroke="#d8f4ff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`
       + `<path d="${ptsToPath(b1)}" stroke="#eaf9ff" stroke-width="2.2" fill="none" stroke-linecap="round"/>`
       + `<path d="${ptsToPath(b2)}" stroke="#eaf9ff" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>`;
+  } else if(p.render === 'gamora-energy'){
+    p.el.classList.add('gamora-energy-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none';
+    p.el.innerHTML='<div class="gamora-energy-aura"></div><div class="gamora-energy-core"></div><div class="gamora-energy-ring"></div><div class="gamora-energy-tail"></div><div class="gamora-energy-spark"></div>';
   } else if(p.render === 'captain-photon'){
     p.el.classList.add('captain-photon-projectile');
     p.el.innerHTML = '<div class="captain-photon-core"></div><div class="captain-photon-halo"></div><div class="captain-photon-tail"></div>';
+  } else if(p.render === 'yondu-yaka-arrow'){
+    p.el.classList.add('yondu-yaka-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none';
+    p.el.innerHTML=yonduYakaArrowSvg('proj_'+Math.random().toString(36).slice(2));
+  } else if(p.render === 'yondu-bolt'){
+    p.el.classList.add('yondu-bolt-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none';
+    p.el.innerHTML='<div class="yondu-bolt-aura"></div><div class="yondu-bolt-core"></div><div class="yondu-bolt-tail"></div><div class="yondu-bolt-tip"></div>';
   } else if(p.render === 'torch-fireball'){
     p.el.style.background = 'transparent';
     p.el.style.boxShadow = 'none';
@@ -10835,6 +11549,12 @@ function spawnProjTrail(p){
       + `<line x1="${n*0.15}" y1="${n*0.15}" x2="${n*0.85}" y2="${n*0.85}"/><line x1="${n*0.85}" y1="${n*0.15}" x2="${n*0.15}" y2="${n*0.85}"/>`
       + `</g></svg>`);
     if(Math.random() < 0.35) spawnSparks(cx, cy, 1, '#9ff3ff', 14, 200);
+  } else if(p.render === 'gamora-energy') {
+    fxEl('fx-trail', `left:${(cx-10).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:20px;height:8px;background:radial-gradient(ellipse,#fffbd7,#8fff64 45%,transparent 78%);box-shadow:0 0 12px #73ff59,0 0 26px #53d63e66;`, 240);
+  } else if(p.render === 'yondu-yaka-arrow') {
+    fxEl('fx-trail', `left:${(cx-20).toFixed(1)}px;top:${(cy-3).toFixed(1)}px;width:40px;height:6px;background:linear-gradient(90deg,transparent,#ab1d26 44%,#ff3f45 78%,#ffd7b0);box-shadow:0 0 8px #d62a31,0 0 18px #b2171e88;`, 220);
+  } else if(p.render === 'yondu-bolt') {
+    fxEl('fx-trail', `left:${(cx-9).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:18px;height:8px;background:radial-gradient(ellipse,#ffffff,#62d6ff 45%,transparent 78%);box-shadow:0 0 12px #51cfff,0 0 22px #22a9ff66;`, 240);
   } else if(p.render === 'warmachine-missile') {
     const sz=7;
     fxEl('fx-trail', `left:${(cx-sz/2-8).toFixed(1)}px;top:${(cy-sz/2).toFixed(1)}px;width:${sz}px;height:${sz}px;background:radial-gradient(circle,#fff2c8,#ff8f2f 45%,transparent 75%);box-shadow:0 0 10px #ff7a18;`, 260);
@@ -11021,6 +11741,9 @@ const AI_STYLE_RANGE = {
   groot:90,
   invisiblewoman:480,
   thing:90,
+  drax:100,
+  gamora:180,
+  yondu:520,
   humantorch:400,
 };
 /* A bot's facing tracks its opponent's true side by default — including
@@ -11525,6 +12248,22 @@ function updateBotAI(dtF){
     if(cdReady(bot,'R',t) && hpPct < 0.35 && Math.random() < 0.6){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'E',t) && adist <= eAb.range + 20 && Math.abs(vertical) < 120){ tryUseAbility(bot,player,'E'); return; }
     if(cdReady(bot,'Q',t) && adist > eAb.range && adist < 500 && Math.abs(vertical) < 140){ tryUseAbility(bot,player,'Q'); return; }
+  } else if(style === 'drax'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
+    if(cdReady(bot,'Q',t) && adist > eAb.range + 25 && adist < 700){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 35){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'R',t) && (Math.abs(vertical)>120 || (hpPct<0.45 && adist>220)) && Math.random()<0.5){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'gamora'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
+    if(cdReady(bot,'Q',t) && adist > 220 && adist < 1100){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 30 && Math.abs(vertical)<140){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'R',t) && (Math.abs(vertical)>130 || (hpPct<0.35 && adist>240)) && Math.random()<0.58){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'yondu'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(bot.yonduArrow) return;
+    if(cdReady(bot,'R',t) && (hpPct<0.55 || adist<250) && Math.random()<0.42){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 170 && adist < 1000){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 1100){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'humantorch'){
     // Human Torch: flame on immediately and stay airborne, poke with
     // Fireball at range, and dive in for a point-blank Nova Blast whenever
@@ -11594,10 +12333,13 @@ function loseLife(target, side){
   target.waspSizeUntil = 0; target.waspSizeSpeedMultiplier = .62;
   target.el && target.el.classList.remove('wasp-enlarged','wasp-small');
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
+  target.chargeState = null; target.draxFuryUntil = 0;
   target.shield = null;
   target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
   target.bpCharging = false; target.bpSlamPending = false; target.bpAbsorbed = 0;
   target.grappleUntil = 0;
+  cancelYonduArrow(target, false);
+  target.holoSuitUntil = 0;
   target.turnPending = null;
   target.regenAccumulator = 0;
   if(target.def.id === 'loki') clearLokiDuplications(target);
@@ -11802,6 +12544,8 @@ function renderFighter(f){
   f.el.classList.toggle('rooted', !!f.rootedUntil && now() < f.rootedUntil);
   f.el.classList.toggle('bullseye-ricochet-armed', !!f.ricochetArmed);
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
+  f.el.classList.toggle('holo-suit-active', !!f.holoSuitUntil && now() < f.holoSuitUntil);
+  f.el.classList.toggle('yondu-arrow-active', !!f.yonduArrow);
   updateAntmanForm(f);
   updateCloak(f);
   updateWaspSizeEffect(f);
@@ -12988,6 +13732,8 @@ function gameLoop(ts){
 
     updateBotFacing(b, p);
     }
+    updateThingCharge(p);
+    updateThingCharge(b);
     updateHazards(p); updateHazards(b);
     updatePassiveRegen(p, dtF); updatePassiveRegen(b, dtF);
     updateGrootBall(p); updateGrootBall(b);
@@ -13005,6 +13751,8 @@ function gameLoop(ts){
     updateVisionBeams(dtF);
     updateGoblinGlider(p, dtF);
     updateGoblinGlider(b, dtF);
+    updateYonduArrow(p, dtF);
+    updateYonduArrow(b, dtF);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
