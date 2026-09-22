@@ -994,6 +994,141 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 /* ---------- New roster visuals ---------- */
 .fighter.hulk .fighter-square,.fighter.thing .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
+.fighter.ironmonger .fighter-square,.fighter.groot .fighter-square{transform:scale(1.24);transform-origin:50% 100%;border-radius:14px;}
+.fighter.ironmonger.facing-left .fighter-square,.fighter.groot.facing-left .fighter-square{transform:scaleX(-1) scale(1.24);}
+.fighter.ironmonger .overhead-hp,.fighter.groot .overhead-hp{left:-9px;width:82px;top:-31px;}
+.fighter.ironmonger .fighter-square{box-shadow:0 0 0 2px rgba(255,159,67,.20),0 18px 34px rgba(0,0,0,.38),0 0 26px rgba(255,112,38,.14);}
+.fighter.groot .fighter-square{box-shadow:0 0 0 2px rgba(143,208,90,.18),0 18px 34px rgba(0,0,0,.36);}
+.fighter.redhulk .fighter-square{transform:scale(1.18);transform-origin:50% 100%;border-radius:14px;box-shadow:0 0 0 2px rgba(255,70,40,.16),0 16px 32px rgba(0,0,0,.35);}
+.fighter.redhulk.facing-left .fighter-square{transform:scaleX(-1) scale(1.18);}
+.fighter.redhulk .overhead-hp{left:-8px;width:80px;top:-29px;}
+.fighter.killmonger .fighter-square{border-color:#9f7b2d;box-shadow:0 0 0 1px rgba(255,215,110,.18),0 12px 26px rgba(0,0,0,.35),0 0 20px rgba(210,161,45,.14);}
+.fighter.punisher .fighter-square{border-color:#7e828c;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 10px 22px rgba(0,0,0,.36);}
+.fighter.redhulk .redhulk-flame{display:none;position:absolute;inset:-16px;pointer-events:none;z-index:3;filter:drop-shadow(0 0 10px #ff4d1f) drop-shadow(0 0 20px #ff6a2b);}
+.fighter.redhulk.redhulk-heat-active .redhulk-flame{display:block;}
+.redhulk-flame i{position:absolute;bottom:-4px;width:22px;height:54px;border-radius:58% 42% 45% 48%;background:linear-gradient(180deg,#fff4b8 0%,#ffd24a 25%,#ff7a1f 57%,#d71920 100%);box-shadow:0 0 12px #ff7a1f;transform-origin:50% 100%;animation:redHulkFlame .34s ease-in-out infinite alternate;}
+.redhulk-flame i:nth-child(1){left:7px;height:48px;animation-delay:-.08s}.redhulk-flame i:nth-child(2){left:23px;height:72px}.redhulk-flame i:nth-child(3){left:42px;height:58px;animation-delay:-.16s}.redhulk-flame i:nth-child(4){left:61px;height:74px;animation-delay:-.03s}.redhulk-flame i:nth-child(5){left:77px;height:48px;animation-delay:-.12s}
+@keyframes redHulkFlame{from{transform:scaleY(.82) rotate(-4deg);opacity:.78}to{transform:scaleY(1.12) rotate(5deg);opacity:1}}
+.fighter.redhulk.redhulk-heat-active .fighter-square{animation:redHulkHeatPulse .34s ease-in-out infinite alternate;filter:saturate(1.2) brightness(1.05);}
+@keyframes redHulkHeatPulse{from{box-shadow:0 0 0 2px rgba(255,70,40,.20),0 14px 30px rgba(0,0,0,.35),0 0 22px rgba(255,89,31,.32)}to{box-shadow:0 0 0 3px rgba(255,115,47,.34),0 18px 38px rgba(0,0,0,.38),0 0 42px rgba(255,65,20,.56)}}
+.fighter.ironmonger.iron-jumping .fighter-square{filter:brightness(1.12) drop-shadow(0 0 12px rgba(255,177,90,.35));}
+.fighter.killmonger.killmonger-fury-active .fighter-square{animation:killmongerFuryPulse .45s ease-in-out infinite alternate;filter:saturate(1.35) brightness(1.12);}
+@keyframes killmongerFuryPulse{from{box-shadow:0 0 18px rgba(255,194,64,.22),0 0 34px rgba(155,78,255,.16)}to{box-shadow:0 0 34px rgba(255,194,64,.62),0 0 68px rgba(155,78,255,.34),0 0 92px rgba(255,90,28,.16)}}
+/* A visible burn state for anyone suffering Red Hulk's Volcano Fists burn. */
+.redhulk-burn-fx{display:none;position:absolute;inset:-14px;pointer-events:none;z-index:9;overflow:visible;filter:drop-shadow(0 0 5px #ff6b24);}
+.fighter.redhulk-burn-active .redhulk-burn-fx{display:block;}
+.redhulk-burn-fx .rh-burn-glow{position:absolute;inset:9px;border-radius:44%;background:radial-gradient(ellipse at 50% 72%,#ffb51f22 0 12%,#ff5a1f1c 24%,transparent 60%);box-shadow:0 0 18px #ff5a1f44;animation:rhBurnGlow .28s ease-in-out infinite alternate;}
+.redhulk-burn-fx i{position:absolute;width:5px;height:15px;border-radius:65% 35% 62% 38%;background:linear-gradient(180deg,#fff7bd 0%,#ffd45a 22%,#ff7a1e 58%,#d7181a 100%);box-shadow:0 0 8px #ff7324,0 0 14px #ff3b1f66;transform-origin:50% 100%;animation:rhBurnSpark .45s ease-out infinite;}
+.redhulk-burn-fx i:nth-child(2){left:8%;bottom:18%;animation-delay:-.08s}.redhulk-burn-fx i:nth-child(3){left:19%;top:18%;height:11px;animation-delay:-.31s}.redhulk-burn-fx i:nth-child(4){left:31%;bottom:6%;height:18px;animation-delay:-.17s}.redhulk-burn-fx i:nth-child(5){left:45%;top:7%;height:12px;animation-delay:-.39s}.redhulk-burn-fx i:nth-child(6){left:57%;bottom:14%;height:16px;animation-delay:-.22s}.redhulk-burn-fx i:nth-child(7){left:70%;top:22%;height:10px;animation-delay:-.04s}.redhulk-burn-fx i:nth-child(8){left:80%;bottom:9%;height:17px;animation-delay:-.28s}.redhulk-burn-fx i:nth-child(9){left:91%;top:30%;height:10px;animation-delay:-.41s}
+@keyframes rhBurnGlow{from{transform:scale(.95);opacity:.55}to{transform:scale(1.06);opacity:.95}}
+@keyframes rhBurnSpark{0%{transform:translate3d(0,6px,0) scale(.55) rotate(-8deg);opacity:0}22%{opacity:1}100%{transform:translate3d(8px,-28px,0) scale(1.05) rotate(24deg);opacity:0}}
+
+/* ---------- Iron Monger / Red Hulk / Punisher FX ---------- */
+.im-repulsor-cast,.im-jump-charge,.rh-fist-cast,.rh-spew-cast,.rh-heat-burst,.punisher-muzzle,.punisher-grenade-flight,.punisher-grenade-explosion,.ironmonger-landing,.redhulk-heat-aura{position:absolute;pointer-events:none;z-index:28;}
+.im-repulsor-core{position:absolute;inset:15%;border-radius:50%;background:radial-gradient(circle,#fffdf1 0 9%,#d9ecff 18%,#ffc55a 42%,#ff8b1f 67%,transparent 78%);box-shadow:0 0 10px #fff,0 0 26px #ffab3d,0 0 42px #ff6a1f;animation:imCorePulse .22s ease-in-out infinite alternate;}
+.im-repulsor-ring{position:absolute;inset:3%;border:2px solid #ffe4a8;border-radius:50%;box-shadow:0 0 10px #ffbc61, inset 0 0 15px #ff902f66;animation:imRingSpin .42s linear infinite;}
+@keyframes imCorePulse{from{transform:scale(.88);opacity:.82}to{transform:scale(1.1);opacity:1}}
+@keyframes imRingSpin{to{transform:rotate(360deg) scale(1.05)}}
+.im-missile-salvo{position:absolute;pointer-events:none;z-index:27;}
+.im-missile-salvo i{position:absolute;display:block;width:38px;height:12px;border-radius:10px;background:linear-gradient(180deg,#f4f7fa,#9ea8b2 45%,#2c333b);border:1px solid #15191e;box-shadow:inset 0 2px 2px #fff8,0 0 8px #ff9d3d66;}
+.im-missile-salvo i:after{content:'';position:absolute;left:-18px;top:3px;width:20px;height:6px;border-radius:6px;background:linear-gradient(90deg,transparent,#ffca63,#ff5b25);box-shadow:0 0 10px #ff6a2b;}
+.im-missile-salvo i:nth-child(1){left:8px;top:10px;transform:rotate(-25deg)}.im-missile-salvo i:nth-child(2){left:24px;top:27px;transform:rotate(-12deg)}.im-missile-salvo i:nth-child(3){left:36px;top:44px;transform:rotate(0)}.im-missile-salvo i:nth-child(4){left:22px;top:61px;transform:rotate(12deg)}.im-missile-salvo i:nth-child(5){left:6px;top:78px;transform:rotate(25deg)}
+.im-jump-charge{animation:imJumpCharge .46s ease-out forwards;}
+.im-jump-core{position:absolute;left:50%;bottom:8px;width:44px;height:20px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,#fff5ca 0 12%,#ffc15b 28%,#ff6e1f 58%,transparent 75%);box-shadow:0 0 16px #ff8b2a,0 0 34px #ff4d1f;filter:blur(.2px);}
+.im-jump-ring{position:absolute;left:50%;bottom:1px;width:92px;height:30px;transform:translateX(-50%);border:3px solid #ffd37e;border-radius:50%;box-shadow:0 0 20px #ff8c2f,inset 0 0 15px #ff8c2f55;animation:imJumpRing .46s ease-out forwards;}
+@keyframes imJumpCharge{from{opacity:0;transform:scale(.55) translateY(12px)}35%{opacity:1}to{opacity:0;transform:scale(1.18) translateY(-16px)}}
+@keyframes imJumpRing{from{transform:translateX(-50%) scale(.65);opacity:1}to{transform:translateX(-50%) scale(1.45);opacity:0}}
+.rh-fist-aura{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#fff6c4 0 12%,#ffb632 28%,#ff5d20 52%,transparent 74%);box-shadow:0 0 16px #ff7d20,0 0 34px #ff361c;animation:rhFist .34s ease-out forwards;}
+.rh-fist-core{position:absolute;inset:26%;border-radius:50%;background:#ffdf7b;box-shadow:0 0 8px #fff,0 0 20px #ff8b26;}
+@keyframes rhFist{from{opacity:0;transform:scale(.48) rotate(-12deg)}45%{opacity:1}to{opacity:0;transform:scale(1.2) rotate(9deg)}}
+.rh-spew-mouth{position:absolute;left:8px;top:33px;width:30px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff7c7 0 10%,#ffce55 26%,#ff5c19 55%,#691010 82%);box-shadow:0 0 14px #ff5e22,0 0 28px #ff4b1f;}
+.rh-spew-blast{position:absolute;left:28px;top:5px;width:56px;height:76px;border-radius:50%;background:radial-gradient(ellipse,#fff6bd 0 9%,#ffd24f 19%,#ff7a20 46%,#d51d18 68%,transparent 80%);filter:blur(.3px);box-shadow:0 0 18px #ff751f,0 0 40px #ff451d;animation:rhSpewBlast .22s ease-in-out infinite alternate;}
+@keyframes rhSpewBlast{from{transform:scale(.9,.88) skewX(-4deg)}to{transform:scale(1.1,1.12) skewX(4deg)}}
+.rh-heat-burst{border-radius:50%;animation:rhHeatBurst .62s ease-out forwards;}
+.rh-heat-burst>div{position:absolute;inset:8px;border-radius:50%;background:radial-gradient(circle,transparent 0 34%,#ff8d2b33 52%,transparent 73%);border:3px solid #ffbd54;box-shadow:0 0 20px #ff6a2b,0 0 45px #ff341a,inset 0 0 28px #ff762e55;}
+.rh-heat-burst i{position:absolute;left:50%;top:50%;width:4px;height:46%;transform-origin:50% 100%;background:linear-gradient(180deg,#fff6b8,transparent);filter:drop-shadow(0 0 8px #ff8a2a);}
+.rh-heat-burst i:nth-child(2){transform:translate(-50%,-100%) rotate(0)}.rh-heat-burst i:nth-child(3){transform:translate(-50%,-100%) rotate(60deg)}.rh-heat-burst i:nth-child(4){transform:translate(-50%,-100%) rotate(-60deg)}
+@keyframes rhHeatBurst{from{opacity:0;transform:scale(.48)}30%{opacity:1}to{opacity:0;transform:scale(1.35)}}
+.redhulk-heat-aura{border:3px solid #ffd36a;border-radius:50%;box-shadow:0 0 24px #ff7c24,0 0 48px #ff361c,inset 0 0 24px #ff8c2b44;animation:rhHeatAura .7s ease-out forwards;}
+@keyframes rhHeatAura{from{opacity:1;transform:scale(.72)}to{opacity:0;transform:scale(1.45)}}
+.punisher-muzzle .pm-flash{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#fff 0 8%,#ffe7a5 18%,#ffaf2d 38%,#ff4d1f 58%,transparent 78%);box-shadow:0 0 16px #ff9b2e;animation:pmFlash .11s ease-out forwards;}
+.punisher-muzzle .pm-smoke{position:absolute;inset:24%;border-radius:50%;background:#cfd2d666;filter:blur(3px);animation:pmSmoke .35s ease-out forwards;}
+@keyframes pmFlash{from{opacity:1;transform:scale(.72)}to{opacity:0;transform:scale(1.28)}}
+@keyframes pmSmoke{from{opacity:.7;transform:translateX(0) scale(.7)}to{opacity:0;transform:translateX(10px) scale(1.6)}}
+.punisher-grenade-flight{z-index:29;animation:pgFlight .47s cubic-bezier(.2,.8,.25,1) forwards;}
+.pg-body{position:absolute;inset:3px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f2f4f5 0 8%,#7b8188 30%,#272b31 68%,#0d0f12 100%);border:2px solid #11151b;box-shadow:inset 2px 2px 3px #fff5,0 3px 7px #000b;}
+.pg-pin{position:absolute;right:-2px;top:2px;width:9px;height:9px;border:2px solid #cbd0d6;border-radius:50%;box-shadow:0 0 4px #dce2e8;}
+.pg-ring{position:absolute;inset:-3px;border:1px solid #e8ebef55;border-radius:50%;animation:pgPinSpin .18s linear infinite;}
+@keyframes pgFlight{0%{transform:translate(0,0) scale(.84) rotate(0);opacity:0}15%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(520deg);opacity:1}}
+@keyframes pgPinSpin{to{transform:rotate(360deg)}}
+.punisher-grenade-explosion .pge-hot{position:absolute;inset:18px;border-radius:50%;background:radial-gradient(circle,#fff9c6 0 8%,#ffcc55 20%,#ff6a1d 44%,#d61f19 62%,transparent 78%);box-shadow:0 0 25px #ff6a2b,0 0 55px #ff2f1b;animation:pgeHot .52s ease-out forwards;}
+.punisher-grenade-explosion .pge-ring{position:absolute;inset:5px;border:5px solid #ffd79a;border-radius:50%;box-shadow:0 0 20px #ff6c2a,0 0 38px #ff3d21;animation:pgeRing .52s ease-out forwards;}
+.punisher-grenade-explosion .pge-smoke{position:absolute;inset:18px;border-radius:50%;background:radial-gradient(circle,#4a4d52aa 0 30%,#24272c55 55%,transparent 78%);filter:blur(5px);animation:pgeSmoke .52s ease-out forwards;}
+@keyframes pgeHot{from{transform:scale(.35);opacity:1}to{transform:scale(1.1);opacity:0}}
+@keyframes pgeRing{from{transform:scale(.35);opacity:1}to{transform:scale(1.15);opacity:0}}
+@keyframes pgeSmoke{from{transform:scale(.3);opacity:.72}to{transform:scale(1.4);opacity:0}}
+.punisher-roll-ring{border:2px solid #e9edf3;border-radius:50%;box-shadow:0 0 14px #aeb7c555, inset 0 0 10px #fff2;animation:punRollRing .33s ease-out forwards;}
+@keyframes punRollRing{from{opacity:1;transform:scale(.65)}to{opacity:0;transform:scale(1.4)}}
+
+/* Tall, lingering Red Hulk fire pool: a long low floor and high flame wall. */
+.killmonger-energy-cast{position:absolute;pointer-events:none;z-index:30;overflow:visible;filter:drop-shadow(0 0 5px #a968ff) drop-shadow(0 0 10px #6f35c955);}
+.km-cast-core,.km-pounce-core{position:absolute;left:50%;top:50%;width:28%;height:28%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#f7eaff 0 10%,#d99bff 24%,#9a52ef 52%,#6428ba 72%,transparent 82%);box-shadow:0 0 8px #edd3ff,0 0 18px #a75dff,0 0 28px #7136c955;animation:kmCoreBeat .24s ease-in-out infinite alternate;}
+.km-cast-ring,.km-pounce-ring{position:absolute;left:50%;top:50%;border-radius:50%;border:2px solid #c88aff;box-shadow:0 0 8px #b56cff,0 0 16px #7d43d966;transform:translate(-50%,-50%);animation:kmRingBurst .34s ease-out forwards;}
+.km-cast-ring.r1{width:58%;height:58%;}.km-cast-ring.r2{width:82%;height:44%;border-color:#a968ff;animation-delay:.03s;}
+.km-claw{position:absolute;left:13%;top:34%;width:72%;height:30%;border-top:4px solid #d8b0ff;border-radius:56% 44% 0 0;box-shadow:0 -2px 8px #b56cff,0 0 12px #7b3fd966;transform-origin:50% 100%;}
+.km-claw:after{content:'';position:absolute;right:0;top:-5px;width:40%;height:14px;border-top:2px solid #ecdfff;border-radius:50%;transform:rotate(10deg);filter:drop-shadow(0 0 5px #ad63ff);}
+.km-claw.c1{transform:rotate(-17deg);animation:kmClaw .30s ease-out forwards}.km-claw.c2{transform:rotate(0deg) scale(.96);animation:kmClaw .30s .02s ease-out forwards}.km-claw.c3{transform:rotate(17deg);animation:kmClaw .30s .04s ease-out forwards}
+.km-pounce-ring.a{width:72%;height:52%;border-color:#bf83ff;animation:kmPounceRing .38s ease-out forwards}.km-pounce-ring.b{width:58%;height:76%;border-color:#8f4fe8;animation:kmPounceRing .42s .03s ease-out forwards}
+.km-pounce-claw{position:absolute;top:22%;width:34%;height:56%;border:4px solid #d7b0ff;border-left-color:transparent;border-bottom-color:transparent;border-radius:58% 44% 52% 42%;box-shadow:0 0 8px #b66cff,0 0 16px #7d43d966;filter:drop-shadow(0 0 5px #a760ff);}
+.km-pounce-claw.one{left:13%;transform:rotate(-20deg);}.km-pounce-claw.two{right:13%;transform:scaleX(-1) rotate(-20deg);}
+@keyframes kmCoreBeat{from{transform:translate(-50%,-50%) scale(.88);opacity:.82}to{transform:translate(-50%,-50%) scale(1.10);opacity:1}}
+@keyframes kmRingBurst{from{opacity:.95;transform:translate(-50%,-50%) scale(.62) rotate(-8deg)}to{opacity:0;transform:translate(-50%,-50%) scale(1.06) rotate(10deg)}}
+@keyframes kmClaw{from{opacity:0;transform:scale(.78) translateX(-8px)}28%{opacity:1}to{opacity:0;transform:scale(1.06) translateX(8px)}}
+@keyframes kmPounceRing{from{opacity:0;transform:translate(-50%,-50%) scale(.62)}24%{opacity:1}to{opacity:0;transform:translate(-50%,-50%) scale(1.06)}}
+
+.killmonger-hit-slash,.killmonger-hit-claws{position:absolute;pointer-events:none;z-index:32;filter:drop-shadow(0 0 5px #b873ff);overflow:visible;}
+.km-hit-slash{position:absolute;left:5%;width:90%;height:6px;border-radius:10px;background:linear-gradient(90deg,transparent,#f0ddff 18%,#c98aff 48%,#8743df 78%,transparent);box-shadow:0 0 7px #c585ff,0 0 14px #8b4de066;transform-origin:50% 50%;}
+.km-hit-slash.s1{top:25%;transform:rotate(-21deg);animation:kmSlashA .30s ease-out forwards}.km-hit-slash.s2{top:49%;transform:rotate(2deg);animation:kmSlashB .32s .02s ease-out forwards}.km-hit-slash.s3{top:73%;transform:rotate(22deg);animation:kmSlashC .34s .04s ease-out forwards}
+@keyframes kmSlashA{from{opacity:0;transform:translateX(-12px) rotate(-21deg) scaleX(.70)}28%{opacity:1}to{opacity:0;transform:translateX(10px) rotate(-16deg) scaleX(1.05)}}
+@keyframes kmSlashB{from{opacity:0;transform:translateX(-10px) rotate(2deg) scaleX(.68)}28%{opacity:1}to{opacity:0;transform:translateX(12px) rotate(6deg) scaleX(1.08)}}
+@keyframes kmSlashC{from{opacity:0;transform:translateX(-9px) rotate(22deg) scaleX(.68)}28%{opacity:1}to{opacity:0;transform:translateX(12px) rotate(27deg) scaleX(1.06)}}
+.km-big-claw{position:absolute;width:62%;height:18%;border-top:6px solid #d8b3ff;border-radius:60% 40% 0 0;box-shadow:0 -2px 10px #b66cff,0 0 14px #7b43d966;transform-origin:50% 50%;}
+.km-big-claw:after{content:'';position:absolute;left:10%;top:-5px;width:80%;height:10px;border-top:2px solid #eedfff;border-radius:50%;filter:drop-shadow(0 0 5px #a760ff);}
+.km-big-claw.a{left:4%;top:32%;transform:rotate(-18deg);animation:kmBigClawA .32s ease-out forwards}.km-big-claw.b{left:34%;top:60%;transform:rotate(18deg);animation:kmBigClawB .36s .03s ease-out forwards}
+@keyframes kmBigClawA{from{opacity:0;transform:translateX(-10px) rotate(-18deg) scale(.74)}25%{opacity:1}to{opacity:0;transform:translateX(12px) rotate(-9deg) scale(1.06)}}
+@keyframes kmBigClawB{from{opacity:0;transform:translateX(-9px) rotate(18deg) scale(.74)}25%{opacity:1}to{opacity:0;transform:translateX(12px) rotate(26deg) scale(1.08)}}
+.redhulk-fire-pool{position:absolute;pointer-events:none;z-index:17;overflow:visible;isolation:isolate;}
+.redhulk-fire-pool:before{content:'';position:absolute;left:5%;right:5%;bottom:2px;height:44px;border-radius:50%;background:radial-gradient(ellipse at 50% 60%,#fffbd4 0 5%,#ffd761 13%,#ff8a1f 31%,#ef3219 51%,#9c1016 66%,transparent 82%);box-shadow:0 0 24px #ff6a25,0 0 52px #ff321b55;filter:blur(2px);animation:rhPoolBase .24s ease-in-out infinite alternate;}
+.redhulk-fire-pool:after{content:'';position:absolute;left:9%;right:9%;bottom:3%;height:91%;border-radius:50% 50% 30% 30% / 28% 28% 18% 18%;background:radial-gradient(ellipse at 50% 94%,#fff0a4 0 7%,#ffd867 17%,#ff9f2f 33%,#ff5a19 52%,#d41a1d 68%,transparent 82%);opacity:.48;filter:blur(12px);mask-image:radial-gradient(ellipse at 50% 92%,#000 0 58%,transparent 86%);animation:rhWallPulse .36s ease-in-out infinite alternate;}
+.redhulk-fire-pool .rh-fire-smoke{position:absolute;left:7%;right:7%;top:-1%;height:34%;background:radial-gradient(ellipse at 50% 70%,#f2aa6740 0 14%,#8a5d4b66 35%,#34384055 58%,transparent 78%);filter:blur(11px);opacity:.48;animation:rhSmokeDrift 1s ease-in-out infinite alternate;}
+.redhulk-fire-pool .rh-fire-core{position:absolute;left:2%;right:2%;bottom:8px;height:78%;border-radius:50% 50% 9% 9%;background:radial-gradient(ellipse at 50% 82%,#fffbe0 0 7%,#ffe36c 13%,#ff9228 27%,#ff4f1b 49%,#bd151a 69%,transparent 82%);filter:blur(1px);opacity:.93;box-shadow:inset 0 0 18px #fff0a066,0 -4px 22px #ff4f1f33;animation:rhCorePulse .23s ease-in-out infinite alternate;}
+.redhulk-fire-pool .rh-fire-glow{position:absolute;left:4%;right:4%;bottom:7%;height:88%;border-radius:50% 50% 12% 12%;background:linear-gradient(90deg,transparent,#ff9a2a22 18%,#fff1a433 48%,#ff6e1d22 82%,transparent);filter:blur(9px);mix-blend-mode:screen;animation:rhGlowWave .55s ease-in-out infinite alternate;}
+.redhulk-fire-pool .rh-fire-tongues{position:absolute;left:0;right:0;bottom:0;height:100%;overflow:visible;}
+.redhulk-fire-pool .rh-fire-tongues i{position:absolute;bottom:-6px;width:72px;height:76%;border-radius:54% 46% 48% 44%;background:radial-gradient(ellipse at 50% 76%,#fffbe0 0 8%,#ffe064 17%,#ff8a21 39%,#ef3819 61%,#9e1217 76%,transparent 82%);filter:drop-shadow(0 0 10px #ff5d24) drop-shadow(0 0 20px #ff301966);transform-origin:50% 100%;animation:rhTongue .34s ease-in-out infinite alternate;}
+.redhulk-fire-pool .rh-fire-tongues i:nth-child(1){left:3%;height:64%;animation-delay:-.08s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(2){left:10%;height:84%;animation-delay:-.23s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(3){left:22%;height:70%;animation-delay:-.04s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(4){left:33%;height:98%;animation-delay:-.18s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(5){left:46%;height:78%;animation-delay:-.28s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(6){left:58%;height:95%;animation-delay:-.13s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(7){left:70%;height:72%;animation-delay:-.21s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(8){left:80%;height:89%;animation-delay:-.06s}.redhulk-fire-pool .rh-fire-tongues i:nth-child(9){left:88%;height:68%;animation-delay:-.16s}
+.redhulk-fire-pool .rh-fire-embers{position:absolute;inset:-8% 0 0;background-image:radial-gradient(circle,#fff5bc 0 2px,transparent 3px),radial-gradient(circle,#ffd066 0 1.7px,transparent 2.8px),radial-gradient(circle,#ff6421 0 2px,transparent 3px);background-size:72px 64px,49px 57px,96px 78px;animation:rhEmbers 1s linear infinite;opacity:.88;mix-blend-mode:screen;}
+@keyframes rhCorePulse{from{transform:scaleY(.94) translateY(2px);opacity:.86}to{transform:scaleY(1.04) translateY(-2px);opacity:1}}
+@keyframes rhGlowWave{from{transform:scaleX(.96);opacity:.5}to{transform:scaleX(1.05);opacity:.9}}
+@keyframes rhTongue{from{transform:translateY(5px) scale(.9,.92) skewX(-4deg);opacity:.82}to{transform:translateY(-8px) scale(1.05,1.08) skewX(5deg);opacity:1}}
+@keyframes rhPoolBase{from{transform:scaleX(.96)}to{transform:scaleX(1.06)}}
+@keyframes rhWallPulse{from{transform:scaleY(.96) skewX(-1deg)}to{transform:scaleY(1.04) skewX(1deg)}}
+@keyframes rhPoolFlame{from{transform:scaleY(.86) rotate(-3deg);opacity:.72}to{transform:scaleY(1.08) rotate(4deg);opacity:1}}
+@keyframes rhSmokeDrift{from{transform:translateX(-2%) scale(.96)}to{transform:translateX(3%) scale(1.05)}}
+@keyframes rhEmbers{from{background-position:0 0,0 0,0 0;transform:translateY(8px)}to{background-position:20px -58px,-12px -74px,18px -82px;transform:translateY(-12px)}}
+.ironmonger-missile-projectile{overflow:visible!important;filter:drop-shadow(0 0 5px #ff9f43) drop-shadow(0 0 12px #ff561c66);}
+.im-missile-body{position:absolute;left:4%;right:4%;top:25%;height:50%;border-radius:6px 55% 55% 6px;background:linear-gradient(180deg,#f4f7f9,#a7afb7 38%,#3a424a 74%,#161a1f);border:1px solid #0c0f13;box-shadow:inset 0 2px 2px #fff9;}
+.im-missile-body:before,.im-missile-body:after{content:'';position:absolute;top:10%;bottom:10%;width:9px;background:#6e7780;border:1px solid #24282e;}
+.im-missile-body:before{left:18%;transform:skewY(18deg)}.im-missile-body:after{right:18%;transform:skewY(-18deg)}
+.im-missile-glow{position:absolute;inset:5%;border-radius:50%;background:radial-gradient(circle,#fff 0 8%,#ffcf6b 22%,#ff6b1f 54%,transparent 78%);opacity:.45;filter:blur(2px);animation:imMissilePulse .18s ease-in-out infinite alternate;}
+.im-missile-flame{position:absolute;left:-12%;top:33%;width:34%;height:34%;border-radius:50%;background:radial-gradient(circle,#fff7c8 0 14%,#ffcf61 29%,#ff6a1f 58%,transparent 78%);filter:blur(.4px);animation:imMissileFlame .18s ease-in-out infinite alternate;}
+@keyframes imMissilePulse{from{transform:scale(.92)}to{transform:scale(1.08)}}
+@keyframes imMissileFlame{from{transform:scaleX(.72)}to{transform:scaleX(1.2)}}
+.ironmonger-repulsor-projectile{overflow:visible!important;filter:drop-shadow(0 0 6px #ffd27a) drop-shadow(0 0 14px #ff6a1f88);}
+.im-repulsor-bolt{position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle,#fff 0 10%,#e8f3ff 21%,#ffcf6b 42%,#ff6c1d 68%,transparent 80%);box-shadow:0 0 12px #fff,0 0 25px #ffb84f;}
+.im-repulsor-halo{position:absolute;inset:4%;border:2px solid #ffe8b5;border-radius:50%;box-shadow:0 0 14px #ffb44a;animation:imRepPulse .28s linear infinite;}
+.im-repulsor-tail{position:absolute;top:30%;height:40%;width:110%;background:linear-gradient(90deg,transparent,#fff1b0,#ff8a2c);filter:blur(2px);opacity:.8;}
+@keyframes imRepPulse{from{transform:scale(.84) rotate(-12deg);opacity:.65}to{transform:scale(1.13) rotate(12deg);opacity:1}}
+
 .fighter.venom .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
 .fighter.hulk .fighter-square{box-shadow:0 0 0 2px rgba(105,255,108,.18),0 16px 30px rgba(0,0,0,.32);}
 .fighter.hulk.facing-left .fighter-square,.fighter.thing.facing-left .fighter-square{transform:scaleX(-1) scale(1.3);}
@@ -1521,6 +1656,18 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.hulk.hulk-smash.facing-left .fighter-square{animation:hulkPunchLeft .24s cubic-bezier(.18,.82,.2,1);}
 @keyframes hulkPunch{0%{transform:scale(1.3) rotate(0)}35%{transform:scale(1.36) rotate(-2deg)}62%{transform:scale(1.29) rotate(2deg)}100%{transform:scale(1.3) rotate(0)}}
 @keyframes hulkPunchLeft{0%{transform:scaleX(-1) scale(1.3) rotate(0)}35%{transform:scaleX(-1) scale(1.36) rotate(2deg)}62%{transform:scaleX(-1) scale(1.29) rotate(-2deg)}100%{transform:scaleX(-1) scale(1.3) rotate(0)}}
+.fighter.redhulk.redhulk-smash .fighter-square{animation:redHulkPunch .24s cubic-bezier(.18,.82,.2,1);}
+.fighter.redhulk.redhulk-smash.facing-left .fighter-square{animation:redHulkPunchLeft .24s cubic-bezier(.18,.82,.2,1);}
+@keyframes redHulkPunch{0%{transform:scale(1.18) rotate(0)}35%{transform:scale(1.24) rotate(-2deg)}62%{transform:scale(1.17) rotate(2deg)}100%{transform:scale(1.18) rotate(0)}}
+@keyframes redHulkPunchLeft{0%{transform:scaleX(-1) scale(1.18) rotate(0)}35%{transform:scaleX(-1) scale(1.24) rotate(2deg)}62%{transform:scaleX(-1) scale(1.17) rotate(-2deg)}100%{transform:scaleX(-1) scale(1.18) rotate(0)}}
+
+/* Punisher rounds: deliberately distinct from Nick Fury's small generic bullets. */
+.punisher-round-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 5px rgba(255,235,180,.18))!important;}
+.punisher-round-projectile .pmr-casing{position:absolute;left:18%;top:30%;width:47%;height:40%;border-radius:4px 1px 2px 4px;background:linear-gradient(180deg,#e8c47c,#9a6a2b 48%,#4b3015);border:1px solid #23170b;box-shadow:inset 0 1px 1px #fff7;}
+.punisher-round-projectile .pmr-tip{position:absolute;right:4%;top:30%;width:38%;height:40%;clip-path:polygon(0 0,100% 50%,0 100%);background:linear-gradient(180deg,#9ea6ad,#535c66);filter:drop-shadow(0 0 2px #d8dde2);}
+.punisher-round-projectile .pmr-band{position:absolute;left:48%;top:27%;width:10%;height:46%;border-radius:2px;background:#30353a;box-shadow:0 0 3px #000;}
+.punisher-round-projectile .pmr-trail{position:absolute;left:-30%;top:39%;width:46%;height:22%;border-radius:50%;background:linear-gradient(90deg,transparent,#ffd98a88,#fff1bd);filter:blur(1.4px);animation:pmrTrail .12s ease-in-out infinite alternate;}
+@keyframes pmrTrail{from{transform:scaleX(.78);opacity:.55}to{transform:scaleX(1.2);opacity:.95}}
 
 /* Clear, readable melee weapon/slash FX for Black Panther and Daredevil. */
 .melee-weapon-fx{pointer-events:none;z-index:10;transform-origin:50% 50%;}
@@ -3859,6 +4006,24 @@ const CHARACTERS = {
          desc:'A sudden burst of speed in the direction he\u2019s facing — close distance to start a combo, or bail out to reposition. Pure mobility — no damage.'}
     }
   },
+  killmonger: {
+    id:'killmonger', name:'Killmonger', img:'Killmonger.jpg', color:'#d8a12c', accentColor:'#a8781d', aiStyle:'killmonger',
+    maxHealth:12000,
+    description:"An aggressive vibranium-blade brawler. Fast claws keep pressure on, Panther Pounce closes the gap, and Warrior's Fury turns him into a tougher, harder-hitting threat for a short burst.",
+    abilities:{
+      E:{key:'E', name:'Vibranium Blades', type:'melee', damage:525, cooldown:850, knockback:9, range:96,
+         hitRange:145, hitVertical:135, hitStartSlack:55, hitDelay:60,
+         sound:'killmonger_blades', fx:'killmonger_blades', hitFx:'killmonger_blade_hit', hitSound:'killmonger_blade_hit',
+         desc:'Fast twin-blade strikes for 525 damage.'},
+      Q:{key:'Q', name:'Panther Pounce', type:'thingCharge', damage:1500, cooldown:15000, knockback:20, range:150,
+         boostX:29, boostY:-5, dashMs:255, hitDelay:205,
+         sound:'killmonger_pounce', fx:'killmonger_pounce', hitFx:'killmonger_pounce_hit', hitSound:'killmonger_pounce_hit',
+         desc:'Leaps forward and crashes into the enemy for 1,500 damage.'},
+      R:{key:'R', name:"Warrior's Fury", type:'killmongerFury', damage:0, cooldown:18000, duration:5000, damageMult:1.3, reduction:.2,
+         sound:'killmonger_fury', fx:'killmonger_fury',
+         desc:'Enters a 5-second combat frenzy, increasing damage by 30% and reducing incoming damage by 20%.'}
+    }
+  },
   daredevil: {
     id:'daredevil', name:'Daredevil', img:'Daredevil.jpg', color:'#c53030',
     maxHealth:5000, aiStyle:'agile',
@@ -3894,6 +4059,23 @@ const CHARACTERS = {
       R:{key:'R', name:'Hulk Roar', type:'hulkScream', cooldown:20000,
          sound:'hulk_scream_roar', fx:'hulk_scream',
          desc:'Hulk unleashes a massive roar that blasts the enemy to whichever side of the map they are closest to and pins them there. Fighters under 15,000 max health cannot move at all, fighters from 15,000 to 20,000 can only shuffle a little, and anyone over 20,000 max health is not affected at all.'}
+    }
+  },
+  redhulk: {
+    id:'redhulk', name:'Red Hulk', img:'RedHulk.jpg', color:'#c92b2b', accentColor:'#ff9d35', aiStyle:'redhulk',
+    maxHealth:19500, jumpHeightMultiplier:2,
+    description:'A raging gamma powerhouse. His fists leave burning wounds, he spews a towering pool of fire across the arena, and Heat Radiation superheats his entire body for a short burst of extra power.',
+    abilities:{
+      E:{key:'E', name:'Volcano Fists', type:'melee', damage:500, cooldown:900, knockback:13, range:100,
+         hitRange:150, hitVertical:138, hitStartSlack:55, hitDelay:65, redHulkBurn:true, burnTicks:4, burnTickMs:250,
+         sound:'redhulk_volcano_fists', fx:'redhulk_hulk_smash', hitFx:'redhulk_volcano_hit', hitSound:'redhulk_volcano_hit',
+         desc:'A brutal punch for 500 damage that leaves the target burning for bonus damage based on their max health.'},
+      Q:{key:'Q', name:'Fire Spew', type:'fireSpew', damage:200, cooldown:20000, duration:3500, width:410, height:300,
+         sound:'redhulk_fire_spew', fx:'redhulk_fire_spew', hitFx:'redhulk_fire_hit', hitSound:'redhulk_fire_hit',
+         desc:'Creates a long, towering fire pool in front of Red Hulk that deals 200 damage every 0.2 seconds while an enemy remains inside.'},
+      R:{key:'R', name:'Heat Radiation', type:'redHulkHeat', damage:0, cooldown:20000, duration:5000, damageMult:1.3,
+         sound:'redhulk_heat', fx:'redhulk_heat',
+         desc:'Superheats Red Hulk for 5 seconds, increasing the damage of his abilities by 30% and covering him in flames.'}
     }
   },
   wolverine: {
@@ -4085,6 +4267,23 @@ const CHARACTERS = {
     }
   },
 
+  ironmonger: {
+    id:'ironmonger', name:'Iron Monger', img:'IronMonger.jpg', color:'#59636f', accentColor:'#ff9f43', aiStyle:'ironmonger',
+    maxHealth:13000,
+    description:'A towering armored weapons platform. Fires brutal repulsor shots, unloads a guided missile barrage, and leaps high into the air before landing with a concussive force push.',
+    abilities:{
+      E:{key:'E', name:'Repulsor Cannons', type:'projectile', damage:575, cooldown:700, knockback:8,
+         speed:14, w:30, h:16, color:'#ffbf63', render:'ironmonger-repulsor', trail:'ironmonger',
+         sound:'ironmonger_repulsor', fx:'ironmonger_none', hitFx:'ironmonger_repulsor_hit', hitSound:'ironmonger_repulsor_hit',
+         desc:'Fires a heavy orange-white repulsor blast for 575 damage.'},
+      Q:{key:'Q', name:'Missile Barrage', type:'missileBarrage', damage:1900, cooldown:10000, knockback:15,
+         sound:'ironmonger_missiles', fx:'ironmonger_none', hitFx:'ironmonger_missile_hit', hitSound:'ironmonger_missile_hit',
+         desc:'Launches a five-missile barrage for 1,900 total damage.'},
+      R:{key:'R', name:'Iron Jump', type:'ironJump', damage:0, cooldown:12000, jumpVel:-38, pushRadius:225, pushX:15, pushY:8,
+         sound:'ironmonger_jump', fx:'ironmonger_jump', hitFx:'ironmonger_landing', hitSound:'ironmonger_landing',
+         desc:'Leaps extremely high, then lands with a concussive force that pushes nearby enemies away without dealing damage.'}
+    }
+  },
   vision: {
     id:'vision', name:'Vision', img:'Vision.jpg', color:'#38e5ae', accentColor:'#b7ffe8', aiStyle:'vision',
     maxHealth:14500,
@@ -4117,6 +4316,24 @@ const CHARACTERS = {
       R:{key:'R', name:'What attack?', type:'scarletDisable', damage:0, cooldown:45000, duration:20000,
          sound:'scarlet_disable', fx:'scarlet_disable',
          desc:'Randomly disables one of the enemy’s E/Q/R abilities for 20 seconds. Cooldown: 45 seconds.'}
+    }
+  },
+  punisher: {
+    id:'punisher', name:'The Punisher', img:'Punisher.jpg', color:'#27282c', accentColor:'#f0f0f0', aiStyle:'punisher',
+    maxHealth:5050,
+    description:'A lethal grounded gunner. Keeps pressure on with automatic fire, throws a high-impact frag grenade, then uses a combat roll to reposition before the enemy can pin him down.',
+    abilities:{
+      E:{key:'E', name:'Automatic Gunfire', type:'bulletStorm', damage:320, cooldown:850, knockback:5, speed:29,
+         bulletDamages:[64,70,58,72,56], bulletTypes:['punisher-fmj','punisher-fmj','punisher-ap','punisher-fmj','punisher-hollow'],
+         projectileRender:'punisher-round',
+         sound:'punisher_gunfire', fx:'punisher_gunfire', hitFx:'punisher_bullet_hit', hitSound:'punisher_bullet_hit',
+         desc:'Rapid rifle burst for 320 total damage.'},
+      Q:{key:'Q', name:'Frag Grenade', type:'fragGrenade', damage:600, cooldown:14000, knockback:16, radius:120, fuse:470,
+         sound:'punisher_grenade', fx:'punisher_grenade', hitFx:'punisher_grenade_hit', hitSound:'punisher_grenade_hit',
+         desc:'Throws a frag grenade that explodes for 600 damage.'},
+      R:{key:'R', name:'Tactical Roll', type:'mobility', damage:0, cooldown:7000, boostX:23, boostY:-2, rollMs:380,
+         sound:'punisher_roll', fx:'punisher_roll',
+         desc:'A fast combat roll for repositioning or escaping danger. No damage.'}
     }
   },
   bullseye: {
@@ -4152,16 +4369,16 @@ const CHARACTERS = {
     maxHealth:9500, dodgeChance:0.15,
     description:'Passive: Spider-Sense dodges 15% of incoming attacks. Shocks enemies with electrified webs, crushes them with a bio-electric punch, and can vanish completely.',
     abilities:{
-      E:{key:'E', name:'Electric Webs', type:'projectile', damage:400, cooldown:800, knockback:7,
+      E:{key:'E', name:'Electric Webs', type:'projectile', damage:300, cooldown:800, knockback:7,
          speed:16, w:24, h:9, color:'#7fe8ff',
          sound:'miles_web', fx:'miles_web', render:'electric-web', trail:'electric-web', web:true,
          hitFx:'miles_web_hit', hitSound:'miles_web_hit', slow:600,
          shock:{ticks:4, interval:250, damage:50},
-         desc:'A stronger web shot crackling with bio-electricity. Deals 400 damage, slows the target, then electrocutes them for 200 extra damage over 1 second.'},
-      Q:{key:'Q', name:'Electric Punch', type:'melee', damage:1400, cooldown:12000, knockback:18, range:88,
+         desc:'A stronger web shot crackling with bio-electricity. Deals 300 damage, slows the target, then electrocutes them for 200 extra damage over 1 second.'},
+      Q:{key:'Q', name:'Electric Punch', type:'melee', damage:1050, cooldown:12000, knockback:18, range:88,
          hitDelay:90,
          sound:'miles_punch', fx:'miles_punch', hitFx:'miles_punch_hit', hitSound:'miles_punch_hit',
-         desc:'A charged Venom Strike haymaker that deals 1,400 damage at close range.'},
+         desc:'A charged Venom Strike haymaker that deals 1,050 damage at close range.'},
       R:{key:'R', name:'Camouflage', type:'cloak', damage:0, duration:6000, cooldown:20000,
          sound:'miles_cloak', fx:'miles_cloak',
          desc:'Turns Miles fully invisible for 6 seconds. You cannot see yourself, and the enemy cannot see you either. Cooldown: 20 seconds.'}
@@ -4398,7 +4615,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','yondu','rocket','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','punisher','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp'];
 
 
 /* =========================================================================
@@ -5348,7 +5565,9 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     grappleVx:0, grappleVy:0, grappleUntil:0,
     cooldowns:{E:0,Q:0,R:0},
     windBurstUntil:0, windBurstVx:0, invulnAbilityUntil:0,
-    chargeState:null, draxFuryUntil:0,
+    chargeState:null, draxFuryUntil:0, killmongerFuryUntil:0,
+    redHulkHeatUntil:0, redHulkFirePools:[], ironJumpActive:false, ironJumpMinLandAt:0, ironJumpAbility:null,
+    burnAttacker:null,
     shield:null,
     elasticityEl:null,
     shieldThrown:false,
@@ -5391,7 +5610,7 @@ const state = {
   mode:'menu', // 'battle'
   countdown:false,
   player:null, bot:null,
-  projectiles:[], walls:[], missiles:[], illusions:[], fxNodes:[],
+  projectiles:[], walls:[], missiles:[], illusions:[], firePools:[], fxNodes:[],
   lastTime:0,
   scaleFactor:1,
   input:{left:false,right:false,down:false,up:false},
@@ -5428,6 +5647,7 @@ function startBattle(playerCharId, botCharId, opts){
   state.walls = [];
   state.missiles = [];
   state.illusions = [];
+  state.firePools = [];
   setActiveMap(SAVE.mapId);
   clearArenaDOM();
   buildArenaStatic();
@@ -5673,10 +5893,12 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
+    ${f.def.id==='redhulk' ? '<div class="redhulk-flame" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="redhulk-burn-fx" aria-hidden="true"><div class="rh-burn-glow"></div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' : ''}
+    ${f.def.id!=='redhulk' ? '<div class="redhulk-burn-fx" aria-hidden="true"><div class="rh-burn-glow"></div><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' : ''}
     ${f.def.id==='antman' ? '<div class="antman-size-ring"></div>' : ''}
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
@@ -5992,7 +6214,7 @@ function hulkRoarTier(def){
 function isRoarHeld(f, t){ return !!f && (!!f.hulkSlideDir || (!!f.hulkRoarUntil && t < f.hulkRoarUntil)); }
 // Abilities that would carry a fighter across the arena. They are locked while roared,
 // otherwise a "rooted" fighter could just teleport / leap / grapple straight out of it.
-const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl'];
+const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl','ironJump'];
 
 function finishHulkSlide(f, hitWall){
   const tier = f.hulkSlideTier;
@@ -6258,6 +6480,26 @@ function spawnFourthWallBubble(caster){
 
 function executeAbility(caster, target, ability, t){
   switch(ability.type){
+    case 'killmongerFury': {
+      caster.killmongerFuryUntil=t+(ability.duration||5000); if(caster.el)caster.el.classList.add('killmonger-fury-active');
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,24,'#ffd36b',86,520);
+      fxEl('fx-ring',`left:${caster.x-20}px;top:${caster.y-20}px;width:${FIGHTER_SIZE+40}px;height:${FIGHTER_SIZE+40}px;border-color:#ffd36b;border-width:3px;box-shadow:0 0 32px #ff9d2e;`,520); shakeArena(4,220); break;
+    }
+    case 'redHulkHeat': {
+      caster.redHulkHeatUntil=t+(ability.duration||5000); if(caster.el)caster.el.classList.add('redhulk-heat-active');
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,28,'#ff9f2f',96,560);
+      fxEl('redhulk-heat-aura',`left:${caster.x-18}px;top:${caster.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;`,700); shakeArena(5,240); break;
+    }
+    case 'fireSpew': {
+      state.firePools=state.firePools.filter(pool=>{if(pool.casterRef===caster){if(pool.el)pool.el.remove();return false;}return true;});
+      spawnRedHulkFirePool(caster,ability,t); sfx(ability.sound||'redhulk_fire_spew'); break;
+    }
+    case 'ironJump': {
+      caster.ironJumpActive=true; caster.ironJumpMinLandAt=t+650; caster.ironJumpAbility=ability;
+      caster.vy=ability.jumpVel||-38; caster.vx=caster.facing*4.5; caster.onGround=false; caster.abilityLockUntil=Math.max(caster.abilityLockUntil||0,t+320);
+      if(caster.el)caster.el.classList.add('iron-jumping');
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE-6,22,'#ffd080',84,480); fxEl('ironmonger-jump-ring',`left:${caster.x-22}px;top:${caster.y+12}px;width:${FIGHTER_SIZE+44}px;height:40px;`,460); break;
+    }
     case 'lokiDuplication': {
       spawnLokiDuplications(caster, ability.duration || 4000);
       break;
@@ -6476,7 +6718,7 @@ function executeAbility(caster, target, ability, t){
           vx: baseDir*speed, vy: spread*speed, w:36, h:10, color:'#d9dde3',
           damage: damages[i], knockback:ability.knockback, owner:caster.id,
           icon:'', life:2600, returns:false, phase:'out', originX:caster.x, casterRef:caster, targetRef:target,
-          returnDistance:0, render:'bullet', bulletType:types[i%types.length], trail:'', web:false,
+          returnDistance:0, render:(ability.projectileRender || 'bullet'), bulletType:types[i%types.length], trail:'', web:false,
           hitFx:ability.hitFx || 'bullet_hit', hitSound:ability.hitSound || 'bullet_hit', slow:0,
           pierce:false, shieldViz:false, hasHitTarget:false, trailTick:0, el:null
         });
@@ -6499,7 +6741,7 @@ function executeAbility(caster, target, ability, t){
           vx:baseDir*(13+i*.55), vy:(i-2)*0.55, w:50, h:18, color:'#d4d9e0',
           damage: per + (i===count-1 ? total-per*count : 0), knockback:ability.knockback, owner:caster.id,
           life:3000, returns:false, phase:'out', originX:caster.x, casterRef:caster, targetRef:tg, returnDistance:0,
-          render:'warmachine-missile', trail:'missile-smoke', web:false, hitFx:ability.hitFx, hitSound:ability.hitSound,
+          render:'ironmonger-missile', trail:'missile-smoke', web:false, hitFx:ability.hitFx, hitSound:ability.hitSound,
           slow:0, pierce:false, shieldViz:false, hasHitTarget:false, trailTick:0, el:null
         });
       }, i*85);
@@ -6772,6 +7014,7 @@ function executeAbility(caster, target, ability, t){
         waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
         pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false, precisionAim:!!ability.precisionAim, ricochet:false, ricochetBounced:false,
         burnDamage: ability.burnDamage || 0, burnTicks: ability.burnTicks || 0, burnTickMs: ability.burnTickMs || 500,
+        redHulkBurn: !!ability.redHulkBurn, redHulkBurnTicks: ability.burnTicks || 4, redHulkBurnTickMs: ability.burnTickMs || 250,
         trailTick: 0,
         el:null
       });
@@ -6797,7 +7040,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && !attackBlockedByFloor(caster, target)){
           const dir = dirSignTo(caster, target);
           damageTargetOrWall(target, ability.damage, ability.knockback, dir,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability)});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability), attacker:caster});
         } else {
           const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*70;
           fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#ffffff44,transparent 70%);`, 380);
@@ -6935,8 +7178,13 @@ function executeAbility(caster, target, ability, t){
         // never restricts the player's own attacks.
         const facingOk = swingOk();
         if(inRange && facingOk){
+          const healthBefore=target.health;
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
             {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability), attacker:caster});
+          if(ability.redHulkBurn && target.health<healthBefore && !target.dead){
+            const ticks=Math.max(1,ability.burnTicks||4);
+            applyBurn(target,{interval:ability.burnTickMs||250,ticks,damage:redHulkBurnDamageFor(target)/ticks,attacker:caster});
+          }
         } else {
           // whiff: a small puff of air so the swing still reads
           const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*52;
@@ -6947,6 +7195,30 @@ function executeAbility(caster, target, ability, t){
       };
       const delay = ability.hitDelay || 0;
       if(delay > 0) setTimeout(resolve, delay); else resolve();
+      break;
+    }
+    case 'fragGrenade': {
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      const dir = tg && !tg.dead ? dirSignTo(caster,tg) : caster.facing;
+      const gx = caster.x + FIGHTER_SIZE/2 + dir*34;
+      const gy = caster.y + FIGHTER_SIZE/2 - 6;
+      const tx = tg && !tg.dead ? tg.x + FIGHTER_SIZE/2 : gx + dir*150;
+      const ty = tg && !tg.dead ? tg.y + FIGHTER_SIZE/2 : gy;
+      const radius = ability.radius || 120;
+      const fuse = ability.fuse || 470;
+      setTimeout(()=>{
+        if(state.mode !== 'battle' || caster.dead) return;
+        const ex=Math.max(20,Math.min(ARENA_W-20,tx));
+        const ey=Math.max(20,Math.min(ARENA_H-20,ty));
+        damageMissilesInArea(caster.id,ex,ey,radius,ability.damage);
+        if(tg && !tg.dead){
+          const dist=Math.hypot((tg.x+FIGHTER_SIZE/2)-ex,(tg.y+FIGHTER_SIZE/2)-ey);
+          if(dist<=radius && !attackBlockedByFloor(caster,tg)){
+            damageTargetOrWall(tg,ability.damage,ability.knockback,dirSignTo(caster,tg),{hitFx:ability.hitFx,sound:ability.hitSound,ranged:true,attacker:caster});
+          }
+        }
+        sfx(ability.hitSound||'punisher_grenade_hit');
+      },fuse);
       break;
     }
     case 'aoe': {
@@ -7403,6 +7675,71 @@ function updatePsiWarp(f){
   if(f.psiTicksLeft <= 0 && f.el) f.el.classList.remove('psi-warped');
 }
 
+function redHulkBurnDamageFor(target){
+  const hp = (target && target.def && target.def.maxHealth) || 0;
+  if(hp < 6000) return 400;
+  if(hp > 20000) return 20;
+  if(hp > 15000) return 100;
+  return 200;
+}
+function spawnRedHulkFirePool(caster, ability, t){
+  const dir = caster.facing < 0 ? -1 : 1;
+  const w = ability.width || 470, h = ability.height || 300;
+  const centerX = caster.x + FIGHTER_SIZE/2 + dir*(w*0.48);
+  const x = centerX - w/2;
+  const y = caster.y + FIGHTER_SIZE - h + 42;
+  const el = fxEl('redhulk-fire-pool', `left:${x}px;top:${y}px;width:${w}px;height:${h}px;--fire-dir:${dir};`, ability.duration||3500,
+    '<div class="rh-fire-smoke"></div><div class="rh-fire-glow"></div><div class="rh-fire-core"></div><div class="rh-fire-tongues"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="rh-fire-embers"></div>');
+  state.firePools.push({casterRef:caster,ability,x,y,w,h,dir,expires:t+(ability.duration||3500),nextTick:new Map(),el});
+  spawnSparks(centerX-dir*30,caster.y+FIGHTER_SIZE-12,24,'#ffd66b',90,520);
+  shakeArena(7,260);
+}
+function updateRedHulkFirePools(){
+  const t=now();
+  for(let i=state.firePools.length-1;i>=0;i--){
+    const pool=state.firePools[i];
+    if(!pool || !pool.casterRef || pool.casterRef.dead || t>=pool.expires || state.mode!=='battle'){
+      if(pool&&pool.el)pool.el.remove(); state.firePools.splice(i,1); continue;
+    }
+    const caster=pool.casterRef;
+    for(const target of [state.player,state.bot]){
+      if(!target || target.dead || target===caster) continue;
+      const inside=(target.x+FIGHTER_SIZE>pool.x && target.x<pool.x+pool.w && target.y+FIGHTER_SIZE>pool.y && target.y<pool.y+pool.h);
+      if(!inside){pool.nextTick.delete(target.id);continue;}
+      const next=pool.nextTick.get(target.id)||0;
+      if(t>=next){
+        pool.nextTick.set(target.id,t+200);
+        damageTargetOrWall(target,pool.ability.damage||200,5,dirSignTo(caster,target),{hitFx:pool.ability.hitFx,sound:pool.ability.hitSound,ranged:true,attacker:caster});
+        fxEl('fx-ring',`left:${target.x-8}px;top:${target.y-8}px;width:${FIGHTER_SIZE+16}px;height:${FIGHTER_SIZE+16}px;border-color:#ffb338;border-width:2px;box-shadow:0 0 18px #ff5722;`,180);
+        spawnSparks(target.x+FIGHTER_SIZE/2,target.y+FIGHTER_SIZE/2,5,'#ffcf5a',28,240);
+      }
+    }
+  }
+}
+function updateIronJump(f){
+  if(!f || !f.ironJumpActive || f.dead) return;
+  const t=now();
+  if(t < (f.ironJumpMinLandAt||0) || !f.onGround) return;
+  const a=f.ironJumpAbility||f.def.abilities.R;
+  const cx=f.x+FIGHTER_SIZE/2, cy=f.y+FIGHTER_SIZE-4;
+  f.ironJumpActive=false; f.ironJumpAbility=null;
+  if(f.el)f.el.classList.remove('iron-jumping');
+  fxEl('ironmonger-landing',`left:${cx-(a.pushRadius||225)}px;top:${cy-(a.pushRadius||225)}px;width:${(a.pushRadius||225)*2}px;height:${(a.pushRadius||225)*2}px;`,480);
+  spawnSparks(cx,cy,30,'#ffcb7b',130,600); shakeArena(12,420); sfx(a.hitSound||'ironmonger_landing');
+  const target=f===state.player?state.bot:state.player;
+  if(target && !target.dead){
+    const tx=target.x+FIGHTER_SIZE/2, ty=target.y+FIGHTER_SIZE/2;
+    const dx=tx-cx, dy=ty-cy, dist=Math.hypot(dx,dy);
+    if(dist <= (a.pushRadius||225)){
+      const dir=dx>=0?1:-1;
+      const radial=(Math.max(0,(a.pushRadius||225)-dist)/(a.pushRadius||225));
+      const push=(a.pushX||15)*(0.72+radial*0.55);
+      target.windBurstUntil=t+360; target.windBurstVx=dir*push; target.vx=target.windBurstVx; target.vy=-(a.pushY||8)*(0.85+radial*0.35); target.onGround=false; target.hitStun=Math.max(target.hitStun||0,360);
+      spawnAfterimage(target,'#ffb35c66',260);
+    }
+  }
+}
+
 /* ---- Human Torch: Fireball burn + Flame On contact scorch (shared DoT tick) ---- */
 function applyBurn(target, cfg){
   if(!target || target.dead || !cfg) return;
@@ -7410,6 +7747,7 @@ function applyBurn(target, cfg){
   target.burnDamage = cfg.damage || 0;
   target.burnTicksLeft = cfg.ticks || 0;
   target.burnNextTick = now() + target.burnInterval;
+  target.burnAttacker = cfg.attacker || null;
 }
 function updateBurn(f){
   if(!f || !f.burnTicksLeft) return;
@@ -7418,9 +7756,18 @@ function updateBurn(f){
   while(f.burnTicksLeft > 0 && t >= f.burnNextTick){
     f.burnTicksLeft--; f.burnNextTick += f.burnInterval;
     if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.burnTicksLeft = 0; break; }
-    f.health = Math.max(0, f.health - f.burnDamage);
-    spawnDamageNumber(f.x+18, f.y-8, Math.round(f.burnDamage), false);
-    spawnSparks(f.x+FIGHTER_SIZE/2, f.y+FIGHTER_SIZE/2, 3, '#ff8a2b', 22, 260);
+    let burnDamage = f.burnDamage;
+    if(f.burnAttacker && f.burnAttacker.def && f.burnAttacker.def.id==='redhulk' && f.burnAttacker.redHulkHeatUntil > t){ burnDamage *= f.burnAttacker.def.abilities.R.damageMult || 1.3; }
+    f.health = Math.max(0, f.health - burnDamage);
+    spawnDamageNumber(f.x+18, f.y-8, Math.round(burnDamage), false);
+    if(f.burnAttacker && f.burnAttacker.def && f.burnAttacker.def.id==='redhulk') {
+      const bx=f.x+FIGHTER_SIZE/2, by=f.y+FIGHTER_SIZE/2;
+      spawnSparks(bx,by,10,'#ffd35e',52,360);
+      spawnSparks(bx,by-8,6,'#ff6d22',72,430);
+      fxEl('fx-ring',`left:${f.x-6}px;top:${f.y-6}px;width:${FIGHTER_SIZE+12}px;height:${FIGHTER_SIZE+12}px;border-color:#ff8c2b;border-width:2px;box-shadow:0 0 14px #ff5122;`,180);
+    } else {
+      spawnSparks(f.x+FIGHTER_SIZE/2, f.y+FIGHTER_SIZE/2, 3, '#ff8a2b', 22, 260);
+    }
     sfx('shock_tick');
     if(f.health <= 0){ f.burnTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
   }
@@ -7662,6 +8009,10 @@ function updateSpecialViz(f){
   f.el.classList.toggle('holo-suit-active', !!f.holoSuitUntil && now() < f.holoSuitUntil);
   f.el.classList.toggle('yondu-arrow-active', !!f.yonduArrow);
   f.el.classList.toggle('drax-fury-active', f.def.id === 'drax' && f.draxFuryUntil > now());
+  f.el.classList.toggle('killmonger-fury-active', f.def.id === 'killmonger' && f.killmongerFuryUntil > now());
+  f.el.classList.toggle('redhulk-heat-active', f.def.id === 'redhulk' && f.redHulkHeatUntil > now());
+  f.el.classList.toggle('redhulk-burn-active', !!(f.burnTicksLeft > 0 && f.burnAttacker && f.burnAttacker.def && f.burnAttacker.def.id === 'redhulk'));
+  f.el.classList.toggle('iron-jumping', f.def.id === 'ironmonger' && f.ironJumpActive);
   f.el.classList.toggle('drax-charging', !!f.chargeState);
 }
 
@@ -7673,7 +8024,7 @@ const CLOSE_KNOCKBACK_MULT = 0.90;
 function isRangedAbility(ability){
   if(!ability) return false;
   const type = ability.type || '';
-  if(['projectile','missile','bulletStorm','missileBarrage','falconDrone','bullseyeProjectile','bullseyeOdds'].includes(type)) return true;
+  if(['projectile','missile','bulletStorm','missileBarrage','falconDrone','bullseyeProjectile','bullseyeOdds','fireSpew','fragGrenade'].includes(type)) return true;
   if(['stretchPunch','elasticBarrage','rootWave','visionBeam','laserBomb','scarletHexBurst','tendrilGrab','yonduArrowControl'].includes(type)) return true;
   if(Number.isFinite(ability.range) && ability.range >= 180) return true;
   if(Number.isFinite(ability.waveRange) && ability.waveRange >= 300) return true;
@@ -7725,10 +8076,11 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     }
     return;
   }
-  let actual = dmg;
-  if(opts.attacker && opts.attacker.def && opts.attacker.def.id === 'drax' && opts.attacker.draxFuryUntil > now()){
-    actual *= opts.attacker.def.abilities.R.damageMult || 1.35;
-  }
+  let actual=dmg; const tNow=now();
+  if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='drax' && opts.attacker.draxFuryUntil>tNow) actual*=opts.attacker.def.abilities.R.damageMult||1.35;
+  if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='killmonger' && opts.attacker.killmongerFuryUntil>tNow) actual*=opts.attacker.def.abilities.R.damageMult||1.3;
+  if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='redhulk' && opts.attacker.redHulkHeatUntil>tNow) actual*=opts.attacker.def.abilities.R.damageMult||1.3;
+  if(target.def && target.def.id==='killmonger' && target.killmongerFuryUntil>tNow) actual*=1-(target.def.abilities.R.reduction||0.2);
   // Captain America's Shield Block: no-sells anything at or under the
   // threshold; anything harder breaks the block and deals full damage.
   if(target.blocking){
@@ -8006,6 +8358,87 @@ function sfx(kind='ability'){
         aTone(ctx, t, 'triangle', 190, 900, 0.34, 0.14);
         aNoise(ctx, t, 0.36, 0.16, 'bandpass', 500, 3400, 1.3);
         aTone(ctx, t, 'sine', 120, 60, 0.30, 0.16);
+        return;
+
+      /* ---------- Iron Monger / Red Hulk / Punisher ---------- */
+      case 'ironmonger_repulsor':
+        aTone(ctx,t,'sine',420,1180,0.16,0.13);
+        aTone(ctx,t+0.02,'triangle',180,70,0.22,0.08);
+        aNoise(ctx,t,0.08,0.16,'highpass',5000,1700,1.2);
+        return;
+      case 'ironmonger_repulsor_hit':
+        aTone(ctx,t,'sine',260,55,0.34,0.23);
+        aNoise(ctx,t,0.22,0.20,'bandpass',3300,700,1.25);
+        aTone(ctx,t+0.03,'triangle',1600,700,0.18,0.08);
+        return;
+      case 'ironmonger_missiles':
+        aNoise(ctx,t,0.18,0.16,'bandpass',2600,600,1.4);
+        aTone(ctx,t,'sawtooth',140,620,0.28,0.08);
+        for(let i=0;i<5;i++) aTone(ctx,t+i*0.04,'triangle',720+i*90,340+i*30,0.10,0.035);
+        return;
+      case 'ironmonger_missile_hit':
+        aTone(ctx,t,'sine',105,28,0.46,0.32);
+        aNoise(ctx,t,0.34,0.25,'lowpass',3000,170,0.85);
+        aNoise(ctx,t+0.02,0.16,0.15,'highpass',5200,1400,1.0);
+        return;
+      case 'ironmonger_jump':
+        aTone(ctx,t,'triangle',90,720,0.46,0.16);
+        aNoise(ctx,t,0.36,0.18,'bandpass',440,2600,1.0);
+        aTone(ctx,t+0.12,'sine',210,70,0.28,0.10);
+        return;
+      case 'ironmonger_landing':
+        aTone(ctx,t,'sine',82,25,0.72,0.40);
+        aTone(ctx,t,'square',120,42,0.30,0.14);
+        aNoise(ctx,t,0.48,0.32,'lowpass',2500,150,0.75);
+        aNoise(ctx,t+0.04,0.20,0.17,'highpass',5000,1200,1.0);
+        return;
+      case 'redhulk_volcano_fists':
+        aTone(ctx,t,'sawtooth',120,54,0.22,0.20);
+        aNoise(ctx,t,0.14,0.24,'bandpass',2600,500,1.2);
+        aTone(ctx,t+0.03,'sine',640,120,0.25,0.09);
+        return;
+      case 'redhulk_volcano_hit':
+        aTone(ctx,t,'sine',95,28,0.46,0.36);
+        aNoise(ctx,t,0.28,0.24,'lowpass',2800,150,0.8);
+        aTone(ctx,t+0.02,'sawtooth',420,90,0.30,0.10);
+        return;
+      case 'redhulk_fire_spew':
+        aNoise(ctx,t,0.34,0.23,'bandpass',1300,2200,1.0);
+        aTone(ctx,t,'sawtooth',70,260,0.42,0.13);
+        aTone(ctx,t+0.05,'triangle',180,48,0.38,0.10);
+        return;
+      case 'redhulk_fire_hit':
+        aTone(ctx,t,'sine',130,34,0.40,0.26);
+        aNoise(ctx,t,0.22,0.20,'bandpass',2200,420,1.2);
+        return;
+      case 'redhulk_heat':
+        aTone(ctx,t,'sine',180,680,0.62,0.13);
+        aNoise(ctx,t,0.44,0.18,'bandpass',480,2200,1.1);
+        aTone(ctx,t+0.08,'sawtooth',90,42,0.48,0.12);
+        return;
+      case 'punisher_gunfire':
+        for(let i=0;i<3;i++){
+          aNoise(ctx,t+i*0.04,0.034,0.36,'highpass',4400,2100,0.9);
+          aTone(ctx,t+i*0.04,'square',980+i*65,390,0.07,0.055);
+        }
+        return;
+      case 'punisher_bullet_hit':
+        aTone(ctx,t,'square',190,70,0.13,0.14);
+        aNoise(ctx,t,0.09,0.13,'bandpass',3000,850,1.1);
+        return;
+      case 'punisher_grenade':
+        aTone(ctx,t,'triangle',340,180,0.12,0.08);
+        aNoise(ctx,t,0.10,0.11,'bandpass',2600,900,1.4);
+        aTone(ctx,t+0.07,'square',1900,1500,0.06,0.05);
+        return;
+      case 'punisher_grenade_hit':
+        aTone(ctx,t,'sine',105,24,0.58,0.34);
+        aNoise(ctx,t,0.42,0.27,'lowpass',3200,150,0.8);
+        aNoise(ctx,t+0.03,0.20,0.16,'highpass',5600,1300,0.9);
+        return;
+      case 'punisher_roll':
+        aNoise(ctx,t,0.22,0.14,'bandpass',500,2500,1.2);
+        aTone(ctx,t,'triangle',120,520,0.24,0.07);
         return;
 
       /* ---------- Red Skull ---------- */
@@ -9368,6 +9801,93 @@ function spawnAbilityFx(caster, ability, target){
   const dir = caster.facing;
   switch(ability.fx){
 
+    /* ---------------- New roster: Iron Monger / Red Hulk / Punisher ---------------- */
+    case 'ironmonger_none': {
+      // No separate cast props: the actual projectile itself is the visual.
+      break;
+    }
+    case 'ironmonger_jump': {
+      fxEl('im-jump-charge',`left:${cx-50}px;top:${caster.y+FIGHTER_SIZE-18}px;width:100px;height:42px;`,460,
+        '<div class=\"im-jump-core\"></div><div class=\"im-jump-ring\"></div>');
+      spawnSparks(cx,caster.y+FIGHTER_SIZE-2,18,'#ffd080',100,420);
+      break;
+    }
+    case 'killmonger_blades': {
+      const aura = fxEl('killmonger-energy-cast',`left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;transform:scaleX(${dir});`,430,
+        '<div class="km-cast-ring r1"></div><div class="km-cast-ring r2"></div><div class="km-claw c1"></div><div class="km-claw c2"></div><div class="km-claw c3"></div>');
+      spawnSparks(cx+dir*14,cy,10,'#b86cff',60,300);
+      spawnSparks(cx-dir*8,cy-6,6,'#d8b1ff',46,260);
+      for(let i=0;i<2;i++){ const a=(Math.PI*2*i)/2+Math.random()*.45; spawnLightning(cx,cy,cx+Math.cos(a)*42,cy+Math.sin(a)*42,{bolts:1,branches:1,width:1.5,life:180,jag:10,segs:5,color:'#c88cff'}); }
+      break;
+    }
+    case 'killmonger_pounce': {
+      fxEl('killmonger-energy-cast',`left:${cx-56}px;top:${cy-48}px;width:112px;height:96px;transform:scaleX(${dir});`,520,
+        '<div class="km-pounce-ring a"></div><div class="km-pounce-ring b"></div><div class="km-pounce-claw one"></div><div class="km-pounce-claw two"></div>');
+      spawnSparks(cx+dir*24,cy-4,12,'#b96cff',72,320);
+      spawnSparks(cx-dir*12,cy+8,6,'#dfbcff',58,280);
+      shakeArena(6,220);
+      break;
+    }
+    case 'redhulk_hulk_smash': {
+      // Same visual structure as Hulk's E, recolored to Red Hulk's red/orange gamma heat.
+      caster.el.classList.remove('redhulk-smash');
+      void caster.el.offsetWidth;
+      caster.el.classList.add('redhulk-smash');
+      const R = ability.radius || 120;
+      fxEl('hulk-smash-radial', `left:${cx-R}px;top:${cy-R}px;width:${R*2}px;height:${R*2}px;color:#ff8165;border-color:#ff8f72;box-shadow:0 0 14px #ff5a3d,0 0 38px rgba(255,55,25,.78),inset 0 0 32px rgba(255,100,55,.35);background:radial-gradient(circle,rgba(255,246,235,.28) 0 10%,rgba(255,80,45,.10) 35%,transparent 70%);`, 600);
+      fxEl('fx-flash', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;background:radial-gradient(circle,#fff8e8,#ffb18d 30%,#ff3b1f 65%,transparent 78%);`, 250);
+      fxEl('fx-ring', `left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;border-color:#ffd0c4;border-width:5px;box-shadow:0 0 24px #ff4f2f,0 0 44px rgba(255,64,32,.50);`, 520);
+      fxEl('fx-ring', `left:${cx-94}px;top:${cy-94}px;width:188px;height:188px;border-color:#ff6a4a;border-width:2px;box-shadow:0 0 18px rgba(255,72,40,.82);`, 560);
+      spawnSparks(cx, cy, 24, '#ffae8e', 112, 520);
+      const who = caster;
+      for(let i=0;i<8;i++) setTimeout(()=>{ if(state.mode==='battle' && who.el) spawnAfterimage(who,'#ff4d3b50',180); }, i*25);
+      shakeArena(10, 330);
+      break;
+    }
+    case 'redhulk_fire_spew': {
+      const x=cx+dir*42, y=caster.y+FIGHTER_SIZE-14;
+      fxEl('rh-spew-cast',`left:${x-42}px;top:${y-46}px;width:84px;height:92px;transform:scaleX(${dir});`,520,
+        '<div class=\"rh-spew-mouth\"></div><div class=\"rh-spew-blast\"></div>');
+      spawnSparks(x,y,22,'#ffdc6b',110,450);
+      break;
+    }
+    case 'redhulk_heat': {
+      fxEl('rh-heat-burst',`left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;`,620,
+        '<div></div><i></i><i></i><i></i>');
+      spawnSparks(cx,cy,28,'#ff8b2e',115,560);
+      break;
+    }
+    case 'punisher_gunfire': {
+      const x=cx+dir*40, y=cy-5;
+      for(let i=0;i<3;i++) setTimeout(()=>{
+        if(state.mode==='battle' && caster.el) fxEl('punisher-muzzle',`left:${x+dir*(i*6)-18}px;top:${y+(i%2)*5-18}px;width:36px;height:36px;transform:scaleX(${dir});`,110,
+          '<div class=\"pm-flash\"></div><div class=\"pm-smoke\"></div>');
+      },i*40);
+      break;
+    }
+    case 'punisher_grenade': {
+      const tx=target && !target.dead ? target.x+FIGHTER_SIZE/2 : cx+dir*150;
+      const ty=target && !target.dead ? target.y+FIGHTER_SIZE/2 : cy;
+      const gx=cx+dir*34, gy=cy-6;
+      const dx=tx-gx, dy=ty-gy;
+      const el=fxEl('punisher-grenade-flight',`left:${gx-13}px;top:${gy-13}px;width:26px;height:26px;--dx:${dx}px;--dy:${dy}px;`,620,
+        '<div class=\"pg-body\"></div><div class=\"pg-pin\"></div><div class=\"pg-ring\"></div>');
+      setTimeout(()=>{
+        if(el) el.remove();
+        const ex=Math.max(20,Math.min(ARENA_W-20,tx)), ey=Math.max(20,Math.min(ARENA_H-20,ty));
+        fxEl('punisher-grenade-explosion',`left:${ex-92}px;top:${ey-92}px;width:184px;height:184px;`,520,
+          '<div class=\"pge-hot\"></div><div class=\"pge-ring\"></div><div class=\"pge-smoke\"></div>');
+        spawnSparks(ex,ey,22,'#ffd7a3',130,500); shakeArena(5,220);
+      },470);
+      break;
+    }
+    case 'punisher_roll': {
+      const who=caster;
+      for(let i=0;i<5;i++) setTimeout(()=>{if(state.mode==='battle' && !who.dead) spawnAfterimage(who,'#e6e9ed44',220);},i*42);
+      fxEl('punisher-roll-ring',`left:${caster.x-14}px;top:${caster.y+10}px;width:${FIGHTER_SIZE+28}px;height:40px;transform:scaleX(${dir});`,330);
+      break;
+    }
+
     /* ---------------- Thor ---------------- */
     case 'thor_smash': {
       // hammer physically swings from Thor's hand toward the opponent
@@ -9948,7 +10468,7 @@ function spawnAbilityFx(caster, ability, target){
       caster.el.classList.remove('cm-punching'); void caster.el.offsetWidth; caster.el.classList.add('cm-punching');
       setTimeout(()=>{ if(caster.el) caster.el.classList.remove('cm-punching'); }, 320);
       const hx=cx+dir*36, hy=cy;
-      fxEl('mj-arc-wrap', `left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;transform:scaleX(${dir});`, 320, '<div class="mj-arc" style="border-right-color:#ffe98a;border-top-color:#6db5ff;border-width:9px;"></div>');
+      fxEl('mj-arc-wrap', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;transform:scaleX(${dir});`, 320, '<div class="mj-arc" style="border-right-color:#ffe98a;border-top-color:#6db5ff;border-width:9px;"></div>');
       fxEl('fx-flash', `left:${hx-30}px;top:${hy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff,#ffd85a 30%,transparent 74%);`, 240);
       spawnSparks(hx,hy,12,'#ffd95a',46,320);
       break;
@@ -10650,6 +11170,25 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'killmonger_blade_hit': {
+      fxEl('fx-flash',`left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;background:radial-gradient(circle,#f7eaff 0 8%,#d59aff 26%,#944ce8 56%,transparent 78%);`,240);
+      fxEl('killmonger-hit-slash',`left:${cx-58}px;top:${cy-46}px;width:116px;height:92px;transform:scaleX(${dirSign||1});`,420,'<div class="km-hit-slash s1"></div><div class="km-hit-slash s2"></div><div class="km-hit-slash s3"></div>');
+      fxEl('fx-ring',`left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;border-color:#c78aff;border-width:2px;box-shadow:0 0 12px #b05dff;`,340);
+      spawnSparks(cx,cy,10,'#c98bff',60,300);
+      spawnSparks(cx,cy,6,'#e0c1ff',45,240);
+      for(let i=0;i<2;i++){const a=(Math.PI*2*i)/2+Math.random()*.3;spawnLightning(cx,cy,cx+Math.cos(a)*52,cy+Math.sin(a)*52,{bolts:1,branches:1,width:1.4,life:180,jag:10,segs:5,color:'#c88cff'});}
+      shakeArena(5,220);
+      break;
+    }
+    case 'killmonger_pounce_hit': {
+      fxEl('fx-flash',`left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;background:radial-gradient(circle,#f7eaff 0 7%,#d79dff 24%,#964fe8 56%,transparent 78%);`,260);
+      fxEl('fx-ring',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#c589ff;border-width:2px;box-shadow:0 0 14px #a85cff;`,380);
+      fxEl('killmonger-hit-claws',`left:${cx-62}px;top:${cy-54}px;width:124px;height:108px;transform:scaleX(${dirSign||1});`,360,'<div class="km-big-claw a"></div><div class="km-big-claw b"></div>');
+      spawnSparks(cx,cy,12,'#c58cff',70,320);
+      spawnSparks(cx,cy,7,'#e3c6ff',52,260);
+      shakeArena(7,240);
+      break;
+    }
     case 'drax_blade_hit': {
       // Twin blades land as two quick X-crossed cuts, not one generic ring.
       fxEl('fx-ring',`left:${cx-32}px;top:${cy-32}px;width:64px;height:64px;border-color:#e9ffe9;box-shadow:0 0 20px #82c98d;`,260);
@@ -10817,6 +11356,15 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx, cy, 18, '#eaf7ff', 78);
       spawnSparks(cx, cy, 8, '#ffd479', 55, 420);
       shakeArena(14, 360);
+      break;
+    }
+    case 'redhulk_volcano_hit': {
+      fxEl('fx-flash',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;background:radial-gradient(circle,#fffaf0,#ffb28f 24%,#ff4d2f 52%,#b80f13 70%,transparent 80%);`,280);
+      fxEl('fx-ring',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#ffd3c8;border-width:5px;box-shadow:0 0 28px #ff4a2c,0 0 52px rgba(255,53,24,.62);`,440);
+      fxEl('fx-ring',`left:${cx-86}px;top:${cy-34}px;width:172px;height:68px;border-color:#ff6b4f;border-width:3px;box-shadow:0 0 24px #ff3f24;`,420);
+      spawnSparks(cx,cy,18,'#ffbf9b',88,380);
+      spawnSparks(cx-(dirSign||1)*10,cy-4,8,'#fff0cd',54,320);
+      shakeArena(7,220);
       break;
     }
     case 'thunder': {
@@ -12191,10 +12739,14 @@ function updateProjectiles(dtF){
         if(p.visualOnly){ spawnSparks(p.x + p.w/2, p.y + p.h/2, 5, '#ff8a5c', 30, 260); if(p.el) p.el.remove(); state.projectiles.splice(i,1); continue; }
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
-          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock, ranged:true});
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock, ranged:true, attacker:p.casterRef});
         if(p.burnDamage && target.health < healthBefore){
           const ticks = Math.max(1, p.burnTicks || 1);
-          applyBurn(target, {interval: p.burnTickMs || 500, ticks, damage: p.burnDamage / ticks});
+          applyBurn(target, {interval: p.burnTickMs || 500, ticks, damage: p.burnDamage / ticks, attacker:p.casterRef});
+        }
+        if(p.redHulkBurn && target.health < healthBefore && !target.dead){
+          const ticks=Math.max(1,p.redHulkBurnTicks||4);
+          applyBurn(target,{interval:p.redHulkBurnTickMs||250,ticks,damage:redHulkBurnDamageFor(target)/ticks,attacker:p.casterRef});
         }
         if(p.waspSizeDuration && target.health < healthBefore){
           applyWaspSizeEffect(target, p.waspSizeDuration, p.waspSizeSpeedMultiplier || .62);
@@ -12332,6 +12884,12 @@ function buildProjectileVisual(p){
     p.el.style.boxShadow='none';
     p.el.style.overflow='visible';
     p.el.innerHTML = goblinPumpkinSvg();
+  } else if(p.render === 'punisher-round'){
+    p.el.classList.add('punisher-round-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.style.overflow='visible';
+    p.el.innerHTML = '<div class=\"pmr-trail\"></div><div class=\"pmr-casing\"></div><div class=\"pmr-band\"></div><div class=\"pmr-tip\"></div>';
   } else if(p.render === 'bullet'){
     p.el.classList.add('bullet-projectile');
     p.el.style.background='transparent';
@@ -12386,6 +12944,19 @@ function buildProjectileVisual(p){
     p.el.style.background='transparent';
     p.el.style.boxShadow='none';
     p.el.innerHTML = '<div class="wm-mini-missile"><span class="wm-nose"></span><span class="wm-body"></span><span class="wm-fin"></span><span class="wm-flame"></span></div>';
+  } else if(p.render === 'ironmonger-missile'){
+    p.el.classList.add('ironmonger-missile-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.style.overflow='visible';
+    p.el.innerHTML = '<div class="im-missile-body"></div><div class="im-missile-glow"></div><div class="im-missile-flame"></div>';
+  } else if(p.render === 'ironmonger-repulsor'){
+    p.el.classList.add('ironmonger-repulsor-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.style.overflow='visible';
+    const side = flip > 0 ? 'right' : 'left';
+    p.el.innerHTML = `<div class="im-repulsor-tail" style="${side}:100%;"></div><div class="im-repulsor-bolt"></div><div class="im-repulsor-halo"></div>`;
   } else if(p.render === 'web-strand'){
     p.el.classList.add('web-projectile');
     p.el.style.background = 'transparent';
@@ -12723,6 +13294,7 @@ function updateWalls(){
    picks abilities based on range and cooldown rather than raw chance.
    ========================================================================= */
 const AI_STYLE_RANGE = {
+  ironmonger:420, redhulk:140, killmonger:115, punisher:520,
   aggressive: 70,   // Thor wants to be inside melee range
   mobile:     260,  // Spider-Man pokes from mid-range, darts in/out
   defensive:  340,  // Iron Man kites and fights from a distance
@@ -12786,6 +13358,49 @@ function findIncomingMissile(bot){
   }
   return best;
 }
+function findEnemyRedHulkFireThreat(bot){
+  if(!bot || bot.dead || !state.firePools || !state.firePools.length) return null;
+  const t = now();
+  const bcX = bot.x + FIGHTER_SIZE/2;
+  const bcY = bot.y + FIGHTER_SIZE/2;
+  let best = null, bestScore = Infinity;
+  for(const pool of state.firePools){
+    if(!pool || !pool.casterRef || pool.casterRef === bot || pool.casterRef.dead) continue;
+    if(t >= pool.expires) continue;
+    if(pool.casterRef.def && pool.casterRef.def.id !== 'redhulk') continue;
+    const padX = 95, padY = 34;
+    const nearX = bcX >= pool.x-padX && bcX <= pool.x+pool.w+padX;
+    const nearY = bcY >= pool.y-padY && bcY <= pool.y+pool.h+padY;
+    if(!nearX || !nearY) continue;
+    const pcX = pool.x + pool.w/2;
+    const pcY = pool.y + pool.h/2;
+    const score = Math.hypot((bcX-pcX)/(pool.w+1), (bcY-pcY)/(pool.h+1));
+    if(score < bestScore){ bestScore=score; best=pool; }
+  }
+  return best;
+}
+function applyRedHulkFireAvoidance(bot, pool, moveDir, jumpPulse){
+  if(!bot || !pool || bot.dead || bot.flight) return {moveDir,jumpPulse};
+  const bcX = bot.x + FIGHTER_SIZE/2;
+  const bcY = bot.y + FIGHTER_SIZE/2;
+  const left = pool.x, right = pool.x + pool.w, top = pool.y, bottom = pool.y + pool.h;
+  const inFire = bcX >= left && bcX <= right && bcY >= top && bcY <= bottom;
+  const horizontallyThreatened = bcX > left-95 && bcX < right+95;
+  const verticallyThreatened = bcY > top-40 && bcY < bottom+40;
+  if(!verticallyThreatened || !horizontallyThreatened) return {moveDir,jumpPulse};
+
+  let escapeDir = bcX < (left+right)/2 ? -1 : 1;
+  const nearLeft = bot.x < 70, nearRight = bot.x > ARENA_W-FIGHTER_SIZE-70;
+  if(escapeDir < 0 && nearLeft) escapeDir = 1;
+  if(escapeDir > 0 && nearRight) escapeDir = -1;
+
+  moveDir = escapeDir;
+  // If the bot is actually inside the fire or very close to it, jump as well
+  // so it does not spend several AI ticks walking through the hazard.
+  if(inFire || Math.abs(bcX-((left+right)/2)) < 110) jumpPulse = bot.onGround ? true : jumpPulse;
+  return {moveDir,jumpPulse};
+}
+
 function updateBotAI(dtF){
   const bot = state.bot, player = state.player;
   if(bot.dead || player.dead) return;
@@ -12984,6 +13599,16 @@ function updateBotAI(dtF){
   if(bot.x < 70) moveDir = 1;
   if(bot.x > ARENA_W - FIGHTER_SIZE - 70) moveDir = -1;
 
+  // Red Hulk's Fire Spew is a real terrain hazard. AI fighters should read
+  // the active fire pool and route around it instead of blindly walking through.
+  const redHulkFireThreat = findEnemyRedHulkFireThreat(bot);
+  if(redHulkFireThreat){
+    const avoided = applyRedHulkFireAvoidance(bot, redHulkFireThreat, moveDir, jumpPulse);
+    moveDir = avoided.moveDir;
+    jumpPulse = avoided.jumpPulse;
+    if(!bot.flight) decision = 'avoid-redhulk-fire';
+  }
+
   bot.aiMoveDir = moveDir;
   bot.aiJumpPulse = jumpPulse;
   bot.aiDropPulse = dropPulse;
@@ -13041,6 +13666,26 @@ function updateBotAI(dtF){
     if(cdReady(bot,'E',t)){
       tryUseAbility(bot, player, 'E'); return;
     }
+  } else if(style === 'ironmonger'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t)&&(adist<(rAb.pushRadius||225)+40||hpPct<0.28||Math.abs(vertical)>145)&&Math.random()<0.65){tryUseAbility(bot,player,'R');return;}
+    if(cdReady(bot,'Q',t)&&adist>170&&adist<1050){tryUseAbility(bot,player,'Q');return;}
+    if(cdReady(bot,'E',t)&&adist<1000){tryUseAbility(bot,player,'E');return;}
+  } else if(style === 'redhulk'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t)&&(hpPct<0.6||adist<300)&&Math.random()<0.45){tryUseAbility(bot,player,'R');return;}
+    if(cdReady(bot,'Q',t)&&adist<570&&Math.abs(vertical)<150){tryUseAbility(bot,player,'Q');return;}
+    if(cdReady(bot,'E',t)&&adist<=eAb.range+25&&Math.abs(vertical)<125){tryUseAbility(bot,player,'E');return;}
+  } else if(style === 'killmonger'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t)&&(hpPct<0.65||adist<220)&&Math.random()<0.55){tryUseAbility(bot,player,'R');return;}
+    if(cdReady(bot,'Q',t)&&adist>eAb.range&&adist<390&&Math.abs(vertical)<150){tryUseAbility(bot,player,'Q');return;}
+    if(cdReady(bot,'E',t)&&adist<=eAb.range+20){tryUseAbility(bot,player,'E');return;}
+  } else if(style === 'punisher'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t)&&(hpPct<0.34||adist<160||Math.abs(vertical)>140)&&Math.random()<0.7){tryUseAbility(bot,player,'R');return;}
+    if(cdReady(bot,'Q',t)&&adist>130&&adist<760){tryUseAbility(bot,player,'Q');return;}
+    if(cdReady(bot,'E',t)&&adist<900){tryUseAbility(bot,player,'E');return;}
   } else if(style === 'defensive'){
     // Iron Man: keep the repulsor firing constantly at range, launch missiles
     // whenever the cooldown allows and there's room for one to build up speed,
@@ -13345,7 +13990,10 @@ function loseLife(target, side){
   target.waspSizeUntil = 0; target.waspSizeSpeedMultiplier = .62;
   target.el && target.el.classList.remove('wasp-enlarged','wasp-small');
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
-  target.chargeState = null; target.draxFuryUntil = 0;
+  target.chargeState = null; target.draxFuryUntil = 0; target.killmongerFuryUntil = 0; target.redHulkHeatUntil = 0;
+  target.ironJumpActive = false; target.ironJumpMinLandAt = 0; target.ironJumpAbility = null; target.burnTicksLeft = 0; target.burnAttacker = null;
+  if(target.el) target.el.classList.remove('killmonger-fury-active','redhulk-heat-active','iron-jumping');
+  state.firePools = state.firePools.filter(pool=>{ if(pool.casterRef===target){ if(pool.el)pool.el.remove(); return false; } return true; });
   target.shield = null;
   target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
   target.bpCharging = false; target.bpSlamPending = false; target.bpAbsorbed = 0;
@@ -13430,6 +14078,7 @@ function endBattle(winnerSide, reason){
   if(state.mode !== 'battle') return;
   state.illusions.forEach(g => (g.clones || g.illusions || []).forEach(i => { if(i.el) i.el.remove(); }));
   state.illusions = [];
+  state.firePools.forEach(pool=>{if(pool.el)pool.el.remove();}); state.firePools=[];
   state.mode = 'ended';
   state.countdown = false;
   battleToken++; // invalidate any pending countdown steps
@@ -14754,6 +15403,8 @@ function gameLoop(ts){
     updateShock(p); updateShock(b);
     updatePsiWarp(p); updatePsiWarp(b);
     updateBurn(p); updateBurn(b);
+    updateRedHulkFirePools();
+    updateIronJump(p); updateIronJump(b);
     updateTorchTouch(p, b); updateTorchTouch(b, p);
     updateTorchFlameFx(p); updateTorchFlameFx(b);
     updateBlock(p); updateBlock(b);
