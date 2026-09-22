@@ -3551,7 +3551,7 @@ const CHARACTERS = {
   },
   ironman: {
     id:'ironman', name:'Iron Man', img:'IronMan.jpg', color:'#d6432b',
-    maxHealth:10150, aiStyle:'defensive',
+    maxHealth:11450, aiStyle:'defensive',
     description:'Defensive attacker who fights at range with repulsors and missiles, then opens distance with free flight when things get dangerous.',
     abilities:{
       E:{key:'E', name:'Repulsor Blast', type:'projectile', damage:430, cooldown:650, knockback:8,
@@ -3866,7 +3866,7 @@ const CHARACTERS = {
   },
   warmachine: {
     id:'warmachine', name:'War Machine', img:'WarMachine.jpg', color:'#87919d', aiStyle:'warmachine',
-    maxHealth:8000,
+    maxHealth:9500,
     description:'A high-output armored weapons platform. Trades survivability for an overwhelming stream of physical ammunition, explosive missiles, and short-burst flight.',
     abilities:{
       E:{key:'E', name:'Bullet Storm', type:'bulletStorm', damage:680, cooldown:950, knockback:6, speed:26,
@@ -11560,6 +11560,19 @@ function updateYonduArrow(f, dtF){
     if(tg && !tg.dead){
       mx=Math.sign((tg.x+FIGHTER_SIZE/2)-(ar.x+ar.w/2));
       my=Math.sign((tg.y+FIGHTER_SIZE/2)-(ar.y+ar.h/2));
+    }
+  } else if(state.pvp){
+    // 1 V 1 Friend is controller-only, and each pad's live direction state lives
+    // in versus.keys[slot] (updated every frame in pollPvpBattle) rather than the
+    // shared keysHeld/gpKeys globals the solo screen uses — read from there so the
+    // arrow actually responds to whichever pad is steering this fighter.
+    const slot = (f === state.bot) ? 1 : 0;
+    const keys = versus.keys[slot];
+    if(keys){
+      if(keys.left) mx-=1;
+      if(keys.right) mx+=1;
+      if(keys.up) my-=1;
+      if(keys.down) my+=1;
     }
   } else {
     if(keysHeld.left || gpKeys.left) mx-=1;
