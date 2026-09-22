@@ -3011,6 +3011,190 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .drax-fury-active .fighter-square{animation:draxFuryPulse .38s ease-in-out infinite alternate!important;filter:saturate(1.25) brightness(1.06) drop-shadow(0 0 8px #72e58a)!important;}
 @keyframes draxFuryPulse{from{box-shadow:0 0 18px rgba(100,220,120,.18)}to{box-shadow:0 0 38px rgba(91,235,121,.42),0 0 58px rgba(80,220,110,.12)}}
 
+/* ---------- Shang-Chi: the Ten Rings ---------- */
+.fighter.shangchi .fighter-square{
+  border-color:#c52b38;
+  box-shadow:0 0 0 1px rgba(255,207,107,.24),0 10px 24px rgba(0,0,0,.38),0 0 24px rgba(255,170,60,.18);
+}
+/* Ten REAL rings. The exact same DOM rings are launched by Q and restored to this orbit on return. */
+.shangchi-rings{
+  position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:4;
+  perspective:520px;
+}
+.shangchi-rings i,.shangchi-ring-projectile{
+  position:absolute;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;
+  box-sizing:border-box;border:4px solid #ffd76a;
+  background:radial-gradient(circle,transparent 0 54%,rgba(255,238,180,.16) 56%,rgba(255,176,40,.20) 76%,transparent 78%) !important;
+  box-shadow:
+    0 0 0 1px #8a4e12,
+    0 0 7px #fff4b7,
+    0 0 15px #ffc34b,
+    0 0 28px rgba(255,117,18,.78),
+    inset 0 0 8px rgba(255,248,211,.98) !important;
+  opacity:1!important;
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+.shangchi-rings i{animation:shangchiOrbit 3.6s linear infinite;}
+.shangchi-rings i::before{
+  content:'';position:absolute;inset:-2px;border-radius:50%;border:1px solid rgba(255,250,218,.96);
+  box-shadow:inset 0 0 5px rgba(255,246,196,.78);
+}
+.shangchi-rings i::after{
+  content:'';position:absolute;left:4px;top:2px;width:9px;height:3px;border-radius:50%;
+  background:#fff9d6;box-shadow:0 0 8px #fff3ae;transform:rotate(-22deg);
+}
+.shangchi-rings i:nth-child(1){--ring-angle:0deg}
+.shangchi-rings i:nth-child(2){--ring-angle:36deg}
+.shangchi-rings i:nth-child(3){--ring-angle:72deg}
+.shangchi-rings i:nth-child(4){--ring-angle:108deg}
+.shangchi-rings i:nth-child(5){--ring-angle:144deg}
+.shangchi-rings i:nth-child(6){--ring-angle:180deg}
+.shangchi-rings i:nth-child(7){--ring-angle:216deg}
+.shangchi-rings i:nth-child(8){--ring-angle:252deg}
+.shangchi-rings i:nth-child(9){--ring-angle:288deg}
+.shangchi-rings i:nth-child(10){--ring-angle:324deg}
+@keyframes shangchiOrbit{from{transform:rotate(var(--ring-angle,0deg)) translateX(62px)}to{transform:rotate(calc(var(--ring-angle,0deg) + 360deg)) translateX(62px)}}
+.shangchi-rings .shangchi-ring-in-flight{
+  position:absolute!important;left:0;top:0;margin:-15px 0 0 -15px;
+  animation:none!important;transform-origin:50% 50%;opacity:1!important;z-index:30!important;
+  pointer-events:none!important;
+}
+.fighter.shangchi.shangchi-rings-firing .shangchi-rings i:not(.shangchi-ring-in-flight){filter:brightness(1.15) drop-shadow(0 0 9px rgba(255,185,48,.85));}
+/* Ring projectiles are the same orbiting rings, never a separate replacement graphic. */
+.shangchi-ring-projectile{
+  width:30px!important;height:30px!important;overflow:visible!important;
+  animation:none!important;
+  filter:drop-shadow(0 0 7px #fff0a3) drop-shadow(0 0 16px #ff9e20) drop-shadow(0 0 30px #ff7c1d99);
+}
+.shangchi-ring-projectile::before{
+  content:'';position:absolute;left:-28px;right:-28px;top:50%;height:7px;margin-top:-3.5px;border-radius:999px;
+  background:linear-gradient(90deg,transparent,#ff7d1e22,#ffb83d55,#fff4b7aa);
+  filter:blur(2px);opacity:.82;pointer-events:none;transform-origin:right center;
+}
+.shangchi-ring-projectile::after{
+  content:'';position:absolute;inset:-9px;border-radius:50%;
+  border:2px solid rgba(255,215,106,.55);
+  box-shadow:0 0 15px rgba(255,177,35,.6),inset 0 0 10px rgba(255,243,177,.18);
+  animation:scFlightHalo .18s ease-in-out infinite alternate;
+}
+.sc-ring-glow{
+  position:absolute;inset:-85%;border-radius:50%;
+  background:radial-gradient(circle,#fff5ba88 0 15%,#ffba375e 28%,#ff7b1f2e 48%,transparent 70%);
+  filter:blur(2px);animation:scRingPulse .18s ease-in-out infinite alternate;
+}
+.sc-ring-core{
+  position:absolute;inset:0;border-radius:50%;border:4px solid #ffd76a;
+  background:radial-gradient(circle,transparent 0 53%,rgba(255,221,125,.16) 56%,rgba(255,151,34,.22) 72%,transparent 76%);
+  box-shadow:0 0 0 1px #8f5618,0 0 9px #fff0aa,0 0 20px #ffae2d,0 0 34px #ff7d1eaa,inset 0 0 8px #fff7c8;
+  animation:scRingSpin .28s linear infinite;
+}
+.sc-ring-core::before{content:'';position:absolute;inset:3px;border-radius:50%;border:1px solid #fff7ce;box-shadow:inset 0 0 7px #ffeaa2aa;}
+.sc-ring-core::after{content:'';position:absolute;left:5px;top:2px;width:10px;height:3px;border-radius:50%;background:#fffbe1;box-shadow:0 0 9px #fff5bb;transform:rotate(-25deg);}
+@keyframes scRingPulse{from{transform:scale(.96)}to{transform:scale(1.10)}}
+@keyframes scRingSpin{to{transform:rotate(360deg)}}
+@keyframes scFlightHalo{from{transform:scale(.92);opacity:.55}to{transform:scale(1.08);opacity:1}}
+/* Q cast / throw / return FX. */
+.shangchi-ring-trail{
+  border-radius:50%;border:3px solid #ffd56f;
+  box-shadow:0 0 10px #fff0aa,0 0 19px #ffb42f,0 0 34px #ff7d1e99;
+  animation:shangchiTrail .22s ease-out forwards;
+}
+.shangchi-ring-trail::before{content:'';position:absolute;inset:3px;border-radius:50%;border:1px solid #fff7c9;}
+@keyframes shangchiTrail{from{transform:scale(.74);opacity:1}to{transform:scale(1.6);opacity:0}}
+.shangchi-onslaught-aura{
+  position:absolute;left:50%;top:50%;width:174px;height:174px;margin:-87px;border-radius:50%;pointer-events:none;z-index:3;
+  background:radial-gradient(circle,#fff6c63d 0 12%,#ffc94b26 28%,transparent 68%);
+  box-shadow:0 0 34px #ffbf3f77,0 0 80px #ff8c1f44;
+  animation:shangchiAura .55s ease-out forwards;
+}
+.shangchi-onslaught-ring{
+  position:absolute;left:50%;top:50%;width:174px;height:174px;margin:-87px;border-radius:50%;border:5px solid #ffd56f;
+  box-shadow:0 0 14px #fff0a8,0 0 38px #ffae2f,0 0 72px #ff7d1e77,inset 0 0 24px #fff0a844;
+  pointer-events:none;z-index:3;animation:shangchiOnslaughtRing .72s cubic-bezier(.12,.72,.2,1) forwards;
+}
+.shangchi-onslaught-ray{
+  position:absolute;left:50%;top:50%;width:138px;height:5px;margin-left:-69px;margin-top:-2.5px;
+  background:linear-gradient(90deg,transparent,#fff8cf 18%,#ffbd3d 50%,#fff8cf 82%,transparent);
+  box-shadow:0 0 10px #ffcf68,0 0 24px #ff9f24;
+  pointer-events:none;z-index:3;transform-origin:50% 50%;animation:shangchiRay .40s ease-out forwards;
+}
+.shangchi-e-arc{
+  position:absolute;border-radius:50%;border:7px solid transparent;border-top-color:#fff5bd;border-right-color:#ffb52e;
+  box-shadow:0 0 8px #fff1a6,0 0 20px #ff8c22,0 0 34px #ff6f1e66;
+  pointer-events:none;z-index:12;animation:shangchiEArc .28s cubic-bezier(.12,.78,.2,1) forwards;
+}
+.shangchi-e-core{
+  position:absolute;left:50%;top:50%;width:42px;height:42px;margin:-21px;border-radius:50%;pointer-events:none;z-index:13;
+  background:radial-gradient(circle,#fff 0 10%,#fff2b6 26%,#ffc24d 47%,#ff7d1f 67%,transparent 72%);
+  box-shadow:0 0 18px #fff4be,0 0 34px #ffb32f,0 0 58px #ff6e1f66;
+  animation:shangchiECore .26s ease-out forwards;
+}
+.shangchi-e-streak{
+  position:absolute;height:4px;border-radius:4px;pointer-events:none;z-index:11;
+  background:linear-gradient(90deg,transparent,#fff8d0,#ffca57,transparent);
+  box-shadow:0 0 8px #fff1ac,0 0 18px #ff9b2d;
+  transform-origin:right center;animation:shangchiEStreak .30s ease-out forwards;
+}
+/* Anchored to the fighter itself (not the arena) so it stays centered on Shang-Chi
+   even while he moves/dodges during the ability window. Shown only while the
+   .shangchi-dodging class is active on the fighter. */
+.shangchi-r-aura{
+  position:absolute;left:50%;top:50%;width:184px;height:184px;margin:-92px;border-radius:50%;pointer-events:none;z-index:2;
+  background:radial-gradient(circle,rgba(255,225,125,.12),transparent 62%);
+  box-shadow:0 0 36px rgba(255,193,62,.45),0 0 90px rgba(255,132,31,.20);
+  border:2px solid rgba(255,220,122,.72);
+  opacity:0;
+}
+.fighter.shangchi.shangchi-dodging .shangchi-r-aura{
+  animation:shangchiRAura 5s ease-in-out both;
+}
+.shangchi-r-ring{
+  position:absolute;left:50%;top:50%;width:164px;height:164px;margin:-82px;border-radius:50%;
+  border:4px solid #ffd76a;box-shadow:0 0 12px #fff0ac,0 0 28px #ffad2f,0 0 54px #ff7b1e66,inset 0 0 18px #fff0a833;
+  pointer-events:none;z-index:3;opacity:0;
+}
+.fighter.shangchi.shangchi-dodging .shangchi-r-ring{
+  opacity:1;
+  animation:shangchiRSpin 5s linear both;
+}
+.shangchi-r-ring::after{
+  content:'';position:absolute;inset:14px;border-radius:50%;border:2px dashed rgba(255,248,205,.72);box-shadow:0 0 14px #ffc14a66;animation:shangchiRSpinReverse 3.2s linear infinite;
+}
+.shangchi-r-streak{
+  position:absolute;width:94px;height:7px;border-radius:7px;pointer-events:none;z-index:12;
+  background:linear-gradient(90deg,transparent,#fff6c7,#ffbc38);
+  box-shadow:0 0 10px #fff0a7,0 0 22px #ff8e24;
+  transform-origin:right center;animation:shangchiRStreak .34s ease-out forwards;
+}
+.shangchi-hit-fx{position:absolute;left:50%;top:50%;width:146px;height:146px;margin:-73px;border-radius:50%;pointer-events:none;z-index:20;filter:drop-shadow(0 0 8px #ffcf5d);animation:shangchiHitFx .48s cubic-bezier(.12,.78,.2,1) forwards;}
+.shangchi-hit-fx::before{content:'';position:absolute;inset:7px;border-radius:50%;border:5px solid #fff4b3;box-shadow:0 0 14px #fff0a0,0 0 30px #ffb52f,0 0 56px #ff7d1e;transform:rotate(12deg) scale(.3);animation:shangchiHitRing .42s ease-out forwards;}
+.shangchi-hit-fx::after{content:'';position:absolute;left:50%;top:50%;width:5px;height:126px;background:linear-gradient(#fff9cf,transparent 80%);box-shadow:0 0 10px #ffcf68;transform-origin:50% 50%;animation:shangchiHitSpokes .36s ease-out forwards;}
+.shangchi-hit-core{position:absolute;left:50%;top:50%;width:36px;height:36px;margin:-18px;border-radius:50%;background:radial-gradient(circle,#fff 0 15%,#fff0ae 27%,#ffb42f 54%,#e66a1c 76%,transparent 78%);box-shadow:0 0 18px #fff2b1,0 0 38px #ffb52f;animation:shangchiHitCore .28s ease-out forwards;}
+@keyframes shangchiAura{from{transform:scale(.55);opacity:0}28%{opacity:1}to{transform:scale(1.22);opacity:0}}
+@keyframes shangchiOnslaughtRing{from{transform:scale(.18) rotate(-20deg);opacity:1}35%{opacity:1}to{transform:scale(1.24) rotate(28deg);opacity:0}}
+@keyframes shangchiRay{from{transform:rotate(0deg) scaleX(.15);opacity:0}25%{opacity:1}to{transform:rotate(360deg) scaleX(1.45);opacity:0}}
+@keyframes shangchiEArc{from{transform:scale(.25) rotate(-38deg);opacity:0}20%{opacity:1}to{transform:scale(1.25) rotate(44deg);opacity:0}}
+@keyframes shangchiECore{from{transform:scale(.35);opacity:1}to{transform:scale(1.45);opacity:0}}
+@keyframes shangchiEStreak{from{transform:rotate(var(--r,0deg)) scaleX(.15);opacity:0}20%{opacity:1}to{transform:rotate(var(--r,0deg)) scaleX(1.2);opacity:0}}
+@keyframes shangchiRAura{0%{opacity:.95;transform:scale(.8)}100%{opacity:.95;transform:scale(1.04)}}
+@keyframes shangchiRSpin{to{transform:rotate(900deg)}}
+@keyframes shangchiRSpinReverse{to{transform:rotate(-720deg)}}
+@keyframes shangchiRStreak{from{transform:rotate(var(--r,0deg)) scaleX(.1);opacity:0}25%{opacity:1}to{transform:rotate(var(--r,0deg)) scaleX(1);opacity:0}}
+@keyframes shangchiHitFx{from{transform:scale(.6);opacity:1}to{transform:scale(1.2);opacity:0}}
+@keyframes shangchiHitRing{to{transform:rotate(125deg) scale(1.08);opacity:0}}
+@keyframes shangchiHitSpokes{to{transform:rotate(108deg) scaleY(1.18);opacity:0}}
+@keyframes shangchiHitCore{from{transform:scale(.35);opacity:1}to{transform:scale(1.3);opacity:0}}
+.fighter.shangchi.shangchi-rings-firing .shangchi-rings{filter:brightness(1.12) drop-shadow(0 0 8px rgba(255,180,45,.78));}
+.fighter.shangchi.shangchi-flowing-strikes .fighter-square{animation:shangchiBodyStrike .28s cubic-bezier(.12,.78,.2,1) both;filter:saturate(1.3) brightness(1.12) drop-shadow(0 0 12px #ffcf6bcc);}
+.fighter.shangchi.facing-left.shangchi-flowing-strikes .fighter-square{animation-name:shangchiBodyStrikeLeft;}
+@keyframes shangchiBodyStrike{0%{transform:scale(1)}28%{transform:translateX(var(--strike-x,0px)) scale(1.09)}62%{transform:translateX(calc(var(--strike-x,0px)*-.45)) scale(1.03)}100%{transform:scale(1)}}
+@keyframes shangchiBodyStrikeLeft{0%{transform:scaleX(-1) scale(1)}28%{transform:scaleX(-1) translateX(var(--strike-x,0px)) scale(1.09)}62%{transform:scaleX(-1) translateX(calc(var(--strike-x,0px)*-.45)) scale(1.03)}100%{transform:scaleX(-1) scale(1)}}
+/* Martial Arts Dodge: a bright, gold, motion-blurred flicker rather than invisibility —
+   he's still there, he's just too fast to hit. */
+.fighter.shangchi.shangchi-dodging .fighter-square{animation:shangchiDodgeFlicker .22s ease-in-out infinite alternate;filter:saturate(1.2) brightness(1.15) drop-shadow(0 0 10px #ffcf6bcc);}
+@keyframes shangchiDodgeFlicker{from{opacity:1;transform:translateX(0)}to{opacity:.72;transform:translateX(-2px)}}
+
 </style>
 </head>
 <body>
@@ -3572,14 +3756,14 @@ const CHARACTERS = {
     maxHealth:25000,
     description:'Cosmic powerhouse. Fires photon energy, lands devastating superhuman punches, and can stay airborne indefinitely with unrestricted flight.',
     abilities:{
-      E:{key:'E', name:'Photon Blast', type:'projectile', damage:1000, cooldown:1500, knockback:10,
+      E:{key:'E', name:'Photon Blast', type:'projectile', damage:1250, cooldown:1500, knockback:10,
          speed:20, w:76, h:22, color:'#ffd95a', render:'captain-photon', trail:'energy',
          sound:'cm_photon', fx:'cm_photon', hitFx:'cm_photon_hit', hitSound:'cm_photon_hit',
-         desc:'Fires a high-energy photon blast for 1,000 damage. Cooldown: 1.5 seconds.'},
-      Q:{key:'Q', name:'Cosmic Punch', type:'melee', damage:2500, cooldown:15000, knockback:22, range:118,
+         desc:'Fires a high-energy photon blast for 1,250 damage. Cooldown: 1.5 seconds.'},
+      Q:{key:'Q', name:'Cosmic Punch', type:'melee', damage:3125, cooldown:15000, knockback:22, range:118,
          hitRange:176, hitVertical:145, hitStartSlack:70, hitDelay:80,
          sound:'cm_punch', fx:'cm_punch', hitFx:'cm_punch_hit', hitSound:'cm_punch_hit',
-         desc:'A devastating close-range cosmic punch that deals 2,500 damage. Cooldown: 15 seconds.'},
+         desc:'A devastating close-range cosmic punch that deals 3,125 damage. Cooldown: 15 seconds.'},
       R:{key:'R', name:'Flight', type:'toggle', damage:0, cooldown:0,
          sound:'cm_flight', fx:'cm_flight',
          desc:'Unlimited powered flight. Toggle it on or off whenever you want — there is no duration and no cooldown.'}
@@ -3920,16 +4104,16 @@ const CHARACTERS = {
   },
   scarletwitch: {
     id:'scarletwitch', name:'Scarlet Witch', img:'ScarletWitch.jpg', color:'#e33b4f', accentColor:'#ff8b9c', aiStyle:'scarletwitch',
-    maxHealth:32500,
+    maxHealth:34500,
     description:'A reality-warping powerhouse. Her chaos magic hits extremely hard and can freeze enemies or tear away one of their abilities for a long time.',
     abilities:{
-      E:{key:'E', name:'Chaos Bolt', type:'projectile', damage:1100, cooldown:2200, knockback:10,
+      E:{key:'E', name:'Chaos Bolt', type:'projectile', damage:1375, cooldown:2200, knockback:10,
          speed:18, w:34, h:18, color:'#ff475d', render:'scarlet-chaos', trail:'scarlet',
          sound:'scarlet_bolt', fx:'scarlet_bolt', hitFx:'scarlet_hit', hitSound:'scarlet_hit',
-         desc:'Launches a fast chaos-energy bolt for 1,100 damage. Cooldown: 2.2 seconds.'},
-      Q:{key:'Q', name:'Hex Burst', type:'scarletHexBurst', damage:3000, cooldown:25000, knockback:24, radius:175, duration:4000,
+         desc:'Launches a fast chaos-energy bolt for 1,375 damage. Cooldown: 2.2 seconds.'},
+      Q:{key:'Q', name:'Hex Burst', type:'scarletHexBurst', damage:3750, cooldown:25000, knockback:24, radius:175, duration:4000,
          sound:'scarlet_hex', fx:'scarlet_hex', hitFx:'scarlet_hex_hit', hitSound:'scarlet_hex_hit',
-         desc:'Unleashes 3,000 damage. On hit, the enemy glows red, becomes completely frozen, and cannot use abilities for 4 seconds. Cooldown: 25 seconds.'},
+         desc:'Unleashes 3,750 damage. On hit, the enemy glows red, becomes completely frozen, and cannot use abilities for 4 seconds. Cooldown: 25 seconds.'},
       R:{key:'R', name:'What attack?', type:'scarletDisable', damage:0, cooldown:45000, duration:20000,
          sound:'scarlet_disable', fx:'scarlet_disable',
          desc:'Randomly disables one of the enemy’s E/Q/R abilities for 20 seconds. Cooldown: 45 seconds.'}
@@ -4193,10 +4377,28 @@ const CHARACTERS = {
          desc:'Ignites into his blazing fire form and takes flight, no cooldown and no duration limit. While flaming on, brushing against an enemy sears them for a small burn tick.'}
     }
   },
+  shangchi: {
+    id:'shangchi', name:'Shang-Chi', img:'ShangChi.jpg', color:'#c52b38', accentColor:'#ffcf6b', aiStyle:'bruiser',
+    maxHealth:9150,
+    description:'A disciplined martial artist who fights entirely at close range, chaining fast strikes together while the Ten Rings orbit him permanently, ready to be flung at the enemy and recalled home.',
+    abilities:{
+      E:{key:'E', name:'Flowing Strikes', type:'melee', damage:400, cooldown:800, knockback:6, range:74,
+         hitDelay:65,
+         sound:'shangchi_strike', fx:'shangchi_strike', hitFx:'shangchi_strike_hit', hitSound:'shangchi_strike_hit',
+         desc:'A quick palm-and-elbow combo for 400 damage. Cooldown: 0.8 seconds.'},
+      Q:{key:'Q', name:'Ten Rings Onslaught', type:'tenRingsOnslaught', damage:2300, cooldown:12000, knockback:6,
+         hits:10, hitStagger:55, speed:24,
+         sound:'shangchi_rings_fire', fx:'shangchi_rings', hitFx:'shangchi_ring_hit', hitSound:'shangchi_ring_hit',
+         desc:'Launches the exact ten rings orbiting Shang-Chi in a rapid ten-hit flurry for 2,300 total damage, then recalls those same rings to orbit around him. Cooldown: 12 seconds.'},
+      R:{key:'R', name:'Martial Arts Dodge', type:'martialDodge', damage:0, cooldown:22000, duration:5000,
+         sound:'shangchi_dodge', fx:'shangchi_dodge',
+         desc:'Shang-Chi\'s reflexes sharpen to superhuman levels, letting him dodge every incoming attack for 5 seconds. Cooldown: 22 seconds.'}
+    }
+  },
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','yondu','rocket','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','blackpanther','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','yondu','rocket','antman','wasp'];
 
 
 /* =========================================================================
@@ -5465,8 +5667,13 @@ function activateHeldWeapon(f, selector, duration, direction){
 }
 
 function buildFighterDOM(f){
+  // Shared clock all ten rings measure their orbit against, so a ring that
+  // gets fired and recalled later re-syncs to the exact rotational phase the
+  // untouched rings are already at, instead of restarting from zero and
+  // slowly drifting out of their even 36-degree spacing.
+  if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -5484,6 +5691,7 @@ function buildFighterDOM(f){
     ${f.def.id==='drax' ? '<div class="drax-blades-held" aria-hidden="true"><svg viewBox="0 0 120 70"><g class="drax-blade blade-one"><path d="M32 51 C40 30 51 15 76 7 L69 21 C57 29 50 40 45 57 Z"/></g><g class="drax-blade blade-two"><path d="M58 58 C70 38 84 27 108 22 L101 37 C86 41 76 49 69 62 Z"/></g></svg></div>' : ''}
     ${f.def.id==='gamora' ? '<div class="gamora-gun-held" aria-hidden="true"><svg viewBox="0 0 100 44"><path d="M10 20h42l11-7h24v11H63l-9 7H38l-2-9H10z" fill="#756b83"/><path d="M58 13l8-8h13l-8 11z" fill="#c8f7ff"/><path d="M68 20h27l-8 5H68z" fill="#7bdcff"/><circle cx="84" cy="18" r="3" fill="#fff6b0"/></svg></div>' : ''}
     ${f.def.id==='yondu' ? '<div class="yondu-suit-overlay" aria-hidden="true"><span></span><span></span><span></span></div>' : ''}
+    ${f.def.id==='shangchi' ? `<div class="shangchi-rings" aria-hidden="true">${Array.from({length:10},(_,ri)=>`<i data-ring-index="${ri}" style="--ring-angle:${ri*36}deg"></i>`).join('')}</div><div class="shangchi-r-aura" aria-hidden="true"></div><div class="shangchi-r-ring" aria-hidden="true"></div>` : ''}
     ${f.def.id==='professorx' ? `<div class="professorx-wheelchair" aria-hidden="true"><svg viewBox="0 0 124 84"><g fill="none" stroke="#37414f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path class="px-frame" d="M26 18 L26 48 L84 48 L102 29"/><path class="px-frame" d="M26 18 L44 18"/><path class="px-frame" d="M82 48 L82 28"/><path class="px-frame" d="M65 20 L85 20"/></g><path d="M30 17 C28 8 34 4 43 5 L52 8 L52 18" fill="#465263" stroke="#26313e" stroke-width="3"/><path d="M34 27 Q56 23 77 28 L80 42 Q58 46 34 41 Z" fill="#58708f" stroke="#273342" stroke-width="2.5"/><path class="px-seat-front" d="M37 39 Q58 44 78 40 L83 48 Q59 54 34 47 Z" fill="#6d86a4" stroke="#263442" stroke-width="2.5"/><path d="M37 24 L37 10 M37 10 L48 10 M73 24 L73 10 M73 10 L82 10" fill="none" stroke="#526174" stroke-width="3.5" stroke-linecap="round"/><circle class="px-big-wheel" cx="41" cy="55" r="18" fill="#1d222a" stroke="#697487" stroke-width="4.5"/><circle cx="41" cy="55" r="5" fill="#a8b2c0"/><circle class="px-front-wheel" cx="95" cy="57" r="10" fill="#20252d" stroke="#697487" stroke-width="3.5"/><circle cx="95" cy="57" r="3" fill="#a8b2c0"/><path d="M80 46 L94 47 L101 57" fill="none" stroke="#3e4855" stroke-width="4"/><path d="M67 47 L84 62 L95 62" fill="none" stroke="#3e4855" stroke-width="3.5"/><path d="M28 48 L19 62 L39 62" fill="none" stroke="#3e4855" stroke-width="3.5"/></svg></div>` : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
@@ -6105,6 +6313,94 @@ function executeAbility(caster, target, ability, t){
       caster.holoSuitUntil = t + (ability.duration || 4000);
       caster.vx = 0;
       spawnHoloSuitFx(caster, true);
+      break;
+    }
+    case 'tenRingsOnslaught': {
+      // IMPORTANT: Q throws the exact DOM rings that are visibly orbiting Shang-Chi.
+      // We detach each real ring at its current screen position, fly it to the target,
+      // and then put that same ring element back into the orbit container on recall.
+      const tg = target || ((caster === state.player) ? state.bot : state.player);
+      if(!tg || tg.dead || caster.shangchiRingsFiring) break;
+      caster.shangchiRingsFiring = true;
+      const dir = caster.isBot ? caster.facing : dirSignTo(caster, tg);
+      caster.facing = dir;
+      if(caster.el){ caster.el.classList.toggle('facing-left', dir < 0); caster.el.classList.add('shangchi-rings-firing'); }
+      const ringContainer = caster.el ? caster.el.querySelector('.shangchi-rings') : null;
+      const ringEls = ringContainer ? Array.from(ringContainer.querySelectorAll('i')).filter(el=>!el.classList.contains('shangchi-ring-in-flight')) : [];
+      ringEls.forEach((el,i)=>{ if(el.dataset.ringIndex===undefined) el.dataset.ringIndex=String(i); });
+      const hits = Math.min(10, ability.hits || 10, ringEls.length || 10);
+      const perHit = Math.round((ability.damage || 2300) / 10);
+      const stagger = ability.hitStagger || 45;
+      const who = caster;
+
+      if(who.el){
+        const scx=who.x+FIGHTER_SIZE/2, scy=who.y+FIGHTER_SIZE/2;
+        fxEl('shangchi-onslaught-aura',`left:${scx-87}px;top:${scy-87}px;width:174px;height:174px;`,560);
+        fxEl('shangchi-onslaught-ring',`left:${scx-87}px;top:${scy-87}px;width:174px;height:174px;`,760);
+        for(let ri=0;ri<10;ri++){
+          const aa=(Math.PI*2*ri)/10;
+          fxEl('shangchi-onslaught-ray',`left:${scx-69}px;top:${scy-2.5}px;transform:rotate(${aa}rad);`,410);
+        }
+        spawnSparks(scx,scy,26,'#ffd56f',110,440);
+        shakeArena(3,180);
+      }
+
+      for(let ri=0;ri<hits;ri++){
+        const ringEl = ringEls[ri];
+        if(!ringEl) continue;
+        setTimeout(()=>{
+          if(state.mode !== 'battle' || who.dead || !ringEl) return;
+          const liveTarget = (who === state.player) ? state.bot : state.player;
+          if(!liveTarget || liveTarget.dead){ restoreShangChiRing(who, ringEl); return; }
+
+          const arenaRect = arenaEl.getBoundingClientRect();
+          const ringRect = ringEl.getBoundingClientRect();
+          const scale = state.scaleFactor || 1;
+          const startCx = (ringRect.left + ringRect.width/2 - arenaRect.left) / scale;
+          const startCy = (ringRect.top + ringRect.height/2 - arenaRect.top) / scale;
+          const tcx = liveTarget.x + FIGHTER_SIZE/2, tcy = liveTarget.y + FIGHTER_SIZE/2;
+          const ang = Math.atan2(tcy-startCy, tcx-startCx);
+          const speed = ability.speed || 24;
+
+          // The ring itself becomes the projectile.
+          if(ringEl.parentNode !== arenaEl) arenaEl.appendChild(ringEl);
+          ringEl.classList.add('shangchi-ring-in-flight','shangchi-ring-projectile');
+          ringEl.style.left=(startCx-15)+'px';
+          ringEl.style.top=(startCy-15)+'px';
+          ringEl.style.transform=`rotate(${ang}rad)`;
+          ringEl.style.animation='none';
+          ringEl.style.zIndex='30';
+
+          state.projectiles.push({
+            x:startCx-15,y:startCy-15,vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,
+            w:30,h:30,color:'#ffcf6b',damage:perHit,knockback:ability.knockback||6,owner:who.id,
+            life:3000,returns:true,phase:'out',originX:startCx,casterRef:who,targetRef:liveTarget,
+            returnDistance:780,homing:true,homingTurn:0.30,instantTurn:true,
+            render:'shangchi-ring',trail:null,web:false,
+            hitFx:ability.hitFx||'shangchi_ring_hit',hitSound:ability.hitSound||'shangchi_ring_hit',
+            slow:0,pierce:false,shieldViz:false,hasHitTarget:false,precisionAim:false,trailTick:0,
+            el:ringEl,ringIndex:ri,shangchiOrbitRing:true
+          });
+          if(ri===0) sfx(ability.sound||'shangchi_rings_fire');
+          spawnSparks(startCx,startCy,9,'#fff0ae',42,230);
+          fxEl('fx-ring',`left:${startCx-23}px;top:${startCy-23}px;width:46px;height:46px;border-color:#fff2b2;border-width:3px;box-shadow:0 0 18px #ffae2f,0 0 30px #ff7a1e;`,260);
+        },ri*stagger);
+      }
+
+      setTimeout(()=>{
+        if(who.el) who.el.classList.remove('shangchi-rings-firing');
+        who.shangchiRingsFiring = false;
+      },hits*stagger+2300);
+      break;
+    }
+    case 'martialDodge': {
+      // Total damage immunity for a window, same mechanism as Professor X's
+      // Astral Projection (invulnAbilityUntil), styled as pure reflexes/evasion.
+      caster.invulnAbilityUntil = t + (ability.duration || 5000);
+      if(caster.el) caster.el.classList.add('shangchi-dodging');
+      const who = caster;
+      setTimeout(()=>{ if(who.el) who.el.classList.remove('shangchi-dodging'); }, ability.duration || 5000);
+      spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 16, '#ffcf6b', 60, 420);
       break;
     }
     case 'draxFury': {
@@ -10243,6 +10539,52 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Shang-Chi ---------------- */
+    case 'shangchi_strike': {
+      const hx=cx+dir*42, hy=cy;
+      if(caster.el){
+        caster.el.style.setProperty('--strike-x', `${dir*5}px`);
+        caster.el.classList.remove('shangchi-flowing-strikes');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('shangchi-flowing-strikes');
+        setTimeout(()=>{if(caster.el) caster.el.classList.remove('shangchi-flowing-strikes');},320);
+      }
+      fxEl('fx-flash',`left:${hx-38}px;top:${hy-38}px;width:76px;height:76px;background:radial-gradient(circle,#fffdf0 0 12%,#fff0a0 26%,#ffb42f 52%,transparent 76%);box-shadow:0 0 30px #ffb12e;`,220);
+      fxEl('shangchi-e-core',`left:${hx-21}px;top:${hy-21}px;width:42px;height:42px;`,260);
+      fxEl('shangchi-e-arc',`left:${hx-70}px;top:${hy-70}px;width:140px;height:140px;transform:scaleX(${dir});`,300);
+      for(let i=0;i<4;i++){
+        const rr = (i*24-36) * dir;
+        const yy = hy + (i%2===0 ? -16 : 16);
+        fxEl('shangchi-e-streak',`left:${dir>0 ? hx-92 : hx-8}px;top:${yy}px;width:100px;--r:${rr}deg;`,300);
+      }
+      spawnSparks(hx,hy,20,'#ffe9a0',72,320);
+      spawnSparks(hx,hy,8,'#fff9dc',42,260);
+      break;
+    }
+    case 'shangchi_rings': {
+      fxEl('shangchi-onslaught-aura',`left:${cx-87}px;top:${cy-87}px;width:174px;height:174px;`,560);
+      fxEl('shangchi-onslaught-ring',`left:${cx-87}px;top:${cy-87}px;width:174px;height:174px;`,760);
+      for(let i=0;i<10;i++){const aa=(Math.PI*2*i)/10;fxEl('shangchi-onslaught-ray',`left:${cx-69}px;top:${cy-2.5}px;transform:rotate(${aa}rad);`,410);}
+      spawnSparks(cx,cy,26,'#ffd56f',110,440);
+      shakeArena(3,180);
+      break;
+    }
+    case 'shangchi_dodge': {
+      // The aura/ring are persistent children of the fighter (added in buildFighterDOM)
+      // toggled purely by the .shangchi-dodging class, so they stay centered on
+      // Shang-Chi even as he moves during the dodge window instead of staying
+      // pinned to the spot he cast it from.
+      for(let i=0;i<8;i++){
+        const aa=(Math.PI*2*i)/8;
+        const sx=cx+Math.cos(aa)*18-47, sy=cy+Math.sin(aa)*18-3;
+        fxEl('shangchi-r-streak',`left:${sx}px;top:${sy}px;--r:${aa}rad;`,340+i*18);
+      }
+      spawnSparks(cx,cy,28,'#ffd66f',92,420);
+      spawnSparks(cx,cy,12,'#fff6c7',54,280);
+      shakeArena(2,160);
+      break;
+    }
+
     /* ---------------- Blade ---------------- */
     case 'blade_sword': {
       if(caster.el){
@@ -10866,6 +11208,22 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx, cy, 20, '#eaffb0', 70, 460);
       spawnSparks(cx, cy, 10, '#f2c94c', 48, 400);
       shakeArena(13, 340);
+      break;
+    }
+    case 'shangchi_strike_hit': {
+      fxEl('fx-flash',`left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;background:radial-gradient(circle,#fffbe4,#ffd56f 26%,#ff9f28 52%,transparent 78%);`,260);
+      fxEl('shangchi-hit-fx',`left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;`,480,'<div class="shangchi-hit-core"></div>');
+      spawnSparks(cx,cy,16,'#ffe8a0',76,420);
+      spawnSparks(cx,cy,8,'#fff8dc',44,340);
+      shakeArena(4,200);
+      break;
+    }
+    case 'shangchi_ring_hit': {
+      fxEl('fx-flash',`left:${cx-72}px;top:${cy-72}px;width:144px;height:144px;background:radial-gradient(circle,#fff 0 8%,#fff0b1 22%,#ffb82e 46%,#e96a1f 62%,transparent 80%);`,340);
+      fxEl('shangchi-hit-fx',`left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;`,500,'<div class="shangchi-hit-core"></div>');
+      fxEl('fx-ring',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;border-color:#fff1ad;border-width:4px;box-shadow:0 0 34px #ffad2f,0 0 58px #ff7d1e66;`,560);
+      for(let i=0;i<7;i++){const a=(Math.PI*2*i)/7;spawnSparks(cx+Math.cos(a)*12,cy+Math.sin(a)*12,3,'#fff5c2',52,340);}
+      shakeArena(7,250);
       break;
     }
     case 'blade_sword_hit': {
@@ -11636,6 +11994,41 @@ function spawnHoloSuitBreakFx(target){
   spawnSparks(cx,cy,22,'#a6ecff',110,520);
   shakeArena(5,220);
 }
+function restoreShangChiRing(owner, ringEl){
+  if(!owner || !ringEl) return;
+  const fighterEl = owner.el;
+  const ringContainer = fighterEl ? fighterEl.querySelector('.shangchi-rings') : null;
+  if(!ringContainer) { if(ringEl.parentNode) ringEl.remove(); return; }
+  const idx = Number.isFinite(Number(ringEl.dataset.ringIndex)) ? Number(ringEl.dataset.ringIndex) : 0;
+  ringEl.classList.remove('shangchi-ring-in-flight','shangchi-ring-projectile');
+  ringEl.style.position=''; ringEl.style.left=''; ringEl.style.top=''; ringEl.style.margin='';
+  ringEl.style.width=''; ringEl.style.height=''; ringEl.style.transform=''; ringEl.style.zIndex='';
+  ringEl.style.background=''; ringEl.style.boxShadow=''; ringEl.style.pointerEvents='';
+  // Reinsert into the same numbered slot. Each ring carries its own fixed
+  // --ring-angle (set once, inline, at creation) rather than relying on
+  // nth-child position, so it always orbits back to the exact same spot
+  // even if rings return home out of order.
+  // Re-sync this ring's spin to the shared orbit clock (rather than letting
+  // the animation restart from 0% at whatever moment it happens to land)
+  // so it locks back into the same rotating formation as the rings that
+  // never left, instead of drifting out of their even spacing over time.
+  const ORBIT_MS = 3600;
+  const epoch = owner.shangchiOrbitEpoch || now();
+  const phase = ((now() - epoch) % ORBIT_MS + ORBIT_MS) % ORBIT_MS;
+  ringEl.style.animation = `shangchiOrbit ${ORBIT_MS}ms linear ${-phase}ms infinite`;
+  const siblings = Array.from(ringContainer.children).filter(el=>el.tagName==='I' && el !== ringEl && !el.classList.contains('shangchi-ring-in-flight'));
+  const before = siblings.find(el=>Number(el.dataset.ringIndex) > idx);
+  if(before) ringContainer.insertBefore(ringEl,before); else ringContainer.appendChild(ringEl);
+}
+function removeProjectileAtIndex(i,p){
+  if(p && p.shangchiOrbitRing){
+    restoreShangChiRing(p.casterRef,p.el);
+    state.projectiles.splice(i,1);
+    return;
+  }
+  if(p && p.el) p.el.remove();
+  state.projectiles.splice(i,1);
+}
 function updateProjectiles(dtF){
   for(let i=state.projectiles.length-1; i>=0; i--){
     const p = state.projectiles[i];
@@ -11670,6 +12063,13 @@ function updateProjectiles(dtF){
       p.y += p.vy*dtF;
       const traveled = Math.abs(p.x - p.originX);
       if(traveled >= p.returnDistance || p.life <= 0 || p.x < -30 || p.x > ARENA_W+30){
+        if(p.shangchiOrbitRing){
+          // Missed everything: warp straight back into orbit instead of
+          // slow-flying home across the arena.
+          spawnSparks(p.x + p.w/2, p.y + p.h/2, 8, '#fff0ae', 50, 240);
+          removeProjectileAtIndex(i,p);
+          continue;
+        }
         p.phase = 'return';
         p.life = 1800;
       }
@@ -11721,8 +12121,7 @@ function updateProjectiles(dtF){
           sfx('bullseye_ricochet_hit');
           shakeArena(4,180);
         }
-        if(p.el) p.el.remove();
-        state.projectiles.splice(i,1);
+        removeProjectileAtIndex(i,p);
         continue;
       }
     }
@@ -11734,7 +12133,7 @@ function updateProjectiles(dtF){
       const overlapX = (p.x + p.w) > w.x && p.x < (w.x + w.w);
       const overlapY = (p.y + p.h) > w.y && p.y < (w.y + w.h);
       if(overlapX && overlapY){
-        if(p.returns && p.phase === 'out'){
+        if(p.returns && p.phase === 'out' && !p.shangchiOrbitRing){
           p.phase = 'return';
           p.life = 1800;
           break;
@@ -11748,8 +12147,8 @@ function updateProjectiles(dtF){
     }
     if(consumed){
       if(p.shieldViz && p.casterRef) p.casterRef.shieldThrown = false;
-      if(p.el) p.el.remove();
-      state.projectiles.splice(i,1);
+      if(p.shangchiOrbitRing) spawnSparks(p.x + p.w/2, p.y + p.h/2, 8, '#fff0ae', 50, 240);
+      removeProjectileAtIndex(i,p);
       continue;
     }
 
@@ -11771,7 +12170,9 @@ function updateProjectiles(dtF){
       }
     }
     if(struckMissile){
-      if(p.returns && p.phase === 'out'){
+      if(p.shangchiOrbitRing){
+        removeProjectileAtIndex(i,p);
+      } else if(p.returns && p.phase === 'out'){
         p.phase = 'return';
         p.life = 1800;
       } else {
@@ -11799,7 +12200,16 @@ function updateProjectiles(dtF){
           applyWaspSizeEffect(target, p.waspSizeDuration, p.waspSizeSpeedMultiplier || .62);
         }
         p.hasHitTarget = true;
-        if(p.returns){
+        if(p.shangchiOrbitRing){
+          // Ten Rings: the ring warps straight back into orbit the instant it
+          // lands its hit, instead of visibly flying home across the arena —
+          // so it can't linger mid-flight, overshoot, or land out of sync
+          // with the rings that never left.
+          spawnSparks(p.x + p.w/2, p.y + p.h/2, 10, '#fff0ae', 60, 260);
+          fxEl('fx-ring',`left:${p.x+p.w/2-20}px;top:${p.y+p.h/2-20}px;width:40px;height:40px;border-color:#fff2b2;border-width:3px;box-shadow:0 0 18px #ffae2f,0 0 30px #ff7a1e;`,240);
+          removeProjectileAtIndex(i,p);
+          continue;
+        } else if(p.returns){
           p.phase = 'return';
           p.life = 1800;
         } else if(!p.pierce){
@@ -11857,8 +12267,7 @@ function updateProjectiles(dtF){
     // Returning shield/club is now visibly homing back to its owner.
     if(p.life <= 0 || (!p.returns && (p.x < -60 || p.x > ARENA_W+60))){
       if(p.shieldViz && p.casterRef) p.casterRef.shieldThrown = false;
-      if(p.el) p.el.remove();
-      state.projectiles.splice(i,1);
+      removeProjectileAtIndex(i,p);
       continue;
     }
 
@@ -11953,6 +12362,12 @@ function buildProjectileVisual(p){
   } else if(p.render === 'yondu-yaka-arrow'){
     p.el.classList.add('yondu-yaka-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none';
     p.el.innerHTML=yonduYakaArrowSvg('proj_'+Math.random().toString(36).slice(2));
+  } else if(p.render === 'shangchi-ring'){
+    // Q uses the exact orbiting <i> ring element as the projectile.
+    p.el.classList.add('shangchi-ring-projectile');
+    p.el.style.background='';
+    p.el.style.boxShadow='';
+    p.el.style.zIndex='30';
   } else if(p.render === 'yondu-bolt'){
     p.el.classList.add('yondu-bolt-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none';
     p.el.innerHTML='<div class="yondu-bolt-aura"></div><div class="yondu-bolt-core"></div><div class="yondu-bolt-tail"></div><div class="yondu-bolt-tip"></div>';
@@ -12149,6 +12564,8 @@ function spawnProjTrail(p){
     fxEl('fx-trail', `left:${(cx-24).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:48px;height:8px;transform:rotate(${ang}rad) scale(1)!important;transform-origin:right center!important;background:linear-gradient(90deg,transparent,#8f0f16 30%,#c8181f 55%,#ff4a44 80%,#ffcfae);box-shadow:0 0 10px #d6262b,0 0 22px rgba(214,38,43,.75);animation:yonduArrowTrailFade .26s linear forwards;`, 260);
   } else if(p.render === 'yondu-bolt') {
     fxEl('fx-trail', `left:${(cx-9).toFixed(1)}px;top:${(cy-4).toFixed(1)}px;width:18px;height:8px;background:radial-gradient(ellipse,#ffffff,#62d6ff 45%,transparent 78%);box-shadow:0 0 12px #51cfff,0 0 22px #22a9ff66;`, 240);
+  } else if(p.render === 'shangchi-ring') {
+    // The ring carries its own lightweight CSS trail; do not spawn a DOM node every frame.
   } else if(p.render === 'warmachine-missile') {
     const sz=7;
     fxEl('fx-trail', `left:${(cx-sz/2-8).toFixed(1)}px;top:${(cy-sz/2).toFixed(1)}px;width:${sz}px;height:${sz}px;background:radial-gradient(circle,#fff2c8,#ff8f2f 45%,transparent 75%);box-shadow:0 0 10px #ff7a18;`, 260);
