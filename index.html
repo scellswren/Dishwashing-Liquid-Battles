@@ -4029,7 +4029,7 @@ const CHARACTERS = {
     maxHealth:10000, aiStyle:'balanced',
     description:'Super-soldier all-rounder. Throws his shield for reliable ranged damage, raises it to no-sell small hits outright, and closes the gap or bails out with a huge leap.',
     abilities:{
-      E:{key:'E', name:'Shield Throw', type:'projectile', damage:500, cooldown:2000, knockback:10,
+      E:{key:'E', name:'Shield Throw', type:'projectile', damage:750, cooldown:2000, knockback:10,
          speed:17, w:34, h:34, color:'#3b5bdb',
          sound:'shield_throw', fx:'cap_shield_throw', render:'cap-shield', trail:'energy',
          returns:true, pierce:true, shieldViz:true, returnDistance:820,
@@ -4041,6 +4041,60 @@ const CHARACTERS = {
       R:{key:'R', name:'Super Jump', type:'mobility', boostX:0, boostY:0, swingToTop:true, cooldown:6000,
          sound:'cap_jump', fx:'cap_jump',
          desc:'A colossal leap that launches him all the way to the top of the arena. Pure mobility — no damage.'}
+    }
+  },
+  usagent: {
+    id:'usagent', name:'US Agent', img:'USAgent.jpg', color:'#8f1c1c', accentColor:'#c9ccd6', aiStyle:'usagent',
+    maxHealth:10600,
+    description:'A harder-hitting, less disciplined super-soldier. Throws his iconic shield just like Captain America, but closes the gap for a brutal shield slam that only comes around once every 40 seconds, and can only hold his own defensive shield wall for 7 seconds.',
+    abilities:{
+      E:{key:'E', name:'Shield Throw', type:'projectile', damage:600, cooldown:2000, knockback:10,
+         speed:17, w:34, h:34, color:'#8f1c1c',
+         sound:'shield_throw', fx:'cap_shield_throw', render:'cap-shield', trail:'energy',
+         returns:true, pierce:true, shieldViz:true, returnDistance:820,
+         hitFx:'cap_shield_hit', hitSound:'shield_hit',
+         desc:'Throws his shield in a straight line — it always returns to hand afterward. Reliable ranged poke.'},
+      Q:{key:'Q', name:'Decapitation', type:'melee', damage:2000, cooldown:40000, knockback:16, range:80,
+         hitDelay:120, startOnCooldown:true,
+         sound:'shield_hit', fx:'bp_claw', hitFx:'cap_shield_hit', hitSound:'shield_break',
+         desc:'A devastating close-range shield slam to the head for 2,000 damage. Not available at the very start of a match — cooldown: 40 seconds.'},
+      R:{key:'R', name:'Shield Block', type:'block', blockThreshold:1000, duration:7000, cooldown:8000,
+         sound:'shield_block', fx:'cap_block',
+         desc:'Raises his shield defensively. Hits of 1,000 damage or less do nothing; anything harder breaks the block. Cannot attack while blocking, and moves 35% slower. Press again to lower it early. Cannot hold longer than 7 seconds.'}
+    }
+  },
+  mystique: {
+    id:'mystique', name:'Mystique', img:'Mystique.jpg', color:'#7a3fae', accentColor:'#c9a3ff', aiStyle:'trickster',
+    maxHealth:8000,
+    description:'A deceptive shapeshifter who wins through misdirection. Peppers foes with a compact pistol, can shapeshift into her opponent to freeze them in confusion, and can freely shapeshift into any fighter in the game — purely cosmetic, no powers gained.',
+    abilities:{
+      E:{key:'E', name:'Gun Shot', type:'projectile', damage:250, cooldown:600, knockback:5,
+         speed:32, w:16, h:5, color:'#c9a3ff', render:'pistol', trail:'',
+         sound:'widow_pistol', fx:'widow_pistol', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         desc:'A quick pistol shot for 250 damage. Cooldown: 0.6 seconds.'},
+      Q:{key:'Q', name:'Confusing Shapeshift', type:'mystiqueConfuse', damage:0, cooldown:8000, duration:2500, radius:700,
+         sound:'loki_teleport', fx:'profx_mindstun', hitFx:'profx_mindstun_hit', hitSound:'profx_mindstun_hit',
+         desc:'Shapeshifts into the face of the fighter she\u2019s up against, throwing them into total confusion — frozen, unable to move or attack, for 2.5 seconds. Cooldown: 8 seconds.'},
+      R:{key:'R', name:'Shapeshift', type:'shapeshiftRandom', damage:0, cooldown:0,
+         sound:'loki_duplication', fx:'',
+         desc:'Shapeshifts her look into a random fighter from the entire roster. Purely cosmetic — she gains none of their powers. No cooldown; use it as often as you like.'}
+    }
+  },
+  whitewidow: {
+    id:'whitewidow', name:'White Widow', img:'WhiteWidow.jpg', color:'#d6e8f2', accentColor:'#4c8bf5', aiStyle:'blackwidow',
+    maxHealth:5100,
+    description:'A fast, icy ranged fighter. Peppers enemies with a sidearm and zaps them close-up with a stunning taser disc, then grapples around the arena to stay mobile.',
+    abilities:{
+      E:{key:'E', name:'Rifle', type:'projectile', damage:260, cooldown:550, knockback:6,
+         speed:30, w:16, h:5, color:'#e8c887', render:'pistol', trail:'',
+         sound:'widow_pistol', fx:'widow_pistol', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         desc:'Rapid-fire rounds that keep pressure on the opponent.'},
+      Q:{key:'Q', name:'Taser Disc', type:'melee', damage:500, cooldown:20000, knockback:10, range:78, stun:1000,
+         hitDelay:80, sound:'electric_baton', fx:'electric_baton', hitFx:'electric_baton_hit', hitSound:'electric_baton_hit',
+         desc:'A close-range taser disc strike that deals 500 damage and stuns the target for 1 second. Cooldown: 20 seconds.'},
+      R:{key:'R', name:'Grapple', type:'grapple', cooldown:5200,
+         sound:'grapple', fx:'blackwidow_grapple',
+         desc:'Fires a grapple toward the opponent and quickly pulls White Widow into position.'}
     }
   },
   blackpanther: {
@@ -4670,7 +4724,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','punisher','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','punisher','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','usagent','mystique','whitewidow'];
 
 
 /* =========================================================================
@@ -5605,6 +5659,11 @@ document.getElementById('btn-menu-play').addEventListener('click', ()=> showScre
    ========================================================================= */
 function makeFighter(charId, isBot, spawnX, idOverride){
   const def = CHARACTERS[charId];
+  const startCooldowns = {E:0,Q:0,R:0};
+  ['E','Q','R'].forEach(k=>{
+    const ab = def.abilities[k];
+    if(ab && ab.startOnCooldown) startCooldowns[k] = now() + ab.cooldown;
+  });
   return {
     def, id: idOverride || (isBot ? 'bot' : 'player'),
     isBot,
@@ -5619,7 +5678,8 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     dead:false,
     regenAccumulator:0,
     grappleVx:0, grappleVy:0, grappleUntil:0,
-    cooldowns:{E:0,Q:0,R:0},
+    cooldowns:startCooldowns,
+    mystiqueDisguiseUntil:0,
     windBurstUntil:0, windBurstVx:0, invulnAbilityUntil:0,
     chargeState:null, draxFuryUntil:0, killmongerFuryUntil:0,
     redHulkHeatUntil:0, redHulkFirePools:[], ironJumpActive:false, ironJumpMinLandAt:0, ironJumpAbility:null,
@@ -6072,6 +6132,7 @@ function buildFighterDOM(f){
     <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
     ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
     ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
+    ${f.def.id==='usagent' ? '<div class="cap-shield-held usagent-shield-held">'+usAgentShieldSvg()+'</div>' : ''}
     ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
     ${f.def.id==='blade' ? '<div class="blade-sword-held"><svg viewBox="0 0 96 80" aria-hidden="true"><defs><linearGradient id="bladeBlade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8f96"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient></defs><g transform="translate(4 4) rotate(-6 44 36)"><rect x="2" y="30" width="14" height="12" rx="3" fill="#1a1a1a" stroke="#000" stroke-width="1.4"/><rect x="14" y="33" width="8" height="6" rx="2" fill="#701d1d"/><rect x="20" y="31" width="66" height="9" rx="2.5" fill="url(#bladeBlade)" stroke="#5c6067" stroke-width="1"/><path d="M22 35.5 L84 35.5" stroke="#ffffff" stroke-width="1.2" opacity=".8"/><path d="M84 31 L92 35.5 L84 40 Z" fill="#f4f6f8" stroke="#5c6067" stroke-width="1"/></g></svg></div>' : ''}
     ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
@@ -6093,6 +6154,7 @@ function buildFighterDOM(f){
   f.waspWingsEl = el.querySelector('.wasp-wings');
   f.falconWingsEl = el.querySelector('.falcon-wings');
   f.waspSizeMarkEl = el.querySelector('.wasp-size-mark');
+  f.fighterSquareEl = el.querySelector('.fighter-square');
   f.gliderEl = el.querySelector('.goblin-glider');
   f.sizeBodyEl = el.querySelector('.fighter-size-body');
 }
@@ -7163,7 +7225,7 @@ function executeAbility(caster, target, ability, t){
         homing: !!ability.homing, homingTurn: ability.homingTurn || 0, instantTurn: !!ability.instantTurn,
         render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
         bulletType: ability.bulletType || '',
-        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, shock: ability.shock || null,
+        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, shock: ability.shock || null, stun: ability.stun || 0,
         waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
         pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false, precisionAim:!!ability.precisionAim, ricochet:false, ricochetBounced:false,
         burnDamage: ability.burnDamage || 0, burnTicks: ability.burnTicks || 0, burnTickMs: ability.burnTickMs || 500,
@@ -7278,6 +7340,38 @@ function executeAbility(caster, target, ability, t){
       spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 18, '#8ec9ff', 70, 460);
       break;
     }
+    case 'mystiqueConfuse': {
+      // Mystique's Confusing Shapeshift: she takes on the face of whoever she's
+      // fighting and, using the same control-lock Professor X's Mind Stun uses,
+      // completely freezes them (no moving, no attacking) for a few seconds.
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) break;
+      const mcDx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), mcDy = (tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
+      const mcDist = Math.hypot(mcDx, mcDy);
+      if(mcDist > (ability.radius||700) || attackBlockedByFloor(caster,tg)) break;
+      if(caster.fighterSquareEl) caster.fighterSquareEl.innerHTML = squareInner(tg.def);
+      caster.mystiqueDisguiseUntil = t + (ability.duration||2500);
+      tg.pxMindStunUntil = t + (ability.duration||2500);
+      tg.abilityLockUntil = t + (ability.duration||2500);
+      tg.vx = 0; tg.vy = 0; tg.flight = false; tg.flightExpire = 0; tg.grappleUntil = 0; tg.hitStun = 0;
+      if(tg.el) tg.el.classList.add('px-mind-stunned');
+      spawnSparks(tg.x+FIGHTER_SIZE/2, tg.y+FIGHTER_SIZE/2, 16, '#c9a3ff', 60, 420);
+      sfx(ability.hitSound||'profx_mindstun_hit');
+      spawnHitFx(tg, ability.hitFx, dirSignTo(caster,tg));
+      break;
+    }
+    case 'shapeshiftRandom': {
+      // Mystique's Shapeshift: purely cosmetic, no cooldown. Swaps her portrait
+      // to a random other fighter in the roster — no stats or powers change.
+      const ids = Object.keys(CHARACTERS).filter(id => id !== caster.def.id);
+      const randomId = ids[Math.floor(Math.random()*ids.length)];
+      const randomDef = CHARACTERS[randomId];
+      if(caster.fighterSquareEl && randomDef) caster.fighterSquareEl.innerHTML = squareInner(randomDef);
+      caster.mystiqueDisguiseUntil = 0; // permanent until she shifts again
+      spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 14, '#c9a3ff', 55, 380);
+      sfx('loki_duplication');
+      break;
+    }
     case 'magnetoShield': {
       // Magneto's Levitation Field: a straight damage-reduction buff. Flight
       // itself is now passive (see the magneto-specific hook in updatePhysics),
@@ -7333,7 +7427,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && facingOk){
           const healthBefore=target.health;
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability), attacker:caster});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, stun: ability.stun, ranged:isRangedAbility(ability), attacker:caster});
           if(ability.redHulkBurn && target.health<healthBefore && !target.dead){
             const ticks=Math.max(1,ability.burnTicks||4);
             applyBurn(target,{interval:ability.burnTickMs||250,ticks,damage:redHulkBurnDamageFor(target)/ticks,attacker:caster});
@@ -7764,6 +7858,16 @@ function applyShock(target, cfg){
   if(target.el) target.el.classList.add('shocked');
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   spawnLightning(cx-26, cy-24, cx+26, cy+24, {bolts:2, branches:2, width:2.4, life:260, jag:16, segs:6, color:'#9ff3ff'});
+}
+function updateMystiqueDisguise(f){
+  // Confusing Shapeshift is temporary (mystiqueDisguiseUntil > 0) and reverts
+  // automatically. Shapeshift (the random one) is permanent until she shifts
+  // again, so mystiqueDisguiseUntil is left at 0 for that case.
+  if(!f || f.def.id !== 'mystique' || !f.mystiqueDisguiseUntil) return;
+  if(now() >= f.mystiqueDisguiseUntil){
+    f.mystiqueDisguiseUntil = 0;
+    if(f.fighterSquareEl) f.fighterSquareEl.innerHTML = squareInner(f.def);
+  }
 }
 function updateShock(f){
   if(!f) return;
@@ -8283,6 +8387,13 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   spawnHitFx(target, opts.hitFx || '', dirSign);
   if(opts.slow) applyWebSlow(target, opts.slow);
   if(opts.shock && target.health > 0) applyShock(target, opts.shock);
+  if(opts.stun && target.health > 0){
+    const stunEnd = now() + opts.stun;
+    target.pxMindStunUntil = stunEnd;
+    target.abilityLockUntil = stunEnd;
+    target.vx = 0; target.vy = 0; target.hitStun = 0;
+    if(target.el) target.el.classList.add('px-mind-stunned');
+  }
   flashHit(target);
   if(target.health <= 0 && !target.dead){
     onFighterZeroHealth(target, 'ko-health');
@@ -9940,6 +10051,15 @@ function capShieldSvg(){
     <circle cx="20" cy="20" r="15" fill="#f2f0ea"/>
     <circle cx="20" cy="20" r="11" fill="#c0393f"/>
     <circle cx="20" cy="20" r="6.2" fill="#3b5bdb" stroke="#1c357c" stroke-width="1"/>
+    <path d="M20 15.2 L21.8 18.7 L25.8 19.2 L22.9 21.9 L23.7 25.9 L20 23.9 L16.3 25.9 L17.1 21.9 L14.2 19.2 L18.2 18.7 Z" fill="#f2f0ea"/>
+  </svg>`;
+}
+function usAgentShieldSvg(){
+  return `<svg viewBox="0 0 40 40" width="40" height="40" style="overflow:visible;filter:drop-shadow(0 0 6px rgba(140,20,20,.75));">
+    <circle cx="20" cy="20" r="19" fill="#1c1c1e" stroke="#000" stroke-width="1.4"/>
+    <circle cx="20" cy="20" r="15" fill="#f2f0ea"/>
+    <circle cx="20" cy="20" r="11" fill="#8f1c1c"/>
+    <circle cx="20" cy="20" r="6.2" fill="#1c1c1e" stroke="#000" stroke-width="1"/>
     <path d="M20 15.2 L21.8 18.7 L25.8 19.2 L22.9 21.9 L23.7 25.9 L20 23.9 L16.3 25.9 L17.1 21.9 L14.2 19.2 L18.2 18.7 Z" fill="#f2f0ea"/>
   </svg>`;
 }
@@ -12895,7 +13015,7 @@ function updateProjectiles(dtF){
         if(p.visualOnly){ spawnSparks(p.x + p.w/2, p.y + p.h/2, 5, '#ff8a5c', 30, 260); if(p.el) p.el.remove(); state.projectiles.splice(i,1); continue; }
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
-          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock, ranged:true, attacker:p.casterRef});
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock, stun: p.stun, ranged:true, attacker:p.casterRef});
         if(p.burnDamage && target.health < healthBefore){
           const ticks = Math.max(1, p.burnTicks || 1);
           applyBurn(target, {interval: p.burnTickMs || 500, ticks, damage: p.burnDamage / ticks, attacker:p.casterRef});
@@ -13455,6 +13575,7 @@ const AI_STYLE_RANGE = {
   mobile:     260,  // Spider-Man pokes from mid-range, darts in/out
   defensive:  340,  // Iron Man kites and fights from a distance
   balanced:   130,  // Captain America wants shield-throw range, closes for melee/block pressure
+  usagent:    130,  // same shield-throw range as Cap, closes in for Decapitation
   bruiser:    85,   // Black Panther wants to be inside claw range
   agile:      110,  // Daredevil weaves in and out of club range
   hulk:        95,
@@ -13874,6 +13995,23 @@ function updateBotAI(dtF){
     if(cdReady(bot,'R',t) && (hpPct < 0.2 || (!bot.onGround && Math.abs(vertical) > 170)) && Math.random() < 0.5){
       tryUseAbility(bot, player, 'R'); return;
     }
+  } else if(style === 'usagent'){
+    // US Agent: throw the shield for reliable poke, raise Shield Block when
+    // threatened, and land the rare, hard-hitting Decapitation once he's
+    // already right on top of the target.
+    if(bot.blocking){
+      if((t - (bot.blockStart || t)) > 1500 && cdReady(bot,'Q',t) && adist < 140){
+        tryUseAbility(bot, player, 'Q'); return;
+      }
+    } else if(cdReady(bot,'R',t) && (hpPct < 0.38 || (adist < 105 && Math.random() < 0.35))){
+      tryUseAbility(bot, player, 'R'); return;
+    }
+    if(cdReady(bot,'Q',t) && adist < 140){
+      tryUseAbility(bot, player, 'Q'); return;
+    }
+    if(cdReady(bot,'E',t) && adist <= 760){
+      tryUseAbility(bot, player, 'E'); return;
+    }
   } else if(style === 'bruiser'){
     // Black Panther: close aggressively, spend Energy Redistribution while
     // threatened so damage received becomes the payoff, and Dash to stay on top of evasive targets.
@@ -14145,6 +14283,7 @@ function loseLife(target, side){
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
   target.magnetoShieldUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned');
+  target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
   target.slowUntil = 0;
   target.cloakUntil = 0; target.shockTicksLeft = 0; target.psiTicksLeft = 0;
   if(target.el) target.el.classList.remove('psi-warped');
@@ -15578,7 +15717,7 @@ function gameLoop(ts){
       for(const f of state.multi.fighters){
         if(!f) continue; const target=multiTargetFor(f);
         updateThingCharge(f); updateHazards(f); updatePassiveRegen(f,dtF); updateGrootBall(f);
-        updateShock(f); updatePsiWarp(f); updateBurn(f); updateIronJump(f);
+        updateShock(f); updatePsiWarp(f); updateBurn(f); updateIronJump(f); updateMystiqueDisguise(f);
         updateTorchTouch(f,target); updateTorchFlameFx(f); updateBlock(f); updateShield(f);
         updateBPCharge(f); updateVenomTendril(f); updateGoblinGlider(f,dtF); updateYonduArrow(f,dtF);
       }
@@ -15633,6 +15772,7 @@ function gameLoop(ts){
     updateGrootBall(p); updateGrootBall(b);
     updateLaserBombs(dtF);
     updateShock(p); updateShock(b);
+    updateMystiqueDisguise(p); updateMystiqueDisguise(b);
     updatePsiWarp(p); updatePsiWarp(b);
     updateBurn(p); updateBurn(b);
     updateRedHulkFirePools();
