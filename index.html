@@ -15490,9 +15490,13 @@ function preparePairLayout(){
 
 /* ---------- pairing: who is Player 1, who is Player 2 ---------- */
 let pairSig = '';
+let pairIgnoreUntil = 0;
 function startPairing(){
   const cfg=multiConfig();
   versus.slots = Array.from({length:cfg.players},()=>null);
+  // Ignore the button press that may have opened the multiplayer mode itself.
+  // After that brief handoff, a held/just-pressed controller button can claim a seat.
+  pairIgnoreUntil = performance.now() + 250;
   versus.readyAt = 0;
   versus.armed = {};
   versus.sel = Array.from({length:cfg.players},(_,i)=>({cursor:i%Math.max(1,ROSTER_ORDER.length),locked:false}));
@@ -15508,15 +15512,25 @@ function pollPairing(){
   if(versus.slots.some(s=>s && !livePadByIndex(s.index))){
     versus.slots=Array.from({length:cfg.players},()=>null); versus.readyAt=0;
   }
-  livePads.forEach(gp=>{ if(versus.armed[gp.index]===undefined) versus.armed[gp.index]=false; if(!anyBtnHeld(gp.index)) versus.armed[gp.index]=true; });
+  livePads.forEach(gp=>{
+    // A controller can appear in navigator.getGamepads() on the same frame its
+    // first button press is detected. Treat newly-seen pads as claim-ready so
+    // that this first press is not silently lost. The short handoff delay above
+    // prevents the button used to choose the multiplayer mode from auto-claiming.
+    if(versus.armed[gp.index]===undefined) versus.armed[gp.index]=true;
+    if(!anyBtnHeld(gp.index)) versus.armed[gp.index]=true;
+  });
   if(livePads.some(gp=>btnEdge(gp.index,PAD_BACK_BTN))){ showScreen('multiplayer'); return; }
 
   const claimedIdx=versus.slots.filter(Boolean).map(s=>s.index);
   let nextSlot=versus.slots.findIndex(s=>!s);
   const connectedEnough = cfg.players===2 ? livePads.length>=2 : livePads.length>=1;
   if(nextSlot<0) nextSlot=cfg.players;
-  if(nextSlot<cfg.players && connectedEnough){
-    const pressers=livePads.filter(gp=>!claimedIdx.includes(gp.index)&&versus.armed[gp.index]&&anyClaimEdge(gp.index)).sort((a,b)=>a.index-b.index);
+  if(nextSlot<cfg.players && connectedEnough && nowT>=pairIgnoreUntil){
+    const pressers=livePads.filter(gp=>{
+      if(claimedIdx.includes(gp.index) || !versus.armed[gp.index]) return false;
+      return anyClaimEdge(gp.index) || anyBtnHeld(gp.index);
+    }).sort((a,b)=>a.index-b.index);
     for(const gp of pressers){
       if(nextSlot>=cfg.players) break;
       // Keep the original 1v1 behavior: both controllers must be present before P1 can claim.
