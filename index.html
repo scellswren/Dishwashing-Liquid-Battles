@@ -888,10 +888,11 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes koVignette{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
 
 #countdown-overlay{
-  position:absolute; inset:0; display:none; align-items:center; justify-content:center;
-  pointer-events:none; z-index:30; overflow:hidden;
+  position:fixed !important; inset:0 !important; display:none; align-items:center; justify-content:center;
+  pointer-events:none !important; z-index:2147483647 !important; overflow:hidden;
+  visibility:visible !important; opacity:1 !important;
 }
-#countdown-overlay.on{display:flex;}
+#countdown-overlay.on{display:flex !important;}
 .count-item{position:relative; display:flex; align-items:center; justify-content:center;}
 .count-num{
   font-family:'Anton',sans-serif; font-size:clamp(88px,20vw,210px); line-height:1; color:#fff;
@@ -3804,8 +3805,8 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 
     <div id="arena-wrapper">
       <div id="arena"></div>
-      <div id="countdown-overlay"></div>
     </div>
+    <div id="countdown-overlay" aria-hidden="true"></div>
 
     <div id="controls-row">
       <div id="dpad">
@@ -5998,29 +5999,52 @@ const COUNT_STEP_MS = 800;
 function startCountdown(){
   const token = ++battleToken;
   state.countdown = true;
-  const ov = document.getElementById('countdown-overlay');
-  if(!ov){ state.countdown = false; return; }
+
+  // Always use a body-level overlay so the countdown cannot be clipped, covered,
+  // or hidden by the battle/arena stacking contexts.
+  let ov = document.getElementById('countdown-overlay');
+  if(!ov){
+    ov = document.createElement('div');
+    ov.id = 'countdown-overlay';
+    document.body.appendChild(ov);
+  } else if(ov.parentElement !== document.body){
+    document.body.appendChild(ov);
+  }
+  ov.style.setProperty('display','flex','important');
+  ov.style.setProperty('position','fixed','important');
+  ov.style.setProperty('inset','0','important');
+  ov.style.setProperty('z-index','2147483647','important');
+  ov.style.setProperty('visibility','visible','important');
+  ov.style.setProperty('opacity','1','important');
   ov.innerHTML = '';
   ov.classList.add('on');
 
-  const steps = ['3', '2', '1', 'FIGHT!'];
+  // The original pre-fight sequence: 3 -> 2 -> 1 -> FIGHT!
+  const steps = ['3','2','1','FIGHT!'];
   steps.forEach((label, i)=>{
     setTimeout(()=>{
       if(token !== battleToken || state.mode !== 'battle') return;
-      const go = (i === steps.length - 1);
+      const go = i === steps.length - 1;
       ov.innerHTML = '';
       const item = document.createElement('div');
       item.className = 'count-item';
-      item.innerHTML = `<div class="count-ring${go ? ' go' : ''}"></div>`
-        + `<div class="count-num${go ? ' count-go' : ''}">${label}</div>`;
+      item.style.cssText = 'position:relative;display:flex;align-items:center;justify-content:center;min-width:260px;min-height:260px;';
+      const ring = document.createElement('div');
+      ring.className = 'count-ring' + (go ? ' go' : '');
+      const num = document.createElement('div');
+      num.className = 'count-num' + (go ? ' count-go' : '');
+      num.textContent = label;
+      // Inline visibility guarantees even if another stylesheet overrides the class.
+      num.style.cssText = 'position:relative;z-index:2;display:block!important;visibility:visible!important;opacity:1!important;font-family:Anton,sans-serif;font-weight:900;line-height:1;color:#fff;';
+      item.appendChild(ring);
+      item.appendChild(num);
       ov.appendChild(item);
-      sfx(go ? 'fight' : 'count');
-      if(go) shakeArena(9, 320);
+      try{sfx(go ? 'fight' : 'count');}catch(e){}
+      if(go) try{shakeArena(9,320);}catch(e){}
       setTimeout(()=>{ if(item.parentNode) item.remove(); }, go ? 950 : 780);
     }, i * COUNT_STEP_MS);
   });
 
-  // Control is returned the moment FIGHT! appears.
   setTimeout(()=>{
     if(token !== battleToken) return;
     state.countdown = false;
@@ -6030,6 +6054,7 @@ function startCountdown(){
     if(token !== battleToken) return;
     ov.classList.remove('on');
     ov.innerHTML = '';
+    ov.style.setProperty('display','none','important');
   }, (steps.length - 1) * COUNT_STEP_MS + 1000);
 }
 
@@ -15490,13 +15515,9 @@ function preparePairLayout(){
 
 /* ---------- pairing: who is Player 1, who is Player 2 ---------- */
 let pairSig = '';
-let pairIgnoreUntil = 0;
 function startPairing(){
   const cfg=multiConfig();
   versus.slots = Array.from({length:cfg.players},()=>null);
-  // Ignore the button press that may have opened the multiplayer mode itself.
-  // After that brief handoff, a held/just-pressed controller button can claim a seat.
-  pairIgnoreUntil = performance.now() + 250;
   versus.readyAt = 0;
   versus.armed = {};
   versus.sel = Array.from({length:cfg.players},(_,i)=>({cursor:i%Math.max(1,ROSTER_ORDER.length),locked:false}));
@@ -15512,25 +15533,15 @@ function pollPairing(){
   if(versus.slots.some(s=>s && !livePadByIndex(s.index))){
     versus.slots=Array.from({length:cfg.players},()=>null); versus.readyAt=0;
   }
-  livePads.forEach(gp=>{
-    // A controller can appear in navigator.getGamepads() on the same frame its
-    // first button press is detected. Treat newly-seen pads as claim-ready so
-    // that this first press is not silently lost. The short handoff delay above
-    // prevents the button used to choose the multiplayer mode from auto-claiming.
-    if(versus.armed[gp.index]===undefined) versus.armed[gp.index]=true;
-    if(!anyBtnHeld(gp.index)) versus.armed[gp.index]=true;
-  });
+  livePads.forEach(gp=>{ if(versus.armed[gp.index]===undefined) versus.armed[gp.index]=false; if(!anyBtnHeld(gp.index)) versus.armed[gp.index]=true; });
   if(livePads.some(gp=>btnEdge(gp.index,PAD_BACK_BTN))){ showScreen('multiplayer'); return; }
 
   const claimedIdx=versus.slots.filter(Boolean).map(s=>s.index);
   let nextSlot=versus.slots.findIndex(s=>!s);
   const connectedEnough = cfg.players===2 ? livePads.length>=2 : livePads.length>=1;
   if(nextSlot<0) nextSlot=cfg.players;
-  if(nextSlot<cfg.players && connectedEnough && nowT>=pairIgnoreUntil){
-    const pressers=livePads.filter(gp=>{
-      if(claimedIdx.includes(gp.index) || !versus.armed[gp.index]) return false;
-      return anyClaimEdge(gp.index) || anyBtnHeld(gp.index);
-    }).sort((a,b)=>a.index-b.index);
+  if(nextSlot<cfg.players && connectedEnough){
+    const pressers=livePads.filter(gp=>!claimedIdx.includes(gp.index)&&versus.armed[gp.index]&&anyClaimEdge(gp.index)).sort((a,b)=>a.index-b.index);
     for(const gp of pressers){
       if(nextSlot>=cfg.players) break;
       // Keep the original 1v1 behavior: both controllers must be present before P1 can claim.
