@@ -1777,15 +1777,15 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 /* ---------- Captain America: held shield / blocking stance ---------- */
 .cap-shield-held{
-  position:absolute; width:34px; height:34px; right:-11px; top:15px; z-index:7;
+  position:absolute; width:46px; height:46px; right:-15px; top:11px; z-index:7;
   pointer-events:none; display:block; transform:rotate(8deg);
   transform-origin:50% 50%; filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));
 }
 .cap-shield-held svg{width:100%;height:100%;display:block;}
-.fighter.facing-left .cap-shield-held{left:-11px;right:auto;transform:scaleX(-1) rotate(8deg);}
+.fighter.facing-left .cap-shield-held{left:-15px;right:auto;transform:scaleX(-1) rotate(8deg);}
 .fighter.cap-thrown .cap-shield-held{display:none;}
-.fighter.cap-blocking .cap-shield-held{width:54px;height:54px;right:-22px;top:5px;transform:scale(1.08) rotate(-7deg);filter:drop-shadow(0 0 9px rgba(108,208,255,.9));}
-.fighter.cap-blocking.facing-left .cap-shield-held{left:-22px;right:auto;transform:scaleX(-1) scale(1.08) rotate(-7deg);}
+.fighter.cap-blocking .cap-shield-held{width:68px;height:68px;right:-27px;top:0px;transform:scale(1.08) rotate(-7deg);filter:drop-shadow(0 0 9px rgba(108,208,255,.9));}
+.fighter.cap-blocking.facing-left .cap-shield-held{left:-27px;right:auto;transform:scaleX(-1) scale(1.08) rotate(-7deg);}
 .fighter.cap-blocking .fighter-square{box-shadow:0 0 0 2px rgba(108,208,255,.28),0 0 26px rgba(108,208,255,.32),0 12px 22px rgba(0,0,0,.26);}
 
 /* ---------- Black Panther: Energy Redistribution channel ---------- */
@@ -4030,7 +4030,7 @@ const CHARACTERS = {
     description:'Super-soldier all-rounder. Throws his shield for reliable ranged damage, raises it to no-sell small hits outright, and closes the gap or bails out with a huge leap.',
     abilities:{
       E:{key:'E', name:'Shield Throw', type:'projectile', damage:750, cooldown:2000, knockback:10,
-         speed:17, w:34, h:34, color:'#3b5bdb',
+         speed:17, w:46, h:46, color:'#3b5bdb',
          sound:'shield_throw', fx:'cap_shield_throw', render:'cap-shield', trail:'energy',
          returns:true, pierce:true, shieldViz:true, returnDistance:820,
          hitFx:'cap_shield_hit', hitSound:'shield_hit',
@@ -4049,7 +4049,7 @@ const CHARACTERS = {
     description:'A harder-hitting, less disciplined super-soldier. Throws his iconic shield just like Captain America, but closes the gap for a brutal shield slam that only comes around once every 40 seconds, and can only hold his own defensive shield wall for 7 seconds.',
     abilities:{
       E:{key:'E', name:'Shield Throw', type:'projectile', damage:600, cooldown:2000, knockback:10,
-         speed:17, w:34, h:34, color:'#8f1c1c',
+         speed:17, w:46, h:46, color:'#8f1c1c',
          sound:'shield_throw', fx:'cap_shield_throw', render:'cap-shield', trail:'energy',
          returns:true, pierce:true, shieldViz:true, returnDistance:820,
          hitFx:'cap_shield_hit', hitSound:'shield_hit',
@@ -4659,7 +4659,7 @@ const CHARACTERS = {
          sound:'yondu_snap', fx:'yondu_snap', hitFx:'yondu_snap_hit', hitSound:'yondu_snap_hit',
          desc:'Fires the physical Yaka Arrow with strong automatic aim, then recalls it to Yondu.'},
       Q:{key:'Q', name:'Whistling Arrow', type:'yonduArrowControl', damage:1000, cooldown:20000, knockback:4,
-         speed:9.2, returnSpeed:24, controlAccel:0.85, controlFriction:0.80, damageInterval:1000,
+         speed:9.2, returnSpeed:24, controlAccel:0.85, controlTurn:0.20, controlFriction:0.80, damageInterval:1000,
          sound:'yondu_arrow_fire', fx:'yondu_arrow', hitFx:'yondu_arrow_hit', hitSound:'yondu_arrow_hit',
          desc:'Yondu stands still while you directly control the physical Yaka Arrow with the movement keys. Each target can be damaged once per second. Press Q again to recall it; taking a hit also recalls it.'},
       R:{key:'R', name:'Holographic Space Suit', type:'holoSuit', damage:0, cooldown:17000, duration:4000, threshold:1000,
@@ -4724,7 +4724,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','deadpool','blade','daredevil','punisher','bullseye','blackwidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','usagent','mystique','whitewidow'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp'];
 
 
 /* =========================================================================
@@ -6116,26 +6116,28 @@ function buildFighterDOM(f){
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
     ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
-    ${f.def.id==='redskull' ? `<div class="held-ranged-weapon held-redskull-gun" aria-hidden="true">${redSkullHeldGunSvg()}</div>` : ''}
-    ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
-    ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
-    ${f.def.id==='rocket' ? `<div class="held-ranged-weapon held-rocket-gun" aria-hidden="true">${rocketRifleSvg()}</div>` : ''}
     ${f.def.id==='magneto' ? '<div class="magneto-flight-aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>' : ''}
     ${f.def.id==='groot' ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
     ${f.def.id==='humantorch' ? '<div class="torch-flame" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' : ''}
-    ${f.def.id==='drax' ? '<div class="drax-blades-held" aria-hidden="true"><svg viewBox="0 0 120 70"><g class="drax-blade blade-one"><path d="M32 51 C40 30 51 15 76 7 L69 21 C57 29 50 40 45 57 Z"/></g><g class="drax-blade blade-two"><path d="M58 58 C70 38 84 27 108 22 L101 37 C86 41 76 49 69 62 Z"/></g></svg></div>' : ''}
-    ${f.def.id==='gamora' ? '<div class="gamora-gun-held" aria-hidden="true"><svg viewBox="0 0 100 44"><path d="M10 20h42l11-7h24v11H63l-9 7H38l-2-9H10z" fill="#756b83"/><path d="M58 13l8-8h13l-8 11z" fill="#c8f7ff"/><path d="M68 20h27l-8 5H68z" fill="#7bdcff"/><circle cx="84" cy="18" r="3" fill="#fff6b0"/></svg></div>' : ''}
     ${f.def.id==='yondu' ? '<div class="yondu-suit-overlay" aria-hidden="true"><span></span><span></span><span></span></div>' : ''}
     ${f.def.id==='shangchi' ? `<div class="shangchi-rings" aria-hidden="true">${Array.from({length:10},(_,ri)=>`<i data-ring-index="${ri}" style="--ring-angle:${ri*36}deg"></i>`).join('')}</div><div class="shangchi-r-aura" aria-hidden="true"></div><div class="shangchi-r-ring" aria-hidden="true"></div>` : ''}
     ${f.def.id==='professorx' ? `<div class="professorx-wheelchair" aria-hidden="true"><svg viewBox="0 0 124 84"><g fill="none" stroke="#37414f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path class="px-frame" d="M26 18 L26 48 L84 48 L102 29"/><path class="px-frame" d="M26 18 L44 18"/><path class="px-frame" d="M82 48 L82 28"/><path class="px-frame" d="M65 20 L85 20"/></g><path d="M30 17 C28 8 34 4 43 5 L52 8 L52 18" fill="#465263" stroke="#26313e" stroke-width="3"/><path d="M34 27 Q56 23 77 28 L80 42 Q58 46 34 41 Z" fill="#58708f" stroke="#273342" stroke-width="2.5"/><path class="px-seat-front" d="M37 39 Q58 44 78 40 L83 48 Q59 54 34 47 Z" fill="#6d86a4" stroke="#263442" stroke-width="2.5"/><path d="M37 24 L37 10 M37 10 L48 10 M73 24 L73 10 M73 10 L82 10" fill="none" stroke="#526174" stroke-width="3.5" stroke-linecap="round"/><circle class="px-big-wheel" cx="41" cy="55" r="18" fill="#1d222a" stroke="#697487" stroke-width="4.5"/><circle cx="41" cy="55" r="5" fill="#a8b2c0"/><circle class="px-front-wheel" cx="95" cy="57" r="10" fill="#20252d" stroke="#697487" stroke-width="3.5"/><circle cx="95" cy="57" r="3" fill="#a8b2c0"/><path d="M80 46 L94 47 L101 57" fill="none" stroke="#3e4855" stroke-width="4"/><path d="M67 47 L84 62 L95 62" fill="none" stroke="#3e4855" stroke-width="3.5"/><path d="M28 48 L19 62 L39 62" fill="none" stroke="#3e4855" stroke-width="3.5"/></svg></div>` : ''}
     <div class="wasp-size-mark"></div>
-    <div class="fighter-size-body"><div class="fighter-square">${squareInner(f.def)}</div></div>
-    ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
-    ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
-    ${f.def.id==='usagent' ? '<div class="cap-shield-held usagent-shield-held">'+usAgentShieldSvg()+'</div>' : ''}
-    ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
-    ${f.def.id==='blade' ? '<div class="blade-sword-held"><svg viewBox="0 0 96 80" aria-hidden="true"><defs><linearGradient id="bladeBlade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8f96"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient></defs><g transform="translate(4 4) rotate(-6 44 36)"><rect x="2" y="30" width="14" height="12" rx="3" fill="#1a1a1a" stroke="#000" stroke-width="1.4"/><rect x="14" y="33" width="8" height="6" rx="2" fill="#701d1d"/><rect x="20" y="31" width="66" height="9" rx="2.5" fill="url(#bladeBlade)" stroke="#5c6067" stroke-width="1"/><path d="M22 35.5 L84 35.5" stroke="#ffffff" stroke-width="1.2" opacity=".8"/><path d="M84 31 L92 35.5 L84 40 Z" fill="#f4f6f8" stroke="#5c6067" stroke-width="1"/></g></svg></div>' : ''}
-    ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
+    <div class="fighter-size-body">
+      <div class="fighter-square">${squareInner(f.def)}</div>
+      ${f.def.id==='redskull' ? `<div class="held-ranged-weapon held-redskull-gun" aria-hidden="true">${redSkullHeldGunSvg()}</div>` : ''}
+      ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
+      ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
+      ${f.def.id==='rocket' ? `<div class="held-ranged-weapon held-rocket-gun" aria-hidden="true">${rocketRifleSvg()}</div>` : ''}
+      ${f.def.id==='drax' ? '<div class="drax-blades-held" aria-hidden="true"><svg viewBox="0 0 120 70"><g class="drax-blade blade-one"><path d="M32 51 C40 30 51 15 76 7 L69 21 C57 29 50 40 45 57 Z"/></g><g class="drax-blade blade-two"><path d="M58 58 C70 38 84 27 108 22 L101 37 C86 41 76 49 69 62 Z"/></g></svg></div>' : ''}
+      ${f.def.id==='gamora' ? '<div class="gamora-gun-held" aria-hidden="true"><svg viewBox="0 0 100 44"><path d="M10 20h42l11-7h24v11H63l-9 7H38l-2-9H10z" fill="#756b83"/><path d="M58 13l8-8h13l-8 11z" fill="#c8f7ff"/><path d="M68 20h27l-8 5H68z" fill="#7bdcff"/><circle cx="84" cy="18" r="3" fill="#fff6b0"/></svg></div>' : ''}
+      ${f.def.id==='thor' ? '<div class="thor-hammer"><div class="hammer-head"></div><div class="hammer-handle"></div></div>' : ''}
+      ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
+      ${f.def.id==='usagent' ? '<div class="cap-shield-held usagent-shield-held">'+usAgentShieldSvg()+'</div>' : ''}
+      ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
+      ${f.def.id==='blade' ? '<div class="blade-sword-held"><svg viewBox="0 0 96 80" aria-hidden="true"><defs><linearGradient id="bladeBlade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8f96"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient></defs><g transform="translate(4 4) rotate(-6 44 36)"><rect x="2" y="30" width="14" height="12" rx="3" fill="#1a1a1a" stroke="#000" stroke-width="1.4"/><rect x="14" y="33" width="8" height="6" rx="2" fill="#701d1d"/><rect x="20" y="31" width="66" height="9" rx="2.5" fill="url(#bladeBlade)" stroke="#5c6067" stroke-width="1"/><path d="M22 35.5 L84 35.5" stroke="#ffffff" stroke-width="1.2" opacity=".8"/><path d="M84 31 L92 35.5 L84 40 Z" fill="#f4f6f8" stroke="#5c6067" stroke-width="1"/></g></svg></div>' : ''}
+      ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
+    </div>
     ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
     ${f.def.id==='mrfantastic' ? '<div class="elasticity-ring" style="display:none;"></div>' : ''}
     <div class="shield-ring"></div>
@@ -10055,12 +10057,17 @@ function capShieldSvg(){
   </svg>`;
 }
 function usAgentShieldSvg(){
-  return `<svg viewBox="0 0 40 40" width="40" height="40" style="overflow:visible;filter:drop-shadow(0 0 6px rgba(140,20,20,.75));">
-    <circle cx="20" cy="20" r="19" fill="#1c1c1e" stroke="#000" stroke-width="1.4"/>
-    <circle cx="20" cy="20" r="15" fill="#f2f0ea"/>
-    <circle cx="20" cy="20" r="11" fill="#8f1c1c"/>
-    <circle cx="20" cy="20" r="6.2" fill="#1c1c1e" stroke="#000" stroke-width="1"/>
-    <path d="M20 15.2 L21.8 18.7 L25.8 19.2 L22.9 21.9 L23.7 25.9 L20 23.9 L16.3 25.9 L17.1 21.9 L14.2 19.2 L18.2 18.7 Z" fill="#f2f0ea"/>
+  return `<svg viewBox="0 0 40 40" width="40" height="40" style="overflow:visible;filter:drop-shadow(0 0 6px rgba(0,0,0,.6));">
+    <circle cx="20" cy="20" r="19" fill="#17130f" stroke="#050403" stroke-width="1.1"/>
+    <circle cx="20" cy="20" r="17.1" fill="none" stroke="#5c1414" stroke-width="1.5"/>
+    <circle cx="20" cy="20" r="15.3" fill="#1c1815"/>
+    <circle cx="20" cy="20" r="13.6" fill="none" stroke="#4d1111" stroke-width="1"/>
+    <circle cx="20" cy="20" r="11.4" fill="none" stroke="#6e1c1c" stroke-width="3.4"/>
+    <circle cx="20" cy="20" r="9.2" fill="#1a1613"/>
+    <circle cx="20" cy="20" r="7.4" fill="none" stroke="#3a1010" stroke-width=".8"/>
+    <circle cx="20" cy="20" r="4.6" fill="#141110"/>
+    <path d="M16.5 15.8 q3.2 -2.1 5.3 -.2" stroke="#3f3a34" stroke-width=".6" fill="none" opacity=".55"/>
+    <path d="M12 24 q1.5 2 3.2 1.2" stroke="#000" stroke-width=".5" fill="none" opacity=".4"/>
   </svg>`;
 }
 function ddClubSvg(){
@@ -12762,12 +12769,34 @@ function updateYonduArrow(f, dtF){
     if(keysHeld.down || gpKeys.down) my+=1;
   }
   if(mx||my){
-    const len=Math.hypot(mx,my)||1;
+    // Same smooth, constant-speed turning the Yaka Arrow (E) uses when homing:
+    // the heading rotates toward the desired direction at a clamped max turn
+    // rate instead of blending vx/vy independently, so turns trace an even,
+    // consistent arc with no per-axis wobble.
+    const desiredAngle=Math.atan2(my,mx);
     const speed=a.speed || 4.6;
-    const desiredX=(mx/len)*speed, desiredY=(my/len)*speed;
-    const blend=Math.min(1,(a.controlAccel||0.72)*dtF);
-    ar.vx += (desiredX-ar.vx)*blend;
-    ar.vy += (desiredY-ar.vy)*blend;
+    const currentSpeed=Math.hypot(ar.vx,ar.vy);
+    if(currentSpeed < 0.5){
+      // Starting from a standstill (or from a near-dead stop): point straight
+      // into the new heading immediately, just like the Yaka Arrow's instant
+      // lock-on, so there's no wind-up wobble before it starts turning.
+      ar.vx=Math.cos(desiredAngle)*speed;
+      ar.vy=Math.sin(desiredAngle)*speed;
+      ar.angle=desiredAngle;
+    } else {
+      const currentAngle=Math.atan2(ar.vy,ar.vx);
+      let diff=desiredAngle-currentAngle;
+      while(diff>Math.PI) diff-=Math.PI*2;
+      while(diff<-Math.PI) diff+=Math.PI*2;
+      const maxTurn=(a.controlTurn||0.20)*dtF;
+      const turn=Math.max(-maxTurn,Math.min(maxTurn,diff));
+      const angle=currentAngle+turn;
+      const accel=Math.min(1,(a.controlAccel||0.85)*dtF);
+      const newSpeed=currentSpeed+(speed-currentSpeed)*accel;
+      ar.vx=Math.cos(angle)*newSpeed;
+      ar.vy=Math.sin(angle)*newSpeed;
+      ar.angle=angle;
+    }
   } else {
     const friction=Math.pow(a.controlFriction||0.82,dtF);
     ar.vx*=friction; ar.vy*=friction;
@@ -13290,7 +13319,7 @@ function buildProjectileVisual(p){
   } else if(p.render === 'cap-shield'){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
-    p.el.innerHTML = capShieldSvg();
+    p.el.innerHTML = (p.casterRef && p.casterRef.def && p.casterRef.def.id === 'usagent') ? usAgentShieldSvg() : capShieldSvg();
   } else if(p.render === 'dd-club'){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
