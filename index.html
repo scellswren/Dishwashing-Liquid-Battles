@@ -1874,7 +1874,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
    versus screen so the whole flow reads as one piece.
    ========================================================================= */
 :root{
-  --p1:#4da3ff; --p2:#ff5a5f; --cream:#f6efe0;
+  --p1:#4da3ff; --p2:#ff5a5f; --mp3:#63e6be; --mp4:#ffd166; --cream:#f6efe0;
   --slant:clamp(34px,9vh,104px);
 }
 
@@ -2318,15 +2318,24 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .vs-card.mystery{border:1px dashed #3a3d54; background:linear-gradient(160deg,#1b1d29,#131420);}
 .vs-card.cur-1{box-shadow:0 0 0 4px var(--p1), 0 0 26px rgba(77,163,255,.6); transform:translateY(-3px);}
 .vs-card.cur-2{box-shadow:0 0 0 4px var(--p2), 0 0 26px rgba(255,90,95,.6); transform:translateY(-3px);}
+.vs-card.cur-3{box-shadow:0 0 0 4px var(--mp3), 0 0 26px rgba(99,230,190,.6); transform:translateY(-3px);}
+.vs-card.cur-4{box-shadow:0 0 0 4px var(--mp4), 0 0 26px rgba(255,209,102,.6); transform:translateY(-3px);}
 .vs-card.cur-1.cur-2{box-shadow:0 0 0 4px var(--p1), 0 0 0 9px var(--p2), 0 0 28px rgba(255,255,255,.35);}
+/* Extended lobbies (1v1v1 / 1v1v1v1 / 2v2) layer a ring per active player via
+   an inline --multi-ring box-shadow set in renderVersus(), so any combo of
+   2-4 pickers on the same card gets a correctly colored, correctly counted
+   set of rings instead of the fixed 2-player rule above. */
+.vs-card.multi-cur{box-shadow:var(--multi-ring, none), 0 0 26px rgba(255,255,255,.25); transform:translateY(-3px);}
 .vs-mark{
   position:absolute; top:-9px; width:24px; height:24px; border-radius:50%; display:none; align-items:center; justify-content:center;
   font-family:'Anton',sans-serif; font-size:14px; z-index:3; box-shadow:0 2px 0 rgba(0,0,0,.5);
 }
 .vs-mark.m1{left:-9px; background:var(--p1); color:#08121f;}
 .vs-mark.m2{right:-9px; background:var(--p2); color:#1e0708;}
-.vs-card.cur-1 .vs-mark.m1, .vs-card.cur-2 .vs-mark.m2{display:flex;}
-.vs-card.lock-1 .vs-mark.m1::after, .vs-card.lock-2 .vs-mark.m2::after{content:'✓'; position:absolute; inset:0; border-radius:50%; background:inherit; display:flex; align-items:center; justify-content:center; font-family:'Inter'; font-weight:900;}
+.vs-mark.m3{left:-9px; top:auto; bottom:-9px; background:var(--mp3); color:#062018;}
+.vs-mark.m4{right:-9px; top:auto; bottom:-9px; background:var(--mp4); color:#3a2400;}
+.vs-card.cur-1 .vs-mark.m1, .vs-card.cur-2 .vs-mark.m2, .vs-card.cur-3 .vs-mark.m3, .vs-card.cur-4 .vs-mark.m4{display:flex;}
+.vs-card.lock-1 .vs-mark.m1::after, .vs-card.lock-2 .vs-mark.m2::after, .vs-card.lock-3 .vs-mark.m3::after, .vs-card.lock-4 .vs-mark.m4::after{content:'✓'; position:absolute; inset:0; border-radius:50%; background:inherit; display:flex; align-items:center; justify-content:center; font-family:'Inter'; font-weight:900;}
 .vs-note{font-size:clamp(11px,1.7vh,13px); color:var(--muted); text-align:center; min-height:1.4em; max-width:46ch;}
 
 #vs-multi-roster{display:none;width:min(720px,100%);grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
@@ -3440,8 +3449,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       </button>
       <button class="split-card right mode-friend" id="btn-mode-friend">
         <span class="mode-name">Multiplayer</span>
-        <span class="mode-desc" data-i18n="mode_friend_desc">Two players, two controllers. Pick your fighters and settle it.</span>
-        <span class="mode-pads"><span class="mode-pad p1" id="mode-pad-1">P1</span><span class="mode-pad p2" id="mode-pad-2">P2</span><span id="mode-pads-text"></span></span>
+        <span class="mode-desc" data-i18n="mode_friend_desc">1v1, 1v1v1, 1v1v1v1 or 2v2 — grab your controllers and pick your fighters.</span>
         <span class="mode-tag" data-i18n="mode_controller_only">🎮 Controller only</span>
         <span class="mode-arrow">▶</span>
       </button>
@@ -3455,10 +3463,10 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     <div class="multi-mode-stage">
       <div class="multi-mode-head"><div class="multi-mode-kicker">MULTIPLAYER</div><h2>Choose a multiplayer mode</h2><p>Choose a mode, then connect the controllers for each player.</p></div>
       <div class="multi-mode-grid">
-        <button class="multi-mode-card active" data-mp-mode="1v1" data-gp-default><span class="multi-mode-number">01</span><span class="multi-mode-name">1 V 1</span><span class="multi-mode-desc">The current 1 V 1 mode. Nothing about it changes.</span><span class="multi-mode-pads">🎮 🎮</span></button>
-        <button class="multi-mode-card" data-mp-mode="1v1v1"><span class="multi-mode-number">02</span><span class="multi-mode-name">1 V 1 V 1</span><span class="multi-mode-desc">Three players, everyone for themselves.</span><span class="multi-mode-pads">🎮 🎮 🎮</span></button>
-        <button class="multi-mode-card" data-mp-mode="1v1v1v1"><span class="multi-mode-number">03</span><span class="multi-mode-name">1 V 1 V 1 V 1</span><span class="multi-mode-desc">Four players, free-for-all.</span><span class="multi-mode-pads">🎮 🎮 🎮 🎮</span></button>
-        <button class="multi-mode-card" data-mp-mode="2v2"><span class="multi-mode-number">04</span><span class="multi-mode-name">2 V 2</span><span class="multi-mode-desc">Two teams of two controllers.</span><span class="multi-mode-pads">🎮 🎮 VS 🎮 🎮</span></button>
+        <button class="multi-mode-card active" data-mp-mode="1v1" data-gp-default><span class="multi-mode-number">01</span><span class="multi-mode-name">1 V 1</span><span class="multi-mode-pads">🎮 🎮</span></button>
+        <button class="multi-mode-card" data-mp-mode="1v1v1"><span class="multi-mode-number">02</span><span class="multi-mode-name">1 V 1 V 1</span><span class="multi-mode-pads">🎮 🎮 🎮</span></button>
+        <button class="multi-mode-card" data-mp-mode="1v1v1v1"><span class="multi-mode-number">03</span><span class="multi-mode-name">1 V 1 V 1 V 1</span><span class="multi-mode-pads">🎮 🎮 🎮 🎮</span></button>
+        <button class="multi-mode-card" data-mp-mode="2v2"><span class="multi-mode-number">04</span><span class="multi-mode-name">2 V 2</span><span class="multi-mode-pads">🎮 🎮 VS 🎮 🎮</span></button>
       </div>
     </div>
   </div>
@@ -15078,13 +15086,9 @@ function renderModeScreen(){
   if(typeof renderMapSelect === 'function') renderMapSelect();
 }
 function updateModeStatus(force){
-  const n = Math.min(2, livePads.length);
-  if(!force && n === modeShown) return;
-  modeShown = n;
-  const p1 = document.getElementById('mode-pad-1'), p2 = document.getElementById('mode-pad-2'), tx = document.getElementById('mode-pads-text');
-  if(p1) p1.classList.toggle('on', n >= 1);
-  if(p2) p2.classList.toggle('on', n >= 2);
-  if(tx) tx.textContent = t('mode_pads_count').replace('{n}', n);
+  // The Multiplayer card no longer shows a fixed "N of 2 controllers" widget
+  // (multiplayer now supports up to 4 players), so there's nothing to refresh
+  // here. Kept as a no-op hook in case a future status indicator needs it.
 }
 
 /* ---------- multiplayer mode configuration ---------- */
@@ -15106,11 +15110,24 @@ function multiTargetFor(f){
   return enemies[0] || null;
 }
 function multiAlive(){ return state.multiPvp && state.multi ? state.multi.fighters.filter(f=>f && !f.dead) : []; }
+function hexToRgbTriplet(hex){
+  hex = String(hex||'').replace('#','');
+  if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const num = parseInt(hex,16);
+  if(hex.length!==6 || Number.isNaN(num)) return '255,255,255';
+  return `${(num>>16)&255},${(num>>8)&255},${num&255}`;
+}
 function buildPairCard(slot){
   const cfg=multiConfig(), p=slot+1, color=cfg.colors[slot]||'#ffffff';
   const el=document.createElement('div');
   el.className=`split-card ${slot===0?'left':'right'} pair-half p${p} state-waiting`;
   el.style.setProperty('--pc',color); el.dataset.slot=slot;
+  // The p1/p2 CSS classes only carry a hardcoded blue/red background wash,
+  // so slots 3+ (and any slot in a rebuilt 3-4 player lobby) used to render
+  // with no color wash at all. Painting it here per-slot works for any mode.
+  const rgb = hexToRgbTriplet(color);
+  const angle = slot % 2 === 0 ? 160 : 200;
+  el.style.background = `radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px, linear-gradient(${angle}deg, rgba(${rgb},.42), rgba(${rgb},.07) 70%), #12131f`;
   el.innerHTML=`<div class="pair-num" aria-hidden="true">${p}</div><div class="pair-who" id="pair-p${p}-who">${playerLabel(p)}</div><svg class="pair-glyph" viewBox="0 0 120 80" aria-hidden="true"><use href="#pad-glyph"/></svg><div class="pair-state" id="pair-p${p}-state"></div><div class="pair-brand" id="pair-p${p}-brand"></div>`;
   return el;
 }
@@ -15193,8 +15210,8 @@ function renderPairing(force){
       subEl.textContent=livePads.length<2?t('pair_sub_wait2'):t('pair_sub_p2');
     }
   } else {
-    titleEl.textContent=t('pair_title_connect');
-    subEl.textContent=`Press any button on ${cfg.players} controllers. ${n}/${cfg.players} connected.`;
+    titleEl.textContent=t('pair_title_connect_n').replace('{n}',cfg.players);
+    subEl.textContent=`${t('pair_sub_connect')} ${t('mode_pads_count_n').replace('{n}',n).replace('{total}',cfg.players)}.`;
   }
   hintEl.textContent=t('pair_back_hint');
   let unclaimed=livePads.length-slots.filter(Boolean).length;
@@ -15224,7 +15241,7 @@ function startVersusSelect(){
     card.dataset.id = id;
     card.dataset.selectable = ok ? '1' : '0';
     card.innerHTML = ok
-      ? `<div class="char-square">${squareInner(def)}</div><div class="vs-card-name">${def.name}</div><span class="vs-mark m1">1</span><span class="vs-mark m2">2</span>`
+      ? `<div class="char-square">${squareInner(def)}</div><div class="vs-card-name">${def.name}</div><span class="vs-mark m1">1</span><span class="vs-mark m2">2</span><span class="vs-mark m3">3</span><span class="vs-mark m4">4</span>`
       : `<div class="char-square mystery-square"><span class="mystery-icon">?</span></div><div class="vs-card-name mystery-name">???</div>`;
     grid.appendChild(card);
   });
@@ -15232,6 +15249,10 @@ function startVersusSelect(){
   const p1 = pool.includes(SAVE.equipped) ? SAVE.equipped : pool[0];
   const p2 = pool.find(id => id !== p1) || p1;
   const cfg=multiConfig();
+  // 3rd/4th player marker + ring colors match this mode's real colors (e.g.
+  // the shared team-red of 2v2's P3, not a generic placeholder color).
+  document.documentElement.style.setProperty('--mp3', cfg.colors[2] || '#63e6be');
+  document.documentElement.style.setProperty('--mp4', cfg.colors[3] || '#ffd166');
   const fallbackPool=pool.length?pool:[ROSTER_ORDER[0]];
   versus.sel = Array.from({length:cfg.players},(_,i)=>{
     const pref=i===0?p1:i===1?p2:fallbackPool[i%fallbackPool.length];
@@ -15252,15 +15273,24 @@ function renderMultiVersusRoster(){
 }
 function renderVersus(){
   const cards = Array.from(document.querySelectorAll('#vs-grid .vs-card'));
+  const cfg = multiConfig();
   cards.forEach((c,i)=>{
-    c.classList.toggle('cur-1', !!versus.sel[0] && versus.sel[0].cursor === i);
-    c.classList.toggle('cur-2', !!versus.sel[1] && versus.sel[1].cursor === i);
+    const activeSlots=versus.sel.map((s,slot)=>s && s.cursor===i ? slot : -1).filter(slot=>slot>=0);
+    c.classList.toggle('cur-1', activeSlots.includes(0));
+    c.classList.toggle('cur-2', activeSlots.includes(1));
+    c.classList.toggle('cur-3', activeSlots.includes(2));
+    c.classList.toggle('cur-4', activeSlots.includes(3));
     c.classList.toggle('lock-1', !!versus.sel[0] && versus.sel[0].locked && versus.sel[0].cursor === i);
     c.classList.toggle('lock-2', !!versus.sel[1] && versus.sel[1].locked && versus.sel[1].cursor === i);
-    const activeSlots=versus.sel.map((s,slot)=>s && s.cursor===i ? slot : -1).filter(slot=>slot>=0);
-    c.classList.toggle('multi-cur', activeSlots.length>0);
-    if(activeSlots.length){ c.style.setProperty('--mpc', multiConfig().colors[activeSlots[0]]||'#fff'); }
-    else c.style.removeProperty('--mpc');
+    c.classList.toggle('lock-3', !!versus.sel[2] && versus.sel[2].locked && versus.sel[2].cursor === i);
+    c.classList.toggle('lock-4', !!versus.sel[3] && versus.sel[3].locked && versus.sel[3].cursor === i);
+    c.classList.toggle('multi-cur', cfg.players>2 && activeSlots.length>0);
+    if(activeSlots.length){
+      c.style.setProperty('--mpc', cfg.colors[activeSlots[0]]||'#fff');
+      // Stack one ring per player who has this card selected, in their real
+      // color, so 3-4 player lobbies show every picker, not just P1/P2.
+      c.style.setProperty('--multi-ring', activeSlots.map((slot,idx)=>`0 0 0 ${4+idx*5}px ${cfg.colors[slot]||'#fff'}`).join(', '));
+    } else { c.style.removeProperty('--mpc'); c.style.removeProperty('--multi-ring'); }
   });
   renderVersusSide(0);
   renderVersusSide(1);
@@ -15457,8 +15487,8 @@ function renderMenuHero(){
    ========================================================================= */
 const I18N_V5 = {
   en:{ mode_title:'Choose a mode', mode_practice:'Practice', mode_practice_desc:'Fight a random opponent using your equipped fighter.', mode_playing_as:'Playing as {name}',
-    mode_friend_desc:'Two players, two controllers. Pick your fighters and settle it.', mode_controller_only:'🎮 Controller only', mode_pads_count:'{n} of 2 controllers detected',
-    pair_title_connect:'Connect two controllers', pair_title_p1:'Who is Player 1?', pair_title_p2:'Who is Player 2?', pair_title_ready:'Ready!',
+    mode_friend_desc:'1v1, 1v1v1, 1v1v1v1 or 2v2 — grab your controllers and pick your fighters.', mode_controller_only:'🎮 Controller only', mode_pads_count:'{n} of 2 controllers detected', mode_pads_count_n:'{n} of {total} controllers detected',
+    pair_title_connect:'Connect two controllers', pair_title_connect_n:'Connect {n} controllers', pair_title_p1:'Who is Player 1?', pair_title_p2:'Who is Player 2?', pair_title_ready:'Ready!',
     pair_sub_connect:'Press any button on each controller so the game can see it.', pair_sub_p1:'Press any button on your controller. The first to press is Player 1.',
     pair_sub_p2:'Player 2, press any button on your controller.', pair_sub_wait2:'Player 1 is locked in. Waiting for a second controller…', pair_sub_ready:'Loading fighter select…',
     pair_player:'Player {n}', pair_waiting:'Waiting for controller…', pair_detected:'Controller detected', pair_press:'Press any button', pair_locked:'Locked in',
@@ -15470,8 +15500,8 @@ const I18N_V5 = {
     inv_tip:'Tap once to equip. Double-tap to see stats and attacks.', inv_tip_pad:'Press {a} to equip. Double-press it, or press {y}, for stats and attacks.',
     modal_pad_close:'Press {b} to close' },
   es:{ mode_title:'Elige un modo', mode_practice:'Práctica', mode_practice_desc:'Lucha contra un rival aleatorio con tu luchador equipado.', mode_playing_as:'Jugando como {name}',
-    mode_friend_desc:'Dos jugadores, dos mandos. Elijan luchadores y decidan quién gana.', mode_controller_only:'🎮 Solo con mando', mode_pads_count:'{n} de 2 mandos detectados',
-    pair_title_connect:'Conecta dos mandos', pair_title_p1:'¿Quién es el Jugador 1?', pair_title_p2:'¿Quién es el Jugador 2?', pair_title_ready:'¡Listos!',
+    mode_friend_desc:'1v1, 1v1v1, 1v1v1v1 o 2v2 — conecten sus mandos y elijan luchadores.', mode_controller_only:'🎮 Solo con mando', mode_pads_count:'{n} de 2 mandos detectados', mode_pads_count_n:'{n} de {total} mandos detectados',
+    pair_title_connect:'Conecta dos mandos', pair_title_connect_n:'Conecta {n} mandos', pair_title_p1:'¿Quién es el Jugador 1?', pair_title_p2:'¿Quién es el Jugador 2?', pair_title_ready:'¡Listos!',
     pair_sub_connect:'Pulsa cualquier botón en cada mando para que el juego lo detecte.', pair_sub_p1:'Pulsa cualquier botón de tu mando. El primero en pulsar es el Jugador 1.',
     pair_sub_p2:'Jugador 2, pulsa cualquier botón de tu mando.', pair_sub_wait2:'El Jugador 1 está listo. Esperando un segundo mando…', pair_sub_ready:'Cargando selección de luchadores…',
     pair_player:'Jugador {n}', pair_waiting:'Esperando mando…', pair_detected:'Mando detectado', pair_press:'Pulsa cualquier botón', pair_locked:'Confirmado',
@@ -15483,8 +15513,8 @@ const I18N_V5 = {
     inv_tip:'Toca una vez para equipar. Toca dos veces para ver estadísticas y ataques.', inv_tip_pad:'Pulsa {a} para equipar. Púlsalo dos veces, o pulsa {y}, para ver estadísticas y ataques.',
     modal_pad_close:'Pulsa {b} para cerrar' },
   zh:{ mode_title:'选择模式', mode_practice:'练习', mode_practice_desc:'使用你装备的战士对战随机对手。', mode_playing_as:'当前角色：{name}',
-    mode_friend_desc:'两名玩家，两个手柄。选好战士，一决高下。', mode_controller_only:'🎮 仅限手柄', mode_pads_count:'已检测到 {n}/2 个手柄',
-    pair_title_connect:'请连接两个手柄', pair_title_p1:'谁是玩家 1？', pair_title_p2:'谁是玩家 2？', pair_title_ready:'准备就绪！',
+    mode_friend_desc:'1v1、1v1v1、1v1v1v1 或 2v2——连接手柄，选好战士。', mode_controller_only:'🎮 仅限手柄', mode_pads_count:'已检测到 {n}/2 个手柄', mode_pads_count_n:'已检测到 {n}/{total} 个手柄',
+    pair_title_connect:'请连接两个手柄', pair_title_connect_n:'请连接 {n} 个手柄', pair_title_p1:'谁是玩家 1？', pair_title_p2:'谁是玩家 2？', pair_title_ready:'准备就绪！',
     pair_sub_connect:'请在每个手柄上按任意键，让游戏检测到它。', pair_sub_p1:'请在你的手柄上按任意键。最先按键的是玩家 1。',
     pair_sub_p2:'玩家 2，请在你的手柄上按任意键。', pair_sub_wait2:'玩家 1 已就位，正在等待第二个手柄……', pair_sub_ready:'正在加载战士选择……',
     pair_player:'玩家 {n}', pair_waiting:'等待手柄……', pair_detected:'已检测到手柄', pair_press:'按任意键', pair_locked:'已锁定',
@@ -15496,8 +15526,8 @@ const I18N_V5 = {
     inv_tip:'点按一次装备，双击查看属性和技能。', inv_tip_pad:'按 {a} 装备；连按两次或按 {y} 查看属性和技能。',
     modal_pad_close:'按 {b} 关闭' },
   ar:{ mode_title:'اختر الوضع', mode_practice:'تدريب', mode_practice_desc:'قاتل خصمًا عشوائيًا بالمقاتل المجهّز لديك.', mode_playing_as:'تلعب بشخصية {name}',
-    mode_friend_desc:'لاعبان وذراعا تحكم. اختارا مقاتليكما وحسما الأمر.', mode_controller_only:'🎮 بذراع التحكم فقط', mode_pads_count:'تم اكتشاف {n} من 2 من أذرع التحكم',
-    pair_title_connect:'وصّل ذراعي تحكم', pair_title_p1:'من هو اللاعب 1؟', pair_title_p2:'من هو اللاعب 2؟', pair_title_ready:'جاهزان!',
+    mode_friend_desc:'1v1 أو 1v1v1 أو 1v1v1v1 أو 2v2 — صِلوا أذرع التحكم واختاروا مقاتليكم.', mode_controller_only:'🎮 بذراع التحكم فقط', mode_pads_count:'تم اكتشاف {n} من 2 من أذرع التحكم', mode_pads_count_n:'تم اكتشاف {n} من {total} من أذرع التحكم',
+    pair_title_connect:'وصّل ذراعي تحكم', pair_title_connect_n:'وصّل {n} من أذرع التحكم', pair_title_p1:'من هو اللاعب 1؟', pair_title_p2:'من هو اللاعب 2؟', pair_title_ready:'جاهزان!',
     pair_sub_connect:'اضغط أي زر على كل ذراع تحكم لكي تتعرف عليها اللعبة.', pair_sub_p1:'اضغط أي زر على ذراعك. أول من يضغط هو اللاعب 1.',
     pair_sub_p2:'اللاعب 2، اضغط أي زر على ذراعك.', pair_sub_wait2:'تم تثبيت اللاعب 1. بانتظار ذراع تحكم ثانية…', pair_sub_ready:'جارٍ تحميل اختيار المقاتلين…',
     pair_player:'اللاعب {n}', pair_waiting:'بانتظار ذراع التحكم…', pair_detected:'تم اكتشاف الذراع', pair_press:'اضغط أي زر', pair_locked:'تم التثبيت',
@@ -15509,8 +15539,8 @@ const I18N_V5 = {
     inv_tip:'المس مرة للتجهيز. المس مرتين لعرض الإحصاءات والهجمات.', inv_tip_pad:'اضغط {a} للتجهيز. اضغطه مرتين، أو اضغط {y}، لعرض الإحصاءات والهجمات.',
     modal_pad_close:'اضغط {b} للإغلاق' },
   fr:{ mode_title:'Choisir un mode', mode_practice:'Entraînement', mode_practice_desc:'Affrontez un adversaire aléatoire avec votre combattant équipé.', mode_playing_as:'Vous jouez {name}',
-    mode_friend_desc:'Deux joueurs, deux manettes. Choisissez vos combattants et réglez ça.', mode_controller_only:'🎮 Manette uniquement', mode_pads_count:'{n} manette(s) détectée(s) sur 2',
-    pair_title_connect:'Branchez deux manettes', pair_title_p1:'Qui est le Joueur 1 ?', pair_title_p2:'Qui est le Joueur 2 ?', pair_title_ready:'Prêts !',
+    mode_friend_desc:'1v1, 1v1v1, 1v1v1v1 ou 2v2 — branchez vos manettes et choisissez vos combattants.', mode_controller_only:'🎮 Manette uniquement', mode_pads_count:'{n} manette(s) détectée(s) sur 2', mode_pads_count_n:'{n} manette(s) détectée(s) sur {total}',
+    pair_title_connect:'Branchez deux manettes', pair_title_connect_n:'Branchez {n} manettes', pair_title_p1:'Qui est le Joueur 1 ?', pair_title_p2:'Qui est le Joueur 2 ?', pair_title_ready:'Prêts !',
     pair_sub_connect:'Appuyez sur un bouton de chaque manette pour que le jeu la détecte.', pair_sub_p1:'Appuyez sur un bouton de votre manette. Le premier à appuyer est le Joueur 1.',
     pair_sub_p2:'Joueur 2, appuyez sur un bouton de votre manette.', pair_sub_wait2:'Le Joueur 1 est verrouillé. En attente d’une deuxième manette…', pair_sub_ready:'Chargement de la sélection…',
     pair_player:'Joueur {n}', pair_waiting:'En attente de manette…', pair_detected:'Manette détectée', pair_press:'Appuyez sur un bouton', pair_locked:'Verrouillé',
@@ -15522,8 +15552,8 @@ const I18N_V5 = {
     inv_tip:'Touchez une fois pour équiper. Touchez deux fois pour voir stats et attaques.', inv_tip_pad:'Appuyez sur {a} pour équiper. Appuyez deux fois dessus, ou sur {y}, pour voir stats et attaques.',
     modal_pad_close:'Appuyez sur {b} pour fermer' },
   de:{ mode_title:'Modus wählen', mode_practice:'Training', mode_practice_desc:'Kämpfe mit deinem ausgerüsteten Kämpfer gegen einen zufälligen Gegner.', mode_playing_as:'Du spielst {name}',
-    mode_friend_desc:'Zwei Spieler, zwei Controller. Wählt eure Kämpfer und tragt es aus.', mode_controller_only:'🎮 Nur mit Controller', mode_pads_count:'{n} von 2 Controllern erkannt',
-    pair_title_connect:'Zwei Controller verbinden', pair_title_p1:'Wer ist Spieler 1?', pair_title_p2:'Wer ist Spieler 2?', pair_title_ready:'Bereit!',
+    mode_friend_desc:'1v1, 1v1v1, 1v1v1v1 oder 2v2 — Controller anschließen und Kämpfer wählen.', mode_controller_only:'🎮 Nur mit Controller', mode_pads_count:'{n} von 2 Controllern erkannt', mode_pads_count_n:'{n} von {total} Controllern erkannt',
+    pair_title_connect:'Zwei Controller verbinden', pair_title_connect_n:'{n} Controller verbinden', pair_title_p1:'Wer ist Spieler 1?', pair_title_p2:'Wer ist Spieler 2?', pair_title_ready:'Bereit!',
     pair_sub_connect:'Drücke auf jedem Controller eine beliebige Taste, damit das Spiel ihn erkennt.', pair_sub_p1:'Drücke eine beliebige Taste an deinem Controller. Wer zuerst drückt, ist Spieler 1.',
     pair_sub_p2:'Spieler 2, drücke eine beliebige Taste an deinem Controller.', pair_sub_wait2:'Spieler 1 steht fest. Warte auf einen zweiten Controller …', pair_sub_ready:'Kämpferauswahl wird geladen …',
     pair_player:'Spieler {n}', pair_waiting:'Warte auf Controller …', pair_detected:'Controller erkannt', pair_press:'Beliebige Taste drücken', pair_locked:'Bestätigt',
@@ -15535,8 +15565,8 @@ const I18N_V5 = {
     inv_tip:'Einmal tippen zum Ausrüsten. Doppeltippen für Werte und Angriffe.', inv_tip_pad:'{a} zum Ausrüsten. Doppelt drücken oder {y} drücken für Werte und Angriffe.',
     modal_pad_close:'{b} zum Schließen drücken' },
   pt:{ mode_title:'Escolha um modo', mode_practice:'Treino', mode_practice_desc:'Lute contra um oponente aleatório com o lutador equipado.', mode_playing_as:'Jogando como {name}',
-    mode_friend_desc:'Dois jogadores, dois controles. Escolham seus lutadores e resolvam isso.', mode_controller_only:'🎮 Somente controle', mode_pads_count:'{n} de 2 controles detectados',
-    pair_title_connect:'Conecte dois controles', pair_title_p1:'Quem é o Jogador 1?', pair_title_p2:'Quem é o Jogador 2?', pair_title_ready:'Prontos!',
+    mode_friend_desc:'1v1, 1v1v1, 1v1v1v1 ou 2v2 — conectem os controles e escolham seus lutadores.', mode_controller_only:'🎮 Somente controle', mode_pads_count:'{n} de 2 controles detectados', mode_pads_count_n:'{n} de {total} controles detectados',
+    pair_title_connect:'Conecte dois controles', pair_title_connect_n:'Conecte {n} controles', pair_title_p1:'Quem é o Jogador 1?', pair_title_p2:'Quem é o Jogador 2?', pair_title_ready:'Prontos!',
     pair_sub_connect:'Aperte qualquer botão em cada controle para o jogo detectá-lo.', pair_sub_p1:'Aperte qualquer botão do seu controle. Quem apertar primeiro é o Jogador 1.',
     pair_sub_p2:'Jogador 2, aperte qualquer botão do seu controle.', pair_sub_wait2:'O Jogador 1 está confirmado. Aguardando um segundo controle…', pair_sub_ready:'Carregando seleção de lutadores…',
     pair_player:'Jogador {n}', pair_waiting:'Aguardando controle…', pair_detected:'Controle detectado', pair_press:'Aperte qualquer botão', pair_locked:'Confirmado',
@@ -15548,8 +15578,8 @@ const I18N_V5 = {
     inv_tip:'Toque uma vez para equipar. Toque duas vezes para ver status e ataques.', inv_tip_pad:'Aperte {a} para equipar. Aperte duas vezes, ou aperte {y}, para ver status e ataques.',
     modal_pad_close:'Aperte {b} para fechar' },
   hi:{ mode_title:'मोड चुनें', mode_practice:'अभ्यास', mode_practice_desc:'अपने चुने हुए फ़ाइटर से किसी रैंडम विरोधी से लड़ें।', mode_playing_as:'{name} के रूप में खेल रहे हैं',
-    mode_friend_desc:'दो खिलाड़ी, दो कंट्रोलर। अपने फ़ाइटर चुनें और फ़ैसला करें।', mode_controller_only:'🎮 सिर्फ़ कंट्रोलर', mode_pads_count:'2 में से {n} कंट्रोलर मिले',
-    pair_title_connect:'दो कंट्रोलर जोड़ें', pair_title_p1:'खिलाड़ी 1 कौन है?', pair_title_p2:'खिलाड़ी 2 कौन है?', pair_title_ready:'तैयार!',
+    mode_friend_desc:'1v1, 1v1v1, 1v1v1v1 या 2v2 — कंट्रोलर जोड़ें और अपने फ़ाइटर चुनें।', mode_controller_only:'🎮 सिर्फ़ कंट्रोलर', mode_pads_count:'2 में से {n} कंट्रोलर मिले', mode_pads_count_n:'{total} में से {n} कंट्रोलर मिले',
+    pair_title_connect:'दो कंट्रोलर जोड़ें', pair_title_connect_n:'{n} कंट्रोलर जोड़ें', pair_title_p1:'खिलाड़ी 1 कौन है?', pair_title_p2:'खिलाड़ी 2 कौन है?', pair_title_ready:'तैयार!',
     pair_sub_connect:'हर कंट्रोलर पर कोई भी बटन दबाएँ ताकि गेम उसे पहचान सके।', pair_sub_p1:'अपने कंट्रोलर का कोई भी बटन दबाएँ। सबसे पहले दबाने वाला खिलाड़ी 1 होगा।',
     pair_sub_p2:'खिलाड़ी 2, अपने कंट्रोलर का कोई भी बटन दबाएँ।', pair_sub_wait2:'खिलाड़ी 1 तय हो गया। दूसरे कंट्रोलर का इंतज़ार…', pair_sub_ready:'फ़ाइटर चयन लोड हो रहा है…',
     pair_player:'खिलाड़ी {n}', pair_waiting:'कंट्रोलर का इंतज़ार…', pair_detected:'कंट्रोलर मिला', pair_press:'कोई भी बटन दबाएँ', pair_locked:'तय हो गया',
@@ -15561,8 +15591,8 @@ const I18N_V5 = {
     inv_tip:'चुनने के लिए एक बार टैप करें। स्टैट्स और अटैक देखने के लिए दो बार टैप करें।', inv_tip_pad:'चुनने के लिए {a} दबाएँ। स्टैट्स और अटैक के लिए इसे दो बार दबाएँ या {y} दबाएँ।',
     modal_pad_close:'बंद करने के लिए {b} दबाएँ' },
   ja:{ mode_title:'モードを選択', mode_practice:'練習', mode_practice_desc:'装備中のファイターでランダムな相手と戦います。', mode_playing_as:'使用中：{name}',
-    mode_friend_desc:'2人プレイ・コントローラー2台。ファイターを選んで勝負しよう。', mode_controller_only:'🎮 コントローラー専用', mode_pads_count:'コントローラー {n}/2 台を検出',
-    pair_title_connect:'コントローラーを2台接続', pair_title_p1:'プレイヤー1は誰？', pair_title_p2:'プレイヤー2は誰？', pair_title_ready:'準備完了！',
+    mode_friend_desc:'1v1・1v1v1・1v1v1v1・2v2 — コントローラーを接続してファイターを選ぼう。', mode_controller_only:'🎮 コントローラー専用', mode_pads_count:'コントローラー {n}/2 台を検出', mode_pads_count_n:'コントローラー {n}/{total} 台を検出',
+    pair_title_connect:'コントローラーを2台接続', pair_title_connect_n:'コントローラーを{n}台接続', pair_title_p1:'プレイヤー1は誰？', pair_title_p2:'プレイヤー2は誰？', pair_title_ready:'準備完了！',
     pair_sub_connect:'ゲームが認識できるよう、各コントローラーのボタンを何か押してください。', pair_sub_p1:'コントローラーのボタンを何か押してください。最初に押した人がプレイヤー1です。',
     pair_sub_p2:'プレイヤー2、コントローラーのボタンを何か押してください。', pair_sub_wait2:'プレイヤー1が決定しました。2台目のコントローラーを待っています…', pair_sub_ready:'ファイター選択を読み込み中…',
     pair_player:'プレイヤー{n}', pair_waiting:'コントローラーを待っています…', pair_detected:'コントローラーを検出', pair_press:'ボタンを押してください', pair_locked:'決定済み',
