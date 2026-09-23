@@ -5333,7 +5333,7 @@ function renderSaveSlots(){
     card.className = 'save-slot-card' + (number===activeSaveSlot ? ' active' : '');
     const used = slot.used && slot.unlocked.length;
     const status = used
-      ? t('save_slot_unlocked').replace('{count}', slot.unlocked.length).replace('{total}', ROSTER_ORDER.length)
+      ? t('save_slot_unlocked').replace('{count}', slot.unlocked.length).replace('{total}', 54)
       : t('save_slot_empty');
     card.innerHTML = `
       <div class="save-slot-num">Slot ${number}${number===activeSaveSlot ? ` • ${t('save_slot_active')}` : ''}</div>
@@ -5742,7 +5742,7 @@ function setUnlockMessage(text, tone){
 }
 function renderUnlockScreen(){
   renderTokenCounters();
-  const owned = SAVE.unlocked.length, total = ROSTER_ORDER.length, tokens = getTokens();
+  const owned = SAVE.unlocked.length, total = 54, tokens = getTokens();
   const prog = document.getElementById('unlock-progress-text');
   if(prog) prog.textContent = t('unlock_progress').replace('{n}', owned).replace('{total}', total);
   const fill = document.getElementById('unlock-progress-fill');
