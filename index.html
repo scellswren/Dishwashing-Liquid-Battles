@@ -406,6 +406,68 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .magneto-flight-aura i:nth-child(2){width:28px;height:8px;transform:translate(-50%,-50%) rotate(-34deg) translateX(31px);animation:magMetalOrbit 1.25s linear infinite reverse;}
 .magneto-flight-aura i:nth-child(3){width:24px;height:7px;transform:translate(-50%,-50%) rotate(56deg) translateX(36px);animation:magMetalOrbit 1.4s linear infinite;}
 .magneto-flight-aura i:nth-child(4){width:19px;height:6px;transform:translate(-50%,-50%) rotate(-68deg) translateX(43px);animation:magMetalOrbit .88s linear infinite reverse;}
+/* Doctor Octopus: four mechanical tentacle arms permanently fused to his back.
+   He is a grounded fighter (gravity, jumping, platforms all apply normally to
+   him) — it's specifically his body that never sets foot on the ground: it
+   rides slightly above the rig while the four tentacle limbs are the ones
+   that plant, stride and reach. Each arm is a single rigid <g class="oc-arm
+   oc-arm-N"> pivoting from its shoulder mount, so idle sway, walking, jumps
+   and his E/Q abilities all animate the SAME limbs that are always visible —
+   nothing is a detached copy. */
+.octopus-tentacles{position:absolute;left:50%;top:60%;width:172px;height:172px;transform:translate(-50%,-50%);z-index:0;pointer-events:none;filter:drop-shadow(0 5px 6px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(0,0,0,.35));}
+.octopus-tentacles svg{width:100%;height:100%;display:block;overflow:visible;}
+.octopus-tentacles .oc-arm{transform-box:view-box;}
+.octopus-tentacles .oc-lens{filter:drop-shadow(0 0 3px #ff3b3b) drop-shadow(0 0 6px #ff3b3b88);}
+/* idle: gentle independent sway, arms pivoting from the shoulder mount */
+.octopus-tentacles .oc-arm-1{animation:ocArmSway1 2.6s ease-in-out infinite;}
+.octopus-tentacles .oc-arm-2{animation:ocArmSway2 2.9s ease-in-out infinite .2s;}
+.octopus-tentacles .oc-arm-3{animation:ocArmSway3 3.1s ease-in-out infinite .1s;}
+.octopus-tentacles .oc-arm-4{animation:ocArmSway4 2.7s ease-in-out infinite .35s;}
+@keyframes ocArmSway1{0%,100%{transform:rotate(0deg);}50%{transform:rotate(-4deg);}}
+@keyframes ocArmSway2{0%,100%{transform:rotate(0deg);}50%{transform:rotate(4deg);}}
+@keyframes ocArmSway3{0%,100%{transform:rotate(0deg);}50%{transform:rotate(3deg);}}
+@keyframes ocArmSway4{0%,100%{transform:rotate(0deg);}50%{transform:rotate(-3deg);}}
+/* walking: the two diagonal leg-pairs stride opposite each other, like a
+   four-legged gait, so the tentacles read as what's actually carrying him */
+.fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-1,
+.fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-4{animation:ocWalkA .46s ease-in-out infinite;}
+.fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-2,
+.fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-3{animation:ocWalkB .46s ease-in-out infinite;}
+@keyframes ocWalkA{0%,100%{transform:rotate(-9deg) translateY(1px);}50%{transform:rotate(11deg) translateY(-5px);}}
+@keyframes ocWalkB{0%,100%{transform:rotate(11deg) translateY(-5px);}50%{transform:rotate(-9deg) translateY(1px);}}
+/* airborne (jumping): all four legs curl up tight beneath him */
+.fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-1,
+.fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-3{animation:ocTuckLeft .22s ease-out forwards;}
+.fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-2,
+.fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-4{animation:ocTuckRight .22s ease-out forwards;}
+@keyframes ocTuckLeft{0%{transform:rotate(0deg) scale(1);}100%{transform:rotate(20deg) scale(.84) translateY(-6px);}}
+@keyframes ocTuckRight{0%{transform:rotate(0deg) scale(1);}100%{transform:rotate(-20deg) scale(.84) translateY(-6px);}}
+/* Tentacle Lash (E): the mounted upper arm on his facing side whips out to
+   full reach and snaps back — this IS the hit, not a copy of it. */
+.fighter.doctoroctopus .octopus-tentacles.oc-lash-r .oc-arm-2{animation:ocLashRight .3s cubic-bezier(.22,.85,.25,1) 1;}
+.fighter.doctoroctopus .octopus-tentacles.oc-lash-l .oc-arm-1{animation:ocLashLeft .3s cubic-bezier(.22,.85,.25,1) 1;}
+@keyframes ocLashRight{0%{transform:rotate(0deg) scale(1);}45%{transform:rotate(40deg) scale(1.62);}70%{transform:rotate(33deg) scale(1.52);}100%{transform:rotate(0deg) scale(1);}}
+@keyframes ocLashLeft{0%{transform:rotate(0deg) scale(1);}45%{transform:rotate(-40deg) scale(1.62);}70%{transform:rotate(-33deg) scale(1.52);}100%{transform:rotate(0deg) scale(1);}}
+/* Tentacle Grab & Slam (Q): the lower arm on his facing side shoots out to
+   long reach, holds while it hauls the target in, then whips back to slam. */
+.fighter.doctoroctopus .octopus-tentacles.oc-grab-r .oc-arm-4{animation:ocGrabRight var(--oc-grab-ms,420ms) cubic-bezier(.16,.82,.2,1) 1;}
+.fighter.doctoroctopus .octopus-tentacles.oc-grab-l .oc-arm-3{animation:ocGrabLeft var(--oc-grab-ms,420ms) cubic-bezier(.16,.82,.2,1) 1;}
+@keyframes ocGrabRight{0%{transform:rotate(0deg) scale(1);}18%{transform:rotate(28deg) scale(2.15);}78%{transform:rotate(23deg) scale(2.05);}100%{transform:rotate(0deg) scale(1);}}
+@keyframes ocGrabLeft{0%{transform:rotate(0deg) scale(1);}18%{transform:rotate(-28deg) scale(2.15);}78%{transform:rotate(-23deg) scale(2.05);}100%{transform:rotate(0deg) scale(1);}}
+@media (prefers-reduced-motion:reduce){
+  .octopus-tentacles .oc-arm-1,.octopus-tentacles .oc-arm-2,.octopus-tentacles .oc-arm-3,.octopus-tentacles .oc-arm-4,
+  .fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-1,.fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-2,
+  .fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-3,.fighter.doctoroctopus.moving .octopus-tentacles .oc-arm-4,
+  .fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-1,.fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-2,
+  .fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-3,.fighter.doctoroctopus.airborne .octopus-tentacles .oc-arm-4,
+  .fighter.doctoroctopus .octopus-tentacles.oc-lash-r .oc-arm-2,.fighter.doctoroctopus .octopus-tentacles.oc-lash-l .oc-arm-1,
+  .fighter.doctoroctopus .octopus-tentacles.oc-grab-r .oc-arm-4,.fighter.doctoroctopus .octopus-tentacles.oc-grab-l .oc-arm-3
+  {animation:none!important;}
+}
+.fighter.doctoroctopus{filter:drop-shadow(0 10px 10px rgba(0,0,0,.4));}
+.fighter.doctoroctopus .fighter-size-body{animation:ocHover 2.4s ease-in-out infinite; z-index:2;}
+@keyframes ocHover{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@media (prefers-reduced-motion:reduce){.fighter.doctoroctopus .fighter-size-body{animation:none;}}
 @keyframes magnetoFlightPulse{from{opacity:.7;transform:scale(.94)}to{opacity:1;transform:scale(1.05)}}
 @keyframes magMetalOrbit{from{rotate:0deg}to{rotate:360deg}}
 .mag-flight-ring{position:absolute;pointer-events:none;transform-origin:50% 50%;}
@@ -3915,6 +3977,22 @@ const CHARACTERS = {
          desc:'Overcharges the glider, making Goblin move 2x faster for 5 seconds. Cooldown: 15 seconds.'}
     }
   },
+  doctoroctopus: {
+    id:'doctoroctopus', name:'Doctor Octopus', img:'DoctorOctopus.jpg', color:'#7a4a2b', accentColor:'#c9a25a', aiStyle:'bruiser',
+    maxHealth:9700,
+    description:'A brilliant, unhinged scientist fused permanently to four mechanical tentacle arms. His own body never sets foot on the ground — the tentacles are what walk, jump and land for him — and he uses their reach to grab, lash and crush anyone who gets close.',
+    abilities:{
+      E:{key:'E', name:'Tentacle Lash', type:'melee', damage:380, cooldown:600, knockback:6, range:96, hitDelay:130,
+         sound:'octopus_lash', fx:'octopus_lash', hitFx:'octopus_lash_hit', hitSound:'octopus_lash_hit',
+         desc:'A whipping strike from one of his tentacle arms for 380 damage. Cooldown: 0.6 seconds.'},
+      Q:{key:'Q', name:'Tentacle Grab & Slam', type:'tendrilGrab', damage:1400, cooldown:14000, knockback:16, range:340, tendrilStyle:'octopus',
+         sound:'octopus_grab', fx:'octopus_grab', hitFx:'octopus_slam_hit', hitSound:'octopus_slam_hit',
+         desc:'Shoots a tentacle out to grab the opponent, hauls them in, and slams them down for 1,400 damage. Cooldown: 14 seconds.'},
+      R:{key:'R', name:'Adamantium Carapace', type:'shield', damage:0, cooldown:14000, duration:4000, reduction:0.5,
+         sound:'octopus_carapace', fx:'octopus_carapace',
+         desc:'Hardens his tentacle rig into a defensive shell, cutting incoming damage in half for 4 seconds. Deals no damage. Cooldown: 14 seconds.'}
+    }
+  },
   redskull: {
     id:'redskull', name:'Red Skull', img:'RedSkull.jpg', color:'#d92535', accentColor:'#4fa9ff', aiStyle:'redskull',
     maxHealth:9500,
@@ -4758,7 +4836,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
 
 
 /* =========================================================================
@@ -6114,6 +6192,38 @@ function grootBallSvg(){
     <g stroke="#2f6b1c" stroke-width="1.3"><ellipse cx="46" cy="10" rx="8" ry="3.6" transform="rotate(-38 46 10)" fill="#72c84a"/><ellipse cx="52" cy="18" rx="7" ry="3.2" transform="rotate(-8 52 18)" fill="#5fb23c"/><ellipse cx="14" cy="50" rx="7" ry="3.2" transform="rotate(40 14 50)" fill="#72c84a"/></g>
   </svg>`;
 }
+function octopusTentacleSvg(){
+  return `<svg viewBox="0 0 160 160"><defs><linearGradient id="ocSegGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#82868f"/><stop offset=".45" stop-color="#3d4049"/><stop offset="1" stop-color="#15161a"/></linearGradient><linearGradient id="ocClawGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8c98a"/><stop offset=".6" stop-color="#c9a25a"/><stop offset="1" stop-color="#7a5a26"/></linearGradient><radialGradient id="ocHubGrad" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#585c66"/><stop offset=".6" stop-color="#2b2d33"/><stop offset="1" stop-color="#0c0d10"/></radialGradient></defs><ellipse class="oc-hub" cx="80" cy="80" rx="17" ry="15" fill="url(#ocHubGrad)" stroke="#000" stroke-width="1.6"/><ellipse cx="80" cy="80" rx="9.5" ry="8" fill="none" stroke="#585e68" stroke-width="1.2" opacity=".8"/><g class="oc-arm oc-arm-1" style="transform-origin:80.0px 78.0px;"><g transform="translate(64.2 72.1) rotate(-159.6)"><rect x="-20.8" y="-8.8" width="41.5" height="17.5" rx="7.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-19.3" y="-3.7" width="38.5" height="5.3" rx="2.6" fill="#ffffff" opacity="0.30"/></g><g transform="translate(36.2 62.9) rotate(-164.8)"><rect x="-16.3" y="-7.9" width="32.6" height="15.7" rx="6.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-14.8" y="-3.3" width="29.6" height="4.7" rx="2.4" fill="#ffffff" opacity="0.30"/></g><g transform="translate(15.9 54.4) rotate(-146.9)"><rect x="-12.6" y="-7.0" width="25.2" height="14.0" rx="5.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-11.1" y="-2.9" width="22.2" height="4.2" rx="2.1" fill="#ffffff" opacity="0.30"/></g><g transform="translate(5.7 40.9) rotate(-105.6)"><rect x="-11.4" y="-6.1" width="22.8" height="12.2" rx="5.2" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-9.9" y="-2.6" width="19.8" height="3.7" rx="1.8" fill="#ffffff" opacity="0.30"/></g><g transform="translate(5.4 26.3) rotate(-71.6)"><rect x="-9.0" y="-5.2" width="17.9" height="10.4" rx="4.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-7.5" y="-2.2" width="14.9" height="3.1" rx="1.6" fill="#ffffff" opacity="0.18"/></g><g transform="translate(12.3 16.0) rotate(-40.0)"><rect x="-8.2" y="-4.3" width="16.5" height="8.7" rx="3.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.7" y="-1.8" width="13.5" height="2.6" rx="1.3" fill="#ffffff" opacity="0.18"/></g><g transform="translate(23.6 11.0) rotate(-8.5)"><rect x="-8.0" y="-3.4" width="16.1" height="6.9" rx="2.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.5" y="-1.4" width="13.1" height="2.1" rx="1.0" fill="#ffffff" opacity="0.18"/></g><circle cx="48.5" cy="66.3" r="6.3" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="48.5" cy="66.3" r="2.1" fill="#585e68"/><circle cx="23.8" cy="59.6" r="5.7" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="23.8" cy="59.6" r="1.9" fill="#585e68"/><circle cx="8.0" cy="49.2" r="5.2" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="8.0" cy="49.2" r="1.8" fill="#585e68"/><circle cx="3.3" cy="32.6" r="4.6" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="3.3" cy="32.6" r="1.6" fill="#585e68"/><circle cx="7.5" cy="20.0" r="4.1" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="7.5" cy="20.0" r="1.4" fill="#585e68"/><circle cx="17.1" cy="11.9" r="3.5" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="17.1" cy="11.9" r="1.2" fill="#585e68"/><g class="oc-claw-tip"><path d="M30.0 10.0 Q38.2 15.7 44.2 14.9" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M30.0 10.0 Q39.3 6.5 44.9 8.8" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="30.0" cy="10.0" r="4.4" fill="#232630" stroke="#000" stroke-width="1"/><circle class="oc-lens" cx="30.0" cy="10.0" r="2" fill="#ff3b3b"/></g></g><g class="oc-arm oc-arm-2" style="transform-origin:80.0px 78.0px;"><g transform="translate(95.3 72.6) rotate(-19.5)"><rect x="-20.2" y="-8.8" width="40.4" height="17.5" rx="7.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-18.7" y="-3.7" width="37.4" height="5.3" rx="2.6" fill="#ffffff" opacity="0.30"/></g><g transform="translate(123.1 63.7) rotate(-15.6)"><rect x="-16.5" y="-7.9" width="32.9" height="15.7" rx="6.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-15.0" y="-3.3" width="29.9" height="4.7" rx="2.4" fill="#ffffff" opacity="0.30"/></g><g transform="translate(143.7 54.8) rotate(-33.6)"><rect x="-13.0" y="-7.0" width="25.9" height="14.0" rx="5.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-11.5" y="-2.9" width="22.9" height="4.2" rx="2.1" fill="#ffffff" opacity="0.30"/></g><g transform="translate(154.3 41.0) rotate(-74.2)"><rect x="-11.5" y="-6.1" width="22.9" height="12.2" rx="5.2" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-10.0" y="-2.6" width="19.9" height="3.7" rx="1.8" fill="#ffffff" opacity="0.30"/></g><g transform="translate(154.6 26.3) rotate(-108.4)"><rect x="-9.0" y="-5.2" width="17.9" height="10.4" rx="4.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-7.5" y="-2.2" width="14.9" height="3.1" rx="1.6" fill="#ffffff" opacity="0.18"/></g><g transform="translate(147.7 16.0) rotate(-140.0)"><rect x="-8.2" y="-4.3" width="16.5" height="8.7" rx="3.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.7" y="-1.8" width="13.5" height="2.6" rx="1.3" fill="#ffffff" opacity="0.18"/></g><g transform="translate(136.4 11.0) rotate(-171.5)"><rect x="-8.0" y="-3.4" width="16.1" height="6.9" rx="2.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.5" y="-1.4" width="13.1" height="2.1" rx="1.0" fill="#ffffff" opacity="0.18"/></g><circle cx="110.6" cy="67.1" r="6.3" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="110.6" cy="67.1" r="2.1" fill="#585e68"/><circle cx="135.5" cy="60.2" r="5.7" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="135.5" cy="60.2" r="1.9" fill="#585e68"/><circle cx="151.9" cy="49.3" r="5.2" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="151.9" cy="49.3" r="1.8" fill="#585e68"/><circle cx="156.7" cy="32.6" r="4.6" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="156.7" cy="32.6" r="1.6" fill="#585e68"/><circle cx="152.5" cy="20.0" r="4.1" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="152.5" cy="20.0" r="1.4" fill="#585e68"/><circle cx="142.9" cy="11.9" r="3.5" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="142.9" cy="11.9" r="1.2" fill="#585e68"/><g class="oc-claw-tip"><path d="M130.0 10.0 Q120.7 6.5 115.1 8.8" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M130.0 10.0 Q121.8 15.7 115.8 14.9" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="130.0" cy="10.0" r="4.4" fill="#232630" stroke="#000" stroke-width="1"/><circle class="oc-lens" cx="130.0" cy="10.0" r="2" fill="#ff3b3b"/></g></g><g class="oc-arm oc-arm-3" style="transform-origin:80.0px 82.0px;"><g transform="translate(65.1 86.2) rotate(164.5)"><rect x="-19.5" y="-8.8" width="38.9" height="17.5" rx="7.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-18.0" y="-3.7" width="35.9" height="5.3" rx="2.6" fill="#ffffff" opacity="0.30"/></g><g transform="translate(38.3 93.2) rotate(166.2)"><rect x="-15.7" y="-7.9" width="31.4" height="15.7" rx="6.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-14.2" y="-3.3" width="28.4" height="4.7" rx="2.4" fill="#ffffff" opacity="0.30"/></g><g transform="translate(18.6 101.4) rotate(146.4)"><rect x="-12.7" y="-7.0" width="25.4" height="14.0" rx="5.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-11.2" y="-2.9" width="22.4" height="4.2" rx="2.1" fill="#ffffff" opacity="0.30"/></g><g transform="translate(7.8 115.0) rotate(108.5)"><rect x="-11.6" y="-6.1" width="23.2" height="12.2" rx="5.2" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-10.1" y="-2.6" width="20.2" height="3.7" rx="1.8" fill="#ffffff" opacity="0.30"/></g><g transform="translate(7.1 129.7) rotate(72.0)"><rect x="-8.9" y="-5.2" width="17.9" height="10.4" rx="4.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-7.4" y="-2.2" width="14.9" height="3.1" rx="1.6" fill="#ffffff" opacity="0.18"/></g><g transform="translate(14.0 140.0) rotate(39.3)"><rect x="-8.3" y="-4.3" width="16.7" height="8.7" rx="3.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.8" y="-1.8" width="13.7" height="2.6" rx="1.3" fill="#ffffff" opacity="0.18"/></g><g transform="translate(25.5 145.0) rotate(8.4)"><rect x="-8.1" y="-3.4" width="16.3" height="6.9" rx="2.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.6" y="-1.4" width="13.3" height="2.1" rx="1.0" fill="#ffffff" opacity="0.18"/></g><circle cx="50.1" cy="90.3" r="6.3" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="50.1" cy="90.3" r="2.1" fill="#585e68"/><circle cx="26.5" cy="96.1" r="5.7" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="26.5" cy="96.1" r="1.9" fill="#585e68"/><circle cx="10.6" cy="106.7" r="5.2" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="10.6" cy="106.7" r="1.8" fill="#585e68"/><circle cx="5.0" cy="123.4" r="4.6" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="5.0" cy="123.4" r="1.6" fill="#585e68"/><circle cx="9.1" cy="136.0" r="4.1" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="9.1" cy="136.0" r="1.4" fill="#585e68"/><circle cx="19.0" cy="144.1" r="3.5" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="19.0" cy="144.1" r="1.2" fill="#585e68"/><g class="oc-claw-tip"><path d="M32.0 146.0 Q41.3 149.5 46.9 147.2" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M32.0 146.0 Q40.2 140.3 46.2 141.1" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="32.0" cy="146.0" r="4.4" fill="#232630" stroke="#000" stroke-width="1"/><circle class="oc-lens" cx="32.0" cy="146.0" r="2" fill="#ff3b3b"/></g></g><g class="oc-arm oc-arm-4" style="transform-origin:80.0px 82.0px;"><g transform="translate(94.7 86.6) rotate(17.4)"><rect x="-19.3" y="-8.8" width="38.7" height="17.5" rx="7.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-17.8" y="-3.7" width="35.7" height="5.3" rx="2.6" fill="#ffffff" opacity="0.30"/></g><g transform="translate(121.5 94.0) rotate(12.9)"><rect x="-16.0" y="-7.9" width="32.0" height="15.7" rx="6.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-14.5" y="-3.3" width="29.0" height="4.7" rx="2.4" fill="#ffffff" opacity="0.30"/></g><g transform="translate(141.8 101.8) rotate(31.7)"><rect x="-12.7" y="-7.0" width="25.3" height="14.0" rx="5.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-11.2" y="-2.9" width="22.3" height="4.2" rx="2.1" fill="#ffffff" opacity="0.30"/></g><g transform="translate(152.4 115.1) rotate(73.1)"><rect x="-11.5" y="-6.1" width="22.9" height="12.2" rx="5.2" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-10.0" y="-2.6" width="19.9" height="3.7" rx="1.8" fill="#ffffff" opacity="0.30"/></g><g transform="translate(152.9 129.7) rotate(108.0)"><rect x="-8.9" y="-5.2" width="17.9" height="10.4" rx="4.4" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-7.4" y="-2.2" width="14.9" height="3.1" rx="1.6" fill="#ffffff" opacity="0.18"/></g><g transform="translate(146.0 140.0) rotate(140.7)"><rect x="-8.3" y="-4.3" width="16.7" height="8.7" rx="3.7" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.8" y="-1.8" width="13.7" height="2.6" rx="1.3" fill="#ffffff" opacity="0.18"/></g><g transform="translate(134.5 145.0) rotate(171.6)"><rect x="-8.1" y="-3.4" width="16.3" height="6.9" rx="2.9" fill="url(#ocSegGrad)" stroke="#0a0b0d" stroke-width="1.1"/><rect x="-6.6" y="-1.4" width="13.3" height="2.1" rx="1.0" fill="#ffffff" opacity="0.18"/></g><circle cx="109.4" cy="91.2" r="6.3" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="109.4" cy="91.2" r="2.1" fill="#585e68"/><circle cx="133.7" cy="96.7" r="5.7" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="133.7" cy="96.7" r="1.9" fill="#585e68"/><circle cx="149.9" cy="106.8" r="5.2" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="149.9" cy="106.8" r="1.8" fill="#585e68"/><circle cx="155.0" cy="123.4" r="4.6" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="155.0" cy="123.4" r="1.6" fill="#585e68"/><circle cx="150.9" cy="136.0" r="4.1" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="150.9" cy="136.0" r="1.4" fill="#585e68"/><circle cx="141.0" cy="144.1" r="3.5" fill="#202329" stroke="#000" stroke-width="1"/><circle cx="141.0" cy="144.1" r="1.2" fill="#585e68"/><g class="oc-claw-tip"><path d="M128.0 146.0 Q119.8 140.3 113.8 141.1" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M128.0 146.0 Q118.7 149.5 113.1 147.2" stroke="url(#ocClawGrad)" stroke-width="3.6" fill="none" stroke-linecap="round"/><circle cx="128.0" cy="146.0" r="4.4" fill="#232630" stroke="#000" stroke-width="1"/><circle class="oc-lens" cx="128.0" cy="146.0" r="2" fill="#ff3b3b"/></g></g></svg>`;
+}
+// Doctor Octopus: these drive the SAME permanently-mounted tentacle arms
+// that are always visible on his back (see octopusTentacleSvg()) — nothing
+// here is a separate overlay copy. Tentacle Lash swings the upper arm on his
+// facing side; Tentacle Grab & Slam reaches out with the lower arm on his
+// facing side and holds while the grapple physics haul the target in.
+function octopusTentacleWrap(f){
+  return f && f.el ? f.el.querySelector('.octopus-tentacles') : null;
+}
+function triggerOctopusLashSwing(caster){
+  const wrap = octopusTentacleWrap(caster);
+  if(!wrap) return;
+  const cls = caster.facing >= 0 ? 'oc-lash-r' : 'oc-lash-l';
+  wrap.classList.remove('oc-lash-r','oc-lash-l');
+  void wrap.offsetWidth; // force reflow so a repeated tap always restarts the swing
+  wrap.classList.add(cls);
+  setTimeout(()=>{ if(wrap) wrap.classList.remove(cls); }, 320);
+}
+function triggerOctopusGrabReach(caster, holdMs, connected, dir){
+  const wrap = octopusTentacleWrap(caster);
+  if(!wrap) return;
+  const facing = dir!==undefined ? dir : caster.facing;
+  const cls = facing >= 0 ? 'oc-grab-r' : 'oc-grab-l';
+  wrap.classList.remove('oc-grab-r','oc-grab-l');
+  const total = connected ? Math.max(420, holdMs + 260) : 340;
+  wrap.style.setProperty('--oc-grab-ms', total+'ms');
+  void wrap.offsetWidth;
+  wrap.classList.add(cls);
+  setTimeout(()=>{ if(wrap){ wrap.classList.remove(cls); wrap.style.removeProperty('--oc-grab-ms'); } }, total);
+}
 function activateHeldWeapon(f, selector, duration, direction){
   if(!f || !f.el) return;
   const els = Array.from(f.el.querySelectorAll(selector));
@@ -6140,7 +6250,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -6151,6 +6261,7 @@ function buildFighterDOM(f){
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
     ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
     ${f.def.id==='magneto' ? '<div class="magneto-flight-aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>' : ''}
+    ${f.def.id==='doctoroctopus' ? `<div class="octopus-tentacles" aria-hidden="true">${octopusTentacleSvg()}</div>` : ''}
     ${f.def.id==='groot' ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
     ${f.def.id==='humantorch' ? '<div class="torch-flame" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' : ''}
     ${f.def.id==='yondu' ? '<div class="yondu-suit-overlay" aria-hidden="true"><span></span><span></span><span></span></div>' : ''}
@@ -7868,11 +7979,19 @@ function executeAbility(caster, target, ability, t){
         tg.onGround = false;
         tg.hitStun = Math.min(420, pullMs);
         caster.venomSlamPending = { target: tg, ability, resolveAt: t + pullMs };
-        spawnVenomTendrilFx(caster, tg, true);
+        if(ability.tendrilStyle === 'octopus'){
+          spawnOctopusTendrilFx(caster, tg, true);
+          triggerOctopusGrabReach(caster, pullMs, true, dirSignTo(caster, tg));
+        }
+        else spawnVenomTendrilFx(caster, tg, true);
       } else {
         const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*Math.min(ability.range, 150);
         const wy = caster.y + FIGHTER_SIZE/2;
-        spawnVenomTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
+        if(ability.tendrilStyle === 'octopus'){
+          spawnOctopusTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
+          triggerOctopusGrabReach(caster, 0, false, caster.facing);
+        }
+        else spawnVenomTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
         fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#aeb5c044,transparent 70%);`, 380);
       }
       break;
@@ -9731,6 +9850,35 @@ function sfx(kind='ability'){
         return;
       }
 
+      /* ---------- Doctor Octopus ---------- */
+      case 'octopus_lash': // metallic whip-crack, servo whine on the follow-through
+        aNoise(ctx, t, 0.10, 0.20, 'highpass', 3200, 1400, 1.6);
+        aTone(ctx, t, 'sawtooth', 260, 90, 0.10, 0.10);
+        aTone(ctx, t+0.06, 'square', 900, 400, 0.06, 0.05);
+        return;
+      case 'octopus_lash_hit': // metal-on-flesh crunch
+        aTone(ctx, t, 'square', 150, 55, 0.16, 0.16);
+        aNoise(ctx, t, 0.14, 0.18, 'bandpass', 1500, 400, 1.8);
+        return;
+      case 'octopus_grab': { // servos ratcheting out fast as the arm extends
+        aNoise(ctx, t, 0.20, 0.16, 'bandpass', 1100, 2800, 2.6);
+        aTone(ctx, t, 'square', 70, 220, 0.22, 0.09);
+        aTone(ctx, t+0.10, 'sawtooth', 320, 80, 0.10, 0.06);
+        return;
+      }
+      case 'octopus_slam_hit': { // heavy metal slam into the ground
+        aTone(ctx, t, 'sine', 140, 28, 0.50, 0.32);
+        aTone(ctx, t, 'square', 75, 30, 0.28, 0.14);
+        aNoise(ctx, t, 0.30, 0.24, 'lowpass', 1400, 120, 0.6);
+        aNoise(ctx, t+0.04, 0.10, 0.16, 'highpass', 3600, 1600, 1.3);
+        return;
+      }
+      case 'octopus_carapace': // plates locking into place, a low mechanical clunk
+        aTone(ctx, t, 'square', 110, 60, 0.20, 0.14);
+        aNoise(ctx, t, 0.14, 0.14, 'bandpass', 800, 300, 1.8);
+        aTone(ctx, t+0.08, 'triangle', 320, 260, 0.10, 0.08);
+        return;
+
       /* ---------- legacy / generic ---------- */
       case 'hit':
         aTone(ctx, t, 'square', 140, 62, 0.13, 0.13);
@@ -10019,6 +10167,34 @@ function spawnVenomTendrilFx(caster, targetPoint, connected){
   </svg>`;
   fxEl('fx-webline', `left:${minX.toFixed(1)}px;top:${minY.toFixed(1)}px;width:${w.toFixed(1)}px;height:${h.toFixed(1)}px;`, connected ? 480 : 320, svg);
   spawnGooDroplets(tx, ty, connected ? 10 : 5, connected ? 40 : 22, connected ? 420 : 300);
+  if(connected) shakeArena(4, 200);
+}
+// Doctor Octopus's Tentacle Grab & Slam: a segmented, metallic mechanical
+// arm rather than Venom's organic tendril — gunmetal shaft, bronze finger
+// claw at the tip, small welded-joint ticks instead of barbs.
+function spawnOctopusTendrilFx(caster, targetPoint, connected){
+  const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
+  const tx = targetPoint.x + FIGHTER_SIZE/2, ty = targetPoint.y + FIGHTER_SIZE/2;
+  const pad = 30;
+  const minX = Math.min(cx,tx) - pad, minY = Math.min(cy,ty) - pad;
+  const w = Math.abs(tx-cx) + pad*2, h = Math.abs(ty-cy) + pad*2;
+  const pts = boltPoints(cx-minX, cy-minY, tx-minX, ty-minY, 6, 10);
+  const d = ptsToPath(pts);
+  let joints = '';
+  for(let i=1;i<pts.length-1;i++){
+    const px = pts[i][0], py = pts[i][1];
+    joints += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.5" fill="#3a3d44" stroke="#1a1c20" stroke-width="1.5"/>`;
+  }
+  const tipColor = connected ? '#c9a25a' : '#7a4a2b';
+  const svg = `<svg width="${w.toFixed(1)}" height="${h.toFixed(1)}" viewBox="0 0 ${w.toFixed(1)} ${h.toFixed(1)}">
+    <path d="${d}" stroke="#1a1c20" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" stroke="#5b5f68" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" stroke="#9aa0ab" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+    ${joints}
+    <circle cx="${(tx-minX).toFixed(1)}" cy="${(ty-minY).toFixed(1)}" r="8" fill="${tipColor}" stroke="#1a1c20" stroke-width="2" opacity="0.95"/>
+  </svg>`;
+  fxEl('fx-webline', `left:${minX.toFixed(1)}px;top:${minY.toFixed(1)}px;width:${w.toFixed(1)}px;height:${h.toFixed(1)}px;`, connected ? 480 : 320, svg);
+  spawnSparks(tx, ty, connected ? 10 : 5, '#c9a25a', connected ? 44 : 24, connected ? 420 : 300);
   if(connected) shakeArena(4, 200);
 }
 // Small heal-confirmation burst for Symbiote Regeneration, in Venom's own
@@ -11370,6 +11546,38 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Doctor Octopus ---------------- */
+    case 'octopus_lash': {
+      // The strike IS one of his own permanently-mounted tentacle arms (the
+      // one on his facing side) whipping out to full reach and snapping
+      // back — see triggerOctopusLashSwing. No detached copy is drawn.
+      triggerOctopusLashSwing(caster);
+      const reach = ability.range || 96;
+      const hx = cx + dir*reach*0.85, hy = cy - 4;
+      // Timed to the whip's contact frame (matches ability.hitDelay) rather
+      // than firing before the arm has actually reached out.
+      setTimeout(()=>{ if(state.mode==='battle') spawnSparks(hx, hy, 6, '#c9a25a', 32, 280); }, ability.hitDelay||0);
+      break;
+    }
+    case 'octopus_grab': {
+      // Cast-time charge glow only; the extending/reeling tentacle itself is
+      // drawn by spawnOctopusTendrilFx once executeAbility knows whether it
+      // hooked the target or whiffed (same split as Venom's tendril grab).
+      fxEl('charge-glow',
+        `left:${cx-16}px;top:${cy-16}px;width:32px;height:32px;`
+        + `background:radial-gradient(circle,#e8d9b0,#17181c 60%,transparent 78%);box-shadow:0 0 18px #c9a25a;`, 200);
+      spawnSparks(cx, cy, 5, '#9aa0ab', 26, 260);
+      break;
+    }
+    case 'octopus_carapace': {
+      // Plates lock into place around him — a bronze-edged metal ring plus
+      // a hard flash, distinct from the softer blue/white shields elsewhere.
+      fxEl('fx-ring', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#c9a25a;box-shadow:0 0 26px #7a4a2b,inset 0 0 18px #17181c88;`, 520);
+      fxEl('fx-flash', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;background:radial-gradient(circle,#e8d9b0,#34373e 55%,transparent 78%);`, 260);
+      spawnSparks(cx, cy, 12, '#9aa0ab', 50, 420);
+      break;
+    }
+
     /* ---------------- Gambit ---------------- */
     case 'gambit_card': {
       const hx = cx + dir*22, hy = cy - 2;
@@ -12156,6 +12364,20 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx, cy, 8, '#dfe3e8', 36, 320);
       break;
     }
+    case 'octopus_lash_hit': {
+      fxEl('fx-flash', `left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff5dc,#c9a25a 45%,transparent 76%);`, 240);
+      spawnSparks(cx, cy, 9, '#c9a25a', 46, 300);
+      spawnSparks(cx, cy, 5, '#9aa0ab', 34, 240);
+      break;
+    }
+    case 'octopus_slam_hit': {
+      fxEl('fx-flash', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;background:radial-gradient(circle,#fff,#c9a25a 30%,transparent 74%);`, 300);
+      fxEl('fx-ring', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#7a4a2b;box-shadow:0 0 28px #17181c;`, 360);
+      spawnSparks(cx, cy, 14, '#9aa0ab', 74, 340);
+      spawnSparks(cx, cy, 8, '#c9a25a', 96, 380);
+      shakeArena(6, 220);
+      break;
+    }
     default: {
       const size = 44;
       fxEl('fx-burst',
@@ -12304,6 +12526,9 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     return;
   }
   if(f.holoSuitUntil && tNow >= f.holoSuitUntil){ f.holoSuitUntil = 0; }
+  // Doctor Octopus is permanently airborne on his tentacle rig — no toggle,
+  // no expiry, he simply never has a grounded state to fall back into.
+  if(f.def.permaFlight && !f.dead){ f.flight = true; f.flightExpire = 0; }
   // Magneto's flight is controlled entirely by his R toggle. It is always ready and
   // must not require a jump or automatically switch off when he touches the ground.
   if(f.rootedUntil && tNow < f.rootedUntil){ moveDir = 0; wantJump = false; f.vx *= 0.5; } // pinned by Groot's roots
