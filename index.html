@@ -15718,9 +15718,9 @@ function pollVersusSelect(){
   }
   if(versus.sel.every(s=>s.locked)){
     if(!versus.splashAt){versus.splashAt=nowT+1200;isMultiExtended()?showVsSplashMulti():showVersusSplash();}
-  }else if(versus.splashAt){versus.versus.splashAt=0;hideVersusSplash();}
+  }else if(versus.splashAt){versus.splashAt=0;hideVersusSplash();}
   if(versus.splashAt&&nowT>=versus.splashAt){
-    versus.versus.splashAt=0;hideVersusSplash();
+    versus.splashAt=0;hideVersusSplash();
     const picks=versus.sel.map(s=>ROSTER_ORDER[s.cursor]);
     if(isMultiExtended()) startMultiBattle(picks,multiplayerMode); else startBattle(picks[0],picks[1],{pvp:true});
   }
