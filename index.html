@@ -4758,7 +4758,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','moonknight','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
 
 
 /* =========================================================================
@@ -15183,6 +15183,10 @@ const versus = {
   keys: [ {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false} ],
   lastPick: null
 };
+// Tracks whichever player's cursor last moved in the fighter-select grid, so the
+// auto-scroll-into-view follows the player who is actually navigating right now
+// instead of always jumping back to Player 1's card (see renderVersus()).
+let versusLastMovedSlot = 0;
 function versusPadsPresent(){
   return versus.slots.every(s => s && livePadByIndex(s.index));
 }
@@ -15410,7 +15414,12 @@ function renderVersus(){
   renderVersusSide(0);
   renderVersusSide(1);
   renderMultiVersusRoster();
-  const active = cards[versus.sel[0].cursor] || cards[versus.sel[1].cursor];
+  // Follow whichever player most recently moved their own cursor — previously this
+  // always re-centered on Player 1's card, which meant Player 2 (or 3/4 in bigger
+  // lobbies) could move their cursor off-screen and never get scrolled to it,
+  // especially once Player 1 had already locked in and stopped moving.
+  const focusSlot = (versus.sel[versusLastMovedSlot]) ? versusLastMovedSlot : versus.sel.findIndex(Boolean);
+  const active = focusSlot >= 0 ? cards[versus.sel[focusSlot].cursor] : null;
   if(active){ active.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'}); }
 }
 function renderVersusSide(slot){
@@ -15444,6 +15453,7 @@ function versusMove(slot, dir){
   const best = cur ? geoPick(cur, pool, dir) : null;
   if(best){
     versus.sel[slot].cursor = cards.indexOf(best);
+    versusLastMovedSlot = slot;
     sfx('ui_tick');
     renderVersus();
   }
