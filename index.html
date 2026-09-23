@@ -1014,6 +1014,14 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.ironmonger.iron-jumping .fighter-square{filter:brightness(1.12) drop-shadow(0 0 12px rgba(255,177,90,.35));}
 .fighter.killmonger.killmonger-fury-active .fighter-square{animation:killmongerFuryPulse .45s ease-in-out infinite alternate;filter:saturate(1.35) brightness(1.12);}
 @keyframes killmongerFuryPulse{from{box-shadow:0 0 18px rgba(255,194,64,.22),0 0 34px rgba(155,78,255,.16)}to{box-shadow:0 0 34px rgba(255,194,64,.62),0 0 68px rgba(155,78,255,.34),0 0 92px rgba(255,90,28,.16)}}
+/* Moon Knight: Split Personality glows a different color per active persona,
+   and Ankh Glide tilts + trails the cape while airborne. */
+.fighter.moonknight.moonknight-persona-marc .fighter-square{animation:moonknightPersonaPulse .4s ease-in-out infinite alternate;filter:saturate(1.3) brightness(1.1);--mk-glow:rgba(255,139,92,.55);}
+.fighter.moonknight.moonknight-persona-steven .fighter-square{animation:moonknightPersonaPulse .4s ease-in-out infinite alternate;filter:saturate(1.15) brightness(1.06);--mk-glow:rgba(111,184,255,.55);}
+.fighter.moonknight.moonknight-persona-jake .fighter-square{animation:moonknightPersonaPulse .4s ease-in-out infinite alternate;filter:saturate(1.15) brightness(1.08);--mk-glow:rgba(143,255,154,.55);}
+@keyframes moonknightPersonaPulse{from{box-shadow:0 0 14px var(--mk-glow),0 10px 22px rgba(0,0,0,.35)}to{box-shadow:0 0 32px var(--mk-glow),0 16px 34px rgba(0,0,0,.4)}}
+.fighter.moonknight.moonknight-gliding .fighter-square{transform:rotate(-6deg);transition:transform .2s ease;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4));}
+.fighter.moonknight.moonknight-gliding.facing-left .fighter-square{transform:scaleX(-1) rotate(-6deg);}
 /* A visible burn state for anyone suffering Red Hulk's Volcano Fists burn. */
 .redhulk-burn-fx{display:none;position:absolute;inset:-14px;pointer-events:none;z-index:9;overflow:visible;filter:drop-shadow(0 0 5px #ff6b24);}
 .fighter.redhulk-burn-active .redhulk-burn-fx{display:block;}
@@ -4162,6 +4170,24 @@ const CHARACTERS = {
          desc:'A springing acrobatic leap up and forward. Great for closing distance or escaping a bad spot.'}
     }
   },
+  moonknight: {
+    id:'moonknight', name:'Moon Knight', img:'MoonKnight.jpg', color:'#e8e6df', accentColor:'#8fa3c9', aiStyle:'erratic',
+    maxHealth:10400,
+    description:"Avatar of Khonshu, and never quite the same person twice. Sprays a quick 3-dart spread of crescent darts, involuntarily swaps between his three personas — Marc, Steven, and Jake, each with a different edge — and extends his cape to glide instead of truly flying.",
+    abilities:{
+      E:{key:'E', name:'Crescent Darts', type:'shrapnelSpread', damage:380, count:3, cooldown:700, knockback:6,
+         speed:18, w:16, h:16, color:'#e8e6df', render:'moonknight-dart', spreadAngle:0.13,
+         sound:'moonknight_darts', fx:'moonknight_darts', hitFx:'moonknight_darts_hit', hitSound:'moonknight_darts_hit',
+         desc:'A quick 3-dart spread of crescent darts for 380 damage each. Cooldown: 0.7 seconds.'},
+      Q:{key:'Q', name:'Split Personality', type:'moonknightPersona', damage:0, cooldown:15000, duration:6000,
+         damageMult:1.3, reduction:.25, speedMult:1.35,
+         sound:'moonknight_split', fx:'moonknight_split',
+         desc:"Randomly swaps his active persona for 6 seconds \u2014 Marc (+damage), Steven (+defense), or Jake (+speed). You don't get to pick which. Cooldown: 15 seconds."},
+      R:{key:'R', name:'Ankh Glide', type:'glide', damage:0, cooldown:9500, duration:4500,
+         sound:'moonknight_glide', fx:'moonknight_glide',
+         desc:'Extends his cape to glide \u2014 slowed fall and free horizontal air control for 4.5 seconds, instead of true flight. Cooldown: 9.5 seconds.'}
+    }
+  },
   hulk: {
     id:'hulk', name:'Hulk', img:'Hulk.jpg', color:'#55d65c',
     maxHealth:21250, aiStyle:'hulk', jumpHeightMultiplier:2,
@@ -4732,7 +4758,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','moonknight','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp'];
 
 
 /* =========================================================================
@@ -6114,7 +6140,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -6354,6 +6380,23 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.display='flex';
       overlay.textContent='2X '+Math.max(0,(fighter.gliderBoostUntil-t)/1000).toFixed(1)+'s';
       overlay.style.background='rgba(52,235,80,.48)';
+      return;
+    }
+    if(a.type==='moonknightPersona' && fighter.moonknightPersonaUntil > t){
+      const p = fighter.moonknightPersona;
+      const label = p==='marc' ? 'MARC' : p==='steven' ? 'STEVEN' : 'JAKE';
+      const bg = p==='marc' ? 'rgba(255,139,92,.5)' : p==='steven' ? 'rgba(111,184,255,.5)' : 'rgba(143,255,154,.42)';
+      btn.classList.add('flight-on');
+      overlay.style.display='flex';
+      overlay.textContent = label+' '+Math.max(0,(fighter.moonknightPersonaUntil-t)/1000).toFixed(1)+'s';
+      overlay.style.background=bg;
+      return;
+    }
+    if(a.type==='glide' && fighter.glideUntil > t){
+      btn.classList.add('flight-on');
+      overlay.style.display='flex';
+      overlay.textContent='GLIDE '+Math.max(0,(fighter.glideUntil-t)/1000).toFixed(1)+'s';
+      overlay.style.background='rgba(143,163,201,.5)';
       return;
     }
     if(a.type==='antmanTransform' && (fighter.def.id==='antman' || fighter.def.id==='wasp')) {
@@ -6714,6 +6757,32 @@ function executeAbility(caster, target, ability, t){
       caster.redHulkHeatUntil=t+(ability.duration||5000); if(caster.el)caster.el.classList.add('redhulk-heat-active');
       spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,28,'#ff9f2f',96,560);
       fxEl('redhulk-heat-aura',`left:${caster.x-18}px;top:${caster.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;`,700); shakeArena(5,240); break;
+    }
+    case 'moonknightPersona': {
+      // Split Personality: the game picks, not the player. Each persona lights up
+      // a different passive for the duration (see fighterSpeedMultiplier / applyDamage).
+      const personas = ['marc','steven','jake'];
+      const persona = personas[Math.floor(Math.random()*personas.length)];
+      caster.moonknightPersona = persona;
+      caster.moonknightPersonaUntil = t + (ability.duration||6000);
+      if(caster.el){
+        caster.el.classList.remove('moonknight-persona-marc','moonknight-persona-steven','moonknight-persona-jake');
+        caster.el.classList.add('moonknight-persona-'+persona);
+      }
+      const personaColor = persona==='marc' ? '#ff8b5c' : persona==='steven' ? '#6fb8ff' : '#8fff9a';
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,24,personaColor,86,520);
+      fxEl('fx-ring',`left:${caster.x-20}px;top:${caster.y-20}px;width:${FIGHTER_SIZE+40}px;height:${FIGHTER_SIZE+40}px;border-color:${personaColor};border-width:3px;box-shadow:0 0 32px ${personaColor};`,520);
+      spawnDamageNumber(caster.x+18, caster.y-14, persona.toUpperCase(), false);
+      break;
+    }
+    case 'glide': {
+      // Ankh Glide: NOT true flight — caster stays subject to gravity and platform
+      // collision, but falls slowly and keeps full air control while it's active
+      // (see the reduced-gravity branch for this in updatePhysics).
+      caster.glideUntil = t + (ability.duration||4500);
+      if(caster.vy > 1) caster.vy = 1;
+      if(caster.el) caster.el.classList.add('moonknight-gliding');
+      break;
     }
     case 'fireSpew': {
       state.firePools=state.firePools.filter(pool=>{if(pool.casterRef===caster){if(pool.el)pool.el.remove();return false;}return true;});
@@ -8283,6 +8352,11 @@ function updateSpecialViz(f){
   f.el.classList.toggle('redhulk-burn-active', !!(f.burnTicksLeft > 0 && f.burnAttacker && f.burnAttacker.def && f.burnAttacker.def.id === 'redhulk'));
   f.el.classList.toggle('iron-jumping', f.def.id === 'ironmonger' && f.ironJumpActive);
   f.el.classList.toggle('drax-charging', !!f.chargeState);
+  const mkPersonaActive = f.def.id === 'moonknight' && f.moonknightPersonaUntil > now();
+  f.el.classList.toggle('moonknight-persona-marc', mkPersonaActive && f.moonknightPersona === 'marc');
+  f.el.classList.toggle('moonknight-persona-steven', mkPersonaActive && f.moonknightPersona === 'steven');
+  f.el.classList.toggle('moonknight-persona-jake', mkPersonaActive && f.moonknightPersona === 'jake');
+  f.el.classList.toggle('moonknight-gliding', f.def.id === 'moonknight' && f.glideUntil > now() && !f.onGround);
 }
 
 // Knockback tuning: close-range attacks retain most of their existing force,
@@ -8349,6 +8423,10 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='drax' && opts.attacker.draxFuryUntil>tNow) actual*=opts.attacker.def.abilities.R.damageMult||1.35;
   if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='killmonger' && opts.attacker.killmongerFuryUntil>tNow) actual*=opts.attacker.def.abilities.R.damageMult||1.3;
   if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='redhulk' && opts.attacker.redHulkHeatUntil>tNow) actual*=opts.attacker.def.abilities.R.damageMult||1.3;
+  // Moon Knight's Split Personality: Marc hits harder, Steven takes less damage. Neither
+  // is guaranteed on any given cast — whichever persona is currently active applies.
+  if(opts.attacker && opts.attacker.def && opts.attacker.def.id==='moonknight' && opts.attacker.moonknightPersona==='marc' && opts.attacker.moonknightPersonaUntil>tNow) actual*=opts.attacker.def.abilities.Q.damageMult||1.3;
+  if(target.def && target.def.id==='moonknight' && target.moonknightPersona==='steven' && target.moonknightPersonaUntil>tNow) actual*=1-(target.def.abilities.Q.reduction||0.25);
   if(target.def && target.def.id==='killmonger' && target.killmongerFuryUntil>tNow) actual*=1-(target.def.abilities.R.reduction||0.2);
   // Captain America's Shield Block: no-sells anything at or under the
   // threshold; anything harder breaks the block and deals full damage.
@@ -12312,8 +12390,17 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     const gliderSpeedMul = (f.def.id === 'greengoblin' && f.gliderMounted && f.gliderBoostUntil > tNow) ? 2 : 1;
     f.vy = vertDir * FLY_SPEED * fighterSpeedMultiplier(f) * (isSlowed(f) ? WEB_SLOW_FACTOR : 1) * gliderSpeedMul;
   } else if(!(f.grappleUntil && now() < f.grappleUntil)){
-    f.vy += GRAVITY * dtF;
+    if(f.glideUntil && tNow < f.glideUntil){
+      // Ankh Glide: much lighter gravity and a capped fall speed while it's
+      // active, instead of the flight flag — horizontal control was already
+      // free in the air, so slowing the fall is the whole effect.
+      f.vy += GRAVITY * 0.18 * dtF;
+      if(f.vy > 3.2) f.vy = 3.2;
+    } else {
+      f.vy += GRAVITY * dtF;
+    }
   }
+  if(f.glideUntil && tNow >= f.glideUntil && f.el) f.el.classList.remove('moonknight-gliding');
 
   // Drop-through timer
   if(f.dropThroughTimer > 0){ f.dropThroughTimer -= dtF*16.67; }
@@ -12447,6 +12534,7 @@ function fighterSpeedMultiplier(f){
   }
   if(isWaspSizeActive(f)) mult *= (f.waspSizeSpeedMultiplier || .62);
   if(f.grootBallUntil && now() < f.grootBallUntil) mult *= (f.grootBallSpeed || 2.4);
+  if(f.def.id==='moonknight' && f.moonknightPersona==='jake' && f.moonknightPersonaUntil > now()) mult *= (f.def.abilities.Q.speedMult || 1.35);
   return mult;
 }
 function updateFlightGlow(f){
@@ -13309,6 +13397,11 @@ function buildProjectileVisual(p){
     p.el.style.background='transparent';
     p.el.style.boxShadow='none';
     p.el.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 16 16" style="filter:drop-shadow(0 0 4px #b9c2d4)"><path d="M8 0 L13 6 L10 16 L4 13 L1 5 Z" fill="#c7cfdd" stroke="#5b6478" stroke-width="1"/><path d="M8 0 L10 16" stroke="#8b93a6" stroke-width="0.8" opacity=".7"/></svg>`;
+  } else if(p.render === 'moonknight-dart'){
+    p.el.classList.add('mkdart-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 16 16" style="filter:drop-shadow(0 0 4px #cfd6e8)"><path d="M8 1 C4 1 1.5 4 1.5 8 C1.5 12 4 15 8 15 C6 12.5 5.6 9.5 5.6 8 C5.6 6.5 6 3.5 8 1 Z" fill="#eceae2" stroke="#8fa3c9" stroke-width="0.8"/></svg>`;
   } else if(p.render === 'magneto-clamp'){
     p.el.classList.add('magclamp-projectile');
     p.el.style.background='transparent';
@@ -13642,6 +13735,7 @@ const AI_STYLE_RANGE = {
   gamora:180,
   yondu:520,
   humantorch:400,
+  erratic:320,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -13873,6 +13967,13 @@ function updateBotAI(dtF){
     // Always closing the gap; only backs off a hair if right on top of the player
     // so its melee swing has room to land cleanly.
     moveDir = (adist < preferred*0.5) ? (Math.random() < 0.6 ? dirToPlayer : -dirToPlayer) : dirToPlayer;
+  } else if(style === 'erratic'){
+    decision = 'erratic-spacing';
+    // Moon Knight: genuinely inconsistent on purpose — no stable preferred range,
+    // no committed gameplan. Frequently changes its mind about closing in,
+    // backing off, or just holding still, regardless of distance.
+    const roll = Math.random();
+    moveDir = roll < 0.45 ? dirToPlayer : (roll < 0.8 ? -dirToPlayer : 0);
   } else {
     decision = 'spacing';
     // Mobile / defensive styles hold a rough spacing, but they don't get to
@@ -13899,6 +14000,12 @@ function updateBotAI(dtF){
 
   if(!usingPlatformRoute && Math.abs(vertical) > 70 && player.y < bot.y){
     jumpPulse = Math.random() < 0.55;
+  }
+
+  // Moon Knight's erratic AI throws in unprompted hops even with no real
+  // reason to jump — part of what makes him read as unpredictable.
+  if(style === 'erratic' && bot.onGround && Math.random() < 0.045){
+    jumpPulse = true;
   }
 
   // The player is below the bot by a real margin — rather than pacing
@@ -14259,6 +14366,13 @@ function updateBotAI(dtF){
     if(!bot.flight && cdReady(bot,'R',t)){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && adist <= qAb.radius + 20 && Math.abs(vertical) < 90){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 950){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'erratic'){
+    // Moon Knight: no consistent gameplan. Personas swap and glides trigger
+    // on a whim rather than in response to real threats, and darts fire
+    // whenever the mood strikes as long as the player is roughly reachable.
+    if(cdReady(bot,'Q',t) && Math.random() < 0.45){ tryUseAbility(bot, player, 'Q'); return; }
+    if(cdReady(bot,'R',t) && (!bot.onGround || Math.random() < 0.25) && Math.random() < 0.5){ tryUseAbility(bot, player, 'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 720 && Math.random() < 0.8){ tryUseAbility(bot, player, 'E'); return; }
   }
 }
 
@@ -14334,7 +14448,8 @@ function loseLife(target, side){
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
   target.chargeState = null; target.draxFuryUntil = 0; target.killmongerFuryUntil = 0; target.redHulkHeatUntil = 0;
   target.ironJumpActive = false; target.ironJumpMinLandAt = 0; target.ironJumpAbility = null; target.burnTicksLeft = 0; target.burnAttacker = null;
-  if(target.el) target.el.classList.remove('killmonger-fury-active','redhulk-heat-active','iron-jumping');
+  target.moonknightPersona = null; target.moonknightPersonaUntil = 0; target.glideUntil = 0;
+  if(target.el) target.el.classList.remove('killmonger-fury-active','redhulk-heat-active','iron-jumping','moonknight-persona-marc','moonknight-persona-steven','moonknight-persona-jake','moonknight-gliding');
   state.firePools = state.firePools.filter(pool=>{ if(pool.casterRef===target){ if(pool.el)pool.el.remove(); return false; } return true; });
   target.shield = null;
   target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
