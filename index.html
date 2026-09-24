@@ -2222,6 +2222,8 @@ button.split-card.gp-focused::after, button.split-card:focus-visible::after{tran
 }
 .mode-pad.p1.on{border-style:solid; border-color:var(--p1); background:var(--p1); color:#08121f;}
 .mode-pad.p2.on{border-style:solid; border-color:var(--p2); background:var(--p2); color:#1e0708;}
+.mode-pad.p3.on{border-style:solid; border-color:var(--mp3); background:var(--mp3); color:#08201a;}
+.mode-pad.p4.on{border-style:solid; border-color:var(--mp4); background:var(--mp4); color:#231a05;}
 .mode-tag{align-self:flex-start; font-size:clamp(11px,1.7vh,14px); font-weight:800; color:#e9ecf7; opacity:.9;}
 .mode-arrow{position:absolute !important; bottom:clamp(20px,5vh,54px); font-size:clamp(20px,3.4vh,34px); opacity:.0; transition:opacity .2s ease, transform .2s ease;}
 .split-card.left .mode-arrow{right:calc(var(--slant) + 22px); transform:translateX(-12px);}
@@ -2396,6 +2398,18 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .vs-card.lock-1 .vs-mark.m1::after, .vs-card.lock-2 .vs-mark.m2::after, .vs-card.lock-3 .vs-mark.m3::after, .vs-card.lock-4 .vs-mark.m4::after{content:'✓'; position:absolute; inset:0; border-radius:50%; background:inherit; display:flex; align-items:center; justify-content:center; font-family:'Inter'; font-weight:900;}
 .vs-note{font-size:clamp(11px,1.7vh,13px); color:var(--muted); text-align:center; min-height:1.4em; max-width:46ch;}
 
+.vs-extra-row{display:flex; gap:clamp(8px,1.6vw,14px); justify-content:center; width:100%; flex-wrap:wrap;}
+.vs-mini{--pc:var(--mp3); display:none; align-items:center; gap:10px; background:rgba(0,0,0,.32); border:2px solid var(--pc); border-radius:12px; padding:7px 14px; min-width:170px; transition:filter .12s ease;}
+.vs-mini.p4{--pc:var(--mp4);}
+.vs-mini.show{display:flex;}
+.vs-mini .char-square{width:44px; height:44px; margin:0; border-radius:6px; border:2px solid var(--pc); flex:0 0 auto;}
+.vs-mini-info{display:flex; flex-direction:column; text-align:start; min-width:0;}
+.vs-mini-who{font-family:'Anton',sans-serif; font-size:11px; color:var(--pc); letter-spacing:.05em; text-transform:uppercase;}
+.vs-mini-name{font-weight:800; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px;}
+.vs-mini-status{font-size:10px; color:var(--muted); font-weight:700;}
+.vs-mini.locked{filter:brightness(1.2) saturate(1.2);}
+.vs-mini.locked .vs-mini-status{color:var(--pc);}
+
 .multi-splash-row{display:flex;align-items:flex-start;justify-content:center;gap:clamp(8px,2vw,24px);width:min(94vw,1000px);}
 .multi-splash-row .vsp{width:min(20vw,20vh,180px);}
 .multi-splash-row .vsp .char-square{border-color:var(--pc);}
@@ -2416,6 +2430,10 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .vsp-name{font-family:'Anton',sans-serif; font-size:clamp(20px,4.4vh,44px); text-transform:uppercase; letter-spacing:.04em; text-align:center;}
 .vsp-vs{font-family:'Anton',sans-serif; font-size:clamp(60px,16vh,170px); line-height:1; color:#fff; text-shadow:5px 5px 0 var(--p1), -5px -5px 0 var(--p2); animation:vsSlam .5s .25s cubic-bezier(.2,1.6,.4,1) both;}
 @keyframes vsSlam{from{transform:scale(3); opacity:0;}to{transform:scale(1); opacity:1;}}
+.vsp-multi{animation:vspMultiIn .4s cubic-bezier(.2,.9,.2,1) both;}
+.vsp-multi .vsp-name{font-size:clamp(15px,3vh,26px);}
+@keyframes vspMultiIn{from{transform:scale(.4); opacity:0;}to{transform:scale(1); opacity:1;}}
+.vsp-multi-label{font-family:'Anton',sans-serif; font-size:clamp(30px,7vh,64px); color:#fff; align-self:center;}
 
 @media (max-width:900px), (max-aspect-ratio:1/1){
   :root{--slant:0px;}
@@ -2433,16 +2451,38 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 #pvp-controls{display:none; width:100%; justify-content:space-between; align-items:flex-end; gap:12px;}
 #screen-battle.pvp #pvp-controls{display:flex;}
 #screen-battle.pvp #dpad, #screen-battle.pvp #ability-bar, #screen-battle.pvp #gamepad-hint{display:none !important;}
+#screen-battle.multi #pvp-controls{display:none !important;}
 .pvp-side{display:flex; align-items:center; gap:10px;}
 .pvp-chip{font-family:'Anton',sans-serif; font-size:20px; padding:8px 12px; border-radius:8px; color:#0b0c12; letter-spacing:.04em;}
 .pvp-side.p1 .pvp-chip{background:var(--p1);}
 .pvp-side.p2 .pvp-chip{background:var(--p2);}
+#pvp-controls-multi{display:none; width:100%; justify-content:space-between; align-items:flex-end; gap:8px; flex-wrap:wrap;}
+#screen-battle.multi #pvp-controls-multi{display:flex;}
+.pvp-side-multi{display:none; align-items:center; gap:6px;}
+.pvp-side-multi.show{display:flex;}
+.pvp-side-multi .pvp-chip{font-size:14px; padding:5px 8px;}
+.pvp-side-multi .ability-bar{gap:4px;}
+.pvp-side-multi.n1 .pvp-chip{background:var(--p1);}
+.pvp-side-multi.n2 .pvp-chip{background:var(--p2);}
+.pvp-side-multi.n3 .pvp-chip{background:var(--mp3);}
+.pvp-side-multi.n4 .pvp-chip{background:var(--mp4);}
 .ability-bar{display:flex; gap:7px;}
 #screen-battle .ability-bar .ability-btn{width:96px; height:62px;}
 .hud-pchip{display:inline-block; font-family:'Anton',sans-serif; font-size:11px; letter-spacing:.05em; padding:1px 7px; border-radius:5px; margin:0 6px; vertical-align:1px; color:#0b0c12;}
 .hud-pchip.p1{background:var(--p1);} .hud-pchip.p2{background:var(--p2);}
 #screen-battle.pvp #hud-player{border-color:var(--p1); box-shadow:inset 0 3px 0 var(--p1);}
 #screen-battle.pvp #hud-opp{border-color:var(--p2); box-shadow:inset 0 3px 0 var(--p2);}
+#hud-multi{display:none; gap:10px;}
+#screen-battle.multi #hud{display:none;}
+#screen-battle.multi #hud-multi{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; width:100%;}
+.hud-multi-slot{display:none; flex-direction:column; gap:4px; background:rgba(10,11,18,.72); border:2px solid var(--pc); border-radius:10px; padding:6px 9px; --pc:var(--p1);}
+.hud-multi-slot.show{display:flex;}
+.hud-multi-slot.n1{--pc:var(--p1);} .hud-multi-slot.n2{--pc:var(--p2);} .hud-multi-slot.n3{--pc:var(--mp3);} .hud-multi-slot.n4{--pc:var(--mp4);}
+.hud-multi-slot.eliminated{opacity:.35; filter:grayscale(1);}
+.hud-multi-top{display:flex; align-items:center; gap:6px;}
+.hud-multi-top .hud-mini{width:22px; height:22px; margin:0; border-radius:5px; border:2px solid var(--pc);}
+.hud-multi-nm{font-weight:800; font-size:clamp(10px,1.5vh,13px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#eef0fa;}
+.hud-multi-slot .healthbar-track{height:8px;}
 
 .pvp-pause{
   position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center; padding:16px;
@@ -3215,6 +3255,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 }
 /* ---------- Miles Morales / Winter Soldier ---------- */
 .fighter{transition:opacity .25s ease;}
+.fighter.multi-eliminated{opacity:.22; filter:grayscale(1) brightness(.7); pointer-events:none;}
 .fighter.cloaked{opacity:0 !important; pointer-events:none;}
 .fighter.rolling .fighter-size-body{animation:wsRollSpin .38s linear;}
 @keyframes wsRollSpin{from{transform:rotate(0deg)}to{transform:rotate(calc(var(--rdir,1) * 720deg))}}
@@ -3505,7 +3546,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <button class="split-card right mode-friend" id="btn-mode-friend">
         <span class="mode-name" data-i18n="mode_multiplayer">Multiplayer</span>
         <span class="mode-desc" data-i18n="mode_friend_desc">2-4 players, one controller each. Connect at least 2 to play, then start whenever you're ready.</span>
-        <span class="mode-pads"><span class="mode-pad p1" id="mode-pad-1">P1</span><span class="mode-pad p2" id="mode-pad-2">P2</span><span id="mode-pads-text"></span></span>
+        <span class="mode-pads"><span class="mode-pad p1" id="mode-pad-1">P1</span><span class="mode-pad p2" id="mode-pad-2">P2</span><span class="mode-pad p3" id="mode-pad-3">P3</span><span class="mode-pad p4" id="mode-pad-4">P4</span><span id="mode-pads-text"></span></span>
         <span class="mode-tag" data-i18n="mode_controller_only">🎮 Controller only</span>
         <span class="mode-arrow">▶</span>
       </button>
@@ -3659,6 +3700,10 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <section class="vs-side p1" id="vs-side-1"></section>
       <section class="vs-center">
         <h2 class="vs-heading" data-i18n="vs_title">Choose your fighters</h2>
+        <div class="vs-extra-row" id="vs-extra-row">
+          <div class="vs-mini p3" id="vs-side-3"></div>
+          <div class="vs-mini p4" id="vs-side-4"></div>
+        </div>
         <div class="vs-grid" id="vs-grid"></div>
         <p class="vs-note" id="vs-note"></p>
       </section>
@@ -3784,6 +3829,12 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
           <div class="hud-lives" id="hud-opp-lives"></div>
         </div>
       </div>
+      <div id="hud-multi" style="flex:1;">
+        <div class="hud-multi-slot" id="hud-multi-1"></div>
+        <div class="hud-multi-slot" id="hud-multi-2"></div>
+        <div class="hud-multi-slot" id="hud-multi-3"></div>
+        <div class="hud-multi-slot" id="hud-multi-4"></div>
+      </div>
     </div>
 
     <div id="arena-wrapper">
@@ -3802,6 +3853,12 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <div id="pvp-controls">
         <div class="pvp-side p1"><span class="pvp-chip">P1</span><div class="ability-bar" id="ability-bar-p1"></div></div>
         <div class="pvp-side p2"><div class="ability-bar" id="ability-bar-p2"></div><span class="pvp-chip">P2</span></div>
+      </div>
+      <div id="pvp-controls-multi">
+        <div class="pvp-side-multi n1"><span class="pvp-chip">P1</span><div class="ability-bar" id="ability-bar-p1m"></div></div>
+        <div class="pvp-side-multi n2"><span class="pvp-chip">P2</span><div class="ability-bar" id="ability-bar-p2m"></div></div>
+        <div class="pvp-side-multi n3"><span class="pvp-chip">P3</span><div class="ability-bar" id="ability-bar-p3m"></div></div>
+        <div class="pvp-side-multi n4"><span class="pvp-chip">P4</span><div class="ability-bar" id="ability-bar-p4m"></div></div>
       </div>
     </div>
   </div>
@@ -5433,6 +5490,7 @@ document.addEventListener('click', (e)=>{
   if(nav){ showScreen(nav.getAttribute('data-nav')); }
 });
 document.getElementById('go-play-another-btn').addEventListener('click', ()=> replayLastMatch());
+document.getElementById('pair-start-btn').addEventListener('click', ()=> startMultiplayerFromPairing());
 
 function openCodeModal(){
   const modal = document.getElementById('code-modal');
@@ -5762,6 +5820,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
   return {
     def, id: idOverride || (isBot ? 'bot' : 'player'),
     isBot,
+    multiSlot:null,
     x: spawnX, y: def.id === 'greengoblin' ? 300 : 380,
     vx:0, vy:0,
     facing: isBot ? -1 : 1,
@@ -5839,9 +5898,12 @@ function startBattle(playerCharId, botCharId, opts){
   // 1 V 1 Friend: Player 2 is a second human (same 'bot' owner id, no AI).
   const pvp = !!(opts && opts.pvp);
   state.pvp = pvp;
+  state.multiPvp = false;
+  state.multi = null;
   state.pvpPaused = false;
   document.getElementById('pvp-pause').classList.remove('on');
   document.getElementById('screen-battle').classList.toggle('pvp', pvp);
+  document.getElementById('screen-battle').classList.remove('multi');
   // NOTE: state.mode === 'battle' means "a fight is running" everywhere in this file.
   // The Battle GAME MODE (3 lives) is tracked separately as state.matchKind === 'battle'.
   state.matchKind = pvp ? 'pvp' : ((opts && opts.kind) || 'practice');
@@ -5874,6 +5936,76 @@ function startBattle(playerCharId, botCharId, opts){
   updateHudNames();
   renderLivesHud();
   if(pvp) buildPvpAbilityBars(); else buildAbilityBar();
+  state.mode = 'battle';
+  state.lastTime = 0;
+  showScreen('battle');
+  startCountdown();
+}
+
+/* ---------- Multiplayer (3-4 human players, free-for-all, sudden death) ---------- */
+// Every player is their own "team" — first-hit KO eliminates you, last one
+// standing wins. Reuses the same abilities/physics as 1v1, just looped over
+// however many fighters (2-4) are actually in the match.
+function multiConfig(){
+  return { teams: state.multi ? state.multi.fighters.map((f,i)=>i) : [] };
+}
+function multiTargetFor(caster){
+  if(!state.multi || caster.multiSlot == null) return null;
+  const myTeam = multiConfig().teams[caster.multiSlot];
+  let best = null, bestDist = Infinity;
+  const cx = caster.x + FIGHTER_SIZE/2;
+  state.multi.fighters.forEach(f=>{
+    if(f === caster || f.dead) return;
+    if(multiConfig().teams[f.multiSlot] === myTeam) return;
+    const d = Math.abs((f.x + FIGHTER_SIZE/2) - cx);
+    if(d < bestDist){ bestDist = d; best = f; }
+  });
+  return best;
+}
+const MULTI_SPAWN_X = { 2:[250,950], 3:[180,760,1030], 4:[140,480,800,1120] };
+function startMultiBattle(charIds, opts){
+  const n = Math.max(2, Math.min(4, charIds.length));
+  state.pvp = true;
+  state.multiPvp = true;
+  state.pvpPaused = false;
+  document.getElementById('pvp-pause').classList.remove('on');
+  document.getElementById('screen-battle').classList.add('pvp');
+  document.getElementById('screen-battle').classList.add('multi');
+  state.matchKind = 'pvp';
+  state.maxLives = 1;
+  state.livesOn = false;
+  state.lives = { player:1, bot:1 };
+  state.battleDifficulty = null;
+  state.challenge = null;
+  state.stampSeq = (state.stampSeq || 0) + 1;
+  document.getElementById('screen-battle').classList.remove('lives-on');
+
+  const spawns = MULTI_SPAWN_X[n];
+  const fighters = charIds.slice(0,n).map((id,i)=>{
+    const f = makeFighter(id, false, spawns[i], 'p'+(i+1));
+    f.multiSlot = i;
+    f.facing = i < n/2 ? 1 : -1;
+    return f;
+  });
+  state.multi = { fighters };
+  state.player = fighters[0];
+  state.bot = fighters[1];
+  versus.lastPick = charIds.slice(0,n);
+  versus.keys.forEach(k => { k.left = k.right = k.up = k.down = false; });
+
+  state.projectiles = [];
+  state.laserBombs = [];
+  state.walls = [];
+  state.missiles = [];
+  state.illusions = [];
+  state.firePools = [];
+  setActiveMap(SAVE.mapId);
+  clearArenaDOM();
+  buildArenaStatic();
+  fighters.forEach(buildFighterDOM);
+  arenaEl.classList.remove('echolocation-mode');
+  updateHudMulti();
+  buildMultiAbilityBars();
   state.mode = 'battle';
   state.lastTime = 0;
   showScreen('battle');
@@ -6265,7 +6397,24 @@ function hpClass(pct){
   if(pct <= 0.55) return 'mid';
   return '';
 }
+function updateHudMulti(){
+  const fighters = state.multi ? state.multi.fighters : [];
+  for(let i=0;i<4;i++){
+    const el = document.getElementById('hud-multi-'+(i+1));
+    if(!el) continue;
+    const f = fighters[i];
+    if(!f){ el.classList.remove('show','n1','n2','n3','n4','eliminated'); el.innerHTML=''; continue; }
+    el.classList.add('show');
+    el.classList.remove('n1','n2','n3','n4'); el.classList.add('n'+(i+1));
+    el.classList.toggle('eliminated', !!f.dead);
+    const pct = Math.max(0,f.health)/f.def.maxHealth;
+    el.innerHTML = `
+      <div class="hud-multi-top"><div class="hud-mini">${squareInner(f.def)}</div><div class="hud-multi-nm">${playerLabel(i+1)} · ${f.def.name}</div></div>
+      <div class="healthbar-track"><div class="healthbar-fill ${hpClass(pct)}" style="width:${pct*100}%"></div></div>`;
+  }
+}
 function updateHud(){
+  if(state.multiPvp){ updateHudMulti(); return; }
   const p = state.player, b = state.bot;
   const ppct = Math.max(0,p.health)/p.def.maxHealth;
   const bpct = Math.max(0,b.health)/b.def.maxHealth;
@@ -6301,6 +6450,12 @@ function buildAbilityBar(){
   updateGamepadHint();
 }
 function updateAbilityBar(){
+  if(state.multiPvp && state.multi){
+    state.multi.fighters.forEach((f,i)=>{
+      updateAbilityBarFor(document.getElementById('ability-bar-p'+(i+1)+'m'), f, versus.slots[i].brand);
+    });
+    return;
+  }
   if(state.pvp){
     updateAbilityBarFor(document.getElementById('ability-bar-p1'), state.player, versus.slots[0].brand);
     updateAbilityBarFor(document.getElementById('ability-bar-p2'), state.bot, versus.slots[1].brand);
@@ -14506,6 +14661,8 @@ function fighterSide(f){ return f === state.player ? 'player' : (f === state.bot
 function onFighterZeroHealth(target, reason){
   if(!target || target.dead || state.mode !== 'battle') return;
 
+  if(state.multiPvp){ eliminateMultiFighter(target, reason); return; }
+
   const side = fighterSide(target);
   if(state.livesOn && side){
     state.lives[side] = Math.max(0, state.lives[side] - 1);
@@ -14513,6 +14670,74 @@ function onFighterZeroHealth(target, reason){
     if(state.lives[side] > 0){ loseLife(target, side); return; }
   }
   endBattle(target === state.player ? 'bot' : 'player', reason);
+}
+
+// Multiplayer free-for-all: sudden death per fighter. Getting KO'd removes
+// you from the fight; whoever's left standing when only one remains wins.
+function eliminateMultiFighter(target, reason){
+  target.dead = true;
+  target.vx = 0; target.vy = 0; target.hitStun = 0;
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  const col = target.def.color || '#ffffff';
+  sfx('ko');
+  shakeArena(10, 360);
+  fxEl('fx-flash', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;`, 420);
+  fxEl('fx-ring', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;border-color:${col};box-shadow:0 0 36px ${col};`, 600);
+  spawnSparks(cx, cy, 22, col, 110, 800);
+  spawnSparks(cx, cy, 10, '#ffffff', 70, 600);
+  updateHudMulti();
+
+  const alive = state.multi.fighters.filter(f => !f.dead);
+  if(alive.length <= 1) endBattleMulti(alive[0] || null, reason);
+}
+function endBattleMulti(winner, reason){
+  if(state.mode !== 'battle') return;
+  state.illusions.forEach(g => (g.clones || g.illusions || []).forEach(i => { if(i.el) i.el.remove(); }));
+  state.illusions = [];
+  state.firePools.forEach(pool=>{if(pool.el)pool.el.remove();}); state.firePools=[];
+  state.mode = 'ended';
+  state.countdown = false;
+  battleToken++;
+  state.stampSeq = (state.stampSeq || 0) + 1;
+  state.pvpPaused = false;
+  document.getElementById('pvp-pause').classList.remove('on');
+  state.missiles.forEach(m => { if(m.el) m.el.remove(); });
+  state.missiles = [];
+  const ov = document.getElementById('countdown-overlay');
+  if(ov){ ov.classList.remove('on'); ov.innerHTML = ''; }
+  state.multi.fighters.forEach(f=>{ f.dead = true; f.shieldThrown = false; });
+  if(arenaEl) arenaEl.classList.remove('echolocation-mode');
+
+  document.querySelector('.gameover-wrap').classList.add('pvp');
+  const badge = document.getElementById('go-badge');
+  const rewardEl = document.getElementById('go-reward');
+  if(rewardEl){ rewardEl.textContent=''; rewardEl.className='go-reward'; }
+  const againBtn = document.getElementById('go-play-another-btn');
+  if(againBtn) againBtn.style.display = '';
+  const unlockAgainBtn = document.getElementById('go-unlock-again-btn');
+  if(unlockAgainBtn) unlockAgainBtn.style.display = 'none';
+
+  const winnerSlot = winner ? winner.multiSlot : -1;
+  badge.textContent = winner ? t('go_wins').replace('{name}', playerLabel(winnerSlot+1)) : t('go_draw');
+  badge.className = 'go-badge win';
+  document.getElementById('go-sub').textContent = winner
+    ? t('go_multi_result').replace('{name}', winner.def.name) : '';
+
+  const tagClasses = ['p1','p2','n3','n4'];
+  const portraits = document.getElementById('go-portraits');
+  const order = [...state.multi.fighters].sort((a,b)=> (a===winner ? -1 : b===winner ? 1 : 0));
+  portraits.innerHTML = order.map(f=>{
+    const isW = (f === winner);
+    return `<div class="go-portrait ${isW?'winner':'loser'}">
+      <div class="go-portrait-square">${squareInner(f.def)}</div>
+      <div class="go-portrait-name">${f.def.name}</div>
+      <span class="go-portrait-tag ${tagClasses[f.multiSlot]}">${playerLabel(f.multiSlot+1)}</span>
+    </div>`;
+  }).join('');
+
+  const firstLoser = state.multi.fighters.find(f => f !== winner);
+  if(firstLoser) spawnKODeathFx(firstLoser);
+  setTimeout(()=>showScreen('gameover'), 1900);
 }
 
 function loseLife(target, side){
@@ -14756,6 +14981,7 @@ function renderFighter(f){
   f.el.style.left = f.x+'px';
   f.el.style.top = f.y+'px';
   f.el.classList.toggle('facing-left', f.facing < 0);
+  f.el.classList.toggle('multi-eliminated', state.multiPvp && !!f.dead);
   f.el.classList.toggle('moving', Math.abs(f.vx) > 0.7 && f.hitStun <= 0);
   f.el.classList.toggle('airborne', !f.onGround && !f.flight);
   f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil) || (f.hexFrozenUntil && now() < f.hexFrozenUntil) || (f.pxMindStunUntil && now() < f.pxMindStunUntil));
@@ -15273,17 +15499,21 @@ function handleGamepadMenuNav(gp){
 // active save slot yet.
 const VERSUS_ALLOWS_LOCKED = false;
 const versus = {
-  slots: [null, null],   // [{ index, brand }] — which pad is Player 1 / Player 2
+  slots: [null, null, null, null],   // [{ index, brand }] — which pad is Player 1 / 2 / 3 / 4
+  count: 2,              // how many of the 4 slots are actually playing this match (2-4)
   armed: {},             // pad index -> true once released, so a held button can't claim a slot
   readyAt: 0,            // when pairing finishes and fighter select opens
-  sel: [ {cursor:0, locked:false}, {cursor:0, locked:false} ],
-  nav: [ {dir:null, next:0}, {dir:null, next:0} ],
+  sel: [ {cursor:0, locked:false}, {cursor:0, locked:false}, {cursor:0, locked:false}, {cursor:0, locked:false} ],
+  nav: [ {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0} ],
   splashAt: 0,
-  keys: [ {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false} ],
+  keys: [ {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false} ],
   lastPick: null
 };
+// Colors + CSS var names for each of the 4 possible player slots.
+const MULTI_SLOT_VAR = ['--p1','--p2','--mp3','--mp4'];
 function versusPadsPresent(){
-  return versus.slots.every(s => s && livePadByIndex(s.index));
+  for(let i=0;i<versus.count;i++){ if(!versus.slots[i] || !livePadByIndex(versus.slots[i].index)) return false; }
+  return true;
 }
 function versusSelectable(id){ return VERSUS_ALLOWS_LOCKED || isUnlocked(id); }
 function playerLabel(n){ return t('pair_player').replace('{n}', n); }
@@ -15300,31 +15530,35 @@ function renderModeScreen(){
   if(typeof renderMapSelect === 'function') renderMapSelect();
 }
 function updateModeStatus(force){
-  const n = Math.min(2, livePads.length);
+  const n = Math.min(4, livePads.length);
   if(!force && n === modeShown) return;
   modeShown = n;
-  const p1 = document.getElementById('mode-pad-1'), p2 = document.getElementById('mode-pad-2'), tx = document.getElementById('mode-pads-text');
+  const p1 = document.getElementById('mode-pad-1'), p2 = document.getElementById('mode-pad-2');
+  const p3 = document.getElementById('mode-pad-3'), p4 = document.getElementById('mode-pad-4');
+  const tx = document.getElementById('mode-pads-text');
   if(p1) p1.classList.toggle('on', n >= 1);
   if(p2) p2.classList.toggle('on', n >= 2);
-  if(tx) tx.textContent = t('mode_pads_count').replace('{n}', n);
+  if(p3) p3.classList.toggle('on', n >= 3);
+  if(p4) p4.classList.toggle('on', n >= 4);
+  if(tx) tx.textContent = n >= 2 ? t('mode_pads_ready_count').replace('{n}', n) : t('mode_pads_min_count').replace('{n}', n);
 }
 
-/* ---------- pairing: who is Player 1, who is Player 2 ---------- */
+/* ---------- pairing: who is Player 1-4 (min 2 to start, max 4) ---------- */
 let pairSig = '';
+const PAIR_MAX = 4, PAIR_MIN = 2;
 function startPairing(){
-  versus.slots = [null, null];
+  versus.slots = [null, null, null, null];
   versus.readyAt = 0;
   versus.armed = {};
   livePads.forEach(gp => { versus.armed[gp.index] = !anyBtnHeld(gp.index); });
   pairSig = '';
   renderPairing(true);
 }
+function pairClaimedCount(){ return versus.slots.filter(Boolean).length; }
 function pollPairing(){
-  const nowT = performance.now();
-
-  // Lose a claimed controller and the whole order is void — start again.
+  // Lose a claimed controller and the whole lobby is void — start again.
   if(versus.slots.some(s => s && !livePadByIndex(s.index))){
-    versus.slots = [null, null]; versus.readyAt = 0;
+    versus.slots = [null, null, null, null];
   }
   // A pad only counts as "pressing" once it has been let go at least once.
   livePads.forEach(gp=>{
@@ -15336,62 +15570,73 @@ function pollPairing(){
   if(livePads.some(gp => btnEdge(gp.index, PAD_BACK_BTN))){ showScreen('mode'); return; }
 
   const claimedIdx = versus.slots.filter(Boolean).map(s => s.index);
-  const nextSlot = versus.slots[0] ? (versus.slots[1] ? 2 : 1) : 0;
-  // The Player 1/2 menu only opens once two controllers are detected.
-  const canClaim = nextSlot < 2 && (nextSlot > 0 || livePads.length >= 2);
+  const nextSlot = versus.slots.findIndex(s => !s);
+  // Slot 1 & 2 only open once at least two controllers are detected overall,
+  // same rule as before. Slots 3 & 4 just need a spare, unclaimed pad.
+  const canClaim = nextSlot >= 0 && nextSlot < PAIR_MAX &&
+    (nextSlot < 2 ? livePads.length >= 2 : livePads.length > nextSlot);
   if(canClaim){
     const pressers = livePads
       .filter(gp => !claimedIdx.includes(gp.index) && versus.armed[gp.index] && anyClaimEdge(gp.index))
       .sort((a,b) => a.index - b.index);
     let slot = nextSlot;
     for(const gp of pressers){
-      if(slot > 1) break;
+      if(slot >= PAIR_MAX) break;
+      if(slot >= 2 && livePads.length <= slot) break; // still need a spare pad for slots 3/4
       versus.slots[slot] = { index: gp.index, brand: detectGamepadBrand(gp) };
       sfx(slot === 0 ? 'ui_lock' : 'fight');
       slot++;
     }
   }
 
-  const ready = !!(versus.slots[0] && versus.slots[1]);
-  if(ready){
-    if(!versus.readyAt) versus.readyAt = nowT + 1600;
-    else if(nowT >= versus.readyAt){ versus.readyAt = 0; showScreen('versus'); return; }
-  } else {
-    versus.readyAt = 0;
-  }
   renderPairing(false);
+}
+function startMultiplayerFromPairing(){
+  versus.count = pairClaimedCount();
+  if(versus.count < PAIR_MIN) return;
+  // Keep only the claimed slots, in order — they're always contiguous 0..N-1
+  // since claiming always fills the next open slot.
+  showScreen('versus');
 }
 function renderPairing(force){
   const slots = versus.slots;
-  const nextSlot = slots[0] ? (slots[1] ? 2 : 1) : 0;
-  const n = Math.min(2, livePads.length);
-  const sig = [n, slots[0] && slots[0].index, slots[1] && slots[1].index, currentLang].join('|');
+  const n = Math.min(PAIR_MAX, livePads.length);
+  const claimed = pairClaimedCount();
+  const sig = [n, slots.map(s=>s&&s.index).join(','), claimed, currentLang].join('|');
   if(!force && sig === pairSig) return;
   pairSig = sig;
 
+  const nextSlot = slots.findIndex(s => !s);
   const enough = livePads.length >= 2;
-  const ready = nextSlot === 2;
-  const canClaim = nextSlot < 2 && (nextSlot > 0 || enough);
+  const canStart = claimed >= PAIR_MIN;
+
   let title, sub;
-  if(ready){ title = t('pair_title_ready'); sub = t('pair_sub_ready'); }
-  else if(nextSlot === 0 && !enough){ title = t('pair_title_connect'); sub = `${t('pair_sub_connect')} ${t('mode_pads_count').replace('{n}', n)}.`; }
+  if(canStart){ title = t('pair_title_ready'); sub = t('pair_sub_lobby_ready'); }
+  else if(nextSlot === 0 && !enough){ title = t('pair_title_connect'); sub = `${t('pair_sub_connect')} ${t('mode_pads_min_count').replace('{n}', n)}.`; }
   else if(nextSlot === 0){ title = t('pair_title_p1'); sub = t('pair_sub_p1'); }
   else if(!enough){ title = t('pair_title_p2'); sub = t('pair_sub_wait2'); }
-  else { title = t('pair_title_p2'); sub = t('pair_sub_p2'); }
+  else { title = t('pair_title_lobby'); sub = t('pair_sub_lobby_need'); }
   document.getElementById('pair-title').textContent = title;
   document.getElementById('pair-sub').textContent = sub;
   document.getElementById('pair-hint').textContent = t('pair_back_hint');
 
-  const unclaimed = livePads.length - slots.filter(Boolean).length;
-  for(let s=0; s<2; s++){
+  const startBtn = document.getElementById('pair-start-btn');
+  if(startBtn){
+    startBtn.disabled = !canStart;
+    startBtn.textContent = canStart ? t('pair_start_btn').replace('{n}', claimed) : t('pair_start_btn_disabled');
+  }
+
+  const unclaimed = livePads.length - claimed;
+  for(let s=0; s<PAIR_MAX; s++){
     const el = document.getElementById('pair-p'+(s+1));
     const stateEl = document.getElementById('pair-p'+(s+1)+'-state');
     const brandEl = document.getElementById('pair-p'+(s+1)+'-brand');
+    const canClaimThis = nextSlot >= 0 && (s === nextSlot) && (s < 2 ? enough : livePads.length > s);
     document.getElementById('pair-p'+(s+1)+'-who').textContent = playerLabel(s+1);
     let st;
     if(slots[s]) st = 'locked';
-    else if(canClaim && nextSlot === s && unclaimed > 0) st = 'press';
-    else if(s >= nextSlot && (s - nextSlot) < unclaimed) st = 'detected';
+    else if(canClaimThis && unclaimed > 0) st = 'press';
+    else if(s >= nextSlot && nextSlot>=0 && (s - nextSlot) < unclaimed) st = 'detected';
     else st = 'waiting';
     el.classList.remove('state-locked','state-press','state-detected','state-waiting');
     el.classList.add('state-'+st);
@@ -15413,32 +15658,57 @@ function startVersusSelect(){
     card.dataset.id = id;
     card.dataset.selectable = ok ? '1' : '0';
     card.innerHTML = ok
-      ? `<div class="char-square">${squareInner(def)}</div><div class="vs-card-name">${def.name}</div><span class="vs-mark m1">1</span><span class="vs-mark m2">2</span>`
+      ? `<div class="char-square">${squareInner(def)}</div><div class="vs-card-name">${def.name}</div><span class="vs-mark m1">1</span><span class="vs-mark m2">2</span><span class="vs-mark m3">3</span><span class="vs-mark m4">4</span>`
       : `<div class="char-square mystery-square"><span class="mystery-icon">?</span></div><div class="vs-card-name mystery-name">???</div>`;
     grid.appendChild(card);
   });
   const pool = ROSTER_ORDER.filter(versusSelectable);
-  const p1 = pool.includes(SAVE.equipped) ? SAVE.equipped : pool[0];
-  const p2 = pool.find(id => id !== p1) || p1;
-  versus.sel = [ {cursor: ROSTER_ORDER.indexOf(p1), locked:false}, {cursor: ROSTER_ORDER.indexOf(p2), locked:false} ];
-  versus.nav = [ {dir:null, next:0}, {dir:null, next:0} ];
+  const n = versus.count = Math.max(2, Math.min(4, versus.count || 2));
+  const picks = [];
+  for(let i=0; i<n; i++){
+    let pick = (i === 0 && pool.includes(SAVE.equipped)) ? SAVE.equipped : pool.find(id => !picks.includes(id));
+    if(!pick) pick = pool[i % pool.length];
+    picks.push(pick);
+  }
+  versus.sel = picks.map(id => ({ cursor: ROSTER_ORDER.indexOf(id), locked:false }));
+  while(versus.sel.length < 4) versus.sel.push({cursor:0, locked:false});
+  versus.nav = [ {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0} ];
   versus.splashAt = 0;
   hideVersusSplash();
+  document.getElementById('vs-side-3').classList.toggle('show', n >= 3);
+  document.getElementById('vs-side-4').classList.toggle('show', n >= 4);
   const anyLocked = ROSTER_ORDER.some(id => !versusSelectable(id));
   document.getElementById('vs-note').textContent = anyLocked ? t('vs_locked_note') : '';
   renderVersus();
 }
+function multiRingFor(colorVars){
+  // Stack a box-shadow ring per active player sharing this card.
+  return colorVars.map((v,i) => `0 0 0 ${4+i*5}px var(${v})`).join(', ');
+}
 function renderVersus(){
   const cards = Array.from(document.querySelectorAll('#vs-grid .vs-card'));
+  const n = versus.count;
   cards.forEach((c,i)=>{
-    c.classList.toggle('cur-1', versus.sel[0].cursor === i);
-    c.classList.toggle('cur-2', versus.sel[1].cursor === i);
-    c.classList.toggle('lock-1', versus.sel[0].locked && versus.sel[0].cursor === i);
-    c.classList.toggle('lock-2', versus.sel[1].locked && versus.sel[1].cursor === i);
+    const activeSlots = [];
+    for(let s=0; s<n; s++){
+      const on = versus.sel[s].cursor === i;
+      c.classList.toggle('cur-'+(s+1), on);
+      c.classList.toggle('lock-'+(s+1), versus.sel[s].locked && on);
+      if(on) activeSlots.push(s);
+    }
+    for(let s=n; s<4; s++){ c.classList.remove('cur-'+(s+1)); c.classList.remove('lock-'+(s+1)); }
+    if(activeSlots.length > 1){
+      c.classList.add('multi-cur');
+      c.style.setProperty('--multi-ring', multiRingFor(activeSlots.map(s => MULTI_SLOT_VAR[s])));
+    } else {
+      c.classList.remove('multi-cur');
+      c.style.removeProperty('--multi-ring');
+    }
   });
-  renderVersusSide(0);
-  renderVersusSide(1);
-  const active = cards[versus.sel[0].cursor] || cards[versus.sel[1].cursor];
+  for(let s=0; s<n; s++){
+    if(s < 2) renderVersusSide(s); else renderVersusMini(s);
+  }
+  const active = cards[versus.sel[0].cursor];
   if(active){ active.scrollIntoView({block:'nearest', inline:'nearest', behavior:'smooth'}); }
 }
 function renderVersusSide(slot){
@@ -15465,6 +15735,21 @@ function renderVersusSide(slot){
     <div class="vs-status">${s.locked ? t('vs_ready') : t('vs_choosing')}</div>
     <div class="vs-hintline">${hint}</div>`;
 }
+// Compact panel used for Player 3 / Player 4 — same info, smaller footprint.
+function renderVersusMini(slot){
+  const el = document.getElementById('vs-side-'+(slot+1));
+  if(!el) return;
+  const s = versus.sel[slot];
+  const def = CHARACTERS[ROSTER_ORDER[s.cursor]];
+  el.classList.toggle('locked', s.locked);
+  el.innerHTML = `
+    <div class="char-square">${squareInner(def)}</div>
+    <div class="vs-mini-info">
+      <div class="vs-mini-who">${playerLabel(slot+1)}</div>
+      <div class="vs-mini-name">${def.name}</div>
+      <div class="vs-mini-status">${s.locked ? t('vs_ready') : t('vs_choosing')}</div>
+    </div>`;
+}
 function versusMove(slot, dir){
   const cards = Array.from(document.querySelectorAll('#vs-grid .vs-card'));
   const pool = cards.filter(c => c.dataset.selectable === '1');
@@ -15477,12 +15762,23 @@ function versusMove(slot, dir){
   }
 }
 function showVersusSplash(){
-  const d1 = CHARACTERS[ROSTER_ORDER[versus.sel[0].cursor]], d2 = CHARACTERS[ROSTER_ORDER[versus.sel[1].cursor]];
+  const n = versus.count;
   const sp = document.getElementById('vs-splash');
-  sp.innerHTML = `
-    <div class="vsp vsp-1"><div class="char-square">${squareInner(d1)}</div><div class="vsp-name">${d1.name}</div></div>
-    <div class="vsp-vs">VS</div>
-    <div class="vsp vsp-2"><div class="char-square">${squareInner(d2)}</div><div class="vsp-name">${d2.name}</div></div>`;
+  if(n <= 2){
+    const d1 = CHARACTERS[ROSTER_ORDER[versus.sel[0].cursor]], d2 = CHARACTERS[ROSTER_ORDER[versus.sel[1].cursor]];
+    sp.innerHTML = `
+      <div class="vsp vsp-1"><div class="char-square">${squareInner(d1)}</div><div class="vsp-name">${d1.name}</div></div>
+      <div class="vsp-vs">VS</div>
+      <div class="vsp vsp-2"><div class="char-square">${squareInner(d2)}</div><div class="vsp-name">${d2.name}</div></div>`;
+  } else {
+    const parts = [];
+    for(let s=0; s<n; s++){
+      const def = CHARACTERS[ROSTER_ORDER[versus.sel[s].cursor]];
+      parts.push(`<div class="vsp vsp-multi" style="--pc:var(${MULTI_SLOT_VAR[s]})"><div class="char-square">${squareInner(def)}</div><div class="vsp-name">${def.name}</div></div>`);
+      if(s < n-1) parts.push(`<div class="vsp-multi-label">VS</div>`);
+    }
+    sp.innerHTML = `<div class="multi-splash-row">${parts.join('')}</div>`;
+  }
   sp.classList.add('on');
 }
 function hideVersusSplash(){
@@ -15490,11 +15786,12 @@ function hideVersusSplash(){
   if(sp){ sp.classList.remove('on'); sp.innerHTML = ''; }
 }
 function pollVersusSelect(){
-  // Either controller dropping out sends everyone back to pairing.
+  // Any assigned controller dropping out sends everyone back to pairing.
   if(!versusPadsPresent()){ showScreen('pair'); return; }
   const nowT = performance.now();
+  const n = versus.count;
 
-  for(let slot=0; slot<2; slot++){
+  for(let slot=0; slot<n; slot++){
     const idx = versus.slots[slot].index;
     const s = versus.sel[slot];
     const gp = livePadByIndex(idx);
@@ -15510,8 +15807,11 @@ function pollVersusSelect(){
       } else { ns.dir = null; }
       if(btnEdge(idx, JUMP_POS)){
         s.locked = true; sfx('ui_lock'); renderVersus();
-        if(versus.sel[0].locked && versus.sel[1].locked){
+        let allLocked = true;
+        for(let i=0;i<n;i++){ if(!versus.sel[i].locked){ allLocked = false; break; } }
+        if(allLocked){
           versus.splashAt = nowT + 1700; showVersusSplash();
+
         }
       }
     } else if(btnEdge(idx, ABILITY_POS.R)){
@@ -15522,20 +15822,28 @@ function pollVersusSelect(){
   if(versus.splashAt && nowT >= versus.splashAt){
     versus.splashAt = 0;
     hideVersusSplash();
-    startBattle(ROSTER_ORDER[versus.sel[0].cursor], ROSTER_ORDER[versus.sel[1].cursor], { pvp:true });
+    const picks = [];
+    for(let i=0;i<n;i++) picks.push(ROSTER_ORDER[versus.sel[i].cursor]);
+    if(n <= 2) startBattle(picks[0], picks[1], { pvp:true });
+    else startMultiBattle(picks, { pvp:true });
   }
 }
 
 /* ---------- 1 V 1 battle input ---------- */
 function pollPvpBattle(){
+  const fighters = (state.multiPvp && state.multi) ? state.multi.fighters : [state.player, state.bot];
+  const n = state.multiPvp ? fighters.length : 2;
   let missing = -1;
-  for(let slot=0; slot<2; slot++){
+  for(let slot=0; slot<n; slot++){
     const info = versus.slots[slot];
     let gp = livePadByIndex(info.index);
     if(!gp){
       // A replacement controller (different index) takes over an empty seat.
       const spare = livePads.find(g => !versus.slots.some(s => s && s.index === g.index));
-      if(spare){ info.index = spare.index; info.brand = detectGamepadBrand(spare); gp = spare; buildPvpAbilityBars(); }
+      if(spare){
+        info.index = spare.index; info.brand = detectGamepadBrand(spare); gp = spare;
+        if(state.multiPvp) buildMultiAbilityBars(); else buildPvpAbilityBars();
+      }
     }
     if(!gp){ missing = slot; continue; }
     const idx = gp.index;
@@ -15545,14 +15853,18 @@ function pollPvpBattle(){
     keys.left = d.left; keys.right = d.right; keys.up = d.up; keys.down = d.down;
     if(state.pvpPaused) continue;
 
-    const f = slot === 0 ? state.player : state.bot;
-    const other = slot === 0 ? state.bot : state.player;
+    const f = fighters[slot];
+    const other = state.multiPvp ? multiTargetFor(f) : (slot === 0 ? state.bot : state.player);
     if(!f || f.dead) continue;
     if((btnEdge(idx, JUMP_POS) || (d.up && !wasUp)) && f.onGround && !f.flight) f.jumpQueued = true;
     ['E','Q','R'].forEach(k=>{
       if(btnEdge(idx, ABILITY_POS[k])) tryUseAbility(f, other, k);
     });
   }
+
+  // A fighter who's already been eliminated doesn't need their pad present
+  // for the match to continue — only living slots can trigger a pause.
+  if(state.multiPvp && missing >= 0 && fighters[missing] && fighters[missing].dead) missing = -1;
 
   if(missing >= 0 && !state.pvpPaused) pausePvp(missing);
   else if(missing < 0 && state.pvpPaused) resumePvp();
@@ -15568,15 +15880,18 @@ function resumePvp(){
   state.pvpPaused = false;
   document.getElementById('pvp-pause').classList.remove('on');
 }
-// Leave a running battle (used by the 1 V 1 pause screen).
+// Leave a running battle (used by the pause screen).
 function abortBattle(){
   state.mode = 'menu';
   state.pvpPaused = false;
   state.countdown = false;
+  state.multiPvp = false;
+  state.multi = null;
   battleToken++;
   state.missiles.forEach(m => { if(m.el) m.el.remove(); });
   state.missiles = [];
   document.getElementById('pvp-pause').classList.remove('on');
+  document.getElementById('screen-battle').classList.remove('multi');
   const ov = document.getElementById('countdown-overlay');
   if(ov){ ov.classList.remove('on'); ov.innerHTML = ''; }
   if(arenaEl) arenaEl.classList.remove('echolocation-mode');
@@ -15598,6 +15913,27 @@ function buildPvpAbilityBars(){
       bar.appendChild(btn);
     });
   });
+}
+function buildMultiAbilityBars(){
+  const fighters = state.multi ? state.multi.fighters : [];
+  for(let i=0;i<4;i++){
+    const side = document.querySelector('.pvp-side-multi.n'+(i+1));
+    const bar = document.getElementById('ability-bar-p'+(i+1)+'m');
+    const f = fighters[i];
+    if(side) side.classList.toggle('show', !!f);
+    if(!bar || !f) continue;
+    const brand = versus.slots[i].brand;
+    bar.innerHTML = '';
+    ['E','Q','R'].forEach(k=>{
+      const a = f.def.abilities[k];
+      const btn = document.createElement('div');
+      btn.className = 'ability-btn gp-mode';
+      btn.dataset.key = k;
+      btn.style.pointerEvents = 'none';
+      btn.innerHTML = `<span class="ab-key">${faceLabelFor(brand, ABILITY_POS[k])}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
+      bar.appendChild(btn);
+    });
+  }
 }
 
 /* =========================================================================
@@ -15759,9 +16095,10 @@ Object.keys(I18N_V5).forEach(code => { if(I18N[code]) Object.assign(I18N[code], 
    translated here. */
 const I18N_V_MULTI = {
   en:{ mode_multiplayer:'Multiplayer',
+    mode_pads_min_count:'{n} of 2 minimum connected', mode_pads_ready_count:'{n} connected — ready to play!',
     pair_title_lobby:'Connect controllers', pair_sub_lobby_need:'Need at least 2 to start · up to 4 can play.',
     pair_sub_lobby_ready:'Press Start whenever you\u2019re ready.', pair_start_btn:'Start ({n} players)', pair_start_btn_disabled:'Connect 2+ controllers to start', pair_optional:'Optional',
-    go_wins:'{name} wins!', go_multi_result:'{name} took the win.' },
+    go_wins:'{name} wins!', go_multi_result:'{name} took the win.', go_draw:'Draw!' },
   es:{ mode_multiplayer:'Multijugador' },
   zh:{ mode_multiplayer:'多人游戏' },
   ar:{ mode_multiplayer:'متعدد اللاعبين' },
@@ -15852,7 +16189,9 @@ if(mapSelectBar){
 }
 renderMapSelect();
 document.getElementById('go-rematch-btn').addEventListener('click', ()=>{
-  if(versus.lastPick) startBattle(versus.lastPick[0], versus.lastPick[1], { pvp:true });
+  if(!versus.lastPick) return;
+  if(versus.lastPick.length > 2) startMultiBattle(versus.lastPick, { pvp:true });
+  else startBattle(versus.lastPick[0], versus.lastPick[1], { pvp:true });
 });
 document.getElementById('go-change-btn').addEventListener('click', ()=> showScreen('versus'));
 document.getElementById('pvp-quit').addEventListener('click', abortBattle);
@@ -15929,14 +16268,25 @@ function gameLoop(ts){
     rescaleArena();
     const p = state.player, b = state.bot;
     const frozen = state.countdown;
+    const activeFighters = (state.multiPvp && state.multi) ? state.multi.fighters : [p, b];
 
     if(state.pvp && state.pvpPaused){
-      renderFighter(p); renderFighter(b); updateHud(); updateAbilityBar();
+      activeFighters.forEach(renderFighter);
+      updateHud(); updateAbilityBar();
       requestAnimationFrame(gameLoop);
       return;
     }
 
-    if(state.pvp){
+    if(state.multiPvp){
+      activeFighters.forEach((f, slot)=>{
+        if(f.dead) return;
+        const k = versus.keys[slot];
+        const mv = (k.left ? -1 : 0) + (k.right ? 1 : 0);
+        const jump = !frozen && (f.jumpQueued || (f.flight && k.up));
+        f.jumpQueued = false;
+        updatePhysics(f, frozen ? 0 : mv, jump, !frozen && f.flight && k.down, dtF);
+      });
+    } else if(state.pvp){
       const k1 = versus.keys[0], k2 = versus.keys[1];
       const mv = k => (k.left ? -1 : 0) + (k.right ? 1 : 0);
       const pJump = !frozen && (p.jumpQueued || (p.flight && k1.up));
@@ -15964,35 +16314,50 @@ function gameLoop(ts){
     }
 
     // Shared fighter updates retained from the current build.
-    updateThingCharge(p); updateThingCharge(b);
-    updateHazards(p); updateHazards(b);
-    updatePassiveRegen(p, dtF); updatePassiveRegen(b, dtF);
-    updateGrootBall(p); updateGrootBall(b);
+    activeFighters.forEach(f=>{
+      if(state.multiPvp && f.dead) return;
+      updateThingCharge(f);
+      updateHazards(f);
+      updatePassiveRegen(f, dtF);
+      updateGrootBall(f);
+      updateShock(f);
+      updateMystiqueDisguise(f);
+      updatePsiWarp(f);
+      updateBurn(f);
+      updateIronJump(f);
+      updateTorchFlameFx(f);
+      updateBlock(f);
+      updateShield(f);
+      updateBPCharge(f);
+      updateVenomTendril(f);
+      updateGoblinGlider(f, dtF);
+      updateYonduArrow(f, dtF);
+    });
     updateLaserBombs(dtF);
-    updateShock(p); updateShock(b);
-    updateMystiqueDisguise(p); updateMystiqueDisguise(b);
-    updatePsiWarp(p); updatePsiWarp(b);
-    updateBurn(p); updateBurn(b);
     updateRedHulkFirePools();
-    updateIronJump(p); updateIronJump(b);
-    updateTorchTouch(p, b); updateTorchTouch(b, p);
-    updateTorchFlameFx(p); updateTorchFlameFx(b);
-    updateBlock(p); updateBlock(b);
-    updateShield(p); updateShield(b);
     updateIllusions(dtF);
-    updateBPCharge(p); updateBPCharge(b);
-    updateVenomTendril(p); updateVenomTendril(b);
     updateVisionBeams(dtF);
-    updateGoblinGlider(p, dtF); updateGoblinGlider(b, dtF);
-    updateYonduArrow(p, dtF); updateYonduArrow(b, dtF);
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
-    if(!frozen && !state.pvp) updateBotAI(dtF);
+
+    if(state.multiPvp){
+      // Torch's flame-touch is inherently pairwise — check every live pair.
+      for(let i=0;i<activeFighters.length;i++){
+        for(let j=0;j<activeFighters.length;j++){
+          if(i===j) continue;
+          if(activeFighters[i].dead || activeFighters[j].dead) continue;
+          updateTorchTouch(activeFighters[i], activeFighters[j]);
+        }
+      }
+    } else {
+      updateTorchTouch(p, b); updateTorchTouch(b, p);
+    }
+
+    if(!frozen && !state.pvp && !state.multiPvp) updateBotAI(dtF);
     checkKO();
 
-    renderFighter(p);
-    renderFighter(b);
+    activeFighters.forEach(f=>renderFighter(f));
     updateHud();
     updateAbilityBar();
     updateGamepadHint();
