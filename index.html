@@ -382,6 +382,8 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.magneto.magneto-shielded .fighter-square{box-shadow:0 0 0 3px #c98bffcc,0 0 22px 6px rgba(201,139,255,.55);border-radius:10px;}
 .fighter.professorx.astral-projecting .fighter-square{opacity:.42;filter:saturate(1.4) drop-shadow(0 0 10px #8ec9ffcc);}
 .fighter.professorx.px-mind-stunned .fighter-square{filter:saturate(.72) brightness(.9) drop-shadow(0 0 10px #8ec9ffbb);}
+.fighter.px-mind-stunned .fighter-square{filter:saturate(.8) brightness(.92);}
+.fighter.jg-mind-warped .fighter-square{filter:saturate(.85) brightness(.94) drop-shadow(0 0 10px #ff7fd0bb);}
 .professorx-wheelchair{position:absolute;left:50%;bottom:-15px;width:102px;height:72px;transform:translateX(-50%);pointer-events:none;z-index:2;filter:drop-shadow(0 4px 4px rgba(0,0,0,.72));transform-origin:50% 58%;}
 .professorx-wheelchair svg{width:100%;height:100%;display:block;overflow:visible;}
 .professorx-wheelchair .px-big-wheel,.professorx-wheelchair .px-front-wheel{transform-box:fill-box;transform-origin:center;animation:pxWheelRoll .72s linear infinite;}
@@ -548,13 +550,22 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes psiBoltRing{from{transform:scale(.88) rotate(-8deg);opacity:.7}to{transform:scale(1.12) rotate(8deg);opacity:1}}
 .px-astral-ripple{position:absolute;border:2px solid #bde9ff;border-radius:50%;box-shadow:0 0 20px #78cfff66,inset 0 0 12px #78cfff22;pointer-events:none;animation:pxAstralRipple .72s ease-out forwards;}
 .px-mind-ripple{position:absolute;border:3px solid #d3f2ff;border-radius:50%;box-shadow:0 0 28px #74c8ff66,inset 0 0 22px #74c8ff22;pointer-events:none;animation:pxMindRipple .68s ease-out forwards;}
-.px-mind-stun-mark{position:absolute;left:50%;top:50%;width:92px;height:92px;transform:translate(-50%,-50%);pointer-events:none;border:2px dashed #8ec9ff;border-radius:50%;box-shadow:0 0 22px #8ec9ff55;animation:pxMindOrbit 1.1s linear infinite;}
+.px-mind-stun-mark{position:absolute;width:92px;height:92px;pointer-events:none;border:2px dashed #8ec9ff;border-radius:50%;box-shadow:0 0 22px #8ec9ff55;animation:pxMindOrbit 1.1s linear infinite;}
 @keyframes pxAstralRipple{from{transform:scale(.35);opacity:.95}to{transform:scale(1.65);opacity:0}}
 @keyframes pxMindRipple{from{transform:scale(.45);opacity:1}to{transform:scale(1.35);opacity:0}}
-@keyframes pxMindOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes pxMindOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .px-mind-lock{position:absolute;border:2px solid #dff7ff;border-radius:50%;pointer-events:none;box-shadow:0 0 12px #8ec9ff,0 0 28px #4a6fa577,inset 0 0 20px #8ec9ff22;animation:pxMindLock .9s cubic-bezier(.12,.72,.2,1) forwards;}
 .px-mind-lock-inner{position:absolute;inset:18px;border:2px solid #74c8ff;border-radius:50%;box-shadow:inset 0 0 12px #bfeaff,0 0 13px #74c8ff88;animation:pxMindLockInner 1.1s linear infinite;}
 .px-mind-lock-cross{position:absolute;left:50%;top:50%;width:72%;height:2px;background:linear-gradient(90deg,transparent,#dff7ff 22%,#74c8ff 50%,#dff7ff 78%,transparent);transform:translate(-50%,-50%) rotate(27deg);box-shadow:0 0 8px #dff7ff;}
+.jg-mind-mark{position:absolute;width:96px;height:96px;pointer-events:none;border:2px dashed #ffb0e8;border-radius:50%;box-shadow:0 0 22px #ff7fd077,inset 0 0 18px #ff9fe433;animation:jgMindOrbit 1.05s linear infinite;}
+.jg-mind-mark:before,.jg-mind-mark:after{content:'';position:absolute;left:50%;top:50%;background:#ffe1f7;box-shadow:0 0 10px #ff7fd0;}
+.jg-mind-mark:before{width:3px;height:24px;transform:translate(-50%,-50%) rotate(45deg)}
+.jg-mind-mark:after{width:3px;height:24px;transform:translate(-50%,-50%) rotate(-45deg)}
+@keyframes jgMindOrbit{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+.jg-mind-ripple{position:absolute;border:3px solid #ffd6f2;border-radius:50%;box-shadow:0 0 30px #ff5fa866,inset 0 0 24px #ff5fa822;pointer-events:none;animation:jgMindRipple .7s ease-out forwards;}
+@keyframes jgMindRipple{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
+.jg-mind-burst{position:absolute;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fff 0%,#ffd6f2 22%,#ff7fd0 48%,#c65fff 72%,transparent 82%);animation:jgMindBurst .32s ease-out forwards;}
+@keyframes jgMindBurst{from{transform:scale(.2);opacity:1}to{transform:scale(1);opacity:0}}
 .px-thought-orbit{position:absolute;border-radius:50%;background:radial-gradient(circle,#fff 0 18%,#bfeaff 35%,#5eb8ff 65%,transparent 72%);box-shadow:0 0 10px #74c8ff;animation:pxThoughtOrbit .9s linear infinite;}
 .px-thought-orbit span{position:absolute;inset:-5px;border:1px solid #dff7ff;border-radius:50%;opacity:.75;}
 .px-psi-tail{position:absolute;left:-68%;top:36%;width:90%;height:28%;border-radius:50%;background:linear-gradient(90deg,transparent,#8ec9ff88,#e8faff);filter:blur(2px);}
@@ -648,9 +659,24 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .projectile{position:absolute; border-radius:6px; display:flex; align-items:center; justify-content:center; transform-origin:center; font-size:28px; line-height:1; z-index:6;}
 .projectile.burger{background:transparent !important; box-shadow:none !important; animation:burgerSpin .5s linear infinite;}
 @keyframes burgerSpin{from{transform:rotate(-10deg)}to{transform:rotate(350deg)}}
-.wallblock{position:absolute; border-radius:6px; background:linear-gradient(180deg,#8a6a45,#5c4429); border:2px solid #3b2f1c;}
+.wallblock{position:absolute; border-radius:3px;
+  background:linear-gradient(180deg,#ffffff 0%,#dff5ff 22%,#a9e2ff 52%,#6fc2f0 78%,#4fa8db 100%);
+  border:2px solid #eafcffcc;
+  box-shadow:0 0 22px rgba(120,205,255,.65), inset 0 0 26px rgba(255,255,255,.55), inset -6px 0 14px rgba(60,140,190,.35);
+  clip-path:polygon(4% 6%,22% 0%,38% 7%,58% 1%,76% 8%,96% 0%,100% 14%,94% 100%,78% 94%,60% 100%,40% 95%,20% 100%,6% 92%,0% 30%);
+  overflow:visible;}
+.wallblock:before{content:'';position:absolute;left:14%;top:8%;width:14%;height:60%;background:linear-gradient(180deg,rgba(255,255,255,.9),transparent);border-radius:2px;pointer-events:none;}
+.wallblock:after{content:'';position:absolute;right:20%;top:20%;width:8%;height:40%;background:linear-gradient(180deg,rgba(255,255,255,.55),transparent);border-radius:2px;pointer-events:none;}
 .wallblock .wall-hp{position:absolute; top:-10px; left:0; width:100%; height:4px; background:#0007; border-radius:2px; overflow:hidden;}
-.wallblock .wall-hp .fill{height:100%; background:#e0a83f;}
+.wallblock .wall-hp .fill{height:100%; background:#8fe0ff;}
+.ice-path-segment{position:absolute; border-radius:6px; pointer-events:none;
+  background:linear-gradient(180deg,#ffffff 0%,#d7f4ff 30%,#9fddff 70%,#69bdf0 100%);
+  border:1px solid #eafcffdd;
+  box-shadow:0 0 14px rgba(140,215,255,.7), inset 0 2px 4px rgba(255,255,255,.85);
+  transition:opacity .25s linear;}
+.ice-path-segment:before{content:'';position:absolute;inset:0;border-radius:6px;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.5) 0 3px,transparent 3px 9px);
+  opacity:.5;}
 
 .dmg-num{position:absolute; font-weight:800; font-family:'Anton'; font-size:20px; color:#fff;
   text-shadow:1px 1px 0 #000,-1px -1px 0 #000; pointer-events:none; animation:floatUp .8s ease-out forwards;}
@@ -1141,6 +1167,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes redHulkHeatPulse{from{box-shadow:0 0 0 2px rgba(255,70,40,.20),0 14px 30px rgba(0,0,0,.35),0 0 22px rgba(255,89,31,.32)}to{box-shadow:0 0 0 3px rgba(255,115,47,.34),0 18px 38px rgba(0,0,0,.38),0 0 42px rgba(255,65,20,.56)}}
 .fighter.ironmonger.iron-jumping .fighter-square{filter:brightness(1.12) drop-shadow(0 0 12px rgba(255,177,90,.35));}
 .fighter.killmonger.killmonger-fury-active .fighter-square{animation:killmongerFuryPulse .45s ease-in-out infinite alternate;filter:saturate(1.35) brightness(1.12);}
+.fighter.beast.beast-surge-active .fighter-square{animation:killmongerFuryPulse .4s ease-in-out infinite alternate;filter:saturate(1.3) brightness(1.15) hue-rotate(0deg);box-shadow:0 0 22px #4c8bf5;}
 @keyframes killmongerFuryPulse{from{box-shadow:0 0 18px rgba(255,194,64,.22),0 0 34px rgba(155,78,255,.16)}to{box-shadow:0 0 34px rgba(255,194,64,.62),0 0 68px rgba(155,78,255,.34),0 0 92px rgba(255,90,28,.16)}}
 /* Moon Knight: Split Personality glows a different color per active persona,
    and Ankh Glide tilts + trails the cape while airborne. */
@@ -4159,10 +4186,10 @@ const CHARACTERS = {
     maxHealth:25000,
     description:'Cosmic powerhouse. Fires photon energy, lands devastating superhuman punches, and can stay airborne indefinitely with unrestricted flight.',
     abilities:{
-      E:{key:'E', name:'Photon Blast', type:'projectile', damage:2300, cooldown:1500, knockback:10,
+      E:{key:'E', name:'Photon Blast', type:'projectile', damage:2300, cooldown:3000, knockback:10,
          speed:20, w:76, h:22, color:'#ffd95a', render:'captain-photon', trail:'energy',
          sound:'cm_photon', fx:'cm_photon', hitFx:'cm_photon_hit', hitSound:'cm_photon_hit',
-         desc:'Fires a high-energy photon blast for 2,300 damage. Cooldown: 1.5 seconds.'},
+         desc:'Fires a high-energy photon blast for 2,300 damage. Cooldown: 3 seconds.'},
       Q:{key:'Q', name:'Cosmic Punch', type:'melee', damage:4000, cooldown:15000, knockback:22, range:118,
          hitRange:176, hitVertical:145, hitStartSlack:70, hitDelay:80,
          sound:'cm_punch', fx:'cm_punch', hitFx:'cm_punch_hit', hitSound:'cm_punch_hit',
@@ -4594,6 +4621,56 @@ const CHARACTERS = {
          desc:'Fires a controlled optic burst in front of Cyclops, blasting him backward and upward. Grants a brief damage-proof window during the recoil. Pure mobility — no damage.'}
     }
   },
+  jeangrey: {
+    id:'jeangrey', name:'Jean Grey', img:'JeanGrey.jpg', color:'#ff5fa8', accentColor:'#ffdf6b', aiStyle:'mage',
+    maxHealth:18500,
+    description:'A devastating telepath and telekinetic. Pokes at range with a psychic energy dart, seizes total control of an enemy\u2019s mind and abilities for a few seconds, and flies freely on raw telekinesis.',
+    abilities:{
+      E:{key:'E', name:'Telekinetic Energy Dart', type:'projectile', damage:750, cooldown:1600, knockback:9,
+         speed:19, w:30, h:16, color:'#ff7fd0', render:'jeangrey-dart', trail:'jeangrey',
+         sound:'jeangrey_dart',
+         desc:'Launches a concentrated bolt of psychic energy for 750 damage. Cooldown: 1.6 seconds.'},
+      Q:{key:'Q', name:'Mind Warp', type:'mindWarp', damage:0, cooldown:26000, duration:4000, radius:650,
+         sound:'jeangrey_mindwarp', hitFx:'jeangrey_mindwarp_hit',
+         desc:'Seizes total control of the enemy\u2019s mind for 4 seconds. While it holds, your E/Q/R inputs force them to use their own abilities on themselves. In 3\u20134 player matches this locks onto whoever is closest to you. Cooldown: 26 seconds.'},
+      R:{key:'R', name:'Telekinetic Flight', type:'toggle', damage:0, cooldown:0,
+         sound:'vision_flight', fx:'vision_flight',
+         desc:'Unlimited telekinetic flight. Toggle it on or off whenever you want — no cooldown and no duration.'}
+    }
+  },
+  beast: {
+    id:'beast', name:'Beast', img:'Beast.jpg', color:'#2f6fb3', accentColor:'#dfe8ff', aiStyle:'wolverine',
+    maxHealth:13500,
+    description:'A hyper-agile brawler with animal reflexes. Rapid claw strikes wear enemies down, a leaping pounce closes distance with a heavy hit, and an adrenaline surge makes him faster with quicker-recharging abilities for a few seconds.',
+    abilities:{
+      E:{key:'E', name:'Claw Swipe', type:'melee', damage:420, cooldown:600, knockback:8, range:90,
+         hitDelay:50, sound:'wolverine_claws', fx:'wolverine_claws', hitFx:'wolverine_claw_hit', hitSound:'wolverine_claw_hit',
+         desc:'A fast clawed strike for 420 damage.'},
+      Q:{key:'Q', name:'Feral Pounce', type:'melee', damage:1300, cooldown:9000, knockback:20, range:110,
+         hitDelay:90, sound:'beast_pounce',
+         desc:'A leaping pounce that slams the enemy for 1,300 damage.'},
+      R:{key:'R', name:'Adrenaline Surge', type:'beastSurge', damage:0, cooldown:18000, duration:6000, speedMult:1.4, cooldownMult:0.6,
+         sound:'beast_surge',
+         desc:'Floods his body with adrenaline for 6 seconds: moves 40% faster and his own ability cooldowns recharge 40% quicker.'}
+    }
+  },
+  iceman: {
+    id:'iceman', name:'Iceman', img:'Iceman.jpg', color:'#5fd0ff', accentColor:'#eaffff', aiStyle:'agile',
+    maxHealth:14000,
+    description:'A ranged ice controller. Fires ice shards almost as fast as he can think, throws up a wall of solid ice to block incoming attacks, and rides a path of ice through the air to move freely in any direction.',
+    abilities:{
+      E:{key:'E', name:'Ice Shard', type:'projectile', damage:300, cooldown:250, knockback:5,
+         speed:22, w:26, h:14, color:'#bdf1ff', render:'iceman-shard', trail:'iceman',
+         sound:'iceman_shard',
+         desc:'Fires a razor-sharp shard of ice for 300 damage. Cooldown: 0.25 seconds.'},
+      Q:{key:'Q', name:'Ice Wall', type:'wall', damage:0, cooldown:12000, duration:8000, wallHealth:1800,
+         sound:'iceman_wall',
+         desc:'Raises a towering wall of solid ice in front of him that blocks incoming attacks until it breaks or expires.'},
+      R:{key:'R', name:'Ice Path', type:'toggle', damage:0, cooldown:0,
+         sound:'vision_flight', fx:'vision_flight',
+         desc:'Forms a path of ice beneath him, letting him fly freely up, down, and across the arena. Toggle it on or off whenever you want — no cooldown and no duration.'}
+    }
+  },
 
   ironmonger: {
     id:'ironmonger', name:'Iron Monger', img:'IronMonger.jpg', color:'#59636f', accentColor:'#ff9f43', aiStyle:'ironmonger',
@@ -4614,13 +4691,13 @@ const CHARACTERS = {
   },
   vision: {
     id:'vision', name:'Vision', img:'Vision.jpg', color:'#38e5ae', accentColor:'#b7ffe8', aiStyle:'vision',
-    maxHealth:14500,
+    maxHealth:18300,
     description:'Synthetic Avenger powered by the Mind Stone. Channels a sustained energy beam, delivers a devastating Vibranium Punch, and can fly without limits.',
     abilities:{
-      E:{key:'E', name:'Mind Stone Beam', type:'visionBeam', damage:100, tickMs:200, duration:2000, cooldown:6000,
+      E:{key:'E', name:'Mind Stone Beam', type:'visionBeam', damage:250, tickMs:200, duration:2000, cooldown:6000,
          beamLength:1080, beamWidth:42, knockback:0, color:'#ffd52f',
          sound:'vision_beam', tickSound:'vision_beam_tick', endSound:'vision_beam_end', fx:'vision_beam',
-         desc:'Fires a continuous Mind Stone laser for 2 seconds. While an enemy remains in the beam, they take 100 damage every 0.2 seconds. Cooldown: 6 seconds.'},
+         desc:'Fires a continuous Mind Stone laser for 2 seconds. While an enemy remains in the beam, they take 250 damage every 0.2 seconds. Cooldown: 6 seconds.'},
       Q:{key:'Q', name:'Vibranium Punch', type:'visionPunch', damage:1900, cooldown:15000, cooldownOnMiss:7000, knockback:21, range:128,
          hitRange:154, hitVertical:132,
          sound:'vision_punch', fx:'vision_punch', hitFx:'vision_punch_hit', hitSound:'vision_punch_hit',
@@ -4694,7 +4771,7 @@ const CHARACTERS = {
   },
   milesmorales: {
     id:'milesmorales', name:'Miles Morales', img:'MilesMorales.jpg', color:'#14161b', accentColor:'#39d7ff', aiStyle:'milesmorales',
-    maxHealth:9500, dodgeChance:0.15,
+    maxHealth:9200, dodgeChance:0.15,
     description:'Passive: Spider-Sense dodges 15% of incoming attacks. Shocks enemies with electrified webs, crushes them with a bio-electric punch, and can vanish completely.',
     abilities:{
       E:{key:'E', name:'Electric Webs', type:'projectile', damage:300, cooldown:800, knockback:7,
@@ -4714,7 +4791,7 @@ const CHARACTERS = {
   },
   wintersoldier: {
     id:'wintersoldier', name:'Winter Soldier', img:'WinterSoldier.jpg', color:'#5b6b82', accentColor:'#d64545', aiStyle:'wintersoldier',
-    maxHealth:11500,
+    maxHealth:10500,
     description:'Balanced killer. A sidearm for range, a vibranium arm for crushing close-range burst, and a tactical roll to get out of trouble.',
     abilities:{
       E:{key:'E', name:'Pistol Shots', type:'projectile', damage:350, cooldown:700, knockback:8,
@@ -4732,7 +4809,7 @@ const CHARACTERS = {
   },
   gambit: {
     id:'gambit', name:'Gambit', img:'Gambit.jpg', color:'#9b30ff', accentColor:'#e0b3ff', aiStyle:'agile',
-    maxHealth:8250,
+    maxHealth:9200,
     description:'A Cajun card-sharp. Fires rapid kinetically-charged cards, follows up with a charged bo staff strike, and slips away with a strong burst of speed. Fragile up close with no heal or shield, so he wins by staying mobile and chipping away at range.',
     abilities:{
       E:{key:'E', name:'Charged Card Throw', type:'projectile', damage:300, cooldown:550, knockback:6,
@@ -4943,7 +5020,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
 
 
 /* =========================================================================
@@ -5440,7 +5517,7 @@ function renderSaveSlots(){
     card.className = 'save-slot-card' + (number===activeSaveSlot ? ' active' : '');
     const used = slot.used && slot.unlocked.length;
     const status = used
-      ? t('save_slot_unlocked').replace('{count}', slot.unlocked.length).replace('{total}', 54)
+      ? t('save_slot_unlocked').replace('{count}', slot.unlocked.length).replace('{total}', ROSTER_ORDER.length)
       : t('save_slot_empty');
     card.innerHTML = `
       <div class="save-slot-num">Slot ${number}${number===activeSaveSlot ? ` • ${t('save_slot_active')}` : ''}</div>
@@ -5849,7 +5926,7 @@ function setUnlockMessage(text, tone){
 }
 function renderUnlockScreen(){
   renderTokenCounters();
-  const owned = SAVE.unlocked.length, total = 54, tokens = getTokens();
+  const owned = SAVE.unlocked.length, total = ROSTER_ORDER.length, tokens = getTokens();
   const prog = document.getElementById('unlock-progress-text');
   if(prog) prog.textContent = t('unlock_progress').replace('{n}', owned).replace('{total}', total);
   const fill = document.getElementById('unlock-progress-fill');
@@ -5921,6 +5998,9 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     activeVisionBeam:null,
     hexFrozenUntil:0,
     pxMindStunUntil:0,
+    mindWarpUntil:0,
+    mindWarpTarget:null,
+    beastSurgeUntil:0,
     abilityLockUntil:0,
     disabledAbilityKey:null,
     disabledAbilityUntil:0,
@@ -5990,6 +6070,7 @@ function startBattle(playerCharId, botCharId, opts){
   state.projectiles = [];
   state.laserBombs = [];
   state.walls = [];
+  state.icePlatforms = [];
   state.missiles = [];
   state.illusions = [];
   state.firePools = [];
@@ -6062,6 +6143,7 @@ function startMultiBattle(charIds, opts){
   state.projectiles = [];
   state.laserBombs = [];
   state.walls = [];
+  state.icePlatforms = [];
   state.missiles = [];
   state.illusions = [];
   state.firePools = [];
@@ -6828,6 +6910,29 @@ function tryUseAbility(caster, target, key){
   const t = now();
   if(caster.dead) return false;
   if(state.countdown) return false; // nobody acts until FIGHT!
+  // Jean Grey's Mind Warp: while it's active, the caster's own inputs are
+  // rerouted to fire the possessed target's abilities AT the target itself,
+  // gated by that target's own real cooldowns so it can't be spammed.
+  if(caster.mindWarpUntil){
+    if(t >= caster.mindWarpUntil){ caster.mindWarpUntil = 0; caster.mindWarpTarget = null; }
+    else {
+      const tg = caster.mindWarpTarget;
+      if(!tg || tg.dead) return false;
+      const tAbility = tg.def.abilities[key];
+      if(!tAbility) return false;
+      // Use the target's raw per-key cooldown timer directly rather than cdReady():
+      // cdReady() also checks abilityLockUntil, which we deliberately set on tg to
+      // freeze it from acting on its own — that lock must not block OUR forced casts.
+      if(t < tg.cooldowns[key]) return false;
+      sfx(tAbility.sound || 'ability');
+      spawnAbilityFx(tg, tAbility, tg);
+      executeAbility(tg, tg, tAbility, t);
+      if(tAbility.type !== 'toggle' && tAbility.type !== 'block'){
+        tg.cooldowns[key] = t + tAbility.cooldown;
+      }
+      return true;
+    }
+  }
   const ability = caster.def.abilities[key];
   if(caster.yonduArrow){
     if(ability.type==='yonduArrowControl' && caster.yonduArrow.phase === 'control'){ recallYonduArrow(caster, true); return true; }
@@ -6861,7 +6966,8 @@ function tryUseAbility(caster, target, key){
   spawnAbilityFx(caster, ability, target);
   const result = executeAbility(caster, target, ability, t) || null;
   if(ability.type !== 'toggle' && ability.type !== 'block'){
-    const cd = (result && result.hit === false && ability.cooldownOnMiss) ? ability.cooldownOnMiss : ability.cooldown;
+    let cd = (result && result.hit === false && ability.cooldownOnMiss) ? ability.cooldownOnMiss : ability.cooldown;
+    if(caster.def.id==='beast' && caster.beastSurgeUntil > t) cd *= (caster.def.abilities.R.cooldownMult || 0.6);
     caster.cooldowns[key] = t + cd;
   }
   return true;
@@ -7123,7 +7229,8 @@ function executeAbility(caster, target, ability, t){
         if(state.mode !== 'battle' || caster.dead || target.dead) return;
         const dx = (target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
         const vertical = Math.abs(target.y-caster.y);
-        const facingOk = caster.isBot ? ((dx >= 0 ? 1 : -1) === caster.facing) : (Math.abs(dx) < 24 || (dx >= 0 ? 1 : -1) === faceAtStart);
+        // Same Mind Warp self-cast exception as the melee case above.
+        const facingOk = target === caster ? true : caster.isBot ? ((dx >= 0 ? 1 : -1) === caster.facing) : (Math.abs(dx) < 24 || (dx >= 0 ? 1 : -1) === faceAtStart);
         const movedTooFar = Math.abs(caster.x-startX)>80 || Math.abs(caster.y-startY)>100;
         if(Math.abs(dx) <= ability.range + 35 && vertical < 120 && facingOk && !movedTooFar && !attackBlockedByFloor(caster,target)){
           damageTargetOrWall(target, ability.damage, ability.knockback, dirSignTo(caster,target), {hitFx:ability.hitFx,sound:ability.hitSound,ranged:isRangedAbility(ability)});
@@ -7716,6 +7823,49 @@ function executeAbility(caster, target, ability, t){
       }
       break;
     }
+    case 'mindWarp': {
+      // Jean Grey's Mind Warp: freezes the target exactly like Professor X's Mind
+      // Stun (so they can't act on their own), but ALSO hands the caster a timed
+      // window during which their own E/Q/R inputs are rerouted (see tryUseAbility)
+      // to fire the target's own abilities back onto the target.
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) break;
+      const dx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
+      const dist = Math.hypot(dx,dy);
+      if(dist <= (ability.radius||650) && !attackBlockedByFloor(caster,tg)){
+        const dur = ability.duration||4000;
+        tg.pxMindStunUntil = t + dur;
+        tg.abilityLockUntil = t + dur;
+        tg.vx = 0; tg.vy = 0; tg.flight = false; tg.flightExpire = 0; tg.grappleUntil = 0; tg.hitStun = 0;
+        tg.jgMindWarpUntil = t + dur;
+        if(tg.el){ tg.el.classList.add('px-mind-stunned'); tg.el.classList.add('jg-mind-warped'); }
+        caster.mindWarpUntil = t + dur;
+        caster.mindWarpTarget = tg;
+        // Jean Grey gets her own pink/violet possession visual, correctly centered
+        // on the target for the whole hold, instead of reusing Professor X's blue
+        // Mind Stun look — so the two abilities read as clearly different.
+        const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+        fxEl('jg-mind-ripple',`left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;`,680);
+        fxEl('jg-mind-mark',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`,dur);
+        for(let i=0;i<18;i++) setTimeout(()=>{
+          if(state.mode==='battle' && tg.el && tg.pxMindStunUntil>now()) spawnSparks(cx+(Math.random()-.5)*58,cy+(Math.random()-.5)*58,2,i%2?'#ffd0f0':'#ff7fd0',30,240);
+        },i*105);
+        sfx(ability.hitSound||'profx_mindstun_hit');
+        spawnHitFx(tg, ability.hitFx||'jeangrey_mindwarp_hit', dirSignTo(caster,tg));
+      }
+      break;
+    }
+    case 'beastSurge': {
+      // Beast's Adrenaline Surge: a timed self-buff. The speed half is read by
+      // fighterSpeedMultiplier() and the faster-cooldowns half by tryUseAbility().
+      caster.beastSurgeUntil = t + (ability.duration||6000);
+      if(caster.el) caster.el.classList.add('beast-surge-active');
+      const who = caster, dur = ability.duration||6000;
+      setTimeout(()=>{ if(who.el) who.el.classList.remove('beast-surge-active'); }, dur);
+      spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 20, '#8fd0ff', 80, 480);
+      fxEl('fx-ring', `left:${caster.x-18}px;top:${caster.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;border-color:#8fd0ff;box-shadow:0 0 26px #4c8bf5;`, 480);
+      break;
+    }
     case 'astralProject': {
       // Professor X's Astral Projection: total damage immunity for a window,
       // reusing the same invulnAbilityUntil flag Cyclops' recoil dodge uses.
@@ -7792,6 +7942,10 @@ function executeAbility(caster, target, ability, t){
           && !attackBlockedByFloor(caster, target);
       };
       const swingOk = ()=>{
+        // Jean Grey's Mind Warp forces a possessed fighter to swing on themselves —
+        // caster and target are the same body, so any facing check is meaningless
+        // (and would otherwise coin-flip a miss based on stale facing). Always land it.
+        if(target === caster) return true;
         const dx = (target.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
         if(caster.isBot) return (dx >= 0 ? 1 : -1) === caster.facing;   // bots: see updateBotFacing
         return Math.abs(dx) < 24 || (dx >= 0 ? 1 : -1) === faceAtStart;
@@ -8088,11 +8242,15 @@ function executeAbility(caster, target, ability, t){
       // Replace any existing wall from this caster
       state.walls = state.walls.filter(w => w.owner !== caster.id);
       const facing = caster.facing;
-      const wx = caster.x + FIGHTER_SIZE/2 + facing*46 - 10;
+      // A proper towering ice wall: wider and taller than the old plank, still
+      // planted with its base at the caster's feet.
+      const wallW = 34, wallH = 150;
+      const wx = caster.x + FIGHTER_SIZE/2 + facing*46 - wallW/2;
       state.walls.push({
-        owner: caster.id, x: wx, y: caster.y - 26, w:20, h:90,
-        health: ability.wallHealth, maxHealth: ability.wallHealth, expire: t + ability.duration, el:null
+        owner: caster.id, x: wx, y: caster.y + FIGHTER_SIZE - wallH, w:wallW, h:wallH,
+        health: ability.wallHealth, maxHealth: ability.wallHealth, expire: t + ability.duration, el:null, icy:true
       });
+      spawnSparks(wx+wallW/2, caster.y+FIGHTER_SIZE-20, 14, '#bdf1ff', 60, 360);
       break;
     }
     case 'heal': {
@@ -12036,6 +12194,16 @@ function spawnHitFx(target, kind, dirSign){
       shakeArena(4,220);
       break;
     }
+    case 'jeangrey_mindwarp_hit': {
+      // Jean Grey's own possession impact — pink/violet psychic burst, distinct
+      // from Professor X's blue Mind Stun so the two abilities don't look identical.
+      fxEl('jg-mind-ripple',`left:${cx-72}px;top:${cy-72}px;width:144px;height:144px;`,540);
+      fxEl('jg-mind-burst',`left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;`,260);
+      spawnSparks(cx,cy,16,'#ff9fe4',76,400);
+      spawnSparks(cx,cy,8,'#c65fff',54,340);
+      shakeArena(4,220);
+      break;
+    }
     case 'rocket_blaster_hit': {
       fxEl('fx-flash',`left:${cx-26}px;top:${cy-26}px;width:52px;height:52px;background:radial-gradient(circle,#fff7e0,#ffb16e 26%,#ff6b3c 52%,transparent 76%);`,190);
       spawnSparks(cx,cy,10,'#ffb16e',54,300);
@@ -12715,7 +12883,7 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   } else if(f.pxMindStunUntil && tNow >= f.pxMindStunUntil){
     f.pxMindStunUntil = 0;
     if(!f.hexFrozenUntil) f.abilityLockUntil = 0;
-    if(f.el) f.el.classList.remove('px-mind-stunned');
+    if(f.el) f.el.classList.remove('px-mind-stunned','jg-mind-warped');
   }
   if(f.yonduArrow && f.yonduArrow.phase === 'control'){
     f.vx = 0; f.vy = 0; moveDir = 0; wantJump = false; wantDown = false;
@@ -12823,6 +12991,18 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   }
   if(f.glideUntil && tNow >= f.glideUntil && f.el) f.el.classList.remove('moonknight-gliding');
 
+  // Iceman's Ice Path: while his flight toggle is active, he leaves behind a
+  // short chain of solid ice platforms along his flight trail. They collide
+  // like real one-way platforms (anyone can land on them) and each melts away
+  // 3 seconds after being laid down.
+  if(f.def.id === 'iceman' && f.flight && !f.dead){
+    f._icePathTick = (f._icePathTick||0) + dtF;
+    if(f._icePathTick >= 8){
+      f._icePathTick = 0;
+      spawnIcePathSegment(f, tNow);
+    }
+  }
+
   // Drop-through timer
   if(f.dropThroughTimer > 0){ f.dropThroughTimer -= dtF*16.67; }
   f.dropThrough = wantDown && !f.flight && f.onGround;
@@ -12846,6 +13026,23 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
         f.vy = 0;
         f.onGround = true;
         f.standingPlatform = plat;
+      }
+    }
+    // Iceman's Ice Path trail: same one-way landing logic as real platforms,
+    // just against the temporary ice segments instead.
+    if(state.icePlatforms && state.icePlatforms.length){
+      for(const plat of state.icePlatforms){
+        if(f.dropThroughTimer > 0) continue;
+        if(tNow >= plat.expire) continue;
+        if(!collidesPlatform(f, plat)) continue;
+        const feetPrev = (f.y - f.vy*dtF) + FIGHTER_SIZE;
+        const feetNow = f.y + FIGHTER_SIZE;
+        if(f.vy >= 0 && feetPrev <= plat.y + 6 && feetNow >= plat.y){
+          f.y = plat.y - FIGHTER_SIZE;
+          f.vy = 0;
+          f.onGround = true;
+          f.standingPlatform = plat;
+        }
       }
     }
   }
@@ -12956,6 +13153,7 @@ function fighterSpeedMultiplier(f){
   if(isWaspSizeActive(f)) mult *= (f.waspSizeSpeedMultiplier || .62);
   if(f.grootBallUntil && now() < f.grootBallUntil) mult *= (f.grootBallSpeed || 2.4);
   if(f.def.id==='moonknight' && f.moonknightPersona==='jake' && f.moonknightPersonaUntil > now()) mult *= (f.def.abilities.Q.speedMult || 1.35);
+  if(f.def.id==='beast' && f.beastSurgeUntil > now()) mult *= (f.def.abilities.R.speedMult || 1.4);
   return mult;
 }
 function updateFlightGlow(f){
@@ -13403,7 +13601,10 @@ function updateProjectiles(dtF){
   for(let i=state.projectiles.length-1; i>=0; i--){
     const p = state.projectiles[i];
     const owner = p.casterRef;
-    const target = state.multiPvp ? (p.targetRef && !p.targetRef.dead ? p.targetRef : multiTargetFor(owner)) : ((p.owner === 'player') ? state.bot : state.player);
+    // Self-targeted shots (Jean Grey's Mind Warp forcing an enemy to fire on themselves)
+    // always resolve to the owner, regardless of mode — everything else keeps the old logic.
+    const target = (p.targetRef === owner) ? owner
+      : state.multiPvp ? (p.targetRef && !p.targetRef.dead ? p.targetRef : multiTargetFor(owner)) : ((p.owner === 'player') ? state.bot : state.player);
 
     if(p.homing && p.phase === 'out' && p.targetRef && !p.targetRef.dead){
       const tx=p.targetRef.x+FIGHTER_SIZE/2, ty=p.targetRef.y+FIGHTER_SIZE/2;
@@ -13818,6 +14019,19 @@ function buildProjectileVisual(p){
     p.el.style.background='transparent';
     p.el.style.boxShadow='none';
     p.el.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 16 16" style="filter:drop-shadow(0 0 4px #b9c2d4)"><path d="M8 0 L13 6 L10 16 L4 13 L1 5 Z" fill="#c7cfdd" stroke="#5b6478" stroke-width="1"/><path d="M8 0 L10 16" stroke="#8b93a6" stroke-width="0.8" opacity=".7"/></svg>`;
+  } else if(p.render === 'iceman-shard'){
+    // A jagged, elongated ice-crystal splinter (not a plain blob) that flips
+    // to keep its point facing the direction of travel.
+    p.el.classList.add('iceshard-projectile');
+    p.el.style.background='transparent';
+    p.el.style.boxShadow='none';
+    p.el.style.overflow='visible';
+    p.el.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 26 14" style="transform:scaleX(${flip});filter:drop-shadow(0 0 5px #8fe3ffcc)">`
+      + `<defs><linearGradient id="icshg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#d3f6ff"/><stop offset="1" stop-color="#5fc6f2"/></linearGradient></defs>`
+      + `<path d="M0 7 L8 2 L17 4 L26 7 L17 10 L8 12 Z" fill="url(#icshg)" stroke="#eafcff" stroke-width="0.7"/>`
+      + `<path d="M8 2 L14 7 L8 12" fill="none" stroke="#ffffff" stroke-width="0.8" opacity=".8"/>`
+      + `<path d="M0 7 L8 2" stroke="#ffffff" stroke-width="1" opacity=".9"/>`
+      + `</svg>`;
   } else if(p.render === 'moonknight-dart'){
     p.el.classList.add('mkdart-projectile');
     p.el.style.background='transparent';
@@ -14110,6 +14324,50 @@ function updateWalls(){
     w.el.style.left=w.x+'px'; w.el.style.top=w.y+'px'; w.el.style.width=w.w+'px'; w.el.style.height=w.h+'px';
     const pct = Math.max(0, w.health/w.maxHealth);
     w.el.querySelector('.fill').style.width = (pct*100)+'%';
+  }
+}
+
+/* =========================================================================
+   SECTION: ICEMAN'S ICE PATH TRAIL
+   Temporary one-way ice platforms laid down behind Iceman while his Ice Path
+   flight toggle is active. They collide exactly like real platforms (see the
+   state.icePlatforms loop in updatePhysics) and each melts 3 seconds after
+   being placed, regardless of whether he's still flying.
+   ========================================================================= */
+function spawnIcePathSegment(f, t){
+  if(!state.icePlatforms) state.icePlatforms = [];
+  const w = FIGHTER_SIZE + 10;
+  const seg = {
+    x: f.x + FIGHTER_SIZE/2 - w/2, y: f.y + FIGHTER_SIZE - 6, w, h: 12,
+    placedAt: t, expire: t + 3000, el: null, ownerId: f.id
+  };
+  state.icePlatforms.push(seg);
+  spawnSparks(f.x + FIGHTER_SIZE/2, f.y + FIGHTER_SIZE, 4, '#bdf1ff', 30, 260);
+}
+function updateIcePlatforms(){
+  if(!state.icePlatforms) { state.icePlatforms = []; return; }
+  const t = now();
+  for(let i=state.icePlatforms.length-1; i>=0; i--){
+    const seg = state.icePlatforms[i];
+    const remaining = seg.expire - t;
+    if(remaining <= 0 || state.mode !== 'battle'){
+      if(seg.el) seg.el.remove();
+      state.icePlatforms.splice(i,1);
+      continue;
+    }
+    if(!seg.el){
+      seg.el = document.createElement('div');
+      seg.el.className = 'ice-path-segment';
+      // Inserted at the very back of the arena's stacking order (same trick as
+      // the static platforms) so fighters always render in front, standing on
+      // top of the ice rather than the ice drawing over their feet.
+      arenaEl.insertBefore(seg.el, arenaEl.firstChild);
+    }
+    seg.el.style.left = seg.x+'px'; seg.el.style.top = seg.y+'px';
+    seg.el.style.width = seg.w+'px'; seg.el.style.height = seg.h+'px';
+    // Fade + thin out over the last second so its disappearance reads as
+    // melting rather than just popping out of existence.
+    seg.el.style.opacity = remaining < 1000 ? String(Math.max(0.12, remaining/1000)) : '1';
   }
 }
 
@@ -14915,7 +15173,9 @@ function loseLife(target, side){
   target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
-  target.magnetoShieldUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned');
+  target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0;
+  if(target.el) target.el.classList.remove('beast-surge-active');
+  target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped');
   target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
   target.slowUntil = 0;
   target.cloakUntil = 0; target.shockTicksLeft = 0; target.psiTicksLeft = 0;
@@ -15143,6 +15403,7 @@ function renderFighter(f){
   f.el.classList.toggle('stunned', f.hitStun > 0 || !!f.hulkSlideDir || (f.hulkRoarUntil && now() < f.hulkRoarUntil) || (f.hexFrozenUntil && now() < f.hexFrozenUntil) || (f.pxMindStunUntil && now() < f.pxMindStunUntil));
   f.el.classList.toggle('hex-frozen', !!f.hexFrozenUntil && now() < f.hexFrozenUntil);
   f.el.classList.toggle('px-mind-stunned', !!f.pxMindStunUntil && now() < f.pxMindStunUntil);
+  f.el.classList.toggle('jg-mind-warped', !!f.jgMindWarpUntil && now() < f.jgMindWarpUntil);
   f.el.classList.toggle('rooted', !!f.rootedUntil && now() < f.rootedUntil);
   f.el.classList.toggle('bullseye-ricochet-armed', !!f.ricochetArmed);
   f.el.classList.toggle('invuln', !!f.invulnUntil && now() < f.invulnUntil);
@@ -16496,6 +16757,7 @@ function gameLoop(ts){
     updateProjectiles(dtF);
     updateMissiles(dtF);
     updateWalls();
+    updateIcePlatforms();
 
     if(state.multiPvp){
       // Torch's flame-touch is inherently pairwise — check every live pair.
