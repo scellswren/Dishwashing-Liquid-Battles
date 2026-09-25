@@ -669,7 +669,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .wallblock:after{content:'';position:absolute;right:20%;top:20%;width:8%;height:40%;background:linear-gradient(180deg,rgba(255,255,255,.55),transparent);border-radius:2px;pointer-events:none;}
 .wallblock .wall-hp{position:absolute; top:-10px; left:0; width:100%; height:4px; background:#0007; border-radius:2px; overflow:hidden;}
 .wallblock .wall-hp .fill{height:100%; background:#8fe0ff;}
-.ice-path-segment{position:absolute; border-radius:6px; pointer-events:none;
+.ice-path-segment{position:absolute; border-radius:6px; pointer-events:none; transform-origin:50% 50%;
   background:linear-gradient(180deg,#ffffff 0%,#d7f4ff 30%,#9fddff 70%,#69bdf0 100%);
   border:1px solid #eafcffdd;
   box-shadow:0 0 14px rgba(140,215,255,.7), inset 0 2px 4px rgba(255,255,255,.85);
@@ -716,6 +716,8 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .ability-btn.flight-on{background:linear-gradient(180deg,#3f6fe0,#2a4ea6);}
 .ability-btn:disabled{cursor:default;}
 .ability-btn.gp-mode .ab-key{font-size:20px;}
+#ability-bar.jg-control{filter:drop-shadow(0 0 9px rgba(255,95,168,.28));}
+#ability-bar.jg-control .ability-btn{border-color:#ff7fd0;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 12px rgba(255,95,168,.16);}
 
 /* ---------- Controller banner / hint ---------- */
 #gamepad-banner{
@@ -4632,7 +4634,7 @@ const CHARACTERS = {
          desc:'Launches a concentrated bolt of psychic energy for 750 damage. Cooldown: 1.6 seconds.'},
       Q:{key:'Q', name:'Mind Warp', type:'mindWarp', damage:0, cooldown:26000, duration:4000, radius:650,
          sound:'jeangrey_mindwarp', hitFx:'jeangrey_mindwarp_hit',
-         desc:'Seizes total control of the enemy\u2019s mind for 4 seconds. While it holds, your E/Q/R inputs force them to use their own abilities on themselves. In 3\u20134 player matches this locks onto whoever is closest to you. Cooldown: 26 seconds.'},
+         desc:'Seizes total control of the enemy\u2019s mind for 4 seconds. You directly move as them, and your ability bar swaps to their E/Q/R abilities so you can use those abilities against Jean Grey. Cooldown: 26 seconds.'},
       R:{key:'R', name:'Telekinetic Flight', type:'toggle', damage:0, cooldown:0,
          sound:'vision_flight', fx:'vision_flight',
          desc:'Unlimited telekinetic flight. Toggle it on or off whenever you want — no cooldown and no duration.'}
@@ -6000,6 +6002,8 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     pxMindStunUntil:0,
     mindWarpUntil:0,
     mindWarpTarget:null,
+    jgMindWarpUntil:0,
+    jgMindWarpLockUntil:0,
     beastSurgeUntil:0,
     abilityLockUntil:0,
     disabledAbilityKey:null,
@@ -6670,19 +6674,74 @@ function updateHud(){
 }
 
 /* =========================================================================
+   SECTION: JEAN GREY — MIND WARP CONTROL
+   Jean Grey's Mind Warp temporarily hands the human player the actual target
+   fighter. During the 4-second window, movement, jumping, abilities, and the
+   ability bar all belong to that target. When the timer ends (or the target
+   is removed), control cleanly returns to Jean Grey.
+   ========================================================================= */
+function isJeanMindWarpControlled(f, t=now()){
+  return !!(f && state.mode === 'battle' && !state.pvp && !state.multiPvp
+    && state.player && state.player.mindWarpTarget === f
+    && state.player.mindWarpUntil > t && f.jgMindWarpUntil > t && !f.dead);
+}
+function getSoloControlledFighter(){
+  if(state.mode !== 'battle' || state.pvp || state.multiPvp || !state.player) return state.player;
+  const t = now();
+  return isJeanMindWarpControlled(state.player.mindWarpTarget, t)
+    ? state.player.mindWarpTarget
+    : state.player;
+}
+function endJeanMindWarp(){
+  const jean = state.player;
+  const tg = jean && jean.mindWarpTarget;
+  if(tg){
+    // Only remove the lock that Mind Warp itself installed.
+    if(tg.jgMindWarpLockUntil && tg.abilityLockUntil === tg.jgMindWarpLockUntil){
+      tg.abilityLockUntil = 0;
+    }
+    tg.jgMindWarpLockUntil = 0;
+    tg.jgMindWarpUntil = 0;
+    if(tg.el) tg.el.classList.remove('jg-mind-warped','px-mind-stunned');
+  }
+  if(jean){
+    jean.mindWarpUntil = 0;
+    jean.mindWarpTarget = null;
+  }
+  if(state.mode === 'battle' && !state.pvp && !state.multiPvp) buildAbilityBar();
+}
+function updateJeanMindWarp(){
+  const jean = state.player;
+  if(!jean || !jean.mindWarpUntil) return;
+  const tg = jean.mindWarpTarget;
+  const t = now();
+  if(!tg || tg.dead || t >= jean.mindWarpUntil || tg.jgMindWarpUntil <= t){
+    endJeanMindWarp();
+  }
+}
+
+/* =========================================================================
    SECTION: ABILITY BAR UI
    ========================================================================= */
 function buildAbilityBar(){
+  const controlled = getSoloControlledFighter();
+  const fighter = controlled || state.player;
   const bar = document.getElementById('ability-bar');
+  if(!bar || !fighter) return;
   bar.innerHTML = '';
+  bar.classList.toggle('jg-control', fighter !== state.player);
   ['E','Q','R'].forEach(k=>{
-    const a = state.player.def.abilities[k];
+    const a = fighter.def.abilities[k];
     const btn = document.createElement('button');
     btn.className = 'ability-btn' + (gamepadState.connected ? ' gp-mode' : '');
     btn.dataset.key = k;
     const label = gamepadState.connected ? abilityButtonLabel(k) : k;
     btn.innerHTML = `<span class="ab-key">${label}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
-    btn.onclick = ()=> tryUseAbility(state.player, state.bot, k);
+    btn.onclick = ()=>{
+      const f = getSoloControlledFighter();
+      const tg = f === state.player ? state.bot : state.player;
+      if(f && tg) tryUseAbility(f, tg, k);
+    };
     bar.appendChild(btn);
   });
   updateGamepadHint();
@@ -6699,7 +6758,10 @@ function updateAbilityBar(){
     updateAbilityBarFor(document.getElementById('ability-bar-p2'), state.bot, versus.slots[1].brand);
     return;
   }
-  updateAbilityBarFor(document.getElementById('ability-bar'), state.player, null);
+  const controlled = getSoloControlledFighter();
+  const bar = document.getElementById('ability-bar');
+  if(bar) bar.classList.toggle('jg-control', controlled !== state.player);
+  updateAbilityBarFor(bar, controlled, null);
 }
 function updateAbilityBarFor(bar, fighter, brand){
   if(!bar || !fighter) return;
@@ -6716,7 +6778,7 @@ function updateAbilityBarFor(bar, fighter, brand){
       btn.classList.toggle('gp-mode', !!brand || gamepadState.connected);
     }
     overlay.style.fontSize = '';
-    if(fighter.abilityLockUntil && t < fighter.abilityLockUntil){
+    if(fighter.abilityLockUntil && t < fighter.abilityLockUntil && !isJeanMindWarpControlled(fighter, t)){
       overlay.style.display='flex';
       overlay.textContent='FROZEN';
       overlay.style.background='rgba(180,25,45,.68)';
@@ -6831,7 +6893,7 @@ function updateAbilityBarFor(bar, fighter, brand){
    ========================================================================= */
 function cdReady(f, key, t){
   const a = f.def.abilities[key];
-  if(f.abilityLockUntil && t < f.abilityLockUntil) return false;
+  if(f.abilityLockUntil && t < f.abilityLockUntil && !isJeanMindWarpControlled(f, t)) return false;
   if(f.disabledAbilityKey === key && f.disabledAbilityUntil && t < f.disabledAbilityUntil) return false;
   if(a.type==='toggle') return true;
   if(a.type==='timedToggle') return t >= f.cooldowns[key] && !f.flight;
@@ -6906,40 +6968,57 @@ function spawnRoarShrugFx(tg){
   spawnDamageNumber(tg.x + 2, tg.y - 20, 'UNFAZED', true);
 }
 
+const MIND_WARP_ATTACK_TYPES = new Set([
+  'melee','hulkSmash','projectile','shrapnelSpread','fragGrenade','aoe',
+  'missile','missileBarrage','bulletStorm','falconDrone','bullseyeProjectile',
+  'bullseyeOdds','fireSpew','stretchPunch','elasticBarrage','rootWave',
+  'visionBeam','tendrilGrab','yonduArrowControl','grenade','laserBomb',
+  'scarletHexBurst','cyclopsRecoil','thingCharge','ironJump','chargeSlam'
+]);
+function isMindWarpSelfAttack(caster, ability, t){
+  if(!isJeanMindWarpControlled(caster, t) || !ability) return false;
+  return MIND_WARP_ATTACK_TYPES.has(ability.type)
+    || Number(ability.damage) > 0
+    || ability.dynamicDamage === 'antman'
+    || Number(ability.burnDamage) > 0;
+}
+function mindWarpSelfDamage(caster, ability){
+  if(!caster || caster.dead || !ability) return false;
+  let dmg = Number(ability.damage) || 0;
+  if(ability.dynamicDamage === 'antman'){
+    dmg = caster.antmanForm === 'small' ? 500 : (caster.antmanForm === 'big' ? 1000 : 300);
+  }
+  if(!dmg) return false;
+  // Mind Warp is deliberately a self-hit: do not create a projectile or attack
+  // outward. The possessed fighter simply takes the attack's damage.
+  const before = caster.health;
+  applyDamage(caster, dmg, 0, caster.facing || 1, {
+    hitFx: ability.hitFx,
+    sound: ability.hitSound,
+    ranged: isRangedAbility(ability),
+    attacker: caster,
+    guaranteedHit: true,
+    mindWarpSelf: true
+  });
+  if(ability.burnDamage && caster.health < before && !caster.dead){
+    const ticks = Math.max(1, ability.burnTicks || 1);
+    applyBurn(caster, {interval:ability.burnTickMs || 500, ticks, damage:ability.burnDamage / ticks, attacker:caster});
+  }
+  return caster.health < before || caster.dead;
+}
 function tryUseAbility(caster, target, key){
   const t = now();
   if(caster.dead) return false;
   if(state.countdown) return false; // nobody acts until FIGHT!
-  // Jean Grey's Mind Warp: while it's active, the caster's own inputs are
-  // rerouted to fire the possessed target's abilities AT the target itself,
-  // gated by that target's own real cooldowns so it can't be spammed.
-  if(caster.mindWarpUntil){
-    if(t >= caster.mindWarpUntil){ caster.mindWarpUntil = 0; caster.mindWarpTarget = null; }
-    else {
-      const tg = caster.mindWarpTarget;
-      if(!tg || tg.dead) return false;
-      const tAbility = tg.def.abilities[key];
-      if(!tAbility) return false;
-      // Use the target's raw per-key cooldown timer directly rather than cdReady():
-      // cdReady() also checks abilityLockUntil, which we deliberately set on tg to
-      // freeze it from acting on its own — that lock must not block OUR forced casts.
-      if(t < tg.cooldowns[key]) return false;
-      sfx(tAbility.sound || 'ability');
-      spawnAbilityFx(tg, tAbility, tg);
-      executeAbility(tg, tg, tAbility, t);
-      if(tAbility.type !== 'toggle' && tAbility.type !== 'block'){
-        tg.cooldowns[key] = t + tAbility.cooldown;
-      }
-      return true;
-    }
-  }
+  // During a Jean Grey Mind Warp, the possessed fighter is the actual human-controlled
+  // caster. Offensive abilities are intercepted below and turned into direct self-hits.
   const ability = caster.def.abilities[key];
   if(caster.yonduArrow){
     if(ability.type==='yonduArrowControl' && caster.yonduArrow.phase === 'control'){ recallYonduArrow(caster, true); return true; }
     if(caster.yonduArrow.phase === 'return') return false;
     return false;
   }
-  if(caster.abilityLockUntil && t < caster.abilityLockUntil) return false;
+  if(caster.abilityLockUntil && t < caster.abilityLockUntil && !isJeanMindWarpControlled(caster, t)) return false;
   if(caster.chargeState) return false;
   if(caster.grootBallUntil && t < caster.grootBallUntil) return false; // curled up in the Groot Ball: no attacking
   if(caster.disabledAbilityKey === key && caster.disabledAbilityUntil && t < caster.disabledAbilityUntil){
@@ -6960,6 +7039,14 @@ function tryUseAbility(caster, target, key){
   // Roared fighters cannot use abilities that would move them across the arena.
   if(MOVEMENT_ABILITY_TYPES.includes(ability.type) && isRoarHeld(caster, t)) return false;
   if(!cdReady(caster, key, t)) return false;
+  if(isMindWarpSelfAttack(caster, ability, t)){
+    const didHitSelf = mindWarpSelfDamage(caster, ability);
+    if(!didHitSelf) return false;
+    let cd = ability.cooldown;
+    if(caster.def.id==='beast' && caster.beastSurgeUntil > t) cd *= (caster.def.abilities.R.cooldownMult || 0.6);
+    caster.cooldowns[key] = t + cd;
+    return true;
+  }
   const fallbackSound = ability.type==='jump' ? 'jump' : ability.type==='wall' ? 'wall'
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
   sfx(ability.sound || fallbackSound);
@@ -7824,31 +7911,35 @@ function executeAbility(caster, target, ability, t){
       break;
     }
     case 'mindWarp': {
-      // Jean Grey's Mind Warp: freezes the target exactly like Professor X's Mind
-      // Stun (so they can't act on their own), but ALSO hands the caster a timed
-      // window during which their own E/Q/R inputs are rerouted (see tryUseAbility)
-      // to fire the target's own abilities back onto the target.
+      // True possession: for the next 4 seconds, the human player controls the
+      // target fighter directly, including movement, jumping, and that fighter's
+      // own E/Q/R abilities.
       const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
       if(!tg || tg.dead) break;
       const dx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
       const dist = Math.hypot(dx,dy);
       if(dist <= (ability.radius||650) && !attackBlockedByFloor(caster,tg)){
         const dur = ability.duration||4000;
-        tg.pxMindStunUntil = t + dur;
-        tg.abilityLockUntil = t + dur;
-        tg.vx = 0; tg.vy = 0; tg.flight = false; tg.flightExpire = 0; tg.grappleUntil = 0; tg.hitStun = 0;
-        tg.jgMindWarpUntil = t + dur;
-        if(tg.el){ tg.el.classList.add('px-mind-stunned'); tg.el.classList.add('jg-mind-warped'); }
-        caster.mindWarpUntil = t + dur;
+        const until = t + dur;
+        tg.jgMindWarpUntil = until;
+        tg.jgMindWarpLockUntil = until;
+        tg.abilityLockUntil = until;
+        tg.vx = 0; tg.vy = 0; tg.grappleUntil = 0; tg.hitStun = 0;
+        tg.pxMindStunUntil = 0;
+        if(tg.el){
+          tg.el.classList.remove('px-mind-stunned');
+          tg.el.classList.add('jg-mind-warped');
+        }
+        caster.mindWarpUntil = until;
         caster.mindWarpTarget = tg;
-        // Jean Grey gets her own pink/violet possession visual, correctly centered
-        // on the target for the whole hold, instead of reusing Professor X's blue
-        // Mind Stun look — so the two abilities read as clearly different.
+        // Replace the live ability buttons immediately so the player sees the
+        // target's actual moves before pressing anything else.
+        buildAbilityBar();
         const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
         fxEl('jg-mind-ripple',`left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;`,680);
         fxEl('jg-mind-mark',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`,dur);
         for(let i=0;i<18;i++) setTimeout(()=>{
-          if(state.mode==='battle' && tg.el && tg.pxMindStunUntil>now()) spawnSparks(cx+(Math.random()-.5)*58,cy+(Math.random()-.5)*58,2,i%2?'#ffd0f0':'#ff7fd0',30,240);
+          if(state.mode==='battle' && tg.el && tg.jgMindWarpUntil>now()) spawnSparks(cx+(Math.random()-.5)*58,cy+(Math.random()-.5)*58,2,i%2?'#ffd0f0':'#ff7fd0',30,240);
         },i*105);
         sfx(ability.hitSound||'profx_mindstun_hit');
         spawnHitFx(tg, ability.hitFx||'jeangrey_mindwarp_hit', dirSignTo(caster,tg));
@@ -8871,7 +8962,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   }
   opts = opts || {};
   // Daredevil passive: Evasion — a clean dodge, no damage, no knockback.
-  if(!opts.guaranteedHit && target.def.dodgeChance && Math.random() < target.def.dodgeChance){
+  if(!opts.mindWarpSelf && !opts.guaranteedHit && target.def.dodgeChance && Math.random() < target.def.dodgeChance){
     spawnDodgeFx(target, dirSign);
     sfx('dodge');
     return;
@@ -8903,7 +8994,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.def && target.def.id==='killmonger' && target.killmongerFuryUntil>tNow) actual*=1-(target.def.abilities.R.reduction||0.2);
   // Captain America's Shield Block: no-sells anything at or under the
   // threshold; anything harder breaks the block and deals full damage.
-  if(target.blocking){
+  if(target.blocking && !opts.mindWarpSelf){
     const blockAbility = target.def.abilities[target.blockKey || 'Q'];
     if(blockAbility && dmg <= (blockAbility.blockThreshold||0)){
       spawnBlockFx(target, dirSign);
@@ -12971,6 +13062,8 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     if(f._slideFxT >= 1.6 && f.el){ f._slideFxT = 0; spawnAfterimage(f, '#55d65c77', 300); }
   }
 
+  const icePrevX = f.x, icePrevY = f.y;
+
   // Vertical
   if(f.flight){
     let vertDir = 0;
@@ -12991,18 +13084,6 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   }
   if(f.glideUntil && tNow >= f.glideUntil && f.el) f.el.classList.remove('moonknight-gliding');
 
-  // Iceman's Ice Path: while his flight toggle is active, he leaves behind a
-  // short chain of solid ice platforms along his flight trail. They collide
-  // like real one-way platforms (anyone can land on them) and each melts away
-  // 3 seconds after being laid down.
-  if(f.def.id === 'iceman' && f.flight && !f.dead){
-    f._icePathTick = (f._icePathTick||0) + dtF;
-    if(f._icePathTick >= 8){
-      f._icePathTick = 0;
-      spawnIcePathSegment(f, tNow);
-    }
-  }
-
   // Drop-through timer
   if(f.dropThroughTimer > 0){ f.dropThroughTimer -= dtF*16.67; }
   f.dropThrough = wantDown && !f.flight && f.onGround;
@@ -13011,6 +13092,20 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   // Integrate
   f.x += f.vx * dtF;
   f.y += f.vy * dtF;
+
+  // Iceman's Ice Path is built from the actual movement vector so horizontal,
+  // diagonal, and vertical flight all produce a continuous trail instead of
+  // a pile of disconnected horizontal bars.
+  if(f.def.id === 'iceman' && f.flight && !f.dead){
+    f._icePathTick = (f._icePathTick||0) + dtF;
+    if(f._icePathTick >= 3){
+      f._icePathTick = 0;
+      const ax = icePrevX + FIGHTER_SIZE/2, ay = icePrevY + FIGHTER_SIZE/2;
+      const bx = f.x + FIGHTER_SIZE/2, by = f.y + FIGHTER_SIZE/2;
+      const travel = Math.hypot(bx-ax, by-ay);
+      if(travel > 2) spawnIcePathSegment(f, tNow, ax, ay, bx, by);
+    }
+  }
 
   // Platform collision (only when falling, one-way platforms)
   f.onGround = false;
@@ -13028,17 +13123,28 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
         f.standingPlatform = plat;
       }
     }
-    // Iceman's Ice Path trail: same one-way landing logic as real platforms,
-    // just against the temporary ice segments instead.
+    // Iceman's Ice Path trail: the temporary surface can be sloped, so use the
+    // line's actual Y at the fighter's feet instead of treating every segment as
+    // a horizontal rectangle. The small X extension lets a fighter land cleanly
+    // on the rounded end of a segment and keeps adjacent pieces visually/physically connected.
     if(state.icePlatforms && state.icePlatforms.length){
       for(const plat of state.icePlatforms){
         if(f.dropThroughTimer > 0) continue;
         if(tNow >= plat.expire) continue;
-        if(!collidesPlatform(f, plat)) continue;
+        const dx = plat.x2 - plat.x1, dy = plat.y2 - plat.y1;
+        const len = Math.hypot(dx,dy);
+        if(len < 2) continue;
         const feetPrev = (f.y - f.vy*dtF) + FIGHTER_SIZE;
         const feetNow = f.y + FIGHTER_SIZE;
-        if(f.vy >= 0 && feetPrev <= plat.y + 6 && feetNow >= plat.y){
-          f.y = plat.y - FIGHTER_SIZE;
+        const footX = f.x + FIGHTER_SIZE/2;
+        const along = ((footX - plat.x1)*dx + (feetNow - plat.y1)*dy) / (len*len);
+        const halfReach = (FIGHTER_SIZE/2 + 8) / len;
+        if(along < -halfReach || along > 1 + halfReach) continue;
+        const tSeg = Math.max(0, Math.min(1, (footX - plat.x1) / (Math.abs(dx) > 0.01 ? dx : 1)));
+        const surfaceY = plat.y1 + dy * tSeg;
+        const verticalGap = feetNow - surfaceY;
+        if(f.vy >= 0 && feetPrev <= surfaceY + 8 && verticalGap >= -8 && verticalGap <= 16){
+          f.y = surfaceY - FIGHTER_SIZE;
           f.vy = 0;
           f.onGround = true;
           f.standingPlatform = plat;
@@ -14334,15 +14440,26 @@ function updateWalls(){
    state.icePlatforms loop in updatePhysics) and each melts 3 seconds after
    being placed, regardless of whether he's still flying.
    ========================================================================= */
-function spawnIcePathSegment(f, t){
+function spawnIcePathSegment(f, t, x1, y1, x2, y2){
   if(!state.icePlatforms) state.icePlatforms = [];
-  const w = FIGHTER_SIZE + 10;
+  const dx = x2 - x1, dy = y2 - y1;
+  const travel = Math.hypot(dx,dy);
+  if(travel < 2) return;
+  // Slightly overrun both ends so consecutive segments overlap instead of
+  // leaving tiny gaps when the flight direction changes frame-to-frame.
+  const cap = 7;
+  const ax = x1 - dx / travel * cap, ay = y1 - dy / travel * cap;
+  const bx = x2 + dx / travel * cap, by = y2 + dy / travel * cap;
+  const w = Math.max(12, Math.hypot(bx-ax, by-ay));
+  const h = 12;
   const seg = {
-    x: f.x + FIGHTER_SIZE/2 - w/2, y: f.y + FIGHTER_SIZE - 6, w, h: 12,
-    placedAt: t, expire: t + 3000, el: null, ownerId: f.id
+    x1:ax, y1:ay, x2:bx, y2:by,
+    x:(ax+bx)/2-w/2, y:(ay+by)/2-h/2, w, h,
+    angle:Math.atan2(by-ay,bx-ax) * 180 / Math.PI,
+    placedAt:t, expire:t+3000, el:null, ownerId:f.id
   };
   state.icePlatforms.push(seg);
-  spawnSparks(f.x + FIGHTER_SIZE/2, f.y + FIGHTER_SIZE, 4, '#bdf1ff', 30, 260);
+  spawnSparks(x2, y2 + 4, 3, '#bdf1ff', 24, 220);
 }
 function updateIcePlatforms(){
   if(!state.icePlatforms) { state.icePlatforms = []; return; }
@@ -14363,8 +14480,14 @@ function updateIcePlatforms(){
       // top of the ice rather than the ice drawing over their feet.
       arenaEl.insertBefore(seg.el, arenaEl.firstChild);
     }
-    seg.el.style.left = seg.x+'px'; seg.el.style.top = seg.y+'px';
-    seg.el.style.width = seg.w+'px'; seg.el.style.height = seg.h+'px';
+    const cx = (seg.x1 + seg.x2) / 2;
+    const cy = (seg.y1 + seg.y2) / 2;
+    seg.el.style.left = cx+'px';
+    seg.el.style.top = cy+'px';
+    seg.el.style.width = seg.w+'px';
+    seg.el.style.height = seg.h+'px';
+    seg.el.style.transform = `translate(-50%,-50%) rotate(${seg.angle}deg)`;
+    seg.el.style.transformOrigin = '50% 50%';
     // Fade + thin out over the last second so its disappearance reads as
     // melting rather than just popping out of existence.
     seg.el.style.opacity = remaining < 1000 ? String(Math.max(0.12, remaining/1000)) : '1';
@@ -15156,6 +15279,7 @@ function endBattleMulti(winner, reason){
 
 function loseLife(target, side){
   const opp = side === 'player' ? state.bot : state.player;
+  if(state.player && state.player.mindWarpTarget === target) endJeanMindWarp();
   const col = target.def.color || '#ffffff';
 
   // Knock-out burst where they fell.
@@ -15492,13 +15616,15 @@ window.addEventListener('keydown', (e)=>{
   // descend while Flight is active. 's' and the down arrow always work,
   // same permanent-fallback treatment jump gets from Space/ArrowUp.
   if(k==='s' || k==='arrowdown') keysHeld.down = true;
+  const controlled = getSoloControlledFighter();
+  const controlledTarget = controlled === state.player ? state.bot : state.player;
   if(k===KEYBINDS.jump || k==='arrowup' || k===' '){
     e.preventDefault();
-    if(!e.repeat && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
+    if(!e.repeat && controlled && controlled.onGround && !controlled.flight) controlled.jumpQueued = true;
   }
-  if(k===KEYBINDS.abilityE) tryUseAbility(state.player, state.bot, 'E');
-  if(k===KEYBINDS.abilityQ) tryUseAbility(state.player, state.bot, 'Q');
-  if(k===KEYBINDS.abilityR) tryUseAbility(state.player, state.bot, 'R');
+  if(k===KEYBINDS.abilityE && controlled && controlledTarget) tryUseAbility(controlled, controlledTarget, 'E');
+  if(k===KEYBINDS.abilityQ && controlled && controlledTarget) tryUseAbility(controlled, controlledTarget, 'Q');
+  if(k===KEYBINDS.abilityR && controlled && controlledTarget) tryUseAbility(controlled, controlledTarget, 'R');
 });
 window.addEventListener('keyup', (e)=>{
   const k = e.key.toLowerCase();
@@ -15764,19 +15890,21 @@ function pollSoloBattle(){
   const jumpWasPressed = !!gpPrevPressed[JUMP_POS];
   gpPrevPressed[JUMP_POS] = jumpPressed;
   const stickJumpEdge = wantUp && !wasUp;
-  if(state.player && (jumpPressed && !jumpWasPressed || stickJumpEdge)
-     && state.player.onGround && !state.player.flight){
-    state.player.jumpQueued = true;
+  const controlled = getSoloControlledFighter();
+  const controlledTarget = controlled === state.player ? state.bot : state.player;
+  if(controlled && (jumpPressed && !jumpWasPressed || stickJumpEdge)
+     && controlled.onGround && !controlled.flight){
+    controlled.jumpQueued = true;
   }
 
-  if(state.player && state.bot){
+  if(controlled && controlledTarget){
     ['E','Q','R'].forEach(key=>{
       const idx = ABILITY_POS[key];
       const btn = gp.buttons[idx];
       const pressed = !!(btn && btn.pressed);
       const was = !!gpPrevPressed[idx];
       gpPrevPressed[idx] = pressed;
-      if(pressed && !was) tryUseAbility(state.player, state.bot, key);
+      if(pressed && !was) tryUseAbility(controlled, controlledTarget, key);
     });
   }
 }
@@ -16622,7 +16750,8 @@ document.querySelectorAll('#dpad button').forEach(btn=>{
     ev.preventDefault();
     keysHeld[dir] = true;
     btn.classList.add('pressed');
-    if(dir==='up' && state.player && state.player.onGround && !state.player.flight) state.player.jumpQueued = true;
+    const controlled = getSoloControlledFighter();
+    if(dir==='up' && controlled && controlled.onGround && !controlled.flight) controlled.jumpQueued = true;
   };
   const release = (ev)=>{
     keysHeld[dir] = false;
@@ -16649,8 +16778,9 @@ function dragUpdate(dx, dy){
   // Drag down to drop through a platform or descend while flying — mirrors
   // the up-drag-to-jump gesture instead of being permanently disabled.
   keysHeld.down = dy > DRAG_DEADZONE;
-  if(keysHeld.up && !wasUp && state.player && state.player.onGround && !state.player.flight){
-    state.player.jumpQueued = true;
+  const controlled = getSoloControlledFighter();
+  if(keysHeld.up && !wasUp && controlled && controlled.onGround && !controlled.flight){
+    controlled.jumpQueued = true;
   }
 }
 wrapper.addEventListener('touchstart', (e)=>{
@@ -16683,6 +16813,7 @@ function gameLoop(ts){
 
   if(state.mode === 'battle'){
     rescaleArena();
+    updateJeanMindWarp();
     const p = state.player, b = state.bot;
     const frozen = state.countdown;
     const activeFighters = (state.multiPvp && state.multi) ? state.multi.fighters : [p, b];
@@ -16712,22 +16843,33 @@ function gameLoop(ts){
       updatePhysics(p, frozen ? 0 : mv(k1), pJump, !frozen && p.flight && k1.down, dtF);
       updatePhysics(b, frozen ? 0 : mv(k2), bJump, !frozen && b.flight && k2.down, dtF);
     } else {
-      let pMoveDir = 0;
+      const controlled = getSoloControlledFighter();
+      const controlledIsBot = controlled === b;
+      let moveDir = 0;
       if(!frozen){
-        if(keysHeld.left || gpKeys.left) pMoveDir -= 1;
-        if(keysHeld.right || gpKeys.right) pMoveDir += 1;
+        if(keysHeld.left || gpKeys.left) moveDir -= 1;
+        if(keysHeld.right || gpKeys.right) moveDir += 1;
       }
-      const pWantJump = !frozen && (p.jumpQueued || (p.flight && (keysHeld.up || gpKeys.up)));
-      p.jumpQueued = false;
-      const pWantDown = !frozen && p.flight && (keysHeld.down || gpKeys.down);
-      updatePhysics(p, pMoveDir, pWantJump, pWantDown, dtF);
+      const wantJump = !frozen && (controlled.jumpQueued || (controlled.flight && (keysHeld.up || gpKeys.up)));
+      controlled.jumpQueued = false;
+      const wantDown = !frozen && controlled.flight && (keysHeld.down || gpKeys.down);
+      updatePhysics(controlled, moveDir, wantJump, wantDown, dtF);
 
-      const bWantJump = !frozen && (b.flight ? b.aiFlyDir < 0 : (b.aiJumpPulse && b.onGround));
-      const bWantDown = !frozen && (b.flight ? b.aiFlyDir > 0 : b.aiDropPulse);
-      b.aiJumpPulse = false;
-      b.aiDropPulse = false;
-      updatePhysics(b, frozen ? 0 : b.aiMoveDir, bWantJump, bWantDown, dtF);
-      updateBotFacing(b, p);
+      if(controlledIsBot){
+        // Do not let the possessed enemy's AI overwrite player input.
+        b.aiJumpPulse = false;
+        b.aiDropPulse = false;
+        // Keep Jean Grey present and physically simulated, but do not move her
+        // with the enemy AI while the player's control is swapped.
+        updatePhysics(p, 0, false, false, dtF);
+      } else {
+        const bWantJump = !frozen && (b.flight ? b.aiFlyDir < 0 : (b.aiJumpPulse && b.onGround));
+        const bWantDown = !frozen && (b.flight ? b.aiFlyDir > 0 : b.aiDropPulse);
+        b.aiJumpPulse = false;
+        b.aiDropPulse = false;
+        updatePhysics(b, frozen ? 0 : b.aiMoveDir, bWantJump, bWantDown, dtF);
+        updateBotFacing(b, p);
+      }
     }
 
     // Shared fighter updates retained from the current build.
@@ -16772,7 +16914,7 @@ function gameLoop(ts){
       updateTorchTouch(p, b); updateTorchTouch(b, p);
     }
 
-    if(!frozen && !state.pvp && !state.multiPvp) updateBotAI(dtF);
+    if(!frozen && !state.pvp && !state.multiPvp && getSoloControlledFighter() !== b) updateBotAI(dtF);
     checkKO();
 
     activeFighters.forEach(f=>renderFighter(f));
