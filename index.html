@@ -400,6 +400,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .magclamp-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 0 7px #ff3b5c) drop-shadow(0 0 14px #8b3fd955);}
 .magclamp-projectile svg{display:block;width:100%;height:100%;overflow:visible;animation:magClampPulse .28s ease-in-out infinite alternate;}
 @keyframes magClampPulse{from{transform:scale(.94)}to{transform:scale(1.06)}}
+.fighter.namor.flight-active .flight-glow{display:block!important;inset:-12px;border-radius:50%;background:radial-gradient(circle at 50% 55%,rgba(224,250,255,.18) 0 10%,transparent 28%),radial-gradient(circle at 50% 55%,rgba(48,192,236,.22) 0 40%,transparent 68%);border:2px solid rgba(98,221,255,.70);box-shadow:0 0 12px #62ddff,0 0 32px #1686ad88;animation:magnetoFlightPulse .52s ease-in-out infinite alternate;}
 .fighter.magneto.flight-active .flight-glow{display:block!important;inset:-18px;border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.16) 0 9%,transparent 22%),radial-gradient(circle at 50% 50%,rgba(201,139,255,.24) 0 34%,transparent 60%);border:2px solid rgba(220,226,234,.72);box-shadow:0 0 10px #dce4ec,0 0 24px #9aa9c2,0 0 44px #8b3fd9aa,inset 0 0 24px #ff3b5c44;animation:magnetoFlightPulse .52s ease-in-out infinite alternate;}
 .fighter.magneto.flight-active .magneto-flight-aura{display:block;}
 .magneto-flight-aura{position:absolute;left:50%;top:50%;width:108px;height:76px;transform:translate(-50%,-50%);z-index:1;pointer-events:none;display:none;filter:drop-shadow(0 0 7px #cbd5e1);}
@@ -1359,6 +1360,9 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
    the gun locked to the body when he faces left. */
 .fighter.facing-left .held-ranged-weapon{transform:scaleX(-1);}
 .fighter.redskull .held-redskull-gun svg{left:28px;top:18px;width:84px;height:40px;}
+.zemo .fighter-square,.fighter.zemo .fighter-square{border-color:#8e8f93;box-shadow:0 0 0 1px rgba(230,232,236,.12),0 10px 24px rgba(0,0,0,.36);}
+.fighter.namor .fighter-square{border-color:#35bfe8;box-shadow:0 0 0 1px rgba(74,210,255,.18),0 10px 26px rgba(0,120,180,.22),0 0 18px rgba(53,191,232,.16);}
+
 .fighter.nickfury .held-nickfury-gun svg{left:32px;top:23.5px;width:64px;height:34px;}
 .fighter.nickfury .held-nickfury-bazooka svg{left:2px;top:16px;width:116px;height:44px;}
 
@@ -1410,6 +1414,14 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .sl-bolt-core{position:absolute;inset:0;border-radius:3px 50% 50% 3px;background:linear-gradient(90deg,#a3122a,#ff5a3c 45%,#fff2d6 85%,#fff);}
 .sl-bolt-tail{position:absolute;right:92%;top:20%;width:90%;height:60%;background:linear-gradient(90deg,transparent,#ff5a3c99);filter:blur(2px);}
 .sl-bomb{position:absolute;width:18px;height:18px;z-index:28;pointer-events:none;}
+.zemo-charge-bomb{position:absolute;width:20px;height:20px;z-index:28;pointer-events:none;}
+.zemo-charge-body{position:absolute;inset:1px;border-radius:6px 50% 50% 50%;transform:rotate(45deg);background:linear-gradient(145deg,#eceff2,#7e858d 52%,#272b31);border:2px solid #111318;box-shadow:0 2px 5px rgba(0,0,0,.65),0 0 7px #f0b35b66;}
+.zemo-charge-led{position:absolute;left:7px;top:7px;width:6px;height:6px;border-radius:50%;background:#ffb347;box-shadow:0 0 8px #ffb347;opacity:.35;z-index:2;}
+.zemo-charge-bomb.flash .zemo-charge-led{opacity:1;animation:zemoChargeFlash .12s ease-in-out infinite alternate;}
+.zemo-charge-ring{position:absolute;left:50%;top:50%;width:19px;height:19px;margin:-9.5px;border:2px solid #ffb347;border-radius:50%;opacity:0;}
+.zemo-charge-bomb.stuck .zemo-charge-ring{animation:slBombRing var(--pulse,.5s) ease-out infinite;}
+@keyframes zemoChargeFlash{from{transform:scale(.85)}to{transform:scale(1.3)}}
+
 .sl-bomb-body{position:absolute;inset:1px;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 30%,#dfe4ea,#7a838f 45%,#2a3038);border:2px solid #14171b;box-shadow:0 2px 4px rgba(0,0,0,.6);}
 .sl-bomb-body::after{content:'';position:absolute;left:0;right:0;top:6px;height:4px;background:#8e1f30;}
 .sl-bomb-led{position:absolute;left:6px;top:6px;width:6px;height:6px;border-radius:50%;background:#ff2b3d;box-shadow:0 0 8px #ff2b3d,0 0 16px #ff2b3d;opacity:.3;z-index:2;}
@@ -1813,6 +1825,32 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 .wolverine-slash{pointer-events:none;animation:wolverineSlash .24s cubic-bezier(.15,.8,.2,1) forwards;}
 @keyframes wolverineSlash{from{opacity:0;transform:translateX(-10px) scale(.75) rotate(-18deg)}20%{opacity:1}60%{opacity:1;transform:translateX(8px) scale(1.05) rotate(4deg)}100%{opacity:0;transform:translateX(20px) scale(1.16) rotate(10deg)}}
+
+/* Zemo: compact, hand-anchored sword swing. The wrapper follows Zemo's live position/facing in JS,
+   while the short animation only rotates the weapon around its grip so it never looks like a detached
+   floating sword. */
+.zemo-sword-slash{
+  position:absolute; pointer-events:none; z-index:40; width:100px; height:76px;
+  transform-origin:20px 55px;
+}
+.zemo-sword-slash-art{
+  width:100%; height:100%; transform-origin:20px 55px;
+  animation:zemoSwordSwing .96s cubic-bezier(.16,.8,.2,1) forwards;
+}
+.zemo-sword-slash-art svg{
+  display:block; width:100%; height:100%; overflow:visible;
+  filter:drop-shadow(0 0 3px rgba(235,242,255,.8)) drop-shadow(0 0 8px rgba(120,170,225,.35));
+}
+@keyframes zemoSwordSwing{
+  0%{opacity:0;transform:rotate(-52deg) scale(.88);}
+  10%{opacity:1;}
+  38%{opacity:1;transform:rotate(-18deg) scale(1);}
+  67%{opacity:1;transform:rotate(24deg) scale(1.02);}
+  84%{opacity:.8;transform:rotate(42deg) scale(.98);}
+  100%{opacity:0;transform:rotate(50deg) scale(.94);}
+}
+.zemo-sword-slash .zemo-sword-glint{animation:zemoSwordGlint .22s ease-out infinite alternate;}
+@keyframes zemoSwordGlint{from{opacity:.55}to{opacity:1}}
 .fighter.cm-punching .fighter-square{animation:cmPunch .26s cubic-bezier(.18,.82,.2,1);}
 .fighter.cm-punching.facing-left .fighter-square{animation:cmPunchLeft .26s cubic-bezier(.18,.82,.2,1);}
 @keyframes cmPunch{0%{transform:scale(1) rotate(0)}35%{transform:scale(1.05) translateX(5px) rotate(-3deg)}62%{transform:scale(1.02) translateX(-3px) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
@@ -4147,6 +4185,23 @@ const CHARACTERS = {
          desc:'Uses the Space Stone to teleport Red Skull to a random part of the map. Cooldown: 18 seconds.'}
     }
   },
+  zemo: {
+    id:'zemo', name:'Zemo', img:'Zemo.jpg', color:'#7b7f86', accentColor:'#d9dde3', aiStyle:'zemo',
+    maxHealth:7500,
+    description:'A tactical swordsman who mixes quick blade strikes with explosive charges and short ability denial.',
+    abilities:{
+      E:{key:'E', name:'Sword Slash', type:'melee', damage:225, cooldown:700, knockback:6, range:88,
+         hitRange:132, hitVertical:120, hitStartSlack:42, hitDelay:55,
+         sound:'hit', fx:'zemo-slash', hitFx:'hit', hitSound:'hit',
+         desc:'Fast sword slash for 225 damage. Cooldown: 0.7 seconds.'},
+      Q:{key:'Q', name:'Explosive Charge', type:'laserBomb', damage:800, radius:140, knockback:14, fuse:1000, cooldown:8000, skin:'zemo',
+         sound:'ability', fx:'zemo-charge', hitFx:'hit', hitSound:'hit',
+         desc:'Throws an explosive charge that detonates for 800 damage. Cooldown: 8 seconds.'},
+      R:{key:'R', name:'Master Tactician', type:'tacticalDisable', damage:0, cooldown:10000, duration:2000, radius:520,
+         sound:'ability', fx:'zemo-tactician',
+         desc:'Slows the enemy and disables their abilities for 2 seconds. Cooldown: 10 seconds.'}
+    }
+  },
   nickfury: {
     id:'nickfury', name:'Nick Fury', img:'NickFury.jpg', color:'#3b4250', accentColor:'#b5c9e8', aiStyle:'nickfury',
     maxHealth:4500,
@@ -4181,6 +4236,24 @@ const CHARACTERS = {
       R:{key:'R', name:'Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
          sound:'flight_on', fx:'flight',
          desc:'Activates free flight for 5 seconds. Recharges after a 10 second cooldown.'}
+    }
+  },
+  namor: {
+    id:'namor', name:'Namor', img:'Namor.jpg', color:'#1686ad', accentColor:'#62ddff', aiStyle:'namor',
+    maxHealth:20000,
+    description:'A powerful Atlantean aerial fighter who attacks with his trident, unleashes a crushing tidal wave, and takes to the air.',
+    abilities:{
+      E:{key:'E', name:'Trident Strike', type:'projectile', damage:850, cooldown:1700, knockback:9,
+         speed:18, w:46, h:18, color:'#65ddff', render:'namor-trident', trail:'namor-water',
+         sound:'ability', fx:'namor-trident', hitFx:'hit', hitSound:'hit',
+         desc:'Throws a fast trident strike for 850 damage. Cooldown: 1.7 seconds.'},
+      Q:{key:'Q', name:'Tidal Wave', type:'projectile', damage:1900, cooldown:12000, knockback:22,
+         speed:12, w:150, h:70, color:'#43c7f3', render:'namor-wave', trail:'namor-water',
+         sound:'ability', fx:'namor-wave', hitFx:'hit', hitSound:'hit',
+         desc:'Sends a huge tidal wave forward for 1,900 damage and heavy knockback. Cooldown: 12 seconds.'},
+      R:{key:'R', name:'Namor’s Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
+         sound:'flight', fx:'flight',
+         desc:'Takes flight for 5 seconds. Pure mobility. Cooldown: 10 seconds.'}
     }
   },
   captainmarvel: {
@@ -5022,7 +5095,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
+const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','namor','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
 
 
 /* =========================================================================
@@ -6509,7 +6582,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -7677,6 +7750,22 @@ function executeAbility(caster, target, ability, t){
       spawnSparks(cx,cy,14,'#ff4058',58,360);
       break;
     }
+    case 'tacticalDisable': {
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead || tg === caster) break;
+      const dx = (tg.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
+      const dy = (tg.y+FIGHTER_SIZE/2) - (caster.y+FIGHTER_SIZE/2);
+      if(Math.hypot(dx,dy) > (ability.radius || 520) || attackBlockedByFloor(caster,tg)) break;
+      const until = t + (ability.duration || 2000);
+      tg.abilityLockUntil = until;
+      tg.vx = 0; tg.vy = 0; tg.hitStun = 0;
+      if(tg.el) tg.el.classList.add('slowed');
+      const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+      fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#d9dde3;border-width:2px;box-shadow:0 0 24px #c8ced8;`,520);
+      spawnSparks(cx,cy,16,'#e6e9ee',62,360);
+      setTimeout(()=>{ if(tg.el && tg.abilityLockUntil <= now()) tg.el.classList.remove('slowed'); }, (ability.duration||2000)+20);
+      break;
+    }
     case 'bullseyeRicochet': {
       caster.ricochetArmed = true;
       if(caster.el){ caster.el.classList.add('bullseye-ricochet-armed'); }
@@ -7916,6 +8005,20 @@ function executeAbility(caster, target, ability, t){
       // own E/Q/R abilities.
       const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
       if(!tg || tg.dead) break;
+      // Jean Grey cannot Mind Warp anyone above 17,000 max health, and Spider-Man
+      // (including Miles Morales) is specifically immune regardless of health.
+      const immuneToMindWarp = (tg.def && (
+        (Number(tg.def.maxHealth) > 17000) ||
+        tg.def.id === 'spiderman' ||
+        tg.def.id === 'milesmorales'
+      ));
+      if(immuneToMindWarp){
+        const ix=tg.x+FIGHTER_SIZE/2, iy=tg.y+FIGHTER_SIZE/2;
+        fxEl('fx-ring',`left:${ix-30}px;top:${iy-30}px;width:60px;height:60px;border-color:#ff7fd0;border-width:3px;box-shadow:0 0 18px #ff4aa2,0 0 28px #ff7fd055;`,340);
+        spawnDamageNumber(ix-16, iy-34, 'IMMUNE', false);
+        sfx('dodge');
+        break;
+      }
       const dx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
       const dist = Math.hypot(dx,dy);
       if(dist <= (ability.radius||650) && !attackBlockedByFloor(caster,tg)){
@@ -8713,10 +8816,10 @@ function updateLaserBombs(dtF){
     const isRocket = b.ability && b.ability.skin === 'rocket';
     if(!b.el){
       b.el = document.createElement('div');
-      b.el.className = isRocket ? 'rocket-sticky-grenade' : 'sl-bomb';
+      b.el.className = isRocket ? 'rocket-sticky-grenade' : (b.ability && b.ability.skin === 'zemo' ? 'zemo-charge-bomb' : 'sl-bomb');
       b.el.innerHTML = isRocket
         ? '<div class="rocket-sticky-body"></div><div class="rocket-sticky-spikes"></div><div class="rocket-sticky-led"></div><div class="rocket-sticky-ring"></div>'
-        : '<div class="sl-bomb-body"></div><div class="sl-bomb-led"></div><div class="sl-bomb-ring"></div>';
+        : (b.ability && b.ability.skin === 'zemo' ? '<div class="zemo-charge-body"></div><div class="zemo-charge-led"></div><div class="zemo-charge-ring"></div>' : '<div class="sl-bomb-body"></div><div class="sl-bomb-led"></div><div class="sl-bomb-ring"></div>');
       arenaEl.appendChild(b.el);
     }
     if(b.state === 'flying'){
@@ -10874,6 +10977,60 @@ function spawnAbilityFx(caster, ability, target){
       const who=caster;
       for(let i=0;i<5;i++) setTimeout(()=>{if(state.mode==='battle' && !who.dead) spawnAfterimage(who,'#e6e9ed44',220);},i*42);
       fxEl('punisher-roll-ring',`left:${caster.x-14}px;top:${caster.y+10}px;width:${FIGHTER_SIZE+28}px;height:40px;transform:scaleX(${dir});`,330);
+      break;
+    }
+
+    /* ---------------- Zemo ---------------- */
+    case 'zemo-slash': {
+      // The sword is deliberately compact and anchored to Zemo's hand. The wrapper is
+      // updated every frame for the full swing, so moving/turning Zemo carries the sword with him.
+      const slashSvg = `<svg viewBox="0 0 100 76" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="zemoBladeMetal" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#737d88"/>
+            <stop offset=".22" stop-color="#e8edf2"/>
+            <stop offset=".48" stop-color="#ffffff"/>
+            <stop offset=".74" stop-color="#c0c8d0"/>
+            <stop offset="1" stop-color="#59636e"/>
+          </linearGradient>
+          <linearGradient id="zemoGrip" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4b5360"/>
+            <stop offset=".45" stop-color="#242a31"/>
+            <stop offset="1" stop-color="#101319"/>
+          </linearGradient>
+        </defs>
+        <!-- subtle motion trail -->
+        <path d="M28 48 Q49 25 86 17" fill="none" stroke="#d9efff" stroke-width="5" opacity=".18" stroke-linecap="round"/>
+        <!-- compact sword -->
+        <path d="M29 48 L79 14 L90 12 L84 23 L35 53 Z" fill="url(#zemoBladeMetal)" stroke="#59636e" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M36 49 L83 20" stroke="#ffffff" stroke-width="1.15" opacity=".78" stroke-linecap="round"/>
+        <!-- crossguard -->
+        <path d="M25 44 L36 57" stroke="#d0d6dc" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M23 42 L35 56" stroke="#4b535d" stroke-width="1.1" stroke-linecap="round"/>
+        <!-- visible handle/grip -->
+        <path d="M16 50 L29 44 L36 53 L23 59 Z" fill="url(#zemoGrip)" stroke="#0b0e12" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M18 51 L29 47 M20 55 L32 50 M23 58 L34 52" stroke="#69727c" stroke-width="1.1" opacity=".85" stroke-linecap="round"/>
+        <!-- pommel -->
+        <circle cx="18" cy="55" r="4.4" fill="#c4ccd4" stroke="#3e4650" stroke-width="1.1"/>
+        <circle class="zemo-sword-glint" cx="82" cy="17" r="2.2" fill="#ffffff"/>
+      </svg>`;
+      const sword = fxEl('zemo-sword-slash', 'left:0;top:0;width:100px;height:76px;opacity:1;overflow:visible;', 1000,
+        `<div class="zemo-sword-slash-art">${slashSvg}</div>`);
+
+      const startedAt = performance.now();
+      const follow = () => {
+        if(!sword.parentNode) return;
+        const elapsed = performance.now() - startedAt;
+        const liveDir = caster.facing < 0 ? -1 : 1;
+        const handX = caster.x + FIGHTER_SIZE/2 + liveDir*22;
+        const handY = caster.y + FIGHTER_SIZE/2 + 8;
+        sword.style.left = `${handX - 20}px`;
+        sword.style.top = `${handY - 55}px`;
+        sword.style.transform = `scaleX(${liveDir})`;
+        if(elapsed < 980) requestAnimationFrame(follow);
+      };
+      requestAnimationFrame(follow);
+      spawnSparks(cx + dir*20, cy - 4, 5, '#dcecff', 28, 220);
       break;
     }
 
@@ -13268,7 +13425,7 @@ function updateFlightGlow(f){
     f.flight = false;
     f.flightExpire = 0;
   }
-  const flightVisual = f.flight && ['ironman','warmachine','wasp','falcon','vision','magneto'].includes(f.def.id);
+  const flightVisual = f.flight && ['ironman','warmachine','wasp','falcon','vision','magneto','namor'].includes(f.def.id);
   if(f.el) f.el.classList.toggle('flight-active', !!f.flight);
   if(f.flightEl) f.flightEl.style.display = (flightVisual && !['wasp','falcon'].includes(f.def.id)) ? 'block' : 'none';
   if(f.waspWingsEl) f.waspWingsEl.style.display = (f.flight && f.def.id === 'wasp') ? 'block' : 'none';
@@ -13960,7 +14117,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile') || p.el.classList.contains('namor-trident-projectile') || p.el.classList.contains('namor-wave-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -14221,6 +14378,49 @@ function buildProjectileVisual(p){
   } else if(p.render === 'deadpool-leg'){ 
     p.el.classList.add('deadpool-leg');
     p.el.innerHTML=`<svg viewBox="0 0 80 50"><defs><linearGradient id="dpLegSuit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b31928"/><stop offset=".42" stop-color="#ed3f4d"/><stop offset=".7" stop-color="#82111d"/><stop offset="1" stop-color="#2a1116"/></linearGradient><linearGradient id="dpBoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#252a31"/><stop offset=".6" stop-color="#0f1116"/><stop offset="1" stop-color="#030405"/></linearGradient></defs><path d="M9 18 Q15 9 25 8 L44 15 Q53 18 59 26 L52 33 L38 31 L29 39 L14 36 L6 29 Z" fill="url(#dpLegSuit)" stroke="#11151b" stroke-width="2.2"/><path d="M14 14 Q23 11 31 14 L38 29 L27 36 L17 34 L10 28 Z" fill="#15181d" opacity=".8"/><path d="M35 30 L48 19" stroke="#e33642" stroke-width="3" stroke-linecap="round"/><path d="M53 24 L68 29 Q74 31 76 37 L69 41 L51 35 Z" fill="url(#dpBoot)" stroke="#07090c" stroke-width="2.2"/><path d="M51 34 L68 39" stroke="#d3d7de" stroke-width="1.4" opacity=".55"/><circle cx="27" cy="13" r="3" fill="#1a0b0e"/><path d="M20 20 L31 29" stroke="#ff7a84" stroke-width="1.2" opacity=".5"/></svg>`;
+  } else if(p.render === 'namor-trident') {
+    p.el.classList.add('namor-trident-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML = `
+      <svg viewBox="0 0 92 36" width="92" height="36" aria-hidden="true" style="position:absolute;left:-23px;top:-9px;overflow:visible;filter:drop-shadow(0 0 4px #58dfff) drop-shadow(0 0 10px #35aeea66);">
+        <defs>
+          <linearGradient id="namorTridentGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6e4216"/>
+            <stop offset=".22" stop-color="#d9a94b"/>
+            <stop offset=".48" stop-color="#fff0a3"/>
+            <stop offset=".7" stop-color="#c8892c"/>
+            <stop offset="1" stop-color="#5b3510"/>
+          </linearGradient>
+          <linearGradient id="namorTridentEdge" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#f9e6a0"/>
+            <stop offset=".5" stop-color="#ffffff"/>
+            <stop offset="1" stop-color="#c99a3c"/>
+          </linearGradient>
+        </defs>
+
+        <!-- shaft and grip -->
+        <rect x="8" y="15" width="58" height="6" rx="3" fill="url(#namorTridentGold)" stroke="#4a2b0b" stroke-width="1.2"/>
+        <rect x="17" y="13.6" width="3" height="8.8" rx="1.5" fill="#fff0a3" opacity=".55"/>
+        <rect x="54" y="13.6" width="3" height="8.8" rx="1.5" fill="#fff0a3" opacity=".55"/>
+        <path d="M8 15 L2 18 L8 21 Z" fill="#8e5b1d" stroke="#4a2b0b" stroke-width="1"/>
+
+        <!-- three unmistakable prongs: upper, centre, lower -->
+        <path d="M61 15.5 L82 3 L75 17 L61 18 Z" fill="url(#namorTridentGold)" stroke="#4a2b0b" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M61 15 L91 18 L61 21 Z" fill="url(#namorTridentEdge)" stroke="#4a2b0b" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M61 20.5 L82 33 L75 19 L61 18 Z" fill="url(#namorTridentGold)" stroke="#4a2b0b" stroke-width="1.2" stroke-linejoin="round"/>
+
+        <!-- bright edges make the three tips readable during fast movement -->
+        <path d="M63 15.5 L80 5" stroke="#fff6c6" stroke-width="1" opacity=".78" stroke-linecap="round"/>
+        <path d="M65 18 L88 18" stroke="#ffffff" stroke-width="1.1" opacity=".82" stroke-linecap="round"/>
+        <path d="M63 20.5 L80 31" stroke="#fff6c6" stroke-width="1" opacity=".78" stroke-linecap="round"/>
+
+        <!-- small watery energy wake behind the weapon -->
+        <path d="M8 11 Q4 18 8 25" fill="none" stroke="#72e6ff" stroke-width="2" opacity=".7" stroke-linecap="round"/>
+      </svg>`;
+  } else if(p.render === 'namor-wave') {
+    p.el.classList.add('namor-wave-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML = '<div style="position:absolute;inset:5px 0;border-radius:50% 55% 45% 50%;background:linear-gradient(90deg,#0b719b,#42d7ff 48%,#e7fbff 53%,#219bc4);box-shadow:0 0 14px #42d7ff,0 0 28px #1aa6d655;transform:skewX(-7deg);"></div><div style="position:absolute;left:8%;right:2%;top:31%;height:13%;border-radius:50%;background:#ffffffaa;filter:blur(1px);"></div>';
   } else if(p.render === 'pistol'){
     p.el.classList.add('pistol-projectile');
     p.el.innerHTML = '<div class="bullet-core"></div><div class="bullet-trail"></div>';
@@ -14267,6 +14467,9 @@ function spawnProjTrail(p){
       + `<line x1="${n*0.5}" y1="0" x2="${n*0.5}" y2="${n}"/><line x1="0" y1="${n*0.5}" x2="${n}" y2="${n*0.5}"/>`
       + `<line x1="${n*0.15}" y1="${n*0.15}" x2="${n*0.85}" y2="${n*0.85}"/><line x1="${n*0.85}" y1="${n*0.15}" x2="${n*0.15}" y2="${n*0.85}"/>`
       + `</g></svg>`);
+  } else if(p.trail === 'namor-water'){
+    const sz = p.render === 'namor-wave' ? 10 : 7;
+    fxEl('fx-trail', `left:${(cx-sz).toFixed(1)}px;top:${(cy-sz/2).toFixed(1)}px;width:${(sz*2).toFixed(1)}px;height:${sz.toFixed(1)}px;background:radial-gradient(ellipse,#eaffff,#48d8ff 42%,transparent 78%);box-shadow:0 0 ${p.render === 'namor-wave' ? 16 : 9}px #45d9ff88;`, p.render === 'namor-wave' ? 260 : 190);
   } else if(p.trail === 'electric-web'){
     const n = Math.max(8, Math.min(18, p.w));
     fxEl('fx-webtick', `left:${(cx-n/2).toFixed(1)}px;top:${(cy-n/2).toFixed(1)}px;width:${n}px;height:${n}px;`, 320,
@@ -15168,6 +15371,16 @@ function updateBotAI(dtF){
     if(!bot.flight && cdReady(bot,'R',t)){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && adist <= qAb.radius + 20 && Math.abs(vertical) < 90){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 950){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'zemo'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && adist < (rAb.radius||520) && (hpPct < 0.7 || adist < 260) && Math.random()<0.7){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 110 && adist < 700){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.range + 25 && Math.abs(vertical)<120){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'namor'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && !bot.flight && (Math.abs(vertical)>100 || adist>480 || hpPct<0.4) && Math.random()<0.65){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 170 && adist < 850){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 1050){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'erratic'){
     // Moon Knight: no consistent gameplan. Personas swap and glides trigger
     // on a whim rather than in response to real threats, and darts fire
