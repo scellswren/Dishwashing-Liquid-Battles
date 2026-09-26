@@ -46,7 +46,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 /* ---------- Full-bleed page screens (menu / inventory / instructions / settings) ---------- */
 /* These break out of #app's centered 1200px column and cover the entire
    viewport so they read well on anything from a phone to a TV/fridge display. */
-#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-save-slots.active{
+#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-save-slots.active, #screen-mp-settings.active, #screen-podium.active{
   position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none;
   display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
   overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; z-index:2;
@@ -2616,6 +2616,7 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .hud-multi-top .hud-mini{width:22px; height:22px; margin:0; border-radius:5px; border:2px solid var(--pc);}
 .hud-multi-nm{font-weight:800; font-size:clamp(10px,1.5vh,13px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#eef0fa;}
 .hud-multi-slot .healthbar-track{height:8px;}
+.hud-multi-lives{display:flex; gap:3px; margin-top:3px; font-size:11px; line-height:1;}
 
 .pvp-pause{
   position:fixed; inset:0; z-index:70; display:none; align-items:center; justify-content:center; padding:16px;
@@ -2678,7 +2679,7 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
    v6 — Inventory · Settings · Instructions · Game over · popups
    Same language as the main menu: full-bleed, slanted rows, cream focus.
    ========================================================================= */
-#screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-gameover.active, #screen-save-slots.active{
+#screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-gameover.active, #screen-save-slots.active, #screen-mp-settings.active, #screen-podium.active{
   position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; min-height:0; z-index:2;
   display:block; overflow-x:hidden; overflow-y:auto; padding:0;
   background:
@@ -2858,6 +2859,126 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .lang-btn.gp-focused{background:var(--cream) !important; color:#1a1305 !important; outline:none !important; box-shadow:none !important;}
 #settings-reset-btn{font-weight:800;}
 @media (max-width:900px){ .set-cols{grid-template-columns:1fr;} }
+
+/* ---------- Multiplayer match settings screen ---------- */
+.mps-stage{max-width:1100px; margin:0 auto; width:100%;}
+.mps-cols{display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,28px); align-items:start;}
+@media (max-width:820px){ .mps-cols{grid-template-columns:1fr;} }
+.mps-block{
+  background:linear-gradient(180deg,rgba(27,29,41,.72),rgba(36,38,57,.6));
+  border:1px solid var(--line); border-radius:16px; padding:clamp(16px,2.4vw,24px);
+  box-shadow:0 10px 26px rgba(0,0,0,.28);
+}
+.mps-block-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px;}
+.mps-block .set-sub{margin:0; font-size:clamp(18px,2.4vh,24px);}
+.mps-toggle{background:none; border:none; padding:0; cursor:pointer; flex:none;}
+.mps-toggle-track{
+  display:block; width:54px; height:30px; border-radius:999px; background:#2b2e42; border:1px solid var(--line);
+  position:relative; transition:background .2s ease, border-color .2s ease;
+}
+.mps-toggle-knob{
+  position:absolute; top:2px; left:2px; width:24px; height:24px; border-radius:50%;
+  background:#8b8fa8; transition:transform .2s cubic-bezier(.2,.8,.3,1), background .2s ease;
+  box-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.mps-toggle[data-on="1"] .mps-toggle-track{background:linear-gradient(90deg,var(--amber),#e08a20); border-color:transparent;}
+.mps-toggle[data-on="1"] .mps-toggle-knob{transform:translateX(24px); background:#fff;}
+.mps-toggle.gp-focused .mps-toggle-track, .mps-toggle:focus-visible .mps-toggle-track{outline:2px solid var(--amber); outline-offset:2px;}
+.mps-stepper{
+  display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px;
+  opacity:1; max-height:100px; overflow:hidden; transition:opacity .2s ease, max-height .2s ease;
+}
+.mps-stepper.disabled{opacity:.35; pointer-events:none;}
+.mps-step-btn{
+  width:42px; height:42px; border-radius:50%; border:1px solid var(--line); background:var(--panel2); color:var(--text);
+  font-family:'Anton',sans-serif; font-size:22px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:transform .15s ease, background .15s ease;
+}
+.mps-step-btn:hover, .mps-step-btn.gp-focused{background:var(--amber); color:#231600; transform:translateY(-2px);}
+.mps-step-btn:active{transform:scale(.92);}
+.mps-step-value{font-family:'Anton',sans-serif; font-size:clamp(20px,3vh,26px); min-width:110px; text-align:center; color:var(--cream);}
+.mps-step-value span:last-child{font-size:.5em; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-left:4px;}
+.mps-chip-row{display:flex; flex-wrap:wrap; gap:9px; margin-top:12px;}
+.mps-health-pill{font-size:13px;}
+.mps-health-count{color:var(--muted); font-size:12.5px; margin:10px 0 0;}
+.mps-continue-row{display:flex; justify-content:center; margin-top:clamp(22px,4vh,36px);}
+#mps-continue-btn{min-width:240px;}
+.mps-continue-row{position:sticky;bottom:0;padding:14px 0 0;background:linear-gradient(180deg,transparent,rgba(15,16,22,.92) 30%);backdrop-filter:blur(7px);}
+.mps-block{transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;}
+.mps-block:hover{transform:translateY(-2px);border-color:#4a4f70;box-shadow:0 14px 34px rgba(0,0,0,.32);}
+.mps-toggle-track:after{content:'ON';position:absolute;right:7px;top:6px;font-size:8px;font-weight:800;color:rgba(255,255,255,.72);opacity:0;transition:opacity .2s ease;}
+.mps-toggle[data-on="1"] .mps-toggle-track:after{opacity:1;}
+
+/* ---------- Round scoreboard on the results screen ---------- */
+.go-round-info{margin:-6px auto 20px; max-width:min(560px,94%);}
+.go-round-info.on{display:block !important;}
+.go-round-label{font-family:'Anton',sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--amber); font-size:clamp(14px,2.2vh,18px); margin-bottom:10px;}
+.go-scoreboard{display:flex; flex-direction:column; gap:6px;}
+.go-score-row{
+  display:flex; align-items:center; gap:10px; padding:7px 12px; border-radius:10px;
+  background:rgba(0,0,0,.32); border:1px solid rgba(255,255,255,.08);
+}
+.go-score-row.won{border-color:rgba(242,165,65,.6); background:rgba(242,165,65,.12);}
+.go-score-tag{
+  font-family:'Anton',sans-serif; font-size:11px; letter-spacing:.05em; padding:2px 8px; border-radius:6px;
+  background:var(--pc); color:#0b0c12; flex:none;
+}
+.go-score-name{flex:1; text-align:left; font-weight:700; font-size:14px;}
+.go-score-pts{font-family:'Anton',sans-serif; font-size:15px; color:var(--cream); flex:none;}
+.go-score-row.won .go-score-pts::before{content:'👑 '; }
+
+/* ---------- Podium screen ---------- */
+.podium-stage{max-width:900px; margin:0 auto; width:100%; text-align:center;}
+.podium-head{align-items:center;}
+.podium-stands{display:flex; align-items:flex-end; justify-content:center; gap:clamp(10px,2.5vw,26px); margin:clamp(20px,4vh,44px) 0 18px; flex-wrap:wrap;}
+.podium-stand{display:flex; flex-direction:column; align-items:center; gap:10px; width:clamp(120px,20vw,180px);}
+.podium-stand-square{
+  width:clamp(70px,12vw,104px); height:clamp(70px,12vw,104px); border-radius:10px; overflow:hidden;
+  border:4px solid var(--char-color,#888); box-shadow:0 8px 20px rgba(0,0,0,.4);
+}
+.podium-stand-square img{width:100%;height:100%;object-fit:cover;display:block;}
+.podium-stand-name{font-weight:800; font-size:clamp(13px,1.6vw,16px);}
+.podium-stand-pts{font-family:'Anton',sans-serif; color:var(--amber); font-size:clamp(14px,2vw,18px);}
+.podium-stand-crown{font-size:clamp(22px,3.2vw,30px); margin-bottom:-4px;}
+.podium-stand-block{
+  width:100%; border-radius:10px 10px 0 0; background:linear-gradient(180deg,#2a2d42,#1a1c29);
+  border:1px solid var(--line); border-bottom:none; display:flex; align-items:flex-start; justify-content:center;
+  padding-top:8px; font-family:'Anton',sans-serif; font-size:clamp(20px,3vw,30px); color:var(--muted);
+}
+.podium-stand.place-1 .podium-stand-block{height:118px; background:linear-gradient(180deg,#4a3a14,#2a2110); border-color:rgba(242,165,65,.55); color:var(--amber);}
+.podium-stand.place-2 .podium-stand-block{height:82px;}
+.podium-stand.place-3 .podium-stand-block{height:58px;}
+.podium-stand.place-4 .podium-stand-block{height:46px; font-size:22px;}
+.podium-extra{display:flex; flex-direction:column; gap:6px; max-width:520px; margin:0 auto 10px;}
+.podium-buttons{margin-top:10px;}
+.podium-stand{animation:podiumRise .55s cubic-bezier(.2,.9,.2,1) both;}
+.podium-stand:nth-child(1){animation-delay:.06s;}
+.podium-stand:nth-child(2){animation-delay:.15s;}
+.podium-stand:nth-child(3){animation-delay:.24s;}
+.podium-stand:nth-child(4){animation-delay:.33s;}
+@keyframes podiumRise{from{opacity:0;transform:translateY(34px) scale(.96)}to{opacity:1;transform:none}}
+.podium-stand.place-1 .podium-stand-square{box-shadow:0 0 30px rgba(242,165,65,.38),6px 6px 0 rgba(0,0,0,.45);}
+.podium-stand-crown{animation:podiumCrown 1.6s ease-in-out infinite;}
+@keyframes podiumCrown{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+.round-finish{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--cream);font-size:clamp(26px,4.4vh,42px);margin-bottom:6px;}
+.round-finish-sub{color:var(--muted);font-weight:700;margin-bottom:12px;}
+.go-round-info{margin:-2px auto 22px; max-width:min(620px,94%);}
+.go-round-label{margin-bottom:12px;}
+.go-score-row{min-height:44px;}
+.go-score-row.is-first{box-shadow:inset 3px 0 0 var(--pc);}
+.go-score-place{font-family:'Anton',sans-serif;color:var(--pc);min-width:30px;text-align:center;}
+.go-score-delta{font-family:'Anton',sans-serif;color:var(--amber);min-width:54px;text-align:right;}
+.go-score-total{font-family:'Anton',sans-serif;color:var(--cream);min-width:62px;text-align:right;}
+.go-round-extra{margin-top:8px;color:var(--muted);font-size:12px;font-weight:700;}
+@media (max-width:640px){
+  .mps-stage{padding-left:14px;padding-right:14px;}
+  .mps-block{padding:16px;}
+  .mps-continue-row{padding-bottom:6px;}
+  .go-score-row{gap:7px;padding:7px 9px;}
+  .go-score-name{font-size:12px;}
+  .go-score-delta,.go-score-total{min-width:48px;font-size:12px;}
+}
+
 
 /* ---------- INSTRUCTIONS ---------- */
 .instr-wrap{max-width:1180px;}
@@ -3825,6 +3946,75 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     </div>
   </div>
 
+  <!-- ============ MULTIPLAYER MATCH SETTINGS ============ -->
+  <div id="screen-mp-settings" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="pair"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="page-stage mps-stage">
+      <header class="page-head">
+        <h2 class="page-title" data-i18n="mps_title">Match Settings</h2>
+        <div class="page-caption" data-i18n="mps_caption">Set up the rules for this multiplayer match before choosing fighters.</div>
+      </header>
+      <div class="mps-cols">
+        <section class="mps-block">
+          <div class="mps-block-head">
+            <h3 class="set-sub" data-i18n="mps_lives_header">Lives</h3>
+            <button class="mps-toggle" id="mps-lives-toggle" data-on="0" aria-pressed="false">
+              <span class="mps-toggle-track"><span class="mps-toggle-knob"></span></span>
+            </button>
+          </div>
+          <p class="settings-note" data-i18n="mps_lives_note">Give every fighter extra chances — getting knocked out costs a life instead of ending the match. Off means one knockout ends it, like a normal free-for-all.</p>
+          <div class="mps-stepper" id="mps-lives-stepper">
+            <button class="mps-step-btn" id="mps-lives-minus" aria-label="Fewer lives">−</button>
+            <div class="mps-step-value"><span id="mps-lives-value">3</span> <span data-i18n="mps_lives_unit">lives</span></div>
+            <button class="mps-step-btn" id="mps-lives-plus" aria-label="More lives">+</button>
+          </div>
+        </section>
+
+        <section class="mps-block">
+          <div class="mps-block-head">
+            <h3 class="set-sub" data-i18n="mps_rounds_header">Rounds</h3>
+            <button class="mps-toggle" id="mps-rounds-toggle" data-on="0" aria-pressed="false">
+              <span class="mps-toggle-track"><span class="mps-toggle-knob"></span></span>
+            </button>
+          </div>
+          <p class="settings-note" data-i18n="mps_rounds_note">Play a series of matches with the same fighters. Every round pays out points — 15 for 1st, 5 for 2nd, 2 for 3rd, none for last — and the top scorer takes the podium once every round is done.</p>
+          <div class="mps-stepper" id="mps-rounds-stepper">
+            <button class="mps-step-btn" id="mps-rounds-minus" aria-label="Fewer rounds">−</button>
+            <div class="mps-step-value"><span id="mps-rounds-value">3</span> <span data-i18n="mps_rounds_unit">rounds</span></div>
+            <button class="mps-step-btn" id="mps-rounds-plus" aria-label="More rounds">+</button>
+          </div>
+        </section>
+
+        <section class="mps-block">
+          <div class="mps-block-head">
+            <h3 class="set-sub" data-i18n="mps_random_header">Random Characters</h3>
+            <button class="mps-toggle" id="mps-random-toggle" data-on="0" aria-pressed="false">
+              <span class="mps-toggle-track"><span class="mps-toggle-knob"></span></span>
+            </button>
+          </div>
+          <p class="settings-note" data-i18n="mps_random_note">Skip the fighter-select screen entirely — everyone gets handed a random fighter and the match jumps straight to the countdown.</p>
+        </section>
+
+        <section class="mps-block">
+          <h3 class="set-sub" data-i18n="mps_health_header">Health Limit</h3>
+          <p class="settings-note" data-i18n="mps_health_note">Disable fighters whose maximum health is above the selected limit. This also affects random characters.</p>
+          <div class="mps-chip-row" id="mps-health-row">
+            <button class="map-pill mps-health-pill active" data-cap="0"><span data-i18n="mps_health_none">No limit</span></button>
+            <button class="map-pill mps-health-pill" data-cap="30000"><span data-i18n="mps_health_30k">30,000 HP or less</span></button>
+            <button class="map-pill mps-health-pill" data-cap="20000"><span data-i18n="mps_health_20k">20,000 HP or less</span></button>
+            <button class="map-pill mps-health-pill" data-cap="15000"><span data-i18n="mps_health_15k">15,000 HP or less</span></button>
+            <button class="map-pill mps-health-pill" data-cap="10000"><span data-i18n="mps_health_10k">10,000 HP or less</span></button>
+          </div>
+          <p class="mps-health-count" id="mps-health-count"></p>
+        </section>
+      </div>
+      <div class="mps-continue-row">
+        <button class="btn btn-primary" id="mps-continue-btn" data-i18n="mps_continue">Continue</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ 1 V 1: FIGHTER SELECT ============ -->
   <div id="screen-versus" class="screen">
     <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
@@ -4004,12 +4194,33 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <div class="go-portraits" id="go-portraits"></div>
       <p class="go-sub" id="go-sub"></p>
       <p class="go-reward" id="go-reward" role="status"></p>
+      <div class="go-round-info" id="go-round-info" style="display:none"></div>
       <div class="go-buttons">
         <button class="btn btn-primary solo-only" id="go-play-another-btn" data-i18n="go_play_another">Play Another</button>
         <button class="btn btn-primary solo-only" id="go-unlock-again-btn" data-nav="unlock" data-i18n="go_unlock_again" style="display:none">Unlock Another</button>
         <button class="btn btn-primary pvp-only" id="go-rematch-btn" data-i18n="go_rematch">Rematch</button>
         <button class="btn btn-secondary pvp-only" id="go-change-btn" data-i18n="go_change_fighters">Change fighters</button>
-        <button class="btn btn-secondary" data-nav="menu" data-i18n="go_return_menu">Return to Menu</button>
+        <button class="btn btn-primary" id="go-next-round-btn" data-i18n="round_next_btn" style="display:none">Next Round</button>
+        <button class="btn btn-primary" id="go-view-podium-btn" data-i18n="round_podium_btn" style="display:none">See Results</button>
+        <button class="btn btn-secondary" data-nav="menu" id="go-return-menu-btn" data-i18n="go_return_menu">Return to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PODIUM (final standings after a Rounds session) ============ -->
+  <div id="screen-podium" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <div class="page-stage podium-stage">
+      <header class="page-head podium-head">
+        <h2 class="page-title" id="podium-title" data-i18n="podium_title_default">Final Results</h2>
+        <div class="page-caption" id="podium-caption"></div>
+      </header>
+      <div class="podium-stands" id="podium-stands"></div>
+      <div class="podium-extra" id="podium-extra"></div>
+      <div class="go-buttons podium-buttons">
+        <button class="btn btn-primary" id="podium-rematch-btn" data-i18n="podium_rematch">Play Again</button>
+        <button class="btn btn-secondary" id="podium-settings-btn" data-i18n="podium_settings">Change Settings</button>
+        <button class="btn btn-secondary" data-nav="menu" id="podium-menu-btn" data-i18n="go_return_menu">Return to Menu</button>
       </div>
     </div>
   </div>
@@ -5684,10 +5895,10 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','mode','practice','battle-difficulty','unlock','pair','versus','save-slots','inventory','instructions','settings','battle','gameover'];
+const screens = ['menu','mode','practice','battle-difficulty','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','battle','gameover','podium'];
 function showScreen(name){
   // Fighter select needs both controllers still present — otherwise re-pair.
-  if(name === 'versus' && !versusPadsPresent()) name = 'pair';
+  if((name === 'versus' || name === 'mp-settings') && !versusPadsPresent()) name = 'pair';
   screens.forEach(s=>{
     document.getElementById('screen-'+s).classList.toggle('active', s===name);
   });
@@ -5699,8 +5910,13 @@ function showScreen(name){
   if(name==='mode') renderModeScreen();
   if(name==='unlock') renderUnlockScreen();
   renderTokenCounters();
-  if(name==='pair') startPairing();
+  if(name==='pair'){
+    if(versus.slots.some(Boolean)) renderPairing(true);
+    else startPairing();
+  }
+  if(name==='mp-settings') renderMpSettingsScreen();
   if(name==='versus') startVersusSelect();
+  if(name==='podium') renderPodiumScreen();
   if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
 document.addEventListener('click', (e)=>{
@@ -6107,6 +6323,7 @@ const state = {
   lastTime:0,
   scaleFactor:1,
   input:{left:false,right:false,down:false,up:false},
+  roundsSession:null,
 };
 
 function now(){ return performance.now(); }
@@ -6129,6 +6346,7 @@ function startBattle(playerCharId, botCharId, opts){
   document.getElementById('screen-battle').classList.remove('multi');
   // NOTE: state.mode === 'battle' means "a fight is running" everywhere in this file.
   // The Battle GAME MODE (3 lives) is tracked separately as state.matchKind === 'battle'.
+  if(pvp && !roundSessionActive()) resetRoundScoreButtons();
   state.matchKind = pvp ? 'pvp' : ((opts && opts.kind) || 'practice');
   state.maxLives = Math.max(1, Math.floor((opts && opts.lives) || 1));
   state.livesOn = state.maxLives > 1;
@@ -6195,6 +6413,7 @@ function startMultiBattle(charIds, opts){
   document.getElementById('pvp-pause').classList.remove('on');
   document.getElementById('screen-battle').classList.add('pvp');
   document.getElementById('screen-battle').classList.add('multi');
+  if(!roundSessionActive()) resetRoundScoreButtons();
   state.matchKind = 'pvp';
   state.maxLives = 1;
   state.livesOn = false;
@@ -6204,14 +6423,20 @@ function startMultiBattle(charIds, opts){
   state.stampSeq = (state.stampSeq || 0) + 1;
   document.getElementById('screen-battle').classList.remove('lives-on');
 
+  // Per-fighter lives for 3-4 player free-for-all (separate from the
+  // player/bot lives system above, which only knows about two sides).
+  const multiMaxLives = Math.max(1, Math.floor((opts && opts.lives) || 1));
+  const multiLivesOn = multiMaxLives > 1;
+
   const spawns = MULTI_SPAWN_X[n];
   const fighters = charIds.slice(0,n).map((id,i)=>{
     const f = makeFighter(id, false, spawns[i], 'p'+(i+1));
     f.multiSlot = i;
     f.facing = i < n/2 ? 1 : -1;
+    f.livesLeft = multiMaxLives;
     return f;
   });
-  state.multi = { fighters };
+  state.multi = { fighters, livesOn: multiLivesOn, maxLives: multiMaxLives, eliminationOrder: [] };
   state.player = fighters[0];
   state.bot = fighters[1];
   versus.lastPick = charIds.slice(0,n);
@@ -6723,9 +6948,16 @@ function updateHudMulti(){
     el.classList.remove('n1','n2','n3','n4'); el.classList.add('n'+(i+1));
     el.classList.toggle('eliminated', !!f.dead);
     const pct = Math.max(0,f.health)/f.def.maxHealth;
+    let livesHtml = '';
+    if(state.multi && state.multi.livesOn){
+      const left = f.livesLeft != null ? f.livesLeft : state.multi.maxLives;
+      let hearts = '';
+      for(let h=0; h<state.multi.maxLives; h++) hearts += `<span class="hud-heart${h>=left?' lost':''}">♥</span>`;
+      livesHtml = `<div class="hud-multi-lives">${hearts}</div>`;
+    }
     el.innerHTML = `
       <div class="hud-multi-top"><div class="hud-mini">${squareInner(f.def)}</div><div class="hud-multi-nm">${playerLabel(i+1)} · ${f.def.name}</div></div>
-      <div class="healthbar-track"><div class="healthbar-fill ${hpClass(pct)}" style="width:${pct*100}%"></div></div>`;
+      <div class="healthbar-track"><div class="healthbar-fill ${hpClass(pct)}" style="width:${pct*100}%"></div></div>${livesHtml}`;
   }
 }
 function updateHud(){
@@ -15425,6 +15657,19 @@ function onFighterZeroHealth(target, reason){
 // Multiplayer free-for-all: sudden death per fighter. Getting KO'd removes
 // you from the fight; whoever's left standing when only one remains wins.
 function eliminateMultiFighter(target, reason){
+  if(!target || target.dead) return;
+
+  // Lives on: a knockout costs a life and respawns the fighter instead of
+  // ending their match, until their last life is gone.
+  if(state.multi && state.multi.livesOn){
+    target.livesLeft = Math.max(0, (target.livesLeft || 0) - 1);
+    if(target.livesLeft > 0){
+      respawnMultiFighter(target);
+      updateHudMulti();
+      return;
+    }
+  }
+
   target.dead = true;
   target.vx = 0; target.vy = 0; target.hitStun = 0;
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
@@ -15436,10 +15681,136 @@ function eliminateMultiFighter(target, reason){
   spawnSparks(cx, cy, 22, col, 110, 800);
   spawnSparks(cx, cy, 10, '#ffffff', 70, 600);
   updateHudMulti();
+  if(state.multi){
+    if(!state.multi.eliminationOrder) state.multi.eliminationOrder = [];
+    state.multi.eliminationOrder.push(target);
+  }
 
   const alive = state.multi.fighters.filter(f => !f.dead);
   if(alive.length <= 1) endBattleMulti(alive[0] || null, reason);
 }
+function roundSessionActive(){
+  const rs = state.roundsSession;
+  return !!(rs && rs.active && rs.current >= 1 && rs.current <= rs.total);
+}
+
+function applyRoundScoring(placements){
+  const rs = state.roundsSession;
+  if(!roundSessionActive()) return null;
+  const clean = [];
+  placements.forEach(slot=>{
+    const n = Number(slot);
+    if(n >= 0 && n < rs.n && !clean.includes(n)) clean.push(n);
+  });
+  for(let slot=0; slot<rs.n; slot++) if(!clean.includes(slot)) clean.push(slot);
+  rs.lastPlacements = clean;
+  rs.lastRoundPoints = new Array(rs.n).fill(0);
+  clean.forEach((slot, place)=>{
+    const pts = ROUND_POINTS_BY_PLACE[place] ?? 0;
+    rs.lastRoundPoints[slot] = pts;
+    rs.points[slot] += pts;
+    if(place === 0) rs.roundWins[slot] += 1;
+  });
+  rs.isFinalRound = rs.current >= rs.total;
+  return rs.lastRoundPoints;
+}
+
+function roundPlacementForSlot(slot){
+  const rs = state.roundsSession;
+  if(!rs || !rs.lastPlacements) return rs ? rs.n : 0;
+  const ix = rs.lastPlacements.indexOf(slot);
+  return ix >= 0 ? ix + 1 : rs.n;
+}
+
+function renderRoundGameoverUI(){
+  const rs = state.roundsSession;
+  if(!rs || !rs.lastPlacements) return;
+  const info = document.getElementById('go-round-info');
+  const nextBtn = document.getElementById('go-next-round-btn');
+  const podiumBtn = document.getElementById('go-view-podium-btn');
+  const rematchBtn = document.getElementById('go-rematch-btn');
+  const changeBtn = document.getElementById('go-change-btn');
+  const returnBtn = document.getElementById('go-return-menu-btn');
+  if(!info) return;
+
+  const rows = rs.lastPlacements.map((slot, place)=>{
+    const id = rs.charIds[slot];
+    const def = CHARACTERS[id];
+    const colorVar = MULTI_SLOT_VAR[slot] || '--p1';
+    const roundPts = rs.lastRoundPoints?.[slot] ?? ROUND_POINTS_BY_PLACE[place] ?? 0;
+    const total = rs.points[slot] ?? 0;
+    return `<div class="go-score-row ${place===0?'won':''} ${place===0?'is-first':''}" style="--pc:var(${colorVar})">
+      <span class="go-score-place">${place+1}</span>
+      <span class="go-score-tag">${playerLabel(slot+1)}</span>
+      <span class="go-score-name">${def ? def.name : '—'}</span>
+      <span class="go-score-delta">+${roundPts}</span>
+      <span class="go-score-total">${total}</span>
+    </div>`;
+  }).join('');
+
+  info.innerHTML = `<div class="round-finish">${t('round_complete').replace('{round}', rs.current)}</div>
+    <div class="go-round-label">${t('round_points_awarded')} · ${t('round_total_points')}</div>
+    <div class="go-scoreboard">${rows}</div>
+    <div class="go-round-extra">${rs.isFinalRound ? t('round_final_caption').replace('{rounds}', rs.total) : ''}</div>`;
+  info.classList.add('on');
+
+  // A rounds result is a dedicated scoreboard, not the normal rematch screen.
+  [rematchBtn, changeBtn].forEach(el=>{ if(el) el.style.display='none'; });
+  if(returnBtn) returnBtn.style.display='inline-flex';
+  if(rs.isFinalRound){
+    if(nextBtn) nextBtn.style.display='none';
+    if(podiumBtn) podiumBtn.style.display='inline-flex';
+  }else{
+    if(nextBtn) nextBtn.style.display='inline-flex';
+    if(podiumBtn) podiumBtn.style.display='none';
+  }
+}
+
+function podiumOrder(rs){
+  const finalPlacement = new Array(rs.n).fill(rs.n + 1);
+  (rs.lastPlacements || []).forEach((slot, place)=> finalPlacement[slot] = place + 1);
+  return [...Array(rs.n).keys()].sort((a,b)=>{
+    const pts = (rs.points[b]||0) - (rs.points[a]||0);
+    if(pts) return pts;
+    const wins = (rs.roundWins[b]||0) - (rs.roundWins[a]||0);
+    if(wins) return wins;
+    return finalPlacement[a] - finalPlacement[b];
+  });
+}
+
+function renderPodiumScreen(){
+  const rs = state.roundsSession;
+  const stands = document.getElementById('podium-stands');
+  const extra = document.getElementById('podium-extra');
+  const title = document.getElementById('podium-title');
+  const caption = document.getElementById('podium-caption');
+  if(!stands || !extra || !title || !caption || !rs) return;
+  const order = podiumOrder(rs);
+  const winner = order[0];
+  title.textContent = t('podium_title_default');
+  caption.textContent = t('podium_caption').replace('{rounds}',rs.total).replace('{players}',rs.n);
+  stands.innerHTML = order.map((slot, place)=>{
+    const def = CHARACTERS[rs.charIds[slot]];
+    const colorVar = MULTI_SLOT_VAR[slot] || '--p1';
+    const crown = place===0 ? `<div class="podium-stand-crown">👑</div><div class="podium-champion">${t('podium_champion')}</div>` : '';
+    return `<article class="podium-stand place-${place+1}" style="--char-color:var(${colorVar})">
+      ${crown}
+      <div class="podium-stand-square">${squareInner(def)}</div>
+      <div class="podium-stand-name">${playerLabel(slot+1)} · ${def.name}</div>
+      <div class="podium-stand-pts">${t('podium_points').replace('{n}',rs.points[slot]||0)}</div>
+      <div class="podium-stand-block">${place+1}</div>
+    </article>`;
+  }).join('');
+  extra.innerHTML = `<div>${t('podium_tiebreak')}</div>`;
+}
+
+function resetRoundScoreButtons(){
+  const info = document.getElementById('go-round-info');
+  if(info){ info.classList.remove('on'); info.style.display='none'; info.innerHTML=''; }
+  ['go-next-round-btn','go-view-podium-btn'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  ['go-rematch-btn','go-change-btn','go-return-menu-btn'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display=''; });
+}
+
 function endBattleMulti(winner, reason){
   if(state.mode !== 'battle') return;
   state.illusions.forEach(g => (g.clones || g.illusions || []).forEach(i => { if(i.el) i.el.remove(); }));
@@ -15487,7 +15858,85 @@ function endBattleMulti(winner, reason){
 
   const firstLoser = state.multi.fighters.find(f => f !== winner);
   if(firstLoser) spawnKODeathFx(firstLoser);
+
+  if(roundSessionActive()) {
+    const elimOrder = (state.multi.eliminationOrder || []).slice().reverse();
+    const placements = winner ? [winner, ...elimOrder.filter(f => f !== winner)] : elimOrder;
+    applyRoundScoring(placements.map(f => f.multiSlot));
+    renderRoundGameoverUI();
+  } else {
+    resetRoundScoreButtons();
+  }
+
   setTimeout(()=>showScreen('gameover'), 1900);
+}
+
+// Knocks a life off a multiplayer fighter and drops them back into the
+// arena on a clean slate — the free-for-all equivalent of loseLife() below,
+// just without a fixed "opponent" to respawn away from.
+function respawnMultiFighter(target){
+  if(state.player && state.player.mindWarpTarget === target) endJeanMindWarp();
+  const col = target.def.color || '#ffffff';
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  sfx('ko');
+  shakeArena(12, 420);
+  fxEl('fx-flash', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;`, 420);
+  fxEl('fx-ring', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;border-color:${col};box-shadow:0 0 36px ${col};`, 600);
+  spawnSparks(cx, cy, 22, col, 110, 800);
+  spawnSparks(cx, cy, 10, '#ffffff', 70, 600);
+
+  resetFighterTransientState(target);
+
+  const n = state.multi.fighters.length;
+  const spawns = MULTI_SPAWN_X[n] || MULTI_SPAWN_X[4];
+  target.x = (spawns && spawns[target.multiSlot] != null) ? spawns[target.multiSlot] : ARENA_W/2;
+  target.y = 380;
+  target.facing = target.multiSlot < n/2 ? 1 : -1;
+  const nx = target.x + FIGHTER_SIZE/2, ny = target.y + FIGHTER_SIZE/2;
+  fxEl('fx-ring', `left:${nx-50}px;top:${ny-50}px;width:100px;height:100px;border-color:#bfe4ff;border-width:3px;box-shadow:0 0 26px #78beff;`, 620);
+  spawnSparks(nx, ny, 12, '#bfe4ff', 60, 600);
+
+  showLifeStamp(t('life_lost_named').replace('{name}', playerLabel(target.multiSlot+1)), true);
+}
+
+// Resets every transient ability/status flag on a fighter that just lost a
+// life, so their next life starts on a clean slate. Cooldowns are kept on
+// purpose — a new life isn't a free reset of ability timers.
+function resetFighterTransientState(target){
+  target.health = target.def.maxHealth;
+  target.invulnUntil = now() + RESPAWN_INVULN_MS;
+  target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
+  if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
+  target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
+  target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0;
+  if(target.el) target.el.classList.remove('beast-surge-active');
+  target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped');
+  target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
+  target.slowUntil = 0;
+  target.cloakUntil = 0; target.shockTicksLeft = 0; target.psiTicksLeft = 0;
+  if(target.el) target.el.classList.remove('psi-warped');
+  if(target.webWrapEl){ target.webWrapEl.remove(); target.webWrapEl = null; }
+  target.hulkRoarUntil = 0; target.hulkRoarLock = false;
+  target.hulkSlideDir = 0; target.hulkSlideEnd = 0; target.hulkSlideTier = '';
+  target.flight = false; target.flightExpire = 0;
+  target.antmanForm = 'normal'; target.antmanTransformUntil = 0;
+  target.waspSizeUntil = 0; target.waspSizeSpeedMultiplier = .62;
+  target.el && target.el.classList.remove('wasp-enlarged','wasp-small');
+  target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
+  target.chargeState = null; target.draxFuryUntil = 0; target.killmongerFuryUntil = 0; target.redHulkHeatUntil = 0;
+  target.ironJumpActive = false; target.ironJumpMinLandAt = 0; target.ironJumpAbility = null; target.burnTicksLeft = 0; target.burnAttacker = null;
+  target.moonknightPersona = null; target.moonknightPersonaUntil = 0; target.glideUntil = 0;
+  if(target.el) target.el.classList.remove('killmonger-fury-active','redhulk-heat-active','iron-jumping','moonknight-persona-marc','moonknight-persona-steven','moonknight-persona-jake','moonknight-gliding');
+  state.firePools = state.firePools.filter(pool=>{ if(pool.casterRef===target){ if(pool.el)pool.el.remove(); return false; } return true; });
+  target.shield = null;
+  target.blocking = false; target.blockExpire = 0; target.blockStart = 0;
+  target.bpCharging = false; target.bpSlamPending = false; target.bpAbsorbed = 0;
+  target.grappleUntil = 0;
+  cancelYonduArrow(target, false);
+  target.holoSuitUntil = 0;
+  target.turnPending = null;
+  target.regenAccumulator = 0;
+  if(target.def.id === 'loki') clearLokiDuplications(target);
 }
 
 function loseLife(target, side){
@@ -15672,6 +16121,13 @@ function endBattle(winnerSide, reason){
   `;
   const loser = winnerSide==='player' ? state.bot : state.player;
   spawnKODeathFx(loser);
+
+  if(roundSessionActive()) {
+    applyRoundScoring([winnerSide === 'player' ? 0 : 1, winnerSide === 'player' ? 1 : 0]);
+    renderRoundGameoverUI();
+  } else {
+    resetRoundScoreButtons();
+  }
   setTimeout(()=>showScreen('gameover'), 1900);
 }
 
@@ -16273,8 +16729,146 @@ function versusPadsPresent(){
   for(let i=0;i<versus.count;i++){ if(!versus.slots[i] || !livePadByIndex(versus.slots[i].index)) return false; }
   return true;
 }
-function versusSelectable(id){ return VERSUS_ALLOWS_LOCKED || isUnlocked(id); }
+function versusSelectable(id){
+  if(!(VERSUS_ALLOWS_LOCKED || isUnlocked(id))) return false;
+  if(mp.healthCap && CHARACTERS[id].maxHealth > mp.healthCap) return false;
+  return true;
+}
 function playerLabel(n){ return t('pair_player').replace('{n}', n); }
+
+/* =========================================================================
+   SECTION: MULTIPLAYER MATCH SETTINGS (lives / rounds / random / health cap)
+   One shared settings object drives the screen that now sits between
+   controller pairing and fighter select. Values persist for the session so
+   picking them once doesn't need to be repeated every rematch.
+   ========================================================================= */
+const MP_LIVES_MIN = 2, MP_LIVES_MAX = 10, MP_LIVES_DEFAULT = 3;
+const MP_ROUNDS_MIN = 2, MP_ROUNDS_MAX = 20, MP_ROUNDS_DEFAULT = 3;
+const MP_HEALTH_CAPS = [0, 30000, 20000, 15000, 10000]; // 0 = no limit
+const ROUND_POINTS_BY_PLACE = [15, 5, 2, 0]; // index 0 = 1st place
+
+const mp = {
+  livesOn: false,
+  livesCount: MP_LIVES_DEFAULT,
+  roundsOn: false,
+  roundsCount: MP_ROUNDS_DEFAULT,
+  randomChar: false,
+  healthCap: 0
+};
+
+function mpEligibleRosterCount(){
+  return ROSTER_ORDER.filter(versusSelectable).length;
+}
+
+function renderMpSettingsScreen(){
+  const setToggle = (id, on)=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.dataset.on = on ? '1' : '0';
+    el.setAttribute('aria-pressed', on ? 'true' : 'false');
+  };
+  setToggle('mps-lives-toggle', mp.livesOn);
+  setToggle('mps-rounds-toggle', mp.roundsOn);
+  setToggle('mps-random-toggle', mp.randomChar);
+
+  document.getElementById('mps-lives-value').textContent = mp.livesCount;
+  document.getElementById('mps-rounds-value').textContent = mp.roundsCount;
+  document.getElementById('mps-lives-stepper').classList.toggle('disabled', !mp.livesOn);
+  document.getElementById('mps-rounds-stepper').classList.toggle('disabled', !mp.roundsOn);
+
+  document.querySelectorAll('#mps-health-row .mps-health-pill').forEach(btn=>{
+    btn.classList.toggle('active', Number(btn.dataset.cap) === mp.healthCap);
+  });
+  const n = mpEligibleRosterCount();
+  document.getElementById('mps-health-count').textContent = t('mps_health_count').replace('{n}', n);
+
+  const continueBtn = document.getElementById('mps-continue-btn');
+  if(continueBtn) continueBtn.textContent = mp.randomChar ? t('mps_continue_random') : t('mps_continue');
+}
+
+function mpClampLives(n){ return Math.max(MP_LIVES_MIN, Math.min(MP_LIVES_MAX, n)); }
+function mpClampRounds(n){ return Math.max(MP_ROUNDS_MIN, Math.min(MP_ROUNDS_MAX, n)); }
+
+document.getElementById('mps-lives-toggle').addEventListener('click', ()=>{
+  mp.livesOn = !mp.livesOn;
+  if(mp.livesOn && !mp.livesCount) mp.livesCount = MP_LIVES_DEFAULT;
+  sfx('ui_tick');
+  renderMpSettingsScreen();
+});
+document.getElementById('mps-rounds-toggle').addEventListener('click', ()=>{
+  mp.roundsOn = !mp.roundsOn;
+  if(mp.roundsOn && !mp.roundsCount) mp.roundsCount = MP_ROUNDS_DEFAULT;
+  sfx('ui_tick');
+  renderMpSettingsScreen();
+});
+document.getElementById('mps-random-toggle').addEventListener('click', ()=>{
+  mp.randomChar = !mp.randomChar;
+  sfx('ui_tick');
+  renderMpSettingsScreen();
+});
+document.getElementById('mps-lives-minus').addEventListener('click', ()=>{
+  mp.livesCount = mpClampLives(mp.livesCount - 1); sfx('ui_tick'); renderMpSettingsScreen();
+});
+document.getElementById('mps-lives-plus').addEventListener('click', ()=>{
+  mp.livesCount = mpClampLives(mp.livesCount + 1); sfx('ui_tick'); renderMpSettingsScreen();
+});
+document.getElementById('mps-rounds-minus').addEventListener('click', ()=>{
+  mp.roundsCount = mpClampRounds(mp.roundsCount - 1); sfx('ui_tick'); renderMpSettingsScreen();
+});
+document.getElementById('mps-rounds-plus').addEventListener('click', ()=>{
+  mp.roundsCount = mpClampRounds(mp.roundsCount + 1); sfx('ui_tick'); renderMpSettingsScreen();
+});
+document.getElementById('mps-health-row').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.mps-health-pill');
+  if(!btn) return;
+  const cap = Number(btn.dataset.cap) || 0;
+  // A cap that would leave fewer selectable fighters than there are players
+  // in the lobby isn't a usable choice — ignore the tap rather than lock
+  // everyone out of fighter select.
+  const pool = ROSTER_ORDER.filter(id=> (VERSUS_ALLOWS_LOCKED || isUnlocked(id)) && (!cap || CHARACTERS[id].maxHealth <= cap));
+  if(pool.length < Math.max(2, versus.count || 2)) return;
+  mp.healthCap = cap;
+  sfx('ui_tick');
+  renderMpSettingsScreen();
+});
+function pickRandomRosterForPlayers(n){
+  const pool = ROSTER_ORDER.filter(versusSelectable);
+  const shuffled = [...pool];
+  for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
+  const picks = [];
+  for(let i=0;i<n;i++) picks.push(shuffled.length ? shuffled[i % shuffled.length] : ROSTER_ORDER[0]);
+  return picks;
+}
+function buildRoundBattleOpts(){
+  return { pvp:true, lives: mp.livesOn ? mp.livesCount : 1 };
+}
+function beginRoundsSession(charIds, n){
+  if(!mp.roundsOn){ state.roundsSession = null; return; }
+  state.roundsSession = {
+    active:true,
+    total: mp.roundsCount,
+    current: 1,
+    n,
+    charIds: charIds.slice(0,n),
+    points: new Array(n).fill(0),
+    roundWins: new Array(n).fill(0),
+    lastPlacements: null,
+    isFinalRound: false
+  };
+}
+document.getElementById('mps-continue-btn').addEventListener('click', ()=>{
+  const n = Math.max(2, Math.min(4, versus.count || 2));
+  if(mp.randomChar){
+    const picks = pickRandomRosterForPlayers(n);
+    versus.lastPick = picks;
+    beginRoundsSession(picks, n);
+    const opts = buildRoundBattleOpts();
+    if(n <= 2) startBattle(picks[0], picks[1], opts);
+    else startMultiBattle(picks, opts);
+  } else {
+    showScreen('versus');
+  }
+});
 
 /* ---------- mode select ---------- */
 let modeShown = -1;
@@ -16354,7 +16948,7 @@ function startMultiplayerFromPairing(){
   if(versus.count < PAIR_MIN) return;
   // Keep only the claimed slots, in order — they're always contiguous 0..N-1
   // since claiming always fills the next open slot.
-  showScreen('versus');
+  showScreen('mp-settings');
 }
 function renderPairing(force){
   const slots = versus.slots;
@@ -16582,8 +17176,10 @@ function pollVersusSelect(){
     hideVersusSplash();
     const picks = [];
     for(let i=0;i<n;i++) picks.push(ROSTER_ORDER[versus.sel[i].cursor]);
-    if(n <= 2) startBattle(picks[0], picks[1], { pvp:true });
-    else startMultiBattle(picks, { pvp:true });
+    beginRoundsSession(picks, n);
+    const opts = buildRoundBattleOpts();
+    if(n <= 2) startBattle(picks[0], picks[1], opts);
+    else startMultiBattle(picks, opts);
   }
 }
 
@@ -16856,7 +17452,43 @@ const I18N_V_MULTI = {
     mode_pads_min_count:'{n} of 2 minimum connected', mode_pads_ready_count:'{n} connected — ready to play!',
     pair_title_lobby:'Connect controllers', pair_sub_lobby_need:'Need at least 2 to start · up to 4 can play.',
     pair_sub_lobby_ready:'Press Start whenever you\u2019re ready.', pair_start_btn:'Start ({n} players)', pair_start_btn_disabled:'Connect 2+ controllers to start', pair_optional:'Optional',
-    go_wins:'{name} wins!', go_multi_result:'{name} took the win.', go_draw:'Draw!' },
+    go_wins:'{name} wins!', go_multi_result:'{name} took the win.', go_draw:'Draw!',
+    mps_title:'Match Settings',
+    mps_caption:'Set up the rules for this multiplayer match before choosing fighters.',
+    mps_lives_header:'Lives',
+    mps_lives_note:'Turn this on to give everyone multiple lives. A knockout removes one life and respawns that player until their last life is gone.',
+    mps_lives_unit:'lives',
+    mps_rounds_header:'Rounds',
+    mps_rounds_note:'Play a series of rounds with the same fighters. Each round awards 15 points for 1st, 5 for 2nd, 2 for 3rd and 0 for 4th.',
+    mps_rounds_unit:'rounds',
+    mps_random_header:'Random Characters',
+    mps_random_note:'Skip fighter selection. Everyone is assigned a random eligible fighter and the match starts immediately.',
+    mps_health_header:'Health Limit',
+    mps_health_note:'Disable fighters whose maximum health is over the selected limit. This also affects random characters.',
+    mps_health_none:'No limit',
+    mps_health_30k:'30,000 HP or less',
+    mps_health_20k:'20,000 HP or less',
+    mps_health_15k:'15,000 HP or less',
+    mps_health_10k:'10,000 HP or less',
+    mps_health_count:'{n} eligible fighters',
+    mps_continue:'Choose Fighters',
+    mps_continue_random:'Start Random Match',
+    life_lost_named:'{name} lost a life!',
+    round_complete:'Round {round} Complete',
+    round_points_awarded:'Round points',
+    round_total_points:'Total points',
+    round_next_btn:'Next Round',
+    round_podium_btn:'See Final Results',
+    round_final_caption:'All {rounds} rounds are complete.',
+    podium_title_default:'Final Results',
+    podium_caption:'{rounds} rounds · {players} players',
+    podium_champion:'Champion',
+    podium_place:'{n}',
+    podium_points:'{n} pts',
+    podium_round_wins:'{n} round wins',
+    podium_tiebreak:'Ties are broken by round wins, then final-round placement.',
+    podium_rematch:'Play Again',
+    podium_settings:'Change Settings' },
   es:{ mode_multiplayer:'Multijugador' },
   zh:{ mode_multiplayer:'多人游戏' },
   ar:{ mode_multiplayer:'متعدد اللاعبين' },
@@ -16920,7 +17552,7 @@ document.querySelectorAll('#screen-battle-difficulty .battle-diff-card').forEach
   btn.addEventListener('click', ()=> startBattleDifficulty(btn.dataset.battleDiff));
 });
 document.getElementById('btn-unlock-go').addEventListener('click', ()=> startUnlockChallenge());
-document.getElementById('btn-mode-friend').addEventListener('click', ()=> showScreen('pair'));
+document.getElementById('btn-mode-friend').addEventListener('click', ()=>{ versus.slots = [null,null,null,null]; versus.count = 2; showScreen('pair'); });
 
 /* =========================================================================
    SECTION: MAP PICKER (mode-select screen)
@@ -16948,10 +17580,45 @@ if(mapSelectBar){
 renderMapSelect();
 document.getElementById('go-rematch-btn').addEventListener('click', ()=>{
   if(!versus.lastPick) return;
-  if(versus.lastPick.length > 2) startMultiBattle(versus.lastPick, { pvp:true });
-  else startBattle(versus.lastPick[0], versus.lastPick[1], { pvp:true });
+  const n = versus.count || versus.lastPick.length;
+  const picks = mp.randomChar ? pickRandomRosterForPlayers(n) : versus.lastPick.slice(0,n);
+  versus.lastPick = picks;
+  beginRoundsSession(picks, n);
+  resetRoundScoreButtons();
+  const opts = buildRoundBattleOpts();
+  if(n > 2) startMultiBattle(picks, opts);
+  else startBattle(picks[0], picks[1], opts);
 });
 document.getElementById('go-change-btn').addEventListener('click', ()=> showScreen('versus'));
+document.getElementById('go-next-round-btn').addEventListener('click', ()=>{
+  const rs = state.roundsSession;
+  if(!rs || !rs.active) return;
+  if(rs.current >= rs.total) return;
+  rs.current++;
+  rs.lastPlacements = null;
+  rs.lastRoundPoints = null;
+  rs.isFinalRound = false;
+  resetRoundScoreButtons();
+  const opts = buildRoundBattleOpts();
+  if(rs.n <= 2) startBattle(rs.charIds[0], rs.charIds[1], opts);
+  else startMultiBattle(rs.charIds, opts);
+});
+document.getElementById('go-view-podium-btn').addEventListener('click', ()=> showScreen('podium'));
+document.getElementById('go-return-menu-btn').addEventListener('click', ()=>{ state.roundsSession = null; });
+document.getElementById('podium-rematch-btn').addEventListener('click', ()=>{
+  const rs = state.roundsSession;
+  if(!rs){ showScreen('menu'); return; }
+  const picks = mp.randomChar ? pickRandomRosterForPlayers(rs.n) : rs.charIds.slice(0,rs.n);
+  versus.lastPick = picks;
+  versus.count = rs.n;
+  beginRoundsSession(picks, rs.n);
+  resetRoundScoreButtons();
+  const opts = buildRoundBattleOpts();
+  if(rs.n <= 2) startBattle(picks[0], picks[1], opts);
+  else startMultiBattle(picks, opts);
+});
+document.getElementById('podium-settings-btn').addEventListener('click', ()=>{ showScreen('mp-settings'); });
+document.getElementById('podium-menu-btn').addEventListener('click', ()=>{ state.roundsSession = null; });
 document.getElementById('pvp-quit').addEventListener('click', abortBattle);
 
 /* =========================================================================
