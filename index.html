@@ -46,7 +46,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 /* ---------- Full-bleed page screens (menu / inventory / instructions / settings) ---------- */
 /* These break out of #app's centered 1200px column and cover the entire
    viewport so they read well on anything from a phone to a TV/fridge display. */
-#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-save-slots.active, #screen-mp-settings.active, #screen-podium.active{
+#screen-menu.active, #screen-inventory.active, #screen-instructions.active, #screen-settings.active, #screen-save-slots.active, #screen-mp-settings.active, #screen-podium.active, #screen-radio.active{
   position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none;
   display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
   overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; z-index:2;
@@ -2791,6 +2791,8 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 #screen-inventory .fs-bg, #screen-instructions .fs-bg, #screen-settings .fs-bg, #screen-gameover .fs-bg, #screen-save-slots .fs-bg{position:fixed;}
 #screen-save-slots.active{display:flex; align-items:center; justify-content:center;}
 #screen-gameover.active{display:flex; align-items:center; justify-content:center;}
+#screen-radio.active{display:flex; align-items:center; justify-content:center; overflow:auto; padding:clamp(70px,10vh,110px) clamp(16px,5vw,90px) clamp(30px,6vh,70px);}
+#screen-radio.active .radio-mini-wrap{margin:auto;}
 
 .page-stage{position:relative; z-index:1; min-height:100%; padding:clamp(72px,12vh,110px) clamp(20px,5vw,90px) clamp(30px,6vh,70px);}
 .page-head{display:flex; flex-direction:column; gap:6px; margin-bottom:clamp(16px,3vh,32px);}
@@ -3840,6 +3842,57 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .fighter.shangchi.shangchi-dodging .fighter-square{animation:shangchiDodgeFlicker .22s ease-in-out infinite alternate;filter:saturate(1.2) brightness(1.15) drop-shadow(0 0 10px #ffcf6bcc);}
 @keyframes shangchiDodgeFlicker{from{opacity:1;transform:translateX(0)}to{opacity:.72;transform:translateX(-2px)}}
 
+
+/* ---------- MAIN MENU RADIO BUTTON + MINI MENU ---------- */
+.menu-radio-btn{
+  position:static !important;
+  min-width:0; width:auto; margin:0;
+  padding:9px 12px; border-radius:999px;
+  font-size:12px;
+  gap:7px;
+  background:rgba(15,16,22,.6);
+  border:1px solid rgba(242,165,65,.48);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  box-shadow:0 6px 16px rgba(0,0,0,.22);
+}
+.menu-radio-btn .btn-icon{font-size:1em;}
+.radio-mini-wrap{
+  position:relative; z-index:1;
+  width:min(560px,94vw);
+  max-height:min(82vh,620px); overflow:auto;
+  background:linear-gradient(145deg,#171a2b,#252944 60%,#11131f);
+  border:1px solid #464b6d;
+  border-radius:18px;
+  padding:clamp(20px,4vw,34px);
+  box-shadow:0 30px 90px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.radio-mini-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;}
+.radio-mini-title{font-family:'Anton',sans-serif;font-size:clamp(30px,5vw,48px);color:var(--amber);text-shadow:0 0 18px rgba(242,165,65,.35);}
+.radio-mini-sub{color:var(--muted);font-size:12px;margin-top:4px;}
+.radio-mini-now{margin-bottom:18px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);}
+.radio-mini-now-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;}
+.radio-mini-now-name{font-family:'Anton',sans-serif;font-size:22px;color:#fff;margin-top:3px;}
+.radio-mini-controls{display:flex;flex-direction:column;gap:14px;}
+.radio-mini-field{display:flex;align-items:center;gap:12px;min-width:0;color:#c6c9d7;font-size:12px;font-weight:800;}
+.radio-mini-label{flex:0 0 76px;color:#7f849c;text-transform:uppercase;letter-spacing:.08em;}
+.radio-mini-field select{flex:1;min-width:0;background:#11131f;color:#fff;border:1px solid #3b3f55;border-radius:10px;padding:10px 11px;font:700 13px 'Inter',system-ui,sans-serif;outline:none;}
+.radio-mini-field select:focus{border-color:var(--amber);box-shadow:0 0 0 2px rgba(242,165,65,.15);}
+.radio-mini-volume{display:grid;grid-template-columns:76px minmax(0,1fr) 44px;align-items:center;gap:12px;}
+.radio-mini-volume input[type="range"]{width:100%;accent-color:var(--amber);cursor:pointer;}
+#radio-volume-value{text-align:right;color:#fff;font-size:12px;font-weight:800;}
+.radio-power{flex:none;min-width:64px;padding:8px 12px;border-radius:999px;border:1px solid #555a72;background:#202333;color:#aeb5d6;font:800 11px 'Inter',system-ui,sans-serif;letter-spacing:.08em;cursor:pointer;transition:background .15s ease,color .15s ease,border-color .15s ease,box-shadow .2s ease,transform .1s ease;}
+.radio-power.on{color:#231600;background:linear-gradient(180deg,#ffcf7a,var(--amber));border-color:#f2a541;box-shadow:0 0 16px rgba(242,165,65,.28);}
+.radio-power:active{transform:scale(.97);}
+#radio-loop{min-width:64px;}
+.radio-mini-actions{display:flex;justify-content:flex-end;margin-top:20px;}
+@media (max-width:560px){
+  .radio-mini-wrap{padding:18px;}
+  .radio-mini-head{align-items:flex-start;}
+  .radio-mini-title{font-size:32px;}
+  .radio-mini-volume{grid-template-columns:64px minmax(0,1fr) 42px;gap:9px;}
+  .radio-mini-label{flex-basis:64px;}
+}
+
 </style>
 
 <style id="free-play-sandbox-styles">
@@ -3896,6 +3949,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     <div class="fs-bg" aria-hidden="true"><div class="fs-slash"></div><div class="bubbles"></div></div>
     <div class="menu-topbar">
       <button class="btn btn-secondary menu-save-slots-top" id="btn-menu-save-slots"><span class="btn-icon">💾</span><span data-i18n="nav_save_slots">Save Slots</span></button>
+      <button class="btn btn-secondary menu-radio-btn" id="btn-menu-radio" aria-label="Open Radio"><span class="btn-icon">📻</span><span>Radio</span></button>
       <div class="token-chip"><span class="token-coin" aria-hidden="true">🪙</span><span data-token-count>0</span><span data-i18n="tokens_label">tokens</span></div>
     </div>
     <div class="menu-stage">
@@ -3909,6 +3963,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
           <button class="menu-item" data-nav="settings"><span class="mi-icon">⚙️</span><span data-i18n="nav_settings">Settings</span></button>
           <button class="menu-item menu-code-highlight" id="btn-menu-code"><span class="mi-icon">🔑</span><span data-i18n="nav_code">Code</span></button>
         </nav>
+
       </div>
       <button class="menu-hero" id="menu-hero" data-nav="inventory">
         <div class="hero-frame"><div class="hero-art" id="menu-hero-art"></div></div>
@@ -4293,6 +4348,54 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       </div>
     </div>
   </div>
+
+  <!-- ============ RADIO MINI MENU ============ -->
+  <div id="screen-radio" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="radio-mini-wrap">
+      <div class="radio-mini-head">
+        <div>
+          <h2 class="radio-mini-title">📻 Radio</h2>
+          <div class="radio-mini-sub">Choose your music and audio level.</div>
+        </div>
+        <button type="button" class="radio-power on" id="radio-toggle" aria-pressed="true">ON</button>
+      </div>
+      <div class="radio-mini-now">
+        <div class="radio-mini-now-label">Now Playing</div>
+        <div class="radio-mini-now-name" id="radio-now">Avengers</div>
+      </div>
+      <div class="radio-mini-controls">
+        <label class="radio-mini-field">
+          <span class="radio-mini-label">Song</span>
+          <select id="radio-track" aria-label="Song">
+            <option value="Avengers.mp3">Avengers</option>
+            <option value="Loki.mp3">Loki</option>
+            <option value="DoctorStrange.mp3">Doctor Strange</option>
+            <option value="FantasticFour.mp3">Fantastic Four</option>
+            <option value="X-men.mp3">X-men</option>
+            <option value="CaptainAmerica.mp3">Captain America</option>
+            <option value="BlackPanther.mp3">Black Panther</option>
+            <option value="Daredevil.mp3">Daredevil</option>
+          </select>
+        </label>
+        <label class="radio-mini-field radio-mini-volume">
+          <span class="radio-mini-label">Volume</span>
+          <input id="radio-volume" type="range" min="0" max="100" value="60" step="1" aria-label="Volume">
+          <span id="radio-volume-value">60%</span>
+        </label>
+        <div class="radio-mini-field">
+          <span class="radio-mini-label">Loop</span>
+          <button type="button" class="radio-power" id="radio-loop" aria-pressed="false">OFF</button>
+        </div>
+      </div>
+      <div class="radio-mini-actions">
+        <button class="btn btn-secondary btn-small" data-nav="menu">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="music-audio" preload="auto" playsinline></audio>
 
   <!-- ============ BATTLE ============ -->
   <div id="screen-battle" class="screen">
@@ -6148,7 +6251,7 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','mode','free-play','practice','battle-difficulty','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','battle','gameover','podium'];
+const screens = ['menu','mode','free-play','practice','battle-difficulty','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','radio','battle','gameover','podium'];
 function showScreen(name){
   // Fighter select needs both controllers still present — otherwise re-pair.
   if((name === 'versus' || name === 'mp-settings') && !versusPadsPresent()) name = 'pair';
@@ -6160,6 +6263,7 @@ function showScreen(name){
   if(name==='inventory'){ renderInventory(); queuePendingInventoryUnlock(); }
   if(name==='settings') renderSettingsScreen();
   if(name==='menu'){ updateCurrentSaveSlotLabel(); renderMenuHero(); }
+  if(name==='battle' && typeof playMusic === 'function' && MUSIC.enabled) playMusic();
   if(name==='mode') renderModeScreen();
   if(name==='unlock') renderUnlockScreen();
   renderTokenCounters();
@@ -6317,6 +6421,7 @@ function submitUnlockCode(){
   if(ok) input.value = '';
 }
 document.getElementById('btn-menu-save-slots').addEventListener('click', ()=>showScreen('save-slots'));
+document.getElementById('btn-menu-radio').addEventListener('click', ()=>showScreen('radio'));
 document.getElementById('btn-menu-code').addEventListener('click', openCodeModal);
 document.getElementById('code-close').addEventListener('click', closeCodeModal);
 document.getElementById('code-submit').addEventListener('click', submitUnlockCode);
@@ -10016,6 +10121,205 @@ function updateHazards(f){
     applyHazardDamage(f, HAZARD_DAMAGE[hazard] || 4);
   }
 }
+
+
+/* =========================================================================
+   SECTION: MUSIC RADIO
+   The radio is separate from the Web Audio effects system so MP3 music
+   can play continuously without changing the existing battle sound effects.
+   Track names/filenames are kept exactly as supplied by the game assets.
+   ========================================================================= */
+const MUSIC_STORAGE_KEY = 'dwlb_music_settings_v1';
+const MUSIC_TRACKS = [
+  {file:'Avengers.mp3', name:'Avengers'},
+  {file:'Loki.mp3', name:'Loki'},
+  {file:'DoctorStrange.mp3', name:'Doctor Strange'},
+  {file:'FantasticFour.mp3', name:'Fantastic Four'},
+  {file:'X-men.mp3', name:'X-men'},
+  {file:'CaptainAmerica.mp3', name:'Captain America'},
+  {file:'BlackPanther.mp3', name:'Black Panther'},
+  {file:'Daredevil.mp3', name:'Daredevil'}
+];
+
+function loadMusicSettings(){
+  const fallback = {track:0, volume:.60, enabled:true, loop:false};
+  try{
+    const saved = JSON.parse(localStorage.getItem(MUSIC_STORAGE_KEY));
+    if(!saved || typeof saved !== 'object') return fallback;
+    const track = MUSIC_TRACKS.findIndex(x => x.file === saved.file);
+    const volume = Number(saved.volume);
+    return {
+      track: track >= 0 ? track : Math.max(0, Math.min(MUSIC_TRACKS.length-1, Number(saved.track) || 0)),
+      volume: Number.isFinite(volume) ? Math.max(0, Math.min(1, volume)) : fallback.volume,
+      enabled: saved.enabled !== false,
+      loop: saved.loop === true
+    };
+  }catch(err){
+    return fallback;
+  }
+}
+let MUSIC = loadMusicSettings();
+let musicStarted = false;
+let musicAudio = document.getElementById('music-audio');
+
+function saveMusicSettings(){
+  try{
+    const track = MUSIC_TRACKS[MUSIC.track] || MUSIC_TRACKS[0];
+    localStorage.setItem(MUSIC_STORAGE_KEY, JSON.stringify({
+      file: track.file,
+      track: MUSIC.track,
+      volume: MUSIC.volume,
+      enabled: MUSIC.enabled,
+      loop: MUSIC.loop
+    }));
+  }catch(err){ /* storage unavailable */ }
+}
+
+function updateRadioUI(){
+  const track = MUSIC_TRACKS[MUSIC.track] || MUSIC_TRACKS[0];
+  const nowEl = document.getElementById('radio-now');
+  const selectEl = document.getElementById('radio-track');
+  const volumeEl = document.getElementById('radio-volume');
+  const volumeValEl = document.getElementById('radio-volume-value');
+  const toggleEl = document.getElementById('radio-toggle');
+  const loopEl = document.getElementById('radio-loop');
+
+  if(nowEl) nowEl.textContent = track.name;
+  if(selectEl) selectEl.value = track.file;
+  if(volumeEl) volumeEl.value = String(Math.round(MUSIC.volume * 100));
+  if(volumeValEl) volumeValEl.textContent = Math.round(MUSIC.volume * 100) + '%';
+  if(toggleEl){
+    toggleEl.textContent = MUSIC.enabled ? 'ON' : 'OFF';
+    toggleEl.classList.toggle('on', MUSIC.enabled);
+    toggleEl.setAttribute('aria-pressed', MUSIC.enabled ? 'true' : 'false');
+    toggleEl.title = MUSIC.enabled ? 'Turn music off' : 'Turn music on';
+  }
+  if(loopEl){
+    loopEl.textContent = MUSIC.loop ? 'ON' : 'OFF';
+    loopEl.classList.toggle('on', MUSIC.loop);
+    loopEl.setAttribute('aria-pressed', MUSIC.loop ? 'true' : 'false');
+    loopEl.title = MUSIC.loop ? 'Loop this song' : 'Play a random song when it ends';
+  }
+}
+
+function setMusicSource(trackIndex, autoplay){
+  if(!musicAudio) return;
+  const track = MUSIC_TRACKS[trackIndex] || MUSIC_TRACKS[0];
+  MUSIC.track = Math.max(0, Math.min(MUSIC_TRACKS.length-1, trackIndex));
+  musicAudio.src = track.file;
+  musicAudio.loop = !!MUSIC.loop;
+  musicAudio.volume = MUSIC.volume;
+  musicAudio.load();
+  updateRadioUI();
+  saveMusicSettings();
+
+  if(autoplay && MUSIC.enabled){
+    const playPromise = musicAudio.play();
+    if(playPromise && typeof playPromise.catch === 'function'){
+      playPromise.then(()=>{ musicStarted = true; }).catch(()=>{ /* browser autoplay policy */ });
+    }else{
+      musicStarted = true;
+    }
+  }
+}
+
+function playMusic(){
+  if(!musicAudio || !MUSIC.enabled) return;
+  musicAudio.volume = MUSIC.volume;
+  const playPromise = musicAudio.play();
+  if(playPromise && typeof playPromise.catch === 'function'){
+    playPromise.then(()=>{ musicStarted = true; }).catch(()=>{ /* wait for user gesture */ });
+  }else{
+    musicStarted = true;
+  }
+}
+
+function pauseMusic(){
+  if(!musicAudio) return;
+  musicAudio.pause();
+}
+
+function setMusicEnabled(enabled, userGesture=false){
+  MUSIC.enabled = !!enabled;
+  saveMusicSettings();
+  updateRadioUI();
+  if(MUSIC.enabled){
+    if(!musicAudio.src || musicAudio.src.endsWith('/')) setMusicSource(MUSIC.track, false);
+    if(userGesture) playMusic();
+    else if(musicStarted) playMusic();
+  }else{
+    pauseMusic();
+  }
+}
+
+function setMusicVolume(value){
+  const n = Number(value);
+  MUSIC.volume = Number.isFinite(n) ? Math.max(0, Math.min(1, n/100)) : MUSIC.volume;
+  if(musicAudio) musicAudio.volume = MUSIC.volume;
+  saveMusicSettings();
+  updateRadioUI();
+}
+
+function setMusicTrackByFile(file, userGesture=false){
+  const idx = MUSIC_TRACKS.findIndex(x => x.file === file);
+  if(idx < 0) return;
+  setMusicSource(idx, MUSIC.enabled && (userGesture || musicStarted));
+}
+
+function initMusicRadio(){
+  musicAudio = document.getElementById('music-audio');
+  if(!musicAudio) return;
+  musicAudio.loop = !!MUSIC.loop;
+  setMusicSource(MUSIC.track, false);
+  musicAudio.volume = MUSIC.volume;
+
+  const toggle = document.getElementById('radio-toggle');
+  const track = document.getElementById('radio-track');
+  const volume = document.getElementById('radio-volume');
+  const loop = document.getElementById('radio-loop');
+
+  if(toggle) toggle.addEventListener('click', e=>{
+    setMusicEnabled(!MUSIC.enabled, true);
+  });
+  if(track) track.addEventListener('change', e=>{
+    setMusicTrackByFile(e.target.value, true);
+  });
+  if(volume) volume.addEventListener('input', e=>{
+    setMusicVolume(e.target.value);
+  });
+  if(loop) loop.addEventListener('click', e=>{
+    MUSIC.loop = !MUSIC.loop;
+    if(musicAudio) musicAudio.loop = MUSIC.loop;
+    saveMusicSettings();
+    updateRadioUI();
+  });
+
+  musicAudio.addEventListener('ended', ()=>{
+    if(!MUSIC.enabled) return;
+    if(MUSIC.loop) return;
+    let next = MUSIC.track;
+    if(MUSIC_TRACKS.length > 1){
+      while(next === MUSIC.track) next = Math.floor(Math.random() * MUSIC_TRACKS.length);
+    }else{
+      next = 0;
+    }
+    setMusicSource(next, true);
+  });
+
+  updateRadioUI();
+}
+
+/* Browsers normally require a user gesture before audible autoplay. Start
+   the selected station on the first interaction, while respecting OFF. */
+function unlockMusicFromGesture(e){
+  if(e && e.target && e.target.closest && e.target.closest('#radio-toggle')) return;
+  if(MUSIC.enabled && !musicStarted){
+    playMusic();
+  }
+}
+document.addEventListener('pointerdown', unlockMusicFromGesture, {passive:true});
+document.addEventListener('keydown', unlockMusicFromGesture, {passive:true});
+initMusicRadio();
 
 /* =========================================================================
    SECTION: AUDIO + EPIC ABILITY FX
