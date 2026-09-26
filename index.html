@@ -1083,6 +1083,90 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes aiFade{0%{opacity:.48;transform:scale(1)}100%{opacity:0;transform:scale(.82)}}
 
 /* ---------- New character visuals ---------- */
+
+/* ---------- Mobius / Spider-Gwen / She-Hulk visuals ---------- */
+.tva-door{
+  position:absolute; z-index:18; pointer-events:none; border-radius:3px;
+  background:linear-gradient(180deg,#ffcf6b,#f5921f 55%,#e17c14);
+  border:4px solid #241505;
+  box-shadow:0 0 10px #fff2b0,0 0 22px #ff9f2f,0 0 40px #ff7a18;
+  animation:tvaDoorOpen .55s cubic-bezier(.2,.85,.2,1) forwards;
+}
+@keyframes tvaDoorOpen{0%{opacity:0;transform:scaleY(.15) scaleX(.7)}35%{opacity:1;transform:scaleY(1.04) scaleX(1.02)}100%{opacity:0;transform:scaleY(1) scaleX(.98)}}
+
+.tva-stick-body,.tva-time-stick-body{
+  position:absolute;left:8%;top:35%;width:82%;height:30%;border-radius:9px;
+  background:linear-gradient(180deg,#fff1a5,#ffbe39 44%,#8e5b16 58%,#f6bd45 100%);
+  border:2px solid #3a2712;box-shadow:inset 0 2px 2px #fff8c688,0 0 8px #ffbd3f88;
+}
+.tva-stick-tip,.tva-time-stick-tip{
+  position:absolute;right:2%;top:27%;width:18%;height:46%;border-radius:50%;
+  background:#ffe9a0;border:2px solid #6c4814;box-shadow:0 0 12px #ffd35a;
+}
+.tva-stick-glow{
+  position:absolute;inset:5%;border-radius:14px;box-shadow:0 0 16px #ffbd3a,0 0 30px #ff8d1a55;
+  animation:tvaStickPulse .18s ease-in-out infinite alternate;
+}
+@keyframes tvaStickPulse{to{transform:scale(1.06);opacity:.75}}
+.tva-time-stick-aura{
+  position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(circle,#fff8c6aa,#ffbd3a33 42%,transparent 72%);
+  animation:tvaTimePulse .42s ease-in-out infinite alternate;
+}
+@keyframes tvaTimePulse{to{transform:scale(1.14);opacity:.8}}
+
+.shehulk-rock{position:absolute;inset:2%;border-radius:38% 56% 46% 52%;
+  background:radial-gradient(circle at 30% 25%,#c9c2b6,#8a827a 38%,#59534d 68%,#2c2926);
+  border:3px solid #201d1a;box-shadow:inset 6px 6px 12px #f0ebe166,inset -6px -6px 10px #00000055,0 0 10px #161412aa;
+  animation:sheHulkRockSpin .5s linear infinite;
+}
+.shehulk-rock:before{content:'';position:absolute;left:20%;top:28%;width:34%;height:3px;background:#1c1a17;opacity:.6;transform:rotate(-30deg);border-radius:2px;}
+.shehulk-rock:after{content:'';position:absolute;left:48%;top:55%;width:28%;height:3px;background:#1c1a17;opacity:.55;transform:rotate(20deg);border-radius:2px;}
+@keyframes sheHulkRockSpin{to{transform:rotate(360deg)}}
+.shehulk-rock-chip{position:absolute;width:12px;height:8px;background:#b4aea7;border-radius:50%;opacity:.75;transform:rotate(-25deg);}
+.shehulk-rock-chip.c1{left:18%;top:18%}.shehulk-rock-chip.c2{right:18%;bottom:22%}
+.shehulk-rock-chip.c3{left:50%;top:6%}
+
+.tva-time-charge{position:absolute;z-index:17;pointer-events:none;}
+.tva-charge-ring{position:absolute;inset:0;border:5px solid #ffcb52;border-radius:50%;box-shadow:0 0 30px #ff9f2f, inset 0 0 26px #ffb52e44;animation:tvaChargeSpin 1s linear infinite;}
+.tva-charge-core{position:absolute;left:50%;top:50%;width:22px;height:22px;transform:translate(-50%,-50%);border-radius:50%;background:#fff5b6;box-shadow:0 0 28px #ffd35a;}
+@keyframes tvaChargeSpin{to{transform:rotate(360deg)}}
+
+.tva-vaporize-burst,.tva-dust-cloud{position:absolute;z-index:24;pointer-events:none;border-radius:50%;}
+.tva-vaporize-core{position:absolute;inset:28%;border-radius:50%;background:radial-gradient(circle,#fff,#fff4bf 24%,#ffbd3b 50%,transparent 74%);box-shadow:0 0 28px #fff0a8;}
+.tva-vaporize-ring{position:absolute;inset:6%;border:5px solid #ffe89a;border-radius:50%;box-shadow:0 0 38px #ffab29;animation:tvaVaporizeRing .58s ease-out forwards;}
+@keyframes tvaVaporizeRing{to{transform:scale(1.35);opacity:0}}
+.tva-dust-cloud{background:radial-gradient(circle at 50% 50%,#eee8ddcc 0 20%,#9b948a88 48%,transparent 72%);filter:blur(1px);animation:tvaDust .9s ease-out forwards;}
+@keyframes tvaDust{to{transform:scale(1.65) translateY(-20px);opacity:0}}
+
+.mobius-time-charging .fighter-square{filter:sepia(.55) saturate(.7) brightness(.8);box-shadow:0 0 0 2px #ffd35a,0 0 20px #ffb52e;}
+.mobius-time-charged .fighter-square{box-shadow:0 0 0 3px #fff0a5,0 0 28px #ffd35a,0 0 48px #ff9d2f;}
+.spidergwen-dodging .fighter-square{box-shadow:0 0 0 3px #f7a6db,0 0 24px #ff7fd0;filter:saturate(1.2) brightness(1.12);animation:spiderGwenDodgeGlow .18s ease-in-out infinite alternate;}
+@keyframes spiderGwenDodgeGlow{to{transform:scale(1.04)}}
+
+.shehulk-breaking .fighter-square{animation:sheHulkBreak .4s cubic-bezier(.3,.7,.15,1) forwards;}
+.shehulk-reenter .fighter-square{animation:sheHulkReenter .42s cubic-bezier(.2,.85,.2,1) both;}
+@keyframes sheHulkBreak{0%{transform:scale(1);filter:none;opacity:1}40%{transform:scaleX(1.08) scaleY(.95) rotate(-2deg);filter:brightness(1.1)}100%{transform:scaleX(.65) scaleY(1.06) rotate(3deg) translateX(12px);opacity:0;filter:brightness(1.35)}}
+@keyframes sheHulkReenter{0%{transform:scaleX(.65) scaleY(1.06) rotate(-3deg) translateX(-12px);opacity:0;filter:brightness(1.35)}55%{transform:scaleX(1.06) scaleY(.96) rotate(1deg);opacity:1;filter:brightness(1.05)}100%{transform:scale(1) rotate(0);opacity:1;filter:none}}
+.shehulk-speech-bubble{
+  position:absolute;z-index:40;pointer-events:none;min-width:210px;max-width:250px;
+  padding:10px 13px;background:#fff;color:#111;font:800 13px/1.2 Inter,system-ui,sans-serif;
+  border:3px solid #111;border-radius:13px;box-shadow:4px 5px 0 #111;
+}
+.shehulk-speech-bubble:after{
+  content:'';position:absolute;left:24px;bottom:-13px;width:18px;height:18px;background:#fff;
+  border-right:3px solid #111;border-bottom:3px solid #111;transform:skewY(24deg) rotate(34deg);
+}
+.shehulk-comic-rip{position:absolute;z-index:35;pointer-events:none;overflow:hidden;animation:sheHulkComicRip .82s cubic-bezier(.18,.7,.22,1) forwards;}
+.shehulk-rip-flash{position:absolute;inset:0;background:#fff;opacity:.85;animation:sheHulkFlash .35s ease-out forwards;}
+.shehulk-rip-edge{position:absolute;top:-6%;width:34%;height:112%;
+  background:#fff radial-gradient(circle,#00000020 1.1px,transparent 1.6px) 0 0/7px 7px;
+  border:6px solid #111;box-shadow:0 0 0 3px #fff,0 0 20px #111;
+  clip-path:polygon(50% 0,64% 12%,46% 24%,62% 37%,44% 50%,60% 63%,44% 76%,58% 88%,50% 100%,38% 90%,54% 78%,40% 65%,56% 52%,38% 39%,54% 26%,40% 13%);}
+.shehulk-rip-edge.edge-a{left:24%;transform:rotate(-2deg)}.shehulk-rip-edge.edge-b{left:51%;transform:rotate(2deg)}
+.shehulk-rip-lines{position:absolute;left:48%;top:8%;width:4px;height:84%;background:#111;box-shadow:-10px 0 0 #fff,10px 0 0 #fff;transform:rotate(1deg);opacity:.95;}
+@keyframes sheHulkComicRip{0%{opacity:0;transform:scale(.98)}12%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0;transform:scale(1.02)}}
+@keyframes sheHulkFlash{0%{opacity:0}18%{opacity:.92}100%{opacity:0}}
+
 .loki-clone{z-index:7;}
 .strange-portal,.loki-portal{position:absolute;border-radius:50%;pointer-events:none;z-index:8;overflow:visible;animation:strangePortalOpen .48s cubic-bezier(.2,.85,.2,1) forwards;}
 .strange-portal{background:radial-gradient(circle,rgba(10,8,6,.35) 0 60%,transparent 68%);border:3px solid #ffb04a;box-shadow:0 0 6px #fff2b0,0 0 16px #ff9f2f,inset 0 0 14px #ff9f2f88,0 0 34px #ff6a00,0 0 58px #ff7b1855;}
@@ -1101,6 +1185,13 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .bw-baton-swing .bw-baton-held{animation:bwBatonSwing .3s cubic-bezier(.2,.85,.25,1) forwards;}
 .fighter.facing-left .bw-baton-held{right:auto;left:-30px;transform:scaleX(-1) rotate(-55deg);}
 .fighter.facing-left.bw-baton-swing .bw-baton-held{animation:bwBatonSwingLeft .3s cubic-bezier(.2,.85,.25,1) forwards;}
+.mobius-stick-held{position:absolute;right:-26px;top:2px;width:82px;height:59px;z-index:6;pointer-events:none;transform-origin:20% 55%;filter:drop-shadow(0 2px 3px #000b);opacity:0;transform:scaleX(1) rotate(-18deg);}
+.mobius-stick-held svg{width:100%;height:100%;display:block;overflow:visible;}
+.mobius-stick-swing .mobius-stick-held{animation:mobiusStickSwing .28s cubic-bezier(.2,.85,.25,1) forwards;}
+.fighter.facing-left .mobius-stick-held{right:auto;left:-26px;transform:scaleX(-1) rotate(-18deg);}
+.fighter.facing-left.mobius-stick-swing .mobius-stick-held{animation:mobiusStickSwingLeft .28s cubic-bezier(.2,.85,.25,1) forwards;}
+@keyframes mobiusStickSwing{0%{opacity:1;transform:scaleX(1) rotate(-18deg);}45%{opacity:1;transform:scaleX(1) rotate(48deg);}90%{opacity:1;transform:scaleX(1) rotate(16deg);}100%{opacity:0;transform:scaleX(1) rotate(16deg);}}
+@keyframes mobiusStickSwingLeft{0%{opacity:1;transform:scaleX(-1) rotate(-18deg);}45%{opacity:1;transform:scaleX(-1) rotate(48deg);}90%{opacity:1;transform:scaleX(-1) rotate(16deg);}100%{opacity:0;transform:scaleX(-1) rotate(16deg);}}
 @keyframes bwBatonSwing{0%{opacity:1;transform:scaleX(1) rotate(-55deg);}45%{transform:scaleX(1) rotate(28deg);}100%{opacity:1;transform:scaleX(1) rotate(14deg);}}
 @keyframes bwBatonSwingLeft{0%{opacity:1;transform:scaleX(-1) rotate(-55deg);}45%{transform:scaleX(-1) rotate(28deg);}100%{opacity:1;transform:scaleX(-1) rotate(14deg);}}
 .mrf-arm-wrap{position:absolute;right:-4px;top:36%;width:0;height:0;z-index:6;pointer-events:none;transform-origin:0 50%;}
@@ -1835,7 +1926,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 }
 .zemo-sword-slash-art{
   width:100%; height:100%; transform-origin:20px 55px;
-  animation:zemoSwordSwing .96s cubic-bezier(.16,.8,.2,1) forwards;
+  animation:zemoSwordSwing .34s cubic-bezier(.16,.8,.2,1) forwards;
 }
 .zemo-sword-slash-art svg{
   display:block; width:100%; height:100%; overflow:visible;
@@ -1843,11 +1934,10 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 }
 @keyframes zemoSwordSwing{
   0%{opacity:0;transform:rotate(-52deg) scale(.88);}
-  10%{opacity:1;}
-  38%{opacity:1;transform:rotate(-18deg) scale(1);}
-  67%{opacity:1;transform:rotate(24deg) scale(1.02);}
-  84%{opacity:.8;transform:rotate(42deg) scale(.98);}
-  100%{opacity:0;transform:rotate(50deg) scale(.94);}
+  14%{opacity:1;}
+  42%{opacity:1;transform:rotate(-10deg) scale(1);}
+  75%{opacity:1;transform:rotate(30deg) scale(1.02);}
+  100%{opacity:0;transform:rotate(46deg) scale(.96);}
 }
 .zemo-sword-slash .zemo-sword-glint{animation:zemoSwordGlint .22s ease-out infinite alternate;}
 @keyframes zemoSwordGlint{from{opacity:.55}to{opacity:1}}
@@ -4397,7 +4487,7 @@ const CHARACTERS = {
     }
   },
   zemo: {
-    id:'zemo', name:'Zemo', img:'Zemo.jpg', color:'#7b7f86', accentColor:'#d9dde3', aiStyle:'zemo',
+    id:'zemo', name:'Zemo', img:'Zemo.jpg', color:'#5b2a72', accentColor:'#d9dde3', aiStyle:'zemo',
     maxHealth:7500,
     description:'A tactical swordsman who mixes quick blade strikes with explosive charges and short ability denial.',
     abilities:{
@@ -4521,7 +4611,7 @@ const CHARACTERS = {
     }
   },
   falcon: {
-    id:'falcon', name:'The Falcon', img:'TheFalcon.jpg', color:'#9aa3af', accentColor:'#dce3ec', aiStyle:'falcon',
+    id:'falcon', name:'The Falcon', img:'TheFalcon.jpg', color:'#a8323d', accentColor:'#dce3ec', aiStyle:'falcon',
     maxHealth:8000,
     description:'An aerial marksman with permanent mechanical wings. Uses Wing Strike up close, deploys Redwing as an attack drone at range, and flies freely for short bursts.',
     abilities:{
@@ -4872,7 +4962,7 @@ const CHARACTERS = {
     }
   },
   warmachine: {
-    id:'warmachine', name:'War Machine', img:'WarMachine.jpg', color:'#87919d', aiStyle:'warmachine',
+    id:'warmachine', name:'War Machine', img:'WarMachine.jpg', color:'#4a4f56', aiStyle:'warmachine',
     maxHealth:9500,
     description:'A high-output armored weapons platform. Trades survivability for an overwhelming stream of physical ammunition, explosive missiles, and short-burst flight.',
     abilities:{
@@ -5303,10 +5393,65 @@ const CHARACTERS = {
          desc:'Shang-Chi\'s reflexes sharpen to superhuman levels, letting him dodge every incoming attack for 5 seconds. Cooldown: 22 seconds.'}
     }
   },
+  mobius: {
+    id:'mobius', name:'Mobius', img:'Mobius.jpg', color:'#6b7280', accentColor:'#f59e0b', aiStyle:'mobius',
+    difficulty:'medium',
+    maxHealth:7000,
+    description:'TVA agent armed with a TemPad and time stick. Can slow time, charge a devastating time stick, and open a TVA time door.',
+    abilities:{
+      E:{key:'E', name:'TVA Slow-mo Stick', type:'melee', damage:400, cooldown:1000, knockback:5, range:76, hitDelay:70,
+         slow:500, slowFactor:1/16,
+         sound:'ability', fx:'mobius_stick_swing', hitFx:'mobius_stick_hit', hitSound:'hit',
+         desc:'A close-range strike with the TVA stick for 400 damage that slows the enemy to 1/16 speed for 0.5 seconds.'},
+      Q:{key:'Q', name:'Time Stick', type:'timeStick', damage:250000, cooldown:30000, knockback:0,
+         speed:15, w:52, h:16, color:'#ffd35a', render:'tva-time-stick',
+         chargeDuration:20000,
+         sound:'ability', fx:'ability', hitFx:'tva-vaporize', hitSound:'ability',
+         desc:'Charge for 20 seconds, then vaporise the enemy with one hit.'},
+      R:{key:'R', name:'TemPad Portal', type:'tvaPortal', damage:0, cooldown:8000,
+         sound:'ability', fx:'ability',
+         desc:'Opens a rectangular TVA time door to another part of the arena.'}
+    }
+  },
+  spidergwen: {
+    id:'spidergwen', name:'Spider-Gwen', img:'SpiderGwen.jpg', color:'#f06bb5', accentColor:'#50d5ff', aiStyle:'spidergwen',
+    maxHealth:8900,
+    description:'A fast spider-hero with rapid web shots, perfect defensive reflexes, and powerful aerial movement.',
+    abilities:{
+      E:{key:'E', name:'Web Shot', type:'projectile', damage:250, cooldown:500, knockback:5,
+         speed:15, w:22, h:8, color:'#e7e7e7', web:true, slow:300,
+         sound:'web_shoot', fx:'web_shot', hitFx:'web', hitSound:'web_hit',
+         desc:'Fires a fast web shot that briefly slows.'},
+      Q:{key:'Q', name:'Enhanced Agility', type:'martialDodge', damage:0, cooldown:8500, duration:8000,
+         sound:'ability', fx:'ability',
+         desc:'Dodges every attack for 8 seconds.'},
+      R:{key:'R', name:'Web Swing', type:'mobility', damage:0, cooldown:7500, boostX:18, swingToTop:true,
+         sound:'web_swing', fx:'web_swing',
+         desc:'Swings rapidly to the top of the arena.'}
+    }
+  },
+  shehulk: {
+    id:'shehulk', name:'She-Hulk', img:'SheHulk.jpg', color:'#55b94a', accentColor:'#b8ff8b', aiStyle:'shehulk',
+    maxHealth:15000,
+    description:'A gamma-powered powerhouse with heavy punches, giant rocks, and a comic-book escape that tears through the arena.',
+    abilities:{
+      E:{key:'E', name:'Gamma Punch', type:'melee', damage:450, cooldown:700, knockback:13, range:100, hitDelay:75,
+         sound:'ability', fx:'shehulk_gamma_punch', hitFx:'shehulk_gamma_hit', hitSound:'hit',
+         desc:'A heavy gamma-powered punch.'},
+      Q:{key:'Q', name:'Rock Throw', type:'projectile', damage:1300, cooldown:7000, knockback:20,
+         speed:12, w:54, h:50, color:'#77706a', render:'shehulk-rock',
+         sound:'ability', fx:'shehulk_rock_throw', hitFx:'shehulk_rock_hit', hitSound:'hit',
+         desc:'Throws a huge rock for 1,300 damage.'},
+      R:{key:'R', name:'Hulk Break', type:'hulkBreak', damage:0, cooldown:9000,
+         sound:'ability', fx:'ability',
+         desc:'Rips through the map like a comic page and re-enters somewhere else.'}
+    }
+  },
+
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','hulk','redhulk','blackpanther','killmonger','namor','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','namor','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
 
 
 /* =========================================================================
@@ -6161,6 +6306,7 @@ function startRandomBattle(){ startPractice('random'); }
 const DIFFICULTIES = ['random','easy','medium','hard'];
 function hasHealingFactor(def){ return !!def && (!!def.healingFactor || (def.passiveRegen || 0) > 0); }
 function difficultyOf(def){
+  if(def && ['easy','medium','hard'].includes(def.difficulty)) return def.difficulty;
   if(def.maxHealth > 15000 || hasHealingFactor(def)) return 'hard';
   if(def.maxHealth < 8000) return 'easy';
   return 'medium';
@@ -6294,6 +6440,9 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     jgMindWarpUntil:0,
     jgMindWarpLockUntil:0,
     beastSurgeUntil:0,
+    timeStickChargingUntil:0,
+    timeStickCharged:false,
+    sheHulkBreakUntil:0,
     abilityLockUntil:0,
     disabledAbilityKey:null,
     disabledAbilityUntil:0,
@@ -6400,6 +6549,22 @@ function multiTargetFor(caster){
     if(f === caster || f.dead) return;
     if(multiConfig().teams[f.multiSlot] === myTeam) return;
     const d = Math.abs((f.x + FIGHTER_SIZE/2) - cx);
+    if(d < bestDist){ bestDist = d; best = f; }
+  });
+  return best;
+}
+function closestOpponentFor(caster){
+  const candidates = (state.multiPvp && state.multi) ? state.multi.fighters : [state.player, state.bot];
+  const myTeam = (state.multiPvp && state.multi && caster.multiSlot != null) ? multiConfig().teams[caster.multiSlot] : null;
+  let best = null, bestDist = Infinity;
+  const cx = caster.x + FIGHTER_SIZE/2;
+  const cy = caster.y + FIGHTER_SIZE/2;
+  candidates.forEach(f=>{
+    if(!f || f === caster || f.dead) return;
+    if(myTeam != null && multiConfig().teams[f.multiSlot] === myTeam) return;
+    const dx = (f.x + FIGHTER_SIZE/2) - cx;
+    const dy = (f.y + FIGHTER_SIZE/2) - cy;
+    const d = Math.hypot(dx, dy);
     if(d < bestDist){ bestDist = d; best = f; }
   });
   return best;
@@ -6838,6 +7003,7 @@ function buildFighterDOM(f){
       ${f.def.id==='usagent' ? '<div class="cap-shield-held usagent-shield-held">'+usAgentShieldSvg()+'</div>' : ''}
       ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
       ${f.def.id==='blade' ? '<div class="blade-sword-held"><svg viewBox="0 0 96 80" aria-hidden="true"><defs><linearGradient id="bladeBlade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8f96"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient></defs><g transform="translate(4 4) rotate(-6 44 36)"><rect x="2" y="30" width="14" height="12" rx="3" fill="#1a1a1a" stroke="#000" stroke-width="1.4"/><rect x="14" y="33" width="8" height="6" rx="2" fill="#701d1d"/><rect x="20" y="31" width="66" height="9" rx="2.5" fill="url(#bladeBlade)" stroke="#5c6067" stroke-width="1"/><path d="M22 35.5 L84 35.5" stroke="#ffffff" stroke-width="1.2" opacity=".8"/><path d="M84 31 L92 35.5 L84 40 Z" fill="#f4f6f8" stroke="#5c6067" stroke-width="1"/></g></svg></div>' : ''}
+      ${f.def.id==='mobius' ? '<div class="mobius-stick-held"><svg viewBox="0 0 92 66" aria-hidden="true"><defs><linearGradient id="mobiusShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a2712"/><stop offset=".5" stop-color="#8e5b16"/><stop offset="1" stop-color="#3a2712"/></linearGradient><radialGradient id="mobiusTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fffdf0"/><stop offset=".4" stop-color="#ffd35a"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/></radialGradient></defs><g transform="translate(6 8) rotate(-16 40 25)"><rect x="0" y="19" width="17" height="13" rx="4" fill="#241505" stroke="#000" stroke-width="1.3"/><rect x="3.2" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="7.6" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="12" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="17" y="20.5" width="46" height="10" rx="5" fill="url(#mobiusShaft)" stroke="#1c1006" stroke-width="1.3"/><rect x="21" y="22.6" width="38" height="2.1" rx="1" fill="#ffdf94" opacity=".7"/><circle cx="70" cy="25.5" r="11" fill="url(#mobiusTip)"/><circle cx="70" cy="25.5" r="4.4" fill="#fffdf0"/><path d="M63 17 L69 25 L62 27 L71 36" fill="none" stroke="#fff3c6" stroke-width="1.9" stroke-linecap="round"/></g></svg></div>' : ''}
       ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
     </div>
     ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
@@ -7238,7 +7404,7 @@ function hulkRoarTier(def){
 function isRoarHeld(f, t){ return !!f && (!!f.hulkSlideDir || (!!f.hulkRoarUntil && t < f.hulkRoarUntil)); }
 // Abilities that would carry a fighter across the arena. They are locked while roared,
 // otherwise a "rooted" fighter could just teleport / leap / grapple straight out of it.
-const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl','ironJump'];
+const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','tvaPortal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl','ironJump','hulkBreak'];
 
 function finishHulkSlide(f, hitWall){
   const tier = f.hulkSlideTier;
@@ -7324,6 +7490,7 @@ function tryUseAbility(caster, target, key){
     return false;
   }
   if(caster.abilityLockUntil && t < caster.abilityLockUntil && !isJeanMindWarpControlled(caster, t)) return false;
+  if(ability.type === 'timeStick' && caster.timeStickChargingUntil && t < caster.timeStickChargingUntil) return false;
   if(caster.chargeState) return false;
   if(caster.grootBallUntil && t < caster.grootBallUntil) return false; // curled up in the Groot Ball: no attacking
   if(caster.disabledAbilityKey === key && caster.disabledAbilityUntil && t < caster.disabledAbilityUntil){
@@ -7357,6 +7524,12 @@ function tryUseAbility(caster, target, key){
   sfx(ability.sound || fallbackSound);
   spawnAbilityFx(caster, ability, target);
   const result = executeAbility(caster, target, ability, t) || null;
+  if(ability.type === 'timeStick'){
+    if(result && result.stage === 'fire'){
+      caster.cooldowns[key] = t + ability.cooldown;
+    }
+    return true;
+  }
   if(ability.type !== 'toggle' && ability.type !== 'block'){
     let cd = (result && result.hit === false && ability.cooldownOnMiss) ? ability.cooldownOnMiss : ability.cooldown;
     if(caster.def.id==='beast' && caster.beastSurgeUntil > t) cd *= (caster.def.abilities.R.cooldownMult || 0.6);
@@ -7446,6 +7619,19 @@ function teleportThroughPortal(caster){
   caster.x=best.x; caster.y=best.y; caster.vx=0; caster.vy=0; caster.onGround=false;
   fxEl('strange-portal', `left:${caster.x+FIGHTER_SIZE/2-42}px;top:${caster.y+FIGHTER_SIZE/2-42}px;width:84px;height:84px;`, 460);
   spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,18,'#ffcf73',78,380);
+}
+function teleportThroughTVAPortal(caster){
+  const from = platformUnderX(caster);
+  const dest = randomArenaPlatformPoint(from);
+  const ox = caster.x + FIGHTER_SIZE/2, oy = caster.y + FIGHTER_SIZE/2;
+  const doorW = 74, doorH = 118;
+  fxEl('tva-door',`left:${ox-doorW/2}px;top:${oy-doorH/2}px;width:${doorW}px;height:${doorH}px;`,520);
+  spawnSparks(ox,oy,16,'#ffb72e',70,360);
+  caster.x = dest.x; caster.y = dest.y; caster.vx = 0; caster.vy = 0; caster.onGround = false; caster.turnPending = null;
+  const nx = caster.x + FIGHTER_SIZE/2, ny = caster.y + FIGHTER_SIZE/2;
+  fxEl('tva-door',`left:${nx-doorW/2}px;top:${ny-doorH/2}px;width:${doorW}px;height:${doorH}px;`,650);
+  spawnSparks(nx,ny,22,'#ffd15c',92,520);
+  spawnAfterimage(caster,'#f5a62388',480);
 }
 function spawnLokiDuplications(caster, duration){
   clearLokiDuplications(caster);
@@ -7611,6 +7797,84 @@ function executeAbility(caster, target, ability, t){
       teleportWithSpaceStone(caster);
       break;
     }
+    case 'timeStick': {
+      if(caster.timeStickCharged){
+        const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+        if(!tg || tg.dead) return {stage:'fire'};
+        const d = caster.isBot ? caster.facing : dirSignTo(caster,tg);
+        state.projectiles.push({
+          x:caster.x+FIGHTER_SIZE/2 + d*32, y:caster.y+FIGHTER_SIZE/2 - 8,
+          vx:d*(ability.speed||15), vy:0, w:ability.w||52, h:ability.h||16,
+          color:ability.color||'#ffd35a', damage:ability.damage||250000, knockback:0, owner:caster.id,
+          life:4200, returns:false, phase:'out', originX:caster.x, casterRef:caster, targetRef:tg,
+          returnDistance:0, render:ability.render||'tva-time-stick', trail:'', web:false,
+          hitFx:ability.hitFx||'tva-vaporize', hitSound:ability.hitSound||'ability',
+          slow:0, slowFactor:0, shock:null, stun:0, pierce:false, hasHitTarget:false,
+          trailTick:0, el:null, tvaVaporize:true
+        });
+        caster.timeStickCharged = false;
+        if(caster.el) caster.el.classList.remove('mobius-time-charged');
+        spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,22,'#ffd35a',95,520);
+        return {stage:'fire'};
+      }
+      const chargeMs = ability.chargeDuration || 20000;
+      caster.timeStickChargingUntil = t + chargeMs;
+      caster.timeStickCharged = false;
+      caster.timeStickChargeToken = (caster.timeStickChargeToken||0) + 1;
+      const myChargeToken = caster.timeStickChargeToken;
+      caster.vx = 0; caster.vy = 0; caster.flight = false; caster.grappleUntil = 0;
+      if(caster.el) caster.el.classList.add('mobius-time-charging');
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,26,'#ffcf59',100,520);
+      caster.timeStickChargeFxEl = fxEl('tva-time-charge',`left:${caster.x-22}px;top:${caster.y-30}px;width:${FIGHTER_SIZE+44}px;height:${FIGHTER_SIZE+44}px;`,chargeMs,'<div class="tva-charge-ring"></div><div class="tva-charge-core"></div>');
+      const who = caster;
+      setTimeout(()=>{
+        if(state.mode !== 'battle' || who.dead) return;
+        if(who.timeStickChargeToken !== myChargeToken) return; // the charge was interrupted by a hit
+        who.timeStickChargingUntil = 0;
+        who.timeStickCharged = true;
+        who.timeStickChargeFxEl = null;
+        if(who.el){
+          who.el.classList.remove('mobius-time-charging');
+          who.el.classList.add('mobius-time-charged');
+          setTimeout(()=>{ if(who.el) who.el.classList.remove('mobius-time-charged'); }, 900);
+        }
+        spawnDamageNumber(who.x+4,who.y-22,'CHARGED',false);
+        spawnSparks(who.x+FIGHTER_SIZE/2,who.y+FIGHTER_SIZE/2,32,'#fff0a8',120,700);
+        fxEl('fx-ring',`left:${who.x-18}px;top:${who.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;border-color:#fff1a1;border-width:3px;box-shadow:0 0 34px #ffbd3a;`,600);
+      }, chargeMs);
+      return {stage:'charge'};
+    }
+    case 'tvaPortal': {
+      teleportThroughTVAPortal(caster);
+      break;
+    }
+    case 'hulkBreak': {
+      const from = platformUnderX(caster);
+      const dest = randomArenaPlatformPoint(from);
+      caster.sheHulkBreakUntil = t + 650;
+      caster.vx = 0; caster.vy = 0; caster.onGround = false;
+      if(caster.el) caster.el.classList.add('shehulk-breaking');
+      const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
+      const ripW = 220, ripH = 190;
+      fxEl('shehulk-speech-bubble',`left:${Math.max(8,caster.x-18)}px;top:${Math.max(8,caster.y-88)}px;`,900,'<span>Kevin Feige transport me please.</span>');
+      fxEl('shehulk-comic-rip',`left:${cx-ripW/2}px;top:${cy-ripH/2}px;width:${ripW}px;height:${ripH}px;`,540,'<div class="shehulk-rip-flash"></div><div class="shehulk-rip-edge edge-a"></div>');
+      spawnSparks(cx,cy,14,'#b9ff87',80,380);
+      shakeArena(4,160);
+      setTimeout(()=>{
+        if(state.mode !== 'battle' || caster.dead) return;
+        caster.x = dest.x; caster.y = dest.y; caster.vx = 0; caster.vy = 0; caster.onGround = false;
+        if(caster.el){
+          caster.el.classList.remove('shehulk-breaking');
+          caster.el.classList.add('shehulk-reenter');
+          setTimeout(()=>{ if(caster.el) caster.el.classList.remove('shehulk-reenter'); }, 420);
+        }
+        const rx = caster.x + FIGHTER_SIZE/2, ry = caster.y + FIGHTER_SIZE/2;
+        fxEl('shehulk-comic-rip',`left:${rx-ripW/2}px;top:${ry-ripH/2}px;width:${ripW}px;height:${ripH}px;`,420,'<div class="shehulk-rip-flash"></div>');
+        fxEl('fx-ring',`left:${caster.x-14}px;top:${caster.y-14}px;width:${FIGHTER_SIZE+28}px;height:${FIGHTER_SIZE+28}px;border-color:#c8ff9a;border-width:3px;box-shadow:0 0 18px #6ee94a;`,340);
+        spawnSparks(rx,ry,10,'#d3ffb1',65,320);
+      },400);
+      break;
+    }
     case 'portal': {
       teleportThroughPortal(caster);
       break;
@@ -7741,7 +8005,13 @@ function executeAbility(caster, target, ability, t){
       caster.invulnAbilityUntil = t + (ability.duration || 5000);
       if(caster.el) caster.el.classList.add('shangchi-dodging');
       const who = caster;
-      setTimeout(()=>{ if(who.el) who.el.classList.remove('shangchi-dodging'); }, ability.duration || 5000);
+      if(caster.def && caster.def.id === 'spidergwen' && caster.el) caster.el.classList.add('spidergwen-dodging');
+      setTimeout(()=>{
+        if(who.el){
+          who.el.classList.remove('shangchi-dodging');
+          if(who.def && who.def.id === 'spidergwen') who.el.classList.remove('spidergwen-dodging');
+        }
+      }, ability.duration || 5000);
       spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 16, '#ffcf6b', 60, 420);
       break;
     }
@@ -7969,7 +8239,9 @@ function executeAbility(caster, target, ability, t){
       break;
     }
     case 'scarletDisable': {
-      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      // Scarlet Witch's R is strictly single-target: always affect only the
+      // opponent physically closest to Scarlet Witch at cast time.
+      const tg = closestOpponentFor(caster);
       if(!tg || tg.dead) break;
       const keys=['E','Q','R'];
       const pick=keys[Math.floor(Math.random()*keys.length)];
@@ -7983,7 +8255,9 @@ function executeAbility(caster, target, ability, t){
       break;
     }
     case 'tacticalDisable': {
-      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      // Zemo's R is strictly single-target: always affect only the opponent
+      // physically closest to Zemo at cast time.
+      const tg = closestOpponentFor(caster);
       if(!tg || tg.dead || tg === caster) break;
       const dx = (tg.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2);
       const dy = (tg.y+FIGHTER_SIZE/2) - (caster.y+FIGHTER_SIZE/2);
@@ -8126,7 +8400,7 @@ function executeAbility(caster, target, ability, t){
         homing: !!ability.homing, homingTurn: ability.homingTurn || 0, instantTurn: !!ability.instantTurn,
         render: ability.render || '', trail: ability.trail || '', web: !!ability.web,
         bulletType: ability.bulletType || '',
-        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, shock: ability.shock || null, stun: ability.stun || 0,
+        hitFx: ability.hitFx || '', hitSound: ability.hitSound || '', slow: ability.slow || 0, slowFactor: ability.slowFactor || 0, shock: ability.shock || null, stun: ability.stun || 0,
         waspSizeDuration: ability.waspSizeDuration || 0, waspSizeSpeedMultiplier: ability.waspSizeSpeedMultiplier || 1,
         pierce: !!ability.pierce, shieldViz: !!ability.shieldViz, hasHitTarget:false, precisionAim:!!ability.precisionAim, ricochet:false, ricochetBounced:false,
         burnDamage: ability.burnDamage || 0, burnTicks: ability.burnTicks || 0, burnTickMs: ability.burnTickMs || 500,
@@ -8156,7 +8430,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && !attackBlockedByFloor(caster, target)){
           const dir = dirSignTo(caster, target);
           damageTargetOrWall(target, ability.damage, ability.knockback, dir,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, ranged:isRangedAbility(ability), attacker:caster});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, slowFactor:ability.slowFactor, ranged:isRangedAbility(ability), attacker:caster});
         } else {
           const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*70;
           fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#ffffff44,transparent 70%);`, 380);
@@ -8393,7 +8667,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && facingOk){
           const healthBefore=target.health;
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, stun: ability.stun, ranged:isRangedAbility(ability), attacker:caster});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, slowFactor: ability.slowFactor, stun: ability.stun, ranged:isRangedAbility(ability), attacker:caster});
           if(ability.redHulkBurn && target.health<healthBefore && !target.dead){
             const ticks=Math.max(1,ability.burnTicks||4);
             applyBurn(target,{interval:ability.burnTickMs||250,ticks,damage:redHulkBurnDamageFor(target)/ticks,attacker:caster});
@@ -9287,6 +9561,29 @@ function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
   applyDamage(target, dmg, knockback, dirSign, opts);
 }
 
+// Mobius gets hit mid-charge on the Time Stick: the charge fails outright, he's freed
+// up to move/act again immediately, and the ability goes on cooldown (a failed charge
+// still costs him the attempt) rather than letting him instantly try again.
+function cancelTimeStickCharge(target, tNow){
+  target.timeStickChargingUntil = 0;
+  target.timeStickCharged = false;
+  target.timeStickChargeToken = (target.timeStickChargeToken||0) + 1;
+  if(target.el) target.el.classList.remove('mobius-time-charging');
+  if(target.timeStickChargeFxEl){
+    if(target.timeStickChargeFxEl.parentNode) target.timeStickChargeFxEl.remove();
+    target.timeStickChargeFxEl = null;
+  }
+  let failedKey = null, failedAbility = null;
+  for(const k of ['E','Q','R']){
+    const ab = target.def.abilities[k];
+    if(ab && ab.type === 'timeStick'){ failedKey = k; failedAbility = ab; break; }
+  }
+  if(failedKey) target.cooldowns[failedKey] = tNow + (failedAbility.cooldown || 30000);
+  const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
+  spawnDamageNumber(target.x+4, target.y-22, 'CHARGE FAILED', false);
+  fxEl('fx-burst', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;background:radial-gradient(circle,#fff6d8aa,transparent 72%);`, 360);
+  fxEl('tva-dust-cloud', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;`, 500);
+}
 function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.dead) return;
   if(target.invulnUntil && now() < target.invulnUntil) return; // just respawned (Battle mode)
@@ -9358,6 +9655,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   }
   target.health = Math.max(0, target.health - actual);
   spawnDamageNumber(target.x+18, target.y, Math.round(actual), false);
+  if(target.timeStickChargingUntil && tNow < target.timeStickChargingUntil) cancelTimeStickCharge(target, tNow);
   if(target.yonduArrow) cancelYonduArrow(target, false);
   const kbMult = (typeof target.def.knockbackTakenMult === 'number') ? target.def.knockbackTakenMult : 1;
   const profileMult = opts.ranged ? RANGED_KNOCKBACK_MULT : CLOSE_KNOCKBACK_MULT;
@@ -9372,7 +9670,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   target.hitStun = Math.min(420, 90 + effectiveKnockback*10);
   sfx(opts.sound || 'hit');
   spawnHitFx(target, opts.hitFx || '', dirSign);
-  if(opts.slow) applyWebSlow(target, opts.slow);
+  if(opts.slow) applyWebSlow(target, opts.slow, opts.slowFactor);
   if(opts.shock && target.health > 0) applyShock(target, opts.shock);
   if(opts.stun && target.health > 0){
     const stunEnd = now() + opts.stun;
@@ -11225,28 +11523,35 @@ function spawnAbilityFx(caster, ability, target){
             <stop offset=".74" stop-color="#c0c8d0"/>
             <stop offset="1" stop-color="#59636e"/>
           </linearGradient>
-          <linearGradient id="zemoGrip" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#4b5360"/>
-            <stop offset=".45" stop-color="#242a31"/>
-            <stop offset="1" stop-color="#101319"/>
+          <linearGradient id="zemoGrip" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#57616d"/>
+            <stop offset=".5" stop-color="#242a31"/>
+            <stop offset="1" stop-color="#0d1015"/>
+          </linearGradient>
+          <linearGradient id="zemoGuard" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e7c774"/>
+            <stop offset=".5" stop-color="#a9822f"/>
+            <stop offset="1" stop-color="#6b4e18"/>
           </linearGradient>
         </defs>
         <!-- subtle motion trail -->
         <path d="M28 48 Q49 25 86 17" fill="none" stroke="#d9efff" stroke-width="5" opacity=".18" stroke-linecap="round"/>
-        <!-- compact sword -->
-        <path d="M29 48 L79 14 L90 12 L84 23 L35 53 Z" fill="url(#zemoBladeMetal)" stroke="#59636e" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M36 49 L83 20" stroke="#ffffff" stroke-width="1.15" opacity=".78" stroke-linecap="round"/>
-        <!-- crossguard -->
-        <path d="M25 44 L36 57" stroke="#d0d6dc" stroke-width="3.2" stroke-linecap="round"/>
-        <path d="M23 42 L35 56" stroke="#4b535d" stroke-width="1.1" stroke-linecap="round"/>
-        <!-- visible handle/grip -->
-        <path d="M16 50 L29 44 L36 53 L23 59 Z" fill="url(#zemoGrip)" stroke="#0b0e12" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M18 51 L29 47 M20 55 L32 50 M23 58 L34 52" stroke="#69727c" stroke-width="1.1" opacity=".85" stroke-linecap="round"/>
-        <!-- pommel -->
-        <circle cx="18" cy="55" r="4.4" fill="#c4ccd4" stroke="#3e4650" stroke-width="1.1"/>
-        <circle class="zemo-sword-glint" cx="82" cy="17" r="2.2" fill="#ffffff"/>
+        <g transform="translate(30 48) rotate(-31)">
+          <!-- pommel -->
+          <circle cx="-33" cy="0" r="5.6" fill="url(#zemoGuard)" stroke="#3e2f10" stroke-width="1.1"/>
+          <circle cx="-34.4" cy="-1.4" r="1.5" fill="#fff6d8" opacity=".8"/>
+          <!-- wrapped grip -->
+          <rect x="-29" y="-4.4" width="25" height="8.8" rx="3.6" fill="url(#zemoGrip)" stroke="#05070a" stroke-width="1.1"/>
+          <path d="M-25 -2.6 L-8 -2.6 M-25 0 L-8 0 M-25 2.6 L-8 2.6" stroke="#6c7580" stroke-width="1" opacity=".7"/>
+          <!-- crossguard -->
+          <rect x="-4.4" y="-10.5" width="8.8" height="21" rx="2.2" fill="url(#zemoGuard)" stroke="#3e2f10" stroke-width="1.1"/>
+          <!-- blade -->
+          <path d="M0 -4.2 L60 -1.3 L70 0 L60 1.3 L0 4.2 Z" fill="url(#zemoBladeMetal)" stroke="#59636e" stroke-width="1.1" stroke-linejoin="round"/>
+          <path d="M4 0 L64 0" stroke="#ffffff" stroke-width="1.1" opacity=".75" stroke-linecap="round"/>
+          <circle class="zemo-sword-glint" cx="66" cy="0" r="2.2" fill="#ffffff"/>
+        </g>
       </svg>`;
-      const sword = fxEl('zemo-sword-slash', 'left:0;top:0;width:100px;height:76px;opacity:1;overflow:visible;', 1000,
+      const sword = fxEl('zemo-sword-slash', 'left:0;top:0;width:100px;height:76px;opacity:1;overflow:visible;', 380,
         `<div class="zemo-sword-slash-art">${slashSvg}</div>`);
 
       const startedAt = performance.now();
@@ -11259,7 +11564,7 @@ function spawnAbilityFx(caster, ability, target){
         sword.style.left = `${handX - 20}px`;
         sword.style.top = `${handY - 55}px`;
         sword.style.transform = `scaleX(${liveDir})`;
-        if(elapsed < 980) requestAnimationFrame(follow);
+        if(elapsed < 360) requestAnimationFrame(follow);
       };
       requestAnimationFrame(follow);
       spawnSparks(cx + dir*20, cy - 4, 5, '#dcecff', 28, 220);
@@ -12100,6 +12405,20 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- She-Hulk ---------------- */
+    case 'shehulk_gamma_punch': {
+      const px = cx + dir*46, py = cy - 2;
+      fxEl('fx-flash', `left:${px-26}px;top:${py-26}px;width:52px;height:52px;background:radial-gradient(circle,#eaffe0,#8bff6b 45%,transparent 76%);`, 220);
+      fxEl('fx-ring', `left:${px-34}px;top:${py-34}px;width:68px;height:68px;border-color:#b9ff8b;border-width:4px;box-shadow:0 0 20px #6ee94a;`, 320);
+      spawnSparks(px, py, 10, '#c6ff9e', 54, 280);
+      break;
+    }
+    case 'shehulk_rock_throw': {
+      spawnMuzzleFx(caster);
+      spawnSparks(cx + dir*20, cy, 6, '#9c948a', 30, 240);
+      break;
+    }
+
     /* ---------------- Wolverine ---------------- */
     case 'wolverine_claws': {
       const wx = cx + dir*30, wy = cy + 3;
@@ -12180,6 +12499,16 @@ function spawnAbilityFx(caster, ability, target){
       </svg>`;
       fxEl('pistol-muzzle', `left:${hx-11}px;top:${hy-12}px;width:22px;height:22px;`, 90, starSvg);
       spawnSparks(hx, hy, 5, '#ffe6a8', 16, 160);
+      break;
+    }
+    case 'mobius_stick_swing': {
+      caster.el.classList.remove('mobius-stick-swing');
+      void caster.el.offsetWidth;
+      caster.el.classList.add('mobius-stick-swing');
+      setTimeout(()=>caster.el && caster.el.classList.remove('mobius-stick-swing'), 280);
+      const tipX = cx + dir*58, tipY = cy - 4;
+      fxEl('fx-flash', `left:${tipX-16}px;top:${tipY-16}px;width:32px;height:32px;background:radial-gradient(circle,#fff6d8,#ffbd3a 45%,transparent 74%);`, 180);
+      spawnSparks(tipX, tipY, 8, '#ffd35a', 44, 260);
       break;
     }
     case 'electric_baton': {
@@ -12580,6 +12909,28 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'mobius_stick_hit': {
+      fxEl('fx-flash',`left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff6d8,#ffbd3a 40%,transparent 74%);`,220);
+      fxEl('fx-ring',`left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#ffd35a;border-width:3px;box-shadow:0 0 18px #ff9f2f;`,340);
+      spawnSparks(cx,cy,12,'#ffd97a',60,300);
+      break;
+    }
+    case 'shehulk_gamma_hit': {
+      fxEl('fx-flash',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;background:radial-gradient(circle,#f2ffe8,#a9ff86 30%,#5bd63f 58%,transparent 78%);`,260);
+      fxEl('fx-ring',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#c8ff9a;border-width:5px;box-shadow:0 0 26px #6ee94a,0 0 46px rgba(94,255,80,.45);`,420);
+      fxEl('fx-ring',`left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;border-color:#8dff67;border-width:2px;box-shadow:0 0 16px rgba(94,255,80,.6);`,460);
+      spawnSparks(cx,cy,16,'#c9ff9e',84,360);
+      shakeArena(6,240);
+      break;
+    }
+    case 'shehulk_rock_hit': {
+      fxEl('fx-flash',`left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#fff,#cfc7ba 30%,#7a736c 60%,transparent 78%);`,260);
+      fxEl('fx-ring',`left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#b4ada4;border-width:4px;box-shadow:0 0 22px #6b6259;`,380);
+      spawnGroundCrack(cx, target.y+FIGHTER_SIZE, 60);
+      spawnSparks(cx,cy,14,'#c9c1b6',70,340);
+      shakeArena(9,300);
+      break;
+    }
     case 'killmonger_blade_hit': {
       fxEl('fx-flash',`left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;background:radial-gradient(circle,#f7eaff 0 8%,#d59aff 26%,#944ce8 56%,transparent 78%);`,240);
       fxEl('killmonger-hit-slash',`left:${cx-58}px;top:${cy-46}px;width:116px;height:92px;transform:scaleX(${dirSign||1});`,420,'<div class="km-hit-slash s1"></div><div class="km-hit-slash s2"></div><div class="km-hit-slash s3"></div>');
@@ -13222,6 +13573,14 @@ function spawnHitFx(target, kind, dirSign){
       shakeArena(6, 220);
       break;
     }
+    case 'tva-vaporize': {
+      fxEl('tva-vaporize-burst',`left:${cx-74}px;top:${cy-74}px;width:148px;height:148px;`,620,'<div class="tva-vaporize-core"></div><div class="tva-vaporize-ring"></div>');
+      spawnSparks(cx,cy,36,'#fff2b3',120,650);
+      spawnSparks(cx,cy,20,'#f4a43a',96,520);
+      shakeArena(12,360);
+      break;
+    }
+
     default: {
       const size = 44;
       fxEl('fx-burst',
@@ -13240,9 +13599,15 @@ function spawnHitFx(target, kind, dirSign){
    ------------------------------------------------------------------------- */
 const WEB_SLOW_FACTOR = 0.32;
 function isSlowed(f){ return !!f && (f.slowUntil || 0) > now(); }
-function applyWebSlow(target, ms){
+function activeSlowMultiplier(f){
+  if(!isSlowed(f)) return 1;
+  return Math.min(1, Number(f.slowFactor) || WEB_SLOW_FACTOR);
+}
+function applyWebSlow(target, ms, factor){
   if(!target || target.dead) return;
   ms = ms || 300;
+  factor = Number.isFinite(Number(factor)) ? Number(factor) : WEB_SLOW_FACTOR;
+  target.slowFactor = Math.min(target.slowFactor || 1, factor);
   target.slowUntil = Math.max(target.slowUntil || 0, now() + ms);
   showWebWrap(target, ms);
 }
@@ -13347,6 +13712,13 @@ function collidesPlatform(f, plat){
 }
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   const tNow = now();
+  if(f.timeStickChargingUntil && tNow < f.timeStickChargingUntil){
+    f.vx = 0; f.vy = 0; f.flight = false; f.flightExpire = 0; f.grappleUntil = 0;
+    return;
+  } else if(f.timeStickChargingUntil && tNow >= f.timeStickChargingUntil){
+    f.timeStickChargingUntil = 0;
+    if(f.el) f.el.classList.remove('mobius-time-charging');
+  }
   if(f.hexFrozenUntil && tNow < f.hexFrozenUntil){
     // Scarlet Witch's Hex Burst is a real freeze: no walking, jumping, flight, grapple travel, gravity drift, or knockback movement can move the victim.
     f.vx = 0; f.vy = 0; f.flight = false; f.flightExpire = 0; f.grappleUntil = 0;
@@ -13426,7 +13798,7 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   } else if(f.windBurstUntil && tNow < f.windBurstUntil){
     f.vx = f.windBurstVx || f.vx;
   } else {
-    const slowMul = isSlowed(f) ? WEB_SLOW_FACTOR : 1; // webs only affect movement speed
+    const slowMul = activeSlowMultiplier(f); // webs and TVA time-slow affect movement speed
     const blockMul = f.blocking ? 0.65 : 1; // Captain America: -35% movement speed while Shield Block is active
     if(f.flight){
       const gliderSpeedMul = (f.def.id === 'greengoblin' && f.gliderMounted && f.gliderBoostUntil > tNow) ? 2 : 1;
@@ -13459,7 +13831,7 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     if(wantJump) vertDir -= 1;
     if(wantDown) vertDir += 1;
     const gliderSpeedMul = (f.def.id === 'greengoblin' && f.gliderMounted && f.gliderBoostUntil > tNow) ? 2 : 1;
-    f.vy = vertDir * FLY_SPEED * fighterSpeedMultiplier(f) * (isSlowed(f) ? WEB_SLOW_FACTOR : 1) * gliderSpeedMul;
+    f.vy = vertDir * FLY_SPEED * fighterSpeedMultiplier(f) * activeSlowMultiplier(f) * gliderSpeedMul;
   } else if(!(f.grappleUntil && now() < f.grappleUntil)){
     if(f.glideUntil && tNow < f.glideUntil){
       // Ankh Glide: much lighter gravity and a capped fall speed while it's
@@ -14257,7 +14629,12 @@ function updateProjectiles(dtF){
         if(p.visualOnly){ spawnSparks(p.x + p.w/2, p.y + p.h/2, 5, '#ff8a5c', 30, 260); if(p.el) p.el.remove(); state.projectiles.splice(i,1); continue; }
         const healthBefore = target.health;
         applyDamage(target, p.damage, p.knockback, dir >= 0 ? 1 : -1,
-          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, shock: p.shock, stun: p.stun, ranged:true, attacker:p.casterRef});
+          {hitFx: p.hitFx, sound: p.hitSound, slow: p.slow, slowFactor:p.slowFactor, shock: p.shock, stun: p.stun, ranged:true, attacker:p.casterRef});
+        if(p.tvaVaporize){
+          const vcx = target.x+FIGHTER_SIZE/2, vcy = target.y+FIGHTER_SIZE/2;
+          fxEl('tva-dust-cloud',`left:${vcx-58}px;top:${vcy-58}px;width:116px;height:116px;`,900);
+          spawnSparks(vcx,vcy,32,'#d8d2c6',105,650);
+        }
         if(p.burnDamage && target.health < healthBefore){
           const ticks = Math.max(1, p.burnTicks || 1);
           applyBurn(target, {interval: p.burnTickMs || 500, ticks, damage: p.burnDamage / ticks, attacker:p.casterRef});
@@ -14349,7 +14726,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile') || p.el.classList.contains('namor-trident-projectile') || p.el.classList.contains('namor-wave-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile') || p.el.classList.contains('namor-trident-projectile') || p.el.classList.contains('namor-wave-projectile') || p.el.classList.contains('tva-slow-stick-projectile') || p.el.classList.contains('tva-time-stick-projectile') || p.el.classList.contains('shehulk-rock-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -14656,6 +15033,18 @@ function buildProjectileVisual(p){
   } else if(p.render === 'pistol'){
     p.el.classList.add('pistol-projectile');
     p.el.innerHTML = '<div class="bullet-core"></div><div class="bullet-trail"></div>';
+  } else if(p.render === 'tva-slow-stick'){
+    p.el.classList.add('tva-slow-stick-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="tva-stick-glow"></div><div class="tva-stick-body"></div><div class="tva-stick-tip"></div>';
+  } else if(p.render === 'tva-time-stick'){
+    p.el.classList.add('tva-time-stick-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="tva-time-stick-aura"></div><div class="tva-time-stick-body"></div><div class="tva-time-stick-tip"></div>';
+  } else if(p.render === 'shehulk-rock'){
+    p.el.classList.add('shehulk-rock-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="shehulk-rock"></div><div class="shehulk-rock-chip c1"></div><div class="shehulk-rock-chip c2"></div><div class="shehulk-rock-chip c3"></div>';
   } else if(p.render === 'gambit-card'){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
@@ -14973,6 +15362,9 @@ const AI_STYLE_RANGE = {
   yondu:520,
   humantorch:400,
   erratic:320,
+  mobius:420,
+  spidergwen:150,
+  shehulk:105,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -15439,6 +15831,22 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist <= qAb.range + 18){ tryUseAbility(bot, player, 'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 760){ tryUseAbility(bot, player, 'E'); return; }
     if(cdReady(bot,'R',t) && (hpPct < 0.32 || adist > 420 || Math.abs(vertical) > 110) && Math.random() < 0.7){ tryUseAbility(bot, player, 'R'); return; }
+  } else if(style === 'mobius'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(qAb && qAb.type==='timeStick' && bot.timeStickCharged && cdReady(bot,'Q',t)){ tryUseAbility(bot,player,'Q'); return; }
+    if(qAb && qAb.type==='timeStick' && !bot.timeStickCharged && !bot.timeStickChargingUntil && Math.random()<0.035){ tryUseAbility(bot,player,'Q'); return; }
+    if(rAb && cdReady(bot,'R',t) && (adist>420 || Math.abs(vertical)>100 || hpPct<0.4) && Math.random()<0.45){ tryUseAbility(bot,player,'R'); return; }
+    if(eAb && cdReady(bot,'E',t) && adist<900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'spidergwen'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(qAb && cdReady(bot,'Q',t) && (hpPct<0.7 || adist<110) && Math.random()<0.7){ tryUseAbility(bot,player,'Q'); return; }
+    if(rAb && cdReady(bot,'R',t) && (hpPct<0.35 || adist>360 || Math.abs(vertical)>120) && Math.random()<0.65){ tryUseAbility(bot,player,'R'); return; }
+    if(eAb && cdReady(bot,'E',t) && adist<850){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'shehulk'){
+    const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
+    if(rAb && cdReady(bot,'R',t) && (adist>260 || Math.abs(vertical)>90 || hpPct<0.32) && Math.random()<0.5){ tryUseAbility(bot,player,'R'); return; }
+    if(qAb && cdReady(bot,'Q',t) && adist>120 && adist<760){ tryUseAbility(bot,player,'Q'); return; }
+    if(eAb && cdReady(bot,'E',t) && adist<=eAb.range+20){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'trickster'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
     if(cdReady(bot,'Q',t) && adist < 520 && Math.random() < 0.28){ tryUseAbility(bot,player,'Q'); return; }
@@ -16205,7 +16613,7 @@ function renderFighter(f){
   updateAntmanForm(f);
   updateCloak(f);
   updateWaspSizeEffect(f);
-  if(!isSlowed(f) && !isWaspSizeActive(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed');
+  if(!isSlowed(f)){ f.slowFactor=1; if(!isWaspSizeActive(f) && f.el.classList.contains('slowed') && !f.webWrapEl) f.el.classList.remove('slowed'); }
   const pct = Math.max(0, f.health/f.def.maxHealth);
   f.overheadFillEl.style.width = (pct*100)+'%';
   f.overheadFillEl.style.background = pct<=0.25 ? '#e5484d' : (pct<=0.55 ? '#f2cd6e' : '#3fb96f');
