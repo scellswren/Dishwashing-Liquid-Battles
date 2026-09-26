@@ -3007,6 +3007,26 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 .mps-continue-row{display:flex; justify-content:center; margin-top:clamp(22px,4vh,36px);}
 #mps-continue-btn{min-width:240px;}
 .mps-continue-row{position:sticky;bottom:0;padding:14px 0 0;background:linear-gradient(180deg,transparent,rgba(15,16,22,.92) 30%);backdrop-filter:blur(7px);}
+.mps-mode-pill,.mps-time-pill,.mps-gravity-pill{font-size:13px;}
+.mps-mode-pill.active,.mps-time-pill.active,.mps-gravity-pill.active{background:linear-gradient(180deg,var(--amber),#d98a2b);color:#231600;border-color:var(--amber);}
+.mps-mode-pill:disabled{opacity:.38;cursor:not-allowed;transform:none!important;}
+.mps-mode-hint{color:var(--muted);font-size:12px;margin:10px 0 0;min-height:17px;}
+.mps-lives-block.mps-disabled,.mps-rounds-block.mps-disabled{opacity:.38;filter:saturate(.4);}
+.mps-disabled .mps-toggle,.mps-disabled .mps-stepper{pointer-events:none;}
+#mp-match-timer{display:none;min-width:92px;padding:7px 12px;border:2px solid var(--amber);border-radius:10px;background:rgba(10,11,18,.85);font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.08em;text-align:center;color:#fff;box-shadow:0 0 18px rgba(242,165,65,.18);}
+#screen-battle.mp-timer-on #mp-match-timer{display:block;}
+#mp-match-timer.urgent{border-color:#e5484d;color:#ff9b9f;box-shadow:0 0 18px rgba(229,72,77,.35);animation:mpTimerPulse .65s ease-in-out infinite;}
+@keyframes mpTimerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#mp-ko-feed{position:absolute;top:74px;right:12px;z-index:20;width:min(360px,44vw);display:flex;flex-direction:column;gap:6px;pointer-events:none;}
+.mp-ko-entry{align-self:flex-end;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid rgba(255,255,255,.12);border-left:3px solid var(--pc,#f2a541);border-radius:8px;background:rgba(10,11,18,.9);box-shadow:0 8px 20px rgba(0,0,0,.25);font-size:11px;color:#eef0fa;animation:mpKoIn .22s ease-out forwards;}
+.mp-ko-entry.fade{animation:mpKoOut .35s ease-in forwards;}
+.mp-ko-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
+.mp-ko-arrow{color:var(--muted);font-family:'Anton',sans-serif;}
+.mp-ko-tag{font-family:'Anton',sans-serif;letter-spacing:.04em;color:#0b0c12;padding:1px 5px;border-radius:4px;background:var(--pc,#f2a541);}
+@keyframes mpKoIn{from{opacity:0;transform:translateX(18px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes mpKoOut{to{opacity:0;transform:translateX(18px)}}
+.go-portrait-tag.n3{background:var(--mp3);} .go-portrait-tag.n4{background:var(--mp4);}
+@media(max-width:700px){#mp-ko-feed{top:68px;right:8px;width:min(300px,58vw);}#mp-match-timer{min-width:78px;font-size:17px;padding:6px 9px;}}
 .mps-block{transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;}
 .mps-block:hover{transform:translateY(-2px);border-color:#4a4f70;box-shadow:0 14px 34px rgba(0,0,0,.32);}
 .mps-toggle-track:after{content:'ON';position:absolute;right:7px;top:6px;font-size:8px;font-weight:800;color:rgba(255,255,255,.72);opacity:0;transition:opacity .2s ease;}
@@ -4181,7 +4201,40 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
         <div class="page-caption" data-i18n="mps_caption">Set up the rules for this multiplayer match before choosing fighters.</div>
       </header>
       <div class="mps-cols">
-        <section class="mps-block">
+        <section class="mps-block mps-mode-block">
+          <h3 class="set-sub" data-i18n="mps_mode_header">Game Mode</h3>
+          <p class="settings-note" data-i18n="mps_mode_note">Choose the rules for the multiplayer match. Elimination is for 3–4 players and removes the first player knocked out each round.</p>
+          <div class="mps-chip-row" id="mps-mode-row">
+            <button class="map-pill mps-mode-pill active" id="mps-mode-ffa" data-mode="ffa"><span data-i18n="mps_mode_ffa">Free-for-All</span></button>
+            <button class="map-pill mps-mode-pill" id="mps-mode-elimination" data-mode="elimination"><span data-i18n="mps_mode_elimination">Elimination</span></button>
+          </div>
+          <p class="mps-mode-hint" id="mps-mode-hint"></p>
+        </section>
+
+        <section class="mps-block mps-time-block">
+          <h3 class="set-sub" data-i18n="mps_time_header">Time Limit</h3>
+          <p class="settings-note" data-i18n="mps_time_note">Choose how long each multiplayer round can last, or leave it unlimited.</p>
+          <div class="mps-chip-row" id="mps-time-row">
+            <button class="map-pill mps-time-pill active" data-ms="0"><span data-i18n="mps_time_none">No limit</span></button>
+            <button class="map-pill mps-time-pill" data-ms="60000"><span data-i18n="mps_time_1m">1 minute</span></button>
+            <button class="map-pill mps-time-pill" data-ms="120000"><span data-i18n="mps_time_2m">2 minutes</span></button>
+            <button class="map-pill mps-time-pill" data-ms="300000"><span data-i18n="mps_time_5m">5 minutes</span></button>
+            <button class="map-pill mps-time-pill" data-ms="600000"><span data-i18n="mps_time_10m">10 minutes</span></button>
+            <button class="map-pill mps-time-pill" data-ms="1200000"><span data-i18n="mps_time_20m">20 minutes</span></button>
+          </div>
+        </section>
+
+        <section class="mps-block mps-gravity-block">
+          <h3 class="set-sub" data-i18n="mps_gravity_header">Gravity</h3>
+          <p class="settings-note" data-i18n="mps_gravity_note">Change the jump and fall feel for the whole multiplayer match.</p>
+          <div class="mps-chip-row" id="mps-gravity-row">
+            <button class="map-pill mps-gravity-pill active" data-gravity="normal"><span data-i18n="mps_gravity_normal">Normal</span></button>
+            <button class="map-pill mps-gravity-pill" data-gravity="low"><span data-i18n="mps_gravity_low">Low</span></button>
+            <button class="map-pill mps-gravity-pill" data-gravity="high"><span data-i18n="mps_gravity_high">High</span></button>
+          </div>
+        </section>
+
+        <section class="mps-block mps-lives-block">
           <div class="mps-block-head">
             <h3 class="set-sub" data-i18n="mps_lives_header">Lives</h3>
             <button class="mps-toggle" id="mps-lives-toggle" data-on="0" aria-pressed="false">
@@ -4196,7 +4249,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
           </div>
         </section>
 
-        <section class="mps-block">
+        <section class="mps-block mps-rounds-block">
           <div class="mps-block-head">
             <h3 class="set-sub" data-i18n="mps_rounds_header">Rounds</h3>
             <button class="mps-toggle" id="mps-rounds-toggle" data-on="0" aria-pressed="false">
@@ -4433,7 +4486,9 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
         <div class="hud-multi-slot" id="hud-multi-3"></div>
         <div class="hud-multi-slot" id="hud-multi-4"></div>
       </div>
+      <div id="mp-match-timer" aria-live="polite"></div>
     </div>
+    <div id="mp-ko-feed" aria-live="polite" aria-label="KO feed"></div>
 
     <div id="arena-wrapper">
       <div id="arena"></div>
@@ -6372,6 +6427,8 @@ function switchSandboxPlayerCharacter(charId){
   if(dummy){ buildFighterDOM(dummy); }
   arenaEl.classList.remove('echolocation-mode');
   updateHudNames();
+  renderMatchTimer();
+  clearKoFeed();
   renderLivesHud();
   buildAbilityBar();
   closeSandboxCharacterPicker();
@@ -6804,6 +6861,11 @@ const state = {
   scaleFactor:1,
   input:{left:false,right:false,down:false,up:false},
   roundsSession:null,
+  eliminationSession:null,
+  matchTimeLimitMs:0,
+  matchTimeRemainingMs:0,
+  timeLimitTriggered:false,
+  gravityScale:1,
 };
 
 function now(){ return performance.now(); }
@@ -6834,6 +6896,10 @@ function startBattle(playerCharId, botCharId, opts){
   state.lives = { player:state.maxLives, bot:state.maxLives };
   state.battleDifficulty = (opts && opts.battleDifficulty) || (state.matchKind === 'battle' ? 'medium' : null);
   state.challenge = (opts && opts.challenge) || null;
+  state.matchTimeLimitMs = pvp ? Math.max(0, Number((opts && opts.timeLimitMs) || 0)) : 0;
+  state.matchTimeRemainingMs = state.matchTimeLimitMs;
+  state.timeLimitTriggered = false;
+  state.gravityScale = pvp ? ({low:.65,normal:1,high:1.35}[(opts && opts.gravity) || 'normal'] || 1) : 1;
   state.stampSeq = (state.stampSeq || 0) + 1;
   document.getElementById('screen-battle').classList.toggle('lives-on', state.livesOn);
   state.player = makeFighter(playerCharId, false, 250);
@@ -6904,6 +6970,7 @@ function closestOpponentFor(caster){
 const MULTI_SPAWN_X = { 2:[250,950], 3:[180,760,1030], 4:[140,480,800,1120] };
 function startMultiBattle(charIds, opts){
   const n = Math.max(2, Math.min(4, charIds.length));
+  const playerSlots = (opts && Array.isArray(opts.playerSlots)) ? opts.playerSlots.slice(0,n) : Array.from({length:n},(_,i)=>i);
   state.pvp = true;
   state.multiPvp = true;
   state.pvpPaused = false;
@@ -6917,6 +6984,10 @@ function startMultiBattle(charIds, opts){
   state.lives = { player:1, bot:1 };
   state.battleDifficulty = null;
   state.challenge = null;
+  state.matchTimeLimitMs = Math.max(0, Number((opts && opts.timeLimitMs) || 0));
+  state.matchTimeRemainingMs = state.matchTimeLimitMs;
+  state.timeLimitTriggered = false;
+  state.gravityScale = ({low:.65,normal:1,high:1.35}[(opts && opts.gravity) || 'normal'] || 1);
   state.stampSeq = (state.stampSeq || 0) + 1;
   document.getElementById('screen-battle').classList.remove('lives-on');
 
@@ -6929,11 +7000,12 @@ function startMultiBattle(charIds, opts){
   const fighters = charIds.slice(0,n).map((id,i)=>{
     const f = makeFighter(id, false, spawns[i], 'p'+(i+1));
     f.multiSlot = i;
+    f.playerSlot = playerSlots[i] ?? i;
     f.facing = i < n/2 ? 1 : -1;
     f.livesLeft = multiMaxLives;
     return f;
   });
-  state.multi = { fighters, livesOn: multiLivesOn, maxLives: multiMaxLives, eliminationOrder: [] };
+  state.multi = { fighters, playerSlots, livesOn: multiLivesOn, maxLives: multiMaxLives, eliminationOrder: [] };
   state.player = fighters[0];
   state.bot = fighters[1];
   versus.lastPick = charIds.slice(0,n);
@@ -6952,6 +7024,8 @@ function startMultiBattle(charIds, opts){
   fighters.forEach(buildFighterDOM);
   arenaEl.classList.remove('echolocation-mode');
   updateHudMulti();
+  renderMatchTimer();
+  clearKoFeed();
   buildMultiAbilityBars();
   state.mode = 'battle';
   state.lastTime = 0;
@@ -7454,7 +7528,7 @@ function updateHudMulti(){
       livesHtml = `<div class="hud-multi-lives">${hearts}</div>`;
     }
     el.innerHTML = `
-      <div class="hud-multi-top"><div class="hud-mini">${squareInner(f.def)}</div><div class="hud-multi-nm">${playerLabel(i+1)} · ${f.def.name}</div></div>
+      <div class="hud-multi-top"><div class="hud-mini">${squareInner(f.def)}</div><div class="hud-multi-nm">${playerLabel((f.playerSlot??i)+1)} · ${f.def.name}</div></div>
       <div class="healthbar-track"><div class="healthbar-fill ${hpClass(pct)}" style="width:${pct*100}%"></div></div>${livesHtml}`;
   }
 }
@@ -9492,7 +9566,7 @@ function updateShock(f){
     spawnLightning(cx+Math.cos(a)*34, cy+Math.sin(a)*34, cx-Math.cos(a)*34, cy-Math.sin(a)*34, {bolts:1, branches:2, width:2.2, life:220, jag:14, segs:5, color:'#9ff3ff'});
     spawnSparks(cx, cy, 5, '#9ff3ff', 30, 260);
     sfx('shock_tick');
-    if(f.health <= 0){ f.shockTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
+    if(f.health <= 0){ f.shockTicksLeft = 0; pushKoFeed(f); onFighterZeroHealth(f, 'ko-health'); break; }
   }
   if(f.shockTicksLeft <= 0 && f.el) f.el.classList.remove('shocked');
 }
@@ -9532,7 +9606,7 @@ function updatePsiWarp(f){
     fxEl('psi-warp-ring', `left:${cx}px;top:${cy}px;width:34px;height:34px;`, 420);
     spawnSparks(cx, cy, 4, '#c98bff', 26, 300);
     sfx('shock_tick');
-    if(f.health <= 0){ f.psiTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
+    if(f.health <= 0){ f.psiTicksLeft = 0; pushKoFeed(f); onFighterZeroHealth(f, 'ko-health'); break; }
   }
   if(f.psiTicksLeft <= 0 && f.el) f.el.classList.remove('psi-warped');
 }
@@ -9633,7 +9707,7 @@ function updateBurn(f){
       spawnSparks(f.x+FIGHTER_SIZE/2, f.y+FIGHTER_SIZE/2, 3, '#ff8a2b', 22, 260);
     }
     sfx('shock_tick');
-    if(f.health <= 0){ f.burnTicksLeft = 0; onFighterZeroHealth(f, 'ko-health'); break; }
+    if(f.health <= 0){ f.burnTicksLeft = 0; pushKoFeed(f); onFighterZeroHealth(f, 'ko-health'); break; }
   }
 }
 // While flaming on, brushing against the opponent sears them for a small,
@@ -9959,6 +10033,20 @@ function cancelTimeStickCharge(target, tNow){
   fxEl('fx-burst', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;background:radial-gradient(circle,#fff6d8aa,transparent 72%);`, 360);
   fxEl('tva-dust-cloud', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;`, 500);
 }
+function playerSlotOfFighter(f){ return f && (f.playerSlot ?? f.multiSlot ?? (f===state.player?0:1)); }
+function clearKoFeed(){ const el=document.getElementById('mp-ko-feed'); if(el) el.innerHTML=''; }
+function pushKoFeed(target){
+  if(!state.pvp || !target) return;
+  const feed=document.getElementById('mp-ko-feed'); if(!feed) return;
+  const attacker=target.lastDamager && !target.lastDamager.dead ? target.lastDamager : null;
+  const targetSlot=playerSlotOfFighter(target), targetTag=playerLabel(targetSlot+1), targetName=target.def?.name||'Fighter';
+  const pc=attacker?.def?.color||target.def?.color||'#f2a541';
+  const item=document.createElement('div'); item.className='mp-ko-entry';
+  item.innerHTML=attacker ? `<span class="mp-ko-tag" style="--pc:${attacker.def.color||'#f2a541'}">${playerLabel(playerSlotOfFighter(attacker)+1)}</span><span class="mp-ko-name">${attacker.def?.name||'Fighter'}</span><span class="mp-ko-arrow">→</span><span class="mp-ko-tag" style="--pc:${pc}">${targetTag}</span><span class="mp-ko-name">${targetName}</span>` : `<span class="mp-ko-tag" style="--pc:${pc}">KO</span><span class="mp-ko-name">${targetTag} · ${targetName}</span>`;
+  feed.prepend(item); while(feed.children.length>5) feed.lastElementChild.remove();
+  setTimeout(()=>{if(item.parentNode){item.classList.add('fade');setTimeout(()=>item.remove(),350);}},4200);
+}
+
 function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.dead) return;
   if(isSandboxPlayer(target)) return;
@@ -9968,7 +10056,8 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     sfx('dodge');
     return;
   }
-  opts = opts || {};
+  opts=opts||{};
+  if(opts.attacker) target.lastDamager=opts.attacker;
   // Daredevil passive: Evasion — a clean dodge, no damage, no knockback.
   if(!opts.mindWarpSelf && !opts.guaranteedHit && target.def.dodgeChance && Math.random() < target.def.dodgeChance){
     spawnDodgeFx(target, dirSign);
@@ -9986,8 +10075,8 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     spawnBPAbsorbFx(target);
     sfx('bp_absorb');
     flashHit(target);
-    if(target.health <= 0 && !target.dead){
-      onFighterZeroHealth(target, 'ko-health');
+    if(target.health<=0 && !target.dead){
+      pushKoFeed(target); onFighterZeroHealth(target,'ko-health');
     }
     return;
   }
@@ -10056,8 +10145,8 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     if(target.el) target.el.classList.add('px-mind-stunned');
   }
   flashHit(target);
-  if(target.health <= 0 && !target.dead){
-    onFighterZeroHealth(target, 'ko-health');
+  if(target.health<=0 && !target.dead){
+    pushKoFeed(target); onFighterZeroHealth(target,'ko-health');
   }
 }
 
@@ -10079,7 +10168,7 @@ function applyHazardDamage(target, dmg){
   flashHit(target);
   sfx('hit');
   if(target.health <= 0 && !target.dead){
-    onFighterZeroHealth(target, 'ko-hazard');
+    pushKoFeed(target); onFighterZeroHealth(target, 'ko-hazard');
   }
 }
 function updateThingCharge(f){
@@ -14325,6 +14414,33 @@ function spawnBPSlamFx(caster, radius, dmg){
 function collidesPlatform(f, plat){
   return (f.x + FIGHTER_SIZE) > plat.x && f.x < (plat.x + plat.w);
 }
+function getBattleGravity(){
+  return GRAVITY * (state.gravityScale || 1);
+}
+function formatMatchTime(ms){
+  const sec=Math.max(0,Math.ceil(ms/1000));
+  return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+}
+function renderMatchTimer(){
+  const el=document.getElementById('mp-match-timer');
+  const screen=document.getElementById('screen-battle');
+  if(!el || !screen) return;
+  const on=!!(state.pvp && state.matchTimeLimitMs>0 && state.mode==='battle');
+  screen.classList.toggle('mp-timer-on',on);
+  if(!on){el.textContent='';el.classList.remove('urgent');return;}
+  el.textContent=formatMatchTime(state.matchTimeRemainingMs);
+  el.classList.toggle('urgent',state.matchTimeRemainingMs<=30000);
+}
+function updateMatchTimer(dt){
+  if(!state.pvp || !state.matchTimeLimitMs || state.countdown || state.pvpPaused || state.timeLimitTriggered || state.mode!=='battle') return;
+  state.matchTimeRemainingMs=Math.max(0,state.matchTimeRemainingMs-dt);
+  renderMatchTimer();
+  if(state.matchTimeRemainingMs<=0){
+    state.timeLimitTriggered=true;
+    resolveMultiplayerTimeLimit();
+  }
+}
+
 function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   const tNow = now();
   if(f.timeStickChargingUntil && tNow < f.timeStickChargingUntil){
@@ -14453,10 +14569,10 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
       // Ankh Glide: much lighter gravity and a capped fall speed while it's
       // active, instead of the flight flag — horizontal control was already
       // free in the air, so slowing the fall is the whole effect.
-      f.vy += GRAVITY * 0.18 * dtF;
+      f.vy += getBattleGravity() * 0.18 * dtF;
       if(f.vy > 3.2) f.vy = 3.2;
     } else {
-      f.vy += GRAVITY * dtF;
+      f.vy += getBattleGravity() * dtF;
     }
   }
   if(f.glideUntil && tNow >= f.glideUntil && f.el) f.el.classList.remove('moonknight-gliding');
@@ -16698,6 +16814,7 @@ function onFighterZeroHealth(target, reason){
 // you from the fight; whoever's left standing when only one remains wins.
 function eliminateMultiFighter(target, reason){
   if(!target || target.dead) return;
+  if(state.eliminationSession?.active){ endEliminationRound(target,reason); return; }
 
   // Lives on: a knockout costs a life and respawns the fighter instead of
   // ending their match, until their last life is gone.
@@ -16728,6 +16845,58 @@ function eliminateMultiFighter(target, reason){
 
   const alive = state.multi.fighters.filter(f => !f.dead);
   if(alive.length <= 1) endBattleMulti(alive[0] || null, reason);
+}
+function cleanupPvpRoundState(){
+  state.illusions.forEach(g=>(g.clones||g.illusions||[]).forEach(i=>{if(i.el)i.el.remove();})); state.illusions=[];
+  state.firePools.forEach(p=>{if(p.el)p.el.remove();}); state.firePools=[];
+  state.missiles.forEach(m=>{if(m.el)m.el.remove();}); state.missiles=[];
+  state.projectiles.forEach(m=>{if(m.el)m.el.remove();}); state.projectiles=[];
+  state.laserBombs?.forEach(m=>{if(m.el)m.el.remove();}); state.laserBombs=[];
+  state.walls.forEach(w=>{if(w.el)w.el.remove();}); state.walls=[];
+  state.mode='ended'; state.countdown=false; state.pvpPaused=false; state.timeLimitTriggered=false; battleToken++; state.stampSeq=(state.stampSeq||0)+1;
+  document.getElementById('pvp-pause').classList.remove('on');
+  const ov=document.getElementById('countdown-overlay'); if(ov){ov.classList.remove('on');ov.innerHTML='';}
+  if(arenaEl) arenaEl.classList.remove('echolocation-mode');
+}
+function renderEliminationGameover(eliminated,survivors,final,reason){
+  document.querySelector('.gameover-wrap').classList.add('pvp');
+  const badge=document.getElementById('go-badge'), sub=document.getElementById('go-sub');
+  const next=document.getElementById('go-next-round-btn');
+  ['go-rematch-btn','go-change-btn','go-view-podium-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  const ret=document.getElementById('go-return-menu-btn'); if(ret) ret.style.display='inline-flex';
+  if(next){next.style.display=final?'none':'inline-flex';next.textContent=t('elimination_next_round');}
+  const winner=survivors.length===1?survivors[0]:null;
+  badge.textContent=winner?t('go_wins').replace('{name}',playerLabel(playerSlotOfFighter(winner)+1)):t('elimination_eliminated').replace('{name}',playerLabel(playerSlotOfFighter(eliminated)+1));
+  badge.className='go-badge win';
+  sub.textContent=winner?t('elimination_champion').replace('{name}',winner.def.name):(reason==='time-limit'?t('elimination_time_sub').replace('{name}',playerLabel(playerSlotOfFighter(eliminated)+1)):t('elimination_round_sub').replace('{name}',playerLabel(playerSlotOfFighter(eliminated)+1)));
+  const tags=['p1','p2','n3','n4'];
+  document.getElementById('go-portraits').innerHTML=[eliminated,...survivors].map(f=>{const slot=playerSlotOfFighter(f),win=f===winner,elim=f===eliminated;return `<div class="go-portrait ${win?'winner':(elim?'loser':'')}"><div class="go-portrait-square">${squareInner(f.def)}</div><div class="go-portrait-name">${f.def.name}</div><span class="go-portrait-tag ${tags[slot]||'p1'}">${playerLabel(slot+1)}</span></div>`;}).join('');
+  const info=document.getElementById('go-round-info'); if(info){info.classList.remove('on');info.style.display='none';info.innerHTML='';}
+}
+function endEliminationRound(eliminated,reason){
+  if(state.mode!=='battle'||!state.multi||!state.eliminationSession?.active) return;
+  const survivors=state.multi.fighters.filter(f=>f!==eliminated&&!f.dead);
+  const es=state.eliminationSession;
+  es.eliminated.push({playerSlot:playerSlotOfFighter(eliminated),charId:eliminated.def.id,reason});
+  cleanupPvpRoundState(); state.multi.fighters.forEach(f=>{f.dead=true;});
+  es.playerSlots=survivors.map(playerSlotOfFighter); es.n=es.playerSlots.length; es.round++; es.pendingNext=survivors.length>1; es.championSlot=survivors.length===1?playerSlotOfFighter(survivors[0]):null;
+  if(survivors.length===1) es.active=false;
+  renderEliminationGameover(eliminated,survivors,survivors.length===1,reason);
+  setTimeout(()=>showScreen('gameover'),1500);
+}
+function resolveMultiplayerTimeLimit(){
+  if(!state.pvp||state.mode!=='battle') return;
+  const fighters=state.multiPvp?(state.multi?.fighters||[]).filter(f=>!f.dead):[state.player,state.bot].filter(Boolean);
+  if(state.eliminationSession?.active){
+    if(fighters.length>1){ const loser=[...fighters].sort((a,b)=>{const ap=a.health/a.def.maxHealth,bp=b.health/b.def.maxHealth;if(ap!==bp)return ap-bp;return (a.health-b.health)||(a.multiSlot-b.multiSlot);})[0]; onFighterZeroHealth(loser,'time-limit'); }
+    return;
+  }
+  if(state.multiPvp){
+    const ranked=[...fighters].sort((a,b)=>(b.health/b.def.maxHealth)-(a.health/a.def.maxHealth));
+    endBattleMulti(ranked[0]||null,'time-limit'); return;
+  }
+  const pp=state.player.health/state.player.def.maxHealth, bp=state.bot.health/state.bot.def.maxHealth;
+  endBattle(pp>=bp?'player':'bot','time-limit');
 }
 function roundSessionActive(){
   const rs = state.roundsSession;
@@ -16767,6 +16936,7 @@ function renderRoundGameoverUI(){
   if(!rs || !rs.lastPlacements) return;
   const info = document.getElementById('go-round-info');
   const nextBtn = document.getElementById('go-next-round-btn');
+  if(nextBtn) nextBtn.textContent = t('round_next_btn');
   const podiumBtn = document.getElementById('go-view-podium-btn');
   const rematchBtn = document.getElementById('go-rematch-btn');
   const changeBtn = document.getElementById('go-change-btn');
@@ -16878,7 +17048,7 @@ function endBattleMulti(winner, reason){
   const unlockAgainBtn = document.getElementById('go-unlock-again-btn');
   if(unlockAgainBtn) unlockAgainBtn.style.display = 'none';
 
-  const winnerSlot = winner ? winner.multiSlot : -1;
+  const winnerSlot = winner ? (winner.playerSlot ?? winner.multiSlot) : -1;
   badge.textContent = winner ? t('go_wins').replace('{name}', playerLabel(winnerSlot+1)) : t('go_draw');
   badge.className = 'go-badge win';
   document.getElementById('go-sub').textContent = winner
@@ -16892,7 +17062,7 @@ function endBattleMulti(winner, reason){
     return `<div class="go-portrait ${isW?'winner':'loser'}">
       <div class="go-portrait-square">${squareInner(f.def)}</div>
       <div class="go-portrait-name">${f.def.name}</div>
-      <span class="go-portrait-tag ${tagClasses[f.multiSlot]}">${playerLabel(f.multiSlot+1)}</span>
+      <span class="go-portrait-tag ${tagClasses[f.multiSlot]}">${playerLabel((f.playerSlot ?? f.multiSlot)+1)}</span>
     </div>`;
   }).join('');
 
@@ -17783,12 +17953,17 @@ const versus = {
   nav: [ {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0} ],
   splashAt: 0,
   keys: [ {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false}, {left:false,right:false,up:false,down:false} ],
-  lastPick: null
+  lastPick: null,
+  activeSlots:[0,1]
 };
 // Colors + CSS var names for each of the 4 possible player slots.
 const MULTI_SLOT_VAR = ['--p1','--p2','--mp3','--mp4'];
+function getVersusSelectionSlots(){
+  const slots=Array.isArray(versus.activeSlots)&&versus.activeSlots.length?versus.activeSlots:Array.from({length:versus.count||2},(_,i)=>i);
+  return slots.slice(0,4);
+}
 function versusPadsPresent(){
-  for(let i=0;i<versus.count;i++){ if(!versus.slots[i] || !livePadByIndex(versus.slots[i].index)) return false; }
+  for(const playerSlot of getVersusSelectionSlots()){ if(!versus.slots[playerSlot] || !livePadByIndex(versus.slots[playerSlot].index)) return false; }
   return true;
 }
 function versusSelectable(id){
@@ -17810,12 +17985,15 @@ const MP_HEALTH_CAPS = [0, 30000, 20000, 15000, 10000]; // 0 = no limit
 const ROUND_POINTS_BY_PLACE = [15, 5, 2, 0]; // index 0 = 1st place
 
 const mp = {
+  mode:'ffa',
   livesOn: false,
   livesCount: MP_LIVES_DEFAULT,
   roundsOn: false,
   roundsCount: MP_ROUNDS_DEFAULT,
   randomChar: false,
-  healthCap: 0
+  healthCap: 0,
+  timeLimitMs:0,
+  gravity:'normal'
 };
 
 function mpEligibleRosterCount(){
@@ -17829,6 +18007,17 @@ function renderMpSettingsScreen(){
     el.dataset.on = on ? '1' : '0';
     el.setAttribute('aria-pressed', on ? 'true' : 'false');
   };
+  const eliminationAllowed = (versus.count || 2) >= 3;
+  if(mp.mode==='elimination' && !eliminationAllowed){ mp.mode='ffa'; mp.livesOn=false; mp.roundsOn=false; }
+  document.getElementById('mps-mode-ffa')?.classList.toggle('active',mp.mode==='ffa');
+  const elimBtn=document.getElementById('mps-mode-elimination');
+  if(elimBtn){
+    elimBtn.classList.toggle('active',mp.mode==='elimination');
+    elimBtn.disabled=!eliminationAllowed;
+    elimBtn.title=eliminationAllowed?'':'Elimination requires 3 or 4 players';
+  }
+  const modeHint=document.getElementById('mps-mode-hint');
+  if(modeHint) modeHint.textContent=mp.mode==='elimination'?t('mps_mode_elimination_hint'):t('mps_mode_ffa_hint');
   setToggle('mps-lives-toggle', mp.livesOn);
   setToggle('mps-rounds-toggle', mp.roundsOn);
   setToggle('mps-random-toggle', mp.randomChar);
@@ -17841,6 +18030,10 @@ function renderMpSettingsScreen(){
   document.querySelectorAll('#mps-health-row .mps-health-pill').forEach(btn=>{
     btn.classList.toggle('active', Number(btn.dataset.cap) === mp.healthCap);
   });
+  document.querySelectorAll('#mps-time-row .mps-time-pill').forEach(btn=>{ btn.classList.toggle('active',Number(btn.dataset.ms)===mp.timeLimitMs); });
+  document.querySelectorAll('#mps-gravity-row .mps-gravity-pill').forEach(btn=>{ btn.classList.toggle('active',btn.dataset.gravity===mp.gravity); });
+  document.querySelector('.mps-lives-block')?.classList.toggle('mps-disabled',mp.mode==='elimination');
+  document.querySelector('.mps-rounds-block')?.classList.toggle('mps-disabled',mp.mode==='elimination');
   const n = mpEligibleRosterCount();
   document.getElementById('mps-health-count').textContent = t('mps_health_count').replace('{n}', n);
 
@@ -17852,12 +18045,14 @@ function mpClampLives(n){ return Math.max(MP_LIVES_MIN, Math.min(MP_LIVES_MAX, n
 function mpClampRounds(n){ return Math.max(MP_ROUNDS_MIN, Math.min(MP_ROUNDS_MAX, n)); }
 
 document.getElementById('mps-lives-toggle').addEventListener('click', ()=>{
+  if(mp.mode==='elimination') return;
   mp.livesOn = !mp.livesOn;
   if(mp.livesOn && !mp.livesCount) mp.livesCount = MP_LIVES_DEFAULT;
   sfx('ui_tick');
   renderMpSettingsScreen();
 });
 document.getElementById('mps-rounds-toggle').addEventListener('click', ()=>{
+  if(mp.mode==='elimination') return;
   mp.roundsOn = !mp.roundsOn;
   if(mp.roundsOn && !mp.roundsCount) mp.roundsCount = MP_ROUNDS_DEFAULT;
   sfx('ui_tick');
@@ -17880,6 +18075,21 @@ document.getElementById('mps-rounds-minus').addEventListener('click', ()=>{
 document.getElementById('mps-rounds-plus').addEventListener('click', ()=>{
   mp.roundsCount = mpClampRounds(mp.roundsCount + 1); sfx('ui_tick'); renderMpSettingsScreen();
 });
+document.getElementById('mps-mode-row').addEventListener('click',e=>{
+  const btn=e.target.closest('.mps-mode-pill'); if(!btn || btn.disabled) return;
+  const mode=btn.dataset.mode; if(mode==='elimination' && (versus.count||2)<3) return;
+  mp.mode=mode;
+  if(mode==='elimination'){ mp.livesOn=false; mp.roundsOn=false; }
+  sfx('ui_tick'); renderMpSettingsScreen();
+});
+document.getElementById('mps-time-row').addEventListener('click',e=>{
+  const btn=e.target.closest('.mps-time-pill'); if(!btn) return;
+  mp.timeLimitMs=Number(btn.dataset.ms)||0; sfx('ui_tick'); renderMpSettingsScreen();
+});
+document.getElementById('mps-gravity-row').addEventListener('click',e=>{
+  const btn=e.target.closest('.mps-gravity-pill'); if(!btn) return;
+  mp.gravity=btn.dataset.gravity||'normal'; sfx('ui_tick'); renderMpSettingsScreen();
+});
 document.getElementById('mps-health-row').addEventListener('click', (e)=>{
   const btn = e.target.closest('.mps-health-pill');
   if(!btn) return;
@@ -17893,40 +18103,46 @@ document.getElementById('mps-health-row').addEventListener('click', (e)=>{
   sfx('ui_tick');
   renderMpSettingsScreen();
 });
-function pickRandomRosterForPlayers(n){
-  const pool = ROSTER_ORDER.filter(versusSelectable);
-  const shuffled = [...pool];
-  for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
-  const picks = [];
-  for(let i=0;i<n;i++) picks.push(shuffled.length ? shuffled[i % shuffled.length] : ROSTER_ORDER[0]);
+function pickRandomRosterForSlots(playerSlots, previousBySlot){
+  const pool=ROSTER_ORDER.filter(versusSelectable);
+  const shuffled=[...pool];
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+  const picks=[];
+  playerSlots.forEach(slot=>{
+    const prev=previousBySlot?.[slot];
+    const pick=shuffled.find(id=>!picks.includes(id)&&id!==prev) || pool.find(id=>!picks.includes(id)&&id!==prev) || pool.find(id=>id!==prev) || pool[0] || ROSTER_ORDER[0];
+    picks.push(pick);
+  });
   return picks;
 }
-function buildRoundBattleOpts(){
-  return { pvp:true, lives: mp.livesOn ? mp.livesCount : 1 };
+function pickRandomRosterForPlayers(n){ return pickRandomRosterForSlots(Array.from({length:n},(_,i)=>i),null); }
+function buildRoundBattleOpts(playerSlots){
+  const slots=playerSlots || state.roundsSession?.playerSlots || state.eliminationSession?.playerSlots || Array.from({length:versus.count||2},(_,i)=>i);
+  return {pvp:true,lives:mp.livesOn?mp.livesCount:1,timeLimitMs:mp.timeLimitMs,gravity:mp.gravity,playerSlots:slots.slice()};
 }
-function beginRoundsSession(charIds, n){
-  if(!mp.roundsOn){ state.roundsSession = null; return; }
-  state.roundsSession = {
-    active:true,
-    total: mp.roundsCount,
-    current: 1,
-    n,
-    charIds: charIds.slice(0,n),
-    points: new Array(n).fill(0),
-    roundWins: new Array(n).fill(0),
-    lastPlacements: null,
-    isFinalRound: false
-  };
+function beginRoundsSession(charIds,n){
+  if(!mp.roundsOn || mp.mode==='elimination'){state.roundsSession=null;return;}
+  const playerSlots=Array.from({length:n},(_,i)=>i);
+  state.roundsSession={active:true,total:mp.roundsCount,current:1,n,playerSlots,charIds:charIds.slice(0,n),lastCharBySlot:Object.fromEntries(playerSlots.map((slot,i)=>[slot,charIds[i]])),points:new Array(n).fill(0),roundWins:new Array(n).fill(0),lastPlacements:null,isFinalRound:false};
+}
+function beginEliminationSession(charIds,n,playerSlots){
+  if(mp.mode!=='elimination'||n<3) return false;
+  const slots=(playerSlots||Array.from({length:n},(_,i)=>i)).slice(0,n);
+  state.roundsSession=null;
+  state.eliminationSession={active:true,round:1,n,playerSlots:slots,charIds:charIds.slice(0,n),lastCharBySlot:Object.fromEntries(slots.map((slot,i)=>[slot,charIds[i]])),eliminated:[],pendingNext:false,championSlot:null};
+  versus.activeSlots=slots.slice(); versus.count=slots.length;
+  return true;
 }
 document.getElementById('mps-continue-btn').addEventListener('click', ()=>{
   const n = Math.max(2, Math.min(4, versus.count || 2));
+  if(mp.mode==='elimination' && n<3) return;
   if(mp.randomChar){
-    const picks = pickRandomRosterForPlayers(n);
-    versus.lastPick = picks;
-    beginRoundsSession(picks, n);
-    const opts = buildRoundBattleOpts();
-    if(n <= 2) startBattle(picks[0], picks[1], opts);
-    else startMultiBattle(picks, opts);
+    const slots=Array.from({length:n},(_,i)=>i);
+    const picks=pickRandomRosterForPlayers(n);
+    versus.lastPick=picks; versus.activeSlots=slots.slice();
+    if(mp.mode==='elimination') beginEliminationSession(picks,n,slots); else beginRoundsSession(picks,n);
+    const opts=buildRoundBattleOpts(slots);
+    if(n<=2) startBattle(picks[0],picks[1],opts); else startMultiBattle(picks,opts);
   } else {
     showScreen('versus');
   }
@@ -18006,10 +18222,10 @@ function pollPairing(){
   renderPairing(false);
 }
 function startMultiplayerFromPairing(){
-  versus.count = pairClaimedCount();
-  if(versus.count < PAIR_MIN) return;
-  // Keep only the claimed slots, in order — they're always contiguous 0..N-1
-  // since claiming always fills the next open slot.
+  versus.count=pairClaimedCount();
+  if(versus.count<PAIR_MIN) return;
+  versus.activeSlots=Array.from({length:versus.count},(_,i)=>i);
+  if(versus.count<3 && mp.mode==='elimination') mp.mode='ffa';
   showScreen('mp-settings');
 }
 function renderPairing(force){
@@ -18076,15 +18292,19 @@ function startVersusSelect(){
       : `<div class="char-square mystery-square"><span class="mystery-icon">?</span></div><div class="vs-card-name mystery-name">???</div>`;
     grid.appendChild(card);
   });
-  const pool = ROSTER_ORDER.filter(versusSelectable);
-  const n = versus.count = Math.max(2, Math.min(4, versus.count || 2));
-  const picks = [];
-  for(let i=0; i<n; i++){
-    let pick = (i === 0 && pool.includes(SAVE.equipped)) ? SAVE.equipped : pool.find(id => !picks.includes(id));
-    if(!pick) pick = pool[i % pool.length];
+  const pool=ROSTER_ORDER.filter(versusSelectable);
+  const activeSlots=getVersusSelectionSlots();
+  const n=versus.count=Math.max(2,Math.min(4,activeSlots.length||versus.count||2));
+  versus.activeSlots=activeSlots.slice(0,n);
+  const prevBySlot=state.eliminationSession?.active?state.eliminationSession.lastCharBySlot:(roundSessionActive()?state.roundsSession.lastCharBySlot:null);
+  const picks=[];
+  for(let i=0;i<n;i++){
+    const playerSlot=versus.activeSlots[i]; const prev=prevBySlot?.[playerSlot];
+    let pick=(i===0&&playerSlot===0&&!prev&&pool.includes(SAVE.equipped))?SAVE.equipped:pool.find(id=>!picks.includes(id)&&id!==prev);
+    if(!pick) pick=pool.find(id=>id!==prev)||pool[i%pool.length];
     picks.push(pick);
   }
-  versus.sel = picks.map(id => ({ cursor: ROSTER_ORDER.indexOf(id), locked:false }));
+  versus.sel=picks.map(id=>({cursor:ROSTER_ORDER.indexOf(id),locked:false}));
   while(versus.sel.length < 4) versus.sel.push({cursor:0, locked:false});
   versus.nav = [ {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0}, {dir:null, next:0} ];
   versus.splashAt = 0;
@@ -18129,7 +18349,8 @@ function renderVersusSide(slot){
   const el = document.getElementById('vs-side-'+(slot+1));
   const s = versus.sel[slot];
   const def = CHARACTERS[ROSTER_ORDER[s.cursor]];
-  const brand = versus.slots[slot].brand;
+  const playerSlot=getVersusSelectionSlots()[slot]??slot;
+  const brand=versus.slots[playerSlot].brand;
   const rows = ['E','Q','R'].map(k=>{
     const a = def.abilities[k];
     const meta = [];
@@ -18141,7 +18362,7 @@ function renderVersusSide(slot){
   el.classList.toggle('locked', s.locked);
   el.style.setProperty('--char-color', def.color);
   el.innerHTML = `
-    <div class="vs-who">${playerLabel(slot+1)}<span class="vs-pad">${BRAND_DISPLAY_NAME[brand] || BRAND_DISPLAY_NAME.generic}</span></div>
+    <div class="vs-who">${playerLabel(playerSlot+1)}<span class="vs-pad">${BRAND_DISPLAY_NAME[brand] || BRAND_DISPLAY_NAME.generic}</span></div>
     <div class="vs-portrait"><div class="char-square">${squareInner(def)}</div>${s.locked ? `<div class="vs-stamp">${t('vs_ready')}</div>` : ''}</div>
     <div class="vs-name">${def.name}</div>
     <div class="vs-hp">${def.maxHealth.toLocaleString()} HP</div>
@@ -18155,11 +18376,12 @@ function renderVersusMini(slot){
   if(!el) return;
   const s = versus.sel[slot];
   const def = CHARACTERS[ROSTER_ORDER[s.cursor]];
+  const playerSlot=getVersusSelectionSlots()[slot]??slot;
   el.classList.toggle('locked', s.locked);
   el.innerHTML = `
     <div class="char-square">${squareInner(def)}</div>
     <div class="vs-mini-info">
-      <div class="vs-mini-who">${playerLabel(slot+1)}</div>
+      <div class="vs-mini-who">${playerLabel(playerSlot+1)}</div>
       <div class="vs-mini-name">${def.name}</div>
       <div class="vs-mini-status">${s.locked ? t('vs_ready') : t('vs_choosing')}</div>
     </div>`;
@@ -18186,9 +18408,11 @@ function showVersusSplash(){
       <div class="vsp vsp-2"><div class="char-square">${squareInner(d2)}</div><div class="vsp-name">${d2.name}</div></div>`;
   } else {
     const parts = [];
-    for(let s=0; s<n; s++){
-      const def = CHARACTERS[ROSTER_ORDER[versus.sel[s].cursor]];
-      parts.push(`<div class="vsp vsp-multi" style="--pc:var(${MULTI_SLOT_VAR[s]})"><div class="char-square">${squareInner(def)}</div><div class="vsp-name">${def.name}</div></div>`);
+    const activeSlots=getVersusSelectionSlots();
+    for(let s=0;s<n;s++){
+      const def=CHARACTERS[ROSTER_ORDER[versus.sel[s].cursor]];
+      const playerSlot=activeSlots[s]??s;
+      parts.push(`<div class="vsp vsp-multi" style="--pc:var(${MULTI_SLOT_VAR[playerSlot]||MULTI_SLOT_VAR[s]})"><div class="char-square">${squareInner(def)}</div><div class="vsp-name">${playerLabel(playerSlot+1)} · ${def.name}</div></div>`);
       if(s < n-1) parts.push(`<div class="vsp-multi-label">VS</div>`);
     }
     sp.innerHTML = `<div class="multi-splash-row">${parts.join('')}</div>`;
@@ -18205,9 +18429,11 @@ function pollVersusSelect(){
   const nowT = performance.now();
   const n = versus.count;
 
-  for(let slot=0; slot<n; slot++){
-    const idx = versus.slots[slot].index;
-    const s = versus.sel[slot];
+  const activeSlots=getVersusSelectionSlots();
+  for(let slot=0;slot<n;slot++){
+    const playerSlot=activeSlots[slot]??slot;
+    const idx=versus.slots[playerSlot].index;
+    const s=versus.sel[slot];
     const gp = livePadByIndex(idx);
     if(btnEdge(idx, PAD_BACK_BTN)){ showScreen('mode'); return; }
 
@@ -18219,8 +18445,15 @@ function pollVersusSelect(){
         if(dir !== ns.dir){ ns.dir = dir; ns.next = nowT + GP_NAV_INITIAL_MS; versusMove(slot, dir); }
         else if(nowT >= ns.next){ ns.next = nowT + GP_NAV_REPEAT_MS; versusMove(slot, dir); }
       } else { ns.dir = null; }
-      if(btnEdge(idx, JUMP_POS)){
-        s.locked = true; sfx('ui_lock'); renderVersus();
+      if(btnEdge(idx,JUMP_POS)){
+        const chosenId=ROSTER_ORDER[s.cursor];
+        const previousId=state.eliminationSession?.active?state.eliminationSession.lastCharBySlot?.[playerSlot]:(roundSessionActive()?state.roundsSession.lastCharBySlot?.[playerSlot]:null);
+        if(previousId && chosenId===previousId){
+          const note=document.getElementById('vs-note');
+          if(note){note.textContent=t('mps_choose_new_character');setTimeout(()=>{if(note.textContent===t('mps_choose_new_character'))note.textContent='';},1200);}
+          sfx('ability_denied'); continue;
+        }
+        s.locked=true; sfx('ui_lock'); renderVersus();
         let allLocked = true;
         for(let i=0;i<n;i++){ if(!versus.sel[i].locked){ allLocked = false; break; } }
         if(allLocked){
@@ -18236,12 +18469,17 @@ function pollVersusSelect(){
   if(versus.splashAt && nowT >= versus.splashAt){
     versus.splashAt = 0;
     hideVersusSplash();
-    const picks = [];
-    for(let i=0;i<n;i++) picks.push(ROSTER_ORDER[versus.sel[i].cursor]);
-    beginRoundsSession(picks, n);
-    const opts = buildRoundBattleOpts();
-    if(n <= 2) startBattle(picks[0], picks[1], opts);
-    else startMultiBattle(picks, opts);
+    const picks=[]; for(let i=0;i<n;i++) picks.push(ROSTER_ORDER[versus.sel[i].cursor]);
+    const slots=getVersusSelectionSlots();
+    if(mp.mode==='elimination'){
+      if(!state.eliminationSession?.active) beginEliminationSession(picks,n,slots);
+      else {state.eliminationSession.charIds=picks.slice();state.eliminationSession.lastCharBySlot=Object.fromEntries(slots.map((slot,i)=>[slot,picks[i]]));}
+    }else if(roundSessionActive()){
+      state.roundsSession.charIds=picks.slice();state.roundsSession.lastCharBySlot=Object.fromEntries(slots.map((slot,i)=>[slot,picks[i]]));
+    }else beginRoundsSession(picks,n);
+    versus.lastPick=picks;
+    const opts=buildRoundBattleOpts(slots);
+    if(n<=2) startBattle(picks[0],picks[1],opts); else startMultiBattle(picks,opts);
   }
 }
 
@@ -18251,8 +18489,9 @@ function pollPvpBattle(){
   const n = state.multiPvp ? fighters.length : 2;
   let missing = -1;
   for(let slot=0; slot<n; slot++){
-    const info = versus.slots[slot];
-    let gp = livePadByIndex(info.index);
+    const playerSlot=(state.multiPvp&&state.multi&&state.multi.playerSlots)?(state.multi.playerSlots[slot]??slot):slot;
+    const info=versus.slots[playerSlot];
+    let gp=info?livePadByIndex(info.index):null;
     if(!gp){
       // A replacement controller (different index) takes over an empty seat.
       const spare = livePads.find(g => !versus.slots.some(s => s && s.index === g.index));
@@ -18518,6 +18757,15 @@ const I18N_V_MULTI = {
     go_wins:'{name} wins!', go_multi_result:'{name} took the win.', go_draw:'Draw!',
     mps_title:'Match Settings',
     mps_caption:'Set up the rules for this multiplayer match before choosing fighters.',
+    mps_mode_header:'Game Mode', mps_mode_note:'Choose the rules for the multiplayer match. Elimination is for 3–4 players and removes the first player knocked out each round.',
+    mps_mode_ffa:'Free-for-All', mps_mode_elimination:'Elimination',
+    mps_mode_ffa_hint:'Standard multiplayer: fight until one player is left.',
+    mps_mode_elimination_hint:'3–4 players only. First KO is eliminated, then the survivors pick new fighters for the next round.',
+    mps_choose_new_character:'Choose a different character for this round.',
+    elimination_next_round:'Next Elimination Round', elimination_eliminated:'{name} Eliminated!', elimination_round_sub:'{name} is out. The remaining players advance to the next round.', elimination_time_sub:'Time expired — {name} had the lowest health and is eliminated.', elimination_champion:'{name} wins the Elimination!',
+    mps_time_header:'Time Limit', mps_time_note:'Choose how long each multiplayer round can last, or leave it unlimited.',
+    mps_time_none:'No limit', mps_time_1m:'1 minute', mps_time_2m:'2 minutes', mps_time_5m:'5 minutes', mps_time_10m:'10 minutes', mps_time_20m:'20 minutes',
+    mps_gravity_header:'Gravity', mps_gravity_note:'Change the jump and fall feel for the whole multiplayer match.', mps_gravity_normal:'Normal', mps_gravity_low:'Low', mps_gravity_high:'High',
     mps_lives_header:'Lives',
     mps_lives_note:'Turn this on to give everyone multiple lives. A knockout removes one life and respawns that player until their last life is gone.',
     mps_lives_unit:'lives',
@@ -18623,7 +18871,7 @@ document.querySelectorAll('#screen-battle-difficulty .battle-diff-card').forEach
   btn.addEventListener('click', ()=> startBattleDifficulty(btn.dataset.battleDiff));
 });
 document.getElementById('btn-unlock-go').addEventListener('click', ()=> startUnlockChallenge());
-document.getElementById('btn-mode-friend').addEventListener('click', ()=>{ versus.slots = [null,null,null,null]; versus.count = 2; showScreen('pair'); });
+document.getElementById('btn-mode-friend').addEventListener('click', ()=>{ versus.slots=[null,null,null,null]; versus.count=2; versus.activeSlots=[0,1]; state.roundsSession=null; state.eliminationSession=null; showScreen('pair'); });
 document.getElementById('sandbox-change-btn').addEventListener('click', openSandboxCharacterPicker);
 document.getElementById('sandbox-character-close').addEventListener('click', closeSandboxCharacterPicker);
 document.getElementById('quit-confirm-yes').addEventListener('click', confirmQuit);
@@ -18665,21 +18913,25 @@ document.getElementById('go-rematch-btn').addEventListener('click', ()=>{
   else startBattle(picks[0], picks[1], opts);
 });
 document.getElementById('go-change-btn').addEventListener('click', ()=> showScreen('versus'));
-document.getElementById('go-next-round-btn').addEventListener('click', ()=>{
-  const rs = state.roundsSession;
-  if(!rs || !rs.active) return;
-  if(rs.current >= rs.total) return;
-  rs.current++;
-  rs.lastPlacements = null;
-  rs.lastRoundPoints = null;
-  rs.isFinalRound = false;
-  resetRoundScoreButtons();
-  const opts = buildRoundBattleOpts();
-  if(rs.n <= 2) startBattle(rs.charIds[0], rs.charIds[1], opts);
-  else startMultiBattle(rs.charIds, opts);
+document.getElementById('go-next-round-btn').addEventListener('click',()=>{
+  const es=state.eliminationSession;
+  if(es?.pendingNext){
+    es.pendingNext=false; versus.activeSlots=es.playerSlots.slice(); versus.count=es.playerSlots.length; resetRoundScoreButtons();
+    if(mp.randomChar){
+      const picks=pickRandomRosterForSlots(versus.activeSlots,es.lastCharBySlot); es.charIds=picks.slice(); es.lastCharBySlot=Object.fromEntries(versus.activeSlots.map((slot,i)=>[slot,picks[i]])); versus.lastPick=picks;
+      startMultiBattle(picks,buildRoundBattleOpts(versus.activeSlots));
+    }else showScreen('versus');
+    return;
+  }
+  const rs=state.roundsSession; if(!rs||!rs.active||rs.current>=rs.total) return;
+  rs.current++; rs.lastPlacements=null; rs.lastRoundPoints=null; rs.isFinalRound=false; versus.activeSlots=rs.playerSlots.slice(); versus.count=rs.playerSlots.length; resetRoundScoreButtons();
+  if(mp.randomChar){
+    const picks=pickRandomRosterForSlots(versus.activeSlots,rs.lastCharBySlot); rs.charIds=picks.slice(); rs.lastCharBySlot=Object.fromEntries(versus.activeSlots.map((slot,i)=>[slot,picks[i]])); versus.lastPick=picks;
+    const opts=buildRoundBattleOpts(versus.activeSlots); if(rs.n<=2) startBattle(picks[0],picks[1],opts); else startMultiBattle(picks,opts);
+  }else showScreen('versus');
 });
 document.getElementById('go-view-podium-btn').addEventListener('click', ()=> showScreen('podium'));
-document.getElementById('go-return-menu-btn').addEventListener('click', ()=>{ state.roundsSession = null; });
+document.getElementById('go-return-menu-btn').addEventListener('click', ()=>{ state.roundsSession=null; state.eliminationSession=null; versus.activeSlots=[0,1]; versus.count=2; });
 document.getElementById('podium-rematch-btn').addEventListener('click', ()=>{
   const rs = state.roundsSession;
   if(!rs){ showScreen('menu'); return; }
@@ -18871,6 +19123,7 @@ function gameLoop(ts){
 
     if(!frozen && !state.pvp && !state.multiPvp && getSoloControlledFighter() !== b) updateBotAI(dtF);
     checkKO();
+    if(!frozen) updateMatchTimer(dt);
 
     activeFighters.forEach(f=>renderFighter(f));
     updateHud();
