@@ -3841,6 +3841,51 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 @keyframes shangchiDodgeFlicker{from{opacity:1;transform:translateX(0)}to{opacity:.72;transform:translateX(-2px)}}
 
 </style>
+
+<style id="free-play-sandbox-styles">
+#screen-free-play.active{
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; min-height:0; z-index:2;
+  display:block; overflow-x:hidden; overflow-y:auto; padding:0;
+  background:
+    radial-gradient(1100px 700px at 18% 8%, rgba(76,139,245,.14), transparent 60%),
+    radial-gradient(1100px 700px at 85% 92%, rgba(242,165,65,.13), transparent 60%),
+    radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
+}
+#screen-free-play .fs-bg{position:fixed;}
+.free-play-grid{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(14px,2vw,24px); width:min(980px,94vw); margin:0 auto;
+}
+.free-play-card{min-height:clamp(220px,34vh,360px); text-align:left; align-items:flex-start; justify-content:center;}
+.free-play-card .diff-name{font-size:clamp(32px,5vw,58px);}
+.free-play-card .diff-rule{font-size:clamp(13px,1.7vw,16px);}
+.free-play-card .diff-desc{font-size:clamp(13px,1.5vw,16px); line-height:1.55; max-width:620px;}
+.sandbox-card{--dc:#63e6be;}
+.practice-card{--dc:#f2a541;}
+.sandbox-change-btn{display:none; margin-left:auto; white-space:nowrap;}
+.sandbox-change-btn.show{display:inline-flex;}
+.quit-confirm-modal{max-width:520px; text-align:center; padding:clamp(24px,4vw,36px);}
+.quit-confirm-modal h3{font-size:clamp(28px,4vw,42px); text-transform:uppercase; line-height:1.08;}
+.quit-confirm-buttons{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:24px;}
+.sandbox-character-modal{max-width:min(980px,96vw); padding:clamp(18px,3vw,28px);}
+.sandbox-modal-head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:18px;}
+.sandbox-modal-head h3{font-size:clamp(26px,4vw,40px); text-transform:uppercase;}
+.sandbox-modal-head p{margin:5px 0 0; color:var(--muted); font-size:13px; line-height:1.45;}
+.sandbox-char-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(125px,1fr)); gap:10px; max-height:64vh; overflow:auto; padding:2px;}
+.sandbox-char-card{border:1px solid var(--line); border-radius:12px; background:var(--panel2); color:var(--text); padding:9px; text-align:center; cursor:pointer; font:inherit; transition:transform .12s ease,border-color .15s ease,box-shadow .15s ease;}
+.sandbox-char-card.selected{border-color:var(--amber); box-shadow:0 0 0 2px var(--amber) inset,0 0 18px rgba(242,165,65,.18);}
+.sandbox-char-card:active{transform:scale(.98);}
+.sandbox-char-art{width:100%; aspect-ratio:1; border-radius:9px; overflow:hidden; background:#2c2f45; border:1px solid var(--line); margin-bottom:8px;}
+.sandbox-char-art .char-square{width:100%; height:100%; aspect-ratio:auto; margin:0; border:0; border-radius:0;}
+.sandbox-char-art .char-square .fallback{font-size:28px;}
+.sandbox-char-name{font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.sandbox-char-hp{font-size:10px; color:var(--muted); margin-top:3px;}
+@media (max-width:760px){
+  .free-play-grid{grid-template-columns:1fr; width:min(680px,92vw);}
+  .free-play-card{min-height:170px;}
+  .quit-confirm-buttons{grid-template-columns:1fr;}
+  .sandbox-char-grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); max-height:68vh;}
+}
+</style>
 </head>
 <body>
 <div id="gamepad-banner"><span class="gp-icon">🎮</span><span>Controller connected — <span class="gp-brand" id="gp-brand-name">Controller</span></span></div>
@@ -3886,8 +3931,8 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     <h2 class="mode-heading" data-i18n="mode_title">Choose a mode</h2>
     <div class="split-stage three">
       <button class="split-card left mode-practice" id="btn-mode-practice" data-gp-default>
-        <span class="mode-name" data-i18n="mode_practice">Practice</span>
-        <span class="mode-desc" data-i18n="mode_practice_desc">Fight a random opponent using your equipped fighter.</span>
+        <span class="mode-name" data-i18n="mode_free_play">Free Play</span>
+        <span class="mode-desc" data-i18n="mode_free_play_desc">Practice or experiment freely with your equipped fighter.</span>
         <span class="mode-chip"><span class="mode-chip-art" id="mode-chip-art"></span><span id="mode-chip-text"></span></span>
         <span class="mode-arrow">▶</span>
       </button>
@@ -3908,10 +3953,34 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     </div>
   </div>
 
+  <!-- ============ FREE PLAY ============ -->
+  <div id="screen-free-play" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="page-stage">
+      <header class="page-head">
+        <h2 class="page-title" data-i18n="free_play_title">Free Play</h2>
+        <div class="page-caption" data-i18n="free_play_caption">Choose Sandbox or Practice.</div>
+      </header>
+      <div class="free-play-grid">
+        <button class="diff-card free-play-card sandbox-card" id="btn-freeplay-sandbox" data-gp-default>
+          <span class="diff-name" data-i18n="free_play_sandbox">Sandbox</span>
+          <span class="diff-rule" data-i18n="free_play_sandbox_rule">Infinite health · Test Dummy</span>
+          <span class="diff-desc" data-i18n="free_play_sandbox_desc">Experiment with abilities against a 10,000 HP dummy that runs around and respawns whenever it is KO'd.</span>
+        </button>
+        <button class="diff-card free-play-card practice-card" id="btn-freeplay-practice">
+          <span class="diff-name" data-i18n="free_play_practice">Practice</span>
+          <span class="diff-rule" data-i18n="free_play_practice_rule">Easy · Medium · Hard</span>
+          <span class="diff-desc" data-i18n="free_play_practice_desc">Use the current Practice difficulty screen to choose your opponent.</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ PRACTICE: CHOOSE DIFFICULTY ============ -->
   <div id="screen-practice" class="screen">
     <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
-    <button class="btn btn-secondary fs-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <button class="btn btn-secondary fs-back" data-nav="free-play"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
     <div class="page-stage">
       <header class="page-head">
         <h2 class="page-title" data-i18n="practice_title">Practice</h2>
@@ -4185,18 +4254,20 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     <div class="page-stage">
       <header class="page-head"><h2 class="page-title" data-i18n="instr_title">Instructions</h2></header>
       <div class="instructions instr-wrap">
-        <p class="instr-goal"><strong data-i18n="instr_goal_label">Goal:</strong> <span data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</span></p>
-        <ul>
-        <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></span></li>
-        <li><span class="instr-icon">✨</span><span><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></span></li>
-        <li><span class="instr-icon">👆</span><span data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</span></li>
-        <li><span class="instr-icon">🎮</span><span><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></span></li>
-        <li><span class="instr-icon">⏱️</span><span data-i18n="instr_cooldown">Every ability has a cooldown shown right on its button — watch the timer count down.</span></li>
-        <li><span class="instr-icon">🧱</span><span data-i18n="instr_arena">The arena is fully walled in — you cannot fall out. Knock your opponent's health to zero to win.</span></li>
-        <li><span class="instr-icon">🗺️</span><span>Pick a map — City, Wasteland, or Battleworld — from the mode-select screen before you fight. Watch out for the glowing green toxic waste puddle on Wasteland; standing on it will slowly damage you.</span></li>
-        <li><span class="instr-icon">🪙</span><span><strong>Modes &amp; tokens:</strong> Practice lets you pick Random, Easy, Medium or Hard opponents. Battle lets you pick Easy, Medium or Hard, gives you and your rival 3 lives each, and pays 10, 15 or 25 tokens for a win depending on difficulty. Spend 100 tokens on Unlock Character to challenge a random fighter — win to unlock them, or get your tokens back if you already own them.</span></li>
-        <li><span class="instr-icon">🎒</span><span data-i18n="instr_roster">Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.</span></li>
-      </ul>
+        <section class="instr-section">
+          <h3 class="set-sub" data-i18n="instr_goal_label">Goal:</h3>
+          <p class="instr-goal" data-i18n="instr_goal_text">knock your opponent's health to 0, or knock them clean out of the arena.</p>
+        </section>
+        <section class="instr-section">
+          <h3 class="set-sub">Controls</h3>
+          <ul>
+            <li><span class="instr-icon">🕹️</span><span><kbd>Space</kbd>/<kbd>W</kbd>/<kbd>&uarr;</kbd> <span data-i18n="instr_jump">jump</span> &nbsp; <kbd>A</kbd>/<kbd>&larr;</kbd> <span data-i18n="instr_left">left</span> &nbsp; <kbd>D</kbd>/<kbd>&rarr;</kbd> <span data-i18n="instr_right">right</span></span></li>
+            <li><span class="instr-icon">✨</span><span><kbd>E</kbd> <span data-i18n="instr_ability_main">main ability</span> &nbsp; <kbd>Q</kbd> <span data-i18n="instr_ability_sec">secondary ability</span> &nbsp; <kbd>R</kbd> <span data-i18n="instr_ability_special">special ability</span></span></li>
+            <li><span class="instr-icon">👆</span><span data-i18n="instr_touch">On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.</span></li>
+            <li><span class="instr-icon">🎮</span><span><strong data-i18n="instr_controller_label">Controller support:</strong> <span data-i18n="instr_controller_text">Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.</span></span></li>
+            <li><span class="instr-icon">⎋</span><span><kbd>Esc</kbd> / <span data-i18n="instr_quit">Menu / Controller Menu</span> <span data-i18n="instr_quit_detail">opens the quit confirmation. Choose Yes or No.</span></span></li>
+          </ul>
+        </section>
       </div>
     </div>
   </div>
@@ -4274,6 +4345,7 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       </div>
       <div id="ability-bar"></div>
       <div id="gamepad-hint"><span>🎮</span><span data-i18n="battle_jump_hint">Jump</span><span class="gp-jump-key" id="gp-jump-key">A</span></div>
+      <button class="btn btn-secondary sandbox-change-btn" id="sandbox-change-btn" data-i18n="sandbox_change_character">Change Character</button>
       <div id="pvp-controls">
         <div class="pvp-side p1"><span class="pvp-chip">P1</span><div class="ability-bar" id="ability-bar-p1"></div></div>
         <div class="pvp-side p2"><div class="ability-bar" id="ability-bar-p2"></div><span class="pvp-chip">P2</span></div>
@@ -4333,6 +4405,31 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   <p id="pvp-pause-sub"></p>
   <button class="btn btn-secondary" id="pvp-quit" data-i18n="pvp_quit">Quit to menu</button>
 </div></div>
+
+<!-- Quit confirmation -->
+<div id="quit-confirm-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="quit-confirm-title">
+  <div class="modal quit-confirm-modal">
+    <h3 id="quit-confirm-title" data-i18n="quit_confirm_title">Are you sure you wanna quit?</h3>
+    <div class="quit-confirm-buttons">
+      <button class="btn btn-danger" id="quit-confirm-yes" data-i18n="quit_confirm_yes" data-gp-default>Yes</button>
+      <button class="btn btn-secondary" id="quit-confirm-no" data-i18n="quit_confirm_no" data-modal-close>No</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sandbox character picker -->
+<div id="sandbox-character-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="sandbox-character-title">
+  <div class="modal sandbox-character-modal">
+    <div class="sandbox-modal-head">
+      <div>
+        <h3 id="sandbox-character-title" data-i18n="sandbox_character_title">Change Character</h3>
+        <p data-i18n="sandbox_character_caption">Choose any unlocked fighter. Your dummy stays in the arena.</p>
+      </div>
+      <button class="btn btn-secondary btn-small" id="sandbox-character-close" data-modal-close aria-label="Close">✕</button>
+    </div>
+    <div class="sandbox-char-grid" id="sandbox-character-grid"></div>
+  </div>
+</div>
 
 <!-- Unlock code modal -->
 <div id="code-modal" class="modal-overlay hidden">
@@ -5493,6 +5590,7 @@ const I18N = {
     instr_jump:'jump', instr_left:'left', instr_right:'right', instr_ability_main:'main ability', instr_ability_sec:'secondary ability', instr_ability_special:'special ability',
     instr_touch:'On touch devices: use the on-screen arrows, or drag anywhere on the arena to steer your fighter. Tap the E/Q/R buttons for abilities.',
     instr_controller_label:'Controller support:', instr_controller_text:'Xbox, PlayStation, and Nintendo controllers all work automatically — just plug in (or connect via Bluetooth) and press any button. Move with the left stick, jump with the bottom face button (A / ✕ / B), and the ability bar will relabel itself to show the exact face button for each ability on your controller.',
+    instr_quit:'Menu / Controller Menu', instr_quit_detail:'opens the quit confirmation. Choose Yes or No.',
     instr_cooldown:'Every ability has a cooldown shown right on its button — watch the timer count down.',
     instr_arena:'The arena is fully walled in — you cannot fall out. Knock your opponent\'s health to zero to win.',
     instr_roster:'Your owned and locked fighters live together in Inventory. Select a fighter there to equip them, then hit Play from the main menu to battle with them against a random opponent. Your roster is saved in this browser.',
@@ -6050,7 +6148,7 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','mode','practice','battle-difficulty','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','battle','gameover','podium'];
+const screens = ['menu','mode','free-play','practice','battle-difficulty','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','battle','gameover','podium'];
 function showScreen(name){
   // Fighter select needs both controllers still present — otherwise re-pair.
   if((name === 'versus' || name === 'mp-settings') && !versusPadsPresent()) name = 'pair';
@@ -6072,8 +6170,109 @@ function showScreen(name){
   if(name==='mp-settings') renderMpSettingsScreen();
   if(name==='versus') startVersusSelect();
   if(name==='podium') renderPodiumScreen();
+  const sandboxBtn = document.getElementById('sandbox-change-btn');
+  if(sandboxBtn) sandboxBtn.classList.toggle('show', name === 'battle' && state.matchKind === 'sandbox');
+  if(name !== 'battle') closeQuitConfirm(false);
   if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
 }
+
+function openQuitConfirm(){
+  if(state.mode !== 'battle') return;
+  state.quitConfirmOpen = true;
+  const modal = document.getElementById('quit-confirm-modal');
+  if(modal) modal.classList.remove('hidden');
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
+}
+function closeQuitConfirm(playSfx=true){
+  state.quitConfirmOpen = false;
+  const modal = document.getElementById('quit-confirm-modal');
+  if(modal) modal.classList.add('hidden');
+  if(playSfx) sfx('ui_back');
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
+}
+function confirmQuit(){
+  closeQuitConfirm(false);
+  abortBattle();
+}
+
+function renderSandboxCharacterPicker(){
+  const grid = document.getElementById('sandbox-character-grid');
+  if(!grid || !state.player) return;
+  grid.innerHTML = '';
+  const ids = ROSTER_ORDER.filter(id => isUnlocked(id));
+  ids.forEach(id=>{
+    const def = CHARACTERS[id];
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sandbox-char-card' + (state.player.def.id === id ? ' selected' : '');
+    if(state.player.def.id === id) btn.setAttribute('data-gp-default','');
+    btn.dataset.id = id;
+    btn.innerHTML = `<div class="sandbox-char-art"><div class="char-square">${squareInner(def)}</div></div><div class="sandbox-char-name">${def.name}</div><div class="sandbox-char-hp">${def.maxHealth.toLocaleString()} HP</div>`;
+    btn.addEventListener('click', ()=> switchSandboxPlayerCharacter(id));
+    grid.appendChild(btn);
+  });
+}
+function openSandboxCharacterPicker(){
+  if(!isSandboxMatch()) return;
+  renderSandboxCharacterPicker();
+  const modal = document.getElementById('sandbox-character-modal');
+  if(modal) modal.classList.remove('hidden');
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
+}
+function closeSandboxCharacterPicker(){
+  const modal = document.getElementById('sandbox-character-modal');
+  if(modal) modal.classList.add('hidden');
+  if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
+}
+
+function clearSandboxTransientEffects(){
+  ['projectiles','laserBombs','missiles','illusions','firePools','walls','icePlatforms'].forEach(key=>{
+    const list = state[key];
+    if(!Array.isArray(list)) return;
+    list.forEach(item=>{
+      if(item && item.el && item.el.remove) item.el.remove();
+      if(item && Array.isArray(item.clones)) item.clones.forEach(c=>c && c.el && c.el.remove && c.el.remove());
+    });
+    state[key] = [];
+  });
+  // Ability FX such as lightning, portals, afterimages and hit flashes are all
+  // disposable in Sandbox, so clear them as part of a character swap as well.
+  if(arenaEl) arenaEl.querySelectorAll('.fx,.yondu-controlled-arrow').forEach(el=>el.remove());
+}
+function switchSandboxPlayerCharacter(charId){
+  if(!isSandboxMatch() || !isUnlocked(charId) || !CHARACTERS[charId]) return;
+  if(state.player && state.player.def.id === charId){ closeSandboxCharacterPicker(); return; }
+  const old = state.player;
+  const x = old ? old.x : 250, y = old ? old.y : 380;
+  const facing = old ? old.facing : 1;
+  const dummy = state.bot;
+
+  // Hard-reset all old fighter-specific state before rebuilding the arena. This
+  // removes persistent visuals such as Yondu's controlled arrow and Loki clones,
+  // as well as character DOM (Doc Ock tentacles, Professor X's chair, etc.).
+  if(old && old.yonduArrow && old.yonduArrow.el){ old.yonduArrow.el.remove(); old.yonduArrow.el = null; }
+  if(old && old.def && old.def.id === 'loki') clearLokiDuplications(old);
+  clearSandboxTransientEffects();
+
+  const next = makeFighter(charId, false, x);
+  next.x = Math.max(20, Math.min(ARENA_W - FIGHTER_SIZE - 20, x));
+  next.y = Math.max(20, Math.min(ARENA_H - FIGHTER_SIZE - 40, y));
+  next.facing = facing;
+  state.player = next;
+
+  // Rebuild the whole arena so no character-specific DOM or visual state can
+  // survive the swap. The dummy object itself is preserved.
+  clearArenaDOM();
+  buildArenaStatic();
+  buildFighterDOM(next);
+  if(dummy){ buildFighterDOM(dummy); }
+  arenaEl.classList.remove('echolocation-mode');
+  updateHudNames();
+  renderLivesHud();
+  buildAbilityBar();
+  closeSandboxCharacterPicker();
+}
+
 document.addEventListener('click', (e)=>{
   const nav = e.target.closest('[data-nav]');
   if(nav){ showScreen(nav.getAttribute('data-nav')); }
@@ -6333,11 +6532,27 @@ function requireEquippedFighter(){
   return id;
 }
 
+// Sandbox-only dummy: it has no attacks or abilities and simply wanders around.
+const SANDBOX_DUMMY_IMG = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\" rx=\"14\" fill=\"#2c2f45\"/><text x=\"50\" y=\"67\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"62\" font-weight=\"800\" fill=\"#f2f0ea\">?</text></svg>');
+const SANDBOX_DUMMY_DEF = {
+  id:'sandboxdummy', name:'Test Dummy', img:SANDBOX_DUMMY_IMG, color:'#9296ab', maxHealth:10000,
+  abilities:{}, aiStyle:'wanderer'
+};
+function isSandboxMatch(){ return state.matchKind === 'sandbox' && state.mode === 'battle'; }
+function isSandboxPlayer(f){ return isSandboxMatch() && f === state.player; }
+
 // What "Play Another" on the results screen repeats.
 let lastSoloMatch = { kind:'practice', diff:'random' };
 function replayLastMatch(){
   if(lastSoloMatch.kind === 'battle') startBattleDifficulty(lastSoloMatch.diff || 'medium');
+  else if(lastSoloMatch.kind === 'sandbox') startSandbox();
   else startPractice(lastSoloMatch.diff);
+}
+
+function startSandbox(){
+  const playerId = requireEquippedFighter(); if(!playerId) return;
+  lastSoloMatch = { kind:'sandbox', diff:null };
+  startBattle(playerId, 'sandboxdummy', { kind:'sandbox', sandbox:true });
 }
 
 function startPractice(diff){
@@ -6401,7 +6616,7 @@ document.getElementById('btn-menu-play').addEventListener('click', ()=> showScre
    SECTION: FIGHTER ENTITY
    ========================================================================= */
 function makeFighter(charId, isBot, spawnX, idOverride){
-  const def = CHARACTERS[charId];
+  const def = charId === 'sandboxdummy' ? SANDBOX_DUMMY_DEF : CHARACTERS[charId];
   const startCooldowns = {E:0,Q:0,R:0};
   ['E','Q','R'].forEach(k=>{
     const ab = def.abilities[k];
@@ -6477,6 +6692,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
 const state = {
   mode:'menu', // 'battle'
   countdown:false,
+  quitConfirmOpen:false,
   player:null, bot:null,
   projectiles:[], walls:[], missiles:[], illusions:[], firePools:[], fxNodes:[],
   lastTime:0,
@@ -6507,6 +6723,7 @@ function startBattle(playerCharId, botCharId, opts){
   // The Battle GAME MODE (3 lives) is tracked separately as state.matchKind === 'battle'.
   if(pvp && !roundSessionActive()) resetRoundScoreButtons();
   state.matchKind = pvp ? 'pvp' : ((opts && opts.kind) || 'practice');
+  state.sandbox = state.matchKind === 'sandbox';
   state.maxLives = Math.max(1, Math.floor((opts && opts.lives) || 1));
   state.livesOn = state.maxLives > 1;
   state.lives = { player:state.maxLives, bot:state.maxLives };
@@ -7259,6 +7476,18 @@ function updateAbilityBarFor(bar, fighter, brand){
       btn.classList.toggle('gp-mode', !!brand || gamepadState.connected);
     }
     overlay.style.fontSize = '';
+    if(fighter.timeStickChargingUntil && t < fighter.timeStickChargingUntil){
+      if(a.type === 'timeStick'){
+        overlay.style.display='flex';
+        overlay.textContent='CHARGING '+Math.max(0,(fighter.timeStickChargingUntil-t)/1000).toFixed(1)+'s';
+        overlay.style.background='rgba(245,158,11,.58)';
+      } else {
+        overlay.style.display='flex';
+        overlay.textContent='LOCKED';
+        overlay.style.background='rgba(180,25,45,.68)';
+      }
+      return;
+    }
     if(fighter.abilityLockUntil && t < fighter.abilityLockUntil && !isJeanMindWarpControlled(fighter, t)){
       overlay.style.display='flex';
       overlay.textContent='FROZEN';
@@ -7500,6 +7729,8 @@ function tryUseAbility(caster, target, key){
     return false;
   }
   if(caster.abilityLockUntil && t < caster.abilityLockUntil && !isJeanMindWarpControlled(caster, t)) return false;
+  // Mobius is fully committed while charging Time Stick: no other abilities can be used.
+  if(caster.timeStickChargingUntil && t < caster.timeStickChargingUntil && ability.type !== 'timeStick') return false;
   if(ability.type === 'timeStick' && caster.timeStickChargingUntil && t < caster.timeStickChargingUntil) return false;
   if(caster.chargeState) return false;
   if(caster.grootBallUntil && t < caster.grootBallUntil) return false; // curled up in the Groot Ball: no attacking
@@ -9625,6 +9856,7 @@ function cancelTimeStickCharge(target, tNow){
 }
 function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.dead) return;
+  if(isSandboxPlayer(target)) return;
   if(target.invulnUntil && now() < target.invulnUntil) return; // just respawned (Battle mode)
   if(target.invulnAbilityUntil && now() < target.invulnAbilityUntil){
     spawnDodgeFx(target, dirSign || target.facing);
@@ -15513,6 +15745,18 @@ function updateBotAI(dtF){
   if(bot.dead || player.dead) return;
   bot.aiTimer -= dtF*16.67;
   if(bot.aiTimer > 0) return;
+
+  if(isSandboxMatch() && bot.def.id === 'sandboxdummy'){
+    bot.aiTimer = 120 + Math.random()*260;
+    if(bot.x < 90) bot.aiMoveDir = 1;
+    else if(bot.x > ARENA_W - FIGHTER_SIZE - 90) bot.aiMoveDir = -1;
+    else if(Math.random() < 0.65) bot.aiMoveDir = Math.random() < 0.5 ? -1 : 1;
+    bot.aiJumpPulse = false;
+    bot.aiDropPulse = false;
+    bot.aiFlyDir = 0;
+    if(bot.aiMoveDir) bot.facing = bot.aiMoveDir;
+    return;
+  }
   bot.aiTimer = 60 + Math.random()*50; // quick reactions
 
   const t = now();
@@ -16124,6 +16368,10 @@ function onFighterZeroHealth(target, reason){
   if(state.multiPvp){ eliminateMultiFighter(target, reason); return; }
 
   const side = fighterSide(target);
+  if(isSandboxMatch() && side === 'bot'){
+    loseLife(target, side);
+    return;
+  }
   if(state.livesOn && side){
     state.lives[side] = Math.max(0, state.lives[side] - 1);
     renderLivesHud(side);
@@ -16749,10 +16997,13 @@ window.addEventListener('keydown', (e)=>{
     return;
   }
   if(e.key === 'Escape'){
+    if(document.getElementById('quit-confirm-modal') && !document.getElementById('quit-confirm-modal').classList.contains('hidden')){ closeQuitConfirm(); return; }
+    if(document.getElementById('sandbox-character-modal') && !document.getElementById('sandbox-character-modal').classList.contains('hidden')){ closeSandboxCharacterPicker(); return; }
     const modal = activeModalEl();
-    if(modal){ const c = modal.querySelector('#modal-close, #code-close'); if(c) c.click(); return; }
+    if(modal){ const c = modal.querySelector('#modal-close, #code-close, [data-modal-close]'); if(c) c.click(); return; }
+    if(state.mode === 'battle'){ openQuitConfirm(); return; }
     const back = document.querySelector('.screen.active .fs-back');
-    if(back && state.mode !== 'battle'){ back.click(); return; }
+    if(back){ back.click(); return; }
   }
   if(state.mode !== 'battle' || state.pvp) return; // 1 V 1 is controller only
   const k = e.key.toLowerCase();
@@ -16928,6 +17179,8 @@ let rawPads = [];      // last navigator.getGamepads() snapshot (may contain nul
 let livePads = [];     // connected pads only
 const padState = {};   // gp.index -> { cur:[bool], prev:[bool] } — one shared source of truth for button edges
 const PAD_BACK_BTN = 8; // Select / View / Share — "go back" on screens where every other button is in use
+const GAMEPAD_CHANGE_CHAR_POS = 8;
+const GAMEPAD_QUIT_POS = 9; // Start / Menu
 
 function refreshPads(){
   if(gamepadApiBlocked || !navigator.getGamepads){ rawPads = []; livePads = []; return false; }
@@ -16993,6 +17246,19 @@ function pollGamepad(){
   const screen = activeScreenName();
   if(screen === 'mode') updateModeStatus(false);
 
+  // In a battle, Start/Menu opens the quit confirmation. Any open modal then
+  // takes over controller navigation so A selects and B closes it.
+  if(screen === 'battle'){
+    if(activeModalEl()){
+      livePads.forEach(gp => handleGamepadMenuNav(gp));
+      return;
+    }
+    if(livePads.some(gp => btnEdge(gp.index, GAMEPAD_QUIT_POS))){
+      openQuitConfirm();
+      return;
+    }
+  }
+
   if(state.mode === 'battle' && state.pvp){ pollPvpBattle(); return; }
   if(screen === 'pair'){ pollPairing(); return; }
   if(screen === 'versus'){ pollVersusSelect(); return; }
@@ -17014,6 +17280,10 @@ function pollSoloBattle(){
   if(!gamepadState.connected) return;
   const gp = rawPads[gamepadState.index];
   if(!gp) return;
+  if(isSandboxMatch() && btnEdge(gp.index, GAMEPAD_CHANGE_CHAR_POS)){
+    openSandboxCharacterPicker();
+    return;
+  }
 
   // Left stick / d-pad movement
   const axisX = gp.axes[0] || 0;
@@ -17149,7 +17419,7 @@ function gpActivateFocus(){
 function gpBack(){
   const modal = activeModalEl();
   if(modal){
-    const c = modal.querySelector('#modal-close, #code-close');
+    const c = modal.querySelector('#modal-close, #code-close, [data-modal-close]');
     if(c) c.click();
     return;
   }
@@ -17715,6 +17985,7 @@ function resumePvp(){
 // Leave a running battle (used by the pause screen).
 function abortBattle(){
   state.mode = 'menu';
+  state.quitConfirmOpen = false;
   state.pvpPaused = false;
   state.countdown = false;
   state.multiPvp = false;
@@ -17989,6 +18260,12 @@ const I18N_V6 = {
     battle_easy_desc:'Lightweight foes. Win the 3-life battle to earn 10 tokens.',
     battle_medium_desc:'Solid fighters. Win the 3-life battle to earn 15 tokens.',
     battle_hard_desc:'Heavyweights and healing-factor fighters. Win to earn 25 tokens.',
+    mode_free_play:'Free Play', mode_free_play_desc:'Practice or experiment freely with your equipped fighter.',
+    free_play_title:'Free Play', free_play_caption:'Choose Sandbox or Practice.',
+    free_play_sandbox:'Sandbox', free_play_sandbox_rule:'Infinite health · Test Dummy', free_play_sandbox_desc:"Experiment with abilities against a 10,000 HP dummy that runs around and respawns whenever it is KO'd.",
+    free_play_practice:'Practice', free_play_practice_rule:'Easy · Medium · Hard', free_play_practice_desc:'Use the current Practice difficulty screen to choose your opponent.',
+    sandbox_change_character:'Change Character', sandbox_character_title:'Change Character', sandbox_character_caption:'Choose any unlocked fighter. Your dummy stays in the arena.',
+    quit_confirm_title:'Are you sure you wanna quit?', quit_confirm_yes:'Yes', quit_confirm_no:'No',
     practice_title:'Practice', practice_caption:'Pick how tough your opponent will be.',
     diff_random:'Random', diff_random_rule:'Any fighter', diff_random_desc:'Anyone in the roster can show up — easy, medium or hard.',
     diff_easy:'Easy', diff_easy_rule:'Under 8,000 HP', diff_easy_desc:'Lightweight foes. A gentle warm-up.',
@@ -18021,7 +18298,9 @@ Object.assign(I18N.en, I18N_V6.en);
 /* =========================================================================
    SECTION: SCREEN WIRING — mode select, 1 V 1 actions, double-tap details
    ========================================================================= */
-document.getElementById('btn-mode-practice').addEventListener('click', ()=> showScreen('practice'));
+document.getElementById('btn-mode-practice').addEventListener('click', ()=> showScreen('free-play'));
+document.getElementById('btn-freeplay-practice').addEventListener('click', ()=> showScreen('practice'));
+document.getElementById('btn-freeplay-sandbox').addEventListener('click', ()=> startSandbox());
 document.getElementById('btn-mode-battle').addEventListener('click', ()=> startLivesBattle());
 document.querySelectorAll('#screen-practice .diff-card').forEach(btn=>{
   btn.addEventListener('click', ()=> startPractice(btn.dataset.diff));
@@ -18031,6 +18310,10 @@ document.querySelectorAll('#screen-battle-difficulty .battle-diff-card').forEach
 });
 document.getElementById('btn-unlock-go').addEventListener('click', ()=> startUnlockChallenge());
 document.getElementById('btn-mode-friend').addEventListener('click', ()=>{ versus.slots = [null,null,null,null]; versus.count = 2; showScreen('pair'); });
+document.getElementById('sandbox-change-btn').addEventListener('click', openSandboxCharacterPicker);
+document.getElementById('sandbox-character-close').addEventListener('click', closeSandboxCharacterPicker);
+document.getElementById('quit-confirm-yes').addEventListener('click', confirmQuit);
+document.getElementById('quit-confirm-no').addEventListener('click', ()=> closeQuitConfirm());
 
 /* =========================================================================
    SECTION: MAP PICKER (mode-select screen)
@@ -18176,7 +18459,7 @@ function gameLoop(ts){
     const frozen = state.countdown;
     const activeFighters = (state.multiPvp && state.multi) ? state.multi.fighters : [p, b];
 
-    if(state.pvp && state.pvpPaused){
+    if(state.pvp && state.pvpPaused || state.quitConfirmOpen || !document.getElementById('sandbox-character-modal').classList.contains('hidden')){
       activeFighters.forEach(renderFighter);
       updateHud(); updateAbilityBar();
       requestAnimationFrame(gameLoop);
