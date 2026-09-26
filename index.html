@@ -10142,17 +10142,25 @@ const MUSIC_TRACKS = [
 ];
 
 function loadMusicSettings(){
-  const fallback = {track:0, volume:.60, enabled:true, loop:false};
+  // Only a song explicitly chosen in the Radio menu is restored across visits.
+  // Older radio saves did not have `chosen`, so they are treated as first-visit
+  // settings and get a fresh random song instead of being stuck on Avengers.
+  const randomTrack = Math.floor(Math.random() * MUSIC_TRACKS.length);
+  const fallback = {track:randomTrack, volume:.60, enabled:true, loop:false, chosen:false};
   try{
     const saved = JSON.parse(localStorage.getItem(MUSIC_STORAGE_KEY));
     if(!saved || typeof saved !== 'object') return fallback;
     const track = MUSIC_TRACKS.findIndex(x => x.file === saved.file);
     const volume = Number(saved.volume);
+    const chosen = saved.chosen === true;
     return {
-      track: track >= 0 ? track : Math.max(0, Math.min(MUSIC_TRACKS.length-1, Number(saved.track) || 0)),
+      track: chosen
+        ? (track >= 0 ? track : Math.max(0, Math.min(MUSIC_TRACKS.length-1, Number(saved.track) || 0)))
+        : randomTrack,
       volume: Number.isFinite(volume) ? Math.max(0, Math.min(1, volume)) : fallback.volume,
       enabled: saved.enabled !== false,
-      loop: saved.loop === true
+      loop: saved.loop === true,
+      chosen
     };
   }catch(err){
     return fallback;
@@ -10170,7 +10178,8 @@ function saveMusicSettings(){
       track: MUSIC.track,
       volume: MUSIC.volume,
       enabled: MUSIC.enabled,
-      loop: MUSIC.loop
+      loop: MUSIC.loop,
+      chosen: MUSIC.chosen === true
     }));
   }catch(err){ /* storage unavailable */ }
 }
@@ -10282,6 +10291,7 @@ function initMusicRadio(){
     setMusicEnabled(!MUSIC.enabled, true);
   });
   if(track) track.addEventListener('change', e=>{
+    MUSIC.chosen = true;
     setMusicTrackByFile(e.target.value, true);
   });
   if(volume) volume.addEventListener('input', e=>{
