@@ -1246,7 +1246,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes bladeSlashFx{0%{opacity:0;transform:scale(.5) rotate(-16deg)}16%{opacity:1}60%{opacity:1;transform:scale(1.06) rotate(6deg)}100%{opacity:0;transform:scale(1.2) rotate(16deg)}}
 
 /* ---------- New roster visuals ---------- */
-.fighter.hulk .fighter-square,.fighter.thing .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
+.fighter.hulk .fighter-square,.fighter.thing .fighter-square,.fighter.juggernaut .fighter-square{transform:scale(1.3);transform-origin:50% 100%;border-radius:14px;}
 .fighter.ironmonger .fighter-square,.fighter.groot .fighter-square{transform:scale(1.24);transform-origin:50% 100%;border-radius:14px;}
 .fighter.ironmonger.facing-left .fighter-square,.fighter.groot.facing-left .fighter-square{transform:scaleX(-1) scale(1.24);}
 .fighter.ironmonger .overhead-hp,.fighter.groot .overhead-hp{left:-9px;width:82px;top:-31px;}
@@ -1267,6 +1267,16 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fighter.ironmonger.iron-jumping .fighter-square{filter:brightness(1.12) drop-shadow(0 0 12px rgba(255,177,90,.35));}
 .fighter.killmonger.killmonger-fury-active .fighter-square{animation:killmongerFuryPulse .45s ease-in-out infinite alternate;filter:saturate(1.35) brightness(1.12);}
 .fighter.beast.beast-surge-active .fighter-square{animation:killmongerFuryPulse .4s ease-in-out infinite alternate;filter:saturate(1.3) brightness(1.15) hue-rotate(0deg);box-shadow:0 0 22px #4c8bf5;}
+.fighter.hellcycle-active .fighter-square{animation:killmongerFuryPulse .3s ease-in-out infinite alternate;filter:saturate(1.4) brightness(1.2);box-shadow:0 0 26px #ff6a2b, 0 0 46px #ff6a2b88;}
+.hellcycle-bike{position:absolute;left:-40px;top:-2px;width:140px;height:76px;z-index:0;pointer-events:none;display:none;transform-origin:50% 74%;filter:drop-shadow(0 5px 5px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(255,106,43,.4));}
+.hellcycle-bike svg{width:100%;height:100%;display:block;}
+.fighter.hellcycle-active .hellcycle-bike{display:block;animation:hellcycleBikeIn .18s ease-out both, hellcycleBikeRide .35s ease-in-out infinite alternate;}
+.fighter.hellcycle-active .fighter-size-body{transform:translate(10px,-16px);}
+.fighter.facing-left .hellcycle-bike{transform:scaleX(-1);}
+.fighter.facing-left.hellcycle-active .fighter-size-body{transform:translate(-10px,-16px);}
+@keyframes hellcycleBikeIn{from{opacity:0;transform:scale(.7);}to{opacity:1;transform:scale(1);}}
+@keyframes hellcycleBikeRide{from{transform:translateY(0);}to{transform:translateY(-3px);}}
+@media (prefers-reduced-motion:reduce){ .fighter.hellcycle-active .hellcycle-bike{animation:hellcycleBikeIn .18s ease-out both;} }
 @keyframes killmongerFuryPulse{from{box-shadow:0 0 18px rgba(255,194,64,.22),0 0 34px rgba(155,78,255,.16)}to{box-shadow:0 0 34px rgba(255,194,64,.62),0 0 68px rgba(155,78,255,.34),0 0 92px rgba(255,90,28,.16)}}
 /* Moon Knight: Split Personality glows a different color per active persona,
    and Ankh Glide tilts + trails the cape while airborne. */
@@ -1584,6 +1594,21 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 
 /* ---------- Drax / Gamora / Yondu visuals ---------- */
 .fighter.drax .fighter-square{border-color:#52755a;box-shadow:0 0 0 1px rgba(151,218,163,.18),0 12px 24px rgba(0,0,0,.38),0 0 22px rgba(91,205,121,.16);}
+.swordsman-sword-held{position:absolute;right:-34px;top:4px;width:92px;height:32px;z-index:6;pointer-events:none;transform-origin:15% 50%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.55)) drop-shadow(0 0 5px rgba(192,57,43,.4));transform:rotate(9deg);}
+.fighter.facing-left .swordsman-sword-held{right:auto;left:-34px;transform:scaleX(-1) rotate(9deg);}
+.swordsman-sword-held svg{width:100%;height:100%;display:block;overflow:visible;}
+@keyframes swordsmanSwordSwing{0%{transform:rotate(-64deg)}30%{transform:rotate(-22deg)}62%{transform:rotate(54deg)}100%{transform:rotate(9deg)}}
+@keyframes swordsmanSwordSwingLeft{0%{transform:scaleX(-1) rotate(-64deg)}30%{transform:scaleX(-1) rotate(-22deg)}62%{transform:scaleX(-1) rotate(54deg)}100%{transform:scaleX(-1) rotate(9deg)}}
+.swordsman-e-swing .swordsman-sword-held{animation:swordsmanSwordSwing .3s cubic-bezier(.18,.82,.2,1) forwards;}
+.fighter.facing-left.swordsman-e-swing .swordsman-sword-held{animation:swordsmanSwordSwingLeft .3s cubic-bezier(.18,.82,.2,1) forwards;}
+@keyframes swordsmanSwordThrust{0%{transform:rotate(9deg) translateX(0)}45%{transform:rotate(2deg) translateX(32px)}100%{transform:rotate(9deg) translateX(0)}}
+@keyframes swordsmanSwordThrustLeft{0%{transform:scaleX(-1) rotate(9deg) translateX(0)}45%{transform:scaleX(-1) rotate(2deg) translateX(32px)}100%{transform:scaleX(-1) rotate(9deg) translateX(0)}}
+.swordsman-q-thrust .swordsman-sword-held{animation:swordsmanSwordThrust .38s cubic-bezier(.16,.82,.2,1) forwards;}
+.fighter.facing-left.swordsman-q-thrust .swordsman-sword-held{animation:swordsmanSwordThrustLeft .38s cubic-bezier(.16,.82,.2,1) forwards;}
+.fighter.juggernaut.juggernaut-punch .fighter-square{animation:hulkPunch .22s cubic-bezier(.18,.82,.2,1);}
+.fighter.juggernaut.juggernaut-punch.facing-left .fighter-square{animation:hulkPunchLeft .22s cubic-bezier(.18,.82,.2,1);}
+.fighter.juggernaut.juggernaut-charge .fighter-square{animation:hulkPunch .32s cubic-bezier(.18,.82,.2,1);}
+.fighter.juggernaut.juggernaut-charge.facing-left .fighter-square{animation:hulkPunchLeft .32s cubic-bezier(.18,.82,.2,1);}
 .drax-blades-held{position:absolute;left:-15px;top:-7px;width:120px;height:70px;z-index:7;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.65)) drop-shadow(0 0 7px rgba(203,255,210,.38));}
 .drax-blades-held svg{width:100%;height:100%;overflow:visible;}
 .drax-blades-held path:first-child{fill:#f0f6f3;stroke:#2d3830;stroke-width:2;}
@@ -5042,6 +5067,42 @@ const CHARACTERS = {
          desc:'Extends his cape to glide \u2014 slowed fall and free horizontal air control for 4.5 seconds, instead of true flight. Cooldown: 9.5 seconds.'}
     }
   },
+  ghostrider: {
+    id:'ghostrider', name:'Ghost Rider', img:'GhostRider.jpg', color:'#1a1a1a', accentColor:'#ff6a2b',
+    maxHealth:22000,
+    description:'The Spirit of Vengeance. A flaming hellfire chain for reach, a Penance Stare that burns sinners to their core once per match, and his Hellcycle to tear across the arena at blistering speed.',
+    abilities:{
+      E:{key:'E', name:'Hellfire Chain', type:'projectile', damage:650, cooldown:850, knockback:8,
+         speed:15, w:56, h:16, color:'#ff6a2b', render:'ghostrider-chain', trail:'fire',
+         sound:'ability', fx:'ghostrider_chain', hitFx:'ghostrider_chain_hit', hitSound:'hit',
+         desc:'Lashes out with a burning chain for 650 damage. Cooldown: 0.85 seconds.'},
+      Q:{key:'Q', name:'Penance Stare', type:'melee', damage:0, percentMaxHealth:0.33, usesPerMatch:1,
+         cooldown:1000, knockback:10, range:500,
+         hitRange:900, hitVertical:300, hitStartSlack:200, hitDelay:300,
+         sound:'ability', fx:'ghostrider_stare', hitFx:'ghostrider_stare_hit', hitSound:'hit',
+         desc:'Locks eyes with his target and makes them feel every sin they\u2019ve committed, burning away 33% of their max health. Hits from almost anywhere on screen. Once per match.'},
+      R:{key:'R', name:'Hellcycle', type:'hellcycleMount', damage:0, cooldown:12000, duration:4000, speedMult:4,
+         sound:'ability', fx:'ghostrider_dash',
+         desc:'Summons his hellcycle and rides it for 4 seconds, moving at 4x speed. Pure mobility \u2014 no damage. Cooldown: 12 seconds.'}
+    }
+  },
+  juggernaut: {
+    id:'juggernaut', name:'Juggernaut', img:'Juggernaut.jpg', color:'#c73a2e', accentColor:'#f2c14e', aiStyle:'bruiser',
+    maxHealth:21000,
+    description:'The unstoppable force of Cyttorak. Towering and huge like Hulk, he bulldozes forward with crushing fists, a ground-shaking charge, and a mystical hide that shrugs off incoming damage.',
+    abilities:{
+      E:{key:'E', name:'Crimson Fist', type:'melee', damage:500, cooldown:700, knockback:14, range:95,
+         hitRange:150, hitVertical:130, hitStartSlack:60, hitDelay:70,
+         sound:'ability', fx:'juggernaut_fist', hitFx:'juggernaut_fist_hit', hitSound:'hit',
+         desc:'A crushing armored punch for 500 damage. Cooldown: 0.7 seconds.'},
+      Q:{key:'Q', name:'Unstoppable Force', type:'aoe', damage:1900, cooldown:9000, knockback:22, radius:130,
+         sound:'ability', fx:'juggernaut_force', hitFx:'juggernaut_force_hit', hitSound:'hit',
+         desc:'Juggernaut barrels forward and slams the ground, releasing a wide shockwave for 1,900 damage. Cooldown: 9 seconds.'},
+      R:{key:'R', name:"Cyttorak's Fury", type:'shield', damage:0, cooldown:15000, duration:5000, reduction:0.4,
+         sound:'ability', fx:'juggernaut_fury',
+         desc:'Channels the power of Cyttorak, cutting incoming damage by 40% for 5 seconds. Deals no damage. Cooldown: 15 seconds.'}
+    }
+  },
   hulk: {
     id:'hulk', name:'Hulk', img:'Hulk.jpg', color:'#55d65c',
     maxHealth:21250, aiStyle:'hulk', jumpHeightMultiplier:2,
@@ -5500,6 +5561,24 @@ const CHARACTERS = {
          desc:'A fast forward lunge for closing distance or escaping danger. Pure mobility — no damage.'}
     }
   },
+  swordsman: {
+    id:'swordsman', name:'Swordsman', img:'Swordsman.jpg', color:'#4a4a52', accentColor:'#c0392b', aiStyle:'agile',
+    maxHealth:4750,
+    description:'A master fencer who never sheathes his blade. Fast, precise sword strikes and a piercing lunge make up for a fragile frame.',
+    abilities:{
+      E:{key:'E', name:'Swords', type:'melee', damage:200, cooldown:500, knockback:6, range:70,
+         hitRange:118, hitVertical:110, hitStartSlack:50, hitDelay:130,
+         sound:'ability', fx:'swordsman_swords', hitFx:'swordsman_swords_hit', hitSound:'hit',
+         desc:'A quick short-range slash with his blade for 200 damage. Cooldown: 0.5 seconds.'},
+      Q:{key:'Q', name:'Piercing Thrust', type:'melee', damage:1300, cooldown:9000, knockback:16, range:120,
+         hitRange:180, hitVertical:120, hitStartSlack:60, hitDelay:170,
+         sound:'ability', fx:'swordsman_thrust', hitFx:'swordsman_thrust_hit', hitSound:'hit',
+         desc:'A lunging thrust with his blade for 1,300 damage. Longer reach than his regular strike. Cooldown: 9 seconds.'},
+      R:{key:'R', name:'Riposte', type:'block', blockThreshold:800, duration:4000, cooldown:12000,
+         sound:'ability', fx:'swordsman_riposte',
+         desc:'Snaps into a parrying stance, absorbing up to 800 damage for 4 seconds before it breaks. Cooldown: 12 seconds.'}
+    }
+  },
   starlord: {
     id:'starlord', name:'Star-Lord', img:'StarLord.jpg', color:'#7a1f2b', accentColor:'#e8b84a', aiStyle:'starlord',
     maxHealth:8500,
@@ -5716,7 +5795,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','namor','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','juggernaut','hulk','redhulk','shehulk','blackpanther','killmonger','namor','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','mystique','deadpool','blade','swordsman','daredevil','punisher','bullseye','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight','ghostrider'];
 
 
 /* =========================================================================
@@ -6800,6 +6879,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     regenAccumulator:0,
     grappleVx:0, grappleVy:0, grappleUntil:0,
     cooldowns:startCooldowns,
+    abilityUses:{},
     mystiqueDisguiseUntil:0,
     windBurstUntil:0, windBurstVx:0, invulnAbilityUntil:0,
     chargeState:null, draxFuryUntil:0, killmongerFuryUntil:0,
@@ -6827,6 +6907,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     jgMindWarpUntil:0,
     jgMindWarpLockUntil:0,
     beastSurgeUntil:0,
+    hellcycleUntil:0,
     timeStickChargingUntil:0,
     timeStickCharged:false,
     sheHulkBreakUntil:0,
@@ -7378,7 +7459,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -7388,6 +7469,7 @@ function buildFighterDOM(f){
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
     ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
+    ${f.def.id==='ghostrider' ? `<div class="hellcycle-bike" aria-hidden="true">${hellcycleBikeSvg()}</div>` : ''}
     ${f.def.id==='magneto' ? '<div class="magneto-flight-aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>' : ''}
     ${f.def.id==='doctoroctopus' ? `<div class="octopus-tentacles" aria-hidden="true">${octopusTentacleSvg()}</div>` : ''}
     ${f.def.id==='groot' ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
@@ -7408,6 +7490,7 @@ function buildFighterDOM(f){
       ${f.def.id==='captainamerica' ? '<div class="cap-shield-held">'+capShieldSvg()+'</div>' : ''}
       ${f.def.id==='usagent' ? '<div class="cap-shield-held usagent-shield-held">'+usAgentShieldSvg()+'</div>' : ''}
       ${f.def.id==='deadpool' ? '<div class="deadpool-katana-held"><svg viewBox="0 0 120 72" aria-hidden="true"><g transform="translate(8 8) rotate(-10 54 30)"><rect x="16" y="29" width="16" height="7" rx="2" fill="#17181c"/><rect x="32" y="26" width="78" height="6" rx="3" fill="#dfe5ef"/><path d="M110 29 L118 32 L110 35Z" fill="#fff4c6"/><path d="M32 26 L44 26" stroke="#b8c0cb" stroke-width="2"/><rect x="27" y="22" width="7" height="20" rx="2" fill="#d7b36b"/><rect x="6" y="27" width="22" height="11" rx="5" fill="#c52b38" stroke="#111" stroke-width="2"/><path d="M8 29 L25 36" stroke="#f4f4f4" stroke-width="1.5" opacity=".8"/></g></svg></div>' : ''}
+      ${f.def.id==='swordsman' ? '<div class="swordsman-sword-held" aria-hidden="true"><svg viewBox="0 0 100 34" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="swBladeGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d838b"/><stop offset=".45" stop-color="#f6f8fa"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient></defs><ellipse cx="7" cy="17" rx="7" ry="7.5" fill="#3a2a18" stroke="#1a1208" stroke-width="1.4"/><rect x="12" y="10" width="16" height="14" rx="3" fill="#5c3d1f" stroke="#2b1c0d" stroke-width="1.3"/><path d="M13 13 L27 13 M13 16.3 L27 16.3 M13 19.6 L27 19.6 M13 23 L27 23" stroke="#2b1c0d" stroke-width="1" opacity=".6"/><rect x="27" y="2.5" width="8" height="29" rx="2.4" fill="#26262c" stroke="#0d0d10" stroke-width="1.3"/><circle cx="31" cy="8" r="1.8" fill="#c0392b"/><circle cx="31" cy="26" r="1.8" fill="#c0392b"/><path d="M35 10 L94 14.5 L100 17 L94 19.5 L35 24 Z" fill="url(#swBladeGrad)" stroke="#5c6067" stroke-width="1.3"/><path d="M38 13.2 L90 15.9" stroke="#ffffff" stroke-width="1.4" opacity=".85"/><path d="M35 10 L94 14.5 L100 17" fill="none" stroke="#ffffff" stroke-width="0.9" opacity=".55"/></svg></div>' : ''}
       ${f.def.id==='blade' ? '<div class="blade-sword-held"><svg viewBox="0 0 96 80" aria-hidden="true"><defs><linearGradient id="bladeBlade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8f96"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient></defs><g transform="translate(4 4) rotate(-6 44 36)"><rect x="2" y="30" width="14" height="12" rx="3" fill="#1a1a1a" stroke="#000" stroke-width="1.4"/><rect x="14" y="33" width="8" height="6" rx="2" fill="#701d1d"/><rect x="20" y="31" width="66" height="9" rx="2.5" fill="url(#bladeBlade)" stroke="#5c6067" stroke-width="1"/><path d="M22 35.5 L84 35.5" stroke="#ffffff" stroke-width="1.2" opacity=".8"/><path d="M84 31 L92 35.5 L84 40 Z" fill="#f4f6f8" stroke="#5c6067" stroke-width="1"/></g></svg></div>' : ''}
       ${f.def.id==='mobius' ? '<div class="mobius-stick-held"><svg viewBox="0 0 92 66" aria-hidden="true"><defs><linearGradient id="mobiusShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a2712"/><stop offset=".5" stop-color="#8e5b16"/><stop offset="1" stop-color="#3a2712"/></linearGradient><radialGradient id="mobiusTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fffdf0"/><stop offset=".4" stop-color="#ffd35a"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/></radialGradient></defs><g transform="translate(6 8) rotate(-16 40 25)"><rect x="0" y="19" width="17" height="13" rx="4" fill="#241505" stroke="#000" stroke-width="1.3"/><rect x="3.2" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="7.6" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="12" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="17" y="20.5" width="46" height="10" rx="5" fill="url(#mobiusShaft)" stroke="#1c1006" stroke-width="1.3"/><rect x="21" y="22.6" width="38" height="2.1" rx="1" fill="#ffdf94" opacity=".7"/><circle cx="70" cy="25.5" r="11" fill="url(#mobiusTip)"/><circle cx="70" cy="25.5" r="4.4" fill="#fffdf0"/><path d="M63 17 L69 25 L62 27 L71 36" fill="none" stroke="#fff3c6" stroke-width="1.9" stroke-linecap="round"/></g></svg></div>' : ''}
       ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
@@ -7679,6 +7762,12 @@ function updateAbilityBarFor(bar, fighter, brand){
       overlay.style.background='rgba(166,24,43,.72)';
       return;
     }
+    if(a.usesPerMatch && fighter.abilityUses && fighter.abilityUses[k] >= a.usesPerMatch){
+      overlay.style.display='flex';
+      overlay.textContent='USED';
+      overlay.style.background='rgba(40,40,40,.75)';
+      return;
+    }
     if(a.type==='yonduArrowControl' && fighter.yonduArrow){
       overlay.style.display='flex'; overlay.textContent='CONTROL'; overlay.style.background='rgba(58,201,255,.48)'; return;
     }
@@ -7782,6 +7871,7 @@ function updateAbilityBarFor(bar, fighter, brand){
    ========================================================================= */
 function cdReady(f, key, t){
   const a = f.def.abilities[key];
+  if(a.usesPerMatch && f.abilityUses && f.abilityUses[key] >= a.usesPerMatch) return false;
   if(f.abilityLockUntil && t < f.abilityLockUntil && !isJeanMindWarpControlled(f, t)) return false;
   if(f.disabledAbilityKey === key && f.disabledAbilityUntil && t < f.disabledAbilityUntil) return false;
   if(a.type==='toggle') return true;
@@ -7943,6 +8033,10 @@ function tryUseAbility(caster, target, key){
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
   sfx(ability.sound || fallbackSound);
   spawnAbilityFx(caster, ability, target);
+  if(ability.usesPerMatch){
+    caster.abilityUses = caster.abilityUses || {};
+    caster.abilityUses[key] = (caster.abilityUses[key] || 0) + 1;
+  }
   const result = executeAbility(caster, target, ability, t) || null;
   if(ability.type === 'timeStick'){
     if(result && result.stage === 'fire'){
@@ -8993,6 +9087,17 @@ function executeAbility(caster, target, ability, t){
       fxEl('fx-ring', `left:${caster.x-18}px;top:${caster.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;border-color:#8fd0ff;box-shadow:0 0 26px #4c8bf5;`, 480);
       break;
     }
+    case 'hellcycleMount': {
+      // Ghost Rider's Hellcycle: a timed self-buff, same shape as Beast's
+      // Adrenaline Surge. The speed multiplier is read by fighterSpeedMultiplier().
+      caster.hellcycleUntil = t + (ability.duration||4000);
+      if(caster.el) caster.el.classList.add('hellcycle-active');
+      const who = caster, dur = ability.duration||4000;
+      setTimeout(()=>{ if(who.el) who.el.classList.remove('hellcycle-active'); }, dur);
+      spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, 24, '#ff6a2b', 90, 520);
+      fxEl('fx-ring', `left:${caster.x-18}px;top:${caster.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;border-color:#ff6a2b;box-shadow:0 0 30px #ff6a2b;`, 520);
+      break;
+    }
     case 'astralProject': {
       // Professor X's Astral Projection: total damage immunity for a window,
       // reusing the same invulnAbilityUntil flag Cyclops' recoil dodge uses.
@@ -9051,6 +9156,7 @@ function executeAbility(caster, target, ability, t){
       // Damage lands on the contact frame of the swing animation, not instantly.
       const attackDamage = ability.dynamicDamage === 'antman'
         ? (caster.antmanForm === 'small' ? 500 : (caster.antmanForm === 'big' ? 1000 : 300))
+        : ability.percentMaxHealth ? Math.round((target && target.def ? target.def.maxHealth : 0) * ability.percentMaxHealth)
         : ability.damage;
       // Reach is forgiving (a little slack past the listed range, a taller vertical window,
       // and a swing that started in range still lands if the target shuffles off) - but a
@@ -13554,6 +13660,118 @@ function spawnAbilityFx(caster, ability, target){
       shakeArena(4, 180);
       break;
     }
+
+    /* ---------------- Juggernaut ---------------- */
+    case 'juggernaut_fist': {
+      if(caster.el){
+        caster.el.classList.remove('juggernaut-punch');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('juggernaut-punch');
+        setTimeout(()=>{ if(caster.el) caster.el.classList.remove('juggernaut-punch'); }, 220);
+      }
+      const px = cx + dir*44, py = cy - 2;
+      fxEl('fx-flash', `left:${px-30}px;top:${py-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff6ea,#ffb37a 35%,#c73a2e 65%,transparent 78%);`, 240);
+      fxEl('fx-ring', `left:${px-40}px;top:${py-40}px;width:80px;height:80px;border-color:#ffcf8a;border-width:5px;box-shadow:0 0 22px #c73a2e,0 0 40px rgba(199,58,46,.55);`, 380);
+      spawnSparks(px, py, 14, '#ffcf8a', 64, 320);
+      shakeArena(6, 200);
+      break;
+    }
+    case 'juggernaut_force': {
+      if(caster.el){
+        caster.el.classList.remove('juggernaut-charge');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('juggernaut-charge');
+        setTimeout(()=>{ if(caster.el) caster.el.classList.remove('juggernaut-charge'); }, 320);
+      }
+      const R = ability.radius || 130;
+      const groundY = caster.y + FIGHTER_SIZE;
+      fxEl('hulk-slam-wave', `left:${cx-R}px;top:${groundY-R*.55}px;width:${R*2}px;height:${R*1.1}px;border-color:#ffb14a;box-shadow:0 0 16px #c73a2e,0 0 44px rgba(199,58,46,.6),inset 0 0 30px rgba(255,177,74,.3);`, 760);
+      fxEl('hulk-slam-wave', `left:${cx-R*1.18}px;top:${groundY-R*.32}px;width:${R*2.36}px;height:${R*.64}px;border-color:#f2c14e;box-shadow:0 0 18px #ff7a4a;`, 820);
+      fxEl('fx-flash', `left:${cx-82}px;top:${groundY-82}px;width:164px;height:164px;background:radial-gradient(circle,#fff2d8,#ffb15a 30%,#c73a2e 60%,transparent 78%);`, 320);
+      fxEl('fx-ring', `left:${cx-70}px;top:${groundY-70}px;width:140px;height:140px;border-color:#ffe2b0;border-width:5px;box-shadow:0 0 34px #c73a2e,0 0 58px rgba(199,58,46,.5);`, 650);
+      fxEl('fx-ring', `left:${cx-118}px;top:${groundY-38}px;width:236px;height:76px;border-color:#ff8a4a;border-width:3px;box-shadow:0 0 28px #c73a2e;`, 700);
+      spawnGroundCrack(cx, groundY-2, Math.min(180, R+35));
+      spawnSparks(cx, groundY, 30, '#ffc98a', 120, 600);
+      for(let i=0;i<7;i++) setTimeout(()=>{ const ox=(Math.random()-.5)*R*1.6; fxEl('hulk-dust', `left:${cx+ox-14}px;top:${groundY-14}px;width:28px;height:28px;background:radial-gradient(circle,#ffe9c8 0,#ffb46a 28%,#c73a2e 48%,transparent 72%);`, 700); }, i*28);
+      shakeArena(16, 440);
+      break;
+    }
+    case 'juggernaut_fury': {
+      fxEl('fx-flash', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;background:radial-gradient(circle,#fff2d0,#ffb84a 30%,#c73a2e 60%,transparent 78%);`, 320);
+      fxEl('fx-ring', `left:${cx-60}px;top:${cy-60}px;width:120px;height:120px;border-color:#f2c14e;border-width:5px;box-shadow:0 0 30px #c73a2e,0 0 54px rgba(199,58,46,.55);`, 560);
+      fxEl('fx-ring', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;border-color:#ff8a4a;border-width:2px;box-shadow:0 0 20px rgba(199,58,46,.7);`, 620);
+      for(let i=0;i<3;i++){ const a=(Math.PI*2*i)/3+Math.random()*.4; spawnLightning(cx,cy,cx+Math.cos(a)*54,cy+Math.sin(a)*54,{bolts:1,branches:1,width:2,life:260,jag:12,segs:5,color:'#ffcf6b'}); }
+      spawnSparks(cx, cy, 22, '#ffcf8a', 92, 480);
+      shakeArena(5, 220);
+      break;
+    }
+
+    /* ---------------- Ghost Rider ---------------- */
+    case 'ghostrider_chain': {
+      const mx = cx + dir*26, my = cy;
+      fxEl('fx-flash', `left:${mx-20}px;top:${my-20}px;width:40px;height:40px;background:radial-gradient(circle,#fff6d8,#ff9a4a 40%,#ff3d1f 68%,transparent 80%);`, 200);
+      spawnSparks(mx, my, 10, '#ff8a4a', 48, 260);
+      break;
+    }
+    case 'ghostrider_stare': {
+      fxEl('fx-flash', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#fff6d8,#ffab5a 34%,#ff3d1f 64%,transparent 78%);`, 340);
+      if(target && !target.dead){
+        const tx = target.x + FIGHTER_SIZE/2, ty = target.y + FIGHTER_SIZE/2;
+        spawnLightning(cx, cy, tx, ty, {bolts:1, branches:2, width:3.4, life:360, jag:16, segs:7, color:'#ff5a2b'});
+        spawnLightning(cx, cy, tx, ty, {bolts:1, branches:1, width:1.6, life:340, jag:10, segs:6, color:'#ffcf6b'});
+      }
+      spawnSparks(cx, cy, 16, '#ffbb6a', 70, 380);
+      shakeArena(4, 200);
+      break;
+    }
+    case 'ghostrider_dash': {
+      const who = caster;
+      fxEl('fx-flash', `left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff6d8,#ff9a4a 40%,#ff3d1f 68%,transparent 80%);`, 220);
+      for(let i=0;i<6;i++) setTimeout(()=>{ if(state.mode==='battle' && who.el) spawnAfterimage(who,'#ff5a2b50',180); }, i*30);
+      spawnSparks(cx, cy, 10, '#ffab5a', 56, 300);
+      break;
+    }
+
+    /* ---------------- Swordsman ---------------- */
+    case 'swordsman_swords': {
+      if(caster.el){
+        caster.el.classList.remove('swordsman-e-swing');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('swordsman-e-swing');
+        setTimeout(()=>{ if(caster.el) caster.el.classList.remove('swordsman-e-swing'); }, 300);
+      }
+      const wx = cx + dir*30, wy = cy - 2;
+      const slash = `<svg width="150" height="100" viewBox="0 0 150 100" style="transform:scaleX(${dir});overflow:visible;">
+        <path d="M12 82 Q56 12 132 18" stroke="#eef1f4" stroke-width="11" fill="none" stroke-linecap="round" opacity=".95"/>
+        <path d="M12 82 Q56 12 132 18" stroke="#c0392b" stroke-width="3.4" fill="none" stroke-linecap="round" opacity=".85"/>
+        <path d="M26 72 Q60 24 126 26" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".85"/>
+      </svg>`;
+      fxEl('melee-weapon-fx', `left:${wx-75}px;top:${wy-50}px;width:150px;height:100px;`, 320, slash);
+      spawnSparks(wx, wy, 14, '#eef1f4', 56, 340);
+      spawnSparks(wx, wy, 7, '#c0392b', 34, 300);
+      shakeArena(3, 150);
+      break;
+    }
+    case 'swordsman_thrust': {
+      if(caster.el){
+        caster.el.classList.remove('swordsman-q-thrust');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('swordsman-q-thrust');
+        setTimeout(()=>{ if(caster.el) caster.el.classList.remove('swordsman-q-thrust'); }, 380);
+      }
+      const wx = cx + dir*44, wy = cy;
+      fxEl('fx-flash', `left:${wx-22}px;top:${wy-22}px;width:44px;height:44px;background:radial-gradient(circle,#fff,#f4d8d0 40%,#c0392b 70%,transparent 82%);`, 220);
+      spawnSparks(wx, wy, 14, '#eef1f4', 64, 340);
+      spawnSparks(wx, wy, 6, '#c0392b', 36, 300);
+      shakeArena(4, 180);
+      break;
+    }
+    case 'swordsman_riposte': {
+      fxEl('fx-ring', `left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;border-color:#eef1f4;border-width:3px;box-shadow:0 0 16px #c0392b;`, 340);
+      spawnSparks(cx, cy, 10, '#eef1f4', 48, 280);
+      break;
+    }
+
     case 'blade_dagger': {
       const hx = cx + dir*22, hy = cy;
       fxEl('fx-flash', `left:${hx-14}px;top:${hy-14}px;width:28px;height:28px;background:radial-gradient(circle,#ffffff,#c0c0c0 55%,transparent 78%);`, 200);
@@ -13640,6 +13858,56 @@ function spawnHitFx(target, kind, dirSign){
       shakeArena(7,240);
       break;
     }
+
+    /* ---------------- Juggernaut ---------------- */
+    case 'juggernaut_fist_hit': {
+      fxEl('fx-flash', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;background:radial-gradient(circle,#fff2e0,#ffab6a 32%,#c73a2e 60%,transparent 78%);`, 260);
+      fxEl('fx-ring', `left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;border-color:#ffce8f;border-width:5px;box-shadow:0 0 26px #c73a2e,0 0 46px rgba(199,58,46,.5);`, 420);
+      spawnSparks(cx,cy,16,'#ffcf8a',80,360);
+      shakeArena(7,260);
+      break;
+    }
+    case 'juggernaut_force_hit': {
+      fxEl('fx-flash', `left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;background:radial-gradient(circle,#fff2d8,#ffab6a 30%,#c73a2e 60%,transparent 78%);`, 300);
+      fxEl('fx-ring', `left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;border-color:#ffdca0;border-width:5px;box-shadow:0 0 30px #c73a2e,0 0 52px rgba(199,58,46,.55);`, 480);
+      spawnGroundCrack(cx, target.y+FIGHTER_SIZE, 70);
+      spawnSparks(cx,cy,20,'#ffc98a',96,420);
+      shakeArena(11,340);
+      break;
+    }
+
+    /* ---------------- Ghost Rider ---------------- */
+    case 'ghostrider_chain_hit': {
+      fxEl('fx-flash', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#fff6d8,#ffa04a 32%,#ff3d1f 62%,transparent 78%);`, 260);
+      fxEl('fx-ring', `left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#ffb35a;border-width:4px;box-shadow:0 0 22px #ff5a2b,0 0 40px rgba(255,90,43,.55);`, 380);
+      spawnSparks(cx,cy,14,'#ffab5a',70,340);
+      shakeArena(5,220);
+      break;
+    }
+    case 'ghostrider_stare_hit': {
+      fxEl('fx-flash', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;background:radial-gradient(circle,#fff6d8 0 8%,#ffab5a 30%,#ff3d1f 60%,transparent 78%);`, 340);
+      fxEl('fx-ring', `left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;border-color:#ffcf8a;border-width:5px;box-shadow:0 0 30px #ff5a2b,0 0 54px rgba(255,90,43,.6);`, 520);
+      fxEl('fx-ring', `left:${cx-90}px;top:${cy-90}px;width:180px;height:180px;border-color:#ff8a4a;border-width:2px;box-shadow:0 0 20px rgba(255,90,43,.7);`, 560);
+      spawnSparks(cx,cy,26,'#ffbb6a',110,460);
+      shakeArena(9,320);
+      break;
+    }
+
+    /* ---------------- Swordsman ---------------- */
+    case 'swordsman_swords_hit': {
+      fxEl('fx-flash', `left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;background:radial-gradient(circle,#fff,#f4d8d0 40%,#c0392b 68%,transparent 80%);`, 220);
+      fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#eef1f4;border-width:3px;box-shadow:0 0 16px #c0392b;`, 320);
+      spawnSparks(cx,cy,10,'#eef1f4',54,300);
+      break;
+    }
+    case 'swordsman_thrust_hit': {
+      fxEl('fx-flash', `left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;background:radial-gradient(circle,#fff,#f4d8d0 36%,#c0392b 66%,transparent 80%);`, 260);
+      fxEl('fx-ring', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;border-color:#f0d6d0;border-width:4px;box-shadow:0 0 22px #c0392b,0 0 38px rgba(192,57,43,.5);`, 400);
+      spawnSparks(cx,cy,14,'#eef1f4',72,340);
+      shakeArena(5,220);
+      break;
+    }
+
     case 'drax_blade_hit': {
       // Twin blades land as two quick X-crossed cuts, not one generic ring.
       fxEl('fx-ring',`left:${cx-32}px;top:${cy-32}px;width:64px;height:64px;border-color:#e9ffe9;box-shadow:0 0 20px #82c98d;`,260);
@@ -14753,6 +15021,7 @@ function fighterSpeedMultiplier(f){
   if(f.grootBallUntil && now() < f.grootBallUntil) mult *= (f.grootBallSpeed || 2.4);
   if(f.def.id==='moonknight' && f.moonknightPersona==='jake' && f.moonknightPersonaUntil > now()) mult *= (f.def.abilities.Q.speedMult || 1.35);
   if(f.def.id==='beast' && f.beastSurgeUntil > now()) mult *= (f.def.abilities.R.speedMult || 1.4);
+  if(f.def.id==='ghostrider' && f.hellcycleUntil > now()) mult *= (f.def.abilities.R.speedMult || 4);
   return mult;
 }
 function updateFlightGlow(f){
@@ -15492,6 +15761,42 @@ function goblinGliderSvg(id){
     <circle cx="80" cy="28" r="4.2" fill="#0d1113" stroke="#dfe4e7" stroke-width="1.2"/>
   </svg>`;
 }
+function hellcycleBikeSvg(){
+  return `<svg viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="hcChrome" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3f4f6"/><stop offset=".5" stop-color="#8b8f97"/><stop offset="1" stop-color="#2b2d31"/></linearGradient>
+      <linearGradient id="hcTank" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a2c"/><stop offset="1" stop-color="#0a0a0b"/></linearGradient>
+      <radialGradient id="hcFlameGlow" cx="30%" cy="50%" r="80%"><stop offset="0" stop-color="#ffe4a8"/><stop offset=".4" stop-color="#ff9a3d"/><stop offset="1" stop-color="#ff6a2b" stop-opacity="0"/></radialGradient>
+      <radialGradient id="hcLamp" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff6d8"/><stop offset=".55" stop-color="#ffb452"/><stop offset="1" stop-color="#ff6a2b"/></radialGradient>
+    </defs>
+    <path d="M6 98 C0 86 12 78 26 80 C34 76 42 78 46 84 C36 90 20 94 6 98 Z" fill="url(#hcFlameGlow)"/>
+    <circle cx="52" cy="92" r="30" fill="#0b0b0d" stroke="url(#hcChrome)" stroke-width="5"/>
+    <circle cx="52" cy="92" r="11" fill="#1c1c1f" stroke="url(#hcChrome)" stroke-width="2.5"/>
+    <path d="M52 92 L52 66 M52 92 L76 92 M52 92 L34 108 M52 92 L70 108 M52 92 L30 78" stroke="url(#hcChrome)" stroke-width="2"/>
+    <path d="M26 72 C36 56 66 54 80 66" fill="none" stroke="#ff6a2b" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+    <circle cx="196" cy="70" r="24" fill="#0b0b0d" stroke="url(#hcChrome)" stroke-width="5"/>
+    <circle cx="196" cy="70" r="9" fill="#1c1c1f" stroke="url(#hcChrome)" stroke-width="2.5"/>
+    <path d="M196 70 L196 48 M196 70 L216 70 M196 70 L180 84 M196 70 L212 84 M196 70 L180 56" stroke="url(#hcChrome)" stroke-width="2"/>
+    <path d="M64 96 C42 100 22 98 8 92" fill="none" stroke="url(#hcChrome)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M64 100 C44 106 24 106 10 100" fill="none" stroke="url(#hcChrome)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M64 78 L118 78 L124 96 L60 98 Z" fill="url(#hcTank)" stroke="#000" stroke-width="1.5"/>
+    <circle cx="78" cy="88" r="6" fill="#050506" stroke="url(#hcChrome)" stroke-width="2"/>
+    <circle cx="100" cy="88" r="6" fill="#050506" stroke="url(#hcChrome)" stroke-width="2"/>
+    <path d="M72 60 C84 46 114 44 130 54 C122 66 98 70 78 66 Z" fill="url(#hcTank)" stroke="#000" stroke-width="1.5"/>
+    <path d="M80 60 C88 52 102 50 112 54 C106 60 94 64 84 63 Z" fill="#ff6a2b"/>
+    <path d="M86 59 C91 54 99 53 104 55 C100 59 93 61 88 60 Z" fill="#ffd15c"/>
+    <path d="M128 52 C138 48 150 48 156 52 L154 60 L126 60 Z" fill="#0d0604" stroke="#000" stroke-width="1.2"/>
+    <path d="M152 52 L154 26" stroke="url(#hcChrome)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M146 30 L160 30" stroke="url(#hcChrome)" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M126 60 L152 40 L152 14" fill="none" stroke="url(#hcTank)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M152 40 L196 70" stroke="url(#hcChrome)" stroke-width="8" stroke-linecap="round"/>
+    <path d="M152 46 L194 74" stroke="url(#hcChrome)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M152 14 L152 6 L130 14" fill="none" stroke="url(#hcChrome)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M152 14 L152 6 L174 14" fill="none" stroke="url(#hcChrome)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="176" cy="46" r="13" fill="url(#hcLamp)" stroke="#1a0f06" stroke-width="2.5"/>
+    <circle cx="176" cy="46" r="5" fill="#fff6d8" opacity=".9"/>
+  </svg>`;
+}
 function goblinPumpkinSvg(){
   return `<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs><radialGradient id="gPump" cx="32%" cy="26%" r="72%"><stop offset="0" stop-color="#d5ffd6"/><stop offset=".15" stop-color="#7dff86"/><stop offset=".48" stop-color="#38d955"/><stop offset=".82" stop-color="#138b34"/><stop offset="1" stop-color="#073e1a"/></radialGradient></defs>
@@ -15790,6 +16095,16 @@ function buildProjectileVisual(p){
     p.el.innerHTML = `<svg width="26" height="9" viewBox="0 0 26 9" style="filter:drop-shadow(0 0 4px #dfe3e8);">
       <path d="M2 4.5 L18 1.5 L26 4.5 L18 7.5 Z" fill="#dfe3e8" stroke="#701d1d" stroke-width="0.8"/>
       <rect x="0" y="3" width="4" height="3" fill="#701d1d"/>
+    </svg>`;
+  } else if(p.render === 'ghostrider-chain'){
+    p.el.classList.add('spin-projectile');
+    p.el.style.background = 'transparent';
+    p.el.innerHTML = `<svg width="56" height="16" viewBox="0 0 56 16" style="filter:drop-shadow(0 0 6px #ff5a1e) drop-shadow(0 0 12px #ff2d0d88);">
+      <defs><linearGradient id="grChainGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1204"/><stop offset=".5" stop-color="#8a5324"/><stop offset="1" stop-color="#2a1204"/></linearGradient></defs>
+      <g fill="none" stroke="url(#grChainGrad)" stroke-width="3"><ellipse cx="6" cy="8" rx="5" ry="4"/><ellipse cx="16" cy="8" rx="5" ry="4"/><ellipse cx="26" cy="8" rx="5" ry="4"/><ellipse cx="36" cy="8" rx="5" ry="4"/></g>
+      <g fill="#ff5a1e" opacity=".85"><ellipse cx="6" cy="8" rx="2" ry="1.6"/><ellipse cx="16" cy="8" rx="2" ry="1.6"/><ellipse cx="26" cy="8" rx="2" ry="1.6"/><ellipse cx="36" cy="8" rx="2" ry="1.6"/></g>
+      <ellipse cx="47" cy="8" rx="8" ry="7" fill="#ff8a2b" opacity=".55"/>
+      <ellipse cx="49" cy="8" rx="5.4" ry="6" fill="#fff2c8"/><ellipse cx="49" cy="8" rx="3.4" ry="4" fill="#ff8a2b"/><ellipse cx="49" cy="8" rx="1.6" ry="2" fill="#fff"/>
     </svg>`;
   } else {
     p.el.classList.add('epic-projectile');
@@ -17118,8 +17433,8 @@ function resetFighterTransientState(target){
   target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
-  target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0;
-  if(target.el) target.el.classList.remove('beast-surge-active');
+  target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0; target.hellcycleUntil = 0;
+  if(target.el) target.el.classList.remove('beast-surge-active','hellcycle-active');
   target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped');
   target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
   target.slowUntil = 0;
@@ -17169,8 +17484,8 @@ function loseLife(target, side){
   target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
-  target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0;
-  if(target.el) target.el.classList.remove('beast-surge-active');
+  target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0; target.hellcycleUntil = 0;
+  if(target.el) target.el.classList.remove('beast-surge-active','hellcycle-active');
   target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped');
   target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
   target.slowUntil = 0;
