@@ -1088,8 +1088,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .tva-door{
   position:absolute; z-index:18; pointer-events:none; border-radius:3px;
   background:linear-gradient(180deg,#ffcf6b,#f5921f 55%,#e17c14);
-  border:4px solid #241505;
-  box-shadow:0 0 10px #fff2b0,0 0 22px #ff9f2f,0 0 40px #ff7a18;
+  box-shadow:0 0 0 2px #ffb84f, 0 0 10px #fff2b0,0 0 22px #ff9f2f,0 0 40px #ff7a18;
   animation:tvaDoorOpen .55s cubic-bezier(.2,.85,.2,1) forwards;
 }
 @keyframes tvaDoorOpen{0%{opacity:0;transform:scaleY(.15) scaleX(.7)}35%{opacity:1;transform:scaleY(1.04) scaleX(1.02)}100%{opacity:0;transform:scaleY(1) scaleX(.98)}}
@@ -1138,8 +1137,7 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .tva-dust-cloud{background:radial-gradient(circle at 50% 50%,#eee8ddcc 0 20%,#9b948a88 48%,transparent 72%);filter:blur(1px);animation:tvaDust .9s ease-out forwards;}
 @keyframes tvaDust{to{transform:scale(1.65) translateY(-20px);opacity:0}}
 
-.mobius-time-charging .fighter-square{filter:sepia(.55) saturate(.7) brightness(.8);box-shadow:0 0 0 2px #ffd35a,0 0 20px #ffb52e;}
-.mobius-time-charged .fighter-square{box-shadow:0 0 0 3px #fff0a5,0 0 28px #ffd35a,0 0 48px #ff9d2f;}
+
 .spidergwen-dodging .fighter-square{box-shadow:0 0 0 3px #f7a6db,0 0 24px #ff7fd0;filter:saturate(1.2) brightness(1.12);animation:spiderGwenDodgeGlow .18s ease-in-out infinite alternate;}
 @keyframes spiderGwenDodgeGlow{to{transform:scale(1.04)}}
 
@@ -1190,6 +1188,13 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .mobius-stick-swing .mobius-stick-held{animation:mobiusStickSwing .28s cubic-bezier(.2,.85,.25,1) forwards;}
 .fighter.facing-left .mobius-stick-held{right:auto;left:-26px;transform:scaleX(-1) rotate(-18deg);}
 .fighter.facing-left.mobius-stick-swing .mobius-stick-held{animation:mobiusStickSwingLeft .28s cubic-bezier(.2,.85,.25,1) forwards;}
+/* Time Stick charge-up: the stick is held out and glows brighter over the charge duration (not the whole body) */
+.mobius-stick-held.mobius-stick-charging,.mobius-stick-held.mobius-stick-charged{opacity:1;transform:scaleX(1) rotate(-8deg);}
+.fighter.facing-left .mobius-stick-held.mobius-stick-charging,.fighter.facing-left .mobius-stick-held.mobius-stick-charged{transform:scaleX(-1) rotate(-8deg);}
+.mobius-stick-held.mobius-stick-charging svg{filter:drop-shadow(0 0 2px #ffb52e55);transition:filter var(--mobius-charge-ms,20000ms) linear;}
+.mobius-stick-held.mobius-stick-charging.mobius-stick-bright svg{filter:drop-shadow(0 0 10px #fff0a5) drop-shadow(0 0 22px #ffb52e) drop-shadow(0 0 38px #ff9d2f);}
+.mobius-stick-held.mobius-stick-charged svg{animation:mobiusStickChargedPulse .5s ease-in-out infinite alternate;}
+@keyframes mobiusStickChargedPulse{from{filter:drop-shadow(0 0 12px #fff6c8) drop-shadow(0 0 24px #ffcf59) drop-shadow(0 0 40px #ff9d2f);}to{filter:drop-shadow(0 0 18px #fff6c8) drop-shadow(0 0 36px #ffcf59) drop-shadow(0 0 60px #ff9d2f);}}
 @keyframes mobiusStickSwing{0%{opacity:1;transform:scaleX(1) rotate(-18deg);}45%{opacity:1;transform:scaleX(1) rotate(48deg);}90%{opacity:1;transform:scaleX(1) rotate(16deg);}100%{opacity:0;transform:scaleX(1) rotate(16deg);}}
 @keyframes mobiusStickSwingLeft{0%{opacity:1;transform:scaleX(-1) rotate(-18deg);}45%{opacity:1;transform:scaleX(-1) rotate(48deg);}90%{opacity:1;transform:scaleX(-1) rotate(16deg);}100%{opacity:0;transform:scaleX(-1) rotate(16deg);}}
 @keyframes bwBatonSwing{0%{opacity:1;transform:scaleX(1) rotate(-55deg);}45%{transform:scaleX(1) rotate(28deg);}100%{opacity:1;transform:scaleX(1) rotate(14deg);}}
@@ -1987,6 +1992,12 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .web-wrap .wrap-pulse{animation:webWrapPulse .3s ease-in-out infinite alternate; transform-origin:50% 50%;}
 @keyframes webWrapIn{from{transform:scale(1.55); opacity:0;}to{transform:scale(1); opacity:1;}}
 @keyframes webWrapPulse{from{opacity:.75}to{opacity:1}}
+/* ---- TVA time-stasis slow wrap (Mobius) — no spider webbing, just a slowed-time ring ---- */
+.time-wrap{position:absolute; inset:-11px; pointer-events:none; z-index:9; animation:timeWrapIn .14s ease-out;}
+.time-wrap svg{width:100%; height:100%; overflow:visible; filter:drop-shadow(0 0 5px rgba(255,197,74,.8));}
+.time-wrap .wrap-pulse{animation:timeWrapPulse .3s ease-in-out infinite alternate; transform-origin:50% 50%;}
+@keyframes timeWrapIn{from{transform:scale(1.35); opacity:0;}to{transform:scale(1); opacity:1;}}
+@keyframes timeWrapPulse{from{opacity:.65}to{opacity:1}}
 .fighter.slowed .fighter-square{filter:saturate(.55) brightness(.88);}
 .fighter.wasp-enlarged.slowed .fighter-square{filter:saturate(.72) brightness(.92);}
 .fx-webline{pointer-events:none; z-index:6; animation:weblineFade .5s ease-out forwards;}
@@ -5400,14 +5411,13 @@ const CHARACTERS = {
     description:'TVA agent armed with a TemPad and time stick. Can slow time, charge a devastating time stick, and open a TVA time door.',
     abilities:{
       E:{key:'E', name:'TVA Slow-mo Stick', type:'melee', damage:400, cooldown:1000, knockback:5, range:76, hitDelay:70,
-         slow:500, slowFactor:1/16,
+         slow:1000, slowFactor:1/16, slowFx:'time',
          sound:'ability', fx:'mobius_stick_swing', hitFx:'mobius_stick_hit', hitSound:'hit',
-         desc:'A close-range strike with the TVA stick for 400 damage that slows the enemy to 1/16 speed for 0.5 seconds.'},
+         desc:'A close-range strike with the TVA stick for 400 damage that slows the enemy to 1/16 speed for 1 second.'},
       Q:{key:'Q', name:'Time Stick', type:'timeStick', damage:250000, cooldown:30000, knockback:0,
-         speed:15, w:52, h:16, color:'#ffd35a', render:'tva-time-stick',
-         chargeDuration:20000,
+         range:90, chargeDuration:20000,
          sound:'ability', fx:'ability', hitFx:'tva-vaporize', hitSound:'ability',
-         desc:'Charge for 20 seconds, then vaporise the enemy with one hit.'},
+         desc:'Charge the TVA stick for 20 seconds, then land one close-range strike that vaporises the enemy.'},
       R:{key:'R', name:'TemPad Portal', type:'tvaPortal', damage:0, cooldown:8000,
          sound:'ability', fx:'ability',
          desc:'Opens a rectangular TVA time door to another part of the arena.'}
@@ -7800,21 +7810,31 @@ function executeAbility(caster, target, ability, t){
     case 'timeStick': {
       if(caster.timeStickCharged){
         const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
-        if(!tg || tg.dead) return {stage:'fire'};
-        const d = caster.isBot ? caster.facing : dirSignTo(caster,tg);
-        state.projectiles.push({
-          x:caster.x+FIGHTER_SIZE/2 + d*32, y:caster.y+FIGHTER_SIZE/2 - 8,
-          vx:d*(ability.speed||15), vy:0, w:ability.w||52, h:ability.h||16,
-          color:ability.color||'#ffd35a', damage:ability.damage||250000, knockback:0, owner:caster.id,
-          life:4200, returns:false, phase:'out', originX:caster.x, casterRef:caster, targetRef:tg,
-          returnDistance:0, render:ability.render||'tva-time-stick', trail:'', web:false,
-          hitFx:ability.hitFx||'tva-vaporize', hitSound:ability.hitSound||'ability',
-          slow:0, slowFactor:0, shock:null, stun:0, pierce:false, hasHitTarget:false,
-          trailTick:0, el:null, tvaVaporize:true
-        });
         caster.timeStickCharged = false;
         if(caster.el) caster.el.classList.remove('mobius-time-charged');
+        resetMobiusStickVisual(caster);
+        // swing the stick regardless of whether the target is in reach, so a whiff still reads
+        if(caster.el){
+          caster.el.classList.remove('mobius-stick-swing');
+          void caster.el.offsetWidth;
+          caster.el.classList.add('mobius-stick-swing');
+          setTimeout(()=>caster.el && caster.el.classList.remove('mobius-stick-swing'), 280);
+        }
         spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,22,'#ffd35a',95,520);
+        if(!tg || tg.dead) return {stage:'fire'};
+        const d = caster.isBot ? caster.facing : dirSignTo(caster,tg);
+        const range = ability.range || 90;
+        const dx = Math.abs((tg.x+FIGHTER_SIZE/2) - (caster.x+FIGHTER_SIZE/2));
+        const dy = Math.abs(tg.y - caster.y);
+        const facingOk = (tg === caster) || (caster.isBot ? (d === caster.facing) : (dx < 24 || d === caster.facing));
+        const inRange = dx <= range + 40 && dy < 115 && facingOk && !attackBlockedByFloor(caster, tg);
+        if(inRange){
+          damageTargetOrWall(tg, ability.damage||250000, ability.knockback||0, d,
+            {hitFx: ability.hitFx||'tva-vaporize', sound: ability.hitSound||'ability', ranged:false, attacker:caster});
+        } else {
+          const wx = caster.x + FIGHTER_SIZE/2 + caster.facing*52;
+          fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#ffffff44,transparent 70%);`, 380);
+        }
         return {stage:'fire'};
       }
       const chargeMs = ability.chargeDuration || 20000;
@@ -7824,7 +7844,7 @@ function executeAbility(caster, target, ability, t){
       const myChargeToken = caster.timeStickChargeToken;
       caster.vx = 0; caster.vy = 0; caster.flight = false; caster.grappleUntil = 0;
       if(caster.el) caster.el.classList.add('mobius-time-charging');
-      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,26,'#ffcf59',100,520);
+      startMobiusStickCharge(caster, chargeMs);
       caster.timeStickChargeFxEl = fxEl('tva-time-charge',`left:${caster.x-22}px;top:${caster.y-30}px;width:${FIGHTER_SIZE+44}px;height:${FIGHTER_SIZE+44}px;`,chargeMs,'<div class="tva-charge-ring"></div><div class="tva-charge-core"></div>');
       const who = caster;
       setTimeout(()=>{
@@ -7833,11 +7853,8 @@ function executeAbility(caster, target, ability, t){
         who.timeStickChargingUntil = 0;
         who.timeStickCharged = true;
         who.timeStickChargeFxEl = null;
-        if(who.el){
-          who.el.classList.remove('mobius-time-charging');
-          who.el.classList.add('mobius-time-charged');
-          setTimeout(()=>{ if(who.el) who.el.classList.remove('mobius-time-charged'); }, 900);
-        }
+        if(who.el) who.el.classList.remove('mobius-time-charging');
+        finishMobiusStickCharge(who);
         spawnDamageNumber(who.x+4,who.y-22,'CHARGED',false);
         spawnSparks(who.x+FIGHTER_SIZE/2,who.y+FIGHTER_SIZE/2,32,'#fff0a8',120,700);
         fxEl('fx-ring',`left:${who.x-18}px;top:${who.y-18}px;width:${FIGHTER_SIZE+36}px;height:${FIGHTER_SIZE+36}px;border-color:#fff1a1;border-width:3px;box-shadow:0 0 34px #ffbd3a;`,600);
@@ -8667,7 +8684,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && facingOk){
           const healthBefore=target.health;
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, slowFactor: ability.slowFactor, stun: ability.stun, ranged:isRangedAbility(ability), attacker:caster});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, slowFactor: ability.slowFactor, slowFx: ability.slowFx, stun: ability.stun, ranged:isRangedAbility(ability), attacker:caster});
           if(ability.redHulkBurn && target.health<healthBefore && !target.dead){
             const ticks=Math.max(1,ability.burnTicks||4);
             applyBurn(target,{interval:ability.burnTickMs||250,ticks,damage:redHulkBurnDamageFor(target)/ticks,attacker:caster});
@@ -9564,11 +9581,33 @@ function damageTargetOrWall(target, dmg, knockback, dirSign, opts){
 // Mobius gets hit mid-charge on the Time Stick: the charge fails outright, he's freed
 // up to move/act again immediately, and the ability goes on cooldown (a failed charge
 // still costs him the attempt) rather than letting him instantly try again.
+// Time Stick's charge glow lives on the held stick itself, not the fighter's body.
+function startMobiusStickCharge(caster, chargeMs){
+  const stickEl = caster.el && caster.el.querySelector('.mobius-stick-held');
+  if(!stickEl) return;
+  caster.el.style.setProperty('--mobius-charge-ms', chargeMs+'ms');
+  stickEl.classList.remove('mobius-stick-charged','mobius-stick-bright');
+  stickEl.classList.add('mobius-stick-charging');
+  void stickEl.offsetWidth; // reflow so the filter transition below actually animates
+  requestAnimationFrame(()=> stickEl.classList.add('mobius-stick-bright'));
+}
+function finishMobiusStickCharge(caster){
+  const stickEl = caster.el && caster.el.querySelector('.mobius-stick-held');
+  if(!stickEl) return;
+  stickEl.classList.remove('mobius-stick-charging','mobius-stick-bright');
+  stickEl.classList.add('mobius-stick-charged');
+}
+function resetMobiusStickVisual(caster){
+  const stickEl = caster.el && caster.el.querySelector('.mobius-stick-held');
+  if(!stickEl) return;
+  stickEl.classList.remove('mobius-stick-charging','mobius-stick-bright','mobius-stick-charged');
+}
 function cancelTimeStickCharge(target, tNow){
   target.timeStickChargingUntil = 0;
   target.timeStickCharged = false;
   target.timeStickChargeToken = (target.timeStickChargeToken||0) + 1;
   if(target.el) target.el.classList.remove('mobius-time-charging');
+  resetMobiusStickVisual(target);
   if(target.timeStickChargeFxEl){
     if(target.timeStickChargeFxEl.parentNode) target.timeStickChargeFxEl.remove();
     target.timeStickChargeFxEl = null;
@@ -9670,7 +9709,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   target.hitStun = Math.min(420, 90 + effectiveKnockback*10);
   sfx(opts.sound || 'hit');
   spawnHitFx(target, opts.hitFx || '', dirSign);
-  if(opts.slow) applyWebSlow(target, opts.slow, opts.slowFactor);
+  if(opts.slow) applyWebSlow(target, opts.slow, opts.slowFactor, opts.slowFx);
   if(opts.shock && target.health > 0) applyShock(target, opts.shock);
   if(opts.stun && target.health > 0){
     const stunEnd = now() + opts.stun;
@@ -11329,6 +11368,22 @@ function webNetSvg(size, stroke){
   });
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`
     + `<g stroke="#ffffff" fill="none" stroke-width="${sw}" stroke-linecap="round" opacity="0.95">${g}</g></svg>`;
+}
+/* --- TVA time-stasis ring geometry (used instead of spider webbing for Mobius's slow) --- */
+function timeStasisSvg(size){
+  const r = size/2, cx = r, cy = r;
+  let ticks = '';
+  for(let i=0;i<12;i++){
+    const a = (Math.PI*2*i)/12;
+    const x1 = cx + Math.cos(a)*r*0.78, y1 = cy + Math.sin(a)*r*0.78;
+    const x2 = cx + Math.cos(a)*r*0.94, y2 = cy + Math.sin(a)*r*0.94;
+    ticks += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#ffd35a" stroke-width="2" stroke-linecap="round"/>`;
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`
+    + `<circle cx="${cx}" cy="${cy}" r="${(r*0.92).toFixed(1)}" fill="none" stroke="#ffb52e" stroke-width="2.4" opacity=".85"/>`
+    + `<circle cx="${cx}" cy="${cy}" r="${(r*0.62).toFixed(1)}" fill="none" stroke="#ffe9a0" stroke-width="1.6" opacity=".55"/>`
+    + ticks
+    + `</svg>`;
 }
 function webStrandSvg(){
   return `<svg width="62" height="26" viewBox="0 0 62 26">
@@ -13603,22 +13658,36 @@ function activeSlowMultiplier(f){
   if(!isSlowed(f)) return 1;
   return Math.min(1, Number(f.slowFactor) || WEB_SLOW_FACTOR);
 }
-function applyWebSlow(target, ms, factor){
+function applyWebSlow(target, ms, factor, kind){
   if(!target || target.dead) return;
   ms = ms || 300;
   factor = Number.isFinite(Number(factor)) ? Number(factor) : WEB_SLOW_FACTOR;
   target.slowFactor = Math.min(target.slowFactor || 1, factor);
   target.slowUntil = Math.max(target.slowUntil || 0, now() + ms);
-  showWebWrap(target, ms);
+  showWebWrap(target, ms, kind);
 }
-function showWebWrap(f, ms){
+// kind defaults to the classic spider webbing; pass 'time' (e.g. Mobius's TVA
+// stick) to show a TVA time-stasis ring instead, so non-web characters don't
+// get slapped with Spider-Man's webs.
+function showWebWrap(f, ms, kind){
   if(!f.el) return;
+  kind = kind || 'web';
+  if(f.webWrapEl && f.webWrapKind !== kind){
+    if(f.webWrapEl.parentNode) f.webWrapEl.remove();
+    f.webWrapEl = null;
+  }
   if(!f.webWrapEl || !f.webWrapEl.parentNode){
     const el = document.createElement('div');
-    el.className = 'web-wrap';
-    el.innerHTML = '<div class="wrap-pulse" style="width:100%;height:100%;">' + webNetSvg(86, 1.7) + '</div>';
+    if(kind === 'time'){
+      el.className = 'time-wrap';
+      el.innerHTML = '<div class="wrap-pulse" style="width:100%;height:100%;">' + timeStasisSvg(86) + '</div>';
+    } else {
+      el.className = 'web-wrap';
+      el.innerHTML = '<div class="wrap-pulse" style="width:100%;height:100%;">' + webNetSvg(86, 1.7) + '</div>';
+    }
     f.el.appendChild(el);
     f.webWrapEl = el;
+    f.webWrapKind = kind;
   }
   f.el.classList.add('slowed');
   clearTimeout(f._webWrapTimer);
@@ -13738,8 +13807,9 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     if(f.el) f.el.classList.remove('px-mind-stunned','jg-mind-warped');
   }
   if(f.yonduArrow && f.yonduArrow.phase === 'control'){
-    f.vx = 0; f.vy = 0; moveDir = 0; wantJump = false; wantDown = false;
-    return;
+    // He can't steer himself while piloting the arrow, but he isn't a statue:
+    // if he's airborne when he activates it, he should still fall/land normally.
+    f.vx = 0; moveDir = 0; wantJump = false; wantDown = false;
   }
   if(f.holoSuitUntil && tNow >= f.holoSuitUntil){ f.holoSuitUntil = 0; }
   // Doctor Octopus is permanently airborne on his tentacle rig — no toggle,
@@ -15833,7 +15903,7 @@ function updateBotAI(dtF){
     if(cdReady(bot,'R',t) && (hpPct < 0.32 || adist > 420 || Math.abs(vertical) > 110) && Math.random() < 0.7){ tryUseAbility(bot, player, 'R'); return; }
   } else if(style === 'mobius'){
     const eAb=bot.def.abilities.E,qAb=bot.def.abilities.Q,rAb=bot.def.abilities.R;
-    if(qAb && qAb.type==='timeStick' && bot.timeStickCharged && cdReady(bot,'Q',t)){ tryUseAbility(bot,player,'Q'); return; }
+    if(qAb && qAb.type==='timeStick' && bot.timeStickCharged && cdReady(bot,'Q',t) && adist <= (qAb.range||90)+40){ tryUseAbility(bot,player,'Q'); return; }
     if(qAb && qAb.type==='timeStick' && !bot.timeStickCharged && !bot.timeStickChargingUntil && Math.random()<0.035){ tryUseAbility(bot,player,'Q'); return; }
     if(rAb && cdReady(bot,'R',t) && (adist>420 || Math.abs(vertical)>100 || hpPct<0.4) && Math.random()<0.45){ tryUseAbility(bot,player,'R'); return; }
     if(eAb && cdReady(bot,'E',t) && adist<900){ tryUseAbility(bot,player,'E'); return; }
