@@ -6387,7 +6387,7 @@ Object.assign(CHARACTERS, {
          hitDelay:130, hitFx:'stormbreaker', hitSound:'mjolnir', sound:'mjolnir_swing', fx:'stormbreaker_cast',
          desc:'A massive Stormbreaker strike for 1,500 damage.'},
       Q:{key:'Q', name:'The Power of Thunder', type:'thorPowerThunder', damage:4000, cooldown:12000, knockback:28,
-         radius:190, launchVy:-36,
+         radius:260, launchVy:-36,
          sound:'thor_power_thunder', fx:'thor_power_thunder', hitFx:'thor_power_thunder_hit', hitSound:'thor_power_thunder_hit',
          desc:'Jumps vertically and crashes back down at the exact point he started, releasing a giant lightning impact for 4,000 damage. Cooldown: 12 seconds.'},
       R:{key:'R', name:'Lightning Flight', type:'toggle', damage:0, cooldown:0,
@@ -8867,6 +8867,12 @@ function tryUseAbility(caster, target, key){
   // Roared fighters cannot use abilities that would move them across the arena.
   if(MOVEMENT_ABILITY_TYPES.includes(ability.type) && isRoarHeld(caster, t)) return false;
   if(!cdReady(caster, key, t)) return false;
+  // Thor (Infinity War): pressing Q while lightning flight (R) is active
+  // cancels the flight first, then Q proceeds normally.
+  if(key === 'Q' && caster.def.id === 'thor_infinitywar' && caster.flight){
+    caster.flight = false;
+    caster.flightExpire = 0;
+  }
   if(isMindWarpSelfAttack(caster, ability, t)){
     const didHitSelf = mindWarpSelfDamage(caster, ability);
     if(!didHitSelf) return false;
@@ -9322,7 +9328,11 @@ function triggerIronSpiderLegs(caster){
 }
 function resolveThorPowerThunder(f){
   if(!f || !f.thorDiveActive || f.dead || state.mode!=='battle') return;
-  const x=f.thorDiveStartX+FIGHTER_SIZE/2, y=f.thorDiveStartY+FIGHTER_SIZE/2;
+  // Use the actual landing spot, not the height Thor was at when Q was pressed.
+  // If Q was used while flying, he cancels flight and free-falls to the ground
+  // beneath him (same X, since it's locked during the dive) - the hit needs to
+  // land there, not up at the altitude he started from.
+  const x=f.x+FIGHTER_SIZE/2, y=f.y+FIGHTER_SIZE/2;
   const ab=f.def.abilities.Q, radius=ab.radius||190;
   const fighters=(state.multiPvp&&state.multi)?state.multi.fighters:[state.player,state.bot];
   fighters.filter(tg=>tg&&tg!==f&&!tg.dead).forEach(tg=>{
@@ -9339,7 +9349,7 @@ function resolveThorPowerThunder(f){
   spawnLightning(x,Math.max(0,y-320),x,y,{bolts:5,branches:5,width:3.8,life:420,jag:36,segs:9,color:'#fff'});
   spawnSparks(x,y,36,'#eaf8ff',150,720);
   shakeArena(18,520);
-  f.thorDiveActive=false; f.thorDiveStarted=false; f.vx=0; f.vy=0; f.x=f.thorDiveStartX; f.y=f.thorDiveStartY; f.onGround=true;
+  f.thorDiveActive=false; f.thorDiveStarted=false; f.vx=0; f.vy=0; f.onGround=true;
   if(f.el) f.el.classList.remove('thor-power-thunder');
   sfx('thor_power_thunder_hit');
 }
@@ -16718,6 +16728,7 @@ function fighterSpeedMultiplier(f){
   if(f.def.id==='beast' && f.beastSurgeUntil > now()) mult *= (f.def.abilities.R.speedMult || 1.4);
   if(f.def.id==='ghostrider' && f.hellcycleUntil > now()) mult *= (f.def.abilities.R.speedMult || 4);
   if(f.def.id==='quicksilver') mult *= (f.quicksilverSpeed || 3);
+  if(f.def.id==='thor_infinitywar' && f.flight) mult *= 1.6;
   return mult;
 }
 function updateFlightGlow(f){
@@ -16730,7 +16741,7 @@ function updateFlightGlow(f){
   if(f.el) f.el.classList.toggle('flight-active', !!f.flight);
   if(f.flightEl) f.flightEl.style.display = (flightVisual && !['wasp','falcon'].includes(f.def.id)) ? 'block' : 'none';
   if(f.waspWingsEl) f.waspWingsEl.style.display = (f.flight && f.def.id === 'wasp') ? 'block' : 'none';
-  if(f.thrusterEl) f.thrusterEl.style.display = (flightVisual && !['wasp','falcon','magneto'].includes(f.def.id)) ? 'block' : 'none';
+  if(f.thrusterEl) f.thrusterEl.style.display = (flightVisual && !['wasp','falcon','magneto','thor_infinitywar'].includes(f.def.id)) ? 'block' : 'none';
 }
 
 /* =========================================================================
