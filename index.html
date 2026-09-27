@@ -4042,6 +4042,242 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   .sandbox-char-grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); max-height:68vh;}
 }
 </style>
+
+<style id="new-character-effects">
+/* =========================================================================
+   NEW CHARACTER EFFECTS — additive only
+   ========================================================================= */
+.fighter.quicksilver .fighter-square{
+  box-shadow:0 0 0 2px rgba(104,190,255,.34),0 0 20px rgba(45,145,255,.34);
+}
+.quicksilver-speed-aura{
+  position:absolute; inset:-18px; border-radius:50%; pointer-events:none; z-index:0;
+  opacity:.28; filter:blur(2px);
+  background:radial-gradient(circle at 50% 50%,rgba(180,238,255,.18),transparent 52%);
+}
+.fighter.quicksilver{z-index:10;}
+.fighter.quicksilver.quick-dashing .fighter-square{
+  filter:brightness(1.25) saturate(1.25);
+  box-shadow:0 0 0 2px #8ad9ff,0 0 28px #269dff,0 0 52px #2076ff66;
+}
+.fighter.scorpion .fighter-square{
+  box-shadow:0 0 0 2px rgba(82,220,112,.24),0 0 18px rgba(52,152,76,.20);
+}
+.fighter.scorpion.scorpion-climbing .fighter-square{filter:brightness(1.14) saturate(1.18);}
+/* Scorpion's attacks (tail strike, hook grab, climb launch) are now all a
+   single consistent visual: a segmented green tail-line that snaps out from
+   him with a curved, glowing stinger barb at the tip, rather than a giant
+   permanently-mounted mechanical tail model. */
+.scorpion-tail-fx{pointer-events:none;z-index:10;}
+.scorpion-tail-fx svg{display:block;overflow:visible;}
+.sc-tail-pop{width:100%;height:100%;transform-origin:6% 50%;animation:scTailPop .24s cubic-bezier(.15,.8,.2,1) forwards;}
+@keyframes scTailPop{0%{opacity:0;transform:scaleX(.35)}55%{opacity:1;transform:scaleX(1.06)}100%{opacity:1;transform:scaleX(1)}}
+
+/* Mantis */
+.fighter.mantis .fighter-square{box-shadow:0 0 0 2px rgba(125,242,164,.22),0 0 18px rgba(82,205,119,.22);}
+.mantis-aura{
+  position:absolute;inset:-8px;border-radius:50%;pointer-events:none;z-index:0;opacity:.36;
+  background:radial-gradient(circle,rgba(205,255,168,.22),transparent 58%);
+  animation:mantisAura 1.7s ease-in-out infinite alternate;
+}
+@keyframes mantisAura{from{transform:scale(.9);opacity:.22}to{transform:scale(1.08);opacity:.4}}
+.mantis-sleep-z{
+  position:absolute;z-index:35;color:#d8ffb6;font:800 24px/1 Inter,sans-serif;
+  text-shadow:0 0 8px #83e66b,0 2px 3px #142415;
+  animation:mantisSleepFloat 1.2s ease-out forwards;
+}
+@keyframes mantisSleepFloat{
+  0%{opacity:0;transform:translate(0,8px) scale(.7)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translate(12px,-54px) scale(1.05)}
+}
+.mantis-sock-love{
+  position:absolute;z-index:36;width:78px;height:62px;pointer-events:none;
+  animation:sockLoveFloat 1.5s ease-in-out infinite;
+  filter:drop-shadow(0 5px 4px rgba(0,0,0,.55));
+}
+.mantis-sock-love .sock-body{
+  position:absolute;left:13px;top:17px;width:44px;height:26px;border-radius:15px 12px 7px 8px;
+  transform:rotate(-16deg);background:linear-gradient(145deg,#fff,#cfd5de 58%,#a4aab3);
+  border:2px solid #707782;
+}
+.mantis-sock-love .sock-cuff{
+  position:absolute;left:9px;top:13px;width:25px;height:15px;border-radius:5px;background:linear-gradient(180deg,#fff,#d6dbe1);
+  border:2px solid #6d747f;transform:rotate(-14deg);
+}
+.mantis-sock-love .sock-stripe{
+  position:absolute;left:33px;top:14px;width:8px;height:28px;border-radius:4px;background:#7e9cff;transform:rotate(-16deg);
+}
+.mantis-sock-love .heart{
+  position:absolute;left:49px;top:4px;color:#ff7fa8;font-size:25px;text-shadow:0 0 10px #ff4e8b;
+  animation:sockHeartBeat .7s ease-in-out infinite alternate;
+}
+@keyframes sockLoveFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+@keyframes sockHeartBeat{from{transform:scale(.82)}to{transform:scale(1.15)}}
+
+/* Nebula */
+.fighter.nebula .fighter-square{box-shadow:0 0 0 2px rgba(174,131,255,.25),0 0 20px rgba(100,106,255,.22);}
+.fighter.nebula.nebula-striking .fighter-square{
+  filter:brightness(1.35) saturate(1.35);
+  box-shadow:0 0 0 3px #d3c1ff,0 0 26px #5e71ff,0 0 44px #b45cff88;
+}
+.nebula-cyber-aura{
+  position:absolute;inset:-12px;border-radius:18px;pointer-events:none;z-index:0;
+  border:1px solid rgba(190,150,255,.30);
+  box-shadow:0 0 16px #6c76ff55,inset 0 0 18px #b58cff18;
+}
+.nebula-repair-fx{
+  position:absolute;border-radius:50%;pointer-events:none;z-index:28;
+  border:2px solid #c993ff;box-shadow:0 0 22px #7c70ff,inset 0 0 15px #c993ff55;
+  animation:nebulaRepair .85s ease-out forwards;
+}
+@keyframes nebulaRepair{from{transform:scale(.3);opacity:0}28%{opacity:1}to{transform:scale(1.6);opacity:0}}
+
+/* Ms. Marvel */
+.fighter.msmarvel .fighter-square{
+  box-shadow:0 0 0 2px rgba(255,211,77,.24),0 0 22px rgba(145,73,215,.26);
+}
+.fighter.msmarvel.msmarvel-embiggen .fighter-square{
+  filter:brightness(1.07) saturate(1.2);
+  box-shadow:0 0 0 3px rgba(255,220,90,.55),0 0 32px rgba(161,80,235,.65);
+}
+.msmarvel-embiggen-ring{
+  position:absolute;z-index:21;border:4px solid #ffd35a;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 14px #a95cff,0 0 34px #ffca4c77,inset 0 0 18px #a95cff33;
+  animation:msmarvelEmbiggen .65s cubic-bezier(.15,.9,.2,1) forwards;
+}
+@keyframes msmarvelEmbiggen{from{transform:scale(.3);opacity:0}35%{opacity:1}to{transform:scale(1.55);opacity:0}}
+
+/* Ms. Marvel's regular Stretch Punch now uses the same body-anchored
+   "arm-wrap" rig as Mr. Fantastic's stretch punch (sleeve -> extending
+   forearm -> cuff -> fist, all growing out from her shoulder via a
+   --msm-reach CSS variable) instead of a separate freestanding overlay.
+   Recolored purple/lavender with faceted crystal clip-paths instead of
+   smooth rubber, and capped with her crystal-shard fist. */
+.msm-arm-wrap{position:absolute;right:-4px;top:36%;width:0;height:0;z-index:6;pointer-events:none;transform-origin:0 50%;}
+.fighter.facing-left .msm-arm-wrap{right:auto;left:-4px;transform:scaleX(-1);}
+.msm-sleeve{position:absolute;left:-14px;top:-17px;width:26px;height:32px;border-radius:13px 6px 6px 13px;background:linear-gradient(180deg,#7a2fc0,#3a1360);box-shadow:inset 0 2px 2px #e8c3ff55;border-right:2px solid #200a3a;opacity:0;}
+.msm-tube{position:absolute;left:10px;top:-12px;width:4px;height:26px;border-radius:3px;transform-origin:left center;
+  background:linear-gradient(180deg,#fff0ff 0%,#dca1ff 17%,#963fdc 48%,#561780 82%,#2d0b4c 100%);
+  border:2px solid #3a1360;
+  clip-path:polygon(0 18%,5% 4%,18% 0,97% 7%,100% 50%,97% 93%,18% 100%,5% 96%,0 82%);
+  box-shadow:0 0 10px #b65cffcc,inset 0 3px 3px #ffe6ff99,inset 0 -3px 4px #2a0a4b99;opacity:0;}
+.msm-tube:before{content:'';position:absolute;inset:3px 6px;
+  background:repeating-linear-gradient(90deg,transparent 0 16px,rgba(255,255,255,.34) 17px 19px,transparent 20px 34px);
+  clip-path:polygon(0 40%,14% 0,33% 42%,49% 2%,68% 44%,84% 8%,100% 50%,84% 92%,67% 55%,49% 98%,31% 57%,14% 100%,0 58%);
+  opacity:.7;mix-blend-mode:screen;}
+.msm-cuff{position:absolute;left:22px;top:-14px;width:7px;height:26px;
+  clip-path:polygon(18% 0,100% 12%,100% 88%,18% 100%,0 50%);
+  background:#3a1360;box-shadow:0 0 6px #c98fff99,inset 1px 0 2px #8b3fd6;opacity:0;}
+.msm-fist{position:absolute;left:6px;top:-20px;width:34px;height:34px;opacity:0;filter:drop-shadow(0 0 6px #b65cffcc);overflow:visible;}
+.msm-fist svg{width:100%;height:100%;display:block;overflow:visible;}
+.msm-stretching .msm-sleeve{opacity:1;}
+.msm-stretching .msm-tube{opacity:1;animation:msmTubeGrow .34s cubic-bezier(.15,.8,.2,1) forwards;}
+.msm-stretching .msm-cuff{opacity:1;animation:msmCuffTravel .34s cubic-bezier(.15,.8,.2,1) forwards;}
+.msm-stretching .msm-fist{opacity:1;animation:msmFistTravel .34s cubic-bezier(.15,.8,.2,1) forwards;}
+@keyframes msmTubeGrow{0%{width:4px;}45%{width:calc(var(--msm-reach,190px) - 14px);}100%{width:calc(var(--msm-reach,190px)*.78 - 14px);opacity:0;}}
+@keyframes msmCuffTravel{0%{transform:translateX(0);}45%{transform:translateX(calc(var(--msm-reach,190px) - 30px));}100%{transform:translateX(calc(var(--msm-reach,190px)*.78 - 30px));opacity:0;}}
+@keyframes msmFistTravel{0%{transform:translateX(0) scale(.4);}20%{transform:translateX(0) scale(1);}45%{transform:translateX(calc(var(--msm-reach,190px) - 40px)) scale(1);}100%{transform:translateX(calc(var(--msm-reach,190px)*.78 - 40px)) scale(1);opacity:0;}}
+.msmarvel-purple-smash{
+  border-color:#ead6ff !important;
+  box-shadow:0 0 16px #d07cff,0 0 42px rgba(160,69,255,.88),inset 0 0 34px rgba(188,112,255,.34) !important;
+  background:radial-gradient(circle,rgba(255,255,255,.34) 0 9%,rgba(226,190,255,.18) 22%,rgba(151,55,255,.12) 42%,transparent 72%) !important;
+}
+.msmarvel-giant-ring{
+  position:absolute;pointer-events:none;border-radius:50%;border:4px solid #e5c7ff;
+  box-shadow:0 0 18px #bf65ff,0 0 45px rgba(147,58,238,.7),inset 0 0 28px rgba(190,95,255,.24);
+  animation:msmarvelGiantRing .58s cubic-bezier(.08,.8,.2,1) forwards;
+  mix-blend-mode:screen;z-index:9;
+}
+@keyframes msmarvelGiantRing{0%{transform:scale(.08);opacity:1}28%{opacity:1}100%{transform:scale(1.22);opacity:0}}
+.msmarvel-crystal-shard{
+  position:absolute;pointer-events:none;width:12px;height:30px;
+  background:linear-gradient(135deg,#fffaff 0%,#dba0ff 26%,#9a42ea 58%,#45106f 100%);
+  border:1px solid #efd8ff;
+  clip-path:polygon(50% 0,100% 28%,78% 100%,42% 76%,0 34%);
+  filter:drop-shadow(0 0 5px #bb63ff) drop-shadow(0 0 11px #8f37de88);
+  animation:msmCrystalFly .48s cubic-bezier(.12,.72,.18,1) forwards;
+  z-index:10;
+}
+@keyframes msmCrystalFly{0%{opacity:0;transform:translate(0,0) scale(.28) rotate(0deg)}18%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--rot));}}
+
+.fighter.sock-in-love .fighter-square{
+  filter:saturate(1.18) brightness(1.03);
+  box-shadow:0 0 0 2px rgba(255,119,171,.45),0 0 24px rgba(255,75,147,.42);
+}
+/* New projectile visuals */
+.nebula-blast-projectile{
+  position:absolute !important; overflow:visible !important; background:transparent !important; border-radius:0;
+  filter:drop-shadow(0 0 5px #8c7cff) drop-shadow(0 0 12px #5f74ff) drop-shadow(0 0 22px #b65dff88);
+}
+.nebula-blast-projectile .nebula-bolt-core{
+  position:absolute; left:2%; top:21%; width:78%; height:58%; border-radius:7px 55% 55% 7px;
+  background:linear-gradient(90deg,#202848 0%,#586cff 25%,#c8b8ff 54%,#ffffff 72%,#7a5cff 100%);
+  border:1px solid #d8d2ff;
+  box-shadow:inset 0 1px 1px #ffffffcc, inset 0 -2px 4px #342e8f88, 0 0 8px #bdb0ff;
+  animation:nebulaBoltPulse .13s ease-in-out infinite alternate;
+}
+.nebula-blast-projectile .nebula-bolt-core::before{
+  content:''; position:absolute; left:16%; top:25%; width:18%; height:50%; border-radius:50%;
+  background:#fff; box-shadow:0 0 8px #fff,0 0 15px #cdbbff;
+}
+.nebula-blast-projectile .nebula-bolt-shell{
+  position:absolute; left:-7%; top:16%; width:58%; height:68%; border:2px solid #92a5ff;
+  border-right-color:transparent; border-radius:50%; transform:rotate(-8deg); opacity:.84;
+  animation:nebulaBoltSpin .24s linear infinite;
+}
+.nebula-blast-projectile .nebula-bolt-tail{
+  position:absolute; right:68%; top:31%; width:190%; height:38%; border-radius:50%;
+  background:linear-gradient(90deg,transparent 0%,#5a6dff33 20%,#7188ff9c 58%,#d4c7ffdd 100%);
+  filter:blur(3px); opacity:.9;
+}
+.nebula-blast-projectile .nebula-bolt-tail::after{
+  content:''; position:absolute; right:4%; top:20%; width:44%; height:20%; border-radius:50%;
+  background:#fff; box-shadow:0 0 8px #fff,0 0 16px #9b86ff;
+}
+.nebula-blast-projectile .nebula-bolt-spark{
+  position:absolute; width:5px; height:5px; border-radius:50%; background:#f5edff; box-shadow:0 0 7px #cbb8ff;
+}
+.nebula-blast-projectile .spark-a{left:22%;top:4%;animation:nebulaSparkA .2s ease-in-out infinite alternate;}
+.nebula-blast-projectile .spark-b{left:34%;top:82%;animation:nebulaSparkB .17s ease-in-out infinite alternate;}
+@keyframes nebulaBoltPulse{from{transform:scaleX(.94)}to{transform:scaleX(1.06)}}
+@keyframes nebulaBoltSpin{to{transform:rotate(352deg)}}
+@keyframes nebulaSparkA{from{transform:translate(-1px,2px);opacity:.35}to{transform:translate(3px,-2px);opacity:1}}
+@keyframes nebulaSparkB{from{transform:translate(2px,0);opacity:.3}to{transform:translate(-2px,2px);opacity:1}}
+.quicksilver-dash-trail{
+  position:absolute;z-index:14;pointer-events:none;border-radius:50%;
+  background:radial-gradient(ellipse,#d9f7ff 0%,#54c4ff 38%,#2879ff 63%,transparent 79%);
+  filter:blur(1px);box-shadow:0 0 10px #4bb8ff,0 0 26px #1b72ff88;
+  animation:quickTrailFade .28s ease-out forwards;
+}
+@keyframes quickTrailFade{from{opacity:.8;transform:scale(1)}to{opacity:0;transform:scale(.72)}}
+.quicksilver-dash-streak{
+  position:absolute;z-index:13;pointer-events:none;height:4px;border-radius:4px;
+  background:linear-gradient(90deg,transparent,#d7f6ff,#319cff,transparent);
+  box-shadow:0 0 8px #37a9ff,0 0 18px #2079ff88;transform-origin:left center;
+  animation:quickDashStreak .36s ease-out forwards;
+}
+@keyframes quickDashStreak{from{opacity:1;transform:scaleX(.2)}to{opacity:0;transform:scaleX(1)}}
+
+/* Speed menu */
+#quicksilver-speed-menu{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:100;
+  width:min(420px,88vw);padding:18px 18px 16px;border:1px solid #519dff;
+  border-radius:16px;background:linear-gradient(180deg,rgba(13,21,39,.97),rgba(19,27,47,.97));
+  box-shadow:0 25px 70px rgba(0,0,0,.62),0 0 35px rgba(60,151,255,.28);
+  display:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+#quicksilver-speed-menu.show{display:block;animation:qsMenuIn .18s ease-out;}
+#quicksilver-speed-menu h3{font-size:26px;color:#bfe9ff;text-align:center;letter-spacing:.05em;text-transform:uppercase;}
+#quicksilver-speed-current{text-align:center;font-size:34px;font-weight:800;color:#fff;margin:3px 0 12px;text-shadow:0 0 14px #3ea8ff;}
+#quicksilver-speed-menu input[type="range"]{width:100%;accent-color:#4da3ff;}
+.qs-speed-presets{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px;}
+.qs-speed-presets button{min-width:0;padding:8px 4px;border-radius:8px;border:1px solid #34557a;background:#1c2a41;color:#dff4ff;font-weight:800;cursor:pointer;}
+.qs-speed-presets button.active{border-color:#7ed4ff;background:#24518a;box-shadow:0 0 14px #3aaeff55;}
+.qs-speed-close{width:100%;margin-top:12px;padding:9px;border-radius:9px;border:1px solid #405978;background:#162237;color:#ccecff;font-weight:800;cursor:pointer;}
+@keyframes qsMenuIn{from{opacity:0;transform:translate(-50%,-46%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+</style>
+
 </head>
 <body>
 <div id="gamepad-banner"><span class="gp-icon">🎮</span><span>Controller connected — <span class="gp-brand" id="gp-brand-name">Controller</span></span></div>
@@ -4578,6 +4814,22 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <div id="countdown-overlay"></div>
     </div>
 
+
+    <div id="quicksilver-speed-menu" aria-hidden="true">
+      <h3>Speed Control</h3>
+      <div id="quicksilver-speed-current">3x</div>
+      <input id="quicksilver-speed-range" type="range" min="1" max="20" step="0.5" value="3" aria-label="Quicksilver speed">
+      <div class="qs-speed-presets">
+        <button type="button" data-qs-speed="1">1x</button>
+        <button type="button" data-qs-speed="2">2x</button>
+        <button type="button" data-qs-speed="3">3x</button>
+        <button type="button" data-qs-speed="5">5x</button>
+        <button type="button" data-qs-speed="10">10x</button>
+        <button type="button" data-qs-speed="15">15x</button>
+        <button type="button" data-qs-speed="20">20x</button>
+      </div>
+      <button type="button" class="qs-speed-close" id="quicksilver-speed-close">Close</button>
+    </div>
     <div id="controls-row">
       <div id="dpad">
         <button class="dpad-up" data-dir="up">&uarr;</button>
@@ -4784,6 +5036,24 @@ const CHARACTERS = {
          desc:'Fires a web line to the ceiling and swings you all the way to the top of the arena. Pure mobility — no damage.'}
     }
   },
+  quicksilver: {
+    id:'quicksilver', name:'Quicksilver', img:'Quicksilver.jpg', color:'#4d9fff', accentColor:'#bfe8ff', aiStyle:'quicksilver',
+    maxHealth:8750,
+    description:'Extreme-speed fighter. His punches come almost instantly, his dash attack tears across the arena, and Speed Control lets him choose anything from normal movement to 20x speed.',
+    abilities:{
+      E:{key:'E', name:'Rapid Strike', type:'melee', damage:75, cooldown:50, knockback:2, range:86,
+         hitRange:122, hitVertical:118, hitStartSlack:48, hitDelay:18,
+         sound:'quicksilver_punch', fx:'quicksilver_punch', hitFx:'quicksilver_hit', hitSound:'quicksilver_hit',
+         desc:'Lightning-fast punch for 75 damage. Cooldown: 0.05 seconds.'},
+      Q:{key:'Q', name:'Dash Attack', type:'thingCharge', damage:2300, cooldown:8000, knockback:18,
+         boostX:38, boostY:0, dashMs:520,
+         sound:'quicksilver_dash', fx:'quicksilver_dash', hitFx:'quicksilver_dash_hit', hitSound:'quicksilver_dash_hit',
+         desc:'A massive high-speed dash. Anyone caught in the path takes 2,300 damage. Cooldown: 8 seconds.'},
+      R:{key:'R', name:'Speed Control', type:'speedControl', damage:0, cooldown:0,
+         sound:'quicksilver_speed_menu', fx:'quicksilver_speed_menu',
+         desc:'Opens a speed menu. Choose any speed from 1x to 20x. Default speed is 3x. No cooldown.'}
+    }
+  },
   greengoblin: {
     id:'greengoblin', name:'Green Goblin', img:'GreenGoblin.jpg', color:'#48d06a', accentColor:'#b7ffbd', aiStyle:'greengoblin',
     maxHealth:10000,
@@ -4815,6 +5085,23 @@ const CHARACTERS = {
       R:{key:'R', name:'Adamantium Carapace', type:'shield', damage:0, cooldown:14000, duration:4000, reduction:0.5,
          sound:'octopus_carapace', fx:'octopus_carapace',
          desc:'Hardens his tentacle rig into a defensive shell, cutting incoming damage in half for 4 seconds. Deals no damage. Cooldown: 14 seconds.'}
+    }
+  },
+  scorpion: {
+    id:'scorpion', name:'Scorpion', img:'Scorpion.jpg', color:'#49b65d', accentColor:'#ffbf45', aiStyle:'scorpion',
+    maxHealth:9500,
+    description:'Armored Spider-Man villain with a powerful mechanical tail. He strikes with the tail, pulls enemies in with his hook, and uses the tail to climb to the top of the arena.',
+    abilities:{
+      E:{key:'E', name:'Tail Strike', type:'melee', damage:425, cooldown:700, knockback:7, range:98,
+         hitRange:140, hitVertical:122, hitStartSlack:54, hitDelay:80,
+         sound:'scorpion_tail_strike', fx:'scorpion_tail_strike', hitFx:'scorpion_tail_hit', hitSound:'scorpion_tail_hit',
+         desc:'A heavy mechanical tail strike for 425 damage. Cooldown: 0.7 seconds.'},
+      Q:{key:'Q', name:'Get Over Here', type:'tendrilGrab', damage:1100, cooldown:13500, knockback:13, range:360, tendrilStyle:'scorpion',
+         sound:'scorpion_hook', fx:'scorpion_hook', hitFx:'scorpion_hook_hit', hitSound:'scorpion_hook_hit',
+         desc:'Hooks the enemy with the tail and yanks them in for 1,100 damage. Cooldown: 13.5 seconds.'},
+      R:{key:'R', name:'Tail Climb', type:'scorpionTailClimb', damage:0, cooldown:13000,
+         sound:'scorpion_climb', fx:'scorpion_climb',
+         desc:'Fires the tail upward and uses it to climb rapidly toward the top of the arena. No damage.'}
     }
   },
   redskull: {
@@ -4922,6 +5209,24 @@ const CHARACTERS = {
       R:{key:'R', name:'Flight', type:'toggle', damage:0, cooldown:0,
          sound:'cm_flight', fx:'cm_flight',
          desc:'Unlimited powered flight. Toggle it on or off whenever you want — there is no duration and no cooldown.'}
+    }
+  },
+  msmarvel: {
+    id:'msmarvel', name:'Ms. Marvel', img:'MsMarvel.jpg', color:'#8d4bd4', accentColor:'#ffd34d', aiStyle:'msmarvel',
+    maxHealth:11000,
+    description:'Elastic Inhuman fighter. Stretches her fists across the arena, unleashes a giant embiggened punch, and can temporarily grow stronger and tougher.',
+    abilities:{
+      E:{key:'E', name:'Stretch Punch', type:'stretchPunch', damage:450, cooldown:800, knockback:8, range:190,
+         hitRange:225, hitVertical:125, hitStartSlack:92, hitDelay:65,
+         sound:'msmarvel_punch', fx:'msmarvel_punch', hitFx:'msmarvel_punch_hit', hitSound:'msmarvel_punch_hit',
+         desc:'Long elastic punch for 450 damage. Cooldown: 0.8 seconds.'},
+      Q:{key:'Q', name:'Giant Fist', type:'stretchPunch', damage:1800, cooldown:10000, knockback:17, range:255,
+         hitRange:285, hitVertical:150, hitStartSlack:115, hitDelay:95,
+         sound:'msmarvel_giant_fist', fx:'msmarvel_giant_fist', hitFx:'msmarvel_giant_fist_hit', hitSound:'msmarvel_giant_fist_hit',
+         desc:'A huge embiggened fist for 1,800 damage. Cooldown: 10 seconds.'},
+      R:{key:'R', name:'Embiggen', type:'msmarvelEmbiggen', damage:0, cooldown:15000, duration:5000, reduction:.30, scale:1.32,
+         sound:'msmarvel_embiggen', fx:'msmarvel_embiggen',
+         desc:'Grows larger and reduces incoming damage by 30% for 5 seconds. Cooldown: 15 seconds.'}
     }
   },
   antman: {
@@ -5705,6 +6010,23 @@ const CHARACTERS = {
          desc:'Enters a furious 5-second battle rage, increasing Drax\'s attack damage by 35%.'}
     }
   },
+  mantis: {
+    id:'mantis', name:'Mantis', img:'Mantis.jpg', color:'#58c98b', accentColor:'#d5ffb6', aiStyle:'mantis',
+    maxHealth:7750,
+    description:'Empathic fighter. Her rapid punches are weak but extremely fast, while her powers can put an enemy to sleep or distract them with Sock Love.',
+    abilities:{
+      E:{key:'E', name:'Punch', type:'melee', damage:100, cooldown:450, knockback:2, range:76,
+         hitRange:112, hitVertical:112, hitStartSlack:44, hitDelay:35,
+         sound:'mantis_punch', fx:'mantis_punch', hitFx:'mantis_punch_hit', hitSound:'mantis_punch_hit',
+         desc:'Fast punch for 100 damage. Cooldown: 0.45 seconds.'},
+      Q:{key:'Q', name:'Sleep', type:'mantisSleep', damage:0, cooldown:13000, duration:3250, radius:620,
+         sound:'mantis_sleep', fx:'mantis_sleep', hitFx:'mantis_sleep_hit', hitSound:'mantis_sleep_hit',
+         desc:'Makes the enemy fall asleep for 3.25 seconds. Cooldown: 13 seconds.'},
+      R:{key:'R', name:'Sock Love', type:'sockLove', damage:0, cooldown:30000, duration:5000,
+         sound:'mantis_sock_love', fx:'mantis_sock_love',
+         desc:'A sock appears in the middle of the map. The enemy cannot attack and falls in love with it for 5 seconds. Cooldown: 30 seconds.'}
+    }
+  },
   gamora: {
     id:'gamora', name:'Gamora', img:'Gamora.jpg', color:'#5e386f', accentColor:'#b6ff7a', aiStyle:'gamora',
     maxHealth:7800,
@@ -5721,6 +6043,24 @@ const CHARACTERS = {
       R:{key:'R', name:'Super Leap', type:'jump', damage:0, cooldown:8500, jumpVel:-31,
          sound:'gamora_super_leap', fx:'gamora_super_leap',
          desc:'Jumps extremely high. Pure mobility — no damage.'}
+    }
+  },
+  nebula: {
+    id:'nebula', name:'Nebula', img:'Nebula.jpg', color:'#5d79e8', accentColor:'#c694ff', aiStyle:'nebula',
+    maxHealth:9400,
+    description:'Cybernetic Guardian with rapid energy fire, a brutal enhanced strike, and mechanical self-repair.',
+    abilities:{
+      E:{key:'E', name:'Blast', type:'projectile', damage:240, cooldown:450, knockback:4,
+         speed:19, w:28, h:14, color:'#9fb4ff', render:'nebula-blast', trail:'nebula',
+         sound:'nebula_blast', fx:'nebula_blast', hitFx:'nebula_blast_hit', hitSound:'nebula_blast_hit',
+         desc:'Rapid cybernetic energy blast for 240 damage. Cooldown: 0.45 seconds.'},
+      Q:{key:'Q', name:'Enhanced Strike', type:'melee', damage:1500, cooldown:9000, knockback:15, range:96,
+         hitRange:144, hitVertical:128, hitStartSlack:58, hitDelay:85,
+         sound:'nebula_strike', fx:'nebula_strike', hitFx:'nebula_strike_hit', hitSound:'nebula_strike_hit',
+         desc:'A powerful cybernetic strike for 1,500 damage. Cooldown: 9 seconds.'},
+      R:{key:'R', name:'Cybernetic Repair', type:'heal', damage:0, heal:700, cooldown:14000,
+         sound:'nebula_repair', fx:'nebula_repair',
+         desc:'Restores 700 health. Cooldown: 14 seconds.'}
     }
   },
   yondu: {
@@ -5853,7 +6193,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','namor','captainmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','gamora','rocket','yondu','antman','wasp','moonknight','ghostrider'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
 
 
 /* =========================================================================
@@ -6452,6 +6792,7 @@ function showScreen(name){
     document.getElementById('screen-'+s).classList.toggle('active', s===name);
   });
   if(name!=='versus') hideVersusSplash();
+  if(name!=='battle') hideQuicksilverSpeedMenu();
   if(name==='save-slots') renderSaveSlots();
   if(name==='inventory'){ renderInventory(); queuePendingInventoryUnlock(); }
   if(name==='settings') renderSettingsScreen();
@@ -6942,6 +7283,8 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     mystiqueDisguiseUntil:0,
     windBurstUntil:0, windBurstVx:0, invulnAbilityUntil:0,
     chargeState:null, draxFuryUntil:0, killmongerFuryUntil:0,
+    quicksilverSpeed: def.id === 'quicksilver' ? 3 : 1,
+    sockLoveUntil:0, sockLoveEl:null,
     redHulkHeatUntil:0, redHulkFirePools:[], ironJumpActive:false, ironJumpMinLandAt:0, ironJumpAbility:null,
     burnAttacker:null,
     shield:null,
@@ -6996,6 +7339,7 @@ const state = {
   countdown:false,
   quitConfirmOpen:false,
   player:null, bot:null,
+  quickSpeedCaster:null,
   projectiles:[], walls:[], missiles:[], illusions:[], firePools:[], fxNodes:[],
   lastTime:0,
   scaleFactor:1,
@@ -7017,6 +7361,7 @@ let battleToken = 0;
 const COUNT_STEP_MS = 700;
 
 function startBattle(playerCharId, botCharId, opts){
+  hideQuicksilverSpeedMenu();
   // 1 V 1 Friend: Player 2 is a second human (same 'bot' owner id, no AI).
   const pvp = !!(opts && opts.pvp);
   state.pvp = pvp;
@@ -7518,7 +7863,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '');
+  el.className='fighter' + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -7535,6 +7880,9 @@ function buildFighterDOM(f){
     ${f.def.id==='humantorch' ? '<div class="torch-flame" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' : ''}
     ${f.def.id==='yondu' ? '<div class="yondu-suit-overlay" aria-hidden="true"><span></span><span></span><span></span></div>' : ''}
     ${f.def.id==='shangchi' ? `<div class="shangchi-rings" aria-hidden="true">${Array.from({length:10},(_,ri)=>`<i data-ring-index="${ri}" style="--ring-angle:${ri*36}deg"></i>`).join('')}</div><div class="shangchi-r-aura" aria-hidden="true"></div><div class="shangchi-r-ring" aria-hidden="true"></div>` : ''}
+    ${f.def.id==='quicksilver' ? '<div class="quicksilver-speed-aura" aria-hidden="true"></div>' : ''}
+    ${f.def.id==='mantis' ? '<div class="mantis-aura" aria-hidden="true"></div>' : ''}
+    ${f.def.id==='nebula' ? '<div class="nebula-cyber-aura" aria-hidden="true"></div>' : ''}
     ${f.def.id==='professorx' ? `<div class="professorx-wheelchair" aria-hidden="true"><svg viewBox="0 0 124 84"><g fill="none" stroke="#37414f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path class="px-frame" d="M26 18 L26 48 L84 48 L102 29"/><path class="px-frame" d="M26 18 L44 18"/><path class="px-frame" d="M82 48 L82 28"/><path class="px-frame" d="M65 20 L85 20"/></g><path d="M30 17 C28 8 34 4 43 5 L52 8 L52 18" fill="#465263" stroke="#26313e" stroke-width="3"/><path d="M34 27 Q56 23 77 28 L80 42 Q58 46 34 41 Z" fill="#58708f" stroke="#273342" stroke-width="2.5"/><path class="px-seat-front" d="M37 39 Q58 44 78 40 L83 48 Q59 54 34 47 Z" fill="#6d86a4" stroke="#263442" stroke-width="2.5"/><path d="M37 24 L37 10 M37 10 L48 10 M73 24 L73 10 M73 10 L82 10" fill="none" stroke="#526174" stroke-width="3.5" stroke-linecap="round"/><circle class="px-big-wheel" cx="41" cy="55" r="18" fill="#1d222a" stroke="#697487" stroke-width="4.5"/><circle cx="41" cy="55" r="5" fill="#a8b2c0"/><circle class="px-front-wheel" cx="95" cy="57" r="10" fill="#20252d" stroke="#697487" stroke-width="3.5"/><circle cx="95" cy="57" r="3" fill="#a8b2c0"/><path d="M80 46 L94 47 L101 57" fill="none" stroke="#3e4855" stroke-width="4"/><path d="M67 47 L84 62 L95 62" fill="none" stroke="#3e4855" stroke-width="3.5"/><path d="M28 48 L19 62 L39 62" fill="none" stroke="#3e4855" stroke-width="3.5"/></svg></div>` : ''}
     <div class="wasp-size-mark"></div>
     <div class="fighter-size-body">
@@ -7556,6 +7904,7 @@ function buildFighterDOM(f){
     </div>
     ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
     ${f.def.id==='mrfantastic' ? '<div class="elasticity-ring" style="display:none;"></div>' : ''}
+    ${f.def.id==='msmarvel' ? '<div class="msm-arm-wrap"><div class="msm-sleeve"></div><div class="msm-tube"></div><div class="msm-cuff"></div><div class="msm-fist">'+msmarvelFistSvg(false)+'</div></div>' : ''}
     <div class="shield-ring"></div>
     <div class="hex-freeze-aura"></div>
     <div class="ricochet-mark"></div>
@@ -8308,6 +8657,211 @@ function spawnFourthWallBubble(caster){
   el.style.top=Math.max(20,caster.y-66)+'px';
   arenaEl.appendChild(el);
   setTimeout(()=>el.remove(),2350);
+}
+
+
+// Scorpion's tail is now drawn on demand as a travelling attack line rather
+// than a permanently-mounted body rig: a short, gently-curved segmented
+// shaft (armor-plate rivets down its length, like the original tail's
+// carapace) capped with a curved, glowing stinger barb at the business end.
+// Used for the melee Tail Strike, the "Get Over Here" hook line, and the
+// upward launch on Tail Climb, so all three read as the same weapon.
+function scorpionTailStrikeSvg(w, h){
+  const y = h/2, tipX = w-32;
+  const pts = boltPoints(6, y, tipX, y, 4, 5);
+  const d = ptsToPath(pts);
+  let rivets = '';
+  for(let i=1;i<pts.length-1;i++){
+    rivets += `<circle cx="${pts[i][0].toFixed(1)}" cy="${pts[i][1].toFixed(1)}" r="2.1" fill="#08130b" opacity=".82"/>`;
+  }
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="scTS_shaft" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#cfffd8"/><stop offset=".22" stop-color="#57de78"/>
+        <stop offset=".55" stop-color="#178c3e"/><stop offset="1" stop-color="#04170b"/>
+      </linearGradient>
+      <linearGradient id="scTS_barb" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#16261b"/><stop offset=".55" stop-color="#0a1a10"/><stop offset="1" stop-color="#04120a"/>
+      </linearGradient>
+      <filter id="scTS_glow"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <path d="${d}" stroke="#53ff7a" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".22" filter="url(#scTS_glow)"/>
+    <path d="${d}" stroke="#050a06" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" stroke="url(#scTS_shaft)" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" stroke="#eafff0" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/>
+    ${rivets}
+    <g transform="translate(${tipX.toFixed(1)},${y.toFixed(1)})">
+      <path d="M-6 -9 C6 -16 20 -12 28 -1 C21 6 10 8 1 4 C6 0 5 -5 -6 -9 Z" fill="url(#scTS_barb)" stroke="#020805" stroke-width="1.2"/>
+      <path d="M-1 -6 C8 -10 18 -7 25 -1" fill="none" stroke="#8dffab" stroke-width="1.6" opacity=".9" stroke-linecap="round"/>
+      <circle cx="25" cy="-1" r="2.6" fill="#e4ffe9"/>
+      <circle cx="25" cy="-1" r="5.4" fill="none" stroke="#7dffa0" stroke-width="1" opacity=".55"/>
+    </g>
+  </svg>`;
+}
+
+
+function msmarvelFistSvg(giant=false){
+  const uid='msmf_'+Math.random().toString(36).slice(2);
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="${uid}_crystal" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#fff8ff"/><stop offset=".2" stop-color="#e0b4ff"/>
+        <stop offset=".48" stop-color="#ae55ee"/><stop offset=".75" stop-color="#6721a8"/><stop offset="1" stop-color="#2c0a4c"/>
+      </linearGradient>
+      <linearGradient id="${uid}_facet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    </defs>
+    <path d="M19 77 L23 55 L34 47 L33 31 L42 20 L52 28 L59 12 L68 16 L72 29 L81 13 L91 20 L87 39 L96 28 L105 35 L96 54 L108 57 L105 74 L92 91 L69 102 L42 98 Z" fill="url(#${uid}_crystal)" stroke="#f0d5ff" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M36 49 L53 40 L61 56 L47 67 Z M62 35 L78 29 L82 48 L68 55 Z M82 52 L99 43 L94 65 L78 70 Z M45 70 L64 58 L72 82 L55 91 Z" fill="#ffffff" opacity=".18"/>
+    <path d="M31 80 L47 67 L55 91 L42 98 Z M72 82 L92 72 L69 102 Z" fill="#3d1269" opacity=".58"/>
+    <path d="M44 28 L51 38 L38 47 M67 17 L64 35 L78 29 M87 21 L81 39 L96 28 M105 36 L96 54 L108 57" fill="none" stroke="#fff" stroke-width="2.2" opacity=".65" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M28 74 L46 66 L57 78" fill="none" stroke="url(#${uid}_facet)" stroke-width="4" opacity=".7" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function spawnMsMarvelStretchFx(caster, target, giant=false){
+  // Only the Giant Fist (embiggened smash) still uses this freestanding
+  // radial-impact effect. The regular Stretch Punch is now driven by the
+  // body-anchored .msm-arm-wrap rig (see the 'msmarvel_punch' case), the
+  // same technique Mr. Fantastic's stretch punch uses.
+  if(!caster || caster.dead || !giant) return;
+  const sx=caster.x+FIGHTER_SIZE/2, sy=caster.y+FIGHTER_SIZE/2;
+  const dir=(target && !target.dead) ? ((target.x+FIGHTER_SIZE/2)>=sx?1:-1) : caster.facing;
+  const R=Math.max(105,Math.min(155,target && !target.dead ? Math.hypot((target.x+FIGHTER_SIZE/2)-sx,(target.y+FIGHTER_SIZE/2)-sy)*.42 : 130));
+  fxEl('hulk-smash-radial msmarvel-purple-smash',`left:${sx-R}px;top:${sy-R}px;width:${R*2}px;height:${R*2}px;`,600);
+  fxEl('msmarvel-giant-ring',`left:${sx+dir*76-90}px;top:${sy-90}px;width:180px;height:180px;`,580);
+  fxEl('msmarvel-giant-ring',`left:${sx+dir*76-128}px;top:${sy-128}px;width:256px;height:256px;border-width:2px;`,640);
+  spawnMsMarvelCrystals(sx+dir*78,sy,22,1);
+  spawnSparks(sx+dir*80,sy,20,'#e8d4ff',118,520);
+  shakeArena(7,240);
+}
+function spawnMsMarvelCrystals(cx,cy,count=12,mult=1){
+  for(let i=0;i<count;i++){
+    const a=(Math.PI*2*i/count)+(Math.random()-.5)*.35;
+    const radius=(36+Math.random()*105)*mult;
+    const el=document.createElement('div');
+    el.className='msmarvel-crystal-shard';
+    const w=(8+Math.random()*10)*mult, h=(18+Math.random()*22)*mult;
+    el.style.width=w+'px'; el.style.height=h+'px';
+    el.style.left=(cx-w/2)+'px'; el.style.top=(cy-h/2)+'px';
+    el.style.setProperty('--dx',(Math.cos(a)*radius)+'px');
+    el.style.setProperty('--dy',(Math.sin(a)*radius)+'px');
+    el.style.setProperty('--rot',((Math.random()*180)-90)+'deg');
+    el.style.animationDelay=(Math.random()*.05)+'s';
+    arenaEl.appendChild(el);
+    setTimeout(()=>{if(el.parentNode)el.remove();},560);
+  }
+}
+
+
+function setQuicksilverSpeed(value){
+  const f=state.quickSpeedCaster || state.player;
+  if(!f || !f.def || f.def.id!=='quicksilver') return;
+  const v = Math.max(1, Math.min(20, Number(value)||3));
+  f.quicksilverSpeed = Math.round(v*2)/2;
+  const range=document.getElementById('quicksilver-speed-range');
+  const cur=document.getElementById('quicksilver-speed-current');
+  if(range) range.value=String(f.quicksilverSpeed);
+  if(cur) cur.textContent = f.quicksilverSpeed + 'x';
+  document.querySelectorAll('#quicksilver-speed-menu [data-qs-speed]').forEach(btn=>{
+    btn.classList.toggle('active', Number(btn.dataset.qsSpeed)===f.quicksilverSpeed);
+  });
+}
+function showQuicksilverSpeedMenu(caster){
+  const f=caster || state.player;
+  if(!f || !f.def || f.def.id!=='quicksilver') return;
+  const menu=document.getElementById('quicksilver-speed-menu');
+  if(!menu) return;
+  state.quickSpeedCaster=f;
+  if(!f.quicksilverSpeed) f.quicksilverSpeed=3;
+  setQuicksilverSpeed(f.quicksilverSpeed);
+  menu.classList.add('show');
+  menu.setAttribute('aria-hidden','false');
+}
+function hideQuicksilverSpeedMenu(){
+  const menu=document.getElementById('quicksilver-speed-menu');
+  if(!menu) return;
+  menu.classList.remove('show');
+  menu.setAttribute('aria-hidden','true');
+  state.quickSpeedCaster=null;
+}
+function quicksilverMenuControllerTick(){
+  const menu=document.getElementById('quicksilver-speed-menu');
+  if(!menu || !menu.classList.contains('show') || !state.player || state.player.def.id!=='quicksilver') return;
+  const gps = (navigator.getGamepads && navigator.getGamepads()) || [];
+  const f=state.quickSpeedCaster || state.player;
+  const padIndex = f && Number.isFinite(f.multiSlot) ? f.multiSlot : 0;
+  const gp = gps[padIndex] || gps[0];
+  if(!gp) return;
+  const nowT=performance.now();
+  if(!quicksilverMenuControllerTick.last) quicksilverMenuControllerTick.last=0;
+  if(nowT - quicksilverMenuControllerTick.last < 150) return;
+  let delta=0;
+  const ax = gp.axes && gp.axes[0];
+  if(Math.abs(ax||0)>.35) delta = ax>0 ? .5 : -.5;
+  if(gp.buttons && gp.buttons[14] && gp.buttons[14].pressed) delta=-.5;
+  if(gp.buttons && gp.buttons[15] && gp.buttons[15].pressed) delta=.5;
+  if(delta){ setQuicksilverSpeed((state.player.quicksilverSpeed||3)+delta); quicksilverMenuControllerTick.last=nowT; }
+}
+function spawnQuicksilverTrailSegment(f, ax, ay){
+  const dx=f.x-ax, dy=f.y-ay, travel=Math.hypot(dx,dy);
+  if(travel<2) return;
+  const el=document.createElement('div');
+  el.className='quicksilver-dash-trail';
+  const w=Math.max(20,Math.min(130,18+travel*1.35)), h=Math.max(12,Math.min(36,12+travel*.28));
+  el.style.left=(ax+FIGHTER_SIZE/2-w/2)+'px';
+  el.style.top=(ay+FIGHTER_SIZE/2-h/2)+'px';
+  el.style.width=w+'px'; el.style.height=h+'px';
+  el.style.transform=`rotate(${Math.atan2(dy,dx)}rad)`;
+  arenaEl.appendChild(el);
+  setTimeout(()=>{if(el.parentNode)el.remove();},300);
+}
+function spawnQuicksilverBurst(f, color='#55bfff', count=10){
+  const cx=f.x+FIGHTER_SIZE/2, cy=f.y+FIGHTER_SIZE/2;
+  spawnSparks(cx,cy,count,color,90,320);
+  fxEl('fx-ring',`left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;border-color:${color};border-width:3px;box-shadow:0 0 24px ${color};`,300);
+}
+function spawnScorpionTendrilFx(caster, target, connected){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  const tx=target.x+FIGHTER_SIZE/2, ty=target.y+FIGHTER_SIZE/2;
+  const dx=tx-cx, dy=ty-cy, len=Math.max(40,Math.hypot(dx,dy)), angle=Math.atan2(dy,dx)*180/Math.PI;
+  fxEl('scorpion-tail-fx', `left:${cx}px;top:${cy-24}px;width:${len+32}px;height:48px;transform-origin:0 24px;transform:rotate(${angle}deg);`,
+    connected?520:360, `<div class="sc-tail-pop">${scorpionTailStrikeSvg(len+32,48)}</div>`);
+  spawnSparks(tx,ty,connected?16:7,connected?'#baf7c2':'#68d97d',connected?72:34,360);
+  if(connected) shakeArena(4,180);
+}
+function spawnScorpionClimbFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('scorpion-tail-fx', `left:${cx-8}px;top:${cy-20}px;width:96px;height:40px;transform-origin:8px 20px;transform:rotate(-90deg);`,
+    260, `<div class="sc-tail-pop">${scorpionTailStrikeSvg(96,40)}</div>`);
+  spawnSparks(cx+caster.facing*16,cy-18,18,'#7ef79a',62,360);
+  fxEl('fx-ring',`left:${cx-28}px;top:${cy-28}px;width:56px;height:56px;border-color:#7ef79a;box-shadow:0 0 24px #41cf6b,0 0 42px #41cf6b55;`,360);
+}
+
+function spawnMantisSleepFx(target,duration){
+  const cx=target.x+FIGHTER_SIZE/2, cy=target.y+FIGHTER_SIZE/2;
+  for(let i=0;i<3;i++) setTimeout(()=>{
+    if(state.mode==='battle' && target.el){
+      const z=document.createElement('div'); z.className='mantis-sleep-z'; z.textContent=i===2?'Z':'z';
+      z.style.left=(cx+18+i*5)+'px'; z.style.top=(cy-8-i*10)+'px'; arenaEl.appendChild(z);
+      setTimeout(()=>{if(z.parentNode)z.remove();},1250);
+    }
+  },i*420);
+  fxEl('fx-ring',`left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;border-color:#b7f58f;box-shadow:0 0 24px #83df7155;`,650);
+  spawnSparks(cx,cy,16,'#c8ffaf',50,420);
+  target._mantisSleepToken=(target._mantisSleepToken||0)+1;
+  const tok=target._mantisSleepToken;
+  setTimeout(()=>{ if(target && target.el && target._mantisSleepToken===tok) target.el.classList.remove('mantis-sleeping'); },duration+80);
+}
+function spawnSockLoveProp(target,duration){
+  const x=ARENA_W/2-39, y=Math.max(90,FLOOR_Y-58);
+  const el=fxEl('mantis-sock-love',`left:${x}px;top:${y}px;width:78px;height:62px;`,duration+120,
+    '<div class="sock-body"></div><div class="sock-cuff"></div><div class="sock-stripe"></div><div class="heart">♥</div>');
+  target.sockLoveEl=el;
+  for(let i=0;i<8;i++) setTimeout(()=>{
+    if(state.mode==='battle' && target.sockLoveUntil>now()){
+      fxEl('fx-ring',`left:${ARENA_W/2-15}px;top:${FLOOR_Y-42}px;width:30px;height:30px;border-color:#ff83ae;box-shadow:0 0 16px #ff4a9666;`,420);
+    }
+  },i*520);
 }
 
 function executeAbility(caster, target, ability, t){
@@ -9063,6 +9617,37 @@ function executeAbility(caster, target, ability, t){
       }, i*40);
       break;
     }
+
+    case 'mantisSleep': {
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) break;
+      const dx=(tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
+      if(Math.hypot(dx,dy) <= (ability.radius||620) && !attackBlockedByFloor(caster,tg)){
+        const dur=ability.duration||3250, until=t+dur;
+        tg.pxMindStunUntil=Math.max(tg.pxMindStunUntil||0,until);
+        tg.abilityLockUntil=Math.max(tg.abilityLockUntil||0,until);
+        tg.vx=0; tg.vy=0; tg.flight=false; tg.flightExpire=0; tg.grappleUntil=0; tg.hitStun=0;
+        if(tg.el) tg.el.classList.add('mantis-sleeping');
+        spawnMantisSleepFx(tg,dur);
+        sfx(ability.hitSound||'mantis_sleep_hit');
+        spawnHitFx(tg,ability.hitFx||'mantis_sleep_hit',dirSignTo(caster,tg));
+      }
+      break;
+    }
+    case 'sockLove': {
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) break;
+      const dur=ability.duration||5000;
+      tg.sockLoveUntil=t+dur;
+      tg.abilityLockUntil=Math.max(tg.abilityLockUntil||0,t+dur);
+      tg.vx=0; tg.vy=Math.min(tg.vy,0); tg.grappleUntil=0;
+      if(tg.el) tg.el.classList.add('sock-in-love');
+      spawnSockLoveProp(tg,dur);
+      const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+      fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ff83ae;box-shadow:0 0 30px #ff5c9a66;`,620);
+      spawnSparks(cx,cy,18,'#ff9fbd',65,420);
+      break;
+    }
     case 'mindStun': {
       // Professor X's Mind Stun uses its own control timer and visuals. It must not touch Scarlet Witch's Hex state.
       const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
@@ -9333,6 +9918,17 @@ function executeAbility(caster, target, ability, t){
       caster.onGround = false;
       break;
     }
+
+    case 'scorpionTailClimb': {
+      if(caster.def.id !== 'scorpion') break;
+      caster.vx = 0;
+      caster.vy = -Math.sqrt(2 * GRAVITY * Math.max(30, caster.y - 18));
+      caster.onGround = false;
+      if(caster.el) caster.el.classList.add('scorpion-climbing');
+      const who=caster;
+      setTimeout(()=>{ if(who.el) who.el.classList.remove('scorpion-climbing'); },840);
+      break;
+    }
     case 'mobility': {
       const facing = caster.facing < 0 ? -1 : 1;
       const dashDir = (ability.botDashAway && caster.isBot) ? -facing : facing;
@@ -9545,6 +10141,17 @@ function executeAbility(caster, target, ability, t){
       spawnSparks(wx+wallW/2, caster.y+FIGHTER_SIZE-20, 14, '#bdf1ff', 60, 360);
       break;
     }
+
+    case 'msmarvelEmbiggen': {
+      caster.msmarvelBigUntil=t+(ability.duration||5000);
+      caster.shield={reduction:ability.reduction||0.30,expire:t+(ability.duration||5000)};
+      if(caster.el) caster.el.classList.add('msmarvel-embiggen');
+      const who=caster, dur=ability.duration||5000;
+      fxEl('msmarvel-embiggen-ring',`left:${caster.x-40}px;top:${caster.y-40}px;width:${FIGHTER_SIZE+80}px;height:${FIGHTER_SIZE+80}px;`,760);
+      spawnSparks(caster.x+FIGHTER_SIZE/2,caster.y+FIGHTER_SIZE/2,26,'#ffd35a',105,520);
+      setTimeout(()=>{if(who.el)who.el.classList.remove('msmarvel-embiggen');},dur);
+      break;
+    }
     case 'heal': {
       const before = caster.health;
       caster.health = Math.min(caster.def.maxHealth, caster.health + ability.heal);
@@ -9567,6 +10174,14 @@ function executeAbility(caster, target, ability, t){
         const c = caster.def.id === 'wasp' ? '#ffe36b' : (ability.form==='small'?'#ff5a63':'#ffcf73');
         spawnSparks(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, ability.form==='small'?16:22, c, ability.form==='small'?52:72, 440);
       }
+      break;
+    }
+
+    case 'speedControl': {
+      if(caster.def.id !== 'quicksilver') break;
+      if(caster.isBot){ caster.quicksilverSpeed=3; break; }
+      showQuicksilverSpeedMenu(caster);
+      spawnQuicksilverBurst(caster,'#72c8ff',8);
       break;
     }
     case 'toggle': {
@@ -9628,6 +10243,8 @@ function executeAbility(caster, target, ability, t){
         if(ability.tendrilStyle === 'octopus'){
           spawnOctopusTendrilFx(caster, tg, true);
           triggerOctopusGrabReach(caster, pullMs, true, dirSignTo(caster, tg));
+        } else if(ability.tendrilStyle === 'scorpion'){
+          spawnScorpionTendrilFx(caster, tg, true);
         }
         else spawnVenomTendrilFx(caster, tg, true);
       } else {
@@ -9636,6 +10253,8 @@ function executeAbility(caster, target, ability, t){
         if(ability.tendrilStyle === 'octopus'){
           spawnOctopusTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
           triggerOctopusGrabReach(caster, 0, false, caster.facing);
+        } else if(ability.tendrilStyle === 'scorpion'){
+          spawnScorpionTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
         }
         else spawnVenomTendrilFx(caster, {x: wx-FIGHTER_SIZE/2, y: wy-FIGHTER_SIZE/2}, false);
         fxEl('fx-burst', `left:${wx-16}px;top:${caster.y+18}px;width:32px;height:32px;background:radial-gradient(circle,#aeb5c044,transparent 70%);`, 380);
@@ -11901,7 +12520,113 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.5, 0.18, 'lowpass', 2400, 260, 0.7);
         aTone(ctx, t+0.32, 'triangle', 600, 340, 0.4, 0.10);
         return;
-      default: // 'ability'
+      
+      /* ---------- New characters ---------- */
+      case 'quicksilver_punch':
+        aNoise(ctx,t,0.045,0.16,'highpass',5200,1800,1.5);
+        aTone(ctx,t,'triangle',1250,320,0.10,0.10);
+        return;
+      case 'quicksilver_hit':
+        aTone(ctx,t,'sine',210,70,0.20,0.16);
+        aNoise(ctx,t,0.12,0.16,'bandpass',3000,900,1.3);
+        return;
+      case 'quicksilver_dash':
+        aNoise(ctx,t,0.28,0.18,'highpass',3600,1200,1.2);
+        aTone(ctx,t,'sawtooth',260,1100,0.26,0.08);
+        aTone(ctx,t+0.06,'triangle',780,1800,0.18,0.07);
+        return;
+      case 'quicksilver_dash_hit':
+        aTone(ctx,t,'sine',92,34,0.58,0.30);
+        aNoise(ctx,t,0.32,0.23,'lowpass',2600,150,0.8);
+        aTone(ctx,t+0.03,'triangle',1700,620,0.20,0.10);
+        return;
+      case 'quicksilver_speed_menu':
+        aTone(ctx,t,'sine',320,900,0.24,0.10);
+        aNoise(ctx,t,0.16,0.09,'bandpass',2400,800,1.2);
+        return;
+      case 'scorpion_tail_strike':
+        aNoise(ctx,t,0.18,0.20,'bandpass',1800,600,1.3);
+        aTone(ctx,t,'triangle',520,120,0.18,0.09);
+        return;
+      case 'scorpion_tail_hit':
+        aTone(ctx,t,'square',160,54,0.34,0.20);
+        aNoise(ctx,t,0.20,0.18,'highpass',4200,1100,1.0);
+        return;
+      case 'scorpion_hook':
+        aNoise(ctx,t,0.20,0.14,'bandpass',900,2800,1.4);
+        aTone(ctx,t,'triangle',180,840,0.28,0.08);
+        return;
+      case 'scorpion_hook_hit':
+        aTone(ctx,t,'sine',110,40,0.42,0.24);
+        aNoise(ctx,t,0.24,0.18,'lowpass',2800,170,0.85);
+        return;
+      case 'scorpion_climb':
+        aTone(ctx,t,'triangle',180,900,0.36,0.11);
+        aNoise(ctx,t,0.28,0.10,'highpass',3200,1200,1.1);
+        return;
+      case 'mantis_punch':
+        aTone(ctx,t,'triangle',980,280,0.08,0.08);
+        aNoise(ctx,t,0.05,0.08,'highpass',4600,1800,1.3);
+        return;
+      case 'mantis_punch_hit':
+        aTone(ctx,t,'sine',240,90,0.16,0.13);
+        return;
+      case 'mantis_sleep':
+        aTone(ctx,t,'sine',620,220,0.36,0.09);
+        aTone(ctx,t+0.08,'sine',460,180,0.42,0.08);
+        aNoise(ctx,t,0.26,0.08,'bandpass',1200,500,1.1);
+        return;
+      case 'mantis_sleep_hit':
+        aTone(ctx,t,'sine',260,70,0.52,0.18);
+        aTone(ctx,t+0.10,'triangle',880,420,0.28,0.06);
+        return;
+      case 'mantis_sock_love':
+        aTone(ctx,t,'sine',420,740,0.34,0.10);
+        aTone(ctx,t+0.08,'sine',740,980,0.38,0.07);
+        aTone(ctx,t+0.16,'triangle',980,1320,0.30,0.055);
+        return;
+      case 'nebula_blast':
+        aTone(ctx,t,'sawtooth',820,180,0.12,0.08);
+        aNoise(ctx,t,0.08,0.12,'highpass',4200,1200,1.2);
+        return;
+      case 'nebula_blast_hit':
+        aTone(ctx,t,'sine',180,48,0.32,0.20);
+        aNoise(ctx,t,0.18,0.16,'bandpass',3000,700,1.2);
+        return;
+      case 'nebula_strike':
+        aNoise(ctx,t,0.18,0.18,'bandpass',1600,520,1.3);
+        aTone(ctx,t,'triangle',420,110,0.20,0.08);
+        return;
+      case 'nebula_strike_hit':
+        aTone(ctx,t,'square',150,46,0.40,0.22);
+        aNoise(ctx,t,0.22,0.17,'highpass',4400,1200,1.0);
+        return;
+      case 'nebula_repair':
+        aTone(ctx,t,'sine',260,760,0.44,0.11);
+        aTone(ctx,t+0.08,'triangle',520,1120,0.36,0.06);
+        return;
+      case 'msmarvel_punch':
+        aNoise(ctx,t,0.10,0.15,'bandpass',1500,520,1.2);
+        aTone(ctx,t,'triangle',420,120,0.14,0.08);
+        return;
+      case 'msmarvel_punch_hit':
+        aTone(ctx,t,'sine',170,45,0.44,0.24);
+        aNoise(ctx,t,0.20,0.16,'lowpass',2500,180,0.9);
+        return;
+      case 'msmarvel_giant_fist':
+        aTone(ctx,t,'sine',180,940,0.38,0.12);
+        aNoise(ctx,t,0.28,0.16,'bandpass',1200,2800,1.0);
+        return;
+      case 'msmarvel_giant_fist_hit':
+        aTone(ctx,t,'sine',85,26,0.58,0.34);
+        aNoise(ctx,t,0.36,0.24,'lowpass',2600,150,0.8);
+        return;
+      case 'msmarvel_embiggen':
+        aTone(ctx,t,'triangle',210,640,0.54,0.10);
+        aNoise(ctx,t,0.36,0.10,'bandpass',900,1900,1.0);
+        return;
+
+default: // 'ability'
         aTone(ctx, t, 'sawtooth', 240, 620, 0.16, 0.12);
         return;
     }
@@ -13846,6 +14571,120 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+
+    case 'quicksilver_punch': {
+      const hx=cx+dir*30, hy=cy;
+      fxEl('fx-flash',`left:${hx-34}px;top:${hy-34}px;width:68px;height:68px;background:radial-gradient(circle,#ffffff,#9fe4ff 34%,#318dff 62%,transparent 80%);`,170);
+      for(let i=0;i<4;i++) setTimeout(()=>{if(state.mode==='battle' && !caster.dead) spawnAfterimage(caster,'#4bb8ff55',120);},i*18);
+      break;
+    }
+    case 'quicksilver_dash': {
+      caster.el.classList.remove('quick-dashing'); void caster.el.offsetWidth; caster.el.classList.add('quick-dashing');
+      spawnQuicksilverBurst(caster,'#74d7ff',18);
+      const who=caster;
+      for(let i=0;i<9;i++) setTimeout(()=>{if(state.mode==='battle'&&!who.dead) spawnAfterimage(who,i%2?'#36aaff66':'#b8eeff55',180);},i*28);
+      fxEl('fx-flash',`left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;background:radial-gradient(circle,#ffffff,#66c8ff 35%,#257bff 66%,transparent 80%);`,220);
+      setTimeout(()=>{if(who.el)who.el.classList.remove('quick-dashing');},560);
+      break;
+    }
+    case 'quicksilver_dash_hit': {
+      const tx=target && !target.dead ? target.x+FIGHTER_SIZE/2 : cx+dir*50;
+      const ty=target && !target.dead ? target.y+FIGHTER_SIZE/2 : cy;
+      fxEl('fx-ring',`left:${tx-70}px;top:${ty-70}px;width:140px;height:140px;border-color:#c9f4ff;border-width:4px;box-shadow:0 0 35px #2aa9ff,0 0 60px #2a6fff55;`,360);
+      spawnSparks(tx,ty,26,'#bceeff',130,500); shakeArena(8,260);
+      break;
+    }
+    case 'quicksilver_speed_menu': {
+      fxEl('fx-ring',`left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;border-color:#78d2ff;border-width:2px;box-shadow:0 0 24px #289dff;`,300);
+      break;
+    }
+    case 'scorpion_tail_strike': {
+      const reach=ability.range||98;
+      const hx=cx+dir*reach*0.85, hy=cy-4;
+      fxEl('scorpion-tail-fx', `left:${cx-10}px;top:${cy-24}px;width:${reach+42}px;height:48px;transform-origin:10px 24px;transform:scaleX(${dir});`,
+        240, `<div class="sc-tail-pop">${scorpionTailStrikeSvg(reach+42,48)}</div>`);
+      fxEl('fx-ring',`left:${hx-28}px;top:${hy-28}px;width:56px;height:56px;border-color:#a7ffae;border-width:3px;box-shadow:0 0 24px #45db66;`,240);
+      spawnSparks(hx,hy,12,'#b8ffd0',72,350);
+      break;
+    }
+    case 'scorpion_hook': {
+      // Cast-time wind-up glow only; the actual hooked line is drawn by
+      // spawnScorpionTendrilFx once executeAbility knows whether it
+      // connected or whiffed (same split as Venom's/Octopus's tendrils).
+      fxEl('charge-glow', `left:${cx-14}px;top:${cy-14}px;width:28px;height:28px;background:radial-gradient(circle,#d8ffe0,#0a170d 62%,transparent 80%);box-shadow:0 0 16px #58e478;`, 220);
+      break;
+    }
+    case 'scorpion_climb': {
+      if(caster.el) caster.el.classList.add('scorpion-climbing');
+      spawnScorpionClimbFx(caster);
+      setTimeout(()=>{if(caster.el)caster.el.classList.remove('scorpion-climbing');},840);
+      break;
+    }
+    case 'mantis_punch': {
+      const px=cx+dir*30, py=cy;
+      fxEl('fx-flash',`left:${px-24}px;top:${py-24}px;width:48px;height:48px;background:radial-gradient(circle,#fff,#d6ffbd 38%,#62d88c 65%,transparent 80%);`,150);
+      spawnSparks(px,py,7,'#d7ffbd',42,250);
+      break;
+    }
+    case 'mantis_sleep': {
+      const tx=target && !target.dead ? target.x+FIGHTER_SIZE/2 : cx+dir*80, ty=target && !target.dead ? target.y+FIGHTER_SIZE/2 : cy;
+      for(let i=0;i<5;i++) setTimeout(()=>{if(state.mode==='battle') fxEl('fx-ring',`left:${tx-(18+i*8)}px;top:${ty-(18+i*8)}px;width:${36+i*16}px;height:${36+i*16}px;border-color:#c7f7a8;border-width:2px;box-shadow:0 0 18px #8adf7e44;`,420);},i*70);
+      break;
+    }
+    case 'mantis_sock_love': {
+      fxEl('fx-ring',`left:${ARENA_W/2-42}px;top:${FLOOR_Y-46}px;width:84px;height:84px;border-color:#ff85ad;border-width:3px;box-shadow:0 0 28px #ff4e9566;`,620);
+      spawnSparks(ARENA_W/2,FLOOR_Y-28,20,'#ffabc7',76,420);
+      break;
+    }
+    case 'nebula_blast': {
+      const bx=cx+dir*36, by=cy;
+      fxEl('fx-flash',`left:${bx-30}px;top:${by-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff 0,#f4ecff 14%,#c6b3ff 28%,#6f79ff 53%,transparent 80%);box-shadow:0 0 22px #8e76ff,0 0 42px #b75cff66;`,160);
+      fxEl('fx-ring',`left:${bx-24}px;top:${by-24}px;width:48px;height:48px;border-color:#d9ceff;border-width:2px;box-shadow:0 0 18px #6674ff,0 0 28px #c15cff77;`,230);
+      for(let i=0;i<3;i++){
+        const ox=dir*(12+i*9);
+        fxEl('fx-streak',`left:${bx+ox-30}px;top:${by+(i-1)*8-2}px;width:64px;height:4px;background:linear-gradient(90deg,transparent,#d9c7ff,#5f76ff,transparent);box-shadow:0 0 8px #6e7bff;transform:rotate(${(i-1)*10}deg);`,180);
+      }
+      spawnSparks(bx,by,14,'#ddd2ff',86,340);
+      break;
+    }
+    case 'nebula_strike': {
+      const sx=cx+dir*38, sy=cy;
+      if(caster.el){caster.el.classList.add('nebula-striking');setTimeout(()=>{if(caster.el)caster.el.classList.remove('nebula-striking');},250);}
+      fxEl('fx-ring',`left:${sx-40}px;top:${sy-40}px;width:80px;height:80px;border-color:#d8caff;border-width:3px;box-shadow:0 0 30px #5e73ff,0 0 52px #b85cff66;`,280);
+      fxEl('fx-flash',`left:${sx-22}px;top:${sy-22}px;width:44px;height:44px;background:radial-gradient(circle,#fff,#bdaeff 35%,#596dff 68%,transparent 82%);`,170);
+      spawnSparks(sx,sy,22,'#e2d8ff',102,430);
+      break;
+    }
+    case 'nebula_repair': {
+      const ring=fxEl('nebula-repair-fx',`left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;`,850);
+      spawnSparks(cx,cy,26,'#d2c4ff',80,520);
+      for(let i=0;i<5;i++) setTimeout(()=>{if(state.mode==='battle'&&!caster.dead) fxEl('fx-ring',`left:${cx-22-i*4}px;top:${cy-22-i*4}px;width:${44+i*8}px;height:${44+i*8}px;border-color:#c69cff;border-width:2px;box-shadow:0 0 18px #7f72ff55;`,420);},i*90);
+      break;
+    }
+    case 'msmarvel_punch': {
+      const reach=ability.range||190;
+      if(caster.el){
+        caster.el.style.setProperty('--msm-reach', reach+'px');
+        caster.el.classList.remove('msm-stretching'); void caster.el.offsetWidth;
+        caster.el.classList.add('msm-stretching');
+        setTimeout(()=>caster.el && caster.el.classList.remove('msm-stretching'), 380);
+      }
+      const hx=cx+dir*reach*0.78, hy=cy-6;
+      fxEl('fx-flash',`left:${hx-28}px;top:${hy-22}px;width:56px;height:56px;background:radial-gradient(circle,#fff,#e4b1ff 28%,#a95cff 56%,transparent 82%);`,170);
+      spawnSparks(hx,hy,10,'#dca8ff',58,280);
+      spawnMsMarvelCrystals(hx,hy,7,.72);
+      break;
+    }
+    case 'msmarvel_giant_fist': {
+      spawnMsMarvelStretchFx(caster,target,true);
+      break;
+    }
+    case 'msmarvel_embiggen': {
+      fxEl('msmarvel-embiggen-ring',`left:${cx-40}px;top:${cy-40}px;width:${FIGHTER_SIZE+80}px;height:${FIGHTER_SIZE+80}px;`,760);
+      spawnSparks(cx,cy,26,'#ffd15b',105,520);
+      break;
+    }
+
     /* ---------------- fallback (keeps any future ability covered) --------- */
     default: {
       const col = ability.color || caster.def.color || '#fff';
@@ -14795,6 +15634,19 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     if(!f.hexFrozenUntil) f.abilityLockUntil = 0;
     if(f.el) f.el.classList.remove('px-mind-stunned','jg-mind-warped');
   }
+  if(f.sockLoveUntil && tNow < f.sockLoveUntil && !f.dead){
+    const sockX=ARENA_W/2-FIGHTER_SIZE/2;
+    const loveDir = Math.abs(sockX-f.x)<18 ? 0 : (sockX>f.x?1:-1);
+    moveDir = loveDir * 0.72;
+    wantJump = false; wantDown = false;
+    f.flight = false; f.flightExpire = 0; f.grappleUntil = 0;
+    if(f.el) f.el.classList.add('sock-in-love');
+  } else if(f.sockLoveUntil && tNow >= f.sockLoveUntil){
+    f.sockLoveUntil=0;
+    if(f.sockLoveEl && f.sockLoveEl.parentNode) f.sockLoveEl.remove();
+    f.sockLoveEl=null;
+    if(f.el) f.el.classList.remove('sock-in-love');
+  }
   if(f.yonduArrow && f.yonduArrow.phase === 'control'){
     // He can't steer himself while piloting the arrow, but he isn't a statue:
     // if he's airborne when he activates it, he should still fall/land normally.
@@ -14910,8 +15762,18 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
   if(wantDown && !f.flight) f.dropThroughTimer = 260;
 
   // Integrate
+  const prevQuickX=f.x, prevQuickY=f.y;
   f.x += f.vx * dtF;
   f.y += f.vy * dtF;
+
+  if(f.def.id==='quicksilver' && !f.dead && state.mode==='battle'){
+    f._quickTrailTick=(f._quickTrailTick||0)+dtF;
+    const travel=Math.hypot(f.x-prevQuickX,f.y-prevQuickY);
+    if(travel>1.4 && f._quickTrailTick>=1.15){
+      f._quickTrailTick=0;
+      spawnQuicksilverTrailSegment(f,prevQuickX,prevQuickY);
+    }
+  }
 
   // Iceman's Ice Path is built from the actual movement vector so horizontal,
   // diagonal, and vertical flight all produce a continuous trail instead of
@@ -15081,6 +15943,7 @@ function fighterSpeedMultiplier(f){
   if(f.def.id==='moonknight' && f.moonknightPersona==='jake' && f.moonknightPersonaUntil > now()) mult *= (f.def.abilities.Q.speedMult || 1.35);
   if(f.def.id==='beast' && f.beastSurgeUntil > now()) mult *= (f.def.abilities.R.speedMult || 1.4);
   if(f.def.id==='ghostrider' && f.hellcycleUntil > now()) mult *= (f.def.abilities.R.speedMult || 4);
+  if(f.def.id==='quicksilver') mult *= (f.quicksilverSpeed || 3);
   return mult;
 }
 function updateFlightGlow(f){
@@ -15960,6 +16823,10 @@ function buildProjectileVisual(p){
     p.el.classList.add('web-projectile');
     p.el.style.background = 'transparent';
     p.el.innerHTML = `<div class="proj-svg"><div class="web-net-spin">${webNetSvg(p.w + 18, 1.6)}</div></div>`;
+  } else if(p.render === 'nebula-blast'){
+    p.el.classList.add('nebula-blast-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="nebula-bolt-tail"></div><div class="nebula-bolt-shell"></div><div class="nebula-bolt-core"></div><i class="nebula-bolt-spark spark-a"></i><i class="nebula-bolt-spark spark-b"></i>';
   } else if(p.render === 'repulsor'){
     p.el.classList.add('epic-projectile');
     p.el.style.background = 'transparent';
@@ -19381,6 +20248,21 @@ function dragEnd(){
 wrapper.addEventListener('touchend', dragEnd);
 wrapper.addEventListener('touchcancel', dragEnd);
 
+
+/* ---------- New character UI controls ---------- */
+document.getElementById('quicksilver-speed-range')?.addEventListener('input', e=>setQuicksilverSpeed(e.target.value));
+document.getElementById('quicksilver-speed-close')?.addEventListener('click', hideQuicksilverSpeedMenu);
+document.querySelectorAll('#quicksilver-speed-menu [data-qs-speed]').forEach(btn=>{
+  btn.addEventListener('click', ()=>setQuicksilverSpeed(btn.dataset.qsSpeed));
+});
+document.addEventListener('keydown', e=>{
+  const menu=document.getElementById('quicksilver-speed-menu');
+  if(!menu || !menu.classList.contains('show')) return;
+  if(e.key==='Escape'){ hideQuicksilverSpeedMenu(); return; }
+  if(e.key==='ArrowLeft'){ e.preventDefault(); setQuicksilverSpeed((state.player?.quicksilverSpeed||3)-.5); }
+  if(e.key==='ArrowRight'){ e.preventDefault(); setQuicksilverSpeed((state.player?.quicksilverSpeed||3)+.5); }
+});
+
 /* =========================================================================
    SECTION: MAIN LOOP
    ========================================================================= */
@@ -19391,6 +20273,7 @@ function gameLoop(ts){
   const dtF = dt / 16.6667;
 
   try{ pollGamepad(); }catch(err){ console.error('pollGamepad', err); }
+  try{ quicksilverMenuControllerTick(); }catch(err){ console.error('quicksilverMenuControllerTick', err); }
 
   if(state.mode === 'battle'){
     rescaleArena();
