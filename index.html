@@ -6333,7 +6333,9 @@ const CHARACTER_SKINS = {
   spiderman: ['spiderman_ironspider'],
   ironman: ['ironman_mark50'],
   thor: ['thor_infinitywar'],
-  scarletwitch: ['scarletwitch_new']
+  scarletwitch: ['scarletwitch_new'],
+  hulk: ['hulk_smart'],
+  captainamerica: ['captainamerica_nomad']
 };
 const SKIN_IDS = Object.values(CHARACTER_SKINS).flat();
 
@@ -6409,6 +6411,43 @@ Object.assign(CHARACTERS, {
       R:{key:'R', name:'What attack?', type:'scarletDisable', damage:0, cooldown:45000, duration:20000,
          sound:'scarlet_disable_big', fx:'scarlet_disable',
          desc:'Randomly disables one of the enemy’s E/Q/R abilities for 20 seconds.'}
+    }
+  },
+  hulk_smart: {
+    id:'hulk_smart', skinOf:'hulk', name:'Hulk (Smart Hulk)',
+    img:'HulkSmart.jpg', color:'#6fbf73', accentColor:'#eef2d8', aiStyle:'hulk',
+    skinCost:10, maxHealth:13500, jumpHeightMultiplier:1.6,
+    description:'A calmer fusion of Bruce Banner and the Hulk — all the brains, a lot less brawn. A cheap, much weaker version of the classic Hulk: a lighter smash, a thrown boulder instead of a ground slam, and calculated reflexes instead of a roar.',
+    abilities:{
+      E:{key:'E', name:'Precision Smash', type:'hulkSmash', damage:500, cooldown:900, knockback:12, radius:110,
+         hitDelay:85, sound:'hulk_smash', fx:'hulk_smash', hitFx:'hulk_smash_hit', hitSound:'hulk_smash_hit',
+         desc:'A controlled 360-degree smash that hits enemies all around Smart Hulk.'},
+      Q:{key:'Q', name:'Boulder Throw', type:'projectile', damage:700, cooldown:6500, knockback:18,
+         speed:12, w:54, h:50, color:'#77706a', render:'shehulk-rock',
+         sound:'ability', fx:'shehulk_rock_throw', hitFx:'shehulk_rock_hit', hitSound:'hit',
+         desc:'Throws a huge rock for 700 damage. A ranged option, unlike regular Hulk\u2019s ground-shaking slam.'},
+      R:{key:'R', name:'Calculated Dodge', type:'martialDodge', damage:0, cooldown:9000, duration:6000,
+         sound:'ability', fx:'ability',
+         desc:'Reads the fight perfectly and dodges every attack for 6 seconds. A defensive tool, unlike regular Hulk\u2019s crowd-pinning roar.'}
+    }
+  },
+  captainamerica_nomad: {
+    id:'captainamerica_nomad', skinOf:'captainamerica', name:'Captain America (Nomad)',
+    img:'CaptainAmericaNomad.jpg', color:'#4a5568', accentColor:'#f2c94c', aiStyle:'balanced',
+    skinCost:125, maxHealth:10000,
+    description:'A shieldless, off-the-books version of Cap. Trades the iconic shield and block for thrown combat knives, a brutal takedown strike, and a long tactical roll — about the same overall strength as the classic Captain America, just played very differently.',
+    abilities:{
+      E:{key:'E', name:'Combat Knives', type:'projectile', damage:700, cooldown:2000, knockback:8,
+         speed:22, w:44, h:16, color:'#dfe4ea', render:'bullseye-item', itemType:'knife',
+         sound:'bullseye_knife', fx:'bullseye_throw', hitFx:'bullseye_hit', hitSound:'bullseye_hit',
+         desc:'Throws a combat knife in a straight line for 700 damage. Reliable ranged poke.'},
+      Q:{key:'Q', name:'Takedown Strike', type:'melee', damage:1600, cooldown:9000, knockback:14, range:90,
+         hitDelay:90,
+         sound:'ws_punch', fx:'ws_punch', hitFx:'ws_punch_hit', hitSound:'ws_punch_hit',
+         desc:'A brutal close-range takedown for 1,600 damage.'},
+      R:{key:'R', name:'Combat Roll', type:'mobility', damage:0, cooldown:6000, boostX:24, boostY:-2, rollMs:380,
+         sound:'ws_roll', fx:'ws_roll',
+         desc:'A long combat roll across the arena for repositioning or escaping danger. No damage.'}
     }
   }
 });
@@ -7352,13 +7391,17 @@ function renderInventory(){
     const card = document.createElement('div');
     const selected = equipped===id || equippedBase===id;
     const selectedVersion = selected && isSkinId(equipped) ? CHARACTERS[equipped] : null;
+    // When a version/skin of this fighter is currently equipped, show that
+    // version's icon, name and HP on the card itself — not the base look —
+    // so the inventory reflects whichever version you'll actually fight with.
+    const displayDef = selectedVersion || def;
     card.className = 'char-card' + (unlocked ? '' : ' mystery') + (selected ? ' selected equipped' : '');
     if(unlocked){
-      card.style.setProperty('--char-color', def.color);
+      card.style.setProperty('--char-color', displayDef.color);
       card.innerHTML = `
-        <div class="char-square">${squareInner(def)}</div>
-        <div class="char-name">${def.name}</div>
-        <div class="char-cat">${def.maxHealth.toLocaleString()} HP</div>
+        <div class="char-square">${squareInner(displayDef)}</div>
+        <div class="char-name">${displayDef.name}</div>
+        <div class="char-cat">${displayDef.maxHealth.toLocaleString()} HP</div>
         ${getSkinIdsForBase(id).length ? `<button class="skin-version-btn ${getSkinIdsForBase(id, true).length ? 'unlocked' : ''}" type="button" aria-label="Character versions">🔒 <span>NEW</span></button>` : ''}
         <div class="lock-badge">${selectedVersion ? `✓ ${selectedVersion.name}` : (selected ? t('inv_ready') : t('inv_click_equip'))}</div>`;
       card.dataset.id = id;
@@ -7366,7 +7409,13 @@ function renderInventory(){
       card.onclick = (e)=>{
         const versionBtn=e.target.closest('.skin-version-btn');
         if(versionBtn){ e.stopPropagation(); openSkinVersionPicker(id); return; }
-        handleCardTap(id);
+        // Tapping the main card should never demote an equipped version back
+        // to the base fighter — that switch only happens inside the Versions
+        // picker. If a version of this fighter is already equipped, tapping
+        // just re-targets that same version (a no-op / stats-on-double-tap);
+        // otherwise it equips the base fighter as normal.
+        const tapId = selectedVersion ? selectedVersion.id : id;
+        handleCardTap(tapId);
       };
     } else {
       card.dataset.id = id;
@@ -7384,12 +7433,26 @@ function renderInventory(){
 // their stats & attacks. Works for mouse, touch and controller (A / ✕ / B).
 const DOUBLE_TAP_MS = 380;
 let lastCardTap = { id:null, t:0 };
-function handleCardTap(id){
+function handleCardTap(id, modalId){
   const nowT = performance.now();
   const isDouble = lastCardTap.id === id && (nowT - lastCardTap.t) < DOUBLE_TAP_MS;
   lastCardTap = isDouble ? { id:null, t:0 } : { id, t:nowT };
-  if(isDouble){ openCharModal(id); return; }
+  if(isDouble){ openCharModal(modalId || id); return; }
   equipPlayable(id);
+}
+// Same double-tap-for-stats convention as handleCardTap above, but for a
+// single version/skin tile inside the "Versions" picker: first tap equips
+// that version, a quick second tap on the same tile shows its full stats.
+let lastVersionTap = { id:null, t:0 };
+function handleVersionTap(id, baseId){
+  const nowT = performance.now();
+  const isDouble = lastVersionTap.id === id && (nowT - lastVersionTap.t) < DOUBLE_TAP_MS;
+  lastVersionTap = isDouble ? { id:null, t:0 } : { id, t:nowT };
+  if(isDouble){ openCharModal(id); return; }
+  if(!isPlayableOwned(id)) return;
+  equipPlayable(id);
+  sfx('ui_tick');
+  openSkinVersionPicker(baseId);
 }
 
 function openSkinVersionPicker(baseId){
@@ -7415,16 +7478,12 @@ function openSkinVersionPicker(baseId){
   inner.style.setProperty('--char-color',base.color);
   inner.innerHTML=`<div class="cm-head"><div class="char-square">${squareInner(base)}</div><div><h3>${base.name} Versions</h3><div class="char-cat">🪙 ${getTokens().toLocaleString()} tokens</div></div></div>
     <div class="skin-offers">${baseOffer}${offers}</div>
-    <div class="cm-foot"><span class="modal-hint">Click any unlocked version to equip it. You can switch back to the base version at any time.</span><button class="btn btn-small btn-secondary" id="modal-close">${t('modal_close')}</button></div>`;
+    <div class="cm-foot"><span class="modal-hint">Click any unlocked version to equip it — double-click a version to see its full stats. You can switch back to the base version at any time.</span><button class="btn btn-small btn-secondary" id="modal-close">${t('modal_close')}</button></div>`;
 
   inner.querySelectorAll('.skin-offer').forEach(offer=>{
     offer.onclick=(e)=>{
       if(e.target.closest('button')) return;
-      const id=offer.dataset.equipId;
-      if(!isPlayableOwned(id)) return;
-      equipPlayable(id);
-      sfx('ui_tick');
-      openSkinVersionPicker(baseId);
+      handleVersionTap(offer.dataset.equipId, baseId);
     };
   });
   inner.querySelectorAll('.skin-buy-btn').forEach(btn=>{
@@ -8235,7 +8294,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.skinOf ? ' skin-version' : '') + (f.def.id === 'scarletwitch' ? ' wanda' : '') + (f.def.id === 'spiderman_ironspider' ? ' ironspider' : '') + (f.def.id === 'ironman_mark50' ? ' mark50' : '') + (f.def.id === 'thor_infinitywar' ? ' thor-infinity' : '') + (f.def.id === 'scarletwitch_new' ? ' scarlet-witch-new' : '') + (f.def.id === 'hulk' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '');
+  el.className='fighter' + (f.def.skinOf ? ' skin-version' : '') + (f.def.id === 'scarletwitch' ? ' wanda' : '') + (f.def.id === 'spiderman_ironspider' ? ' ironspider' : '') + (f.def.id === 'ironman_mark50' ? ' mark50' : '') + (f.def.id === 'thor_infinitywar' ? ' thor-infinity' : '') + (f.def.id === 'scarletwitch_new' ? ' scarlet-witch-new' : '') + (f.def.id === 'hulk' || f.def.id === 'hulk_smart' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -18526,7 +18585,11 @@ function updateBotAI(dtF){
     }
   }  else if(style === 'hulk'){
     const eAb = bot.def.abilities.E, qAb = bot.def.abilities.Q, rAb = bot.def.abilities.R;
-    if(cdReady(bot,'Q',t) && adist <= qAb.radius + 20){ tryUseAbility(bot, player, 'Q'); return; }
+    // Ground Slam (base Hulk) is a radius AOE; Boulder Throw (Smart Hulk) is a
+    // ranged projectile with no radius field — fall back to a sensible throw
+    // range so the bot still uses it instead of the condition always failing.
+    const qRange = Number.isFinite(qAb.radius) ? qAb.radius + 20 : 650;
+    if(cdReady(bot,'Q',t) && adist <= qRange){ tryUseAbility(bot, player, 'Q'); return; }
     if(cdReady(bot,'E',t) && adist <= (eAb.radius || eAb.range || 120)){ tryUseAbility(bot, player, 'E'); return; }
     if(cdReady(bot,'R',t) && (adist > 120 || Math.abs(vertical) > 95 || hpPct < 0.3) && Math.random() < 0.75){ tryUseAbility(bot, player, 'R'); return; }
   } else if(style === 'wolverine'){
