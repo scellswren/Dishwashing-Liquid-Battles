@@ -6350,6 +6350,7 @@ function unlockCharacter(id){
 }
 /* ---- Tokens (stored per save slot) ---- */
 const BATTLE_LIVES = 3;            // lives each side gets in Battle mode
+const BATTLE_TIME_LIMIT_MS = 15 * 60 * 1000; // time limit for Battle mode (vs AI)
 const BATTLE_WIN_TOKENS = { easy:10, medium:15, hard:25 };
 const UNLOCK_COST_TOKENS = 100;    // price of an Unlock Character challenge
 function getTokens(){ return Math.max(0, Math.floor(Number(SAVE.tokens)) || 0); }
@@ -6977,7 +6978,7 @@ function startBattle(playerCharId, botCharId, opts){
   state.lives = { player:state.maxLives, bot:state.maxLives };
   state.battleDifficulty = (opts && opts.battleDifficulty) || (state.matchKind === 'battle' ? 'medium' : null);
   state.challenge = (opts && opts.challenge) || null;
-  state.matchTimeLimitMs = pvp ? Math.max(0, Number((opts && opts.timeLimitMs) || 0)) : 0;
+  state.matchTimeLimitMs = pvp ? Math.max(0, Number((opts && opts.timeLimitMs) || 0)) : (state.matchKind === 'battle' ? BATTLE_TIME_LIMIT_MS : 0);
   state.matchTimeRemainingMs = state.matchTimeLimitMs;
   state.timeLimitTriggered = false;
   state.gravityScale = pvp ? ({low:.65,normal:1,high:1.35}[(opts && opts.gravity) || 'normal'] || 1) : 1;
@@ -14693,14 +14694,14 @@ function renderMatchTimer(){
   const el=document.getElementById('mp-match-timer');
   const screen=document.getElementById('screen-battle');
   if(!el || !screen) return;
-  const on=!!(state.pvp && state.matchTimeLimitMs>0 && state.mode==='battle');
+  const on=!!(state.matchTimeLimitMs>0 && state.mode==='battle');
   screen.classList.toggle('mp-timer-on',on);
   if(!on){el.textContent='';el.classList.remove('urgent');return;}
   el.textContent=formatMatchTime(state.matchTimeRemainingMs);
   el.classList.toggle('urgent',state.matchTimeRemainingMs<=30000);
 }
 function updateMatchTimer(dt){
-  if(!state.pvp || !state.matchTimeLimitMs || state.countdown || state.pvpPaused || state.timeLimitTriggered || state.mode!=='battle') return;
+  if(!state.matchTimeLimitMs || state.countdown || state.pvpPaused || state.timeLimitTriggered || state.mode!=='battle') return;
   state.matchTimeRemainingMs=Math.max(0,state.matchTimeRemainingMs-dt);
   renderMatchTimer();
   if(state.matchTimeRemainingMs<=0){
@@ -17200,7 +17201,7 @@ function endEliminationRound(eliminated,reason){
   setTimeout(()=>showScreen('gameover'),1500);
 }
 function resolveMultiplayerTimeLimit(){
-  if(!state.pvp||state.mode!=='battle') return;
+  if(!state.matchTimeLimitMs||state.mode!=='battle') return;
   const fighters=state.multiPvp?(state.multi?.fighters||[]).filter(f=>!f.dead):[state.player,state.bot].filter(Boolean);
   if(state.eliminationSession?.active){
     if(fighters.length>1){ const loser=[...fighters].sort((a,b)=>{const ap=a.health/a.def.maxHealth,bp=b.health/b.def.maxHealth;if(ap!==bp)return ap-bp;return (a.health-b.health)||(a.multiSlot-b.multiSlot);})[0]; onFighterZeroHealth(loser,'time-limit'); }
@@ -17647,7 +17648,7 @@ function endBattle(winnerSide, reason){
   const loser = winnerSide==='player' ? state.bot : state.player;
   spawnKODeathFx(loser);
 
-  if(roundSessionActive()) {
+  if(isPvp && roundSessionActive()) {
     applyRoundScoring([winnerSide === 'player' ? 0 : 1, winnerSide === 'player' ? 1 : 0]);
     renderRoundGameoverUI();
   } else {
