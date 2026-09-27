@@ -365,6 +365,9 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
   position:absolute; inset:-6px; border-radius:50%; border:3px solid #6cd0ff; box-shadow:0 0 14px #6cd0ff;
   opacity:.85; pointer-events:none; display:none;
 }
+.fighter.redguardian .shield-ring{
+  border-color:#ffce3d; box-shadow:0 0 16px #ffce3d, inset 0 0 14px rgba(179,39,45,.5);
+}
 .fighter .flight-glow{position:absolute; inset:-4px; border-radius:12px; box-shadow:0 0 16px 4px rgba(120,210,255,.75); display:none; pointer-events:none;}
 .fighter-size-body{position:absolute;inset:0;width:64px;height:64px;transform-origin:50% 100%;pointer-events:none;z-index:2;}
 .fighter.wasp .fighter-size-body,.fighter.falcon .fighter-size-body{z-index:2;}
@@ -5315,7 +5318,7 @@ const CHARACTERS = {
          speed:15, w:22, h:8, color:'#e7e7e7',
          sound:'web_shoot', fx:'web_shot', render:'web-strand', trail:'web', web:true,
          hitFx:'web', hitSound:'web_hit', slow:300, desc:'Fast, thin web shot. Basic poke.'},
-      Q:{key:'Q', name:'Web Punch', type:'melee', damage:900, cooldown:9000, knockback:14, range:74,
+      Q:{key:'Q', name:'Web Punch', type:'melee', damage:1000, cooldown:9000, knockback:14, range:74,
          hitDelay:90,
          sound:'web_punch', fx:'web_punch', hitFx:'web_punch_hit', hitSound:'web_punch_hit', slow:300,
          desc:'A devastating close-range haymaker wrapped in webbing. Short range, huge damage.'},
@@ -5643,6 +5646,24 @@ const CHARACTERS = {
          desc:'Fires a grapple toward the opponent and quickly pulls White Widow into position.'}
     }
   },
+  redguardian: {
+    id:'redguardian', name:'Red Guardian', img:'RedGuardian.jpg', color:'#b3272d', accentColor:'#ffce3d', aiStyle:'balanced',
+    maxHealth:9550,
+    description:'A boastful Soviet super-soldier who never tires of retelling his own legend. Crushes enemies with raw super-serum strength, bulldozes across the arena with a bone-rattling charge, and tenses up to shrug off punishment that would fell a lesser hero.',
+    abilities:{
+      E:{key:'E', name:'Iron Curtain Punch', type:'melee', damage:340, cooldown:850, knockback:12, range:92,
+         hitDelay:80,
+         sound:'redguardian_punch', fx:'redguardian_punch', hitFx:'redguardian_punch_hit', hitSound:'redguardian_punch_hit',
+         desc:'A bone-crushing haymaker for 340 damage, backed by decades of super-serum strength. Cooldown: 0.85 seconds.'},
+      Q:{key:'Q', name:'Red Star Charge', type:'thingCharge', damage:1150, cooldown:11000, knockback:22, range:140,
+         boostX:30, boostY:-4, dashMs:250, hitDelay:215,
+         sound:'redguardian_charge', fx:'redguardian_charge', hitFx:'redguardian_charge_hit', hitSound:'redguardian_charge_hit',
+         desc:'Plants his feet and barrels forward like an unstoppable tank, crashing into the enemy for 1,150 damage with heavy knockback. His main way of closing distance. Cooldown: 11 seconds.'},
+      R:{key:'R', name:'Unbreakable', type:'shield', reduction:.6, duration:4500, cooldown:14000,
+         sound:'redguardian_unbreakable', fx:'redguardian_unbreakable',
+         desc:'Tenses every muscle and dares the enemy to try their best, cutting incoming damage by 60% for 4.5 seconds. Cooldown: 14 seconds.'}
+    }
+  },
   blackpanther: {
     id:'blackpanther', name:'Black Panther', img:'BlackPanther.jpg', color:'#8a4fe0',
     maxHealth:12500, aiStyle:'bruiser',
@@ -5922,7 +5943,7 @@ const CHARACTERS = {
   },
   mrfantastic: {
     id:'mrfantastic', name:'Mr. Fantastic', img:'MrFantastic.jpg', color:'#64a9ff', aiStyle:'stretch',
-    maxHealth:8500,
+    maxHealth:9000,
     description:'A flexible fighter who extends his body across the arena, follows up with a rapid barrage, and temporarily becomes extremely resistant to damage.',
     abilities:{
       E:{key:'E', name:'Stretch Punch', type:'stretchPunch', damage:450, cooldown:850, knockback:9, range:210,
@@ -6280,7 +6301,7 @@ const CHARACTERS = {
   },
   starlord: {
     id:'starlord', name:'Star-Lord', img:'StarLord.jpg', color:'#7a1f2b', accentColor:'#e8b84a', aiStyle:'starlord',
-    maxHealth:8500,
+    maxHealth:7450,
     description:'Half-Celestial outlaw. Fires both Element Blasters at once, plants sticky Laser Bombs, and rockets around on his boots. Deadly at range, fragile up close.',
     abilities:{
       E:{key:'E', name:'Blasters', type:'projectile', dual:true, damage:320, cooldown:875, knockback:3,
@@ -6456,7 +6477,7 @@ const CHARACTERS = {
   },
   shangchi: {
     id:'shangchi', name:'Shang-Chi', img:'ShangChi.jpg', color:'#c52b38', accentColor:'#ffcf6b', aiStyle:'bruiser',
-    maxHealth:9150,
+    maxHealth:8800,
     description:'A disciplined martial artist who fights entirely at close range, chaining fast strikes together while the Ten Rings orbit him permanently, ready to be flung at the enemy and recalled home.',
     abilities:{
       E:{key:'E', name:'Flowing Strikes', type:'melee', damage:400, cooldown:800, knockback:6, range:74,
@@ -6529,7 +6550,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','nickfury','hawkeye','drstrange','wong','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','redguardian','nickfury','hawkeye','drstrange','wong','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
 /* =========================================================================
    SECTION: CHARACTER VERSIONS / TOKEN SKINS
    ========================================================================= */
@@ -8555,7 +8576,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.skinOf ? ' skin-version' : '') + (f.def.id === 'scarletwitch' ? ' wanda' : '') + (f.def.id === 'spiderman_ironspider' ? ' ironspider' : '') + (f.def.id === 'ironman_mark50' ? ' mark50' : '') + (f.def.id === 'thor_infinitywar' ? ' thor-infinity' : '') + (f.def.id === 'scarletwitch_new' ? ' scarlet-witch-new' : '') + (f.def.id === 'hulk' || f.def.id === 'hulk_smart' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '') + (f.def.id === 'wong' ? ' wong' : '') + (f.def.id === 'emmafrost' ? ' emmafrost' : '') + (f.def.id === 'okoye' ? ' okoye' : '');
+  el.className='fighter' + (f.def.skinOf ? ' skin-version' : '') + (f.def.id === 'scarletwitch' ? ' wanda' : '') + (f.def.id === 'spiderman_ironspider' ? ' ironspider' : '') + (f.def.id === 'ironman_mark50' ? ' mark50' : '') + (f.def.id === 'thor_infinitywar' ? ' thor-infinity' : '') + (f.def.id === 'scarletwitch_new' ? ' scarlet-witch-new' : '') + (f.def.id === 'hulk' || f.def.id === 'hulk_smart' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '') + (f.def.id === 'wong' ? ' wong' : '') + (f.def.id === 'emmafrost' ? ' emmafrost' : '') + (f.def.id === 'okoye' ? ' okoye' : '') + (f.def.id === 'redguardian' ? ' redguardian' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -13183,6 +13204,31 @@ function sfx(kind='ability'){
         aNoise(ctx, t, 0.20, 0.16, 'lowpass', 1200, 200, 0.8);
         return;
 
+      /* ---------- Red Guardian ---------- */
+      case 'redguardian_punch':
+        aNoise(ctx, t, 0.09, 0.22, 'lowpass', 1800, 300, 1.0);
+        aTone(ctx, t, 'square', 160, 60, 0.13, 0.14);
+        return;
+      case 'redguardian_punch_hit':
+        aTone(ctx, t, 'square', 200, 55, 0.22, 0.20);
+        aNoise(ctx, t, 0.20, 0.26, 'bandpass', 2400, 500, 2.2);
+        aTone(ctx, t+0.03, 'triangle', 1200, 500, 0.16, 0.07);
+        return;
+      case 'redguardian_charge':
+        aNoise(ctx, t, 0.22, 0.20, 'lowpass', 1400, 260, 1.0);
+        aTone(ctx, t, 'sawtooth', 90, 160, 0.24, 0.14);
+        return;
+      case 'redguardian_charge_hit':
+        aTone(ctx, t, 'square', 200, 45, 0.30, 0.26);
+        aNoise(ctx, t, 0.26, 0.30, 'lowpass', 2400, 220, 1.6);
+        aTone(ctx, t+0.03, 'triangle', 1300, 500, 0.18, 0.08);
+        return;
+      case 'redguardian_unbreakable':
+        aTone(ctx, t, 'sine', 140, 380, 0.5, 0.16);
+        aNoise(ctx, t, 0.4, 0.14, 'bandpass', 1200, 400, 1.8);
+        aTone(ctx, t+0.1, 'triangle', 700, 1100, 0.3, 0.08);
+        return;
+
       /* ---------- Black Panther ---------- */
       case 'claw_swipe':
         aNoise(ctx, t, 0.14, 0.20, 'bandpass', 4200, 1100, 3.6);
@@ -15230,6 +15276,33 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Red Guardian ---------------- */
+    case 'redguardian_punch': {
+      fxEl('fx-impact-star', `left:${cx+dir*30-34}px;top:${cy-34}px;width:68px;height:68px;`, 220, impactStarSvg('#ffce3d',68,dir));
+      fxEl('fx-ring', `left:${cx+dir*26-30}px;top:${cy-30}px;width:60px;height:60px;border-color:#ffce3d;box-shadow:0 0 22px #ffce3d;`, 300);
+      spawnSparks(cx+dir*32, cy, 10, '#ffce3d', 46, 320);
+      shakeArena(4, 180);
+      break;
+    }
+    case 'redguardian_charge': {
+      // low, heavy wind-up: a couple of afterimages and ground dust as he plants and launches forward
+      const who = caster;
+      for(let i=0;i<4;i++){
+        setTimeout(()=>{ if(state.mode==='battle' && who.el) spawnAfterimage(who, '#b3272d77', 260); }, 20 + i*35);
+      }
+      spawnSparks(cx - dir*10, cy + 20, 8, '#ffce3d', 40, 260);
+      spawnGroundCrack(cx, caster.y + FIGHTER_SIZE, 60);
+      shakeArena(4, 200);
+      break;
+    }
+    case 'redguardian_unbreakable': {
+      fxEl('fx-ring', `left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#ffce3d;box-shadow:0 0 26px #ffce3d, inset 0 0 20px rgba(179,39,45,.5);`, 460);
+      fxEl('fx-flash', `left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;background:radial-gradient(circle,#fff3c9,#b3272d 55%,transparent 75%);`, 320);
+      spawnSparks(cx, cy, 14, '#ffce3d', 56, 380);
+      shakeArena(5, 220);
+      break;
+    }
+
     /* ---------------- Black Panther ---------------- */
     case 'bp_claw': {
       // Three large, distinct vibranium claw marks sweep in front of Black Panther.
@@ -16578,6 +16651,21 @@ function spawnHitFx(target, kind, dirSign){
       spawnSparks(cx, cy, 12, '#eaf2ff', 54);
       spawnSparks(cx, cy, 6, '#c0393f', 40, 380);
       shakeArena(7, 280);
+      break;
+    }
+    case 'redguardian_punch_hit': {
+      fxEl('fx-flash', `left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;`, 260);
+      fxEl('fx-impact-star', `left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`, 240, impactStarSvg('#ffce3d', 104, dirSign));
+      spawnSparks(cx, cy, 14, '#ffce3d', 60, 340);
+      shakeArena(6, 240);
+      break;
+    }
+    case 'redguardian_charge_hit': {
+      fxEl('fx-flash', `left:${cx-64}px;top:${cy-64}px;width:128px;height:128px;background:radial-gradient(circle,#fff,#b3272d 30%,#7a1a1a 60%,transparent 82%);`, 300);
+      fxEl('fx-ring', `left:${cx-50}px;top:${cy-50}px;width:100px;height:100px;border-color:#ffce3d;border-width:5px;box-shadow:0 0 30px #b3272d;`, 420);
+      spawnSparks(cx, cy, 20, '#ffce3d', 90, 420);
+      spawnGroundCrack(cx, target.y + FIGHTER_SIZE, 90);
+      shakeArena(12, 340);
       break;
     }
     case 'bp_claw_hit': {
