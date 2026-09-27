@@ -1073,6 +1073,8 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 .fx-impact-star svg{display:block; overflow:visible; filter:drop-shadow(0 0 5px rgba(255,255,255,.5));}
 @keyframes impactStarPop{0%{transform:scale(.3) rotate(-10deg); opacity:0}30%{opacity:1}100%{transform:scale(1.2) rotate(6deg); opacity:0}}
 @keyframes ringOut{0%{transform:scale(.18);opacity:1}100%{transform:scale(1.45);opacity:0}}
+.fighter.wong.wong-shield-hit-pulse .wong-mystic-shield{animation:wongShieldHitPulse .22s ease-out both!important;}
+@keyframes wongShieldHitPulse{0%{transform:translate(-50%,-50%) scale(1)}35%{transform:translate(-50%,-50%) scale(1.095);filter:drop-shadow(0 0 10px #fff0b0) drop-shadow(0 0 28px #ff7a18)}100%{transform:translate(-50%,-50%) scale(1);}}
 .fx-shock{border-radius:50%; animation:shockOut .6s cubic-bezier(.08,.75,.2,1) forwards;}
 @keyframes shockOut{0%{transform:scale(.06);opacity:1}70%{opacity:.75}100%{transform:scale(1.05);opacity:0}}
 .fx-trail{border-radius:50%; pointer-events:none; animation:trailFade .34s linear forwards;}
@@ -1083,7 +1085,162 @@ h1,h2,h3{font-family:'Anton',sans-serif; letter-spacing:.5px; margin:0;}
 @keyframes aiFade{0%{opacity:.48;transform:scale(1)}100%{opacity:0;transform:scale(.82)}}
 
 /* ---------- New character visuals ---------- */
+/* ---------- Wong / Emma Frost / Okoye visuals ---------- */
+.wong .fighter-square{border-color:#e7a24d;box-shadow:0 0 0 1px rgba(255,197,104,.22),0 12px 24px rgba(0,0,0,.3),0 0 22px rgba(255,145,38,.18);}
+.fighter.wong.wong-whip-casting .fighter-square{animation:wongWhipCaster .42s cubic-bezier(.2,.85,.16,1) both;}
+@keyframes wongWhipCaster{0%{transform:scaleX(var(--face-scale,1)) rotate(0)}14%{transform:scaleX(var(--face-scale,1)) rotate(-6deg) translateX(calc(var(--face-scale,1)*-3px))}48%{transform:scaleX(var(--face-scale,1)) rotate(10deg) translateX(calc(var(--face-scale,1)*4px))}100%{transform:scaleX(var(--face-scale,1)) rotate(0) translateX(0)}}
+.fighter.facing-left.wong.wong-whip-casting .fighter-square{--face-scale:-1;}
+.wong-mystic-shield{position:absolute;left:50%;top:50%;width:132px;height:132px;transform:translate(-50%,-50%);z-index:5;pointer-events:none;display:none;filter:drop-shadow(0 0 7px #ffd36b) drop-shadow(0 0 18px #ff7f1a88);transform-origin:50% 50%;}
+.fighter.wong.wong-shield-active .wong-mystic-shield{display:block;animation:wongShieldBreathe .9s ease-in-out infinite alternate;}
+.wong-mystic-shield .wong-shield-mandala{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 4px #ffb13d) drop-shadow(0 0 12px #ff7b1b77);}
+.wong-mystic-shield .wms-disc-fill{fill:url(#wmsDiscGrad);opacity:.38;}
+.wong-mystic-shield .wms-ring-still{fill:none;stroke:#ffcf73;stroke-linecap:round;vector-effect:non-scaling-stroke;}
+.wong-mystic-shield .wms-ring-hot{fill:none;stroke:#fff0be;stroke-linecap:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 5px #ffb43d);}
+.wong-mystic-shield .wms-spokes{fill:none;stroke:#ffd77f;stroke-width:1.5;opacity:.78;transform-origin:66px 66px;animation:wongShieldSpinB 4s linear infinite;}
+.wong-mystic-shield .wms-rotor{fill:none;stroke:#ffe7a8;stroke-width:2.3;stroke-dasharray:2 6 18 5;opacity:.95;transform-origin:66px 66px;animation:wongShieldSpinA 2.7s linear infinite;}
+.wong-mystic-shield .wms-rotor-2{fill:none;stroke:#ff9b2e;stroke-width:1.2;stroke-dasharray:8 5 2 7;opacity:.82;transform-origin:66px 66px;animation:wongShieldSpinB 3.8s linear infinite;}
+.wong-mystic-shield .wms-rune-glyphs{fill:#fff1bc;opacity:.9;font-family:'Anton',sans-serif;font-size:10px;letter-spacing:1px;text-anchor:middle;dominant-baseline:middle;transform-origin:66px 66px;animation:wongRuneOrbit 6.5s linear infinite;}
+.wong-mystic-shield .wms-core{fill:url(#wmsCoreGrad);opacity:.5;filter:drop-shadow(0 0 8px #ffd66d);}
+@keyframes wongShieldBreathe{to{transform:translate(-50%,-50%) scale(1.035);opacity:.96}}
+@keyframes wongShieldSpinA{to{transform:rotate(360deg)}}
+@keyframes wongShieldSpinB{to{transform:rotate(-360deg)}}
+@keyframes wongRuneOrbit{to{transform:rotate(360deg)}}
+.fighter.emmafrost .fighter-square{border-color:#f1e2ff;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 12px 24px rgba(0,0,0,.28),0 0 20px rgba(210,173,246,.18);}
+.emma-diamond-rig{position:absolute;inset:-9px;z-index:5;pointer-events:none;display:none;}
+.fighter.emmafrost.diamond-form-active .emma-diamond-rig{display:block;animation:emmaDiamondBreathe .72s ease-in-out infinite alternate;}
+.fighter.emmafrost.diamond-form-active .fighter-square{filter:saturate(.18) brightness(1.5) contrast(1.22);border-color:#ffffff;box-shadow:0 0 0 2px #fff,0 0 22px #ffffffaa,0 0 38px #dcbcff77;}
+.ed-facets{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #d9b9ff);}
+.ed-shard{position:absolute;width:7px;height:18px;background:linear-gradient(180deg,#fff,#e2c7ff,#a987d8);clip-path:polygon(50% 0,100% 28%,72% 100%,25% 84%,0 32%);filter:drop-shadow(0 0 5px #fff);opacity:.9;animation:emmaShardFloat 1.2s ease-in-out infinite alternate;}
+.ed-shard.s1{left:8%;top:18%;}.ed-shard.s2{right:10%;top:30%;animation-delay:.2s}.ed-shard.s3{left:18%;bottom:8%;animation-delay:.42s}.ed-shard.s4{right:21%;bottom:15%;animation-delay:.64s}
+@keyframes emmaDiamondBreathe{to{transform:scale(1.035)}}
+@keyframes emmaShardFloat{to{transform:translateY(-5px) rotate(11deg);opacity:.55}}
+.fighter.emmafrost.diamond-form-ending .emma-diamond-rig{animation:emmaDiamondCollapse .35s ease-out forwards;}
+@keyframes emmaDiamondCollapse{to{transform:scale(1.14);opacity:0}}
+.fighter.okoye .fighter-square{border-color:#b54858;box-shadow:0 0 0 1px rgba(255,207,147,.13),0 12px 24px rgba(0,0,0,.3),0 0 18px rgba(192,57,76,.13);}
+.fighter.okoye.okoye-spear-casting .fighter-square{animation:okoyeSpearBody .33s cubic-bezier(.24,.84,.2,1) both;}
+@keyframes okoyeSpearBody{0%{transform:scaleX(1) rotate(0)}24%{transform:scaleX(1) rotate(-2deg) translateX(-1px)}58%{transform:scaleX(1) rotate(3deg) translateX(2px)}82%{transform:scaleX(1) rotate(-1deg)}100%{transform:scaleX(1) rotate(0)}}
+.fighter.facing-left.okoye.okoye-spear-casting .fighter-square{transform-origin:50% 100%;}
+.okoye-spear-held{position:absolute;left:50%;top:48%;width:150px;height:33px;z-index:4;pointer-events:none;opacity:1;transform:translate(calc(-4px * var(--okoye-spear-dir,1)),-2px) rotate(calc(-24deg * var(--okoye-spear-dir,1))) scaleX(var(--okoye-spear-dir,1));transform-origin:18px 20px;filter:drop-shadow(0 0 3px rgba(185,139,255,.35)) drop-shadow(0 2px 3px rgba(0,0,0,.65));transition:filter .12s ease,opacity .12s ease;}
+.okoye-spear-held svg{width:100%;height:100%;display:block;overflow:visible;}
+.fighter.okoye.okoye-spear-active .okoye-spear-held,.fighter.okoye.okoye-spear-throwing .okoye-spear-held,.fighter.okoye.okoye-deflect-swat .okoye-spear-held{filter:drop-shadow(0 0 6px rgba(185,139,255,.6)) drop-shadow(0 0 9px rgba(255,204,109,.22));}
+.fighter.okoye.okoye-spear-active .okoye-spear-held{animation:okoyeSpearThrust .3s cubic-bezier(.18,.84,.16,1) both;}
+.fighter.okoye.okoye-spear-throwing .okoye-spear-held{animation:okoyeSpearThrowPrep .22s ease-out both;}
+.fighter.okoye.dora-active .okoye-spear-held{animation:okoyeHelicopterRight .07s linear infinite;filter:drop-shadow(0 0 7px rgba(185,139,255,.7)) drop-shadow(0 2px 4px rgba(0,0,0,.7));}
+.okoye-spear-hidden{opacity:0!important;visibility:hidden!important;pointer-events:none!important;}
+.fighter.okoye.okoye-deflect-swat .okoye-spear-held{animation:okoyeDeflectSwat .26s cubic-bezier(.2,.85,.2,1) both;}
+.fighter.facing-left.okoye .okoye-spear-held{transform:translate(4px,-2px) rotate(24deg) scaleX(-1);transform-origin:18px 20px;}
+.fighter.okoye .okoye-spear-held{--okoye-spear-dir:1;}
+.fighter.facing-left.okoye.okoye-spear-active .okoye-spear-held{animation-name:okoyeSpearThrustLeft;}
+.fighter.facing-left.okoye.okoye-spear-throwing .okoye-spear-held{animation-name:okoyeSpearThrowPrepLeft;}
+.fighter.facing-left.okoye.dora-active .okoye-spear-held{animation:okoyeHelicopterLeft .07s linear infinite;}
+.fighter.facing-left.okoye.okoye-deflect-swat .okoye-spear-held{animation-name:okoyeDeflectSwatLeft;}
+@keyframes okoyeSpearThrust{0%{transform:translate(-10px,2px) rotate(-46deg)}34%{transform:translate(2px,-4px) rotate(-10deg) scale(1.02)}68%{transform:translate(20px,-6px) rotate(8deg) scale(1.05)}100%{transform:translate(-4px,-2px) rotate(-24deg) scale(1)}}
+@keyframes okoyeSpearThrustLeft{0%{transform:translate(10px,2px) rotate(46deg) scaleX(-1)}34%{transform:translate(-2px,-4px) rotate(10deg) scaleX(-1) scale(1.02)}68%{transform:translate(-20px,-6px) rotate(-8deg) scaleX(-1) scale(1.05)}100%{transform:translate(4px,-2px) rotate(24deg) scaleX(-1) scale(1)}}
+@keyframes okoyeSpearThrowPrep{0%{transform:translate(-8px,4px) rotate(-40deg)}100%{transform:translate(6px,-4px) rotate(-6deg)}}
+@keyframes okoyeSpearThrowPrepLeft{0%{transform:translate(8px,4px) rotate(40deg) scaleX(-1)}100%{transform:translate(-6px,-4px) rotate(-6deg) scaleX(-1)}}
+@keyframes okoyeGuardSpear{to{transform:translate(-4px,-2px) rotate(336deg) scaleX(1)}}
+@keyframes okoyeGuardSpearLeft{to{transform:translate(4px,-2px) rotate(384deg) scaleX(-1)}}
+@keyframes okoyeHelicopterRight{from{transform:translate(-4px,-2px) rotate(-24deg) scaleX(1)}to{transform:translate(-4px,-2px) rotate(336deg) scaleX(1)}}
+@keyframes okoyeHelicopterLeft{from{transform:translate(4px,-2px) rotate(24deg) scaleX(-1)}to{transform:translate(4px,-2px) rotate(384deg) scaleX(-1)}}
+@keyframes okoyeDeflectSwat{0%{transform:translate(-6px,-14px) rotate(-70deg)}45%{transform:translate(14px,-8px) rotate(6deg) scale(1.08)}100%{transform:translate(-4px,-2px) rotate(-24deg) scale(1)}}
+@keyframes okoyeDeflectSwatLeft{0%{transform:translate(6px,-14px) rotate(70deg) scaleX(-1)}45%{transform:translate(-14px,-8px) rotate(-6deg) scaleX(-1) scale(1.08)}100%{transform:translate(4px,-2px) rotate(24deg) scaleX(-1) scale(1)}}
+.okoye-dora-hit{position:absolute;inset:-20px;z-index:20;pointer-events:none;}
+.okoye-dora-hit .flash{position:absolute;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff 0 16%,#ffd88a 33%,#f2a84e 56%,transparent 74%);box-shadow:0 0 18px #ffe8ac;animation:okoyeParryFlash .2s ease-out forwards;}
+@keyframes okoyeParryFlash{to{transform:translate(-50%,-50%) scale(2.5);opacity:0}}
+.wong-whip-fx{position:absolute;z-index:24;pointer-events:none;overflow:visible;}
+.wong-whip-fx svg{width:100%;height:100%;overflow:visible;display:block;}
+.wong-whip-fx .whip-shadow{stroke:#000;stroke-width:5;stroke-linecap:round;opacity:.22;filter:blur(2px);}
+.wong-whip-fx .whip-core{stroke:#fff4cf;stroke-width:3.4;stroke-linecap:round;filter:drop-shadow(0 0 5px #ffb13d) drop-shadow(0 0 12px #ff7f1a);stroke-dasharray:200;stroke-dashoffset:200;animation:wongWhipDraw .18s cubic-bezier(.2,.85,.15,1) forwards;}
+@keyframes wongWhipDraw{to{stroke-dashoffset:0}}
+.emma-psychic-projectile{position:absolute;overflow:visible!important;background:transparent!important;box-shadow:none!important;}
+.emma-psychic-projectile .psychic-halo{position:absolute;left:-10%;top:4%;width:125%;height:92%;border-radius:50%;background:radial-gradient(ellipse,#ffffff22,#e8b8ff44 42%,transparent 74%);box-shadow:0 0 14px #e9c8ff,0 0 24px #cf8eff77;animation:psychicPulse .18s ease-in-out infinite alternate;}
+.emma-psychic-projectile .psychic-core{position:absolute;left:5%;top:24%;width:78%;height:52%;border-radius:50%;background:linear-gradient(90deg,#c58aff,#ffffff 45%,#fff 56%,#e7b8ff);box-shadow:0 0 9px #fff,0 0 17px #d999ff;}
+.emma-psychic-projectile .psychic-edge{position:absolute;left:-5%;top:43%;width:110%;height:14%;border-radius:50%;background:#ffffff;filter:blur(.6px);opacity:.86;}
+.emma-psychic-projectile .psychic-particle{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 6px #f1c9ff;animation:psychicSpark .4s linear infinite;}
+.emma-psychic-projectile .psychic-particle.p1{left:18%;top:12%}.emma-psychic-projectile .psychic-particle.p2{left:42%;top:74%;animation-delay:.11s}.emma-psychic-projectile .psychic-particle.p3{left:65%;top:6%;animation-delay:.22s}
+@keyframes psychicPulse{to{transform:scale(1.08);opacity:.72}}
+@keyframes psychicSpark{to{transform:translateX(-12px) translateY(-4px);opacity:0}}
+.okoye-spear-projectile{position:absolute;overflow:visible!important;background:transparent!important;box-shadow:none!important;z-index:18;transform-origin:50% 50%;}
+.okoye-spear-projectile svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 0 4px #b98bff) drop-shadow(0 0 9px #dfe7ef88);}
+.wong-mystic-shield + *{}
 
+
+/* ---------- New character cast / impact FX ---------- */
+.wong-shield-activate,.wong-shield-collapse,.emma-diamond-activate,.emma-diamond-collapse,.okoye-dora-activate,.okoye-dora-end,.emma-psychic-cast,.emma-mind-crush-cast,.emma-mind-crush-lock,.emma-mind-crush-impact,.diamond-hit-glass,.emma-psychic-hit,.okoye-spear-swing,.okoye-throw-cast,.okoye-spear-hit-ring,.okoye-parry-streak{position:absolute;pointer-events:none;z-index:27;}
+.wsa-ring,.eda-ring,.oda-ring,.emc-wave,.emci-ring,.eph-ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;}
+.wsa-ring.a{width:94px;height:94px;border:4px solid #ffd77a;box-shadow:0 0 22px #ffab39;animation:wsaSpin .72s linear forwards;}
+.wsa-ring.b{width:122px;height:122px;border:2px dashed #fff0bd;box-shadow:0 0 26px #ff8e2e;animation:wsaExpand .62s ease-out forwards;}
+.wsa-core{position:absolute;left:50%;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff9df,#ffd06a 42%,#ff8b24 66%,transparent 76%);box-shadow:0 0 30px #ffd76b;animation:wsaCore .5s ease-out forwards;}
+@keyframes wsaSpin{to{transform:translate(-50%,-50%) rotate(300deg) scale(1.05);opacity:0}}
+@keyframes wsaExpand{to{transform:translate(-50%,-50%) scale(1.45);opacity:0}}
+@keyframes wsaCore{to{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
+.wsc-ring{position:absolute;inset:15%;border:4px solid #ffd77e;border-radius:50%;box-shadow:0 0 26px #ff8d2b;animation:wscOut .54s ease-out forwards;}
+.wsc-core{position:absolute;inset:35%;border-radius:50%;background:#fff0be;box-shadow:0 0 24px #ffb443;animation:wscCore .42s ease-out forwards;}
+@keyframes wscOut{to{transform:scale(1.7);opacity:0}}
+@keyframes wscCore{to{transform:scale(.15);opacity:0}}
+.eda-ring{width:92px;height:92px;border:3px solid #ffffff;box-shadow:0 0 30px #e4c9ff,0 0 54px #ffffff55;animation:edaRing .5s cubic-bezier(.15,.8,.2,1) forwards;}
+.eda-burst{position:absolute;inset:8%;background:radial-gradient(circle,#fff,#efd8ff 30%,#bd83e8 54%,transparent 75%);animation:edaBurst .46s ease-out forwards;}
+@keyframes edaRing{to{transform:translate(-50%,-50%) scale(1.7) rotate(90deg);opacity:0}}
+@keyframes edaBurst{to{transform:scale(1.25);opacity:0}}
+.edc-ring{position:absolute;inset:4%;border:4px solid #fff;border-radius:50%;box-shadow:0 0 30px #dfb8ff;animation:edcRing .5s ease-out forwards;}
+.edc-burst{position:absolute;inset:25%;background:radial-gradient(circle,#fff,#c89bea 36%,transparent 76%);animation:edcBurst .4s ease-out forwards;}
+@keyframes edcRing{to{transform:scale(.2);opacity:0}}
+@keyframes edcBurst{to{transform:scale(2.5);opacity:0}}
+.oda-ring.r1{width:72px;height:72px;border:2px solid #ffe3ad;box-shadow:0 0 20px #ffbb59;animation:odaA .5s ease-out forwards;}
+.oda-ring.r2{width:102px;height:102px;border:1px dashed #fff4db;box-shadow:0 0 26px #dba45d66;animation:odaB .58s ease-out forwards;}
+.oda-glint{position:absolute;left:50%;top:50%;width:70px;height:3px;transform:translate(-50%,-50%) rotate(28deg);background:linear-gradient(90deg,transparent,#fff6d6,#ffcc76,transparent);box-shadow:0 0 10px #fff0ba;animation:odaG .34s ease-out forwards;}
+@keyframes odaA{to{transform:translate(-50%,-50%) scale(1.42) rotate(100deg);opacity:0}}
+@keyframes odaB{to{transform:translate(-50%,-50%) scale(.65) rotate(-120deg);opacity:0}}
+@keyframes odaG{to{transform:translate(-50%,-50%) rotate(-18deg) scaleX(.28);opacity:0}}
+.ode-ring{position:absolute;inset:12%;border:2px solid #ffe5ae;border-radius:50%;box-shadow:0 0 18px #d8944c;animation:odeOut .4s ease-out forwards;}
+@keyframes odeOut{to{transform:scale(1.48);opacity:0}}
+.epc-ring.r1,.epc-ring.r2{position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%);}
+.epc-ring.r1{width:62px;height:62px;border:2px solid #f5dcff;box-shadow:0 0 17px #dbabff;animation:epc1 .28s ease-out forwards;}
+.epc-ring.r2{width:86px;height:86px;border:1px dashed #fff;animation:epc2 .34s ease-out forwards;}
+.epc-core{position:absolute;left:50%;top:50%;width:22px;height:22px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff,#e2b7ff 42%,transparent 76%);box-shadow:0 0 18px #fff,0 0 30px #b86bff66;animation:epcCore .24s ease-out forwards;}
+@keyframes epc1{to{transform:translate(-50%,-50%) scale(1.55);opacity:0}}
+@keyframes epc2{to{transform:translate(-50%,-50%) scale(1.05) rotate(80deg);opacity:0}}
+@keyframes epcCore{to{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
+.emc-wave{width:86px;height:86px;border:3px solid #f3d4ff;box-shadow:0 0 26px #ce8cff;animation:emcWave .52s cubic-bezier(.15,.8,.2,1) forwards;}
+.emc-wave.w2{width:126px;height:126px;border-style:dashed;animation-delay:.06s;}
+.emc-ray{position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);background:linear-gradient(90deg,transparent,#fff0ff,#cf91ff,#fff0ff,transparent);box-shadow:0 0 15px #d6a3ff;animation:emcRay .44s ease-out forwards;}
+@keyframes emcWave{to{transform:translate(-50%,-50%) scale(1.6);opacity:0}}
+@keyframes emcRay{to{transform:translateY(-50%) scaleX(1.22);opacity:0}}
+.emma-mind-crush-lock{border:2px solid #f0cfff;border-radius:50%;box-shadow:inset 0 0 24px #d28aff55,0 0 24px #c77bff;animation:emcLock 1.1s linear infinite;}
+.emma-mind-crush-lock:before,.emma-mind-crush-lock:after{content:'';position:absolute;inset:12px;border:1px dashed #fff0ff;border-radius:50%;}
+.emma-mind-crush-lock:before{animation:emcOrbit 2.2s linear infinite;}.emma-mind-crush-lock:after{inset:28px;border-color:#d5a0ff88;animation:emcOrbit 1.8s linear infinite reverse;}
+@keyframes emcLock{50%{box-shadow:inset 0 0 36px #d28aff77,0 0 36px #c77bff}}
+@keyframes emcOrbit{to{transform:rotate(360deg)}}
+.emci-ring.a,.emci-ring.b{width:84px;height:84px;border:3px solid #f0d0ff;box-shadow:0 0 22px #c777ff;animation:emci .48s ease-out forwards;}
+.emci-ring.b{width:132px;height:132px;border-style:dashed;animation-delay:.05s;}
+.emci-core{position:absolute;left:50%;top:50%;width:28px;height:28px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff,#e2b5ff 35%,#a45ad6 62%,transparent 78%);box-shadow:0 0 34px #d99cff;animation:emciCore .4s ease-out forwards;}
+@keyframes emci{to{transform:translate(-50%,-50%) scale(1.58);opacity:0}}
+@keyframes emciCore{to{transform:translate(-50%,-50%) scale(2.35);opacity:0}}
+.dhg-flash{position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle,#fff,#e5d2ff 35%,transparent 76%);box-shadow:0 0 25px #fff;animation:dhgF .34s ease-out forwards;}
+.dhg-shard{position:absolute;width:18px;height:7px;background:linear-gradient(90deg,#fff,#dbb9ff,#8c6ab3);clip-path:polygon(0 50%,82% 0,100% 50%,82% 100%);animation:dhgS .42s ease-out forwards;}
+.dhg-shard.s1{left:12%;top:45%;transform:rotate(182deg)}.dhg-shard.s2{right:11%;top:32%;transform:rotate(-18deg)}.dhg-shard.s3{left:45%;bottom:9%;transform:rotate(88deg)}
+@keyframes dhgF{to{transform:scale(1.65);opacity:0}}@keyframes dhgS{to{transform:translate(var(--sx,0),-24px) scale(.5);opacity:0}}
+.okoye-spear-swing{overflow:visible;}
+.oks-arc{position:absolute;left:4%;top:18%;width:92%;height:64%;border:3px solid transparent;border-top-color:#ffdca0;border-radius:50%;box-shadow:0 -2px 8px #ffe1a266;transform:rotate(-18deg);animation:oksArc .25s ease-out forwards;}
+.oks-arc.b{top:29%;border-top-color:#fff;border-width:1.5px;animation-delay:.03s;}
+.oks-glint{position:absolute;right:0;top:26%;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff,#ffd98c 48%,transparent 76%);box-shadow:0 0 16px #ffe0a4;animation:oksGlint .2s ease-out forwards;}
+@keyframes oksArc{to{transform:rotate(20deg) translateX(14px);opacity:0}}
+@keyframes oksGlint{to{transform:scale(2.2);opacity:0}}
+.otc-ring{position:absolute;inset:16%;border:2px solid #dfe7ef;border-radius:50%;box-shadow:0 0 18px #ffe0a0;animation:otcRing .3s ease-out forwards}.otc-glint{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);border-radius:50%;background:#fff;box-shadow:0 0 16px #ffe2ae;animation:otcGlint .22s ease-out forwards}
+@keyframes otcRing{to{transform:scale(1.5);opacity:0}}@keyframes otcGlint{to{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
+.okoye-spear-hit-ring{border:3px solid #ffdba3;border-radius:50%;box-shadow:0 0 26px #c45468;animation:okSpearHit .38s ease-out forwards;}
+@keyframes okSpearHit{to{transform:scale(1.5);opacity:0}}
+.okoye-parry-streak{position:absolute;z-index:29;pointer-events:none;overflow:visible;}
+.okoye-parry-streak:before,.okoye-parry-streak:after{content:'';position:absolute;left:8%;width:84%;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#fff4ce,#ffcc77,transparent);box-shadow:0 0 9px #ffe6ae;transform:rotate(-22deg);animation:parryStreak .2s ease-out forwards;}
+.okoye-parry-streak:after{top:28px;transform:rotate(19deg);animation-delay:.018s;}
+@keyframes parryStreak{to{transform:translateX(24px) rotate(-22deg) scaleX(.65);opacity:0}}.okoye-parry-streak:after{animation-name:parryStreak2}@keyframes parryStreak2{to{transform:translateX(24px) rotate(19deg) scaleX(.65);opacity:0}}
+.wong-whip-impact-slash{position:absolute;z-index:29;pointer-events:none;border-radius:50%;border-top:4px solid #ffe5a1;border-right:2px solid #ff9a30;box-shadow:0 0 11px #ffab37;animation:wongImpactSlash .33s ease-out forwards;transform-origin:45% 50%;}
+@keyframes wongImpactSlash{to{transform:scale(.58) rotate(32deg);opacity:0}}
+.wong-shield-hit{position:absolute;z-index:30;pointer-events:none;}
+.wsh-wave{position:absolute;left:50%;top:50%;width:68px;height:68px;transform:translate(-50%,-50%) translate(var(--impact-x),0);border:3px solid #ffd68b;border-radius:50%;box-shadow:0 0 22px #ff9c35;animation:wshWave .42s ease-out forwards;}
+.wsh-flash{position:absolute;left:50%;top:50%;width:28px;height:28px;transform:translate(-50%,-50%) translate(var(--impact-x),0);border-radius:50%;background:radial-gradient(circle,#fff,#ffd77b 38%,#ff8f2c 65%,transparent 78%);box-shadow:0 0 24px #ffe0a2;animation:wshFlash .22s ease-out forwards;}
+.wsh-runes{position:absolute;left:50%;top:50%;font-family:'Anton';font-size:13px;letter-spacing:7px;color:#ffe4ac;text-shadow:0 0 8px #ff9c36;transform:translate(-50%,-50%) translate(var(--impact-x),0);animation:wshRunes .45s ease-out forwards;}
+@keyframes wshWave{to{transform:translate(-50%,-50%) translate(var(--impact-x),0) scale(1.55);opacity:0}}@keyframes wshFlash{to{transform:translate(-50%,-50%) translate(var(--impact-x),0) scale(2.1);opacity:0}}@keyframes wshRunes{to{transform:translate(-50%,-50%) translate(var(--impact-x),0) rotate(70deg) scale(1.2);opacity:0}}
 /* ---------- Mobius / Spider-Gwen / She-Hulk visuals ---------- */
 .tva-door{
   position:absolute; z-index:18; pointer-events:none; border-radius:3px;
@@ -5715,6 +5872,54 @@ const CHARACTERS = {
          desc:'Opens a portal and instantly teleports Doctor Strange to the opposite side of the arena.'}
     }
   },
+  wong: {
+    id:'wong', name:'Wong', img:'Wong.jpg', color:'#ff9c36', accentColor:'#ffe2a6', aiStyle:'wong',
+    maxHealth:14500,
+    description:'Master of the Mystic Arts. Uses a long-range magical whip, the same portal magic as Doctor Strange, and a temporary 100% damage-immune Mystic Shield.',
+    abilities:{
+      E:{key:'E', name:'Magic Whip', type:'melee', damage:450, cooldown:1300, knockback:10, range:185, hitRange:205, hitVertical:122, hitStartSlack:28, hitDelay:145,
+         sound:'wong_whip', fx:'wong_magic_whip', hitFx:'wong_whip_hit', hitSound:'wong_whip_hit',
+         desc:'Summons a long orange-gold magical whip and snaps it forward for 450 damage. Short-to-medium range. Cooldown: 1.3 seconds.'},
+      Q:{key:'Q', name:'Portal', type:'portal', damage:0, cooldown:12000,
+         sound:'strange_portal', fx:'strange_portal',
+         desc:'Uses Doctor Strange\'s exact Portal behavior to instantly teleport Wong to the opposite side of the arena. Cooldown: 12 seconds.'},
+      R:{key:'R', name:'Mystic Shield', type:'invulnerability', damage:0, cooldown:16000, duration:5000,
+         sound:'wong_shield_activate', fx:'wong_mystic_shield',
+         desc:'Becomes completely immune to all damage for exactly 5 seconds while remaining fully able to move, jump, and use attacks and abilities.'}
+    }
+  },
+  emmafrost: {
+    id:'emmafrost', name:'Emma Frost', img:'EmmaFrost.jpg', color:'#f6d9ff', accentColor:'#ffffff', aiStyle:'emmafrost',
+    maxHealth:15500,
+    description:'A powerful telepath who pressures from range, crushes an enemy\'s mind, and becomes a highly durable crystalline fighter in Diamond Form.',
+    abilities:{
+      E:{key:'E', name:'Psychic Blast', type:'projectile', damage:400, cooldown:1100, knockback:7, speed:19, w:48, h:22, color:'#f6e8ff', render:'emma-psychic', trail:'emma-psychic',
+         sound:'emma_psychic', fx:'emma_psychic', hitFx:'emma_psychic_hit', hitSound:'emma_psychic_hit',
+         desc:'Fires a concentrated psychic energy blast for 400 damage. Cooldown: 1.1 seconds.'},
+      Q:{key:'Q', name:'Mind Crush', type:'mindCrush', damage:1500, cooldown:13000, duration:2500, radius:620, knockback:0,
+         sound:'emma_mind_crush', fx:'emma_mind_crush', hitFx:'emma_mind_crush_hit', hitSound:'emma_mind_crush_hit',
+         desc:"Overwhelms the target's mind for 1,500 damage and disables their movement and abilities for 2.5 seconds. Cooldown: 13 seconds."},
+      R:{key:'R', name:'Diamond Form', type:'diamondForm', damage:0, cooldown:18000, duration:5000, reduction:.70, movementReduction:.20,
+         sound:'emma_diamond_activate', fx:'emma_diamond_form',
+         desc:'Transforms Emma into Diamond Form for exactly 5 seconds, reducing incoming damage by 70% and movement speed by 20%.'}
+    }
+  },
+  okoye: {
+    id:'okoye', name:'Okoye', img:'Okoye.jpg', color:'#c84f64', accentColor:'#ffd8a6', aiStyle:'okoye',
+    maxHealth:10950,
+    description:'An agile Dora Milaje warrior specializing in precise vibranium spear combat, hard-hitting throws, and projectile deflection.',
+    abilities:{
+      E:{key:'E', name:'Vibranium Spear Strike', type:'melee', damage:550, cooldown:650, knockback:8, range:92, hitRange:112, hitVertical:112, hitStartSlack:22, hitDelay:55,
+         sound:'okoye_spear_strike', fx:'okoye_spear_strike', hitFx:'okoye_spear_hit', hitSound:'okoye_spear_hit',
+         desc:'A fast, precise close-range vibranium spear strike for 550 damage. Cooldown: 0.65 seconds.'},
+      Q:{key:'Q', name:'Spear Throw', type:'projectile', damage:1200, cooldown:9000, knockback:18, speed:24, w:104, h:24, color:'#dfe7ef', render:'okoye-spear', trail:'okoye-spear', returns:true, returnDistance:760,
+         sound:'okoye_spear_throw', fx:'okoye_spear_throw', hitFx:'okoye_spear_throw_hit', hitSound:'okoye_spear_throw_hit',
+         desc:'Throws a fast vibranium spear for 1,200 damage with strong knockback. Cooldown: 9 seconds.'},
+      R:{key:'R', name:'Dora Milaje Skills', type:'doraDeflect', damage:0, cooldown:15000, duration:6000,
+         sound:'okoye_dora_activate', fx:'okoye_dora_skills',
+         desc:'Deflects incoming long-range projectiles that are actually traveling toward Okoye for 6 seconds. Close-range melee attacks are not deflected.'}
+    }
+  },
   mrfantastic: {
     id:'mrfantastic', name:'Mr. Fantastic', img:'MrFantastic.jpg', color:'#64a9ff', aiStyle:'stretch',
     maxHealth:8500,
@@ -6324,7 +6529,7 @@ const CHARACTERS = {
 };
 // FUTURE AI BOT REMINDER: When adding a new character, place them beside their teammates / franchise group
 // in this roster order. Do not simply append new IDs to the end — Inventory and 1v1 both use this list.
-const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','nickfury','hawkeye','drstrange','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','nickfury','hawkeye','drstrange','wong','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
 /* =========================================================================
    SECTION: CHARACTER VERSIONS / TOKEN SKINS
    ========================================================================= */
@@ -7715,6 +7920,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     abilityUses:{},
     mystiqueDisguiseUntil:0,
     windBurstUntil:0, windBurstVx:0, invulnAbilityUntil:0,
+    mysticShieldUntil:0, diamondFormUntil:0, diamondFormReduction:.70, diamondMovementReduction:.20, mindCrushUntil:0, doraDeflectUntil:0,
     chargeState:null, draxFuryUntil:0, killmongerFuryUntil:0,
     quicksilverSpeed: def.id === 'quicksilver' ? 3 : 1,
     sockLoveUntil:0, sockLoveEl:null,
@@ -8287,6 +8493,61 @@ function activateHeldWeapon(f, selector, duration, direction){
   });
 }
 
+function okoyeSpearSvg(){
+  // A slim Wakandan vibranium lance: leather-wrapped grip, gold ceremonial
+  // bands, and a long tapering leaf-shaped vibranium blade with a glowing
+  // energy spine, closer in silhouette to the Dora Milaje spears on screen
+  // than the old blunt kite-blade version.
+  return `<svg viewBox="0 0 180 40" aria-hidden="true">
+    <defs>
+      <linearGradient id="okShaftWood" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4a2f18"/><stop offset=".4" stop-color="#8a5a2c"/><stop offset=".5" stop-color="#d3a05a"/><stop offset=".6" stop-color="#8a5a2c"/><stop offset="1" stop-color="#2e1d0e"/>
+      </linearGradient>
+      <linearGradient id="okGripWrap" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#241609"/><stop offset=".5" stop-color="#4a2f16"/><stop offset="1" stop-color="#180f05"/>
+      </linearGradient>
+      <linearGradient id="okVibranium" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#0b0c12"/><stop offset=".26" stop-color="#232a41"/><stop offset=".5" stop-color="#576289"/><stop offset=".52" stop-color="#7d8fd6"/><stop offset=".7" stop-color="#8a4fe0"/><stop offset="1" stop-color="#140f1c"/>
+      </linearGradient>
+      <linearGradient id="okGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#5b3413"/><stop offset=".35" stop-color="#dba546"/><stop offset=".55" stop-color="#ffe8b0"/><stop offset=".8" stop-color="#a96520"/><stop offset="1" stop-color="#4b2a10"/>
+      </linearGradient>
+    </defs>
+    <g>
+      <path d="M2 20 L9 14 L15 20 L9 26 Z" fill="#20232b" stroke="#0a0b0e" stroke-width="1"/>
+      <rect x="9" y="15" width="26" height="10" rx="3" fill="url(#okGripWrap)" stroke="#0a0704" stroke-width="1"/>
+      <path d="M13 15.4 L18.5 24.6 M19 15.4 L24.5 24.6 M25 15.4 L30.5 24.6" stroke="#6b4423" stroke-width="1" opacity=".55"/>
+      <path d="M34 20 L119 20" stroke="#0d0906" stroke-width="7.4" stroke-linecap="round" opacity=".5"/>
+      <path d="M34 20 L119 20" stroke="url(#okShaftWood)" stroke-width="5.2" stroke-linecap="round"/>
+      <path d="M47 15.3 L47 24.7 M81 15.3 L81 24.7 M109 15.3 L109 24.7" stroke="url(#okGold)" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M117 13 L130 20 L117 27 Z" fill="url(#okGold)" stroke="#3a210c" stroke-width="1"/>
+      <path class="okoye-blade-fill" d="M126 20 Q153 2.5 178 20 Q153 12.5 126 20 Z" fill="url(#okVibranium)" stroke="#080810" stroke-width="1.2" stroke-linejoin="round"/>
+      <path class="okoye-blade-glow" d="M129 19.5 L176 20" stroke="#c6a8ff" stroke-width="1.3" opacity=".85"/>
+      <path d="M131 16 Q153 8 173 19.5" fill="none" stroke="#eef0ff" stroke-width="1" opacity=".5"/>
+    </g>
+  </svg>`;
+}
+function wongShieldSvg(){
+  const glyphs = ['ᚱ','◈','✦','ᚦ','◇','ᛉ','✧','ᚱ'];
+  const glyphHtml = glyphs.map((g,i)=>`<text x="66" y="12" transform="rotate(${i*45} 66 66)">${g}</text>`).join('');
+  return `<svg class="wong-shield-mandala" viewBox="0 0 132 132" aria-hidden="true">
+    <defs>
+      <radialGradient id="wmsDiscGrad"><stop offset="0" stop-color="#fff4c8" stop-opacity=".18"/><stop offset=".48" stop-color="#ffb53d" stop-opacity=".12"/><stop offset="1" stop-color="#ff6f16" stop-opacity=".01"/></radialGradient>
+      <radialGradient id="wmsCoreGrad"><stop offset="0" stop-color="#ffffff"/><stop offset=".38" stop-color="#ffe4a0"/><stop offset=".72" stop-color="#ff9d2f"/><stop offset="1" stop-color="#ff7d18" stop-opacity="0"/></radialGradient>
+    </defs>
+    <circle class="wms-disc-fill" cx="66" cy="66" r="55"/>
+    <g class="wms-spokes">
+      <path d="M66 8 L66 124 M8 66 L124 66 M25 25 L107 107 M107 25 L25 107"/>
+    </g>
+    <circle class="wms-ring-still" cx="66" cy="66" r="52" stroke-width="3"/>
+    <circle class="wms-ring-hot" cx="66" cy="66" r="44" stroke-width="2.2"/>
+    <circle class="wms-rotor" cx="66" cy="66" r="58"/>
+    <circle class="wms-rotor-2" cx="66" cy="66" r="35"/>
+    <g class="wms-rune-glyphs">${glyphHtml}</g>
+    <path class="wms-ring-hot" d="M38 66 C43 45 55 33 66 33 C77 33 89 45 94 66 C89 87 77 99 66 99 C55 99 43 87 38 66 Z" stroke-width="1.4" opacity=".82"/>
+    <circle class="wms-core" cx="66" cy="66" r="13"/>
+  </svg>`;
+}
 function buildFighterDOM(f){
   // Shared clock all ten rings measure their orbit against, so a ring that
   // gets fired and recalled later re-syncs to the exact rotational phase the
@@ -8294,7 +8555,7 @@ function buildFighterDOM(f){
   // slowly drifting out of their even 36-degree spacing.
   if(f.def.id === 'shangchi') f.shangchiOrbitEpoch = now();
   const el = document.createElement('div');
-  el.className='fighter' + (f.def.skinOf ? ' skin-version' : '') + (f.def.id === 'scarletwitch' ? ' wanda' : '') + (f.def.id === 'spiderman_ironspider' ? ' ironspider' : '') + (f.def.id === 'ironman_mark50' ? ' mark50' : '') + (f.def.id === 'thor_infinitywar' ? ' thor-infinity' : '') + (f.def.id === 'scarletwitch_new' ? ' scarlet-witch-new' : '') + (f.def.id === 'hulk' || f.def.id === 'hulk_smart' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '');
+  el.className='fighter' + (f.def.skinOf ? ' skin-version' : '') + (f.def.id === 'scarletwitch' ? ' wanda' : '') + (f.def.id === 'spiderman_ironspider' ? ' ironspider' : '') + (f.def.id === 'ironman_mark50' ? ' mark50' : '') + (f.def.id === 'thor_infinitywar' ? ' thor-infinity' : '') + (f.def.id === 'scarletwitch_new' ? ' scarlet-witch-new' : '') + (f.def.id === 'hulk' || f.def.id === 'hulk_smart' ? ' hulk' : '') + (f.def.id === 'redhulk' ? ' redhulk' : '') + (f.def.id === 'ironmonger' ? ' ironmonger' : '') + (f.def.id === 'killmonger' ? ' killmonger' : '') + (f.def.id === 'punisher' ? ' punisher' : '') + (f.def.id === 'venom' ? ' venom' : '') + (f.def.id === 'antman' ? ' antman' : '') + (f.def.id === 'wasp' ? ' wasp' : '') + (f.def.id === 'falcon' ? ' falcon' : '') + (f.def.id === 'vision' ? ' vision' : '') + (f.def.id === 'greengoblin' ? ' greengoblin' : '') + (f.def.id === 'doctoroctopus' ? ' doctoroctopus' : '') + (f.def.id === 'redskull' ? ' redskull' : '') + (f.def.id === 'nickfury' ? ' nickfury' : '') + (f.def.id === 'starlord' ? ' starlord' : '') + (f.def.id === 'groot' ? ' groot' : '') + (f.def.id === 'humantorch' ? ' humantorch' : '') + (f.def.id === 'thing' ? ' thing' : '') + (f.def.id === 'drax' ? ' drax' : '') + (f.def.id === 'gamora' ? ' gamora' : '') + (f.def.id === 'yondu' ? ' yondu' : '') + (f.def.id === 'magneto' ? ' magneto' : '') + (f.def.id === 'professorx' ? ' professorx' : '') + (f.def.id === 'rocket' ? ' rocket' : '') + (f.def.id === 'shangchi' ? ' shangchi' : '') + (f.def.id === 'moonknight' ? ' moonknight' : '') + (f.def.id === 'zemo' ? ' zemo' : '') + (f.def.id === 'namor' ? ' namor' : '') + (f.def.id === 'juggernaut' ? ' juggernaut' : '') + (f.def.id === 'quicksilver' ? ' quicksilver' : '') + (f.def.id === 'scorpion' ? ' scorpion' : '') + (f.def.id === 'mantis' ? ' mantis' : '') + (f.def.id === 'nebula' ? ' nebula' : '') + (f.def.id === 'msmarvel' ? ' msmarvel' : '') + (f.def.id === 'wong' ? ' wong' : '') + (f.def.id === 'emmafrost' ? ' emmafrost' : '') + (f.def.id === 'okoye' ? ' okoye' : '');
   el.innerHTML = `
     <div class="overhead-hp"><div class="fill"></div></div>
     ${f.def.id==='hulk' ? '<div class="hulk-aura"></div>' : ''}
@@ -8340,6 +8601,9 @@ function buildFighterDOM(f){
     ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
     ${f.def.id==='mrfantastic' ? '<div class="elasticity-ring" style="display:none;"></div>' : ''}
     ${f.def.id==='msmarvel' ? '<div class="msm-arm-wrap"><div class="msm-sleeve"></div><div class="msm-tube"></div><div class="msm-cuff"></div><div class="msm-fist">'+msmarvelFistSvg(false)+'</div></div>' : ''}
+    ${f.def.id==='wong' ? `<div class="wong-mystic-shield" aria-hidden="true">${wongShieldSvg()}</div>` : ''}
+    ${f.def.id==='emmafrost' ? '<div class="emma-diamond-rig" aria-hidden="true"><span class="ed-shard s1"></span><span class="ed-shard s2"></span><span class="ed-shard s3"></span><span class="ed-shard s4"></span><svg class="ed-facets" viewBox="0 0 64 64"><polygon points="32,2 54,14 59,35 46,57 32,62 18,57 5,35 10,14" fill="none" stroke="#ffffff" stroke-width="1.5"/><polygon points="32,2 42,20 32,35 22,20" fill="#ffffff" opacity=".34"/><polygon points="42,20 59,35 32,35" fill="#f1d9ff" opacity=".25"/><polygon points="22,20 32,35 5,35" fill="#d9b4ef" opacity=".21"/><polygon points="32,35 46,57 32,62 18,57" fill="#ffffff" opacity=".26"/></svg></div>' : ''}
+    ${f.def.id==='okoye' ? `<div class="okoye-spear-held" aria-hidden="true">${okoyeSpearSvg()}</div>` : ''}
     <div class="shield-ring"></div>
     <div class="hex-freeze-aura"></div>
     <div class="ricochet-mark"></div>
@@ -8848,6 +9112,8 @@ function tryUseAbility(caster, target, key){
   if(caster.timeStickChargingUntil && t < caster.timeStickChargingUntil && ability.type !== 'timeStick') return false;
   if(ability.type === 'timeStick' && caster.timeStickChargingUntil && t < caster.timeStickChargingUntil) return false;
   if(caster.chargeState) return false;
+  if(caster.def && caster.def.id==='okoye' && caster.okoyeSpearThrown && key!=='Q') return false;
+  if(caster.def && caster.def.id==='okoye' && caster.doraDeflectUntil && t < caster.doraDeflectUntil) return false;
   if(caster.grootBallUntil && t < caster.grootBallUntil) return false; // curled up in the Groot Ball: no attacking
   if(caster.disabledAbilityKey === key && caster.disabledAbilityUntil && t < caster.disabledAbilityUntil){
     if(caster.el){
@@ -10000,7 +10266,7 @@ function executeAbility(caster, target, ability, t){
       // real target during the flank-reaction window — see updateBotFacing),
       // so a shot fired the instant you cross behind it can genuinely miss.
       // The player's own shots still auto-aim at the true target, same as before.
-      const dir = caster.isBot ? caster.facing : dirSignTo(caster, target);
+      const dir = caster.def && caster.def.id==='okoye' ? (caster.facing < 0 ? -1 : 1) : (caster.isBot ? caster.facing : dirSignTo(caster, target));
       // A homing shot (Yondu's Yaka Arrow) launches with its tip already pointed
       // straight at the real target — both x and y — instead of flying dead level
       // and only turning once airborne. Combined with instant homing in-flight
@@ -10029,8 +10295,12 @@ function executeAbility(caster, target, ability, t){
         burnDamage: ability.burnDamage || 0, burnTicks: ability.burnTicks || 0, burnTickMs: ability.burnTickMs || 500,
         redHulkBurn: !!ability.redHulkBurn, redHulkBurnTicks: ability.burnTicks || 4, redHulkBurnTickMs: ability.burnTickMs || 250,
         trailTick: 0,
-        el:null
+        el:null,
+        okoyeSpear: caster.def && caster.def.id==='okoye'
       });
+      if(caster.def && caster.def.id==='okoye'){
+        setOkoyeSpearVisible(caster,false);
+      }
       if(ability.shieldViz) caster.shieldThrown = true;
       if(!ability.fx) spawnMuzzleFx(caster);
       break;
@@ -10135,6 +10405,35 @@ function executeAbility(caster, target, ability, t){
       const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
       fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ff83ae;box-shadow:0 0 30px #ff5c9a66;`,620);
       spawnSparks(cx,cy,18,'#ff9fbd',65,420);
+      break;
+    }
+    case 'mindCrush': {
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) break;
+      const dx = (tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), dy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
+      const dist = Math.hypot(dx,dy);
+      const blockedByWall = state.walls.some(w => w.owner === tg.id && (w.x < tg.x + FIGHTER_SIZE && w.x + w.w > tg.x && w.y < tg.y + FIGHTER_SIZE && w.y + w.h > tg.y));
+      if(dist <= (ability.radius||620) && !attackBlockedByFloor(caster,tg) && !blockedByWall){
+        const healthBefore = tg.health;
+        damageTargetOrWall(tg, ability.damage||1500, ability.knockback||0, dirSignTo(caster,tg), {hitFx:ability.hitFx, sound:ability.hitSound, ranged:true, attacker:caster});
+        if(!tg.dead && tg.health < healthBefore){
+          const dur = ability.duration || 2500, until = t + dur;
+          tg.mindCrushUntil = until;
+          tg.pxMindStunUntil = Math.max(tg.pxMindStunUntil||0, until);
+          tg.abilityLockUntil = Math.max(tg.abilityLockUntil||0, until);
+          tg.vx = 0; tg.vy = 0; tg.flight = false; tg.flightExpire = 0; tg.grappleUntil = 0; tg.hitStun = 0;
+          if(tg.el) tg.el.classList.add('mind-crushed','px-mind-stunned');
+          const tx=tg.x+FIGHTER_SIZE/2, ty=tg.y+FIGHTER_SIZE/2;
+          fxEl('emma-mind-crush-lock',`left:${tx-60}px;top:${ty-60}px;width:120px;height:120px;`,dur);
+          for(let i=0;i<16;i++) setTimeout(()=>{
+            if(state.mode==='battle' && tg.el && tg.mindCrushUntil>now()){
+              const cX=tg.x+FIGHTER_SIZE/2, cY=tg.y+FIGHTER_SIZE/2;
+              spawnSparks(cX+(Math.random()-.5)*54,cY+(Math.random()-.5)*54,2,i%2?'#ffd7fb':'#b987ff',34,220);
+            }
+          },i*115);
+          setTimeout(()=>{ if(state.mode==='battle' && tg.mindCrushUntil<=now()){ if(tg.el) tg.el.classList.remove('mind-crushed'); sfx('emma_mind_crush_release'); } },dur+30);
+        }
+      }
       break;
     }
     case 'mindStun': {
@@ -10539,6 +10838,62 @@ function executeAbility(caster, target, ability, t){
       caster.shield = { reduction: ability.reduction, expire: t + ability.duration };
       break;
     }
+    case 'invulnerability': {
+      const dur = ability.duration || 5000;
+      caster.mysticShieldUntil = t + dur;
+      caster.invulnAbilityUntil = Math.max(caster.invulnAbilityUntil || 0, caster.mysticShieldUntil);
+      if(caster.el){ caster.el.classList.remove('wong-shield-active'); void caster.el.offsetWidth; caster.el.classList.add('wong-shield-active'); }
+      spawnWongShieldActivationFx(caster);
+      const who = caster, end = caster.mysticShieldUntil;
+      setTimeout(()=>{
+        if(state.mode==='battle' && who.el && who.mysticShieldUntil===end){
+          spawnWongShieldCollapseFx(who);
+          sfx('wong_shield_end');
+        }
+      },dur+15);
+      break;
+    }
+    case 'diamondForm': {
+      const dur = ability.duration || 5000;
+      caster.diamondFormUntil = t + dur;
+      caster.diamondFormReduction = Number.isFinite(ability.reduction) ? ability.reduction : .70;
+      caster.diamondMovementReduction = Number.isFinite(ability.movementReduction) ? ability.movementReduction : .20;
+      if(caster.el){ caster.el.classList.remove('diamond-form-ending'); caster.el.classList.add('diamond-form-active'); }
+      spawnDiamondActivationFx(caster);
+      const who = caster, end = caster.diamondFormUntil;
+      setTimeout(()=>{
+        if(state.mode==='battle' && who.diamondFormUntil===end){
+          who.diamondFormUntil = 0;
+          if(who.el){ who.el.classList.remove('diamond-form-active'); who.el.classList.add('diamond-form-ending'); setTimeout(()=>who.el && who.el.classList.remove('diamond-form-ending'),380); }
+          spawnDiamondCollapseFx(who);
+          sfx('emma_diamond_end');
+        }
+      },dur+15);
+      break;
+    }
+    case 'doraDeflect': {
+      const dur = ability.duration || 6000;
+      const end = t + dur;
+      caster.doraDeflectUntil = end;
+      // R is a moving defensive stance: Okoye can keep walking/jumping normally
+      // while the spear spins rapidly around its normal held position. Other
+      // abilities remain blocked separately by tryUseAbility while R is active.
+      if(caster.el){
+        caster.el.classList.add('dora-active');
+        caster.el.classList.remove('okoye-spear-casting','okoye-spear-active','okoye-spear-throwing');
+      }
+      spawnDoraActivationFx(caster);
+      const who=caster;
+      setTimeout(()=>{
+        if(state.mode==='battle' && who.doraDeflectUntil===end){
+          who.doraDeflectUntil = 0;
+          if(who.el) who.el.classList.remove('dora-active');
+          spawnDoraEndFx(who);
+          sfx('okoye_dora_end');
+        }
+      },dur+15);
+      break;
+    }
     case 'laserBomb': {
       // Sticky grenade: lobbed on an arc toward the enemy. It sticks to whatever it touches
       // first (the fighter, a wall, a platform or the floor), beeps, then explodes.
@@ -10913,8 +11268,9 @@ function updateShock(f){
   while(f.shockTicksLeft > 0 && t >= f.shockNextTick){
     f.shockTicksLeft--; f.shockNextTick += f.shockInterval;
     if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.shockTicksLeft = 0; break; }
-    f.health = Math.max(0, f.health - f.shockDamage);
-    spawnDamageNumber(f.x+18, f.y, Math.round(f.shockDamage), false);
+    const shockActual = f.def && f.def.id==='emmafrost' && f.diamondFormUntil > t ? f.shockDamage * (1 - (f.diamondFormReduction||.70)) : f.shockDamage;
+    f.health = Math.max(0, f.health - shockActual);
+    spawnDamageNumber(f.x+18, f.y, Math.round(shockActual), false);
     const cx = f.x + FIGHTER_SIZE/2, cy = f.y + FIGHTER_SIZE/2;
     const a = Math.random()*Math.PI*2;
     spawnLightning(cx+Math.cos(a)*34, cy+Math.sin(a)*34, cx-Math.cos(a)*34, cy-Math.sin(a)*34, {bolts:1, branches:2, width:2.2, life:220, jag:14, segs:5, color:'#9ff3ff'});
@@ -10954,8 +11310,9 @@ function updatePsiWarp(f){
   while(f.psiTicksLeft > 0 && t >= f.psiNextTick){
     f.psiTicksLeft--; f.psiNextTick += f.psiInterval;
     if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.psiTicksLeft = 0; break; }
-    f.health = Math.max(0, f.health - f.psiDamage);
-    spawnDamageNumber(f.x+18, f.y, Math.round(f.psiDamage), false);
+    const psiActual = f.def && f.def.id==='emmafrost' && f.diamondFormUntil > t ? f.psiDamage * (1 - (f.diamondFormReduction||.70)) : f.psiDamage;
+    f.health = Math.max(0, f.health - psiActual);
+    spawnDamageNumber(f.x+18, f.y, Math.round(psiActual), false);
     const cx = f.x + FIGHTER_SIZE/2, cy = f.y + FIGHTER_SIZE/2;
     fxEl('psi-warp-ring', `left:${cx}px;top:${cy}px;width:34px;height:34px;`, 420);
     spawnSparks(cx, cy, 4, '#c98bff', 26, 300);
@@ -11050,8 +11407,9 @@ function updateBurn(f){
     if((f.invulnUntil && t < f.invulnUntil) || (f.invulnAbilityUntil && t < f.invulnAbilityUntil)){ f.burnTicksLeft = 0; break; }
     let burnDamage = f.burnDamage;
     if(f.burnAttacker && f.burnAttacker.def && f.burnAttacker.def.id==='redhulk' && f.burnAttacker.redHulkHeatUntil > t){ burnDamage *= f.burnAttacker.def.abilities.R.damageMult || 1.3; }
-    f.health = Math.max(0, f.health - burnDamage);
-    spawnDamageNumber(f.x+18, f.y-8, Math.round(burnDamage), false);
+    const burnActual = f.def && f.def.id==='emmafrost' && f.diamondFormUntil > t ? burnDamage * (1 - (f.diamondFormReduction||.70)) : burnDamage;
+    f.health = Math.max(0, f.health - burnActual);
+    spawnDamageNumber(f.x+18, f.y-8, Math.round(burnActual), false);
     if(f.burnAttacker && f.burnAttacker.def && f.burnAttacker.def.id==='redhulk') {
       const bx=f.x+FIGHTER_SIZE/2, by=f.y+FIGHTER_SIZE/2;
       spawnSparks(bx,by,10,'#ffd35e',52,360);
@@ -11433,17 +11791,24 @@ function pushKoFeed(target){
 function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.dead) return;
   if(isSandboxPlayer(target)) return;
-  if(target.invulnUntil && now() < target.invulnUntil) return; // just respawned (Battle mode)
-  if(target.invulnAbilityUntil && now() < target.invulnAbilityUntil){
-    spawnDodgeFx(target, dirSign || target.facing);
-    sfx('dodge');
+  const damageOpts = opts || {};
+  const tDamage = now();
+  if(target.invulnUntil && tDamage < target.invulnUntil) return; // just respawned (Battle mode)
+  if(target.invulnAbilityUntil && tDamage < target.invulnAbilityUntil){
+    if(target.mysticShieldUntil && tDamage < target.mysticShieldUntil){
+      spawnMysticShieldHitFx(target, dmg, dirSign || target.facing);
+      sfx(dmg >= 1200 ? 'wong_shield_heavy' : 'wong_shield_hit');
+    } else {
+      spawnDodgeFx(target, dirSign || target.facing);
+      sfx('dodge');
+    }
     return;
   }
   if(target.energyFieldUntil && now() < target.energyFieldUntil && dmg < (target.energyFieldThreshold || 3000)){
     spawnEnergyFieldBlockFx(target, dmg);
     return;
   }
-  opts=opts||{};
+  opts = damageOpts;
   if(opts.attacker) target.lastDamager=opts.attacker;
   // Daredevil passive: Evasion — a clean dodge, no damage, no knockback.
   if(!opts.mindWarpSelf && !opts.guaranteedHit && target.def.dodgeChance && Math.random() < target.def.dodgeChance){
@@ -11502,8 +11867,12 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.shield && now() < target.shield.expire){
     actual = dmg * (1 - target.shield.reduction);
   }
-  if(target.magnetoShieldUntil && now() < target.magnetoShieldUntil){
+  if(target.magnetoShieldUntil && now()<target.magnetoShieldUntil){
     actual = actual * (1 - (target.magnetoShieldReduction || 0.3));
+  }
+  const diamondActive = target.def && target.def.id==='emmafrost' && target.diamondFormUntil > tDamage;
+  if(diamondActive){
+    actual *= 1 - (Number.isFinite(target.diamondFormReduction) ? target.diamondFormReduction : 0.70);
   }
   target.health = Math.max(0, target.health - actual);
   spawnDamageNumber(target.x+18, target.y, Math.round(actual), false);
@@ -11531,6 +11900,10 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
     target.vx = 0; target.vy = 0; target.hitStun = 0;
     if(target.el) target.el.classList.add('px-mind-stunned');
   }
+  if(diamondActive && target.health > 0){
+    spawnHitFx(target,'diamond_form_hit',dirSign);
+    sfx(actual >= 800 ? 'emma_diamond_heavy' : 'emma_diamond_hit');
+  }
   flashHit(target);
   if(target.health<=0 && !target.dead){
     pushKoFeed(target); onFighterZeroHealth(target,'ko-health');
@@ -11547,10 +11920,12 @@ const HAZARD_TICK_MS = 550;
 const HAZARD_DAMAGE = { toxic: 5 };
 function applyHazardDamage(target, dmg){
   if(!target || target.dead) return;
-  if(target.invulnUntil && now() < target.invulnUntil) return;
-  if(target.invulnAbilityUntil && now() < target.invulnAbilityUntil) return;
-  target.health = Math.max(0, target.health - dmg);
-  spawnDamageNumber(target.x+18, target.y, Math.round(dmg), false);
+  const tHaz = now();
+  if(target.invulnUntil && tHaz < target.invulnUntil) return;
+  if(target.invulnAbilityUntil && tHaz < target.invulnAbilityUntil) return;
+  const hazardActual = target.def && target.def.id==='emmafrost' && target.diamondFormUntil > tHaz ? dmg * (1 - (target.diamondFormReduction||.70)) : dmg;
+  target.health = Math.max(0, target.health - hazardActual);
+  spawnDamageNumber(target.x+18, target.y, Math.round(hazardActual), false);
   spawnSparks(target.x+FIGHTER_SIZE/2, target.y+FIGHTER_SIZE-6, 4, '#9dff5c', 20, 320);
   flashHit(target);
   sfx('hit');
@@ -12625,6 +13000,111 @@ function sfx(kind='ability'){
         aTone(ctx,t,'sine',240,54,0.34,0.18);
         aTone(ctx,t,'triangle',1200,500,0.16,0.08);
         aNoise(ctx,t,0.20,0.17,'highpass',3800,1300,1.4);
+        return;
+
+      /* ---------- Wong / Emma Frost / Okoye ---------- */
+      case 'wong_whip':
+        aTone(ctx,t,'sine',150,520,0.20,0.075);
+        aTone(ctx,t+0.025,'triangle',420,1500,0.16,0.055);
+        aNoise(ctx,t+0.10,0.14,0.22,'bandpass',4400,1200,1.8);
+        return;
+      case 'wong_whip_hit':
+        aNoise(ctx,t,0.10,0.22,'highpass',5200,1700,1.4);
+        aTone(ctx,t,'sine',180,48,0.24,0.18);
+        aTone(ctx,t+0.015,'triangle',900,1800,0.18,0.065);
+        return;
+      case 'wong_shield_activate':
+        aTone(ctx,t,'sine',130,520,0.58,0.12);
+        aTone(ctx,t+0.12,'triangle',380,1200,0.44,0.08);
+        aNoise(ctx,t,0.38,0.10,'bandpass',1700,5200,1.7);
+        return;
+      case 'wong_shield_hit':
+        aTone(ctx,t,'sine',280,90,0.24,0.16);
+        aTone(ctx,t+0.02,'triangle',1000,420,0.22,0.08);
+        aNoise(ctx,t,0.18,0.19,'highpass',4800,1800,1.1);
+        return;
+      case 'wong_shield_heavy':
+        aTone(ctx,t,'sine',120,40,0.48,0.24);
+        aTone(ctx,t+0.02,'triangle',740,180,0.28,0.10);
+        aNoise(ctx,t,0.28,0.25,'highpass',5200,1200,1.0);
+        return;
+      case 'wong_shield_end':
+        aTone(ctx,t,'sine',520,120,0.46,0.12);
+        aNoise(ctx,t,0.36,0.11,'bandpass',3800,720,1.4);
+        return;
+      case 'emma_psychic':
+        aTone(ctx,t,'sine',680,1180,0.18,0.07);
+        aTone(ctx,t+0.02,'triangle',940,1720,0.16,0.05);
+        aNoise(ctx,t+0.04,0.12,0.08,'bandpass',3200,8200,1.6);
+        return;
+      case 'emma_psychic_hit':
+        aTone(ctx,t,'sine',980,300,0.20,0.14);
+        aTone(ctx,t+0.012,'triangle',1500,620,0.17,0.07);
+        aNoise(ctx,t,0.16,0.13,'highpass',5200,1400,1.3);
+        return;
+      case 'emma_mind_crush':
+        aTone(ctx,t,'sine',240,940,0.44,0.12);
+        aTone(ctx,t+0.08,'triangle',1000,260,0.38,0.08);
+        aNoise(ctx,t,0.36,0.10,'bandpass',1500,4200,1.8);
+        return;
+      case 'emma_mind_crush_hit':
+        aTone(ctx,t,'sine',180,52,0.62,0.23);
+        aTone(ctx,t+0.03,'triangle',1100,1750,0.30,0.07);
+        aNoise(ctx,t,0.40,0.17,'bandpass',1100,4400,1.4);
+        return;
+      case 'emma_mind_crush_release':
+        aTone(ctx,t,'sine',850,240,0.34,0.09);
+        aNoise(ctx,t,0.24,0.08,'bandpass',3600,1000,1.7);
+        return;
+      case 'emma_diamond_activate':
+        aTone(ctx,t,'triangle',250,980,0.42,0.10);
+        aTone(ctx,t+0.06,'sine',620,1520,0.34,0.07);
+        aNoise(ctx,t,0.32,0.10,'highpass',4200,1400,1.5);
+        return;
+      case 'emma_diamond_hit':
+        aTone(ctx,t,'triangle',980,360,0.20,0.13);
+        aTone(ctx,t+0.015,'sine',1650,720,0.22,0.07);
+        aNoise(ctx,t,0.12,0.16,'highpass',6800,2800,1.2);
+        return;
+      case 'emma_diamond_heavy':
+        aTone(ctx,t,'sine',150,60,0.34,0.20);
+        aTone(ctx,t+0.02,'triangle',1300,480,0.25,0.10);
+        aNoise(ctx,t,0.22,0.20,'highpass',7600,2500,1.0);
+        return;
+      case 'emma_diamond_end':
+        aTone(ctx,t,'triangle',920,220,0.38,0.10);
+        aNoise(ctx,t,0.30,0.10,'highpass',5600,900,1.4);
+        return;
+      case 'okoye_spear_strike':
+        aNoise(ctx,t,0.11,0.16,'highpass',4200,900,1.6);
+        aTone(ctx,t+0.01,'triangle',420,180,0.13,0.06);
+        return;
+      case 'okoye_spear_hit':
+        aNoise(ctx,t,0.13,0.20,'highpass',6200,2100,1.1);
+        aTone(ctx,t,'triangle',640,190,0.18,0.12);
+        return;
+      case 'okoye_spear_throw':
+        aNoise(ctx,t,0.10,0.18,'highpass',5200,900,1.4);
+        aTone(ctx,t,'triangle',700,180,0.17,0.08);
+        return;
+      case 'okoye_spear_throw_hit':
+        aNoise(ctx,t,0.16,0.22,'highpass',5600,1600,1.0);
+        aTone(ctx,t,'sine',160,42,0.30,0.18);
+        aTone(ctx,t+0.025,'triangle',980,360,0.20,0.07);
+        return;
+      case 'okoye_dora_activate':
+        aNoise(ctx,t,0.16,0.12,'highpass',5200,1600,1.4);
+        aTone(ctx,t,'triangle',240,760,0.28,0.08);
+        aTone(ctx,t+0.07,'sine',520,980,0.24,0.05);
+        return;
+      case 'okoye_deflect':
+        aNoise(ctx,t,0.075,0.30,'highpass',7200,2900,1.0);
+        aTone(ctx,t,'triangle',950,330,0.16,0.12);
+        aTone(ctx,t+0.018,'sine',1650,740,0.12,0.065);
+        return;
+      case 'okoye_dora_end':
+        aTone(ctx,t,'triangle',740,220,0.28,0.06);
+        aNoise(ctx,t,0.18,0.07,'highpass',4200,900,1.2);
         return;
 
       /* ---------- Mr. Fantastic ---------- */
@@ -13711,6 +14191,68 @@ function ddClubSvg(){
     <circle cx="20" cy="20" r="2" fill="#8a8a8a"/>
   </svg>`;
 }
+function spawnWongShieldActivationFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('wong-shield-activate',`left:${cx-72}px;top:${cy-72}px;width:144px;height:144px;`,680,'<div class="wsa-ring a"></div><div class="wsa-ring b"></div><div class="wsa-core"></div>');
+  spawnSparks(cx,cy,28,'#ffd77f',100,540);
+  spawnSparks(cx,cy,12,'#ffffff',68,380);
+}
+function spawnWongShieldCollapseFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('wong-shield-collapse',`left:${cx-72}px;top:${cy-72}px;width:144px;height:144px;`,560,'<div class="wsc-ring"></div><div class="wsc-core"></div>');
+  spawnSparks(cx,cy,22,'#ffbf5c',92,460);
+}
+function spawnDiamondActivationFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('emma-diamond-activate',`left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;`,520,'<div class="eda-ring"></div><div class="eda-burst"></div>');
+  spawnSparks(cx,cy,24,'#f7ecff',84,520);
+}
+function spawnDiamondCollapseFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('emma-diamond-collapse',`left:${cx-62}px;top:${cy-62}px;width:124px;height:124px;`,520,'<div class="edc-ring"></div><div class="edc-burst"></div>');
+  spawnSparks(cx,cy,18,'#ffffff',76,420);
+}
+function spawnDoraActivationFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('okoye-dora-activate',`left:${cx-56}px;top:${cy-56}px;width:112px;height:112px;`,500,'<div class="oda-ring r1"></div><div class="oda-ring r2"></div><div class="oda-glint"></div>');
+  spawnSparks(cx+caster.facing*24,cy,10,'#ffe5b2',62,340);
+}
+function spawnDoraEndFx(caster){
+  const cx=caster.x+FIGHTER_SIZE/2, cy=caster.y+FIGHTER_SIZE/2;
+  fxEl('okoye-dora-end',`left:${cx-46}px;top:${cy-46}px;width:92px;height:92px;`,420,'<div class="ode-ring"></div>');
+  spawnSparks(cx,cy,8,'#ffd79a',44,280);
+}
+function spawnOkoyeDeflectFx(target, dir){
+  const cx=target.x+FIGHTER_SIZE/2, cy=target.y+FIGHTER_SIZE/2;
+  // Snap the held spear itself into a fast guard-to-swat swing (mirrored to
+  // whichever way Okoye is currently facing) so the deflection reads as her
+  // spear batting the projectile away, instead of just a detached flash.
+  if(target.el){
+    target.el.classList.remove('okoye-deflect-swat');
+    void target.el.offsetWidth;
+    target.el.classList.add('okoye-deflect-swat');
+    setTimeout(()=>{ if(target.el) target.el.classList.remove('okoye-deflect-swat'); },260);
+  }
+  fxEl('okoye-dora-hit',`left:${cx-60}px;top:${cy-60}px;width:120px;height:120px;`,220,'<div class="flash"></div>');
+  fxEl('okoye-parry-streak',`left:${cx-46}px;top:${cy-28}px;width:92px;height:56px;transform:scaleX(${dir||1});`,300);
+  spawnSparks(cx+dir*18,cy-2,12,'#fff2c8',86,300);
+  spawnSparks(cx+dir*12,cy+3,5,'#cdd7e4',48,240);
+  shakeArena(2.5,110);
+}
+function spawnMysticShieldHitFx(target, dmg, dir){
+  const cx=target.x+FIGHTER_SIZE/2, cy=target.y+FIGHTER_SIZE/2;
+  const heavy = dmg >= 1200;
+  fxEl('wong-shield-hit',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;--impact-x:${(dir||target.facing)*28}px;`,heavy?500:380,'<div class="wsh-wave"></div><div class="wsh-flash"></div><div class="wsh-runes">ᚱ ✦ ◈</div>');
+  if(target.el){
+    target.el.classList.remove('wong-shield-hit-pulse');
+    void target.el.offsetWidth;
+    target.el.classList.add('wong-shield-hit-pulse');
+    setTimeout(()=>{ if(target.el) target.el.classList.remove('wong-shield-hit-pulse'); },230);
+  }
+  spawnSparks(cx+(dir||target.facing)*18,cy,heavy?16:10,heavy?'#fff1bc':'#ffd77d',heavy?90:60,heavy?420:300);
+  if(heavy) shakeArena(4,140);
+}
+
 function spawnAbilityFx(caster, ability, target){
   const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
   const dir = caster.facing;
@@ -14953,6 +15495,86 @@ function spawnAbilityFx(caster, ability, target){
       break;
     }
 
+    /* ---------------- Wong / Emma Frost / Okoye ---------------- */
+    case 'wong_magic_whip': {
+      if(caster.el){
+        caster.el.classList.remove('wong-whip-casting'); void caster.el.offsetWidth; caster.el.classList.add('wong-whip-casting');
+        setTimeout(()=>caster.el && caster.el.classList.remove('wong-whip-casting'),440);
+      }
+      const w=200,h=40;
+      // Local anchor point the line actually starts from (the grip end,
+      // right in Wong's fist) — mirroring happens around this exact point
+      // so the whip always launches from his hand for either facing.
+      const anchorX=14, anchorY=20;
+      const whipSvg=`<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">
+        <line class="whip-shadow" x1="14" y1="23" x2="190" y2="23"/>
+        <line class="whip-core" x1="14" y1="20" x2="190" y2="20"/>
+      </svg>`;
+      // Anchor the whip container to Wong's hand: the hand sits a fixed
+      // offset from his body-center toward whichever way he's facing, and
+      // the container's left/top are solved so that the SVG's anchor point
+      // (anchorX,anchorY) always lands exactly on that hand position — for
+      // BOTH facing directions — instead of the old asymmetric left offset
+      // that only worked (partially) for one side.
+      const handX=32+dir*12, handY=20;
+      const whipEl=document.createElement('div');
+      whipEl.className='fx wong-whip-fx';
+      whipEl.style.cssText=`left:${handX-anchorX}px;top:${handY-anchorY}px;width:${w}px;height:${h}px;transform:scaleX(${dir});transform-origin:${anchorX}px ${anchorY}px;`;
+      whipEl.innerHTML=whipSvg;
+      if(caster.el){ caster.el.appendChild(whipEl); }
+      else { arenaEl.appendChild(whipEl); }
+      setTimeout(()=>{ if(whipEl.parentNode) whipEl.remove(); },430);
+      const tipX=cx+dir*176, tipY=cy;
+      setTimeout(()=>{ if(state.mode==='battle') spawnSparks(tipX,tipY,6,'#fff0bd',24,180); },145);
+      spawnSparks(cx+dir*82,cy-6,8,'#ffc66d',48,290);
+      spawnSparks(cx+dir*150,cy-16,5,'#fff0bd',40,250);
+      break;
+    }
+    case 'emma_psychic': {
+      fxEl('emma-psychic-cast',`left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;`,340,'<div class="epc-ring r1"></div><div class="epc-ring r2"></div><div class="epc-core"></div>');
+      spawnSparks(cx+dir*28,cy,6,'#f4ddff',38,240);
+      break;
+    }
+    case 'emma_mind_crush': {
+      const tg=target || (state.multiPvp?multiTargetFor(caster):((caster===state.player)?state.bot:state.player));
+      const tx=tg&& !tg.dead ? tg.x+FIGHTER_SIZE/2 : cx+dir*100, ty=tg&& !tg.dead ? tg.y+FIGHTER_SIZE/2 : cy;
+      fxEl('emma-mind-crush-cast',`left:${Math.min(cx,tx)-80}px;top:${Math.min(cy,ty)-80}px;width:${Math.abs(tx-cx)+160}px;height:${Math.abs(ty-cy)+160}px;`,560,'<div class="emc-wave w1"></div><div class="emc-wave w2"></div><div class="emc-ray"></div>');
+      spawnSparks(cx,cy,14,'#efcfff',72,360);
+      break;
+    }
+    case 'emma_diamond_form': {
+      spawnDiamondActivationFx(caster);
+      break;
+    }
+    case 'okoye_spear_strike': {
+      if(caster.el){
+        caster.el.classList.remove('okoye-spear-casting','okoye-spear-active');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('okoye-spear-casting','okoye-spear-active');
+        setTimeout(()=>{ if(caster.el) caster.el.classList.remove('okoye-spear-casting','okoye-spear-active'); },360);
+      }
+      const sx=cx+dir*58, sy=cy-2;
+      // Keep the FX restrained: the weapon itself is the focal point, with only a tight tip trail and contact sparks.
+      fxEl('okoye-spear-swing',`left:${sx-34}px;top:${sy-8}px;width:68px;height:16px;transform:scaleX(${dir});`,250,'<div class="oks-glint"></div>');
+      spawnSparks(sx,sy-2,7,'#ffe2aa',42,250);
+      break;
+    }
+    case 'okoye_spear_throw': {
+      if(caster.el){
+        caster.el.classList.remove('okoye-spear-throwing');
+        void caster.el.offsetWidth;
+        caster.el.classList.add('okoye-spear-throwing');
+        setTimeout(()=>{ if(caster.el) caster.el.classList.remove('okoye-spear-throwing'); },240);
+      }
+      fxEl('okoye-throw-cast',`left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;`,280,'<div class="otc-ring"></div><div class="otc-glint"></div>');
+      spawnSparks(cx+dir*20,cy,7,'#e7edf3',42,230);
+      break;
+    }
+    case 'okoye_dora_skills': {
+      spawnDoraActivationFx(caster);
+      break;
+    }
+
     /* ---------------- Doctor Strange ---------------- */
     case 'strange_rune': {
       for(let i=0;i<7;i++) fxEl('strange-rune', `left:${cx+dir*(14+i*7)}px;top:${cy-26+i*2}px;`, 520, ['◈','✦','ᚱ'][i%3]);
@@ -15490,6 +16112,55 @@ function spawnGroundCrack(cx, gy, spread){
 function spawnHitFx(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   switch(kind){
+    case 'wong_whip_hit': {
+      fxEl('fx-flash',`left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;background:radial-gradient(circle,#fff8dd,#ffd36e 25%,#ff8f2a 58%,transparent 78%);`,220);
+      fxEl('fx-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;border-color:#ffd27a;border-width:3px;box-shadow:0 0 26px #ff8f2a;transform:scaleX(${dirSign||1});`,360);
+      fxEl('wong-whip-impact-slash',`left:${cx-(dirSign||1)*52-58}px;top:${cy-38}px;width:116px;height:76px;transform:scaleX(${dirSign||1});`,360);
+      spawnSparks(cx+(dirSign||1)*20,cy,16,'#ffe6a8',80,340);
+      shakeArena(4,160);
+      break;
+    }
+    case 'emma_psychic_hit': {
+      fxEl('fx-flash',`left:${cx-38}px;top:${cy-38}px;width:76px;height:76px;background:radial-gradient(circle,#fff,#efd8ff 28%,#c889f0 58%,transparent 77%);`,240);
+      fxEl('fx-ring',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;border-color:#f4dfff;border-width:3px;box-shadow:0 0 24px #ce90ff;`,360);
+      fxEl('emma-psychic-hit',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;`,400,'<div class="eph-ring r1"></div><div class="eph-ring r2"></div><div class="eph-core"></div>');
+      spawnSparks(cx,cy,14,'#eed5ff',72,340);
+      break;
+    }
+    case 'emma_mind_crush_hit': {
+      fxEl('fx-flash',`left:${cx-54}px;top:${cy-54}px;width:108px;height:108px;background:radial-gradient(circle,#fff 0 7%,#f1ccff 26%,#b26ae8 55%,transparent 78%);`,280);
+      fxEl('fx-ring',`left:${cx-66}px;top:${cy-66}px;width:132px;height:132px;border-color:#f4d8ff;border-width:4px;box-shadow:0 0 30px #bc71ec,0 0 48px #dca4ff55;`,460);
+      fxEl('emma-mind-crush-impact',`left:${cx-72}px;top:${cy-72}px;width:144px;height:144px;`,520,'<div class="emci-ring a"></div><div class="emci-ring b"></div><div class="emci-core"></div>');
+      spawnSparks(cx,cy,22,'#f0d6ff',100,480);
+      shakeArena(7,280);
+      break;
+    }
+    case 'diamond_form_hit': {
+      fxEl('diamond-hit-glass',`left:${cx-44}px;top:${cy-44}px;width:88px;height:88px;`,330,'<div class="dhg-flash"></div><div class="dhg-shard s1"></div><div class="dhg-shard s2"></div><div class="dhg-shard s3"></div>');
+      spawnSparks(cx,cy,10,'#ffffff',56,300);
+      break;
+    }
+    case 'okoye_spear_hit': {
+      fxEl('fx-flash',`left:${cx-42}px;top:${cy-42}px;width:84px;height:84px;background:radial-gradient(circle,#fff8e6,#ffd089 30%,#b64f62 61%,transparent 78%);`,230);
+      fxEl('okoye-spear-hit-ring',`left:${cx-52}px;top:${cy-52}px;width:104px;height:104px;`,360);
+      spawnSparks(cx+(dirSign||1)*18,cy,12,'#ffe0a8',72,320);
+      break;
+    }
+    case 'okoye_spear_throw_hit': {
+      fxEl('fx-flash',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;background:radial-gradient(circle,#ffffff,#ffd48e 28%,#b44f61 60%,transparent 80%);`,260);
+      fxEl('fx-ring',`left:${cx-58}px;top:${cy-58}px;width:116px;height:116px;border-color:#ffe0a6;border-width:4px;box-shadow:0 0 26px #c05265;`,420);
+      spawnSparks(cx,cy,18,'#ffe4b2',92,390);
+      shakeArena(8,280);
+      break;
+    }
+    case 'wong_mystic_shield_hit': {
+      spawnMysticShieldHitFx(target,1400,dirSign||target.facing);
+      break;
+    }
+    case 'okoye_deflect': {
+      spawnOkoyeDeflectFx(target,dirSign||target.facing);
+      break;
+    }
     case 'mobius_stick_hit': {
       fxEl('fx-flash',`left:${cx-30}px;top:${cy-30}px;width:60px;height:60px;background:radial-gradient(circle,#fff6d8,#ffbd3a 40%,transparent 74%);`,220);
       fxEl('fx-ring',`left:${cx-40}px;top:${cy-40}px;width:80px;height:80px;border-color:#ffd35a;border-width:3px;box-shadow:0 0 18px #ff9f2f;`,340);
@@ -16417,6 +17088,12 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     if(!f.hexFrozenUntil) f.abilityLockUntil = 0;
     if(f.el) f.el.classList.remove('px-mind-stunned','jg-mind-warped');
   }
+  if(f.def && f.def.id==='okoye' && f.doraDeflectUntil && tNow < f.doraDeflectUntil){
+    // R is a moving defensive stance. Keep normal movement physics active;
+    // only the ability system prevents Okoye from using other moves.
+    if(f.el) f.el.classList.add('dora-active');
+  }
+
   if(f.sockLoveUntil && tNow < f.sockLoveUntil && !f.dead){
     const sockX=ARENA_W/2-FIGHTER_SIZE/2;
     const loveDir = Math.abs(sockX-f.x)<18 ? 0 : (sockX>f.x?1:-1);
@@ -16727,6 +17404,7 @@ function fighterSpeedMultiplier(f){
   if(f.def.id==='moonknight' && f.moonknightPersona==='jake' && f.moonknightPersonaUntil > now()) mult *= (f.def.abilities.Q.speedMult || 1.35);
   if(f.def.id==='beast' && f.beastSurgeUntil > now()) mult *= (f.def.abilities.R.speedMult || 1.4);
   if(f.def.id==='ghostrider' && f.hellcycleUntil > now()) mult *= (f.def.abilities.R.speedMult || 4);
+  if(f.def.id==='emmafrost' && f.diamondFormUntil > now()) mult *= 1 - (Number.isFinite(f.diamondMovementReduction) ? f.diamondMovementReduction : .20);
   if(f.def.id==='quicksilver') mult *= (f.quicksilverSpeed || 3);
   if(f.def.id==='thor_infinitywar' && f.flight) mult *= 1.6;
   return mult;
@@ -17163,6 +17841,14 @@ function restoreShangChiRing(owner, ringEl){
   const before = siblings.find(el=>Number(el.dataset.ringIndex) > idx);
   if(before) ringContainer.insertBefore(ringEl,before); else ringContainer.appendChild(ringEl);
 }
+function setOkoyeSpearVisible(f, visible){
+  if(!f || !f.el || !f.el.querySelector) return;
+  const spear = f.el.querySelector('.okoye-spear-held');
+  if(!spear) return;
+  spear.classList.toggle('okoye-spear-hidden', !visible);
+  f.okoyeSpearThrown = !visible;
+}
+
 function removeProjectileAtIndex(i,p){
   if(p && p.shangchiOrbitRing){
     restoreShangChiRing(p.casterRef,p.el);
@@ -17170,8 +17856,49 @@ function removeProjectileAtIndex(i,p){
     return;
   }
   if(p && p.el) p.el.remove();
+  if(p && p.okoyeSpear && p.casterRef && p.casterRef.def && p.casterRef.def.id==='okoye') setOkoyeSpearVisible(p.casterRef,true);
   state.projectiles.splice(i,1);
 }
+function fighterByRuntimeId(id){
+  const list = state.multiPvp && state.multi && Array.isArray(state.multi.fighters) ? state.multi.fighters : [state.player,state.bot];
+  return list.find(f=>f && f.id===id) || null;
+}
+function isOkoyeDeflectActive(target){ return !!(target && target.def && target.def.id==='okoye' && target.doraDeflectUntil > now()); }
+function projectileIsIncoming(target, p){
+  if(!target || !p) return false;
+  const pcx=p.x+p.w/2, pcy=p.y+p.h/2;
+  const tx=target.x+FIGHTER_SIZE/2-pcx, ty=target.y+FIGHTER_SIZE/2-pcy;
+  return (p.vx*tx + p.vy*ty) > 0;
+}
+function deflectProjectileFromOkoye(p, target){
+  const originalCaster = p.casterRef || fighterByRuntimeId(p.owner);
+  if(!originalCaster || originalCaster===target) return false;
+  const pcx=p.x+p.w/2, pcy=p.y+p.h/2;
+  const tx=target.x+FIGHTER_SIZE/2, ty=target.y+FIGHTER_SIZE/2;
+  let ax=pcx-tx, ay=pcy-ty, len=Math.hypot(ax,ay);
+  if(len<0.01){ ax=target.facing||1; ay=0; len=1; }
+  ax/=len; ay/=len;
+  const speed=Math.max(14,Math.hypot(p.vx,p.vy));
+  const sideBias = (target.facing||1)*0.34;
+  let nx=ax + sideBias, ny=ay - 0.08;
+  const nlen=Math.hypot(nx,ny)||1; nx/=nlen; ny/=nlen;
+  p.vx=nx*speed; p.vy=ny*speed;
+  p.x=tx+nx*(FIGHTER_SIZE/2+12)-p.w/2; p.y=ty+ny*(FIGHTER_SIZE/2+12)-p.h/2;
+  p.owner=target.id;
+  p.casterRef=target;
+  p.targetRef=originalCaster;
+  p.hasHitTarget=false;
+  p.returns=false;
+  p.phase='out';
+  p.life=Math.max(1200,Math.min(p.life||2400,2400));
+  p.deflected=true;
+  if(p.el) p.el.style.transform=`rotate(${Math.atan2(p.vy,p.vx)}rad)`;
+  const dir = nx>=0 ? 1 : -1;
+  spawnOkoyeDeflectFx(target,dir);
+  sfx('okoye_deflect');
+  return true;
+}
+
 function updateProjectiles(dtF){
   for(let i=state.projectiles.length-1; i>=0; i--){
     const p = state.projectiles[i];
@@ -17332,6 +18059,11 @@ function updateProjectiles(dtF){
     if(target && !target.dead && p.phase === 'out'){
       const overlapX = (p.x + p.w) > target.x && p.x < (target.x + FIGHTER_SIZE);
       const overlapY = (p.y + p.h) > target.y && p.y < (target.y + FIGHTER_SIZE);
+      // Okoye's deflection only triggers on a real projectile/body contact so
+      // projectiles that merely pass nearby are never intercepted.
+      if(overlapX && overlapY && !p.hasHitTarget && isOkoyeDeflectActive(target) && projectileIsIncoming(target,p) && deflectProjectileFromOkoye(p,target)){
+        continue;
+      }
       if(overlapX && overlapY && !p.hasHitTarget){
         const dir = dirSignTo({x:p.x}, {x:target.x});
         if(p.visualOnly){ spawnSparks(p.x + p.w/2, p.y + p.h/2, 5, '#ff8a5c', 30, 260); if(p.el) p.el.remove(); state.projectiles.splice(i,1); continue; }
@@ -17434,7 +18166,7 @@ function updateProjectiles(dtF){
       arenaEl.appendChild(p.el);
     }
     p.el.style.left=p.x+'px'; p.el.style.top=p.y+'px';
-    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile') || p.el.classList.contains('namor-trident-projectile') || p.el.classList.contains('namor-wave-projectile') || p.el.classList.contains('tva-slow-stick-projectile') || p.el.classList.contains('tva-time-stick-projectile') || p.el.classList.contains('shehulk-rock-projectile') || p.el.classList.contains('mark50-missile-projectile') || p.el.classList.contains('mark50-unibeam-projectile')){
+    if(p.el.classList.contains('spin-projectile') || p.el.classList.contains('arrow-projectile') || p.el.classList.contains('pistol-projectile') || p.el.classList.contains('bullet-projectile') || p.el.classList.contains('storm-projectile') || p.el.classList.contains('cyclops-projectile') || p.el.classList.contains('wm-missile-projectile') || p.el.classList.contains('wasp-size-disc-projectile') || p.el.classList.contains('bullseye-projectile') || p.el.classList.contains('scarlet-chaos-projectile') || p.el.classList.contains('redskull-hydra-projectile') || p.el.classList.contains('starlord-bolt-projectile') || p.el.classList.contains('redskull-infinite-projectile') || p.el.classList.contains('nickfury-bazooka-projectile') || p.el.classList.contains('iw-laser-projectile') || p.el.classList.contains('yondu-yaka-projectile') || p.el.classList.contains('namor-trident-projectile') || p.el.classList.contains('namor-wave-projectile') || p.el.classList.contains('tva-slow-stick-projectile') || p.el.classList.contains('tva-time-stick-projectile') || p.el.classList.contains('shehulk-rock-projectile') || p.el.classList.contains('mark50-missile-projectile') || p.el.classList.contains('mark50-unibeam-projectile') || p.el.classList.contains('emma-psychic-projectile') || p.el.classList.contains('okoye-spear-projectile')){
       p.el.style.transform = `rotate(${Math.atan2(p.vy,p.vx)}rad)`;
     }
 
@@ -17647,6 +18379,16 @@ function buildProjectileVisual(p){
     p.el.style.overflow='visible';
     const tailSide = flip > 0 ? 'right:100%;' : 'left:100%;';
     p.el.innerHTML = `<div class="rocketbolt-tail" style="${tailSide}"></div><div class="rocketbolt-core"></div>`;
+  } else if(p.render === 'emma-psychic'){
+    p.el.classList.add('emma-psychic-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="psychic-halo"></div><div class="psychic-core"></div><div class="psychic-edge"></div><i class="psychic-particle p1"></i><i class="psychic-particle p2"></i><i class="psychic-particle p3"></i>';
+  } else if(p.render === 'okoye-spear'){
+    p.el.classList.add('okoye-spear-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML=okoyeSpearSvg();
+    const ang=Math.atan2(p.vy||0,p.vx||1);
+    p.el.style.transform=`rotate(${ang}rad)`;
   } else if(p.render === 'magneto-shard'){
     p.el.classList.add('magshard-projectile');
     p.el.style.background='transparent';
@@ -17862,6 +18604,11 @@ function spawnProjTrail(p){
   } else if(p.trail === 'namor-water'){
     const sz = p.render === 'namor-wave' ? 10 : 7;
     fxEl('fx-trail', `left:${(cx-sz).toFixed(1)}px;top:${(cy-sz/2).toFixed(1)}px;width:${(sz*2).toFixed(1)}px;height:${sz.toFixed(1)}px;background:radial-gradient(ellipse,#eaffff,#48d8ff 42%,transparent 78%);box-shadow:0 0 ${p.render === 'namor-wave' ? 16 : 9}px #45d9ff88;`, p.render === 'namor-wave' ? 260 : 190);
+  } else if(p.trail === 'emma-psychic'){
+    fxEl('fx-trail', `left:${(cx-7).toFixed(1)}px;top:${(cy-5).toFixed(1)}px;width:14px;height:10px;background:radial-gradient(ellipse,#fff,#ddb0ff 44%,transparent 78%);box-shadow:0 0 12px #d9a3ff,0 0 24px #b867ff66;`, 250);
+  } else if(p.trail === 'okoye-spear'){
+    const ang=Math.atan2(p.vy||0,p.vx||1);
+    fxEl('fx-trail', `left:${(cx-26).toFixed(1)}px;top:${(cy-2).toFixed(1)}px;width:52px;height:4px;background:linear-gradient(90deg,transparent,#ffffffaa 52%,#f6d18a);box-shadow:0 0 8px #ffe1a2,0 0 16px #dfe7ef66;transform:rotate(${ang}rad);transform-origin:right center;`, 160);
   } else if(p.trail === 'electric-web'){
     const n = Math.max(8, Math.min(18, p.w));
     fxEl('fx-webtick', `left:${(cx-n/2).toFixed(1)}px;top:${(cy-n/2).toFixed(1)}px;width:${n}px;height:${n}px;`, 320,
@@ -17936,6 +18683,25 @@ function updateMissiles(dtF){
     const hitX = (m.x + m.w) > target.x && m.x < (target.x + FIGHTER_SIZE);
     const hitY = (m.y + m.h) > target.y && m.y < (target.y + FIGHTER_SIZE);
     if(hitX && hitY){
+      const mcxHit=m.x+m.w/2, mcyHit=m.y+m.h/2;
+      const incoming=(m.speed*Math.cos(m.angle))*(target.x+FIGHTER_SIZE/2-mcxHit)+(m.speed*Math.sin(m.angle))*(target.y+FIGHTER_SIZE/2-mcyHit)>0;
+      if(isOkoyeDeflectActive(target) && incoming){
+        const originalCaster=fighterByRuntimeId(m.owner);
+        if(originalCaster && originalCaster!==target){
+          let ax=mcxHit-(target.x+FIGHTER_SIZE/2), ay=mcyHit-(target.y+FIGHTER_SIZE/2), len=Math.hypot(ax,ay)||1;
+          ax/=len; ay/=len;
+          const newAng=Math.atan2(ay + (target.facing||1)*0.18, ax + (target.facing||1)*0.18);
+          m.angle=newAng;
+          m.speed=Math.max(16,m.speed);
+          m.x=target.x+FIGHTER_SIZE/2+Math.cos(newAng)*(FIGHTER_SIZE/2+20)-m.w/2;
+          m.y=target.y+FIGHTER_SIZE/2+Math.sin(newAng)*(FIGHTER_SIZE/2+20)-m.h/2;
+          m.owner=target.id;
+          m.targetRef=originalCaster;
+          spawnOkoyeDeflectFx(target,Math.cos(newAng)>=0?1:-1);
+          sfx('okoye_deflect');
+          continue;
+        }
+      }
       const dmg = Math.max(0, Math.round(m.health)); // damage = health it had left
       const dir = (tcx >= mcx) ? 1 : -1;
       applyDamage(target, dmg, m.knockback, dir, {hitFx:'missile', sound:'missile_boom', ranged:true});
@@ -18136,6 +18902,9 @@ const AI_STYLE_RANGE = {
   mobius:420,
   spidergwen:150,
   shehulk:105,
+  wong:240,
+  emmafrost:520,
+  okoye:115,
 };
 /* A bot's facing tracks its opponent's true side by default — including
    while it's retreating/kiting, so ranged characters can still fire while
@@ -18156,6 +18925,17 @@ function updateBotFacing(bot, opp){
   } else {
     bot.turnPending = { dir: trueSide, readyAt: now() + AI_TURN_DELAY };
   }
+}
+function findIncomingProjectile(bot){
+  if(!bot || bot.dead) return null;
+  let best=null,bestD=Infinity;
+  for(const p of state.projectiles){
+    if(!p || p.phase!=='out' || p.casterRef===bot) continue;
+    if(!projectileIsIncoming(bot,p)) continue;
+    const d=Math.hypot((p.x+p.w/2)-(bot.x+FIGHTER_SIZE/2),(p.y+p.h/2)-(bot.y+FIGHTER_SIZE/2));
+    if(d<bestD){bestD=d;best=p;}
+  }
+  return best;
 }
 function findIncomingMissile(bot){
   let best = null, bestD = Infinity;
@@ -18260,6 +19040,7 @@ function updateBotAI(dtF){
   const preferred = AI_STYLE_RANGE[style] || 200;
 
   const missile = findIncomingMissile(bot);
+  const incomingProjectile = findIncomingProjectile(bot);
 
   /* ---------------- movement: navigate to the player's level first ---------------- */
   let moveDir = dirToPlayer;
@@ -18644,6 +19425,22 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist <= qAb.radius + 25){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 850){ tryUseAbility(bot,player,'E'); return; }
     if(cdReady(bot,'R',t) && (adist > 420 || Math.abs(vertical)>130 || hpPct < 0.35)){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'wong'){
+    const eAb=bot.def.abilities.E;
+    if(cdReady(bot,'R',t) && (hpPct < 0.32 || incomingProjectile || missile || adist < 110) && Math.random()<0.82){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && (adist > 480 || adist < 125 || Math.abs(vertical)>160) && Math.random()<0.62){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.hitRange + 18){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'E',t) && adist < 700){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'emmafrost'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'R',t) && (hpPct < 0.42 || incomingProjectile || missile) && Math.random()<0.74){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist <= (qAb.radius||620) && Math.abs(vertical)<150){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 1000){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'okoye'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
+    if(cdReady(bot,'R',t) && (incomingProjectile || missile) && adist < 760 && Math.random()<0.9){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > eAb.hitRange + 24 && adist < 1050){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.hitRange + 18){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'stretch'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
     if(cdReady(bot,'R',t) && hpPct < 0.48){ tryUseAbility(bot,player,'R'); return; }
@@ -19163,7 +19960,7 @@ function resetFighterTransientState(target){
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
   target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0; target.hellcycleUntil = 0;
   if(target.el) target.el.classList.remove('beast-surge-active','hellcycle-active');
-  target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped');
+  target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped','mind-crushed','wong-shield-active','diamond-form-active','diamond-form-ending','dora-active');
   target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
   target.slowUntil = 0;
   target.cloakUntil = 0; target.shockTicksLeft = 0; target.psiTicksLeft = 0;
@@ -19176,6 +19973,8 @@ function resetFighterTransientState(target){
   target.waspSizeUntil = 0; target.waspSizeSpeedMultiplier = .62;
   target.el && target.el.classList.remove('wasp-enlarged','wasp-small');
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
+  target.mysticShieldUntil = 0; target.diamondFormUntil = 0; target.mindCrushUntil = 0; target.doraDeflectUntil = 0; target.okoyeSpearThrown = false;
+  target.el && target.el.classList.remove('wong-shield-active','diamond-form-active','diamond-form-ending','dora-active','mind-crushed','okoye-spear-hidden');
   target.chargeState = null; target.draxFuryUntil = 0; target.killmongerFuryUntil = 0; target.redHulkHeatUntil = 0;
   target.ironJumpActive = false; target.ironJumpMinLandAt = 0; target.ironJumpAbility = null; target.burnTicksLeft = 0; target.burnAttacker = null;
   target.moonknightPersona = null; target.moonknightPersonaUntil = 0; target.glideUntil = 0;
@@ -19214,7 +20013,7 @@ function loseLife(target, side){
   target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
   target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0; target.hellcycleUntil = 0;
   if(target.el) target.el.classList.remove('beast-surge-active','hellcycle-active');
-  target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped');
+  target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped','mind-crushed','wong-shield-active','diamond-form-active','diamond-form-ending','dora-active');
   target.mystiqueDisguiseUntil = 0; if(target.fighterSquareEl) target.fighterSquareEl.innerHTML = squareInner(target.def);
   target.slowUntil = 0;
   target.cloakUntil = 0; target.shockTicksLeft = 0; target.psiTicksLeft = 0;
@@ -19227,6 +20026,8 @@ function loseLife(target, side){
   target.waspSizeUntil = 0; target.waspSizeSpeedMultiplier = .62;
   target.el && target.el.classList.remove('wasp-enlarged','wasp-small');
   target.windBurstUntil = 0; target.windBurstVx = 0; target.invulnAbilityUntil = 0;
+  target.mysticShieldUntil = 0; target.diamondFormUntil = 0; target.mindCrushUntil = 0; target.doraDeflectUntil = 0; target.okoyeSpearThrown = false;
+  target.el && target.el.classList.remove('wong-shield-active','diamond-form-active','diamond-form-ending','dora-active','mind-crushed','okoye-spear-hidden');
   target.chargeState = null; target.draxFuryUntil = 0; target.killmongerFuryUntil = 0; target.redHulkHeatUntil = 0;
   target.ironJumpActive = false; target.ironJumpMinLandAt = 0; target.ironJumpAbility = null; target.burnTicksLeft = 0; target.burnAttacker = null;
   target.moonknightPersona = null; target.moonknightPersonaUntil = 0; target.glideUntil = 0;
@@ -19459,6 +20260,22 @@ function renderFighter(f){
   f.el.classList.toggle('omega-chucked', !!f.omegaChuckUntil && now() < f.omegaChuckUntil);
   f.el.classList.toggle('lightning-flight', !!f.flight && f.def.id==='thor_infinitywar');
   f.el.classList.toggle('holo-suit-active', !!f.holoSuitUntil && now() < f.holoSuitUntil);
+  const tViz = now();
+  f.el.classList.toggle('wong-shield-active', f.def.id==='wong' && f.mysticShieldUntil > tViz);
+  f.el.classList.toggle('diamond-form-active', f.def.id==='emmafrost' && f.diamondFormUntil > tViz);
+  const okoyeDoraActive = f.def.id==='okoye' && f.doraDeflectUntil > tViz;
+  f.el.classList.toggle('dora-active', okoyeDoraActive);
+  if(f.def.id==='okoye'){
+    const heldSpear = f.el.querySelector('.okoye-spear-held');
+    if(heldSpear){
+      heldSpear.classList.toggle('okoye-spear-hidden', !!f.okoyeSpearThrown);
+      // Explicitly mirror the weapon independently of the character portrait.
+      // The spear is mounted outside .fighter-square, so this keeps it on the
+      // correct side whether Okoye faces left or right.
+      heldSpear.style.setProperty('--okoye-spear-dir', f.facing < 0 ? '-1' : '1');
+    }
+  }
+  f.el.classList.toggle('mind-crushed', f.def.id!=='emmafrost' && f.mindCrushUntil > tViz);
   f.el.classList.toggle('yondu-arrow-active', !!f.yonduArrow);
   updateAntmanForm(f);
   updateCloak(f);
