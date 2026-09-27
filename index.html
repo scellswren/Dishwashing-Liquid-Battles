@@ -3164,6 +3164,64 @@ button.split-card.gp-focused .mode-arrow, button.split-card:focus-visible .mode-
 }
 .go-buttons .btn-primary{background:linear-gradient(90deg,var(--amber),#e08a20); color:#231600;}
 .go-buttons .btn:hover, .go-buttons .btn.gp-focused{background:var(--cream) !important; color:#1a1305 !important; transform:translateX(6px); outline:none !important; box-shadow:none !important; filter:none;}
+.go-buttons .btn:active{transform:translateX(6px) scale(.96);}
+
+/* ---------- Game over: outcome-tinted backdrop + celebration polish ---------- */
+#screen-gameover .gameover-wrap{overflow:visible;}
+#screen-gameover.active:has(.go-badge.win){
+  background:
+    radial-gradient(1200px 760px at 20% 6%, rgba(63,185,111,.20), transparent 60%),
+    radial-gradient(1000px 680px at 84% 94%, rgba(242,165,65,.12), transparent 60%),
+    radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
+}
+#screen-gameover.active:has(.go-badge.lose){
+  background:
+    radial-gradient(1200px 760px at 20% 6%, rgba(229,72,77,.17), transparent 60%),
+    radial-gradient(1000px 680px at 84% 94%, rgba(76,139,245,.10), transparent 60%),
+    radial-gradient(1500px 950px at 50% -12%, #1b2038 0%, #0f1016 58%);
+}
+.go-badge{position:relative; z-index:1;}
+.go-badge.win::after{
+  content:''; position:absolute; left:50%; top:50%; width:clamp(260px,42vh,460px); height:clamp(260px,42vh,460px);
+  transform:translate(-50%,-50%); z-index:-1; pointer-events:none; border-radius:50%; opacity:.8;
+  background:repeating-conic-gradient(from 0deg, rgba(141,255,186,.16) 0deg 6deg, transparent 6deg 22deg);
+  animation:goRaysSpin 16s linear infinite;
+}
+@keyframes goRaysSpin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+.go-portrait{position:relative;}
+.go-portrait.winner::before{
+  content:'👑'; position:absolute; top:-24px; left:50%; transform:translateX(-50%) rotate(-10deg);
+  font-size:clamp(18px,3vh,26px); filter:drop-shadow(0 3px 4px rgba(0,0,0,.55));
+  opacity:0; animation:goCrownDrop .5s cubic-bezier(.2,.9,.25,1) .55s forwards;
+}
+.go-portrait.loser::before{
+  content:'✕'; position:absolute; top:-4px; right:-4px; z-index:2;
+  width:clamp(18px,2.6vh,26px); height:clamp(18px,2.6vh,26px); border-radius:50%;
+  background:rgba(229,72,77,.88); color:#fff; font-size:clamp(10px,1.6vh,14px); font-weight:800;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 2px 5px rgba(0,0,0,.45);
+  opacity:0; animation:goPortraitIn .4s ease .5s forwards;
+}
+@keyframes goCrownDrop{
+  0%{opacity:0; transform:translateX(-50%) translateY(-16px) rotate(-20deg);}
+  100%{opacity:1; transform:translateX(-50%) translateY(0) rotate(-10deg);}
+}
+.go-portrait.winner .go-portrait-square::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 45%,transparent 60%);
+  transform:translateX(-120%); animation:goShine 2.6s ease-in-out .9s infinite;
+}
+@keyframes goShine{0%{transform:translateX(-120%);} 35%,100%{transform:translateX(120%);}}
+.go-vs{
+  display:flex; align-items:center; justify-content:center; opacity:1; margin-top:0;
+  width:clamp(40px,7vh,64px); height:clamp(40px,7vh,64px); border-radius:50%;
+  font-size:clamp(15px,2.2vh,20px);
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.1), rgba(10,11,18,.72));
+  border:2px solid rgba(255,255,255,.18); box-shadow:0 4px 10px rgba(0,0,0,.35);
+}
+.go-name-win{color:var(--amber); font-weight:800;}
+.go-name-lose{color:var(--muted); font-weight:700;}
+.go-reward.gain::before{content:'🪙 ';}
+.go-reward.lose::before{content:'⚠ ';}
 
 /* ---------- popups (code + fighter details) ---------- */
 #code-modal .modal{
@@ -17184,7 +17242,7 @@ function renderEliminationGameover(eliminated,survivors,final,reason){
   const winner=survivors.length===1?survivors[0]:null;
   badge.textContent=winner?t('go_wins').replace('{name}',playerLabel(playerSlotOfFighter(winner)+1)):t('elimination_eliminated').replace('{name}',playerLabel(playerSlotOfFighter(eliminated)+1));
   badge.className='go-badge win';
-  sub.textContent=winner?t('elimination_champion').replace('{name}',winner.def.name):(reason==='time-limit'?t('elimination_time_sub').replace('{name}',playerLabel(playerSlotOfFighter(eliminated)+1)):t('elimination_round_sub').replace('{name}',playerLabel(playerSlotOfFighter(eliminated)+1)));
+  sub.innerHTML=winner?t('elimination_champion').replace('{name}',`<span class="go-name-win">${winner.def.name}</span>`):(reason==='time-limit'?t('elimination_time_sub').replace('{name}',`<span class="go-name-lose">${playerLabel(playerSlotOfFighter(eliminated)+1)}</span>`):t('elimination_round_sub').replace('{name}',`<span class="go-name-lose">${playerLabel(playerSlotOfFighter(eliminated)+1)}</span>`));
   const tags=['p1','p2','n3','n4'];
   document.getElementById('go-portraits').innerHTML=[eliminated,...survivors].map(f=>{const slot=playerSlotOfFighter(f),win=f===winner,elim=f===eliminated;return `<div class="go-portrait ${win?'winner':(elim?'loser':'')}"><div class="go-portrait-square">${squareInner(f.def)}</div><div class="go-portrait-name">${f.def.name}</div><span class="go-portrait-tag ${tags[slot]||'p1'}">${playerLabel(slot+1)}</span></div>`;}).join('');
   const info=document.getElementById('go-round-info'); if(info){info.classList.remove('on');info.style.display='none';info.innerHTML='';}
@@ -17367,8 +17425,8 @@ function endBattleMulti(winner, reason){
   const winnerSlot = winner ? (winner.playerSlot ?? winner.multiSlot) : -1;
   badge.textContent = winner ? t('go_wins').replace('{name}', playerLabel(winnerSlot+1)) : t('go_draw');
   badge.className = 'go-badge win';
-  document.getElementById('go-sub').textContent = winner
-    ? t('go_multi_result').replace('{name}', winner.def.name) : '';
+  document.getElementById('go-sub').innerHTML = winner
+    ? t('go_multi_result').replace('{name}', `<span class="go-name-win">${winner.def.name}</span>`) : '';
 
   const tagClasses = ['p1','p2','n3','n4'];
   const portraits = document.getElementById('go-portraits');
@@ -17631,8 +17689,8 @@ function endBattle(winnerSide, reason){
   }
   const winTag = isPvp ? `<span class="go-portrait-tag ${isWin ? 'p1' : 'p2'}">${isWin ? 'P1' : 'P2'}</span>` : '';
   const loseTag = isPvp ? `<span class="go-portrait-tag ${isWin ? 'p2' : 'p1'}">${isWin ? 'P2' : 'P1'}</span>` : '';
-  document.getElementById('go-sub').textContent =
-    t('go_result_template').replace('{w}', winnerDef.name).replace('{l}', loserDef.name);
+  document.getElementById('go-sub').innerHTML =
+    t('go_result_template').replace('{w}', `<span class="go-name-win">${winnerDef.name}</span>`).replace('{l}', `<span class="go-name-lose">${loserDef.name}</span>`);
   const portraits = document.getElementById('go-portraits');
   portraits.innerHTML = `
     <div class="go-portrait winner">
