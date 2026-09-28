@@ -4977,6 +4977,284 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .enh-aura.tor{--a1:rgba(255,138,31,.26);--a2:rgba(255,59,31,.14);--pc:#ffd34a}.enh-aura.tor i{border-radius:50% 50% 50% 0;width:6px;height:9px;animation-duration:1.2s}
 .enh-aura.stl{--a1:rgba(255,90,90,.14);--a2:rgba(90,209,255,.10);--pc:#ffd34a}
 .enh-aura.drx{--a1:rgba(111,174,74,.15);--a2:rgba(217,74,58,.10);--pc:#d94a3a}
+
+/* =========================================================================
+   INVENTORY 2.0 — colourful redesign + collection stats
+   ========================================================================= */
+#screen-inventory{--hero:#f2a541;}
+#screen-inventory .fs-bg{background:
+  radial-gradient(1200px 700px at 85% -10%,color-mix(in srgb,var(--hero) 38%,transparent),transparent 60%),
+  radial-gradient(900px 600px at -5% 105%,rgba(122,92,255,.28),transparent 60%),
+  radial-gradient(700px 500px at 60% 110%,rgba(255,90,140,.18),transparent 60%),
+  #0d0f1c;}
+.inv-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+.inv-stats-btn{
+  display:inline-flex; align-items:center; gap:9px; cursor:pointer; border:0; color:#1a1206;
+  font:900 15px/1 'Anton','Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase;
+  padding:13px 22px; border-radius:999px;
+  background:linear-gradient(135deg,#ffd166,#ff8a3d 55%,#ff4d8d);
+  box-shadow:0 8px 0 rgba(0,0,0,.35),0 14px 34px rgba(255,120,60,.35),inset 0 2px 0 rgba(255,255,255,.55);
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease;
+}
+.inv-stats-btn:hover,.inv-stats-btn.gp-focused{transform:translateY(-3px) scale(1.03); filter:saturate(1.15) brightness(1.05);}
+.inv-stats-btn:active{transform:translateY(4px); box-shadow:0 3px 0 rgba(0,0,0,.35),0 8px 20px rgba(255,120,60,.3);}
+.inv-stats-btn .isb-ico{font-size:1.25em;}
+.inv-progress{display:flex; align-items:center; gap:14px; margin:6px 0 14px;}
+.inv-progress-bar{flex:1; height:14px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; box-shadow:inset 0 2px 4px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06);}
+.inv-progress-bar i{display:block; height:100%; width:0; border-radius:999px; transition:width .7s cubic-bezier(.2,.9,.2,1);
+  background:linear-gradient(90deg,#4dd6ff,#7a5cff 35%,#ff4d8d 68%,#ffd166); background-size:200% 100%; animation:invFlow 5s linear infinite;
+  box-shadow:0 0 16px rgba(122,92,255,.6);}
+.inv-progress-text{font:800 13px/1 'Inter',sans-serif; letter-spacing:.04em; color:#dfe4f8; white-space:nowrap;}
+@keyframes invFlow{to{background-position:200% 0}}
+.inv-filters{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px;}
+.inv-chip{
+  --cc:#8a90b4; cursor:pointer; border:1.5px solid color-mix(in srgb,var(--cc) 55%,transparent); color:#e8ebfa;
+  background:color-mix(in srgb,var(--cc) 16%,#151829); border-radius:999px; padding:8px 14px;
+  font:800 12.5px/1 'Inter',sans-serif; letter-spacing:.03em; transition:transform .12s ease,background .12s ease,box-shadow .12s ease;
+}
+.inv-chip.c-var{--cc:#ffd166}.inv-chip.c-lock{--cc:#9aa0c0}
+.inv-chip:hover,.inv-chip.gp-focused{transform:translateY(-2px); background:color-mix(in srgb,var(--cc) 30%,#151829);}
+.inv-chip.on{background:linear-gradient(135deg,var(--cc),color-mix(in srgb,var(--cc) 55%,#000)); color:#fff; border-color:#fff8; box-shadow:0 6px 18px color-mix(in srgb,var(--cc) 50%,transparent);}
+.inv-chip.on:not(.c-var):not(.c-lock){--cc:#f2a541;}
+.inv-empty{padding:34px 10px; text-align:center; color:#aab0cf; font-weight:700;}
+.inv-hidden{display:none !important;}
+
+/* hero panel */
+.inv-hero{background:
+  radial-gradient(rgba(255,255,255,.12) 1.2px,transparent 1.5px) 0 0/16px 16px,
+  radial-gradient(420px 320px at 50% 30%,color-mix(in srgb,var(--hero) 55%,transparent),transparent 70%),
+  linear-gradient(160deg,color-mix(in srgb,var(--hero) 58%,#1a1c33),color-mix(in srgb,var(--hero) 14%,#0b0c14) 75%) !important;}
+.inv-hero-frame{position:relative; box-shadow:10px 10px 0 rgba(0,0,0,.45),0 0 0 6px color-mix(in srgb,var(--hero) 40%,transparent),0 0 60px color-mix(in srgb,var(--hero) 70%,transparent),0 24px 60px rgba(0,0,0,.5);}
+.inv-hero-frame::after{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%); background-size:250% 100%; animation:invShine 3.8s ease-in-out infinite;}
+@keyframes invShine{0%{background-position:150% 0}60%,100%{background-position:-100% 0}}
+.inv-hero-tags{display:flex; flex-wrap:wrap; justify-content:center; gap:6px;}
+.inv-hero-mini{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; width:100%; max-width:280px;}
+.ihm{background:rgba(0,0,0,.34); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:8px 4px; display:flex; flex-direction:column; align-items:center; gap:3px;}
+.ihm b{font:400 22px/1 'Anton',sans-serif; letter-spacing:.03em;}
+.ihm span{font:800 9.5px/1 'Inter',sans-serif; letter-spacing:.09em; text-transform:uppercase; opacity:.8;}
+  .inv-tag{display:inline-flex; align-items:center; gap:4px; padding:4px 9px; border-radius:999px; font:900 10px/1 'Inter',sans-serif; letter-spacing:.08em; text-transform:uppercase; color:#fff; box-shadow:0 3px 8px rgba(0,0,0,.35);}
+.inv-tag.hp{background:linear-gradient(135deg,#ffd166,#e58a17); color:#2a1a02}
+
+/* cards */
+#screen-inventory .char-card{
+  position:relative; border:1.5px solid color-mix(in srgb,var(--char-color) 60%,#2a2e4a); border-radius:16px; overflow:visible;
+  background:
+    radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--char-color) 42%,transparent),transparent 70%),
+    linear-gradient(170deg,color-mix(in srgb,var(--char-color) 20%,#1b1f36),#12141f 85%);
+  box-shadow:0 12px 26px rgba(0,0,0,.32),0 0 0 1px rgba(255,255,255,.03) inset;
+}
+#screen-inventory .char-card .char-square{border-radius:11px; border:2.5px solid color-mix(in srgb,var(--char-color) 85%,#fff); box-shadow:0 8px 18px rgba(0,0,0,.45),0 0 18px color-mix(in srgb,var(--char-color) 45%,transparent);}
+#screen-inventory .char-card .char-name{text-shadow:0 2px 0 rgba(0,0,0,.5); letter-spacing:.05em;}
+#screen-inventory .char-card .char-cat{display:inline-block; padding:3px 9px; border-radius:999px; background:rgba(0,0,0,.35); color:#ffe3a3; font-weight:800; margin-top:2px;}
+#screen-inventory .char-card .inv-card-tags{position:absolute; left:12px; top:12px; z-index:3; display:flex; flex-direction:column; align-items:flex-start; gap:5px; max-width:calc(100% - 54px);}
+#screen-inventory .char-card .inv-tag{padding:4px 8px; font-size:9px;}
+#screen-inventory .char-card .inv-var-count{padding:3px 8px; border-radius:999px; background:linear-gradient(135deg,#ffd166,#ff8a3d); color:#2a1a02; font:900 9.5px/1 'Inter',sans-serif; letter-spacing:.05em; box-shadow:0 3px 8px rgba(0,0,0,.4); white-space:nowrap;}
+#screen-inventory .char-card.equipped{
+  border-color:#ffd166;
+  background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--char-color) 60%,transparent),transparent 70%),linear-gradient(170deg,color-mix(in srgb,var(--char-color) 34%,#1b1f36),#12141f 85%);
+  box-shadow:0 0 0 2px #ffd166,0 0 26px rgba(255,209,102,.55),0 14px 30px rgba(0,0,0,.4);
+  animation:invEquipPulse 2.4s ease-in-out infinite;
+}
+@keyframes invEquipPulse{50%{box-shadow:0 0 0 2px #fff1ab,0 0 40px rgba(255,209,102,.85),0 14px 30px rgba(0,0,0,.4);}}
+#screen-inventory .char-card.equipped .lock-badge{background:linear-gradient(135deg,#ffd166,#ff8a3d); color:#2a1a02; box-shadow:0 3px 10px rgba(255,138,61,.4);}
+#screen-inventory .char-card:not(.equipped):not(.mystery) .lock-badge{background:color-mix(in srgb,var(--char-color) 35%,#0d0f1a); color:#fff;}
+#screen-inventory .char-card.mystery{background:linear-gradient(170deg,#23263c,#151723); border-style:dashed; border-color:#3d4260;}
+@media (hover:hover) and (pointer:fine){
+  #screen-inventory .char-card:not(.mystery):hover{transform:translateY(-7px) rotate(-.6deg); border-color:#fff; box-shadow:0 18px 38px rgba(0,0,0,.45),0 0 30px color-mix(in srgb,var(--char-color) 60%,transparent);}
+}
+@media (prefers-reduced-motion:reduce){ #screen-inventory .char-card.equipped,.inv-progress-bar i,.inv-hero-frame::after{animation:none;} }
+
+/* stats modal */
+#stats-modal .modal{
+  max-width:min(640px,100%); padding:0; overflow:hidden; border:1.5px solid #ffd166; border-radius:22px; display:flex; flex-direction:column; max-height:min(90vh,780px);
+  background:radial-gradient(90% 40% at 50% 0%,rgba(255,138,61,.35),transparent 70%),radial-gradient(70% 40% at 100% 100%,rgba(122,92,255,.3),transparent 70%),#151829;
+  box-shadow:0 30px 90px rgba(0,0,0,.65),0 0 60px rgba(255,138,61,.2);
+}
+.st-head{padding:22px 24px 6px; display:flex; align-items:center; gap:14px;}
+.st-head h3{font:400 clamp(28px,5vh,40px)/1 'Anton',sans-serif; text-transform:uppercase; letter-spacing:.05em; background:linear-gradient(90deg,#ffd166,#ff8a3d,#ff4d8d); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.st-head .st-sub{color:#b9bed6; font-size:13px; font-weight:600;}
+.st-body{overflow-y:auto; padding:10px 22px 6px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+.st-tile{--tc:#8a90b4; position:relative; border-radius:16px; padding:14px 14px 12px; overflow:hidden; border:1.5px solid color-mix(in srgb,var(--tc) 65%,transparent);
+  background:linear-gradient(150deg,color-mix(in srgb,var(--tc) 32%,#161a2d),#12141f 90%); box-shadow:0 10px 22px rgba(0,0,0,.3);
+  animation:stPop .5s cubic-bezier(.2,1.2,.3,1) both; animation-delay:calc(var(--i,0)*70ms);}
+.st-tile::after{content:attr(data-ico); position:absolute; right:-6px; bottom:-14px; font-size:70px; opacity:.16; transform:rotate(-12deg);}
+.st-tile.wide{grid-column:1 / -1}
+.st-tile.total{--tc:#ffd166}.st-tile.variants{--tc:#b48cff}
+.st-label{font:900 11px/1 'Inter',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:color-mix(in srgb,var(--tc) 70%,#fff);}
+.st-num{font:400 clamp(38px,7vh,56px)/1.05 'Anton',sans-serif; margin-top:6px; text-shadow:0 3px 0 rgba(0,0,0,.4);}
+.st-num small{font:800 14px/1 'Inter',sans-serif; opacity:.6; margin-left:4px;}
+.st-bar{height:7px; border-radius:99px; background:rgba(0,0,0,.4); margin-top:8px; overflow:hidden;}
+.st-bar i{display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,var(--tc),#fff8); transition:width .9s cubic-bezier(.2,.9,.2,1) .2s;}
+@keyframes stPop{from{opacity:0; transform:translateY(14px) scale(.94)}to{opacity:1; transform:none}}
+.st-foot{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:14px 22px 18px;}
+.st-note{color:#8f95b3; font-size:11.5px; font-weight:600; line-height:1.4;}
+@media (max-width:520px){ .st-body{grid-template-columns:1fr 1fr;} .st-num{font-size:36px;} }
+
+
+/* =========================================================================
+   MENU POLISH — keeps the game's colour, tidies the details.
+   ========================================================================= */
+.page-head{padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.08);}
+.page-caption{color:#aab0c9;}
+.mps-block{border-radius:18px; background:linear-gradient(180deg,rgba(30,33,50,.85),rgba(24,26,40,.8)); border-color:#3a3f5c;}
+.mps-block:hover{transform:none;}
+.mps-block .set-sub{color:var(--amber);}
+.mps-step-btn{border-radius:12px;}
+.instructions ul li{border:1px solid rgba(255,255,255,.07);}
+.keybind-row{border:1px solid rgba(255,255,255,.06);}
+.unlock-card{box-shadow:0 20px 50px rgba(0,0,0,.35);}
+.radio-mini-wrap,.save-slot-wrap{box-shadow:0 30px 90px rgba(0,0,0,.55), 0 0 0 1px rgba(242,165,65,.08);}
+.radio-mini-title,.save-slot-title{text-shadow:0 0 22px rgba(242,165,65,.3);}
+.fs-back{border-radius:12px;}
+
+
+/* =========================================================================
+   MENU UPGRADES — richer, clearer menus that keep the game's colour.
+   ========================================================================= */
+/* main menu: one staggered entrance, clearer grouping */
+@keyframes menuIn{from{opacity:0; transform:translateX(-26px);}}
+#screen-menu.active .menu-title{animation:menuIn .5s cubic-bezier(.2,.8,.2,1) backwards;}
+#screen-menu.active .menu-item{animation:menuIn .45s cubic-bezier(.2,.8,.2,1) backwards;}
+#screen-menu.active .menu-item:nth-child(1){animation-delay:.08s}
+#screen-menu.active .menu-item:nth-child(2){animation-delay:.14s}
+#screen-menu.active .menu-item:nth-child(3){animation-delay:.20s}
+#screen-menu.active .menu-item:nth-child(4){animation-delay:.26s}
+#screen-menu.active .menu-item:nth-child(5){animation-delay:.32s}
+#screen-menu.active .menu-item:nth-child(6){animation-delay:.38s}
+@media (prefers-reduced-motion:reduce){ #screen-menu.active .menu-title,#screen-menu.active .menu-item{animation:none;} }
+.menu-item.primary{box-shadow:0 10px 30px rgba(242,165,65,.28);}
+.menu-item .mi-icon{filter:saturate(1.1);}
+.menu-hero .hero-frame{box-shadow:clamp(8px,1.2vw,18px) clamp(8px,1.2vw,18px) 0 rgba(0,0,0,.45), 0 0 90px color-mix(in srgb,var(--hero) 35%,transparent), 0 30px 80px rgba(0,0,0,.5);}
+.token-chip{box-shadow:0 4px 16px rgba(242,165,65,.15);}
+
+/* mode select: clearer cards */
+.split-card .mode-name{text-shadow:0 4px 0 rgba(0,0,0,.45);}
+.split-card .mode-desc{color:#e3e6f3;}
+.mode-battle .mode-lives{letter-spacing:.3em;}
+button.split-card:hover .mode-arrow,button.split-card.gp-focused .mode-arrow{transform:none; opacity:1;}
+.mode-arrow{opacity:.7; transition:transform .2s ease, opacity .2s ease;}
+.mode-chip{background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.18);}
+
+/* free play + difficulty cards: icons and difficulty pips */
+.diff-card::before{
+  position:absolute; top:clamp(14px,2.4vh,24px); right:clamp(16px,2.4vh,26px);
+  font-size:clamp(14px,2.2vh,20px); letter-spacing:.2em; color:var(--dc); text-shadow:0 0 14px color-mix(in srgb,var(--dc) 60%,transparent);
+}
+.diff-card[data-diff="random"]::before{content:'?';font-family:'Anton',sans-serif;font-size:clamp(26px,4.4vh,44px);letter-spacing:0;}
+.diff-card[data-diff="easy"]::before,.diff-card[data-battle-diff="easy"]::before{content:'●○○';}
+.diff-card[data-diff="medium"]::before,.diff-card[data-battle-diff="medium"]::before{content:'●●○';}
+.diff-card[data-diff="hard"]::before,.diff-card[data-battle-diff="hard"]::before{content:'●●●';}
+.free-play-card::before{font-size:clamp(34px,6vh,58px); letter-spacing:0; text-shadow:none; top:clamp(16px,3vh,30px);}
+.sandbox-card::before{content:'🧪';}
+.practice-card::before{content:'🎯';}
+.diff-rule{background:rgba(0,0,0,.45);}
+
+/* unlock: bigger balance, clearer rules */
+.unlock-balance{text-shadow:0 0 30px rgba(242,165,65,.35);}
+.unlock-progress{height:12px; box-shadow:inset 0 2px 4px rgba(0,0,0,.4);}
+.unlock-rules-title{border-bottom:1px solid rgba(255,255,255,.1); padding-bottom:10px; margin-bottom:12px;}
+
+/* multiplayer match settings: map first and full width, tidier blocks */
+.mps-map-block{grid-column:1 / -1; border-color:rgba(242,165,65,.45); background:linear-gradient(135deg,rgba(242,165,65,.12),rgba(30,33,50,.85) 55%);}
+.mps-map-block .mps-chip-row{gap:12px;}
+.mps-map-block .map-pill{padding:12px 20px 12px 14px; font-size:15px;}
+.mps-map-block .map-swatch{width:20px; height:20px;}
+.mps-block-head{margin-bottom:6px;}
+.mps-toggle-track{width:58px; height:32px;}
+.mps-toggle-knob{width:26px; height:26px;}
+.mps-toggle[data-on="1"] .mps-toggle-knob{transform:translateX(26px);}
+.mps-continue-row{background:linear-gradient(180deg,transparent,rgba(15,16,22,.95) 35%); padding-bottom:12px;}
+#mps-continue-btn{font-size:18px; padding:15px 28px; box-shadow:0 12px 30px rgba(242,165,65,.3);}
+
+/* settings: panels for each section */
+.set-block{background:linear-gradient(180deg,rgba(30,33,50,.7),rgba(22,24,38,.6)); border:1px solid #33375a; border-radius:18px; padding:clamp(18px,2.6vw,30px);}
+.set-block .set-sub{color:var(--amber);}
+.set-block .keybind-list{margin-top:14px;}
+.lang-btn.active{box-shadow:0 6px 18px rgba(242,165,65,.25);}
+
+/* instructions: panels + clearer headings */
+.instr-section{background:linear-gradient(180deg,rgba(30,33,50,.7),rgba(22,24,38,.6)); border:1px solid #33375a; border-radius:18px; padding:clamp(18px,2.6vw,30px); margin-bottom:clamp(14px,2vh,22px);}
+.instr-section .set-sub{color:var(--amber); margin-bottom:12px;}
+.instr-section .instr-goal{margin-bottom:0;}
+
+/* radio: now-playing card */
+.radio-mini-now{border-left:4px solid var(--amber); background:linear-gradient(90deg,rgba(242,165,65,.14),rgba(255,255,255,.03));}
+.radio-mini-now-name{font-size:26px;}
+.radio-mini-wrap{border-top:4px solid var(--amber);}
+
+/* save slots: clearer active slot */
+.save-slot-card.active{background:linear-gradient(160deg,rgba(34,211,238,.14),#1b1e30);}
+.save-slot-card.active .save-slot-num{color:#22d3ee;}
+.save-slot-wrap{border-top:4px solid var(--amber);}
+
+/* everyone: visible keyboard focus */
+.btn:focus-visible,.map-pill:focus-visible,.lang-btn:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+
+/* --- map picker (solo modes, shown right before the match) --- */
+#screen-map.active{position:fixed; inset:0; width:100%; height:100vh; height:100dvh; max-width:none; min-height:0; z-index:2; display:block; overflow-x:hidden; overflow-y:auto; padding:0;
+  background:radial-gradient(1100px 700px at 18% 8%,rgba(76,139,245,.14),transparent 60%),radial-gradient(1100px 700px at 85% 92%,rgba(242,165,65,.13),transparent 60%),radial-gradient(1500px 950px at 50% -12%,#1b2038 0%,#0f1016 58%);}
+#screen-map .fs-bg{position:fixed;}
+.map-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(12px,1.8vw,24px); max-width:1200px;}
+.map-card{
+  --mc:#4c8bf5;
+  position:relative; display:flex; align-items:flex-end; min-height:clamp(150px,34vh,300px); padding:clamp(16px,2.6vh,28px); margin:0; cursor:pointer;
+  font:inherit; color:var(--text); border:0; border-top:6px solid var(--mc); border-radius:0; overflow:hidden; text-align:start;
+  background:
+    radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.5px) 0 0/16px 16px,
+    linear-gradient(160deg,color-mix(in srgb,var(--mc) 46%,#151728),color-mix(in srgb,var(--mc) 8%,#0f1016) 72%);
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 24px),calc(100% - 24px) 100%,0 100%);
+  transition:transform .16s ease, filter .16s ease;
+}
+.map-city{--mc:#4c8bf5;} .map-wasteland{--mc:#e0a93b;} .map-battleworld{--mc:#ff6a3d;}
+.map-card-name{font-family:'Anton',sans-serif; font-size:clamp(34px,6vh,64px); line-height:1; letter-spacing:.03em; text-transform:uppercase; text-shadow:0 3px 0 rgba(0,0,0,.4);}
+.map-card::after{content:'Selected'; position:absolute; top:18px; right:18px; padding:5px 12px; border-radius:999px; background:var(--mc); color:#12131d; font:800 12px/1 'Inter',sans-serif; letter-spacing:.03em; opacity:0; transform:translateY(-4px); transition:opacity .15s ease, transform .15s ease;}
+.map-card.active::after{opacity:1; transform:none;}
+.map-card.active{box-shadow:inset 0 0 0 3px var(--mc);}
+.map-card:hover,.map-card.gp-focused,.map-card:focus-visible{outline:none; transform:translateY(-6px); filter:brightness(1.18);}
+.map-start-row{margin-top:clamp(18px,3vh,32px); display:flex;}
+.map-start{min-width:240px; font-size:18px; padding:15px 28px;}
+@media (max-width:820px){ .map-grid{grid-template-columns:1fr;} .map-card{min-height:110px;} .map-start{width:100%;} }
+
+/* =========================================================================
+   INVENTORY — calmer, but still colourful. Fighter colours stay on the
+   cards and hero; the rainbow gradients, glows and pulsing are gone.
+   ========================================================================= */
+#screen-inventory .fs-bg{background:
+  radial-gradient(1100px 650px at 85% -10%,color-mix(in srgb,var(--hero) 20%,transparent),transparent 62%),
+  radial-gradient(900px 600px at -5% 105%,rgba(76,139,245,.10),transparent 60%),
+  #0e1018;}
+.inv-hero{background:
+  radial-gradient(420px 320px at 50% 30%,color-mix(in srgb,var(--hero) 28%,transparent),transparent 70%),
+  linear-gradient(160deg,color-mix(in srgb,var(--hero) 30%,#1a1c2c),color-mix(in srgb,var(--hero) 8%,#0d0e16) 75%) !important;}
+.inv-hero-frame{box-shadow:0 0 0 3px color-mix(in srgb,var(--hero) 45%,transparent),0 20px 44px rgba(0,0,0,.5);}
+.inv-hero-frame::after{display:none;}
+.inv-hero-label{background:none; border:0; padding:0; font-weight:700; letter-spacing:.02em; opacity:.8;}
+.ihm{background:rgba(0,0,0,.28); border-color:rgba(255,255,255,.1);}
+.inv-progress-bar{height:10px;}
+.inv-progress-bar i{background:linear-gradient(90deg,#d98a2b,var(--amber)) !important; animation:none !important; box-shadow:none;}
+.inv-chip,.inv-chip.c-var,.inv-chip.c-lock{--cc:#7d84a6; background:transparent; border:1px solid #363b57; color:#b9bfd8; letter-spacing:0;}
+.inv-chip:hover,.inv-chip.gp-focused{transform:none; background:rgba(255,255,255,.06); color:#fff;}
+.inv-chip.on,.inv-chip.on:not(.c-var):not(.c-lock){background:rgba(242,165,65,.16); color:#ffd9a0; border-color:var(--amber); box-shadow:none;}
+.inv-tag,.inv-tag.hp{background:rgba(255,255,255,.08); color:#f0e6cf; box-shadow:none; border:1px solid rgba(255,255,255,.12);}
+#screen-inventory .char-card{
+  border-color:color-mix(in srgb,var(--char-color) 38%,#2a2e4a);
+  background:
+    radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--char-color) 18%,transparent),transparent 70%),
+    linear-gradient(170deg,color-mix(in srgb,var(--char-color) 9%,#1a1d2e),#12141f 85%);
+  box-shadow:0 8px 18px rgba(0,0,0,.28);
+}
+#screen-inventory .char-card .char-square{border:2px solid color-mix(in srgb,var(--char-color) 60%,#2a2e4a); box-shadow:0 6px 14px rgba(0,0,0,.4);}
+#screen-inventory .char-card .char-cat{background:none; padding:0; color:#a9afc9;}
+#screen-inventory .char-card .inv-var-count{background:rgba(255,209,102,.16); color:#ffd980; border:1px solid rgba(255,209,102,.4); box-shadow:none;}
+#screen-inventory .char-card.equipped{
+  border-color:#ffd166; animation:none;
+  background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--char-color) 26%,transparent),transparent 70%),linear-gradient(170deg,color-mix(in srgb,var(--char-color) 14%,#1a1d2e),#12141f 85%);
+  box-shadow:0 0 0 2px #ffd166,0 10px 24px rgba(0,0,0,.35);
+}
+#screen-inventory .char-card.equipped .lock-badge{background:#ffd166; color:#2a1a02; box-shadow:none;}
+@media (hover:hover) and (pointer:fine){
+  #screen-inventory .char-card:not(.mystery):hover{transform:translateY(-4px); border-color:color-mix(in srgb,var(--char-color) 80%,#fff); box-shadow:0 14px 28px rgba(0,0,0,.4);}
+}
 </style>
 
 </head>
@@ -5017,12 +5295,6 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
   <div id="screen-mode" class="screen">
     <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
     <button class="btn btn-secondary fs-back" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
-    <div class="map-select-bar" id="map-select">
-      <span class="map-select-label">Choose your map:</span>
-      <button class="map-pill" data-map="city"><span class="map-swatch swatch-city"></span>City</button>
-      <button class="map-pill" data-map="wasteland"><span class="map-swatch swatch-wasteland"></span>Wasteland</button>
-      <button class="map-pill" data-map="battleworld"><span class="map-swatch swatch-battleworld"></span>Battleworld</button>
-    </div>
     <h2 class="mode-heading" data-i18n="mode_title">Choose a mode</h2>
     <div class="split-stage three">
       <button class="split-card left mode-practice" id="btn-mode-practice" data-gp-default>
@@ -5135,6 +5407,20 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     </div>
   </div>
 
+  <!-- ============ MAP PICKER (shown right before a solo match starts) ============ -->
+  <div id="screen-map" class="screen">
+    <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
+    <button class="btn btn-secondary fs-back" id="map-back" data-nav="mode"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
+    <div class="page-stage">
+      <header class="page-head">
+        <h2 class="page-title">Pick a map</h2>
+        <div class="page-caption" id="map-caption">Choose where the fight happens.</div>
+      </header>
+      <div class="map-grid" id="map-grid"></div>
+      <div class="map-start-row"><button class="btn btn-primary map-start" id="map-start" data-gp-default>Start match</button></div>
+    </div>
+  </div>
+
   <!-- ============ UNLOCK CHARACTER ============ -->
   <div id="screen-unlock" class="screen">
     <div class="fs-bg" aria-hidden="true"><div class="bubbles"></div></div>
@@ -5221,6 +5507,15 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
         <div class="page-caption" data-i18n="mps_caption">Set up the rules for this multiplayer match before choosing fighters.</div>
       </header>
       <div class="mps-cols">
+        <section class="mps-block mps-map-block">
+          <h3 class="set-sub">Map</h3>
+          <p class="settings-note">Where this match is fought. Wasteland has a toxic ledge in the middle.</p>
+          <div class="mps-chip-row" id="mps-map-row">
+            <button class="map-pill" data-map="city"><span class="map-swatch swatch-city"></span>City</button>
+            <button class="map-pill" data-map="wasteland"><span class="map-swatch swatch-wasteland"></span>Wasteland</button>
+            <button class="map-pill" data-map="battleworld"><span class="map-swatch swatch-battleworld"></span>Battleworld</button>
+          </div>
+        </section>
         <section class="mps-block mps-mode-block">
           <h3 class="set-sub" data-i18n="mps_mode_header">Game Mode</h3>
           <p class="settings-note">Free-for-All: everyone fights at once and the last fighter standing wins.</p>
@@ -5359,17 +5654,28 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
     <button class="btn btn-secondary fs-back" data-nav="menu"><span class="btn-icon">←</span><span data-i18n="nav_back">Back</span></button>
     <div class="page-stage inv-stage">
       <aside class="inv-hero">
-        <div class="inv-hero-label" data-i18n="inv_equipped_label">EQUIPPED FIGHTER</div>
+        <div class="inv-hero-label" data-i18n="inv_equipped_label">Equipped fighter</div>
         <div id="equipped-thumb" class="inv-hero-frame"></div>
         <div id="equipped-name" class="inv-hero-name">None</div>
         <div id="equipped-hint" class="inv-hero-hint">Select a fighter below.</div>
+        <div id="equipped-tags" class="inv-hero-tags"></div>
+        <div class="inv-hero-mini"><div class="ihm"><b id="ihm-owned">0</b><span>Owned</span></div><div class="ihm"><b id="ihm-var">0</b><span>Variants</span></div><div class="ihm"><b id="ihm-pct">0%</b><span>Complete</span></div></div>
       </aside>
       <section class="inv-main">
-        <header class="page-head">
-          <h2 class="page-title" data-i18n="inv_title">Inventory</h2>
-          <div class="page-caption" data-i18n="inv_caption">Roster, collection & equipped fighter</div>
+        <header class="page-head inv-head">
+          <div class="inv-head-text">
+            <h2 class="page-title" data-i18n="inv_title">Inventory</h2>
+            <div class="page-caption" data-i18n="inv_caption">Roster, collection & equipped fighter</div>
+          </div>
         </header>
+        <div class="inv-progress"><div class="inv-progress-bar"><i id="inv-progress-fill"></i></div><div id="inv-progress-text" class="inv-progress-text"></div></div>
+        <div id="inv-filters" class="inv-filters" role="group" aria-label="Filter roster">
+          <button type="button" class="inv-chip on" data-f="all">All</button>
+          <button type="button" class="inv-chip c-var" data-f="variants">Variants</button>
+          <button type="button" class="inv-chip c-lock" data-f="locked">Locked</button>
+        </div>
         <div id="inventory-grid" class="char-grid"></div>
+        <div id="inv-empty" class="inv-empty" hidden>No fighters match this filter yet.</div>
         <div class="inventory-legend"><span class="legend-dot owned"></span> <span data-i18n="inv_legend_owned">Owned</span> <span class="legend-dot locked"></span> <span data-i18n="inv_legend_locked">Locked</span></div>
         <div class="inventory-tip" id="inventory-tip"></div>
       </section>
@@ -7129,6 +7435,15 @@ const CHARACTER_SKINS = {
   okoye: ['okoye_midnightangel']
 };
 const SKIN_IDS = Object.values(CHARACTER_SKINS).flat();
+/* Collection metadata used by the inventory filters + Stats screen.
+   Code = alignment (H hero / V villain) + gender (M / F). Anti-heroes are filed
+   under whichever side they mostly fight for; change a letter here to re-file one. */
+function collectionStats(){
+  const s={total:0, variants:0, rosterTotal:ROSTER_ORDER.length, variantTotal:SKIN_IDS.length};
+  ROSTER_ORDER.forEach(id=>{ if(isUnlocked(id)) s.total++; });
+  s.variants = SKIN_IDS.filter(id=>isSkinUnlocked(id)).length;
+  return s;
+}
 
 Object.assign(CHARACTERS, {
   spiderman_ironspider: {
@@ -7210,7 +7525,7 @@ Object.assign(CHARACTERS, {
   groot_king: {
     id:'groot_king', skinOf:'groot', name:'Groot (King Groot)',
     img:'GrootKingGroot.jpg', color:'#604022', accentColor:'#a7e35f', aiStyle:'groot',
-    skinCost:500, maxHealth:19000, passiveRegen:50, ballRegen:200,
+    skinCost:500, maxHealth:19000, passiveRegen:100, ballRegen:200,
     description:'A colossal King Groot variant with a devastating Super Punch, much heavier root eruption, and a damaging Groot Ball.',
     abilities:{
       E:{key:'E', name:'Super Punch', type:'melee', damage:650, cooldown:1400, knockback:10, range:128, hitRange:128, hitVertical:118, hitStartSlack:30, hitDelay:95,
@@ -7963,7 +8278,7 @@ function unlockAllCharactersWithCode(code){
 /* =========================================================================
    SECTION: NAVIGATION / SCREENS
    ========================================================================= */
-const screens = ['menu','mode','free-play','practice','battle-difficulty','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','radio','battle','gameover','podium'];
+const screens = ['menu','mode','free-play','practice','battle-difficulty','map','unlock','pair','mp-settings','versus','save-slots','inventory','instructions','settings','radio','battle','gameover','podium'];
 function showScreen(name){
   // Fighter select needs both controllers still present — otherwise re-pair.
   if((name === 'versus' || name === 'mp-settings') && !versusPadsPresent()) name = 'pair';
@@ -7978,13 +8293,14 @@ function showScreen(name){
   if(name==='menu'){ updateCurrentSaveSlotLabel(); renderMenuHero(); }
   if(name==='battle' && typeof playMusic === 'function' && MUSIC.enabled) playMusic();
   if(name==='mode') renderModeScreen();
+  if(name==='map') renderMapScreen();
   if(name==='unlock') renderUnlockScreen();
   renderTokenCounters();
   if(name==='pair'){
     if(versus.slots.some(Boolean)) renderPairing(true);
     else startPairing();
   }
-  if(name==='mp-settings') renderMpSettingsScreen();
+  if(name==='mp-settings'){ renderMpSettingsScreen(); renderMapSelect(); }
   if(name==='versus') startVersusSelect();
   if(name==='podium') renderPodiumScreen();
   const sandboxBtn = document.getElementById('sandbox-change-btn');
@@ -8260,9 +8576,12 @@ function renderInventory(){
     // so the inventory reflects whichever version you'll actually fight with.
     const displayDef = selectedVersion || def;
     card.className = 'char-card' + (unlocked ? '' : ' mystery') + (selected ? ' selected equipped' : '');
+    const ownedVars = getSkinIdsForBase(id, true).length;
+    card.dataset.owned = unlocked ? '1':'0'; card.dataset.vars = String(ownedVars);
     if(unlocked){
       card.style.setProperty('--char-color', displayDef.color);
       card.innerHTML = `
+        ${ownedVars ? `<div class="inv-card-tags"><span class="inv-var-count">✨ ${ownedVars} VARIANT${ownedVars>1?'S':''}</span></div>` : ''}
         <div class="char-square">${squareInner(displayDef)}</div>
         <div class="char-name">${displayDef.name}</div>
         <div class="char-cat">${displayDef.maxHealth.toLocaleString()} HP</div>
@@ -8291,8 +8610,39 @@ function renderInventory(){
     }
     grid.appendChild(card);
   });
+  renderInvChrome();
 }
 
+/* ---- Inventory 2.0: progress, hero tags, filters, stats modal ---- */
+let invFilter = 'all';
+function invCardVisible(card){
+  const owned = card.dataset.owned==='1';
+  switch(invFilter){
+    case 'variants': return owned && Number(card.dataset.vars)>0;
+    case 'locked': return !owned;
+    default: return true;
+  }
+}
+function renderInvChrome(){
+  const st = collectionStats();
+  const pct = st.rosterTotal ? Math.round(st.total/st.rosterTotal*100) : 0;
+  const set=(id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+  set('ihm-owned', st.total); set('ihm-var', st.variants); set('ihm-pct', pct+'%');
+  set('inv-progress-text', `${st.total} / ${st.rosterTotal} fighters · ${st.variants} variants`);
+  const fill=document.getElementById('inv-progress-fill'); if(fill) fill.style.width = pct+'%';
+  const tags=document.getElementById('equipped-tags');
+  const eq=CHARACTERS[SAVE.equipped];
+  if(tags) tags.innerHTML = eq ? `<span class="inv-tag hp">${eq.maxHealth.toLocaleString()} HP</span>` : '';
+  document.querySelectorAll('#inv-filters .inv-chip').forEach(b=>b.classList.toggle('on', b.dataset.f===invFilter));
+  let shown=0;
+  document.querySelectorAll('#inventory-grid .char-card').forEach(c=>{ const v=invCardVisible(c); c.classList.toggle('inv-hidden', !v); if(v) shown++; });
+  const empty=document.getElementById('inv-empty'); if(empty) empty.hidden = shown>0;
+}
+document.getElementById('inv-filters').addEventListener('click', e=>{
+  const b=e.target.closest('.inv-chip'); if(!b) return;
+  invFilter=b.dataset.f; try{ sfx('ui_tick'); }catch(_){}
+  renderInvChrome();
+});
 // Single tap equips a fighter; a quick second tap on the same fighter opens
 // their stats & attacks. Works for mouse, touch and controller (A / ✕ / B).
 const DOUBLE_TAP_MS = 380;
@@ -24309,15 +24659,18 @@ Object.assign(I18N.en, I18N_V6.en);
    ========================================================================= */
 document.getElementById('btn-mode-practice').addEventListener('click', ()=> showScreen('free-play'));
 document.getElementById('btn-freeplay-practice').addEventListener('click', ()=> showScreen('practice'));
-document.getElementById('btn-freeplay-sandbox').addEventListener('click', ()=> startSandbox());
+document.getElementById('btn-freeplay-sandbox').addEventListener('click', ()=> openMapPicker(()=>startSandbox(), 'free-play', 'Sandbox'));
 document.getElementById('btn-mode-battle').addEventListener('click', ()=> startLivesBattle());
 document.querySelectorAll('#screen-practice .diff-card').forEach(btn=>{
-  btn.addEventListener('click', ()=> startPractice(btn.dataset.diff));
+  btn.addEventListener('click', ()=> openMapPicker(()=>startPractice(btn.dataset.diff), 'practice', 'Practice'));
 });
 document.querySelectorAll('#screen-battle-difficulty .battle-diff-card').forEach(btn=>{
-  btn.addEventListener('click', ()=> startBattleDifficulty(btn.dataset.battleDiff));
+  btn.addEventListener('click', ()=> openMapPicker(()=>startBattleDifficulty(btn.dataset.battleDiff), 'battle-difficulty', 'Battle'));
 });
-document.getElementById('btn-unlock-go').addEventListener('click', ()=> startUnlockChallenge());
+document.getElementById('btn-unlock-go').addEventListener('click', ()=>{
+  if(getTokens() < UNLOCK_COST_TOKENS){ renderUnlockScreen(); return; }
+  openMapPicker(()=>startUnlockChallenge(), 'unlock', 'Unlock challenge');
+});
 document.getElementById('btn-mode-friend').addEventListener('click', ()=>{ versus.slots=[null,null,null,null]; versus.count=2; versus.activeSlots=[0,1]; state.roundsSession=null; state.eliminationSession=null; showScreen('pair'); });
 document.getElementById('sandbox-change-btn').addEventListener('click', openSandboxCharacterPicker);
 document.getElementById('sandbox-character-close').addEventListener('click', closeSandboxCharacterPicker);
@@ -24331,22 +24684,54 @@ document.getElementById('quit-confirm-no').addEventListener('click', ()=> closeQ
    re-rendered later — nothing to silently un-bind.
    ========================================================================= */
 function renderMapSelect(){
-  document.querySelectorAll('.map-pill').forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.map === (SAVE.mapId || DEFAULT_MAP_ID));
+  const cur = SAVE.mapId || DEFAULT_MAP_ID;
+  document.querySelectorAll('[data-map]').forEach(btn=>{
+    const on = btn.dataset.map === cur;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
 }
-const mapSelectBar = document.getElementById('map-select');
-if(mapSelectBar){
-  mapSelectBar.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.map-pill');
-    if(!btn || !mapSelectBar.contains(btn)) return;
-    const id = btn.dataset.map;
-    if(!MAPS[id]) return;
-    SAVE.mapId = id;
-    persistActiveSave();
-    renderMapSelect();
-  });
+function chooseMap(id){
+  if(!MAPS[id]) return;
+  SAVE.mapId = id;
+  persistActiveSave();
+  renderMapSelect();
 }
+// Multiplayer: the map lives in Match Settings.
+document.getElementById('mps-map-row')?.addEventListener('click', e=>{
+  const btn = e.target.closest('[data-map]'); if(!btn) return;
+  try{ sfx('ui_tick'); }catch(_){}
+  chooseMap(btn.dataset.map);
+});
+
+/* Solo modes: the map is chosen on its own screen right before the match starts. */
+let pendingMapLaunch = null;
+function renderMapScreen(){
+  const grid = document.getElementById('map-grid');
+  if(!grid) return;
+  grid.innerHTML = Object.keys(MAPS).map(id=>`
+    <button type="button" class="map-card map-${id}" data-map="${id}">
+      <span class="map-card-name">${MAPS[id].name}</span>
+    </button>`).join('');
+  renderMapSelect();
+}
+function openMapPicker(launchFn, backScreen, label){
+  pendingMapLaunch = launchFn;
+  const back = document.getElementById('map-back');
+  if(back) back.dataset.nav = backScreen || 'mode';
+  const cap = document.getElementById('map-caption');
+  if(cap) cap.textContent = 'Choose where the fight happens.';
+  showScreen('map');
+}
+document.getElementById('map-grid')?.addEventListener('click', e=>{
+  const card = e.target.closest('[data-map]'); if(!card) return;
+  try{ sfx('ui_tick'); }catch(_){}
+  chooseMap(card.dataset.map);
+});
+document.getElementById('map-start')?.addEventListener('click', ()=>{
+  const fn = pendingMapLaunch; pendingMapLaunch = null;
+  if(fn) fn(); else showScreen('mode');
+});
 renderMapSelect();
 document.getElementById('go-rematch-btn').addEventListener('click', ()=>{
   if(!versus.lastPick) return;
