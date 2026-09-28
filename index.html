@@ -4957,6 +4957,26 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .enh-aura.bld{--a1:rgba(192,57,43,.16);--a2:rgba(223,227,232,.08);--pc:#dfe3e8}
 .enh-aura.dar{--a1:rgba(224,70,60,.14);--a2:rgba(255,208,160,.07);--pc:#ffd0a0}
 .qs-hint{font-size:11px;line-height:1.45;color:#9fc4e6;text-align:center;margin:-4px 0 8px;opacity:.9}
+
+.enh-aura.pun{--a1:rgba(255,179,71,.12);--a2:rgba(30,30,30,.16);--pc:#ffd9a0}
+.enh-aura.bul{--a1:rgba(91,124,255,.16);--a2:rgba(255,59,59,.08);--pc:#ffffff}
+.enh-aura.swd{--a1:rgba(199,210,224,.16);--a2:rgba(255,211,74,.08);--pc:#ffffff}.enh-aura.swd i{width:2px;height:8px;border-radius:1px}
+.enh-aura.bwd{--a1:rgba(255,59,59,.15);--a2:rgba(79,211,255,.09);--pc:#ffd34a}
+.enh-aura.wwd{--a1:rgba(191,233,255,.20);--a2:rgba(255,255,255,.10);--pc:#ffffff}.enh-aura.wwd i{width:5px;height:5px;animation-duration:3s}
+.enh-aura.rgd{--a1:rgba(214,40,40,.18);--a2:rgba(255,209,102,.12);--pc:#ffd166}
+.vsp-opt.locked .vsp-tile{filter:grayscale(1) brightness(.5);}
+.vsp-opt.locked .vsp-label{opacity:.75;}
+.healthbar-fill.hp-infinite{width:100%!important;background:linear-gradient(90deg,#ffd166,#ff9f1c,#fff1b8,#ff9f1c,#ffd166);background-size:200% 100%;animation:hpInf 2.2s linear infinite;box-shadow:0 0 14px rgba(255,209,102,.75);}
+@keyframes hpInf{to{background-position:-200% 0}}
+
+.enh-aura.nfy{--a1:rgba(138,155,176,.14);--a2:rgba(255,211,74,.07);--pc:#c7d2e0}
+.enh-aura.hwk{--a1:rgba(123,79,214,.16);--a2:rgba(217,194,255,.08);--pc:#d9c2ff}.enh-aura.hwk i{width:2px;height:9px;border-radius:1px}
+.enh-aura.mrf{--a1:rgba(58,123,255,.16);--a2:rgba(188,215,255,.09);--pc:#bcd7ff}.enh-aura.mrf i{border-radius:50%}
+.enh-aura.iwm{--a1:rgba(143,212,255,.18);--a2:rgba(255,255,255,.10);--pc:#ffffff}.enh-aura.iwm i{border-radius:50%;opacity:.7}
+.enh-aura.thg{--a1:rgba(224,123,47,.16);--a2:rgba(122,74,42,.14);--pc:#e07b2f}.enh-aura.thg i{border-radius:2px;width:5px;height:5px}
+.enh-aura.tor{--a1:rgba(255,138,31,.26);--a2:rgba(255,59,31,.14);--pc:#ffd34a}.enh-aura.tor i{border-radius:50% 50% 50% 0;width:6px;height:9px;animation-duration:1.2s}
+.enh-aura.stl{--a1:rgba(255,90,90,.14);--a2:rgba(90,209,255,.10);--pc:#ffd34a}
+.enh-aura.drx{--a1:rgba(111,174,74,.15);--a2:rgba(217,74,58,.10);--pc:#d94a3a}
 </style>
 
 </head>
@@ -5203,10 +5223,10 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
       <div class="mps-cols">
         <section class="mps-block mps-mode-block">
           <h3 class="set-sub" data-i18n="mps_mode_header">Game Mode</h3>
-          <p class="settings-note" data-i18n="mps_mode_note">Choose the rules for the multiplayer match. Elimination is for 3–4 players and removes the first player knocked out each round.</p>
+          <p class="settings-note">Free-for-All: everyone fights at once and the last fighter standing wins.</p>
           <div class="mps-chip-row" id="mps-mode-row">
             <button class="map-pill mps-mode-pill active" id="mps-mode-ffa" data-mode="ffa"><span data-i18n="mps_mode_ffa">Free-for-All</span></button>
-            <button class="map-pill mps-mode-pill" id="mps-mode-elimination" data-mode="elimination"><span data-i18n="mps_mode_elimination">Elimination</span></button>
+            
           </div>
           <p class="mps-mode-hint" id="mps-mode-hint"></p>
         </section>
@@ -5829,14 +5849,14 @@ const CHARACTERS = {
     abilities:{
       E:{key:'E', name:'Glok', type:'projectile', damage:100, cooldown:200, knockback:0.4,
          speed:31, w:18, h:6, color:'#d8dde7', render:'bullet', bulletType:'fmj', trail:'',
-         sound:'nickfury_glock', fx:'nickfury_glock', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         sound:'nickfury_glock', fx:'nickfury_glock', hitFx:'nickfury_glock_hit', hitSound:'nickfury_glock_hit',
          desc:'Rapid pistol fire for 100 damage with a 0.2 second cooldown.'},
       Q:{key:'Q', name:'Bazooka', type:'projectile', damage:600, cooldown:23000, knockback:15,
          speed:13, w:58, h:22, color:'#87919f', render:'nickfury-bazooka', trail:'bazooka-smoke',
          sound:'nickfury_bazooka', fx:'nickfury_bazooka', hitFx:'nickfury_bazooka_hit', hitSound:'nickfury_bazooka_hit',
          desc:'Fires a heavy bazooka rocket for 600 damage. Cooldown: 23 seconds.'},
       R:{key:'R', name:'Grapple', type:'grapple', cooldown:5000,
-         sound:'grapple', fx:'nickfury_grapple',
+         sound:'nickfury_grapple', fx:'nickfury_grapple',
          desc:'Fires a grappling hook and rapidly pulls Nick Fury toward the opponent, like Black Widow and Hawkeye.'}
     }
   },
@@ -6028,10 +6048,10 @@ const CHARACTERS = {
     abilities:{
       E:{key:'E', name:'Rifle', type:'projectile', damage:260, cooldown:550, knockback:6,
          speed:30, w:16, h:5, color:'#e8c887', render:'pistol', trail:'',
-         sound:'widow_pistol', fx:'widow_pistol', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         sound:'ww_rifle', fx:'widow_pistol', hitFx:'ww_rifle_hit', hitSound:'ww_rifle_hit',
          desc:'Rapid-fire rounds that keep pressure on the opponent.'},
       Q:{key:'Q', name:'Taser Disc', type:'melee', damage:500, cooldown:20000, knockback:10, range:78, stun:1000,
-         hitDelay:80, sound:'electric_baton', fx:'electric_baton', hitFx:'electric_baton_hit', hitSound:'electric_baton_hit',
+         hitDelay:80, sound:'ww_disc', fx:'electric_baton', hitFx:'ww_disc_hit', hitSound:'ww_disc_hit',
          desc:'A close-range taser disc strike that deals 500 damage and stuns the target for 1 second. Cooldown: 20 seconds.'},
       R:{key:'R', name:'Grapple', type:'grapple', cooldown:5200,
          sound:'grapple', fx:'blackwidow_grapple',
@@ -6227,10 +6247,10 @@ const CHARACTERS = {
          desc:'A fast, accurate arrow with a tight projectile path.'},
       Q:{key:'Q', name:'Explosive Arrow', type:'projectile', damage:900, cooldown:19000, knockback:16,
          speed:14, w:54, h:18, color:'#ff9e3d', render:'explosive-arrow', trail:'',
-         sound:'hawkeye_explosive', fx:'hawkeye_explosive', hitFx:'explosive_arrow_hit', hitSound:'explosive_arrow_hit',
+         sound:'hawkeye_explosive', fx:'hawkeye_explosive', hitFx:'hawkeye_explosive_hit', hitSound:'hawkeye_explosive_hit',
          desc:'A heavy explosive arrow with a large, dramatic impact.'},
       R:{key:'R', name:'Grapple', type:'grapple', cooldown:7000,
-         sound:'grapple', fx:'hawkeye_grapple',
+         sound:'hawkeye_grapple', fx:'hawkeye_grapple',
          desc:'Fires a grapple toward the opponent and rapidly pulls Hawkeye toward the target.'}
     }
   },
@@ -6241,10 +6261,10 @@ const CHARACTERS = {
     abilities:{
       E:{key:'E', name:'Pistol Shots', type:'projectile', damage:120, cooldown:500, knockback:6,
          speed:32, w:16, h:5, color:'#e8c887', render:'pistol', trail:'',
-         sound:'widow_pistol', fx:'widow_pistol', hitFx:'pistol_hit', hitSound:'pistol_hit',
+         sound:'bw_pistol', fx:'widow_pistol', hitFx:'bw_pistol_hit', hitSound:'bw_pistol_hit',
          desc:'Rapid pistol fire — real bullets, fast and flat-shooting, that keep pressure on the opponent.'},
       Q:{key:'Q', name:'Electric Baton', type:'melee', damage:650, cooldown:12000, knockback:12, range:82,
-         hitDelay:80, sound:'electric_baton', fx:'electric_baton', hitFx:'electric_baton_hit', hitSound:'electric_baton_hit',
+         hitDelay:80, sound:'bw_baton', fx:'electric_baton', hitFx:'bw_baton_hit', hitSound:'bw_baton_hit',
          desc:'A close-range electric baton strike that deals 650 damage with a strong electrical hit effect.'},
       R:{key:'R', name:'Grapple', type:'grapple', cooldown:5000,
          sound:'grapple', fx:'blackwidow_grapple',
@@ -6680,14 +6700,14 @@ const CHARACTERS = {
     abilities:{
       E:{key:'E', name:'Swords', type:'melee', damage:200, cooldown:500, knockback:6, range:70,
          hitRange:118, hitVertical:110, hitStartSlack:50, hitDelay:130,
-         sound:'ability', fx:'swordsman_swords', hitFx:'swordsman_swords_hit', hitSound:'hit',
+         sound:'swordsman_swords', fx:'swordsman_swords', hitFx:'swordsman_swords_hit', hitSound:'swordsman_swords_hit',
          desc:'A quick short-range slash with his blade for 200 damage. Cooldown: 0.5 seconds.'},
       Q:{key:'Q', name:'Piercing Thrust', type:'melee', damage:1300, cooldown:9000, knockback:16, range:120,
          hitRange:180, hitVertical:120, hitStartSlack:60, hitDelay:170,
-         sound:'ability', fx:'swordsman_thrust', hitFx:'swordsman_thrust_hit', hitSound:'hit',
+         sound:'swordsman_thrust', fx:'swordsman_thrust', hitFx:'swordsman_thrust_hit', hitSound:'swordsman_thrust_hit',
          desc:'A lunging thrust with his blade for 1,300 damage. Longer reach than his regular strike. Cooldown: 9 seconds.'},
       R:{key:'R', name:'Riposte', type:'block', blockThreshold:800, duration:4000, cooldown:12000,
-         sound:'ability', fx:'swordsman_riposte',
+         sound:'swordsman_riposte', fx:'swordsman_riposte',
          desc:'Snaps into a parrying stance, absorbing up to 800 damage for 4 seconds before it breaks. Cooldown: 12 seconds.'}
     }
   },
@@ -6731,13 +6751,13 @@ const CHARACTERS = {
     abilities:{
       E:{key:'E', name:'Light Beam', type:'projectile', damage:590, cooldown:1300, knockback:4,
          speed:34, w:44, h:8, color:'#eaf6ff', render:'iw-laser', trail:'',
-         sound:'vision_beam_tick', hitFx:'vision_beam_hit', hitSound:'vision_beam_hit',
+         sound:'invisiblewoman_beam', fx:'invisiblewoman_beam', hitFx:'invisiblewoman_beam_hit', hitSound:'invisiblewoman_beam_hit',
          desc:'Fires a fast, focused bolt of bent light for 590 damage.'},
       Q:{key:'Q', name:'Psionic Push', type:'psiPush', damage:2300, cooldown:25000, duration:4000, tickMs:400, launchX:34, launchY:16,
-         sound:'starlord_bomb_throw', fx:'psi_push',
+         sound:'invisiblewoman_push', fx:'psi_push',
          desc:'Seizes the enemy in a telekinetic field and hurls them in whichever direction you\'re facing. Fighters over 18,000 max health are barely moved, and 25,000+ are not pushed at all. Leaves them warped for 4 seconds, dealing 2,300 damage over time regardless. Cooldown: 25 seconds.'},
       R:{key:'R', name:'Invisibility', type:'cloak', damage:0, duration:5000, cooldown:10000,
-         sound:'miles_cloak', fx:'miles_cloak',
+         sound:'invisiblewoman_cloak', fx:'invisiblewoman_cloak',
          desc:'Bends light around herself to turn completely invisible for 5 seconds. Cooldown: 10 seconds.'}
     }
   },
@@ -8666,6 +8686,7 @@ function startBattle(playerCharId, botCharId, opts){
   state.matchTimeLimitMs = pvp ? Math.max(0, Number((opts && opts.timeLimitMs) || 0)) : (state.matchKind === 'battle' ? BATTLE_TIME_LIMIT_MS : 0);
   state.matchTimeRemainingMs = state.matchTimeLimitMs;
   state.timeLimitTriggered = false;
+  document.getElementById('screen-battle')?.classList.remove('mp-timer-on'); // never carry a previous match's timer over (sandbox is infinite)
   state.gravityScale = pvp ? ({low:.65,normal:1,high:1.35}[(opts && opts.gravity) || 'normal'] || 1) : 1;
   state.stampSeq = (state.stampSeq || 0) + 1;
   document.getElementById('screen-battle').classList.toggle('lives-on', state.livesOn);
@@ -9373,6 +9394,8 @@ function updateHudMulti(){
 function updateHud(){
   if(state.multiPvp){ updateHudMulti(); return; }
   const p = state.player, b = state.bot;
+  const sbx = isSandboxMatch();
+  if(sbx && !p.dead) p.health = p.def.maxHealth; // sandbox: the player can never lose health
   const ppct = Math.max(0,p.health)/p.def.maxHealth;
   const bpct = Math.max(0,b.health)/b.def.maxHealth;
   const pBar = document.getElementById('hud-player-bar');
@@ -9382,9 +9405,9 @@ function updateHud(){
     if(!g){ g = document.createElement('div'); g.className = 'healthbar-ghost'; bar.parentElement.insertBefore(g, bar); }
     g.style.width = (pct*100)+'%';
   });
-  pBar.style.width = (ppct*100)+'%'; pBar.className = 'healthbar-fill '+hpClass(ppct);
+  pBar.style.width = (ppct*100)+'%'; pBar.className = 'healthbar-fill '+(sbx?'hp-infinite':hpClass(ppct));
   bBar.style.width = (bpct*100)+'%'; bBar.className = 'healthbar-fill '+hpClass(bpct);
-  document.getElementById('hud-player-hp').textContent = `${Math.max(0,Math.round(p.health))} / ${p.def.maxHealth}`;
+  document.getElementById('hud-player-hp').textContent = sbx ? '\u221E' : `${Math.max(0,Math.round(p.health))} / ${p.def.maxHealth}`;
   document.getElementById('hud-opp-hp').textContent = `${Math.max(0,Math.round(b.health))} / ${b.def.maxHealth}`;
 }
 
@@ -9453,14 +9476,16 @@ function buildAbilityBar(){
   const bar = document.getElementById('ability-bar');
   if(!bar || !fighter) return;
   bar.innerHTML = '';
+  bar.dataset.ctl = fighter.def.id + (fighter !== state.player ? '#w' : '');
   bar.classList.toggle('jg-control', fighter !== state.player);
   abilityKeysFor(fighter.def).forEach(k=>{
-    const a = fighter.def.abilities[k];
+    const a = (fighter.def.abilities || {})[k];
+    if(!a) return; // possessed fighter may lack this ability (Test Dummy)
     const btn = document.createElement('button');
     btn.className = 'ability-btn' + (gamepadState.connected ? ' gp-mode' : '');
     btn.dataset.key = k;
     const label = gamepadState.connected ? abilityButtonLabel(k) : k;
-    btn.innerHTML = `<span class="ab-key">${label}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
+    btn.innerHTML = `<span class="ab-key">${label}</span><span class="ab-nm">${(a && a.name) || k}</span><div class="cd-overlay" style="display:none;"></div>`;
     btn.onclick = ()=>{
       const f = getSoloControlledFighter();
       const tg = f === state.player ? state.bot : state.player;
@@ -9468,22 +9493,34 @@ function buildAbilityBar(){
     };
     bar.appendChild(btn);
   });
+  if(!bar.children.length && fighter !== state.player){
+    const chip = document.createElement('div');
+    chip.className = 'ability-btn';
+    chip.style.pointerEvents = 'none';
+    chip.innerHTML = '<span class="ab-nm">No abilities</span>';
+    bar.appendChild(chip);
+  }
   updateGamepadHint();
 }
 function updateAbilityBar(){
   if(state.multiPvp && state.multi){
     state.multi.fighters.forEach((f,i)=>{
-      updateAbilityBarFor(document.getElementById('ability-bar-p'+(i+1)+'m'), f, versus.slots[i].brand);
+      const bar = document.getElementById('ability-bar-p'+(i+1)+'m'), br = versus.slots[i].brand;
+      const cf = syncWarpBar(bar, f, br); updateAbilityBarFor(bar, cf, br); markPossessedBar(bar, f);
     });
     return;
   }
   if(state.pvp){
-    updateAbilityBarFor(document.getElementById('ability-bar-p1'), state.player, versus.slots[0].brand);
-    updateAbilityBarFor(document.getElementById('ability-bar-p2'), state.bot, versus.slots[1].brand);
+    [['ability-bar-p1',state.player,0],['ability-bar-p2',state.bot,1]].forEach(([id,f,i])=>{ const bar=document.getElementById(id), br=versus.slots[i].brand;
+      const cf=syncWarpBar(bar,f,br); updateAbilityBarFor(bar,cf,br); markPossessedBar(bar,f); });
     return;
   }
   const controlled = getSoloControlledFighter();
   const bar = document.getElementById('ability-bar');
+  if(bar && controlled){
+    const want = controlled.def.id + (controlled !== state.player ? '#w' : '');
+    if(bar.dataset.ctl !== want){ try{ buildAbilityBar(); }catch(err){ console.warn(err); } }
+  }
   if(bar) bar.classList.toggle('jg-control', controlled !== state.player);
   updateAbilityBarFor(bar, controlled, null);
 }
@@ -9495,6 +9532,7 @@ function updateAbilityBarFor(bar, fighter, brand){
     if(!btn) return;
     btn.classList.remove('ability-ready');
     const a = fighter.def.abilities[k];
+    if(!a){ btn.style.display='none'; return; }
     const overlay = btn.querySelector('.cd-overlay');
     const keyEl = btn.querySelector('.ab-key');
     if(keyEl){
@@ -9761,7 +9799,8 @@ function tryUseAbility(caster, target, key){
   if(state.countdown) return false; // nobody acts until FIGHT!
   // During a Jean Grey Mind Warp, the possessed fighter is the actual human-controlled
   // caster. Offensive abilities are intercepted below and turned into direct self-hits.
-  const ability = caster.def.abilities[key];
+  const ability = (caster.def.abilities || {})[key];
+  if(!ability) return false; // e.g. the Sandbox Test Dummy has no abilities
   if(caster.yonduArrow){
     if(ability.type==='yonduArrowControl' && caster.yonduArrow.phase === 'control'){ recallYonduArrow(caster, true); return true; }
     if(caster.yonduArrow.phase === 'return') return false;
@@ -9809,8 +9848,8 @@ function tryUseAbility(caster, target, key){
   }
   const fallbackSound = ability.type==='jump' ? 'jump' : ability.type==='wall' ? 'wall'
     : ability.type==='heal' ? 'heal' : ability.type==='timedToggle' ? 'flight' : 'ability';
-  sfx(ability.sound || fallbackSound);
-  spawnAbilityFx(caster, ability, target);
+  try{ sfx(ability.sound || fallbackSound); }catch(err){ console.warn('sfx failed', err); }
+  try{ spawnAbilityFx(caster, ability, target); }catch(err){ console.warn('ability fx failed', err); }
   if(ability.usesPerMatch){
     caster.abilityUses = caster.abilityUses || {};
     caster.abilityUses[key] = (caster.abilityUses[key] || 0) + 1;
@@ -11159,17 +11198,18 @@ function executeAbility(caster, target, ability, t){
         }
         caster.mindWarpUntil = until;
         caster.mindWarpTarget = tg;
-        // Replace the live ability buttons immediately so the player sees the
-        // target's actual moves before pressing anything else.
-        buildAbilityBar();
-        const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
-        fxEl('jg-mind-ripple',`left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;`,680);
-        fxEl('jg-mind-mark',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`,dur);
-        for(let i=0;i<18;i++) setTimeout(()=>{
-          if(state.mode==='battle' && tg.el && tg.jgMindWarpUntil>now()) spawnSparks(cx+(Math.random()-.5)*58,cy+(Math.random()-.5)*58,2,i%2?'#ffd0f0':'#ff7fd0',30,240);
-        },i*105);
-        sfx(ability.hitSound||'profx_mindstun_hit');
-        spawnHitFx(tg, ability.hitFx||'jeangrey_mindwarp_hit', dirSignTo(caster,tg));
+        try{
+          // Swap the ability bar to the possessed fighter's E/Q/R immediately.
+          buildAbilityBar();
+          const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+          fxEl('jg-mind-ripple',`left:${cx-78}px;top:${cy-78}px;width:156px;height:156px;`,680);
+          fxEl('jg-mind-mark',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`,dur);
+          for(let i=0;i<18;i++) setTimeout(()=>{
+            if(state.mode==='battle' && tg.el && tg.jgMindWarpUntil>now()) spawnSparks(cx+(Math.random()-.5)*58,cy+(Math.random()-.5)*58,2,i%2?'#ffd0f0':'#ff7fd0',30,240);
+          },i*105);
+          sfx(ability.hitSound||'jeangrey_mindwarp_hit');
+          spawnHitFx(tg, ability.hitFx||'jeangrey_mindwarp_hit', dirSignTo(caster,tg));
+        }catch(err){ console.warn('Mind Warp visuals failed', err); }
       }
       break;
     }
@@ -13987,6 +14027,329 @@ pollGamepad=function(){ const f=qsFighter(); const gp=f&&padFor(f);
 quicksilverMenuControllerTick=function(){};
 })();
 
+/* =========================================================================
+   ENHANCED SFX + FX 6: Punisher / Bullseye / Swordsman / Black Widow /
+   White Widow / Red Guardian
+   ========================================================================= */
+(function(){
+const P={pun:['#ffb347','#fff2c9','#ff4d1a'],bul:['#5b7cff','#ffffff','#ff3b3b'],swd:['#c7d2e0','#ffffff','#ffd34a'],bw:['#ff3b3b','#ffd34a','#4fd3ff'],
+ ww:['#bfe9ff','#ffffff','#6fb7ff'],rg:['#d62828','#ffd166','#ffffff']};
+const shot=(c,t,lo,g)=>{ aNoise(c,t,.06,g,'bandpass',lo,lo*.5,1.1); aTone(c,t,'sawtooth',240,60,.07,g*.8); aNoise(c,t,.02,g*.9,'highpass',6000,3000,.8); };
+const S={
+ punisher_bullet_hit:['ht',{f:130,v:1,hp:4200,r:[1200],rt:1}], punisher_roll:['sw',{f:110,v:.9,a:300,b:2200,w:'triangle'}],
+ bullseye_knife:['sw',{f:230,v:1,a:1800,b:7000,w:'triangle',r:[3136]}], bullseye_hit:['ht',{f:150,v:1.1,hp:6000,r:[2093],w:'square',rt:1}],
+ swordsman_swords:['sw',{f:210,v:1.1,a:1300,b:6500,r:[2349,3520,4699]}], swordsman_swords_hit:['ht',{f:100,v:1.1,hp:5800,r:[1760,2637,3520],w:'square'}],
+ swordsman_thrust:['zp',{f:1100,m:.5,w:'triangle',v:1,a:2500,b:7000,r:[2637,3951]}], swordsman_thrust_hit:['ht',{f:90,v:1.3,hp:5000,r:[1976,2960],w:'square',k:1}],
+ bw_pistol_hit:['ht',{f:150,v:1,hp:5000,r:[1400],rt:1}], ww_rifle_hit:['ht',{f:100,v:1.2,hp:4200,k:1,w:'square'}],
+ bw_baton:['zp',{f:1800,m:.4,w:'sawtooth',v:1,a:2500,b:7500,z:1}], bw_baton_hit:['ht',{f:130,v:1.1,hp:6500,r:[1568,2349],z:1}],
+ ww_disc:['zp',{f:1300,m:1.2,w:'triangle',v:1,a:1800,b:6500,r:[2093,3136]}], ww_disc_hit:['ht',{f:170,v:1,hp:6000,r:[2093,3136],z:1,w:'triangle'}],
+ redguardian_punch:['sw',{f:80,v:1.3,a:250,b:2400,w:'sawtooth',r:[392,587]}], redguardian_punch_hit:['ht',{f:55,v:1.7,d:.9,k:1,hp:3800,w:'square',r:[196,294]}],
+ redguardian_charge:['up',{f:60,d:.8,w:'sawtooth',v:1.4,a:200,b:3000,r:[147,196,262]}], redguardian_charge_hit:['ht',{f:45,v:1.9,d:1.1,k:1,hp:3200,w:'square'}],
+ redguardian_unbreakable:['up',{f:180,d:.5,w:'triangle',v:1.2,a:600,b:5000,r:[392,587,784,1175]}]
+};
+Object.keys(S).forEach(k=>{ const [tp,o]=S[k]; ENH_SFX[k]=(c,t)=>SFXT[tp](c,t,o); });
+ENH_SFX.punisher_gunfire=(c,t)=>{ for(let i=0;i<7;i++) shot(c,t+i*.055,1800+(i%2)*400,.26); };
+ENH_SFX.punisher_grenade=(c,t)=>{ aTone(c,t,'square',2200,1800,.03,.08); aTone(c,t+.06,'square',1500,1200,.03,.06); SFXT.sw(c,t+.1,{f:120,v:.8,a:300,b:2200,w:'triangle'}); };
+ENH_SFX.punisher_grenade_hit=(c,t)=>{ SFXT.ht(c,t,{f:55,v:1.8,d:1.1,k:1,hp:3200,w:'square'}); aNoise(c,t,.7,.4,'lowpass',2600,200,.8); aTone(c,t,'sine',90,28,.8,.5); };
+ENH_SFX.bullseye_random=(c,t)=>{ const f=1200+Math.random()*1400; aTone(c,t,'triangle',f,f*.6,.16,.07); SFXT.sw(c,t,{f:200,v:1,a:1400,b:6000,w:'triangle'}); };
+ENH_SFX.bullseye_ricochet=(c,t)=>{ [0,.09,.2,.34].forEach((d,i)=>{ aTone(c,t+d,'sine',3600-i*500,3400-i*500,.1,.09-i*.015); aNoise(c,t+d,.03,.1,'highpass',6000,4000,.8); }); };
+ENH_SFX.swordsman_riposte=(c,t)=>{ aTone(c,t,'triangle',2637,2500,.5,.1); aTone(c,t,'triangle',3951,3800,.4,.07); aNoise(c,t,.08,.25,'highpass',5000,3000,1); };
+ENH_SFX.bw_pistol=(c,t)=>{ shot(c,t,2400,.22); shot(c,t+.09,2400,.2); }; ENH_SFX.ww_rifle=(c,t)=>{ shot(c,t,1500,.32); aNoise(c,t+.03,.35,.1,'lowpass',1800,300,.6); };
+const F=(k,tp,p,o)=>{ ENH_FX[k]=(f,a,tg,cx,cy,dir)=>FXT[tp](f,a,tg,cx,cy,dir,p,o||{}); };
+const H=(k,p,o)=>{ ENH_HIT[k]=HT4(p,o); };
+ENH_FX.punisher_gunfire=(f,a,tg,cx,cy,dir)=>{ const p=P.pun,mx=cx+dir*42; ENH.body(f,p[0],300); for(let i=0;i<7;i++) setTimeout(()=>{ if(state.mode!=='battle') return; ENH.flash(mx,cy-4+(i%2?3:-3),16,i%2?p[1]:p[0],90); ENH.parts(cx,cy-6,2,['#ffd34a','#c9a227'],26,340,{size:3,br:'1px',up:34,grav:.8}); },i*55); ENH.smoke(mx,cy-4,1,18,500,-14); shakeArena(2,300); };
+H('punisher_bullet_hit',P.pun,{s:1.2,sk:2,br:'1px'});
+F('punisher_grenade','sh',P.pun,{r:16,br:'50%'}); ENH_HIT.punisher_grenade_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,74,['#ffffff','#ffb347','#ff4d1a'],11); ENH.dust(cx,tg.y+FIGHTER_SIZE,70,1); ENH.shock(cx,tg.y+FIGHTER_SIZE,90,'#ffb347',420,3); ENH.word(cx,cy-50,'BOOM!','#ffb347',30,700); shakeArena(9,320); };
+F('punisher_roll','rl',P.pun,{x:(f,a,tg,cx)=>ENH.dust(cx,f.y+FIGHTER_SIZE,44,1)});
+F('bullseye_throw','sh',P.bul,{r:14,br:'1px',x:(f,a,tg,cx,cy)=>ENH.ring(cx,cy-16,20,'#ff3b3b',300)}); H('bullseye_hit',P.bul,{s:1.6,br:'1px',x:(tg,cx,cy)=>ENH.ring(cx,cy,34,'#ff3b3b',320)});
+F('bullseye_random','sh',P.bul,{r:18,br:'1px',x:(f,a,tg,cx,cy,dir)=>ENH.parts(cx+dir*30,cy,8,['#c0c7d1','#ffd34a','#ff9a3c','#ffffff'],42,420,{size:5,br:'1px',w:1.6,up:16})});
+ENH_FX.bullseye_ricochet=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#5b7cff',400); ENH.ring(cx,cy-16,50,'#ff3b3b',420,true); ENH.ring(cx,cy-16,30,'#ffffff',320,true,2); ENH.streaks(cx,cy,'#c0c7d1',8,90,360,dir>0?-15:165,80); ENH.word(cx,cy-52,'BULLSEYE!','#ff3b3b',24,800); };
+F('swordsman_swords','sl',P.swd,{w:180,h:84,sk:5,br:'1px',x:(f,a,tg,cx,cy,dir)=>ENH.slash(cx+dir*56,cy+12,-dir,150,70,P.swd[1],P.swd[2],240)});
+H('swordsman_swords_hit',P.swd,{s:1.9,sl:1,w:'SLASH!',sk:5,br:'1px'});
+F('swordsman_thrust','sl',P.swd,{w:210,h:34,sk:4,br:'1px',x:(f,a,tg,cx,cy,dir)=>{ ENH.streaks(cx+dir*40,cy,'#ffffff',6,120,260,dir>0?0:180,10); ENH.flash(cx+dir*110,cy,26,'#ffffff',180); }});
+H('swordsman_thrust_hit',P.swd,{s:2.2,w:'PIERCE!',sk:7,br:'1px'});
+ENH_FX.swordsman_riposte=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#ffd34a',500); ENH.flash(cx+dir*34,cy,44,'#ffffff',240); ENH.ring(cx,cy,60,'#ffd34a',420); ENH.streaks(cx+dir*34,cy,'#ffffff',10,70,300,0,360); ENH.word(cx,cy-52,'PARRY','#ffd34a',22,700); };
+H('bw_pistol_hit',P.bw,{s:1.3,sk:3,br:'1px'}); H('ww_rifle_hit',P.ww,{s:1.6,sk:4,br:'1px',x:(tg,cx,cy)=>ENH.parts(cx,cy,8,['#ffffff','#bfe9ff'],44,420,{size:4,br:'0 100% 0 100%'})});
+ENH_FX.electric_baton=(f,a,tg,cx,cy,dir)=>{ const p=f.def.id==='whitewidow'?P.ww:P.bw,x=cx+dir*46; ENH.body(f,p[2],260); for(let i=0;i<4;i++) setTimeout(()=>{ if(state.mode==='battle') ENH.bolt(x,cy-16+i*8,x+dir*(30+i*14),cy-24+Math.random()*32,i%2?p[1]:p[2],180,2,6); },i*45); ENH.flash(x,cy,30,p[2],200); };
+H('bw_baton_hit',P.bw,{s:2,w:'ZAP!',sk:6,x:(tg,cx,cy)=>{ ENH.boltBurst(cx,cy,6,64,'#4fd3ff',240); ENH.ring(cx,cy,46,'#ffd34a',300); }});
+F('ww_disc','sh',P.ww,{r:24,br:'50%',x:(f,a,tg,cx,cy,dir)=>ENH.ring(cx+dir*34,cy,26,'#6fb7ff',320)});
+H('ww_disc_hit',P.ww,{s:2,w:'FROZEN!',sk:5,x:(tg,cx,cy)=>{ ENH.boltBurst(cx,cy,6,60,'#bfe9ff',240); ENH.parts(cx,cy,10,['#ffffff','#bfe9ff'],50,480,{size:4,br:'0 100% 0 100%'}); }});
+F('redguardian_punch','sl',P.rg,{w:190,h:104,sk:8,d:60,br:'2px',x:(f,a,tg,cx,cy)=>ENH.word(cx,cy-46,'\u0417\u0410 \u0420\u041E\u0414\u0418\u041D\u0423!','#ffd166',18,600)});
+H('redguardian_punch_hit',P.rg,{s:3,w:'SMASH!',sk:11,up:20,br:'2px'});
+F('redguardian_charge','gd',P.rg,{R:110,sk:9,x:(f,a,tg,cx,cy,dir)=>ENH.streaks(cx+dir*30,cy,'#ffd166',10,100,380,dir>0?-20:160,40)});
+ENH_HIT.redguardian_charge_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,60,['#ffffff','#ffd166','#d62828'],9); ENH.parts(cx,cy,10,['#ffd166','#d62828'],70,560,{size:7,br:'0',up:30}); ENH.word(cx,cy-50,'RED STAR!','#ffd166',26,800); shakeArena(9,300); };
+ENH_FX.redguardian_unbreakable=(f,a,tg,cx,cy)=>{ ENH.body(f,'#ffd166',700); ENH.ring(cx,cy,74,'#d62828',520); ENH.ring(cx,cy,50,'#ffd166',420,false,3); ENH.metal(cx,cy,14,60,600,['#ffffff','#ffd166','#d62828']); ENH.word(cx,cy-62,'UNBREAKABLE','#ffd166',24,900); shakeArena(4,200); };
+const AUR2={punisher:'pun',bullseye:'bul',swordsman:'swd',blackwidow:'bwd',whitewidow:'wwd',redguardian:'rgd'};
+const _eah2=enhAuraHtml; enhAuraHtml=function(id){ const m=AUR2[id]; return m?`<div class="enh-aura ${m}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`:_eah2(id); };
+})();
+/* ---------- Mario-Kart style version menu: controller support ---------- */
+function versusVariantLocked(baseId,vid){ return vid!==baseId && (!isSkinUnlocked(vid) || !versusSelectable(vid)); }
+function versusVarMenuTick(slot,idx,gp,s){
+  versus.varMenu = versus.varMenu || {};
+  const vm = versus.varMenu[slot];
+  const paint = ()=>{ if(versusPop) versusPop.el.querySelectorAll('.vsp-opt').forEach((b,j)=>b.classList.toggle('focus', j===vm.focus)); };
+  if(vm){
+    if(!versusPop){ delete versus.varMenu[slot]; return false; }
+    const d = padDir(gp), dir = (d.left||d.up) ? -1 : ((d.right||d.down) ? 1 : 0);
+    if(dir && dir!==vm.dir){ vm.dir=dir; vm.focus=(vm.focus+dir+vm.list.length)%vm.list.length; sfx('ui_tick'); paint(); } else if(!dir) vm.dir=0;
+    if(btnEdge(idx, ABILITY_POS.R)){ closeVersusVariantPop(); delete versus.varMenu[slot]; sfx('ui_back'); return true; }
+    if(btnEdge(idx, JUMP_POS)){
+      const vid = vm.list[vm.focus];
+      if(versusVariantLocked(vm.baseId,vid)){ sfx('ability_denied'); return true; }
+      s.variantId = vid===vm.baseId ? null : vid;
+      closeVersusVariantPop(true); delete versus.varMenu[slot]; renderVersus();
+      return false; // same A press now locks the chosen version in
+    }
+    return true;
+  }
+  if(btnEdge(idx, JUMP_POS)){
+    const baseId = ROSTER_ORDER[s.cursor], list = versusVariantsFor(baseId);
+    if(list.length>1){
+      const cards = Array.from(document.querySelectorAll('#vs-grid-'+slot+' .vs-card')), card = cards[s.cursor];
+      if(card){ closeVersusVariantPop(true); openVersusVariantPop(card, baseId, slot, list);
+        versus.varMenu[slot] = {baseId, list, focus:Math.max(0,list.indexOf(s.variantId||baseId)), dir:0}; sfx('ui_tick');
+        versusPop.el.querySelectorAll('.vsp-opt').forEach((b,j)=>b.classList.toggle('focus', j===versus.varMenu[slot].focus));
+        return true; }
+    }
+  }
+  return false;
+}
+
+/* =========================================================================
+   ENHANCED SFX + FX 7: Nick Fury / Hawkeye / Mr. Fantastic / Invisible Woman /
+   The Thing / Human Torch / Star-Lord / Drax
+   ========================================================================= */
+(function(){
+const P={nf:['#8a9bb0','#ffd34a','#ffffff'],hk:['#7b4fd6','#d9c2ff','#ffffff'],mf:['#3a7bff','#bcd7ff','#ffffff'],iw:['#8fd4ff','#ffffff','#5aa9ff'],
+ th:['#e07b2f','#ffb36b','#7a4a2a'],ht:['#ff8a1f','#ffd34a','#ff3b1f'],sl:['#ff5a5a','#ffd34a','#5ad1ff'],dx:['#6fae4a','#d94a3a','#ffffff']};
+const shot=(c,t,lo,g)=>{ aNoise(c,t,.06,g,'bandpass',lo,lo*.5,1.1); aTone(c,t,'sawtooth',240,60,.07,g*.8); aNoise(c,t,.02,g*.9,'highpass',6000,3000,.8); };
+const twang=(c,t,f)=>{ aTone(c,t,'triangle',f,f*.72,.22,.1); aTone(c,t,'sine',f*2,f*1.4,.14,.05); };
+const boing=(c,t,f,d)=>{ aTone(c,t,'sine',f,f*2.4,d,.12); aTone(c,t+d,'sine',f*2.4,f*.8,d*1.4,.1); };
+const fire=(c,t,d,g)=>{ aNoise(c,t,d,g,'bandpass',500,2600,.8); aNoise(c,t,d,g*.7,'lowpass',2400,300,.6); };
+const S={
+ nickfury_bazooka_hit:['ht',{f:55,v:1.7,d:1.1,k:1,hp:3200,w:'square'}], nickfury_glock_hit:['ht',{f:140,v:1,hp:4800,r:[1300],rt:1}],
+ hawkeye_hit:['ht',{f:170,v:1,hp:4000,r:[880],w:'triangle',rt:1}], hawkeye_explosive_hit:['ht',{f:60,v:1.5,d:.9,k:1,hp:3600,w:'square'}],
+ stretch_hit:['ht',{f:200,v:1.1,d:.6,hp:2600,w:'sine',r:[330,660]}],
+ invisiblewoman_beam:['zp',{f:1000,m:2,w:'sine',v:1,a:1200,b:5000,r:[1319,1976]}], invisiblewoman_beam_hit:['ht',{f:170,v:1,r:[1568,2349],w:'sine'}],
+ invisiblewoman_push:['up',{f:90,d:.4,w:'sine',v:1.3,a:300,b:2500,r:[196,294]}],
+ thing_rock_hit:['ht',{f:60,v:1.6,d:.9,k:1,hp:3000,w:'square',r:[147,220]}], thing_clobber_hit:['ht',{f:45,v:1.9,d:1.2,k:1,hp:3000,w:'square'}],
+ thing_unbreakable:['up',{f:120,d:.5,w:'triangle',v:1.2,a:400,b:2600,r:[196,294,392]}],
+ starlord_hit:['ht',{f:200,v:1,hp:6000,r:[1568],w:'sawtooth'}],
+ drax_blade_hit:['ht',{f:90,v:1.4,hp:5000,r:[1319,1976],w:'square',k:1}], drax_charge_hit:['ht',{f:50,v:1.8,d:1.1,k:1,hp:3200,w:'square'}],
+ torch_fireball_hit:['ht',{f:100,v:1.2,d:.7,hp:2600,w:'sawtooth'}], torch_nova_hit:['ht',{f:60,v:1.6,d:1,k:1,hp:2800,w:'sawtooth'}]
+};
+Object.keys(S).forEach(k=>{ const [tp,o]=S[k]; ENH_SFX[k]=(c,t)=>SFXT[tp](c,t,o); });
+ENH_SFX.nickfury_glock=(c,t)=>{ shot(c,t,2000,.26); };
+ENH_SFX.nickfury_bazooka=(c,t)=>{ aNoise(c,t,.2,.3,'lowpass',1600,200,.7); aTone(c,t,'sine',130,50,.3,.4); SFXT.sw(c,t+.05,{f:90,v:1.1,a:300,b:2200,w:'sawtooth'}); };
+ENH_SFX.nickfury_grapple=ENH_SFX.hawkeye_grapple=(c,t)=>{ aTone(c,t,'square',1800,1500,.03,.08); SFXT.sw(c,t+.03,{f:200,v:.9,a:900,b:5000,w:'triangle'}); aTone(c,t+.28,'square',300,200,.05,.08); };
+ENH_SFX.hawkeye_arrow=(c,t)=>{ twang(c,t,420); SFXT.sw(c,t+.03,{f:260,v:.9,a:1200,b:6000,w:'triangle'}); };
+ENH_SFX.hawkeye_explosive=(c,t)=>{ twang(c,t,360); SFXT.sw(c,t+.03,{f:220,v:.9,a:900,b:5000,w:'triangle'}); [0,.12,.24].forEach(d=>aTone(c,t+.1+d,'square',2400,2400,.04,.05)); };
+ENH_SFX.stretch_punch=(c,t)=>{ boing(c,t,180,.12); SFXT.sw(c,t+.05,{f:150,v:.8,a:400,b:2200,w:'triangle'}); };
+ENH_SFX.rubber_barrage=(c,t)=>{ [0,.09,.18,.27].forEach((d,i)=>boing(c,t+d,200+i*40,.05)); };
+ENH_SFX.elasticity=(c,t)=>{ boing(c,t,140,.16); aTone(c,t+.1,'sine',600,300,.3,.05); };
+ENH_SFX.invisiblewoman_cloak=(c,t)=>{ aTone(c,t,'sine',2200,300,.6,.09); aTone(c,t+.03,'sine',3300,500,.5,.05); aNoise(c,t,.6,.08,'bandpass',4200,700,2); };
+ENH_SFX.thing_rock_fists=(c,t)=>{ SFXT.sw(c,t,{f:90,v:1.1,a:300,b:2200,w:'sawtooth'}); aNoise(c,t+.05,.12,.25,'lowpass',900,300,1); };
+ENH_SFX.thing_clobber=(c,t)=>{ SFXT.up(c,t,{f:55,d:.7,w:'sawtooth',v:1.4,a:200,b:2800,r:[98,147]}); [.15,.3,.45].forEach(d=>aTone(c,t+d,'sine',80,40,.14,.35)); };
+ENH_SFX.torch_fireball=(c,t)=>{ fire(c,t,.3,.25); aTone(c,t,'sawtooth',400,150,.25,.06); };
+ENH_SFX.torch_nova=(c,t)=>{ fire(c,t,.7,.35); aTone(c,t,'sine',110,35,.7,.45); aNoise(c,t,.1,.3,'highpass',3000,1500,1); };
+ENH_SFX.torch_flameon=(c,t)=>{ fire(c,t,.6,.3); SFXT.up(c,t,{f:150,d:.5,w:'sawtooth',v:.9,a:300,b:3500}); };
+ENH_SFX.starlord_blasters=(c,t)=>{ [0,.07].forEach((d,i)=>{ aTone(c,t+d,'sawtooth',2400+i*300,500,.1,.09); aTone(c,t+d,'square',1600,300,.08,.04); }); };
+ENH_SFX.starlord_bomb_throw=(c,t)=>{ [0,.1,.2].forEach(d=>aTone(c,t+d,'square',1400,1400,.04,.06)); SFXT.sw(c,t+.05,{f:160,v:.8,a:500,b:3000,w:'triangle'}); };
+ENH_SFX.starlord_boots=(c,t)=>{ fire(c,t,.5,.3); SFXT.up(c,t,{f:100,d:.4,w:'sawtooth',v:1,a:300,b:3200}); aTone(c,t,'sine',60,120,.4,.2); };
+ENH_SFX.drax_twin_blades=(c,t)=>{ [0,.09].forEach((d,i)=>{ SFXT.sw(c,t+d,{f:130+i*30,v:1.1,a:600,b:4500,w:'sawtooth',r:[1319,1976]}); aNoise(c,t+d,.06,.2,'highpass',4500,2500,1); }); };
+ENH_SFX.drax_charge=(c,t)=>{ aTone(c,t,'sawtooth',110,70,.5,.16); aNoise(c,t,.5,.16,'bandpass',300,900,1.2); [.1,.25,.4].forEach(d=>aTone(c,t+d,'sine',80,40,.12,.35)); };
+ENH_SFX.drax_fury=(c,t)=>{ aTone(c,t,'sawtooth',90,60,.9,.18); aTone(c,t+.02,'sawtooth',135,90,.9,.1); aNoise(c,t,.9,.14,'bandpass',250,1200,1.4); aTone(c,t+.2,'sine',70,32,.6,.4); };
+/* ---------- visuals ---------- */
+const F=(k,tp,p,o)=>{ ENH_FX[k]=(f,a,tg,cx,cy,dir)=>FXT[tp](f,a,tg,cx,cy,dir,p,o||{}); };
+const H=(k,p,o)=>{ ENH_HIT[k]=HT4(p,o); };
+F('nickfury_glock','sh',P.nf,{r:14,br:'1px',x:(f,a,tg,cx,cy,dir)=>{ ENH.flash(cx+dir*34,cy-4,18,'#ffd34a',110); ENH.parts(cx,cy-4,2,['#ffd34a','#c9a227'],24,320,{size:3,br:'1px',up:30,grav:.8}); }});
+H('nickfury_glock_hit',P.nf,{s:1.3,sk:3,br:'1px'});
+F('nickfury_bazooka','sh',P.nf,{r:22,x:(f,a,tg,cx,cy,dir)=>{ ENH.flash(cx-dir*10,cy,40,'#ffd34a',220); ENH.smoke(cx-dir*24,cy,3,34,700,-12); ENH.streaks(cx-dir*20,cy,'#ffffff',6,70,260,dir>0?180:0,40); shakeArena(3,160); }});
+ENH_HIT.nickfury_bazooka_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,78,['#ffffff','#ffb347','#ff4d1a'],12); ENH.dust(cx,tg.y+FIGHTER_SIZE,70,1); ENH.shock(cx,tg.y+FIGHTER_SIZE,90,'#ffb347',420,3); ENH.word(cx,cy-50,'BOOM!','#ffb347',30,700); shakeArena(9,320); };
+F('nickfury_grapple','rl',P.nf,{x:(f,a,tg,cx,cy,dir)=>ENH.streaks(cx+dir*30,cy-10,'#ffffff',5,90,260,dir>0?0:180,8)});
+F('hawkeye_arrow','sh',P.hk,{r:14,br:'1px',x:(f,a,tg,cx,cy,dir)=>ENH.streaks(cx+dir*20,cy,'#d9c2ff',4,70,240,dir>0?180:0,10)});
+H('hawkeye_hit',P.hk,{s:1.4,sk:3,br:'1px',w:'THUNK'});
+F('hawkeye_explosive','sh',P.hk,{r:18,br:'1px',x:(f,a,tg,cx,cy,dir)=>ENH.parts(cx+dir*26,cy,5,['#ffb347','#ff4d1a'],30,320,{size:4,br:FIRE})});
+ENH_HIT.hawkeye_explosive_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,64,['#ffffff','#ffb347','#ff4d1a'],10); ENH.ring(cx,cy,60,'#7b4fd6',380); ENH.word(cx,cy-46,'BOOM!','#ffd34a',26,700); shakeArena(7,260); };
+F('hawkeye_grapple','rl',P.hk,{x:(f,a,tg,cx,cy,dir)=>ENH.streaks(cx+dir*30,cy-10,'#d9c2ff',5,90,260,dir>0?0:180,8)});
+F('stretch_punch','sl',P.mf,{w:220,h:36,sk:5,x:(f,a,tg,cx,cy,dir)=>{ ENH.streaks(cx+dir*40,cy,'#bcd7ff',7,140,300,dir>0?0:180,8); ENH.ring(cx+dir*130,cy,34,'#3a7bff',280); ENH.word(cx+dir*60,cy-40,'SPROING!','#bcd7ff',20,500); }});
+H('stretch_hit',P.mf,{s:1.9,sk:5,w:'SPLAT!',x:(tg,cx,cy)=>ENH.ring(cx,cy,44,'#bcd7ff',340)});
+F('rubber_barrage','sh',P.mf,{r:20,x:(f,a,tg,cx,cy,dir)=>{ for(let i=0;i<4;i++) setTimeout(()=>{ if(state.mode==='battle') ENH.ring(cx+dir*(30+i*26),cy+(i%2?8:-8),20,'#bcd7ff',260); },i*70); }});
+ENH_FX.elasticity=(f,a,tg,cx,cy)=>{ ENH.body(f,'#3a7bff',600); [0,120,240].forEach((d,i)=>setTimeout(()=>{ if(state.mode==='battle') ENH.ring(cx,cy,50+i*12,i%2?'#bcd7ff':'#3a7bff',420,false,3); },d)); ENH.word(cx,cy-56,'ELASTIC','#bcd7ff',22,700); };
+F('invisiblewoman_beam','sh',P.iw,{r:18,x:(f,a,tg,cx,cy,dir)=>ENH.ring(cx+dir*28,cy,26,'#8fd4ff',300)});
+H('invisiblewoman_beam_hit',P.iw,{s:1.7,w:'ZAP!',sk:4,x:(tg,cx,cy)=>ENH.ring(cx,cy,50,'#ffffff',340)});
+F('psi_push','sh',P.iw,{r:26,x:(f,a,tg,cx,cy,dir)=>{ ENH.ring(cx+dir*40,cy,50,'#8fd4ff',420); ENH.ring(cx+dir*40,cy,32,'#ffffff',320,false,3); ENH.streaks(cx+dir*30,cy,'#ffffff',8,110,300,dir>0?0:180,60); shakeArena(4,160); }});
+ENH_FX.invisiblewoman_cloak=(f,a,tg,cx,cy)=>{ const feet=f.y+FIGHTER_SIZE; ENH.body(f,'#8fd4ff',500); ENH.flash(cx,cy,60,'#ffffff',360); ENH.ring(cx,cy,56,'#8fd4ff',460); for(let i=0;i<3;i++) fxEl('enh enh-scan',`left:${cx-38}px;top:${feet-6}px;width:76px;--d:${i*.13}s;`,1000); ENH.parts(cx,cy,14,['#ffffff','#8fd4ff'],54,600,{size:3,br:'50%',up:10}); };
+F('thing_rock_fists','sl',P.th,{w:190,h:104,sk:8,d:60,br:'2px',x:(f,a,tg,cx,cy,dir)=>ENH.parts(cx+dir*60,cy,8,['#7a4a2a','#e07b2f','#ffb36b'],44,420,{size:6,br:'2px',up:24,grav:.8})});
+H('thing_rock_hit',P.th,{s:3,w:'CRUNCH!',sk:11,up:20,br:'2px'});
+F('thing_clobber','gd',P.th,{R:120,sk:12,br:'2px',x:(f,a,tg,cx,cy,dir)=>{ ENH.streaks(cx+dir*30,cy,'#ffb36b',10,100,380,dir>0?-20:160,40); ENH.word(cx,cy-60,"CLOBBERIN' TIME!",'#ffb36b',22,900); }});
+ENH_HIT.thing_clobber_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,64,['#ffffff','#ffb36b','#e07b2f'],9); ENH.parts(cx,cy,12,['#7a4a2a','#e07b2f'],70,560,{size:8,br:'2px',up:34}); ENH.shock(cx,tg.y+FIGHTER_SIZE,90,'#e07b2f',420,4); ENH.word(cx,cy-50,'WHAM!','#ffb36b',30,800); shakeArena(10,320); };
+ENH_FX.thing_unbreakable=(f,a,tg,cx,cy)=>{ ENH.body(f,'#e07b2f',700); ENH.ring(cx,cy,70,'#ffb36b',500); ENH.parts(cx,cy,14,['#7a4a2a','#e07b2f','#ffb36b'],52,600,{size:7,br:'2px',up:14}); ENH.word(cx,cy-60,'UNBREAKABLE','#ffb36b',22,900); shakeArena(4,200); };
+F('torch_fireball','sh',P.ht,{r:22,br:FIRE,x:(f,a,tg,cx,cy,dir)=>ENH.parts(cx+dir*24,cy,6,['#ffd34a','#ff8a1f','#ff3b1f'],34,340,{size:6,br:FIRE,up:20})});
+H('torch_fireball_hit',P.ht,{s:1.8,w:'BURN!',sk:4,br:FIRE});
+F('torch_nova','gd',P.ht,{R:150,sk:9,br:FIRE,x:(f,a,tg,cx,cy)=>{ ENH.explode(cx,cy,110,['#ffffff','#ffd34a','#ff8a1f'],14); ENH.ring(cx,cy,140,'#ff8a1f',520); ENH.ring(cx,cy,90,'#ffd34a',420,false,3); shakeArena(8,300); }});
+H('torch_nova_hit',P.ht,{s:2.6,w:'NOVA!',sk:8,br:FIRE});
+F('torch_flameon','up',P.ht,{lv:5000,br:FIRE,hi:1,up:36,x:(f,a,tg,cx,cy)=>{ ENH.ring(cx,cy,70,'#ffd34a',420,true,3); ENH.word(cx,cy-60,'FLAME ON!','#ffd34a',26,900); }});
+F('starlord_blasters','sh',P.sl,{r:14,x:(f,a,tg,cx,cy,dir)=>{ ENH.flash(cx+dir*34,cy-6,16,'#ff5a5a',100); setTimeout(()=>{ if(state.mode==='battle') ENH.flash(cx+dir*34,cy+6,16,'#5ad1ff',100); },70); }});
+H('starlord_hit',P.sl,{s:1.6,sk:4,br:'1px'});
+F('starlord_bomb','sh',P.sl,{r:22,br:'50%',x:(f,a,tg,cx,cy,dir)=>ENH.ring(cx+dir*34,cy,22,'#5ad1ff',320)});
+F('starlord_boots','rl',P.sl,{x:(f,a,tg,cx)=>{ const gy=f.y+FIGHTER_SIZE; ENH.parts(cx,gy,10,['#ffd34a','#ff8a1f','#5ad1ff'],40,420,{size:5,br:FIRE,up:-30}); ENH.dust(cx,gy,40,1); }});
+F('drax_twin_blades','sl',P.dx,{w:190,h:96,sk:6,br:'1px',x:(f,a,tg,cx,cy,dir)=>ENH.slash(cx+dir*56,cy+14,-dir,150,70,P.dx[1],P.dx[2],240)});
+H('drax_blade_hit',P.dx,{s:2.4,sl:1,w:'SLICE!',sk:7,br:'1px'});
+F('drax_charge','gd',P.dx,{R:110,sk:10,x:(f,a,tg,cx,cy,dir)=>ENH.streaks(cx+dir*30,cy,'#c7ff9a',8,90,360,dir>0?-20:160,40)});
+ENH_HIT.drax_charge_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,60,['#ffffff','#d94a3a','#6fae4a'],9); ENH.shock(cx,tg.y+FIGHTER_SIZE,80,'#d94a3a',400,4); ENH.word(cx,cy-50,'DESTROYER!','#d94a3a',26,800); shakeArena(9,300); };
+ENH_FX.drax_fury=(f,a,tg,cx,cy)=>{ ENH.body(f,'#d94a3a',700); ENH.ring(cx,cy,90,'#d94a3a',600,true,3); ENH.ring(cx,cy,60,'#6fae4a',460); ENH.parts(cx,cy,14,['#d94a3a','#6fae4a'],60,560,{size:5,br:'1px',up:30}); ENH.word(cx,cy-62,'I AM GROOT... NOT!','#d94a3a',18,900); shakeArena(6,260); };
+const AUR3={nickfury:'nfy',hawkeye:'hwk',mrfantastic:'mrf',invisiblewoman:'iwm',thing:'thg',humantorch:'tor',starlord:'stl',drax:'drx'};
+const _eah3=enhAuraHtml; enhAuraHtml=function(id){ const m=AUR3[id]; return m?`<div class="enh-aura ${m}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`:_eah3(id); };
+})();
+/* =========================================================================
+   UPGRADE ROUND 5 — Nick Fury, Hawkeye, Mr. Fantastic, Invisible Woman,
+   The Thing, Human Torch, Star-Lord, Drax: richer layered SFX + visuals.
+   Loaded after every earlier ENH block, so these entries win.
+   ========================================================================= */
+(function(){
+const T=(c,t,ty,a,b,d,v)=>aTone(c,t,ty,a,b,d,v), N=(c,t,d,v,ft,a,b,q)=>aNoise(c,t,d,v,ft,a,b,q);
+const boom=(c,t,f,d,v)=>{ T(c,t,'sine',f*2.4,f,d*.45,v); T(c,t+.01,'sine',f,Math.max(24,f*.4),d,v*.9); };
+const crack=(c,t,v)=>{ N(c,t,.05,.38*v,'highpass',5200,2400,1); T(c,t,'square',2000,260,.06,.1*v); };
+const echo=(c,t,v)=>{ N(c,t+.09,.3,.07*v,'bandpass',1800,500,.8); N(c,t+.2,.4,.04*v,'bandpass',1200,400,.8); };
+const twang=(c,t,f,v)=>{ [1,2,3,4].forEach(h=>{ T(c,t,'sine',f*h*1.12,f*h,.55/h+.1,.14*v/h); T(c,t+.012,'sine',f*h*1.13,f*h*.99,.5/h+.08,.06*v/h); }); T(c,t,'triangle',f*2.4,f*1.9,.22,.05*v); };
+const boing=(c,t,f,v)=>{ T(c,t,'sine',f,f*2.6,.08,.15*v); T(c,t+.08,'sine',f*2.6,f*.6,.26,.14*v); T(c,t+.02,'triangle',f*2,f*5,.08,.05*v); T(c,t+.18,'sine',f*1.2,f*.8,.16,.06*v); };
+const flame=(c,t,d,v)=>{ N(c,t,d,.2*v,'bandpass',500,2800,.8); N(c,t,d*.9,.16*v,'lowpass',1500,260,.7); for(let i=0;i<7;i++) N(c,t+Math.random()*d*.9,.02,.11*v,'highpass',4200,3000,1); };
+const rumble=(c,t,d,v,f)=>N(c,t,d,.3*v,'lowpass',f||420,70,.8);
+const zap=(c,t,f,v)=>{ T(c,t,'sawtooth',f*2.2,f*.5,.13,.1*v); T(c,t,'square',f*1.2,f*.3,.1,.05*v); N(c,t,.07,.16*v,'highpass',5600,2600,1); };
+const glass=(c,t,fs,v)=>fs.forEach((f,i)=>{ T(c,t+i*.02,'sine',f,f*.995,.55-i*.06,.09*v); T(c,t+i*.02,'triangle',f*2.01,f*2,.3,.03*v); });
+const stone=(c,t,v)=>{ N(c,t,.16,.34*v,'lowpass',1100,220,.9); for(let i=0;i<6;i++) N(c,t+.02+i*.03,.03,.16*v,'bandpass',900+Math.random()*1800,500,2); };
+const beepS=(c,t,f,v)=>T(c,t,'square',f,f,.06,.07*v);
+const S=(k,fn)=>{ ENH_SFX[k]=(c,t)=>{ fn(c,t); }; };
+
+/* ---------------- SOUNDS ---------------- */
+// Nick Fury
+S('nickfury_glock',(c,t)=>{ crack(c,t,1); boom(c,t,120,.16,.3); T(c,t+.09,'sine',5200,4200,.05,.05); T(c,t+.13,'sine',4400,3800,.04,.03); echo(c,t,.8); });
+S('nickfury_glock_hit',(c,t)=>{ boom(c,t,150,.18,.4); N(c,t,.1,.22,'lowpass',1800,300,1); T(c,t+.04,'sine',2600,1500,.18,.06); });
+S('nickfury_bazooka',(c,t)=>{ boom(c,t,70,.4,.5); N(c,t,.22,.34,'lowpass',2200,220,.8); T(c,t,'sawtooth',190,55,.3,.1); N(c,t+.08,.6,.16,'bandpass',600,3600,1.2); T(c,t+.05,'sawtooth',90,240,.55,.05); echo(c,t,1); });
+S('nickfury_bazooka_hit',(c,t)=>{ boom(c,t,48,1.1,.85); N(c,t,.7,.5,'lowpass',2600,120,.7); N(c,t,.09,.4,'highpass',6000,2000,1); for(let i=0;i<10;i++) N(c,t+.12+Math.random()*.5,.04,.12,'bandpass',600+Math.random()*2400,400,3); T(c,t+.03,'sawtooth',180,30,.6,.12); });
+S('nickfury_grapple',(c,t)=>{ N(c,t,.03,.3,'highpass',3000,1800,1); T(c,t,'square',260,90,.07,.14); T(c,t+.05,'sawtooth',300,1500,.22,.06); N(c,t+.05,.3,.14,'bandpass',900,5200,1.5); T(c,t+.28,'square',1800,1300,.03,.08); });
+// Hawkeye
+S('hawkeye_arrow',(c,t)=>{ twang(c,t,300,1); N(c,t+.02,.2,.15,'bandpass',1400,6500,1.6); T(c,t+.04,'sawtooth',420,1800,.16,.04); });
+S('hawkeye_hit',(c,t)=>{ boom(c,t,110,.16,.35); N(c,t,.05,.3,'highpass',4200,2200,1); T(c,t+.02,'sine',240,190,.35,.08); T(c,t+.02,'sine',480,380,.25,.03); });
+S('hawkeye_explosive',(c,t)=>{ twang(c,t,240,1); N(c,t+.02,.2,.13,'bandpass',1200,5000,1.6); [0,.08,.16,.24].forEach((d,i)=>beepS(c,t+.12+d,1500+i*220,1)); });
+S('hawkeye_explosive_hit',(c,t)=>{ [0,.05].forEach((d,i)=>beepS(c,t+d,2600+i*300,1.2)); boom(c,t+.09,60,.85,.7); N(c,t+.09,.5,.45,'lowpass',2600,150,.8); N(c,t+.09,.08,.34,'highpass',5800,2600,1); T(c,t+.12,'triangle',900,120,.4,.08); });
+S('hawkeye_grapple',(c,t)=>{ T(c,t,'square',230,110,.06,.13); N(c,t+.02,.32,.15,'bandpass',800,5600,1.4); T(c,t+.04,'triangle',340,1600,.24,.06); T(c,t+.3,'square',1900,1400,.03,.08); });
+// Mr. Fantastic
+S('stretch_punch',(c,t)=>{ boing(c,t,170,1); N(c,t+.06,.18,.16,'bandpass',500,3600,1.4); T(c,t+.16,'sine',900,300,.1,.06); });
+S('stretch_hit',(c,t)=>{ N(c,t,.05,.34,'highpass',3600,1800,1); boom(c,t,150,.2,.4); boing(c,t+.03,260,.6); });
+S('rubber_barrage',(c,t)=>{ [0,.07,.14,.21,.28,.35].forEach((d,i)=>{ boing(c,t+d,220+(i%3)*60,.45); N(c,t+d,.04,.14,'highpass',3200,2000,1); }); });
+S('elasticity',(c,t)=>{ T(c,t,'sine',130,520,.28,.14); T(c,t+.05,'triangle',260,1040,.24,.07); boing(c,t+.2,200,.7); N(c,t,.3,.07,'bandpass',600,2600,1.5); });
+// Invisible Woman
+S('invisiblewoman_beam',(c,t)=>{ zap(c,t,1000,1); glass(c,t+.02,[1319,1976],.9); N(c,t,.16,.1,'bandpass',2400,6500,2); });
+S('invisiblewoman_beam_hit',(c,t)=>{ glass(c,t,[1568,2349,3136],1.2); boom(c,t,170,.2,.32); N(c,t,.09,.2,'highpass',6200,3000,1); });
+S('invisiblewoman_push',(c,t)=>{ boom(c,t,62,.55,.55); T(c,t,'sine',110,330,.4,.14); N(c,t,.45,.2,'bandpass',300,2200,1); glass(c,t+.05,[392,587],.7); });
+S('invisiblewoman_cloak',(c,t)=>{ T(c,t,'sine',3300,400,.7,.08); T(c,t+.04,'sine',2200,300,.6,.07); N(c,t,.6,.09,'bandpass',5200,700,2.2); [0,.1,.2].forEach((d,i)=>T(c,t+d,'triangle',1800-i*300,500,.28,.04)); });
+// The Thing
+S('thing_rock_fists',(c,t)=>{ N(c,t,.16,.26,'lowpass',1400,260,1); T(c,t,'sawtooth',100,52,.16,.13); stone(c,t+.06,.5); });
+S('thing_rock_hit',(c,t)=>{ boom(c,t,52,.85,.8); stone(c,t,1); N(c,t,.07,.3,'highpass',3600,1800,1); T(c,t,'square',150,45,.25,.14); });
+S('thing_clobber',(c,t)=>{ T(c,t,'sawtooth',110,62,.6,.16); T(c,t+.02,'square',82,56,.6,.08); rumble(c,t,.7,.6,700); [.12,.28,.44,.6].forEach(d=>{ boom(c,t+d,58,.16,.42); stone(c,t+d,.4); }); });
+S('thing_clobber_hit',(c,t)=>{ boom(c,t,40,1.3,1); stone(c,t,1.2); N(c,t,.8,.4,'lowpass',2000,90,.7); N(c,t,.08,.4,'highpass',4200,1800,1); T(c,t,'square',120,30,.5,.18); });
+S('thing_unbreakable',(c,t)=>{ N(c,t,.5,.3,'lowpass',900,180,1); stone(c,t+.1,.8); T(c,t,'triangle',120,200,.5,.14); glass(c,t+.25,[196,294,392],.5); boom(c,t+.05,70,.4,.4); });
+// Human Torch
+S('torch_fireball',(c,t)=>{ flame(c,t,.36,1); T(c,t,'sawtooth',560,140,.28,.08); T(c,t+.03,'triangle',300,90,.3,.06); });
+S('torch_fireball_hit',(c,t)=>{ boom(c,t,90,.6,.55); flame(c,t,.5,1.1); N(c,t,.08,.34,'highpass',5000,2200,1); T(c,t,'sawtooth',420,70,.35,.08); });
+S('torch_nova',(c,t)=>{ T(c,t,'sawtooth',70,400,.5,.09); N(c,t,.5,.3,'bandpass',300,3800,1); boom(c,t+.4,46,.9,.85); flame(c,t+.4,.9,1.4); N(c,t+.4,.09,.4,'highpass',4400,2000,1); });
+S('torch_nova_hit',(c,t)=>{ boom(c,t,55,1,.75); flame(c,t,.7,1.2); [0,.06,.12].forEach(d=>T(c,t+d,'sawtooth',700-d*3000,120,.3,.07)); });
+S('torch_flameon',(c,t)=>{ boom(c,t,80,.5,.5); flame(c,t,.9,1.2); T(c,t,'sawtooth',120,720,.45,.09); T(c,t+.08,'triangle',240,1440,.4,.05); });
+// Star-Lord
+S('starlord_blasters',(c,t)=>{ [0,.08].forEach((d,i)=>{ zap(c,t+d,900+i*260,1); T(c,t+d,'sine',180,70,.1,.16); N(c,t+d,.05,.2,'highpass',4800,2400,1); }); });
+S('starlord_hit',(c,t)=>{ zap(c,t,700,1.1); boom(c,t,170,.16,.3); T(c,t+.03,'triangle',1600,600,.18,.06); });
+S('starlord_bomb_throw',(c,t)=>{ [0,.09,.18].forEach((d,i)=>beepS(c,t+d,1100+i*250,.9)); N(c,t+.04,.22,.14,'bandpass',500,3200,1.4); T(c,t+.05,'triangle',200,900,.2,.06); });
+S('starlord_bomb_stick',(c,t)=>{ boom(c,t,110,.12,.32); N(c,t,.04,.24,'highpass',4200,2400,1); beepS(c,t+.06,2200,1.1); });
+S('starlord_beep',(c,t)=>{ beepS(c,t,1700,1.1); T(c,t,'sine',3400,3400,.05,.03); });
+S('starlord_beep_hi',(c,t)=>{ beepS(c,t,2600,1.3); T(c,t,'sine',5200,5200,.05,.04); });
+S('starlord_bomb_explode',(c,t)=>{ [0,.04].forEach(d=>beepS(c,t+d,3000,1.2)); boom(c,t+.07,55,1,.8); N(c,t+.07,.6,.45,'lowpass',3200,140,.7); zap(c,t+.07,300,1.4); N(c,t+.07,.09,.4,'highpass',6200,2400,1); });
+S('starlord_boots',(c,t)=>{ boom(c,t,80,.4,.5); flame(c,t,.6,1.1); T(c,t,'sawtooth',90,340,.5,.1); N(c,t,.5,.2,'bandpass',500,4200,1.2); [0,.09,.18].forEach((d,i)=>T(c,t+d,'square',1400+i*200,900,.05,.04)); });
+// Drax
+S('drax_twin_blades',(c,t)=>{ [0,.1].forEach((d,i)=>{ N(c,t+d,.16,.24,'bandpass',700,5600,1.6); T(c,t+d,'sawtooth',150+i*40,650,.12,.08); T(c,t+d+.05,'sine',2400+i*400,1800,.22,.04); crack(c,t+d+.05,.5); }); });
+S('drax_blade_hit',(c,t)=>{ boom(c,t,95,.22,.5); N(c,t,.07,.36,'highpass',4600,2200,1); T(c,t,'triangle',2600,1400,.28,.07); T(c,t+.02,'triangle',3900,2100,.22,.04); stone(c,t,.25); });
+S('drax_charge',(c,t)=>{ T(c,t,'sawtooth',130,80,.6,.16); T(c,t,'square',97,62,.6,.07); rumble(c,t,.7,.5,600); N(c,t,.6,.14,'bandpass',300,1300,1.3); [.1,.24,.38,.52].forEach(d=>boom(c,t+d,66,.14,.38)); });
+S('drax_charge_hit',(c,t)=>{ boom(c,t,44,1.2,.95); stone(c,t,.9); N(c,t,.6,.34,'lowpass',2000,110,.7); crack(c,t,1); T(c,t+.05,'sawtooth',180,40,.5,.12); });
+S('drax_fury',(c,t)=>{ T(c,t,'sawtooth',95,55,1,.19); T(c,t+.02,'sawtooth',142,84,1,.11); rumble(c,t,1,.5,500); N(c,t,.9,.14,'bandpass',260,1500,1.3); boom(c,t+.25,56,.7,.55); [.3,.5,.7].forEach(d=>T(c,t+d,'square',200,120,.12,.05)); });
+
+/* ---------------- VISUALS ---------------- */
+const FXs=(k,fn)=>{ ENH_FX[k]=(f,a,tg,cx,cy,dir)=>{ try{ fn(f,a,tg,cx,cy,dir||1); }catch(e){ console.warn('FXERR',k,e&&e.message); } }; };
+const HTs=(k,fn)=>{ ENH_HIT[k]=(tg,cx,cy)=>{ try{ fn(tg,cx,cy); }catch(e){ console.warn('FXERR',k,e&&e.message); } }; };
+const bat=()=>state.mode==='battle';
+const later=(ms,fn)=>setTimeout(()=>{ if(bat()) try{ fn(); }catch(e){} },ms);
+const gy=(f)=>f.y+FIGHTER_SIZE;
+const casing=(cx,cy,dir,c)=>ENH.parts(cx,cy,3,c||'#ffd34a',36,520,{size:4,w:1.8,br:'1px',arc:1.1,a0:dir>0?-2.6:-1.7,up:8,grav:2});
+// Nick Fury
+FXs('nickfury_glock',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*36; ENH.flash(x,cy-4,26,'#ffe27a',120); ENH.streaks(x,cy-4,'#fff3c4',5,44,190,dir>0?-40:140,80); ENH.smoke(x,cy-6,2,16,520,-14); casing(cx+dir*6,cy-8,dir); ENH.body(f,'#b5c9e8',180); });
+HTs('nickfury_glock_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,26,'#ffe27a',140); ENH.metal(cx,cy,9,52,420,['#ffffff','#ffd34a','#b5c9e8']); ENH.ring(cx,cy,26,'#ffd34a',260); ENH.word(cx,cy-40,'BANG','#ffd34a',18,520); });
+FXs('nickfury_bazooka',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*34; ENH.flash(x,cy,54,'#ffd34a',260); ENH.streaks(x,cy,'#ffb347',9,84,300,dir>0?-50:130,100); ENH.smoke(cx-dir*30,cy+4,5,44,900,-16); ENH.shock(cx,gy(f),80,'#b5c9e8',420,3); ENH.dust(cx,gy(f),90,2); ENH.body(f,'#ffb347',360); shakeArena(4,200); });
+HTs('nickfury_bazooka_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,110,'#ffffff',200); ENH.explode(cx,cy,92,['#ffffff','#ffd34a','#ff8a1f','#ff3d1a'],14); ENH.ring(cx,cy,100,'#ffb347',480,false,4); ENH.shock(cx,tg.y+FIGHTER_SIZE,120,'#ff6a2b',560,5); ENH.smoke(cx,cy,6,70,1100,-22); ENH.metal(cx,cy,14,120,620,['#ffd34a','#5b6470','#eef2f5']); ENH.dust(cx,tg.y+FIGHTER_SIZE,110,3); ENH.word(cx,cy-64,'BOOM!','#ff8a1f',30,800); shakeArena(10,340); });
+FXs('nickfury_grapple',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*34; ENH.flash(x,cy-8,18,'#ffffff',120); ENH.streaks(x,cy-8,'#dfe8f7',6,60,240,dir>0?-24:156,48); ENH.parts(x,cy-8,6,['#ffffff','#b5c9e8'],30,300,{size:3,w:2,br:'1px'}); });
+// Hawkeye
+FXs('hawkeye_arrow',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*30; ENH.ring(x,cy,20,'#c9a8ff',240); ENH.streaks(x,cy,'#d9c2ff',6,60,220,dir>0?170:-10,60); ENH.feathers(cx,cy,3,['#8f5cff','#d9c2ff'],36,420,10); ENH.body(f,'#8f5cff',220); });
+HTs('hawkeye_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,24,'#d9c2ff',150); ENH.ring(cx,cy,32,'#8f5cff',300); ENH.metal(cx,cy,7,48,380,['#ffffff','#d9c2ff','#8f5cff']); ENH.streaks(cx,cy,'#ffffff',5,36,200,0,360); ENH.word(cx,cy-40,'THWIP','#c9a8ff',18,520); });
+FXs('hawkeye_explosive',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*30; ENH.ring(x,cy,24,'#ffb347',260); ENH.parts(x,cy,7,['#ffb347','#ff4d1a','#ffe27a'],36,340,{size:4,br:FIRE}); ENH.feathers(cx,cy,3,['#8f5cff','#ffb347'],36,420,10); ENH.body(f,'#ffb347',260); });
+HTs('hawkeye_explosive_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,90,'#ffffff',190); ENH.explode(cx,cy,74,['#ffffff','#ffb347','#ff4d1a'],12); ENH.ring(cx,cy,78,'#8f5cff',420,false,3); ENH.ring(cx,cy,52,'#ffd34a',320,true,3); ENH.smoke(cx,cy,4,50,900,-18); ENH.word(cx,cy-56,'BOOM ARROW!','#c9a8ff',22,800); shakeArena(7,260); });
+FXs('hawkeye_grapple',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*34; ENH.flash(x,cy-8,16,'#ffffff',110); ENH.streaks(x,cy-8,'#d9c2ff',6,60,240,dir>0?-24:156,48); });
+// Mr. Fantastic
+FXs('stretch_punch',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#64a9ff',300); ENH.ring(cx+dir*24,cy,22,'#bfe0ff',280); ENH.streaks(cx+dir*40,cy,'#bfe0ff',6,70,240,dir>0?-30:150,60); ENH.parts(cx+dir*30,cy,5,['#64a9ff','#ffffff'],28,320,{size:5,br:'50%'}); });
+HTs('stretch_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,34,'#bfe0ff',150); ENH.ring(cx,cy,30,'#64a9ff',300); ENH.ring(cx,cy,46,'#bfe0ff',380,true,2); ENH.parts(cx,cy,8,['#64a9ff','#ffffff','#bfe0ff'],54,420,{size:5,br:'50%'}); ENH.word(cx,cy-42,'SPLAT!','#64a9ff',20,560); });
+FXs('rubber_barrage',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#64a9ff',520); [0,70,140,210,280,350].forEach((d,i)=>later(d,()=>{ ENH.ring(cx+dir*(20+i*6),cy+(i%2?-14:12),16,i%2?'#ffffff':'#64a9ff',240); ENH.streaks(cx+dir*40,cy+(i%2?-14:12),'#bfe0ff',3,54,180,dir>0?-15:165,30); })); ENH.word(cx,cy-52,'STRETCH!','#64a9ff',22,700); });
+FXs('elasticity',(f,a,tg,cx,cy)=>{ ENH.body(f,'#64a9ff',700); ENH.ring(cx,cy,60,'#bfe0ff',520,true,3); ENH.ring(cx,cy,42,'#64a9ff',420); ENH.parts(cx,cy,10,['#64a9ff','#ffffff'],46,520,{size:5,br:'50%',up:10}); ENH.word(cx,cy-58,'ELASTIC!','#64a9ff',20,700); });
+// Invisible Woman
+FXs('invisiblewoman_beam',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*30; ENH.flash(x,cy,30,'#eaf6ff',140); ENH.ring(x,cy,20,'#8fd4ff',260); ENH.ring(x,cy,32,'#ffffff',340,true,2); ENH.streaks(x,cy,'#bfe6ff',6,60,240,dir>0?-30:150,60); ENH.body(f,'#8fd4ff',240); });
+HTs('invisiblewoman_beam_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,40,'#ffffff',170); ENH.ring(cx,cy,36,'#8fd4ff',340); ENH.ring(cx,cy,56,'#eaf6ff',420,true,2); ENH.streaks(cx,cy,'#bfe6ff',9,60,260,0,360); ENH.parts(cx,cy,9,['#ffffff','#8fd4ff','#1f5fae'],60,480,{size:4,br:'2px'}); ENH.word(cx,cy-44,'ZAP!','#8fd4ff',22,600); });
+FXs('psi_push',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#8fd4ff',480); [0,90,180].forEach((d,i)=>later(d,()=>ENH.ring(cx+dir*(20+i*26),cy,44+i*18,i%2?'#ffffff':'#8fd4ff',420,false,3))); ENH.shock(cx,gy(f),100,'#8fd4ff',520,4); ENH.streaks(cx+dir*30,cy,'#eaf6ff',8,90,300,dir>0?-45:135,90); ENH.dust(cx,gy(f),80,2); ENH.word(cx,cy-56,'PSIONIC PUSH','#8fd4ff',20,760); shakeArena(4,200); });
+FXs('invisiblewoman_cloak',(f,a,tg,cx,cy)=>{ ENH.body(f,'#8fd4ff',700); ENH.flash(cx,cy,70,'#ffffff',380); ENH.ring(cx,cy,70,'#8fd4ff',560,true,3); ENH.ring(cx,cy,44,'#eaf6ff',440,true,2); ENH.parts(cx,cy,16,['#ffffff','#8fd4ff','#bfe6ff'],70,700,{size:4,br:'50%',up:26}); ENH.word(cx,cy-60,'FADING...','#8fd4ff',18,900); });
+// The Thing
+FXs('thing_rock_fists',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#e8823a',260); ENH.dust(cx+dir*30,gy(f),60,2); ENH.parts(cx+dir*34,cy,7,['#c9793a','#8a5a2b','#5b3a1c'],36,380,{size:6,br:'2px',up:10,grav:2}); ENH.streaks(cx+dir*40,cy,'#ffb066',4,50,200,dir>0?-25:155,50); });
+HTs('thing_rock_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,42,'#ffd9a8',150); ENH.explode(cx,cy,48,['#ffffff','#ffb066','#c9793a'],7); ENH.parts(cx,cy,12,['#c9793a','#8a5a2b','#5b3a1c','#e8823a'],70,520,{size:7,br:'2px',up:16,grav:2}); ENH.cracks(cx,tg.y+FIGHTER_SIZE,'#5b3a1c',4,70); ENH.dust(cx,tg.y+FIGHTER_SIZE,70,2); ENH.word(cx,cy-46,'CRUNCH!','#e8823a',22,640); shakeArena(6,220); });
+FXs('thing_clobber',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#e8823a',700); ENH.word(cx,cy-64,"IT'S CLOBBERIN' TIME!",'#e8823a',20,1000); ENH.shock(cx,gy(f),90,'#e8823a',520,5); ENH.live(f,700,60,()=>{ const x=f.x+FIGHTER_SIZE/2; ENH.dust(x,gy(f),50,1); ENH.parts(x,gy(f)-6,3,['#c9793a','#8a5a2b'],30,360,{size:5,br:'2px',up:12,grav:2}); ENH.streaks(x-dir*26,f.y+FIGHTER_SIZE/2,'#ffb066',3,60,200,dir>0?170:-10,40); }); shakeArena(5,300); });
+HTs('thing_clobber_hit',(tg,cx,cy)=>{ const g=tg.y+FIGHTER_SIZE; ENH.flash(cx,cy,100,'#ffffff',200); ENH.explode(cx,cy,86,['#ffffff','#ffb066','#e8823a','#8a5a2b'],12); ENH.shock(cx,g,150,'#e8823a',620,6); ENH.shock(cx,g,90,'#ffd9a8',480,4); ENH.cracks(cx,g,'#3a2412',8,120); ENH.parts(cx,cy,18,['#c9793a','#8a5a2b','#5b3a1c'],110,700,{size:8,br:'2px',up:30,grav:2}); ENH.dust(cx,g,140,4); ENH.word(cx,cy-64,'CLOBBERED!','#e8823a',28,900); shakeArena(12,380); });
+FXs('thing_unbreakable',(f,a,tg,cx,cy)=>{ ENH.body(f,'#e8823a',800); ENH.ring(cx,cy,64,'#3a5fae',560,true,3); ENH.ring(cx,cy,46,'#e8823a',440); ENH.shock(cx,gy(f),90,'#8a5a2b',540,4); ENH.parts(cx,cy,14,['#c9793a','#8a5a2b','#5b3a1c'],60,560,{size:6,br:'2px',up:22,grav:2}); ENH.dust(cx,gy(f),80,2); ENH.word(cx,cy-60,'UNBREAKABLE','#e8823a',20,860); });
+// Human Torch
+FXs('torch_fireball',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*32; ENH.flash(x,cy,38,'#ffd24a',180); ENH.parts(x,cy,10,['#fff3c4','#ffd24a','#ff6a2b'],46,380,{size:5,br:FIRE}); ENH.streaks(x,cy,'#ffb347',5,60,240,dir>0?-30:150,60); ENH.smoke(cx,cy-4,2,20,600,-16); ENH.body(f,'#ff6a2b',260); });
+HTs('torch_fireball_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,60,'#fff3c4',180); ENH.explode(cx,cy,60,['#ffffff','#ffd24a','#ff6a2b','#c1281a'],10); ENH.parts(cx,cy,12,['#ffd24a','#ff6a2b'],66,520,{size:5,br:FIRE,up:24}); ENH.smoke(cx,cy,3,40,800,-20); ENH.word(cx,cy-46,'SCORCHED!','#ff6a2b',20,640); });
+FXs('torch_nova',(f,a,tg,cx,cy)=>{ ENH.body(f,'#ffd24a',720); ENH.flash(cx,cy,130,'#fff3c4',300); [0,110,220].forEach((d,i)=>later(d,()=>ENH.ring(cx,cy,90+i*60,['#ffd24a','#ff6a2b','#c1281a'][i],520,false,5-i))); ENH.shock(cx,gy(f),190,'#ff6a2b',640,6); ENH.parts(cx,cy,26,['#fff3c4','#ffd24a','#ff6a2b'],150,720,{size:7,br:FIRE,up:34}); ENH.streaks(cx,cy,'#ffb347',14,150,460,0,360); ENH.smoke(cx,cy,6,90,1100,-24); ENH.word(cx,cy-74,'NOVA BLAST!','#ffd24a',30,960); shakeArena(9,320); });
+HTs('torch_nova_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,80,'#ffffff',180); ENH.explode(cx,cy,72,['#ffffff','#ffd24a','#ff6a2b'],11); ENH.parts(cx,cy,16,['#ffd24a','#ff6a2b','#c1281a'],80,560,{size:6,br:FIRE,up:30}); ENH.smoke(cx,cy,4,60,900,-22); ENH.word(cx,cy-52,'BURNED!','#ff6a2b',22,700); });
+FXs('torch_flameon',(f,a,tg,cx,cy)=>{ const on=f.flight; ENH.body(f,'#ff6a2b',700); ENH.flash(cx,cy,80,'#fff3c4',360); ENH.ring(cx,cy,74,'#ffd24a',520,on!==false); ENH.ring(cx,cy,50,'#ff6a2b',420); ENH.parts(cx,cy,20,['#fff3c4','#ffd24a','#ff6a2b'],80,640,{size:6,br:FIRE,up:36}); ENH.shock(cx,gy(f),80,'#ff6a2b',500,4); ENH.word(cx,cy-62,'FLAME ON!','#ffd24a',26,860); shakeArena(4,240); });
+// Star-Lord
+FXs('starlord_blasters',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*34; ENH.flash(x,cy-6,22,'#ff7a7a',110); ENH.streaks(x,cy-6,'#ffb0b0',5,54,180,dir>0?-35:145,70); later(80,()=>{ ENH.flash(cx+dir*34,cy+6,20,'#5ad1ff',110); ENH.streaks(cx+dir*34,cy+6,'#a8e6ff',4,48,170,dir>0?-30:150,60); }); ENH.body(f,'#e8b84a',200); });
+HTs('starlord_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,34,'#ff9a9a',140); ENH.ring(cx,cy,30,'#ff5a5a',280); ENH.parts(cx,cy,9,['#ff5a5a','#5ad1ff','#ffffff'],56,420,{size:4,br:'2px'}); ENH.word(cx,cy-42,'PEW!','#ff7a7a',18,520); });
+FXs('starlord_bomb',(f,a,tg,cx,cy,dir)=>{ const x=cx+dir*34; ENH.ring(x,cy,24,'#5ad1ff',320); ENH.flash(x,cy,20,'#ffffff',120); ENH.parts(x,cy,6,['#5ad1ff','#e8b84a'],34,340,{size:4,br:'50%',up:10}); ENH.body(f,'#5ad1ff',240); });
+HTs('starlord_bomb_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,100,'#ffffff',190); ENH.explode(cx,cy,80,['#ffffff','#5ad1ff','#ff5a5a','#e8b84a'],12); ENH.ring(cx,cy,88,'#5ad1ff',440,false,4); ENH.ring(cx,cy,56,'#ff5a5a',340,true,3); ENH.boltBurst&&ENH.boltBurst(cx,cy,7,70,'#a8e6ff',300); ENH.word(cx,cy-60,'KABLOOEY!','#5ad1ff',24,800); shakeArena(8,280); });
+FXs('starlord_boots',(f,a,tg,cx)=>{ const g=gy(f); ENH.body(f,'#e8b84a',520); ENH.flash(cx,g,44,'#ffd34a',260); ENH.parts(cx,g,16,['#fff3c4','#ffd34a','#ff8a1f','#5ad1ff'],56,520,{size:6,br:FIRE,up:-30,grav:2}); ENH.shock(cx,g,80,'#ff8a1f',420,4); ENH.smoke(cx,g,3,40,700,-10); ENH.dust(cx,g,70,2); ENH.live(f,500,60,()=>{ const x=f.x+FIGHTER_SIZE/2; ENH.parts(x,gy(f),3,['#ffd34a','#ff8a1f','#5ad1ff'],24,360,{size:5,br:FIRE,up:-20,grav:2}); }); ENH.word(cx,f.y-14,'BOOSTERS!','#ffd34a',20,700); });
+// Drax
+FXs('drax_twin_blades',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#d94a3a',300); [0,90].forEach((d,i)=>later(d,()=>{ ENH.slash(cx+dir*54,cy+(i?12:-12),dir,120,74,i?'#d94a3a':'#c7ff9a',i?'#ffffff':'#6fae4a',300); ENH.streaks(cx+dir*60,cy,'#ffffff',4,50,180,dir>0?-30:150,60); })); });
+HTs('drax_blade_hit',(tg,cx,cy)=>{ ENH.flash(cx,cy,34,'#ffffff',140); ENH.slash(cx,cy,1,90,58,'#d94a3a','#ffffff',260); ENH.slash(cx,cy,-1,70,46,'#6fae4a','#c7ff9a',260); ENH.metal(cx,cy,8,56,380,['#ffffff','#c7ff9a','#d94a3a']); ENH.word(cx,cy-42,'SLICE!','#d94a3a',20,560); shakeArena(4,160); });
+FXs('drax_charge',(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#d94a3a',700); ENH.word(cx,cy-64,'DESTROYER!','#d94a3a',22,900); ENH.shock(cx,gy(f),80,'#6fae4a',460,4); ENH.live(f,700,55,()=>{ const x=f.x+FIGHTER_SIZE/2; ENH.dust(x,gy(f),50,1); ENH.streaks(x-dir*28,f.y+FIGHTER_SIZE/2,'#c7ff9a',3,60,200,dir>0?170:-10,40); ENH.parts(x,gy(f)-6,2,['#d94a3a','#6fae4a'],26,320,{size:5,br:'2px',up:10,grav:2}); }); shakeArena(4,260); });
+HTs('drax_charge_hit',(tg,cx,cy)=>{ const g=tg.y+FIGHTER_SIZE; ENH.flash(cx,cy,96,'#ffffff',190); ENH.explode(cx,cy,78,['#ffffff','#d94a3a','#6fae4a'],11); ENH.shock(cx,g,130,'#d94a3a',560,5); ENH.shock(cx,g,80,'#c7ff9a',440,3); ENH.cracks(cx,g,'#2a1410',6,100); ENH.slash(cx,cy,1,130,80,'#d94a3a','#ffffff',300); ENH.dust(cx,g,110,3); ENH.word(cx,cy-60,'DESTROYED!','#d94a3a',28,860); shakeArena(11,340); });
+FXs('drax_fury',(f,a,tg,cx,cy)=>{ ENH.body(f,'#d94a3a',900); ENH.flash(cx,cy,90,'#ffb0a0',300); ENH.ring(cx,cy,96,'#d94a3a',600,true,4); ENH.ring(cx,cy,62,'#6fae4a',460); ENH.shock(cx,gy(f),100,'#d94a3a',520,4); ENH.parts(cx,cy,18,['#d94a3a','#6fae4a','#c7ff9a'],70,620,{size:5,br:'2px',up:32}); ENH.streaks(cx,cy,'#ff8a7a',10,90,420,-90,140); ENH.word(cx,cy-64,"DRAX'S FURY!",'#d94a3a',24,920); shakeArena(7,280); });
+})();
+
+/* ---------- Mind Warp: bars for 1v1 / multiplayer + robustness ---------- */
+function warpBarFighter(f){ return (f && f.mindWarpTarget && isJeanMindWarpControlled(f.mindWarpTarget)) ? f.mindWarpTarget : f; }
+function syncWarpBar(bar, f, brand){
+  if(!bar || !f) return f;
+  const cf = warpBarFighter(f), want = cf.def.id + (cf===f ? '' : '#w');
+  if(bar.dataset.ctl !== want){
+    bar.innerHTML = ''; bar.dataset.ctl = want;
+    ['E','Q','R'].forEach(k=>{
+      const a = cf.def.abilities && cf.def.abilities[k]; if(!a) return;
+      const btn = document.createElement('div'); btn.className = 'ability-btn gp-mode'; btn.dataset.key = k; btn.style.pointerEvents = 'none';
+      btn.innerHTML = `<span class="ab-key">${faceLabelFor(brand, ABILITY_POS[k])}</span><span class="ab-nm">${a.name}</span><div class="cd-overlay" style="display:none;"></div>`;
+      bar.appendChild(btn);
+    });
+    bar.classList.toggle('jg-control', cf !== f);
+  }
+  return cf;
+}
+function markPossessedBar(bar, f){
+  if(!bar || !f || !isJeanMindWarpControlled(f)) return;
+  bar.querySelectorAll('.cd-overlay').forEach(o=>{ o.style.display='flex'; o.textContent='CONTROLLED'; o.style.background='rgba(255,79,180,.6)'; });
+}
+
 function sfx(kind='ability'){
   try{
     const ctx = ensureAudio(), t = ctx.currentTime;
@@ -16129,7 +16492,8 @@ function spawnMysticShieldHitFx(target, dmg, dir){
   if(heavy) shakeArena(4,140);
 }
 
-function spawnAbilityFx(caster, ability, target){
+function spawnAbilityFx(...__a){ try{ return __spawnAbilityFxRaw(...__a); }catch(err){ console.warn('spawnAbilityFx failed', err); } }
+function __spawnAbilityFxRaw(caster, ability, target){
   const cx = caster.x + FIGHTER_SIZE/2, cy = caster.y + FIGHTER_SIZE/2;
   const dir = caster.facing;
   if(ENH_FX[ability.fx]){ try{ ENH_FX[ability.fx](caster,ability,target,cx,cy,dir); }catch(e){} }
@@ -18087,7 +18451,8 @@ function spawnGroundCrack(cx, gy, spread){
 /* -------------------------------------------------------------------------
    IMPACT FX  (dispatched from ability.hitFx)
    ------------------------------------------------------------------------- */
-function spawnHitFx(target, kind, dirSign){
+function spawnHitFx(...__a){ try{ return __spawnHitFxRaw(...__a); }catch(err){ console.warn('spawnHitFx failed', err); } }
+function __spawnHitFxRaw(target, kind, dirSign){
   const cx = target.x + FIGHTER_SIZE/2, cy = target.y + FIGHTER_SIZE/2;
   if(ENH_HIT[kind]){ try{ ENH_HIT[kind](target,cx,cy,dirSign||1); }catch(e){} }
   switch(kind){
@@ -19069,14 +19434,14 @@ function renderMatchTimer(){
   const el=document.getElementById('mp-match-timer');
   const screen=document.getElementById('screen-battle');
   if(!el || !screen) return;
-  const on=!!(state.matchTimeLimitMs>0 && state.mode==='battle');
+  const on=!!(state.matchTimeLimitMs>0 && state.mode==='battle' && state.matchKind!=='sandbox');
   screen.classList.toggle('mp-timer-on',on);
   if(!on){el.textContent='';el.classList.remove('urgent');return;}
   el.textContent=formatMatchTime(state.matchTimeRemainingMs);
   el.classList.toggle('urgent',state.matchTimeRemainingMs<=30000);
 }
 function updateMatchTimer(dt){
-  if(!state.matchTimeLimitMs || state.countdown || state.pvpPaused || state.timeLimitTriggered || state.mode!=='battle') return;
+  if(!state.matchTimeLimitMs || state.matchKind==='sandbox' || state.countdown || state.pvpPaused || state.timeLimitTriggered || state.mode!=='battle') return;
   state.matchTimeRemainingMs=Math.max(0,state.matchTimeRemainingMs-dt);
   renderMatchTimer();
   if(state.matchTimeRemainingMs<=0){
@@ -22946,8 +23311,8 @@ function renderMpSettingsScreen(){
     el.dataset.on = on ? '1' : '0';
     el.setAttribute('aria-pressed', on ? 'true' : 'false');
   };
-  const eliminationAllowed = (versus.count || 2) >= 3;
-  if(mp.mode==='elimination' && !eliminationAllowed){ mp.mode='ffa'; mp.livesOn=false; mp.roundsOn=false; }
+  const eliminationAllowed = false; // Elimination mode removed: Free-for-All only
+  if(mp.mode!=='ffa'){ mp.mode='ffa'; mp.livesOn=false; mp.roundsOn=false; }
   document.getElementById('mps-mode-ffa')?.classList.toggle('active',mp.mode==='ffa');
   const elimBtn=document.getElementById('mps-mode-elimination');
   if(elimBtn){
@@ -23349,10 +23714,8 @@ function renderVersusSide(slot){
 /* ---------- Mario-Kart-style version pop-out (multiplayer character select) ---------- */
 let versusPop = null;
 function versusVariantsFor(baseId){
-  // BASE first, then every alternate version the player owns (and that fits the health cap).
-  const list = [baseId];
-  getSkinIdsForBase(baseId, true).forEach(sid=>{ if(versusSelectable(sid)) list.push(sid); });
-  return list;
+  // BASE first, then every alternate version (locked ones are shown dimmed with a padlock).
+  return [baseId].concat(getSkinIdsForBase(baseId));
 }
 function versusPopSlot(){
   const n = versus.count || 2;
@@ -23408,13 +23771,14 @@ function openVersusVariantPop(card, baseId, slot, variants){
     tx = Math.max(46 - cx, Math.min(vw - 46 - cx, tx));
     ty = Math.max(46 - cy, Math.min(vh - 66 - cy, ty));
     const def = CHARACTERS[vid];
-    const label = vid === baseId ? 'BASE' : (def.name.replace(/^[^(]+\(|\)$/g,'') || def.name);
-    html += `<button type="button" class="vsp-opt ${vid===cur?'sel':''}" data-vid="${vid}" style="--tx:${tx.toFixed(1)}px;--ty:${ty.toFixed(1)}px;--i:${i}" aria-label="${def.name}" aria-pressed="${vid===cur}">`
+    const label = (versusVariantLocked(baseId,vid)?'\uD83D\uDD12 ':'') + (vid === baseId ? 'BASE' : (def.name.replace(/^[^(]+\(|\)$/g,'') || def.name));
+    html += `<button type="button" class="vsp-opt ${vid===cur?'sel':''} ${versusVariantLocked(baseId,vid)?'locked':''}" data-vid="${vid}" style="--tx:${tx.toFixed(1)}px;--ty:${ty.toFixed(1)}px;--i:${i}" aria-label="${def.name}" aria-pressed="${vid===cur}">`
       + `<span class="vsp-tile">${squareInner(def)}</span><span class="vsp-label">${label}</span></button>`;
   });
   pop.innerHTML = html;
   document.body.appendChild(pop);
   const choose = (vid, btn)=>{
+    if(versusVariantLocked(baseId,vid)){ sfx('ability_denied'); return; }
     const ss = versus.sel[slot];
     if(!ss || ss.locked) { closeVersusVariantPop(); return; }
     ss.variantId = vid === baseId ? null : vid;
@@ -23510,6 +23874,7 @@ function pollVersusSelect(){
     if(btnEdge(idx, PAD_BACK_BTN)){ showScreen('mode'); return; }
 
     if(!s.locked){
+      if(versusVarMenuTick(slot,idx,gp,s)) continue;
       const d = padDir(gp);
       const dir = d.up ? 'up' : d.down ? 'down' : d.left ? 'left' : d.right ? 'right' : null;
       const ns = versus.nav[slot];
@@ -23640,9 +24005,9 @@ function buildPvpAbilityBars(){
     const bar = document.getElementById(id);
     if(!bar || !f) return;
     const brand = versus.slots[slot].brand;
-    bar.innerHTML = '';
+    bar.innerHTML = ''; bar.dataset.ctl = f.def.id;
     ['E','Q','R'].forEach(k=>{
-      const a = f.def.abilities[k];
+      const a = f.def.abilities[k]; if(!a) return;
       const btn = document.createElement('div');
       btn.className = 'ability-btn gp-mode';
       btn.dataset.key = k;
@@ -23661,9 +24026,9 @@ function buildMultiAbilityBars(){
     if(side) side.classList.toggle('show', !!f);
     if(!bar || !f) continue;
     const brand = versus.slots[i].brand;
-    bar.innerHTML = '';
+    bar.innerHTML = ''; bar.dataset.ctl = f.def.id;
     ['E','Q','R'].forEach(k=>{
-      const a = f.def.abilities[k];
+      const a = f.def.abilities[k]; if(!a) return;
       const btn = document.createElement('div');
       btn.className = 'ability-btn gp-mode';
       btn.dataset.key = k;
