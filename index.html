@@ -8807,7 +8807,6 @@ function renderInventory(){
     if(unlocked){
       card.style.setProperty('--char-color', displayDef.color);
       card.innerHTML = `
-        ${ownedVars ? `<div class="inv-card-tags"><span class="inv-var-count">✨ ${ownedVars} VARIANT${ownedVars>1?'S':''}</span></div>` : ''}
         <div class="char-square">${squareInner(displayDef)}</div>
         <div class="char-name">${displayDef.name}</div>
         <div class="char-cat">${displayDef.maxHealth.toLocaleString()} HP</div>
@@ -23981,6 +23980,48 @@ function activeScreenName(){
   return el ? el.id.replace('screen-','') : '';
 }
 
+/* Right stick (axes 2/3) scrolls whatever is scrollable on the current menu / open popup. */
+function gpScrollableAncestors(start){
+  const out = [];
+  for(let el = start; el && el !== document.documentElement; el = el.parentElement){
+    const oy = getComputedStyle(el).overflowY;
+    if((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight + 1) out.push(el);
+  }
+  return out;
+}
+function gpScrollCandidates(){
+  const modal = activeModalEl();
+  const scope = modal || document.querySelector('.screen.active');
+  const list = [];
+  const push = e => { if(e && !list.includes(e)) list.push(e); };
+  const focus = document.activeElement;
+  if(focus && scope && scope.contains(focus)) gpScrollableAncestors(focus).forEach(push);
+  if(scope){
+    scope.querySelectorAll('*').forEach(el=>{
+      const oy = getComputedStyle(el).overflowY;
+      if((oy === 'auto' || oy === 'scroll') && el.scrollHeight > el.clientHeight + 1) push(el);
+    });
+    gpScrollableAncestors(scope).forEach(push);
+  }
+  push(document.scrollingElement);
+  return list;
+}
+function gpStickScroll(){
+  let y = 0;
+  livePads.forEach(gp=>{
+    const v = gp.axes && gp.axes.length > 3 ? (gp.axes[3] || 0) : 0;
+    if(Math.abs(v) > Math.abs(y)) y = v;
+  });
+  if(Math.abs(y) < GAMEPAD_DEADZONE) return;
+  const dir = y > 0 ? 1 : -1, mag = (Math.abs(y) - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE);
+  const px = dir * (4 + mag * 22);
+  for(const el of gpScrollCandidates()){
+    const before = el.scrollTop;
+    el.scrollTop = before + px;
+    if(el.scrollTop !== before) break;
+  }
+}
+
 function pollGamepad(){
   if(!refreshPads()) return;
 
@@ -23995,6 +24036,7 @@ function pollGamepad(){
 
   const screen = activeScreenName();
   if(screen === 'mode') updateModeStatus(false);
+  if(state.mode !== 'battle' || activeModalEl()) gpStickScroll();
 
   // In a battle, Start/Menu opens the quit confirmation. Any open modal then
   // takes over controller navigation so A selects and B closes it.
@@ -24470,6 +24512,15 @@ function pollPairing(){
   if(livePads.some(gp => btnEdge(gp.index, PAD_BACK_BTN))){ showScreen('mode'); return; }
 
   const claimedIdx = versus.slots.filter(Boolean).map(s => s.index);
+  // Controller can press the Start button once enough pads are claimed:
+  // Start/Menu on any pad, or A on a pad that has already joined.
+  if(pairClaimedCount() >= PAIR_MIN &&
+     livePads.some(gp => btnEdge(gp.index, GAMEPAD_QUIT_POS) ||
+       (claimedIdx.includes(gp.index) && btnEdge(gp.index, JUMP_POS)))){
+    sfx('ui_lock');
+    startMultiplayerFromPairing();
+    return;
+  }
   const nextSlot = versus.slots.findIndex(s => !s);
   // Slot 1 & 2 only open once at least two controllers are detected overall,
   // same rule as before. Slots 3 & 4 just need a spare, unclaimed pad.
@@ -24518,7 +24569,7 @@ function renderPairing(force){
   else { title = t('pair_title_lobby'); sub = t('pair_sub_lobby_need'); }
   document.getElementById('pair-title').textContent = title;
   document.getElementById('pair-sub').textContent = sub;
-  document.getElementById('pair-hint').textContent = t('pair_back_hint');
+  document.getElementById('pair-hint').textContent = t('pair_back_hint') + (canStart ? ' \u00b7 Press A or Start to begin' : '');
 
   const startBtn = document.getElementById('pair-start-btn');
   if(startBtn){
