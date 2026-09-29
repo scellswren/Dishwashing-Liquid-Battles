@@ -7722,7 +7722,7 @@ Object.assign(CHARACTERS, {
   ironman_mark50: {
     id:'ironman_mark50', skinOf:'ironman', name:'Iron Man (Mark 50)',
     img:'IronManMark50.jpg', color:'#d84b3d', accentColor:'#ffd45b', aiStyle:'ironman',
-    skinCost:750, maxHealth:17150, passiveRegen:20,
+    skinCost:500, maxHealth:17150, passiveRegen:20,
     description:'Mark 50 version with a powerful Unibeam, five nano missiles, and unrestricted flight.',
     abilities:{
       E:{key:'E', name:'Unibeam', type:'visionBeam', damage:180, tickMs:200, duration:2000, cooldown:4000, knockback:0,
@@ -10600,6 +10600,16 @@ function tryUseAbility(caster, target, key){
     caster.abilityUses[key] = (caster.abilityUses[key] || 0) + 1;
   }
   const result = executeAbility(caster, target, ability, t) || null;
+  // Dream Walking transforms Spirit Manipulator Strange into base Strange.
+  // The Q cooldown belongs to the FORM that cast it, so do not let the generic
+  // cooldown handler overwrite the newly-entered base Strange Q timer with the
+  // Spirit Manipulator's 40 second cooldown. Keep the Spirit Q timer separately
+  // and let the base Strange cooldown continue from its own saved state.
+  if(ability.type === 'dreamWalk'){
+    caster.dreamWalkSpiritCooldowns = { ...(caster.dreamWalkSpiritCooldowns || {}) };
+    caster.dreamWalkSpiritCooldowns[key] = t + ability.cooldown;
+    return true;
+  }
   if(ability.type === 'timeStick'){
     if(result && result.stage === 'fire'){
       caster.cooldowns[key] = t + ability.cooldown;
