@@ -23862,9 +23862,12 @@ const BRAND_DISPLAY_NAME = { xbox:'Xbox', playstation:'PlayStation', nintendo:'N
 
 function detectGamepadBrand(gp){
   const id = ((gp && gp.id) || '').toLowerCase();
+
+  // Older console pads are frequently exposed by Windows as an "unmapped"
+  // Gamepad, so identify their family from the Gamepad.id string when we can.
   if(/xbox|xinput|045e|microsoft/.test(id)) return 'xbox';
-  if(/dualsense|dualshock|playstation|ps3|ps4|ps5|054c|sony/.test(id)) return 'playstation';
-  if(/nintendo|switch|joy-con|joycon|pro controller|057e/.test(id)) return 'nintendo';
+  if(/dualsense|dualshock|playstation|ps1|psone|ps2|playstation 2|dualshock 2|ps3|playstation 3|dualshock 3|ps4|ps5|054c|sony/.test(id)) return 'playstation';
+  if(/gamecube|game cube|nintendo gamecube|wii|wii u|wiimote|wii remote|nunchuk|classic controller|classic pro|nintendo|switch|joy-con|joycon|pro controller|057e/.test(id)) return 'nintendo';
   return 'generic';
 }
 function faceLabelFor(brand, pos){
@@ -23954,7 +23957,12 @@ function refreshPads(){
     if(!ps) padState[gp.index] = { cur, prev: cur.slice() };
     else { ps.prev = ps.cur; ps.cur = cur; }
   });
-  Object.keys(padState).forEach(k => { if(!seen[k]) delete padState[k]; });
+  Object.keys(padState).forEach(k => {
+    if(!seen[k]){
+      delete padState[k];
+      delete gpRightStickCache[k];
+    }
+  });
   return true;
 }
 function btnHeld(idx, b){ const ps = padState[idx]; return !!(ps && ps.cur[b]); }
@@ -24006,26 +24014,101 @@ function gpScrollCandidates(){
   push(document.scrollingElement);
   return list;
 }
-const gpScrollBase = {};
-function gpPadScrollY(gp){
-  // Works for every connected controller: standard-mapped pads use the right
-  // stick's vertical axis (3); other pads are probed on axes 3-5, ignoring any
-  // axis that rests away from centre (those are analog triggers).
-  if(!gp || !gp.axes) return 0;
+/*
+ * Right-stick axis handling
+ * -------------------------
+ * Standard-mapped pads expose the right stick as axes 2/3. Older / adapter
+ * driven controllers can report mapping="" and sometimes expose the second
+ * stick in a later axis pair. We keep the standard pair as the first choice,
+ * then fall back to other adjacent pairs only when the standard pair is not
+ * actually present. This keeps triggers from accidentally becoming the
+ * scroll wheel on normal 4/6-axis controllers.
+ */
+const GP_RIGHT_STICK_PAIRS = [[2,3],[4,5],[6,7],[0,1]];
+const gpRightStickCache = Object.create(null);
+
+function gpFiniteAxis(gp, i){
+  // Do not require Array.isArray(): some browsers expose Gamepad.axes as an
+  // array-like sequence rather than a literal Array (this is especially
+  // important for Nintendo Switch Pro / HID controller paths).
+  return !!(gp && gp.axes && i >= 0 && i < gp.axes.length && Number.isFinite(Number(gp.axes[i])));
+}
+
+function gpRightStickAxes(gp){
+  if(!gp || !gp.axes) return null;
+
   const n = gp.axes.length;
-  if(n < 4) return 0;
-  const key = gp.index + ':' + gp.id;
-  let base = gpScrollBase[key];
-  if(!base){ base = gpScrollBase[key] = gp.axes.map(v => v || 0); }
-  let best = 0;
-  const cands = gp.mapping === 'standard' ? [3] : [3, 4, 5].filter(k => k < n);
-  cands.forEach(k=>{
-    const rest = base[k] || 0;
-    if(gp.mapping !== 'standard' && Math.abs(rest) > 0.3) return;
-    const v = (gp.axes[k] || 0) - (gp.mapping === 'standard' ? 0 : rest);
-    if(Math.abs(v) > Math.abs(best)) best = v;
-  });
-  return Math.abs(best) < GAMEPAD_DEADZONE ? 0 : Math.max(-1, Math.min(1, best));
+  const id = String(gp.id || '').toLowerCase();
+
+  // Browser-normalized / standard Gamepad layout.
+  if(gp.mapping === 'standard' && gpFiniteAxis(gp,2) && gpFiniteAxis(gp,3)){
+    gpRightStickCache[gp.index] = [2,3];
+    return [2,3];
+  }
+
+  const cached = gpRightStickCache[gp.index];
+  if(cached && gpFiniteAxis(gp,cached[0]) && gpFiniteAxis(gp,cached[1])){
+    return cached;
+  }
+
+  /*
+   * Important legacy layout:
+   * several DirectInput-style PlayStation/Xbox drivers expose the right stick
+   * as X=axis 2 and Y=axis 5 (not 2/3). PS3 and some PS2/PS4/PS5 adapters are
+   * especially likely to report this when Gamepad.mapping is empty.
+   * Prefer this exact known layout before the generic 2/3 fallback.
+   */
+  const asymmetricRightStick = /playstation|dualshock|dualsense|ps1|ps2|ps3|ps4|ps5|sony|xbox|xinput/.test(id);
+  if(asymmetricRightStick && gpFiniteAxis(gp,2) && gpFiniteAxis(gp,5)){
+    gpRightStickCache[gp.index] = [2,5];
+    return [2,5];
+  }
+
+  // Prefer the conventional right-stick pair whenever it exists, even on
+  // unmapped legacy pads. This is also the common layout for GameCube/Wii
+  // USB adapters.
+  if(gpFiniteAxis(gp,2) && gpFiniteAxis(gp,3)){
+    gpRightStickCache[gp.index] = [2,3];
+    return [2,3];
+  }
+
+  // Some adapters expose additional stick pairs instead of 2/3. Only use
+  // those when 2/3 genuinely does not exist, so trigger axes aren't confused
+  // with the right stick on otherwise-normal six-axis controllers.
+  for(const pair of GP_RIGHT_STICK_PAIRS.slice(1,-1)){
+    if(gpFiniteAxis(gp,pair[0]) && gpFiniteAxis(gp,pair[1])){
+      gpRightStickCache[gp.index] = pair.slice();
+      return gpRightStickCache[gp.index];
+    }
+  }
+
+  // Two-axis fallback for unusual / very old drivers.
+  if(gpFiniteAxis(gp,0) && gpFiniteAxis(gp,1) && n <= 2){
+    gpRightStickCache[gp.index] = [0,1];
+    return [0,1];
+  }
+
+  return null;
+}
+
+function gpPadScrollY(gp){
+  const pair = gpRightStickAxes(gp);
+  if(pair){
+    const v = Number(gp.axes[pair[1]]) || 0;
+    if(Math.abs(v) >= GAMEPAD_DEADZONE) return v;
+  }
+
+  // Last-resort vertical fallback for unusual HID/browser layouts.
+  // Prefer the normal right-stick Y axis first, then the common extended
+  // right-stick positions used by older adapters. This fallback is only used
+  // when the mapped pair is unavailable or sitting inside the deadzone.
+  const fallbackY = [3,5,7];
+  for(const i of fallbackY){
+    if(!gpFiniteAxis(gp,i)) continue;
+    const v = Number(gp.axes[i]) || 0;
+    if(Math.abs(v) >= GAMEPAD_DEADZONE) return v;
+  }
+  return 0;
 }
 function gpScrollEl(el, y){
   if(!el) return false;
@@ -24068,7 +24151,10 @@ function pollGamepad(){
 
   const screen = activeScreenName();
   if(screen === 'mode') updateModeStatus(false);
-  if(state.mode !== 'battle' || activeModalEl()) gpStickScroll();
+  // Controller scrolling is UI input, so keep it independent of the
+  // current fighter-control state. It is harmless during battle because
+  // gpStickScroll() only changes elements that are actually scrollable.
+  gpStickScroll();
 
   // In a battle, Start/Menu opens the quit confirmation. Any open modal then
   // takes over controller navigation so A selects and B closes it.
