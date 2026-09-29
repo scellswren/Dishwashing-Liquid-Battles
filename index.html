@@ -4299,12 +4299,17 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .free-play-grid{
   display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(14px,2vw,24px); width:min(980px,94vw); margin:0 auto;
 }
+.free-play-sandbox-wrap{position:relative; min-width:0;}
+.free-play-sandbox-wrap .free-play-card{width:100%;}
+.free-play-sandbox-wrap .sandbox-kills{top:clamp(-42px,-5vh,-30px); left:clamp(16px,2.6vh,30px);}
 .free-play-card{min-height:clamp(220px,34vh,360px); text-align:left; align-items:flex-start; justify-content:center;}
 .free-play-card .diff-name{font-size:clamp(32px,5vw,58px);}
 .free-play-card .diff-rule{font-size:clamp(13px,1.7vw,16px);}
 .free-play-card .diff-desc{font-size:clamp(13px,1.5vw,16px); line-height:1.55; max-width:620px;}
 .sandbox-card{--dc:#63e6be;}
 .practice-card{--dc:#f2a541;}
+.sandbox-side{display:none; position:relative; margin-left:auto;}
+.sandbox-side.show{display:block;}
 .sandbox-change-btn{display:none; margin-left:auto; white-space:nowrap;}
 .sandbox-change-btn.show{display:inline-flex;}
 .quit-confirm-modal{max-width:520px; text-align:center; padding:clamp(24px,4vw,36px);}
@@ -4895,6 +4900,51 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .enh-aura.wsp{--a1:rgba(255,211,78,.16);--a2:rgba(232,79,115,.10);--pc:#fff1a8}
 
 
+
+/* ===================== Nightcrawler + Ebony Maw ===================== */
+.nc-bamf-smoke{border-radius:50%;background:radial-gradient(circle,rgba(160,130,255,.9),rgba(45,35,130,.55) 50%,rgba(10,8,40,0) 72%);filter:blur(2px);z-index:9;animation:ncBamfSmoke .9s ease-out forwards;}
+@keyframes ncBamfSmoke{0%{transform:translate(0,0) scale(.25);opacity:.95}100%{transform:translate(var(--dx,0px),var(--dy,-20px)) scale(1.7);opacity:0}}
+.maw-crystal{position:relative;width:100%;height:100%;animation:mawSpin .45s linear infinite;}
+.maw-crystal:before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#07040c 0%,#2e1650 38%,#e6b85a 50%,#1a0d2e 62%,#05030a 100%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);filter:drop-shadow(0 0 5px #b98cff) drop-shadow(0 0 10px #e6b85a99);}
+.maw-crystal:after{content:'';position:absolute;inset:32%;border-radius:50%;background:radial-gradient(circle,#fff,#ffd98a 50%,transparent 74%);}
+@keyframes mawSpin{to{transform:rotate(360deg)}}
+.fighter.maw-flung .fighter-square{animation:mawTumble .62s linear 1;}
+@keyframes mawTumble{to{transform:rotate(720deg)}}
+
+/* ===================== SYLVIE ===================== */
+.enh-aura.syl{--a1:rgba(61,220,132,.24);--a2:rgba(255,214,107,.13);--pc:#b8ffd2}.enh-aura.syl i{border-radius:50% 0 50% 0;width:5px;height:7px}
+.fighter.sylvie .fighter-square{border-color:#7dffb0;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 12px 24px rgba(0,0,0,.28),0 0 20px rgba(61,220,132,.22);}
+.sylvie-dagger-held{position:absolute;left:48px;top:8px;width:14px;height:44px;z-index:7;pointer-events:none;opacity:0;transform:rotate(-28deg);transform-origin:50% 78%;filter:drop-shadow(0 0 4px #3ddc84) drop-shadow(0 0 9px rgba(255,214,107,.65));}
+.sylvie-dagger-held i{position:absolute;display:block;}
+.sylvie-dagger-held .sd-glow{left:-14px;top:-4px;width:42px;height:54px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,200,.66),rgba(61,220,132,.22) 55%,transparent 74%);}
+.sylvie-dagger-held .sd-blade{left:2px;top:0;width:10px;height:30px;background:linear-gradient(90deg,#9dffc4 0%,#ffffff 48%,#2fbf74 100%);clip-path:polygon(50% 0,100% 100%,0 100%);}
+.sylvie-dagger-held .sd-guard{left:0;top:29px;width:14px;height:4px;border-radius:2px;background:linear-gradient(90deg,#b8862a,#ffe28a,#b8862a);}
+.sylvie-dagger-held .sd-hilt{left:5px;top:33px;width:4px;height:11px;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#ffd66b,#5a3d12);}
+.sylvie-dagger-held.active{animation:sylvieDaggerSlash .34s cubic-bezier(.18,.82,.2,1) both;}
+.fighter.sylvie.facing-left .sylvie-dagger-held{left:auto;right:48px;transform:scaleX(-1) rotate(-28deg);}
+.fighter.sylvie.facing-left .sylvie-dagger-held.active{animation:sylvieDaggerSlashLeft .34s cubic-bezier(.18,.82,.2,1) both;}
+@keyframes sylvieDaggerSlash{0%{opacity:0;transform:translate(5px,2px) rotate(18deg) scale(.82);}22%{opacity:1;transform:translate(0,0) rotate(-44deg) scale(1.05);}55%{opacity:1;transform:translate(5px,2px) rotate(-72deg) scale(1.1);}100%{opacity:0;transform:translate(8px,4px) rotate(-18deg) scale(.86);}}
+@keyframes sylvieDaggerSlashLeft{0%{opacity:0;transform:scaleX(-1) translate(-5px,2px) rotate(18deg) scale(.82);}22%{opacity:1;transform:scaleX(-1) translate(0,0) rotate(-44deg) scale(1.05);}55%{opacity:1;transform:scaleX(-1) translate(-5px,2px) rotate(-72deg) scale(1.1);}100%{opacity:0;transform:scaleX(-1) translate(-8px,4px) rotate(-18deg) scale(.86);}}
+@media (prefers-reduced-motion:reduce){.sylvie-dagger-held{animation:none!important;opacity:0!important;}}
+.syl-dagger{position:absolute;left:50%;top:50%;width:18px;height:48px;margin:-24px 0 0 -9px;animation:sylSpin .38s linear infinite;filter:drop-shadow(0 0 5px #3ddc84) drop-shadow(0 0 12px rgba(255,214,107,.7));}
+.syl-dagger i{position:absolute;display:block;}
+.syl-dagger .sd-glow{left:-16px;top:-6px;width:50px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,200,.7),rgba(61,220,132,.25) 55%,transparent 74%);}
+.syl-dagger .sd-blade{left:3px;top:0;width:12px;height:32px;background:linear-gradient(90deg,#9dffc4 0%,#ffffff 48%,#2fbf74 100%);clip-path:polygon(50% 0,100% 100%,0 100%);}
+.syl-dagger .sd-guard{left:0;top:31px;width:18px;height:4px;border-radius:2px;background:linear-gradient(90deg,#b8862a,#ffe28a,#b8862a);}
+.syl-dagger .sd-hilt{left:7px;top:35px;width:4px;height:13px;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#ffd66b,#5a3d12);}
+@keyframes sylSpin{to{transform:rotate(360deg)}}
+.fighter.sylvie-enchanted .fighter-square{box-shadow:0 0 0 2px #7dffb0,0 0 22px #3ddc84,0 0 44px rgba(255,214,107,.5) !important;filter:saturate(1.25) brightness(1.08);animation:sylEnchantPulse .8s ease-in-out infinite alternate;}
+@keyframes sylEnchantPulse{from{filter:saturate(1.15) brightness(1.02)}to{filter:saturate(1.5) brightness(1.2) hue-rotate(-10deg)}}
+.syl-enchant-rig{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:9;}
+.syl-enchant-rig .sr-ring{position:absolute;left:-50px;top:-50px;width:100px;height:100px;border-radius:50%;border:2px solid rgba(125,255,176,.9);box-shadow:0 0 14px #3ddc84,inset 0 0 14px rgba(61,220,132,.5);animation:sylRingSpin 2.4s linear infinite;}
+.syl-enchant-rig .sr-ring:before{content:'';position:absolute;inset:9px;border-radius:50%;border:1.5px dashed rgba(255,214,107,.95);animation:sylRingSpin 3.4s linear infinite reverse;}
+.syl-enchant-rig .sr-orb{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle,#fff,#7dffb0 55%,transparent 76%);box-shadow:0 0 10px #3ddc84;animation:sylOrbit 1.7s linear infinite;animation-delay:var(--d,0s);}
+.syl-enchant-rig .sr-rune{position:absolute;left:-12px;top:-64px;width:24px;text-align:center;font:400 22px/1 'Inter',sans-serif;color:#ffd66b;text-shadow:0 0 8px #3ddc84,0 0 16px #ffd66b;animation:sylRuneBob 1s ease-in-out infinite alternate;}
+@keyframes sylRingSpin{to{transform:rotate(360deg)}}
+@keyframes sylOrbit{from{transform:rotate(0) translateX(46px) rotate(0)}to{transform:rotate(360deg) translateX(46px) rotate(-360deg)}}
+@keyframes sylRuneBob{from{transform:translateY(0) scale(.9);opacity:.75}to{transform:translateY(-6px) scale(1.15);opacity:1}}
+@media (prefers-reduced-motion:reduce){.syl-dagger,.syl-enchant-rig .sr-ring,.syl-enchant-rig .sr-ring:before,.syl-enchant-rig .sr-orb,.syl-enchant-rig .sr-rune,.fighter.sylvie-enchanted .fighter-square{animation:none;}}
+
 /* Hellcycle bike must keep its mirror when Ghost Rider faces left (the ride animation was overriding scaleX(-1)) */
 .fighter.facing-left.hellcycle-active .hellcycle-bike{animation:hellcycleBikeInL .18s ease-out both, hellcycleBikeRideL .35s ease-in-out infinite alternate;}
 @keyframes hellcycleBikeInL{from{opacity:0;transform:scaleX(-1) scale(.7);}to{opacity:1;transform:scaleX(-1) scale(1);}}
@@ -5198,9 +5248,9 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
 @media (prefers-reduced-motion:reduce){ body .ui-pop.ui-pop{animation:none !important;} }
 
 /* --- sandbox dummy counter --- */
-.sandbox-kills{position:absolute; top:clamp(16px,3vh,30px); left:clamp(16px,2.6vh,30px); display:inline-flex; align-items:center; gap:8px; padding:6px 13px; border-radius:999px; background:rgba(0,0,0,.5); border:1px solid color-mix(in srgb,var(--dc) 75%,#fff); font:800 clamp(12px,1.8vh,14px)/1 'Inter',sans-serif; color:#fff;}
+.sandbox-kills{position:absolute; top:clamp(16px,3vh,30px); left:clamp(16px,2.6vh,30px); display:inline-flex; align-items:center; gap:8px; padding:6px 13px; border-radius:999px; background:rgba(0,0,0,.5); border:1px solid color-mix(in srgb,var(--dc) 75%,#fff); font:800 clamp(12px,1.8vh,14px)/1 'Inter',sans-serif; color:#fff; white-space:nowrap;}
 .sandbox-kills::before{content:'☠'; color:var(--dc);}
-.sandbox-kills-hud{display:none; position:absolute; top:74px; left:50%; transform:translateX(-50%); z-index:30; pointer-events:none; padding:6px 14px; border-radius:999px; background:rgba(10,11,18,.85); border:1px solid rgba(255,255,255,.18); font:800 13px/1 'Inter',sans-serif; color:#fff; white-space:nowrap;}
+.sandbox-kills-hud{display:none; position:absolute; right:0; bottom:calc(100% + 6px); left:auto; top:auto; transform:none; z-index:30; pointer-events:none; padding:6px 14px; border-radius:999px; background:rgba(10,11,18,.85); border:1px solid rgba(255,255,255,.18); font:800 13px/1 'Inter',sans-serif; color:#fff; white-space:nowrap;}
 .sandbox-kills-hud.show{display:block;}
 .sandbox-kills-hud b{font-family:'Anton',sans-serif; font-weight:400; font-size:16px; letter-spacing:.04em; color:var(--amber); margin-inline-start:4px;}
 
@@ -5344,12 +5394,14 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
         <div class="page-caption" data-i18n="free_play_caption">Choose Sandbox or Practice.</div>
       </header>
       <div class="free-play-grid">
-        <button class="diff-card free-play-card sandbox-card" id="btn-freeplay-sandbox" data-gp-default>
+        <div class="free-play-sandbox-wrap">
           <span class="sandbox-kills" data-sandbox-kills></span>
+          <button class="diff-card free-play-card sandbox-card" id="btn-freeplay-sandbox" data-gp-default>
           <span class="diff-name" data-i18n="free_play_sandbox">Sandbox</span>
           <span class="diff-rule" data-i18n="free_play_sandbox_rule">Infinite health · Test Dummy</span>
           <span class="diff-desc" data-i18n="free_play_sandbox_desc">Experiment with abilities against a 10,000 HP dummy that runs around and respawns whenever it is KO'd.</span>
-        </button>
+          </button>
+        </div>
         <button class="diff-card free-play-card practice-card" id="btn-freeplay-practice">
           <span class="diff-name" data-i18n="free_play_practice">Practice</span>
           <span class="diff-rule" data-i18n="free_play_practice_rule">Easy · Medium · Hard</span>
@@ -5878,8 +5930,10 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
       </div>
       <div id="ability-bar"></div>
       <div id="gamepad-hint"><span>🎮</span><span data-i18n="battle_jump_hint">Jump</span><span class="gp-jump-key" id="gp-jump-key">A</span></div>
-      <button class="btn btn-secondary sandbox-change-btn" id="sandbox-change-btn" data-i18n="sandbox_change_character">Change Character</button>
-      <div class="sandbox-kills-hud" id="sandbox-kills-hud" data-sandbox-kills-hud></div>
+      <div class="sandbox-side" id="sandbox-side">
+        <div class="sandbox-kills-hud" id="sandbox-kills-hud" data-sandbox-kills-hud></div>
+        <button class="btn btn-secondary sandbox-change-btn" id="sandbox-change-btn" data-i18n="sandbox_change_character">Change Character</button>
+      </div>
       <div id="pvp-controls">
         <div class="pvp-side p1"><span class="pvp-chip">P1</span><div class="ability-bar" id="ability-bar-p1"></div></div>
         <div class="pvp-side p2"><div class="ability-bar" id="ability-bar-p2"></div><span class="pvp-chip">P2</span></div>
@@ -6641,6 +6695,57 @@ const CHARACTERS = {
       R:{key:'R', name:'Portal', type:'portal', cooldown:12000,
          sound:'strange_portal', fx:'strange_portal',
          desc:'Opens a portal and instantly teleports Doctor Strange to the opposite side of the arena.'}
+    }
+  },
+  nightcrawler: {
+    id:'nightcrawler', name:'Nightcrawler', img:'Nightcrawler.jpg', color:'#3d5bff', accentColor:'#c9b8ff', aiStyle:'nightcrawler',
+    maxHealth:12500,
+    description:'A lightning-fast teleporting swashbuckler. Fights with acrobatic blade slashes, BAMFs behind his enemy for a crushing strike, and can teleport across the arena every 3 seconds.',
+    abilities:{
+      E:{key:'E', name:'Swashbuckler Slash', type:'melee', damage:450, cooldown:750, knockback:8, range:96,
+         hitRange:145, hitVertical:135, hitStartSlack:55, hitDelay:60,
+         sound:'nc_slash', fx:'nc_slash', hitFx:'nc_slash_hit', hitSound:'nc_slash_hit',
+         desc:'Two quick crossing blade slashes at close range for 450 damage. Cooldown: 0.75 seconds.'},
+      Q:{key:'Q', name:'BAMF Strike', type:'bamfStrike', damage:1700, cooldown:11000, knockback:18,
+         hitDelay:170,
+         sound:'nc_bamf_strike', fx:'nc_bamf_strike', hitFx:'nc_bamf_hit', hitSound:'nc_bamf_hit',
+         desc:'Vanishes in a burst of smoke, reappears right behind the enemy and smashes them for 1,700 damage. Works from anywhere in the arena. Cooldown: 11 seconds.'},
+      R:{key:'R', name:'Teleport', type:'randomTeleport', damage:0, cooldown:3000,
+         sound:'nc_bamf', fx:'nc_bamf',
+         desc:'BAMF! Instantly teleports Nightcrawler to a random part of the arena. Cooldown: 3 seconds.'}
+    }
+  },
+  ebonymaw: {
+    id:'ebonymaw', name:'Ebony Maw', img:'EbonyMaw.jpg', color:'#8f6bff', accentColor:'#e6b85a', aiStyle:'ebonymaw',
+    maxHealth:18350,
+    description:'A Black Order telekinetic. Hurls razor-sharp obsidian shards, crushes everything around him, and can Fling an enemy across the arena with a wave of his hand.',
+    abilities:{
+      E:{key:'E', name:'Obsidian Shards', type:'projectile', damage:650, cooldown:1100, knockback:9,
+         speed:14, w:34, h:22, color:'#b98cff', render:'ebony-crystal', trail:'ebony',
+         sound:'maw_shard', fx:'maw_shard', hitFx:'maw_shard_hit', hitSound:'maw_shard_hit',
+         desc:'Launches a spinning obsidian shard for 650 damage. Cooldown: 1.1 seconds.'},
+      Q:{key:'Q', name:'Telekinetic Crush', type:'aoe', damage:2200, cooldown:17000, knockback:20, radius:175,
+         sound:'maw_crush', fx:'maw_crush', hitFx:'maw_crush_hit', hitSound:'maw_crush_hit',
+         desc:'A telekinetic shockwave of black crystal erupts around Ebony Maw for 2,200 damage. Cooldown: 17 seconds.'},
+      R:{key:'R', name:'Fling', type:'fling', damage:0, cooldown:6000, cooldownOnMiss:1000, range:760, flingSpeed:16, maxTargetHealth:40000,
+         sound:'maw_fling', fx:'maw_fling',
+         desc:'Grips the enemy with telekinesis and flings them in a random direction. No damage. Does not work on fighters with more than 40,000 max health. Cooldown: 6 seconds.'}
+    }
+  },
+  sylvie: {
+    id:'sylvie', name:'Sylvie', img:'Sylvie.jpg', color:'#3ddc84', accentColor:'#ffd66b', aiStyle:'sylvie',
+    maxHealth:13800,
+    description:'A Loki variant and the Enchantress. Hurls enchanted daggers, detonates raw emerald magic around herself, and bends an enemy to her will with Enchantment.',
+    abilities:{
+      E:{key:'E', name:'Enchanted Dagger', type:'melee', damage:400, cooldown:950, knockback:8, range:78, hitRange:104, hitVertical:118, hitStartSlack:34, hitDelay:90,
+         sound:'sylvie_dagger', fx:'sylvie_dagger', hitFx:'sylvie_dagger_hit', hitSound:'sylvie_dagger_hit',
+         desc:'Slashes with an enchanted dagger at close range for 400 damage. Cooldown: 0.95 seconds.'},
+      Q:{key:'Q', name:'Emerald Eruption', type:'aoe', damage:1400, cooldown:12000, knockback:18, radius:165,
+         sound:'sylvie_eruption', fx:'sylvie_eruption', hitFx:'sylvie_eruption_hit', hitSound:'sylvie_eruption_hit',
+         desc:'A burst of raw emerald magic erupts around Sylvie for 1,400 damage. Cooldown: 12 seconds.'},
+      R:{key:'R', name:'Enchantment', type:'enchantment', damage:0, cooldown:15000, cooldownOnMiss:2000, duration:3200, radius:640,
+         sound:'sylvie_enchant', fx:'sylvie_enchant', hitFx:'sylvie_enchant_hit', hitSound:'sylvie_enchant_hit',
+         desc:'Sylvie whispers a command and enchants the enemy for 3.2 seconds. They cannot use any abilities and are compelled to walk straight toward her. Long range. Cooldown: 15 seconds.'}
     }
   },
   wong: {
@@ -7450,7 +7555,7 @@ function cleaCastRift(caster, target){
   setTimeout(()=>{ if(caster.el) caster.el.style.opacity=''; }, 1300);
 }
 
-const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','redguardian','nickfury','hawkeye','drstrange','wong','clea','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','sylvie','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','nightcrawler','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','redguardian','nickfury','hawkeye','drstrange','wong','clea','ebonymaw','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
 /* =========================================================================
    SECTION: CHARACTER VERSIONS / TOKEN SKINS
    ========================================================================= */
@@ -8340,6 +8445,8 @@ function showScreen(name){
   if(sandboxBtn) sandboxBtn.classList.toggle('show', name === 'battle' && state.matchKind === 'sandbox');
   const killsHud = document.getElementById('sandbox-kills-hud');
   if(killsHud) killsHud.classList.toggle('show', name === 'battle' && state.matchKind === 'sandbox');
+  const sandboxSide = document.getElementById('sandbox-side');
+  if(sandboxSide) sandboxSide.classList.toggle('show', name === 'battle' && state.matchKind === 'sandbox');
   renderSandboxKills();
   if(name !== 'battle') closeQuitConfirm(false);
   if(typeof resetGpMenuFocus === 'function') resetGpMenuFocus();
@@ -8983,6 +9090,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     chargeState:null, draxFuryUntil:0, killmongerFuryUntil:0,
     quicksilverSpeed: def.id === 'quicksilver' ? 3 : 1,
     sockLoveUntil:0, sockLoveEl:null,
+    enchantedUntil:0, enchantedBy:null, sylRig:null,
     redHulkHeatUntil:0, redHulkFirePools:[], ironJumpActive:false, ironJumpMinLandAt:0, ironJumpAbility:null,
     burnAttacker:null,
     shield:null,
@@ -9647,6 +9755,7 @@ function buildFighterDOM(f){
       <div class="fighter-square">${squareInner(f.def)}</div>
       ${enhHeldHtml(f.def.id)}
       ${f.def.id==='clea' ? '<div class="clea-blade-held" aria-hidden="true">'+cleaBladeSvg()+'</div>' : ''}
+      ${f.def.id==='sylvie' ? '<div class="sylvie-dagger-held" aria-hidden="true"><i class="sd-glow"></i><i class="sd-blade"></i><i class="sd-guard"></i><i class="sd-hilt"></i></div>' : ''}
       ${f.def.id==='redskull' ? `<div class="held-ranged-weapon held-redskull-gun" aria-hidden="true">${redSkullHeldGunSvg()}</div>` : ''}
       ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
       ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
@@ -10113,7 +10222,7 @@ function hulkRoarTier(def){
 function isRoarHeld(f, t){ return !!f && (!!f.hulkSlideDir || (!!f.hulkRoarUntil && t < f.hulkRoarUntil)); }
 // Abilities that would carry a fighter across the arena. They are locked while roared,
 // otherwise a "rooted" fighter could just teleport / leap / grapple straight out of it.
-const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','portal','tvaPortal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl','ironJump','hulkBreak'];
+const MOVEMENT_ABILITY_TYPES = ['mobility','jump','grapple','timedToggle','toggle','randomTeleport','bamfStrike','portal','tvaPortal','cyclopsRecoil','windBurst','thingCharge','yonduArrowControl','ironJump','hulkBreak'];
 
 function finishHulkSlide(f, hitWall){
   const tier = f.hulkSlideTier;
@@ -10323,6 +10432,10 @@ function teleportToRandomPlatform(caster){
   const ox = caster.x+FIGHTER_SIZE/2, oy = caster.y+FIGHTER_SIZE/2;
   caster.x = dest.x; caster.y = dest.y; caster.vx = 0; caster.vy = 0; caster.onGround = false;
   caster.turnPending = null;
+  if(caster.def.id === 'nightcrawler'){
+    try{ ENH.bamf(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, false); spawnAfterimage(caster,'#5b7cff88',380); setTimeout(()=>{ if(state.mode==='battle') sfx('nc_bamf_arrive'); },70); }catch(e){}
+    return;
+  }
   const portalClass = caster.def.id === 'loki' ? 'loki-portal' : 'strange-portal';
   fxEl(portalClass, `left:${ox-38}px;top:${oy-38}px;width:76px;height:76px;`, 430);
   fxEl(portalClass, `left:${caster.x+FIGHTER_SIZE/2-38}px;top:${caster.y+FIGHTER_SIZE/2-38}px;width:76px;height:76px;`, 430);
@@ -10862,6 +10975,56 @@ function executeAbility(caster, target, ability, t){
     }
     case 'cleaRift': {
       cleaCastRift(caster, target);
+      break;
+    }
+    case 'bamfStrike': {
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) return {hit:false};
+      const side = (caster.x <= tg.x) ? 1 : -1;            // reappear on the far side of the enemy
+      const gap = FIGHTER_SIZE + 4;
+      let nx = tg.x + side*gap;
+      if(nx < BOUND_MIN_X || nx > BOUND_MAX_X) nx = tg.x - side*gap;  // pinned to a wall: use the open side
+      nx = Math.max(BOUND_MIN_X, Math.min(BOUND_MAX_X, nx));
+      const face = (tg.x >= nx) ? 1 : -1;
+      caster.x = nx; caster.y = tg.y; caster.vx = 0; caster.vy = 0; caster.onGround = false; caster.turnPending = null;
+      caster.facing = face; if(caster.el) caster.el.classList.toggle('facing-left', face < 0);
+      try{ ENH.bamf(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, true); spawnAfterimage(caster,'#5b7cffaa',420); }catch(e){}
+      const who = caster, victim = tg;
+      setTimeout(()=>{
+        if(state.mode !== 'battle' || who.dead || victim.dead) return;
+        const dxs = (victim.x+FIGHTER_SIZE/2) - (who.x+FIGHTER_SIZE/2), dys = Math.abs(victim.y - who.y);
+        if(Math.abs(dxs) > 190 || dys > 150) return;      // enemy got launched away before the strike landed
+        damageTargetOrWall(victim, ability.damage, ability.knockback, dxs >= 0 ? 1 : -1,
+          {hitFx:ability.hitFx, sound:ability.hitSound, ranged:false, attacker:who});
+      }, ability.hitDelay || 170);
+      break;
+    }
+    case 'fling': {
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) return {hit:false};
+      const tcx = tg.x+FIGHTER_SIZE/2, tcy = tg.y+FIGHTER_SIZE/2;
+      const dist = Math.hypot(tcx-(caster.x+FIGHTER_SIZE/2), tcy-(caster.y+FIGHTER_SIZE/2));
+      const targetMax = (tg.def && tg.def.maxHealth) || 0;
+      if(targetMax > (ability.maxTargetHealth || 40000)){
+        spawnDamageNumber(tg.x+2, tg.y-22, 'IMMUNE', false);
+        try{ ENH.mawResist(tcx, tcy); }catch(e){}
+        sfx('maw_fling_resist');
+        return {hit:false};
+      }
+      if(dist > (ability.range || 760)){
+        spawnDamageNumber(caster.x+2, caster.y-22, 'OUT OF RANGE', false);
+        return {hit:false};
+      }
+      const ang = Math.random()*Math.PI*2;
+      const sp = ability.flingSpeed || 16;
+      const vx = Math.cos(ang)*sp;
+      let vy = Math.sin(ang)*(sp*1.3);
+      if(vy > 0 && tg.onGround) vy = -Math.abs(vy)*0.5 - 4;   // a downward fling from the floor becomes a hop, so it always reads
+      tg.flight = false; tg.flightExpire = 0; tg.grappleUntil = 0; tg.hitStun = 0;
+      tg.windBurstUntil = t + 560; tg.windBurstVx = vx;
+      tg.vx = vx; tg.vy = vy; tg.onGround = false;
+      try{ ENH.mawFling(tg); }catch(e){}
+      sfx('maw_fling_hit');
       break;
     }
     case 'portal': {
@@ -11493,6 +11656,30 @@ function executeAbility(caster, target, ability, t){
       }
       break;
     }
+    case 'enchantment': {
+      // Sylvie's Enchantment: the victim cannot use abilities and is compelled to walk toward her.
+      const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
+      if(!tg || tg.dead) return {hit:false};
+      const edx=(tg.x+FIGHTER_SIZE/2)-(caster.x+FIGHTER_SIZE/2), edy=(tg.y+FIGHTER_SIZE/2)-(caster.y+FIGHTER_SIZE/2);
+      if(Math.hypot(edx,edy) > (ability.radius||640) || attackBlockedByFloor(caster,tg)){
+        spawnDamageNumber(caster.x+2, caster.y-22, 'OUT OF RANGE', false);
+        return {hit:false};
+      }
+      const dur=ability.duration||3200, until=t+dur;
+      tg.enchantedUntil=until; tg.enchantedBy=caster;
+      tg.abilityLockUntil=Math.max(tg.abilityLockUntil||0,until);
+      tg.vx=0; tg.flight=false; tg.flightExpire=0; tg.grappleUntil=0;
+      if(tg.el){
+        tg.el.classList.add('sylvie-enchanted');
+        if(tg.sylRig && tg.sylRig.parentNode) tg.sylRig.remove();
+        const rig=document.createElement('div'); rig.className='syl-enchant-rig'; rig.setAttribute('aria-hidden','true');
+        rig.innerHTML='<i class="sr-ring"></i><i class="sr-orb" style="--d:0s"></i><i class="sr-orb" style="--d:-.55s"></i><i class="sr-orb" style="--d:-1.1s"></i><b class="sr-rune">\u2726</b>';
+        tg.el.appendChild(rig); tg.sylRig=rig;
+      }
+      sfx(ability.hitSound||'sylvie_enchant_hit');
+      spawnHitFx(tg,ability.hitFx||'sylvie_enchant_hit',dirSignTo(caster,tg));
+      break;
+    }
     case 'sockLove': {
       const tg = target || (state.multiPvp ? multiTargetFor(caster) : ((caster === state.player) ? state.bot : state.player));
       if(!tg || tg.dead) break;
@@ -11812,6 +11999,9 @@ function executeAbility(caster, target, ability, t){
       //  - it can't reach through a floor/platform between the two fighters,
       //  - a swing whose attacker got knocked away mid-swing doesn't keep its hit.
       const startX = caster.x, startY = caster.y, faceAtStart = caster.facing;
+      if(caster.def.id==='sylvie' && ability.name==='Enchanted Dagger'){
+        activateHeldWeapon(caster, '.sylvie-dagger-held', 360, caster.isBot ? caster.facing : dirSignTo(caster, target));
+      }
       if(caster.def.id==='thor_infinitywar' && ability.name==='Stormbreaker'){
         activateHeldWeapon(caster,'.stormbreaker-held',460,caster.facing);
         caster.el.classList.remove('thor-swing');
@@ -13592,7 +13782,7 @@ const ENH = {
     fxEl('enh',`left:${cx}px;top:${cy}px;width:0;height:0;`,1300,h); },
   live(caster,ms,every,fn){ let n=0; const max=Math.ceil(ms/every); const iv=setInterval(()=>{ if(state.mode!=='battle'||!caster.el||caster.dead||n++>max){ clearInterval(iv); return; } try{ fn(n); }catch(e){ clearInterval(iv); } }, every); }
 };
-function enhAuraHtml(id){ const m={vision:'vis',okoye:'oko',groot:'grt',yondu:'yon',drstrange:'str',thor:'thr',thor_infinitywar:'thr',blackpanther:'bpn',killmonger:'kmg',namor:'nmr',captainmarvel:'cpm',msmarvel:'msm',okoye_midnightangel:'mid',loki:'lok',ghostrider:'gho',venom:'ven',wong:'wng',redskull:'rsk',wasp:'wsp'}[id]; return m ? `<div class="enh-aura ${m}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>` : ''; }
+function enhAuraHtml(id){ const m={vision:'vis',okoye:'oko',groot:'grt',yondu:'yon',thor:'thr',thor_infinitywar:'thr',blackpanther:'bpn',killmonger:'kmg',namor:'nmr',captainmarvel:'cpm',msmarvel:'msm',okoye_midnightangel:'mid',loki:'lok',ghostrider:'gho',venom:'ven',wong:'wng',redskull:'rsk',wasp:'wsp'}[id]; return m ? `<div class="enh-aura ${m}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>` : ''; }
 
 const ENH_FX = {
   /* ---- Yondu ---- */
@@ -13808,10 +13998,174 @@ Object.assign(ENH_HIT,{ web_hit(tg,cx,cy,d){ ENH.webBurst(cx,cy,34,8); ENH.flash
   shehulk_gamma_hit:ENH_FX.shehulk_gamma_hit, shehulk_rock_hit:ENH_FX.shehulk_rock_hit });
 function enhHeldHtml(id){
   switch(id){
-    case 'drstrange': return '<div class="enh-held enh-cloak"></div><div class="enh-held enh-eye"></div><div class="enh-held enh-sling"></div>';
   } return '';
 }
 
+/* =========================================================================
+   NIGHTCRAWLER + EBONY MAW: sound + visual effects
+   ========================================================================= */
+(function(){
+const NC=['#3a55ff','#c9b8ff','#ffd34a'];      // BAMF blue / lavender / sulfur
+const MW=['#b98cff','#e6b85a','#ffffff'];       // Maw violet / gold
+const live=()=>state.mode==='battle';
+ENH.bamf=function(cx,cy,big){
+  const R=big?72:54;
+  ENH.flash(cx,cy,R*1.3,'#6a4dff',300); ENH.flash(cx,cy,R*.7,'#ffffff',200);
+  ENH.ring(cx,cy,R,NC[0],420); ENH.ring(cx,cy,R*.62,NC[1],340,true,2);
+  for(let i=0;i<(big?8:5);i++){ const a=Math.random()*Math.PI*2, d=8+Math.random()*R*.6;
+    fxEl('enh nc-bamf-smoke',`left:${cx+Math.cos(a)*d-24}px;top:${cy+Math.sin(a)*d-24}px;width:48px;height:48px;--dx:${(Math.cos(a)*24)|0}px;--dy:${(Math.sin(a)*24-14)|0}px;`,940); }
+  ENH.streaks(cx,cy,NC[1],10,R*1.2,380);
+  ENH.parts(cx,cy,big?18:12,[NC[2],'#ff9a3c','#8a5cff','#ffffff'],R*1.1,540,{size:3,up:10});
+  ENH.word(cx,cy-R-6,'BAMF!','#8a7dff',big?32:26,700);
+  shakeArena(big?5:2,160);
+};
+ENH.mawResist=function(cx,cy){ ENH.ring(cx,cy,42,MW[1],360); ENH.ring(cx,cy,28,'#ff8a8a',300,true,2); ENH.parts(cx,cy,8,[MW[1],'#ff8a8a','#ffffff'],36,360,{size:3}); };
+ENH.mawFling=function(tg){
+  const cx=tg.x+FIGHTER_SIZE/2, cy=tg.y+FIGHTER_SIZE/2;
+  ENH.flash(cx,cy,62,MW[0],300); ENH.ring(cx,cy,56,MW[1],420); ENH.ring(cx,cy,38,'#ffffff',320,true,2);
+  ENH.streaks(cx,cy,MW[1],12,84,400); ENH.parts(cx,cy,14,[MW[0],MW[1],'#ffffff'],60,520,{size:4,br:'0 100% 0 100%'});
+  ENH.word(cx,cy-48,'FLING!',MW[1],28,780); shakeArena(4,160);
+  if(tg.el){ tg.el.classList.remove('maw-flung'); void tg.el.offsetWidth; tg.el.classList.add('maw-flung'); setTimeout(()=>{ if(tg.el) tg.el.classList.remove('maw-flung'); },680); }
+  ENH.live(tg,640,45,()=>{ const x=tg.x+FIGHTER_SIZE/2, y=tg.y+FIGHTER_SIZE/2;
+    ENH.parts(x,y,3,[MW[0],MW[1],'#ffffff'],22,420,{size:4,br:'0 100% 0 100%'});
+    if(Math.random()<.5) spawnAfterimage(tg,'#b98cff66',260); });
+};
+
+/* ---------------- SOUND ---------------- */
+const bamfSnd=(c,t,v)=>{ v=v||1;
+  aNoise(c,t,0.10,0.10*v,'bandpass',300,5200,1.6);
+  aTone(c,t+0.06,'sine',1100,55,0.22,0.22*v);
+  enhBoom(c,t+0.07,95,0.5,0.34*v);
+  aNoise(c,t+0.07,0.34,0.20*v,'bandpass',4800,260,1.4);
+  aNoise(c,t+0.07,0.05,0.30*v,'highpass',6500,3000,1.0);
+  [392,587,784].forEach((f,i)=>aTone(c,t+0.10+i*0.02,'triangle',f*2,f,0.28,0.05*v)); };
+Object.assign(ENH_SFX,{
+  nc_slash:(c,t)=>{ aNoise(c,t,.14,.20,'bandpass',1400,6800,1.7); aTone(c,t,'sawtooth',260,1400,.10,.06); aNoise(c,t+.07,.08,.16,'highpass',5400,2800,2);
+    [2349,3520,4699].forEach((f,i)=>aTone(c,t+.06+i*.012,'sine',f,f*.99,.28-i*.05,.045)); aTone(c,t,'sine',130,60,.15,.12); },
+  nc_slash_hit:(c,t)=>{ enhBoom(c,t,105,.5,.4); aNoise(c,t,.16,.26,'highpass',5600,2000,1); aTone(c,t,'triangle',1500,110,.14,.12);
+    [1760,2637,3520,4699].forEach((f,i)=>aTone(c,t+.01,'sine',f,f*.98,.5-i*.09,.06)); enhRock(c,t,.10); },
+  nc_bamf:(c,t)=>bamfSnd(c,t,1),
+  nc_bamf_arrive:(c,t)=>{ aTone(c,t,'sine',900,70,.18,.16); enhBoom(c,t,110,.4,.26); aNoise(c,t,.28,.16,'bandpass',4200,300,1.4); },
+  nc_bamf_strike:(c,t)=>{ bamfSnd(c,t,1.15); bamfSnd(c,t+.12,.8); aTone(c,t+.14,'sawtooth',180,900,.16,.06); },
+  nc_bamf_hit:(c,t)=>{ enhBoom(c,t,70,.8,.5); enhRock(c,t,.16); aNoise(c,t,.2,.3,'highpass',6500,2200,1); aTone(c,t,'sawtooth',1600,90,.3,.12);
+    [880,1320,1760,2637].forEach((f,i)=>aTone(c,t+.01,'sine',f,f*.98,.55-i*.09,.06)); aNoise(c,t+.05,.4,.14,'bandpass',3600,400,1.4); },
+  maw_shard:(c,t)=>{ aTone(c,t,'sawtooth',180,760,.24,.07); aTone(c,t+.02,'triangle',520,1560,.28,.06); aNoise(c,t,.28,.12,'bandpass',900,5600,2.0);
+    [220,277,330].forEach((f,i)=>aTone(c,t+.02*i,'sine',f,f*1.02,.5,.05)); aTone(c,t,'sine',70,45,.2,.14); },
+  maw_shard_hit:(c,t)=>{ aNoise(c,t,.14,.26,'highpass',6800,2400,1); for(let i=0;i<6;i++) aTone(c,t+i*.02,'triangle',2400-i*230,900,.05,.05);
+    enhBoom(c,t,100,.5,.36); [1319,1760,2349].forEach((f,i)=>aTone(c,t+.01,'sine',f,f,.5-i*.1,.05)); },
+  maw_crush:(c,t)=>{ aTone(c,t,'sine',60,220,.28,.16); [147,185,220,277,349].forEach((f,i)=>aTone(c,t+i*.03,'sawtooth',f,f*1.5,.5,.04));
+    aNoise(c,t,.32,.16,'bandpass',300,4800,1.8); aTone(c,t+.26,'sine',55,38,.7,.30); enhBoom(c,t+.26,48,1.1,.5);
+    aNoise(c,t+.26,.5,.24,'bandpass',2600,200,1.2); [1568,2093,3136].forEach((f,i)=>aTone(c,t+.28+i*.03,'sine',f,f,.7,.04)); },
+  maw_crush_hit:(c,t)=>{ enhBoom(c,t,58,1.1,.6); enhRock(c,t,.2); aNoise(c,t,.3,.28,'highpass',5200,1600,1);
+    [330,494,740,1109].forEach((f,i)=>aTone(c,t+.01,'triangle',f,f*.99,.8-i*.14,.06)); aTone(c,t,'sawtooth',900,60,.4,.12); },
+  maw_fling:(c,t)=>{ aTone(c,t,'sine',110,440,.34,.10); aTone(c,t+.03,'triangle',220,880,.34,.06); aNoise(c,t,.34,.12,'bandpass',500,3800,2.2);
+    [196,247,294].forEach(f=>aTone(c,t,'sine',f,f*1.04,.45,.05)); },
+  maw_fling_hit:(c,t)=>{ aNoise(c,t,.12,.26,'highpass',6000,1800,1); aTone(c,t,'sine',500,60,.2,.24); enhBoom(c,t,80,.5,.38);
+    aNoise(c,t+.05,.6,.2,'bandpass',3400,300,1.4); aTone(c,t+.04,'sawtooth',300,1500,.4,.06); },
+  maw_fling_resist:(c,t)=>{ aTone(c,t,'square',200,90,.14,.10); aTone(c,t+.04,'sine',150,70,.2,.16); aNoise(c,t,.1,.14,'lowpass',1800,300,1);
+    [523,554].forEach(f=>aTone(c,t+.1,'triangle',f,f*.6,.25,.05)); }
+});
+
+/* ---------------- VISUALS ---------------- */
+Object.assign(ENH_FX,{
+  nc_slash:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,NC[0],300); const x=cx+dir*52;
+    ENH.slash(x,cy-8,dir,150,84,NC[0],NC[1],300);
+    setTimeout(()=>{ if(live()) ENH.slash(x,cy+10,-dir,140,76,NC[1],NC[0],280); },60);
+    ENH.flash(x,cy,34,NC[1],200); ENH.streaks(cx+dir*24,cy,NC[1],8,80,300,dir>0?-30:150,60);
+    ENH.parts(x+dir*20,cy,8,[NC[2],NC[1],'#ffffff'],42,340,{size:3,br:'1px'}); shakeArena(2,120); },
+  nc_bamf:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,NC[0],260); spawnAfterimage(f,'#5b7cff88',360); ENH.bamf(cx,cy,false); },
+  nc_bamf_strike:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,NC[0],360); spawnAfterimage(f,'#5b7cffaa',420); ENH.bamf(cx,cy,true); },
+  maw_shard:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,MW[0],300); const x=cx+dir*30;
+    ENH.flash(x,cy,26,MW[1],220); ENH.ring(x,cy,26,MW[0],320); ENH.ring(x,cy,16,MW[1],260,true,2);
+    ENH.streaks(x,cy,MW[1],7,50,300,dir>0?-30:150,60); ENH.parts(x,cy,8,[MW[0],MW[1],'#1a0d2e'],38,340,{size:4,br:'0 100% 0 100%'}); },
+  maw_crush:(f,a,tg,cx,cy,dir)=>{ const R=a.radius||175, gy=f.y+FIGHTER_SIZE;
+    ENH.body(f,MW[0],520); ENH.flash(cx,cy,R*.6,MW[0],300); ENH.ring(cx,cy,R*.5,MW[1],320,true,3);
+    setTimeout(()=>{ if(!live()) return;
+      ENH.flash(cx,cy,R*.75,MW[0],420); ENH.flash(cx,cy,R*.35,'#ffffff',260);
+      ENH.ring(cx,cy,R,MW[0],560,false,4); ENH.ring(cx,cy,R*.7,MW[1],460,false,3);
+      ENH.shock(cx,gy,R,MW[0],620,5); ENH.cracks(cx,gy-2,MW[0],10,R); ENH.dust(cx,gy,R*1.4,4);
+      ENH.streaks(cx,cy,MW[1],18,R*.9,480);
+      ENH.parts(cx,gy-4,22,['#0b0710','#2e1650',MW[0],MW[1]],R*.8,720,{size:7,up:80,br:'0 100% 0 100%'});
+      ENH.word(cx,cy-R*.6,'TELEKINETIC CRUSH!',MW[1],26,900); shakeArena(10,340); },250); },
+  maw_fling:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,MW[0],420); ENH.flash(cx,cy,44,MW[0],300);
+    ENH.ring(cx,cy,48,MW[1],420,true,2); ENH.ring(cx,cy,32,MW[0],360);
+    ENH.parts(cx,cy-6,10,[MW[0],MW[1],'#ffffff'],44,480,{size:3});
+    if(tg&&tg.el&&!tg.dead){ const tx=tg.x+FIGHTER_SIZE/2, ty=tg.y+FIGHTER_SIZE/2;
+      ENH.bolt(cx,cy,tx,ty,MW[0],320,3,8); setTimeout(()=>{ if(live()) ENH.bolt(cx,cy,tx,ty,MW[1],260,2,7); },70);
+      ENH.ring(tx,ty,40,MW[0],420,true,2); ENH.flash(tx,ty,34,MW[1],260); } }
+});
+Object.assign(ENH_HIT,{
+  nc_slash_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,42,NC[0],260); ENH.ring(cx,cy,40,NC[1],380); ENH.slash(cx,cy,d,120,68,NC[1],'#ffffff',260);
+    ENH.streaks(cx,cy,'#ffffff',8,56,340); ENH.parts(cx,cy,10,[NC[2],NC[1],'#ffffff'],52,420,{size:3,br:'1px'}); ENH.word(cx,cy-42,'SLASH!',NC[1],22,600); shakeArena(3,140); },
+  nc_bamf_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,80,'#ffffff',260); ENH.flash(cx,cy,70,NC[0],340); ENH.ring(cx,cy,64,NC[1],480); ENH.ring(cx,cy,92,NC[0],620,false,2);
+    ENH.streaks(cx,cy,'#ffffff',16,96,460); ENH.slash(cx,cy,d,150,80,NC[1],'#ffffff',300);
+    ENH.parts(cx,cy,20,[NC[2],'#ff9a3c',NC[1],'#ffffff'],84,600,{size:4}); ENH.word(cx,cy-52,'BAMF STRIKE!',NC[1],26,760); shakeArena(9,260); },
+  maw_shard_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,40,MW[0],260); ENH.ring(cx,cy,38,MW[1],380); ENH.streaks(cx,cy,MW[1],10,60,360);
+    ENH.parts(cx,cy,14,[MW[0],MW[1],'#1a0d2e','#ffffff'],60,480,{size:5,br:'0 100% 0 100%',up:10}); ENH.word(cx,cy-42,'SHATTER!',MW[1],22,620); shakeArena(4,140); },
+  maw_crush_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,88,MW[0],340); ENH.ring(cx,cy,70,MW[1],500); ENH.ring(cx,cy,100,MW[0],640,false,3); ENH.streaks(cx,cy,MW[1],16,100,480);
+    ENH.parts(cx,cy,22,['#0b0710','#2e1650',MW[0],MW[1]],90,620,{size:5,br:'0 100% 0 100%',up:20}); shakeArena(10,300); }
+});
+})();
+
+
+/* =========================================================================
+   SYLVIE: sound + visual effects (Enchanted Dagger / Emerald Eruption / Enchantment)
+   ========================================================================= */
+(function(){
+const SY=['#3ddc84','#ffd66b','#ffffff','#7dffb0'];   // emerald / gold / white / mint
+const live=()=>state.mode==='battle';
+/* ---------------- SOUND ---------------- */
+Object.assign(ENH_SFX,{
+  sylvie_dagger:(c,t)=>{ aNoise(c,t,.16,.16,'bandpass',1200,6200,1.8); aTone(c,t,'sawtooth',300,1500,.10,.05); aNoise(c,t+.05,.08,.14,'highpass',5600,3000,2);
+    [1568,2093,2637,3136].forEach((f,i)=>aTone(c,t+.02+i*.02,'sine',f,f*1.01,.34-i*.05,.045)); aTone(c,t,'sine',140,70,.14,.11); },
+  sylvie_dagger_hit:(c,t)=>{ enhBoom(c,t,108,.5,.38); aNoise(c,t,.14,.26,'highpass',6200,2200,1); aTone(c,t,'triangle',1700,120,.14,.12);
+    [1319,1976,2637,3951].forEach((f,i)=>aTone(c,t+.01,'sine',f,f*.99,.55-i*.1,.06)); aNoise(c,t+.04,.34,.12,'bandpass',4200,900,2); enhRock(c,t,.08); },
+  sylvie_eruption:(c,t)=>{ aTone(c,t,'sine',80,340,.28,.14); [196,247,294,392].forEach((f,i)=>aTone(c,t+i*.03,'sawtooth',f,f*1.6,.45,.035));
+    aNoise(c,t,.3,.14,'bandpass',400,5200,1.8); aTone(c,t+.25,'sine',62,40,.7,.30); enhBoom(c,t+.25,52,1.0,.5);
+    aNoise(c,t+.25,.5,.22,'bandpass',3000,240,1.2); [1175,1568,2349,3136].forEach((f,i)=>aTone(c,t+.27+i*.03,'sine',f,f,.7,.045)); },
+  sylvie_eruption_hit:(c,t)=>{ enhBoom(c,t,62,1.0,.58); enhRock(c,t,.18); aNoise(c,t,.28,.26,'highpass',5400,1700,1);
+    [262,392,587,880].forEach((f,i)=>aTone(c,t+.01,'triangle',f,f*.99,.8-i*.14,.06)); aTone(c,t,'sawtooth',900,60,.4,.11); },
+  sylvie_enchant:(c,t)=>{ aNoise(c,t,.5,.13,'bandpass',2800,1400,3.5); aNoise(c,t+.08,.5,.10,'bandpass',4200,2200,4);
+    [392,494,587,740].forEach((f,i)=>{ aTone(c,t+i*.06,'sine',f,f*1.5,.6,.05); aTone(c,t+i*.06,'triangle',f*2.005,f*3,.55,.025); }); aTone(c,t,'sine',90,180,.5,.10); },
+  sylvie_enchant_hit:(c,t)=>{ [2349,1976,1568,1319,1047,880].forEach((f,i)=>aTone(c,t+i*.07,'sine',f,f*.99,.5,.055));
+    aTone(c,t,'sine',220,165,.7,.10); aTone(c,t+.02,'triangle',330,247,.7,.06); aNoise(c,t,.6,.10,'bandpass',5200,1800,3); enhBoom(c,t,90,.4,.22); },
+  sylvie_enchant_end:(c,t)=>{ [880,1175,1568].forEach((f,i)=>aTone(c,t+i*.05,'sine',f,f*1.02,.32,.04)); aNoise(c,t,.24,.08,'bandpass',3600,7000,3); }
+});
+/* ---------------- VISUALS ---------------- */
+Object.assign(ENH_FX,{
+  sylvie_dagger:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,SY[0],300); const x=cx+dir*32;
+    ENH.flash(x,cy,28,SY[3],220); ENH.ring(x,cy,26,SY[0],320); ENH.ring(x,cy,16,SY[1],260,true,2);
+    ENH.slash(x,cy-4,dir,120,64,SY[0],SY[2],260);
+    ENH.streaks(x,cy,SY[1],7,54,300,dir>0?-30:150,60); ENH.parts(x,cy,9,[SY[0],SY[1],SY[2]],40,340,{size:3,br:'1px'}); },
+  sylvie_eruption:(f,a,tg,cx,cy,dir)=>{ const R=a.radius||165, gy=f.y+FIGHTER_SIZE;
+    ENH.body(f,SY[0],520); ENH.flash(cx,cy,R*.55,SY[0],300); ENH.ring(cx,cy,R*.5,SY[1],320,true,3); ENH.ring(cx,cy,R*.34,SY[3],300,true,2);
+    setTimeout(()=>{ if(!live()) return;
+      ENH.flash(cx,cy,R*.75,SY[0],420); ENH.flash(cx,cy,R*.35,'#ffffff',260);
+      ENH.ring(cx,cy,R,SY[0],560,false,4); ENH.ring(cx,cy,R*.7,SY[1],460,false,3);
+      ENH.shock(cx,gy,R,SY[0],620,5); ENH.cracks(cx,gy-2,SY[3],10,R); ENH.dust(cx,gy,R*1.4,3);
+      ENH.streaks(cx,cy,SY[1],18,R*.9,480);
+      ENH.parts(cx,gy-4,24,['#0b3d2a',SY[0],SY[3],SY[1]],R*.8,720,{size:6,up:80,br:'50% 0 50% 0'});
+      ENH.word(cx,cy-R*.6,'EMERALD ERUPTION!',SY[1],26,900); shakeArena(9,320); },250); },
+  sylvie_enchant:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,SY[0],520); ENH.flash(cx,cy,46,SY[3],300); ENH.flash(cx+dir*6,cy-10,16,'#eaffef',260);
+    ENH.ring(cx,cy,50,SY[1],420,true,2); ENH.ring(cx,cy,34,SY[0],360);
+    for(let i=1;i<=3;i++) setTimeout(()=>{ if(live()) ENH.ring(cx+dir*i*34,cy-4,22+i*8,i%2?SY[3]:SY[1],380,true,2); },i*90);
+    ENH.parts(cx,cy-6,12,[SY[0],SY[1],SY[3],'#ffffff'],46,520,{size:3,up:24,br:'50% 0 50% 0'});
+    if(tg&&tg.el&&!tg.dead){ const tx=tg.x+FIGHTER_SIZE/2, ty=tg.y+FIGHTER_SIZE/2;
+      ENH.bolt(cx,cy-8,tx,ty,SY[0],320,3,9); setTimeout(()=>{ if(live()) ENH.bolt(cx,cy-8,tx,ty,SY[1],260,2,8); },70);
+      ENH.ring(tx,ty,40,SY[0],420,true,2); } }
+});
+Object.assign(ENH_HIT,{
+  sylvie_dagger_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,42,SY[0],260); ENH.ring(cx,cy,40,SY[1],380); ENH.slash(cx,cy,d,118,66,SY[3],'#ffffff',260);
+    ENH.streaks(cx,cy,'#ffffff',8,56,340); ENH.parts(cx,cy,12,[SY[0],SY[1],SY[3],'#ffffff'],56,440,{size:4,br:'50% 0 50% 0'}); ENH.word(cx,cy-42,'PIERCED!',SY[1],22,620); shakeArena(3,140); },
+  sylvie_eruption_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,88,SY[0],340); ENH.ring(cx,cy,70,SY[1],500); ENH.ring(cx,cy,100,SY[0],640,false,3); ENH.streaks(cx,cy,SY[1],16,100,480);
+    ENH.parts(cx,cy,22,['#0b3d2a',SY[0],SY[3],SY[1]],90,620,{size:5,br:'50% 0 50% 0',up:20}); shakeArena(9,280); },
+  sylvie_enchant_hit:(tg,cx,cy,d)=>{ ENH.flash(cx,cy,74,SY[3],320); ENH.flash(cx,cy,36,'#ffffff',240);
+    ENH.ring(cx,cy,56,SY[0],460); ENH.ring(cx,cy,80,SY[1],620,true,2); ENH.streaks(cx,cy,SY[1],10,70,420);
+    ENH.parts(cx,cy,16,[SY[0],SY[1],SY[3],'#ffffff'],64,560,{size:4,up:30,br:'50% 0 50% 0'}); ENH.word(cx,cy-58,'ENCHANTED!',SY[1],26,860); shakeArena(3,160);
+    ENH.live(tg,900,70,()=>{ const x=tg.x+FIGHTER_SIZE/2, y=tg.y+FIGHTER_SIZE/2;
+      ENH.parts(x,y,2,[SY[0],SY[1],SY[3]],28,460,{size:3,up:34,br:'50% 0 50% 0'}); }); }
+});
+})();
 
 /* =========================================================================
    ENHANCED SFX + FX 3: Miles / Spider-Gwen / Green Goblin / Scorpion / War Machine /
@@ -14414,7 +14768,7 @@ const sonar=(cx,cy)=>{ ENH.ring(cx,cy,70,'#ffd0a0',600,true,2); setTimeout(()=>{
 F('dd_club','sl',P.dar,{w:150,d:52,sk:3,br:'1px',x:(f,a,tg,cx,cy)=>sonar(cx,cy)}); F('dd_boomerang','sh',P.dar,{r:22,x:(f,a,tg,cx,cy)=>sonar(cx,cy)});
 H('dd_club_hit',P.dar,{s:1.7,br:'1px',x:(tg,cx,cy)=>ENH.ring(cx,cy,70,'#ffd0a0',560,true,2)}); F('dd_leap','rl',P.dar,{x:(f,a,tg,cx,cy)=>sonar(cx,cy)});
 /* ---------- idle auras ---------- */
-const AUR={wolverine:'wlv',gambit:'gmb',rogue:'rog',storm:'sto',cyclops:'cyc',jeangrey:'jgr',beast:'bst',iceman:'icm',emmafrost:'emf',juggernaut:'jug',mystique:'mys',deadpool:'ddp',blade:'bld',daredevil:'dar'};
+const AUR={wolverine:'wlv',gambit:'gmb',rogue:'rog',storm:'sto',cyclops:'cyc',jeangrey:'jgr',beast:'bst',iceman:'icm',emmafrost:'emf',sylvie:'syl',juggernaut:'jug',mystique:'mys',deadpool:'ddp',blade:'bld',daredevil:'dar'};
 const _eah=enhAuraHtml; enhAuraHtml=function(id){ const m=AUR[id]; return m?`<div class="enh-aura ${m}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`:_eah(id); };
 })();
 /* ---------- Quicksilver: controller speed control ---------- */
@@ -19926,6 +20280,23 @@ function updatePhysics(f, moveDir, wantJump, wantDown, dtF){
     f.sockLoveEl=null;
     if(f.el) f.el.classList.remove('sock-in-love');
   }
+  if(f.enchantedUntil && tNow < f.enchantedUntil && !f.dead){
+    // Sylvie's Enchantment: the victim is compelled to walk straight to her and cannot jump or use abilities.
+    const enchanter = f.enchantedBy;
+    if(enchanter && !enchanter.dead){
+      const ex = enchanter.x - f.x;
+      moveDir = Math.abs(ex) < 46 ? 0 : (ex > 0 ? 0.8 : -0.8);
+    } else { moveDir = 0; }
+    wantJump = false; wantDown = false;
+    f.flight = false; f.flightExpire = 0; f.grappleUntil = 0;
+    if(f.el) f.el.classList.add('sylvie-enchanted');
+  } else if(f.enchantedUntil){
+    f.enchantedUntil = 0; f.enchantedBy = null;
+    if(f.el) f.el.classList.remove('sylvie-enchanted');
+    if(f.sylRig && f.sylRig.parentNode) f.sylRig.remove();
+    f.sylRig = null;
+    if(!f.dead && state.mode==='battle'){ try{ sfx('sylvie_enchant_end'); ENH.ring(f.x+FIGHTER_SIZE/2, f.y+FIGHTER_SIZE/2, 58, '#ffd66b', 360, true, 2); }catch(e){} }
+  }
   if(f.yonduArrow && f.yonduArrow.phase === 'control'){
     // He can't steer himself while piloting the arrow, but he isn't a statue:
     // if he's airborne when he activates it, he should still fall/land normally.
@@ -21321,6 +21692,14 @@ function buildProjectileVisual(p){
     p.el.classList.add('epic-projectile');
     p.el.style.background='transparent'; p.el.style.boxShadow='none';
     p.el.innerHTML='<div class="strange-rune-projectile">◈</div>';
+  } else if(p.render === 'ebony-crystal'){
+    p.el.classList.add('epic-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="maw-crystal"></div>';
+  } else if(p.render === 'sylvie-dagger'){
+    p.el.classList.add('epic-projectile');
+    p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="syl-dagger"><i class="sd-glow"></i><i class="sd-blade"></i><i class="sd-guard"></i><i class="sd-hilt"></i></div>';
   } else if(p.render === 'wasp-size-disc'){
     p.el.classList.add('wasp-size-disc-projectile');
     p.el.style.background='transparent';
@@ -21438,6 +21817,12 @@ function spawnProjTrail(p){
   if(p.trail === 'clea-flames'){
     fxEl('fx-trail', `left:${cx-9+(Math.random()*8-4)}px;top:${cy-9+(Math.random()*10-5)}px;width:18px;height:18px;background:radial-gradient(circle,#f3d6ff,#b464ff 45%,transparent 76%);box-shadow:0 0 12px #a24bff;`, 300);
     if(Math.random()<.45) spawnSparks(cx,cy+(Math.random()*14-7),1,Math.random()<.5?'#e6b3ff':'#ff7cf5',26,320);
+  } else if(p.trail === 'sylvie'){
+    fxEl('fx-trail', `left:${(cx-7).toFixed(1)}px;top:${(cy-7).toFixed(1)}px;width:14px;height:14px;background:radial-gradient(circle,#eaffef,#3ddc84 42%,transparent 76%);box-shadow:0 0 12px #3ddc84,0 0 22px #ffd66b55;`, 300);
+    if(Math.random()<.5) spawnSparks(cx,cy+(Math.random()*12-6),1,Math.random()<.5?'#ffd66b':'#7dffb0',24,320);
+  } else if(p.trail === 'ebony'){
+    fxEl('fx-trail', `left:${(cx-7).toFixed(1)}px;top:${(cy-7).toFixed(1)}px;width:14px;height:14px;background:radial-gradient(circle,#f3e2b0,#9a6cff 42%,transparent 76%);box-shadow:0 0 12px #8f6bff,0 0 22px #e6b85a55;`, 300);
+    if(Math.random()<.4) spawnSparks(cx,cy+(Math.random()*12-6),1,Math.random()<.5?'#e6b85a':'#b98cff',24,320);
   } else if(p.trail === 'starlord'){
     fxEl('fx-trail', `left:${cx-4}px;top:${cy-4}px;width:8px;height:8px;background:radial-gradient(circle,#fff0d0,#ff5a3c 45%,transparent 76%);box-shadow:0 0 8px #ff4a30;`, 200);
   } else if(p.trail === 'redskull-hydra'){
@@ -21759,6 +22144,9 @@ const AI_STYLE_RANGE = {
   spidergwen:150,
   shehulk:105,
   wong:240,
+  nightcrawler:105,
+  ebonymaw:400,
+  sylvie:400,
   emmafrost:520,
   okoye:115,
 };
@@ -22276,6 +22664,22 @@ function updateBotAI(dtF){
     if(cdReady(bot,'Q',t) && adist < 520 && Math.random() < 0.28){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
     if(cdReady(bot,'R',t) && (hpPct < 0.45 || adist < 95) && Math.random() < 0.55){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'nightcrawler'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist < 950 && Math.random()<0.6){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.hitRange - 15 && Math.abs(vertical) < 110){ tryUseAbility(bot,player,'E'); return; }
+    if(cdReady(bot,'R',t) && (hpPct < 0.4 || incomingProjectile || missile || adist > 650) && Math.random()<0.5){ tryUseAbility(bot,player,'R'); return; }
+  } else if(style === 'ebonymaw'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    if(cdReady(bot,'Q',t) && adist <= qAb.radius - 10 && Math.abs(vertical) < 150){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'R',t) && adist < rAb.range && player.def.maxHealth <= rAb.maxTargetHealth && (adist < 200 || hpPct < 0.4) && Math.random()<0.45){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'sylvie'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    const alreadyEnchanted = player.enchantedUntil && player.enchantedUntil > t;
+    if(cdReady(bot,'R',t) && !alreadyEnchanted && adist < rAb.radius - 40 && Math.random()<0.5){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist <= qAb.radius - 10 && Math.abs(vertical) < 150){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist <= eAb.hitRange + 18 && Math.abs(vertical) < eAb.hitVertical){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'clea'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q;
     if(cdReady(bot,'Q',t) && adist <= qAb.hitRange - 20 && Math.abs(vertical) < 100){ tryUseAbility(bot,player,'Q'); return; }
@@ -22820,7 +23224,7 @@ function resetFighterTransientState(target){
   target.invulnUntil = now() + RESPAWN_INVULN_MS;
   target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
-  target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
+  target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false; target.enchantedUntil = 0; target.enchantedBy = null; if(target.el) target.el.classList.remove('sylvie-enchanted'); if(target.sylRig && target.sylRig.parentNode) target.sylRig.remove(); target.sylRig = null;
   target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0; target.hellcycleUntil = 0;
   if(target.el) target.el.classList.remove('beast-surge-active','hellcycle-active');
   target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped','mind-crushed','wong-shield-active','diamond-form-active','diamond-form-ending','dora-active');
@@ -22874,7 +23278,7 @@ function loseLife(target, side){
   target.invulnUntil = now() + RESPAWN_INVULN_MS;
   target.vx = 0; target.vy = 0; target.hitStun = 0; target.onGround = false;
   if(target.activeVisionBeam && target.activeVisionBeam.el) target.activeVisionBeam.el.remove();
-  target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false;
+  target.activeVisionBeam = null; target.hexFrozenUntil = 0; target.pxMindStunUntil = 0; target.abilityLockUntil = 0; target.disabledAbilityKey = null; target.disabledAbilityUntil = 0; target.ricochetArmed = false; target.enchantedUntil = 0; target.enchantedBy = null; if(target.el) target.el.classList.remove('sylvie-enchanted'); if(target.sylRig && target.sylRig.parentNode) target.sylRig.remove(); target.sylRig = null;
   target.mindWarpUntil = 0; target.mindWarpTarget = null; target.beastSurgeUntil = 0; target.hellcycleUntil = 0;
   if(target.el) target.el.classList.remove('beast-surge-active','hellcycle-active');
   target.magnetoShieldUntil = 0; target.jgMindWarpUntil = 0; if(target.el) target.el.classList.remove('magneto-shielded','astral-projecting','px-mind-stunned','jg-mind-warped','mind-crushed','wong-shield-active','diamond-form-active','diamond-form-ending','dora-active');
