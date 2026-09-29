@@ -3887,6 +3887,23 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 .battle-diff-grid{grid-template-columns:repeat(3,minmax(0,1fr)); max-width:1100px;}
 .battle-diff-card .diff-reward{align-self:flex-start; margin-top:2px; padding:6px 12px; border-radius:999px; font-family:'Anton',sans-serif; font-size:14px; letter-spacing:.04em; background:rgba(242,165,65,.14); border:1px solid rgba(242,165,65,.55); color:#ffe1a0;}
 @media (max-width:1000px){ .battle-diff-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+.battle-diff-grid{row-gap:10px;}
+#screen-battle-difficulty .page-stage,#screen-free-play .page-stage{display:flex;flex-direction:column;}
+#screen-battle-difficulty .battle-diff-grid{width:100%;max-width:1100px;margin:auto;padding-bottom:clamp(30px,8vh,90px);}
+#screen-free-play .free-play-grid{margin:auto;padding-bottom:clamp(30px,8vh,90px);}
+.diff-wins[data-for]{justify-self:center;align-self:end;padding:5px 16px;border-radius:999px;background:rgba(0,0,0,.4);border:1px solid var(--dc,#fff);font-weight:800;font-size:clamp(13px,1.9vh,17px);letter-spacing:.05em;color:#fff;}
+.diff-wins[data-for] b{font-size:1.2em;}
+.diff-wins[data-for="easy"]{--dc:#3fb96f;}.diff-wins[data-for="medium"]{--dc:#f2a541;}.diff-wins[data-for="hard"]{--dc:#e5484d;}
+.diff-wins[data-for] b{color:var(--dc);}
+.battle-total-wins{grid-column:1/-1;justify-self:center;margin-top:clamp(8px,2vh,20px);text-align:center;font-family:'Anton',sans-serif;font-size:clamp(20px,3.2vh,30px);letter-spacing:.06em;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);}
+.battle-total-wins b{color:#ffd66b;}
+.cm-wins{margin:12px 22px 4px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);}
+.cm-wins-title{font-weight:800;letter-spacing:.06em;font-size:13px;margin-bottom:6px;opacity:.85;}
+.cm-wins-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;}
+.cm-wins-row div{padding:6px 2px;border-radius:8px;background:rgba(255,255,255,.06);}
+.cm-wins-row b{display:block;font-size:20px;}
+.cm-wins-row span{font-size:11px;opacity:.75;letter-spacing:.05em;}
+
 @media (max-width:760px){ .battle-diff-grid{grid-template-columns:1fr;} }
 
 /* ---------- Unlock Character ---------- */
@@ -5507,6 +5524,9 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
         <div class="page-caption" data-i18n="battle_caption">Pick your opponent difficulty. You get 3 lives each.</div>
       </header>
       <div class="diff-grid battle-diff-grid">
+        <div class="diff-wins" data-for="easy">🏆 <b>0</b> wins</div>
+        <div class="diff-wins" data-for="medium">🏆 <b>0</b> wins</div>
+        <div class="diff-wins" data-for="hard">🏆 <b>0</b> wins</div>
         <button class="diff-card battle-diff-card" data-battle-diff="easy" style="--dc:#3fb96f" data-gp-default>
           <span class="diff-name" data-i18n="diff_easy">Easy</span>
           <span class="diff-reward">🪙 10 tokens</span>
@@ -5522,6 +5542,7 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
           <span class="diff-reward">🪙 25 tokens</span>
           <span class="diff-desc" data-i18n="battle_hard_desc">Heavyweights and healing-factor fighters. Win to earn 25 tokens.</span>
         </button>
+        <div class="battle-total-wins">🏆 Total wins: <b id="battle-total-wins">0</b></div>
       </div>
     </div>
   </div>
@@ -8231,7 +8252,7 @@ function safeJson(raw){
   try{ return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
 }
 function defaultSaveSlot(index){
-  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], unlockedSkins:[], equipped:null, mapId:DEFAULT_MAP_ID, tokens:0, pendingUnlockId:null, dummiesKilled:0 };
+  return { name:`Save Slot ${index+1}`, used:false, unlocked:[], unlockedSkins:[], equipped:null, mapId:DEFAULT_MAP_ID, tokens:0, pendingUnlockId:null, dummiesKilled:0, battleWins:{easy:0,medium:0,hard:0}, charWins:{} };
 }
 function normalizeSaveSlot(slot, index){
   const out = Object.assign(defaultSaveSlot(index), slot && typeof slot === 'object' ? slot : {});
@@ -8242,6 +8263,15 @@ function normalizeSaveSlot(slot, index){
   out.mapId = MAPS[out.mapId] ? out.mapId : DEFAULT_MAP_ID;
   out.tokens = Math.max(0, Math.floor(Number(out.tokens)) || 0);
   out.dummiesKilled = Math.max(0, Math.floor(Number(out.dummiesKilled)) || 0);
+  {
+    const cnt = v => Math.max(0, Math.floor(Number(v)) || 0);
+    const bw = (out.battleWins && typeof out.battleWins === 'object') ? out.battleWins : {};
+    out.battleWins = { easy:cnt(bw.easy), medium:cnt(bw.medium), hard:cnt(bw.hard) };
+    const cw = (out.charWins && typeof out.charWins === 'object') ? out.charWins : {};
+    const clean = {};
+    Object.keys(cw).forEach(k=>{ const w = cw[k] || {}; clean[k] = { easy:cnt(w.easy), medium:cnt(w.medium), hard:cnt(w.hard) }; });
+    out.charWins = clean;
+  }
   out.pendingUnlockId = ROSTER_ORDER.includes(out.pendingUnlockId) ? out.pendingUnlockId : null;
   out.used = !!out.used || out.unlocked.length > 0 || !!out.equipped;
   if(out.used && out.unlocked.length === 0){ out.unlocked = [FIRST_TIME_STARTER]; out.equipped = FIRST_TIME_STARTER; }
@@ -8480,6 +8510,7 @@ function showScreen(name){
   if(name==='save-slots') renderSaveSlots();
   if(name==='inventory'){ renderInventory(); queuePendingInventoryUnlock(); }
   if(name==='settings') renderSettingsScreen();
+  if(name==='battle-difficulty') renderBattleWins();
   if(name==='menu'){ updateCurrentSaveSlotLabel(); renderMenuHero(); }
   if(name==='battle' && typeof playMusic === 'function' && MUSIC.enabled) playMusic();
   if(name==='mode') renderModeScreen();
@@ -8957,6 +8988,7 @@ function openCharModal(id){
   inner.style.setProperty('--char-color', def.color);
   inner.innerHTML = `
     <div class="cm-head"><div class="char-square">${squareInner(def)}</div><div><h3>${def.name}</h3><div class="char-cat">${def.maxHealth.toLocaleString()} HP${def.passiveRegen ? ' · +' + def.passiveRegen + ' HP/s' : ''}${def.dodgeChance ? ' · ' + t('modal_dodge_label') + ' ' + Math.round(def.dodgeChance*100) + '%' : ''}</div></div></div>
+    <div class="cm-wins"><div class="cm-wins-title">🏆 BATTLE WINS</div>${(()=>{const w=charBattleWins(id);return `<div class="cm-wins-row"><div><b>${w.easy}</b><span>EASY</span></div><div><b>${w.medium}</b><span>MEDIUM</span></div><div><b>${w.hard}</b><span>HARD</span></div><div><b>${w.total}</b><span>TOTAL</span></div></div>`;})()}</div>
     <div class="cm-body">${abilityRows}</div>
     <div class="cm-foot">${hint}<button class="btn btn-small btn-secondary" id="modal-close">${t('modal_close')}</button></div>`;
   document.getElementById('modal-close').onclick = closeCharModal;
@@ -23414,6 +23446,47 @@ function renderLivesHud(popSide){
   });
 }
 
+/* ---------- Battle win tracking (Battle mode only) ---------- */
+function battleWinTotals(){
+  const w = (SAVE && SAVE.battleWins) || {};
+  const e = w.easy|0, m = w.medium|0, h = w.hard|0;
+  return { easy:e, medium:m, hard:h, total:e+m+h };
+}
+function charBattleWins(id){
+  // Variants/skins share one counter with their base fighter (and each other).
+  const base = baseIdForPlayable(id);
+  const all = (SAVE && SAVE.charWins) || {};
+  let e = 0, m = 0, h = 0;
+  Object.keys(all).forEach(k=>{
+    if(baseIdForPlayable(k) !== base) return;
+    const w = all[k] || {};
+    e += w.easy|0; m += w.medium|0; h += w.hard|0;
+  });
+  return { easy:e, medium:m, hard:h, total:e+m+h };
+}
+function recordBattleWin(diff, charId){
+  if(!['easy','medium','hard'].includes(diff)) diff = 'medium';
+  SAVE.battleWins = SAVE.battleWins || {easy:0,medium:0,hard:0};
+  SAVE.battleWins[diff] = (SAVE.battleWins[diff]|0) + 1;
+  if(charId){
+    charId = baseIdForPlayable(charId);
+    SAVE.charWins = SAVE.charWins || {};
+    const w = SAVE.charWins[charId] = SAVE.charWins[charId] || {easy:0,medium:0,hard:0};
+    w[diff] = (w[diff]|0) + 1;
+  }
+  persistActiveSave();
+  renderBattleWins();
+}
+function renderBattleWins(){
+  const t = battleWinTotals();
+  ['easy','medium','hard'].forEach(d=>{
+    const el = document.querySelector('.diff-wins[data-for="'+d+'"] b');
+    if(el) el.textContent = t[d].toLocaleString();
+  });
+  const tot = document.getElementById('battle-total-wins');
+  if(tot) tot.textContent = t.total.toLocaleString();
+}
+
 // Returns { text, tone } for the results screen and applies any tokens / unlocks.
 function settleMatchRewards(isWin, isPvp){
   const none = { text:'', tone:'' };
@@ -23421,6 +23494,7 @@ function settleMatchRewards(isWin, isPvp){
   if(state.matchKind === 'battle'){
     if(!isWin) return { text:t('reward_battle_lose'), tone:'lose' };
     const payout = BATTLE_WIN_TOKENS[state.battleDifficulty] || BATTLE_WIN_TOKENS.medium;
+    recordBattleWin(state.battleDifficulty, state.player && state.player.def && state.player.def.id);
     addTokens(payout);
     return { text:t('reward_battle_win').replace('{n}', payout).replace('{total}', getTokens().toLocaleString()), tone:'gain' };
   }
