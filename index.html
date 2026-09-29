@@ -6617,7 +6617,7 @@ const CHARACTERS = {
     }
   },
   ghostrider: {
-    id:'ghostrider', name:'Ghost Rider', img:'GhostRider.jpg', color:'#1a1a1a', accentColor:'#ff6a2b',
+    id:'ghostrider', name:'Ghost Rider', img:'GhostRider.jpg', color:'#1a1a1a', accentColor:'#ff6a2b', aiStyle:'ghostrider',
     maxHealth:22000,
     description:'The Spirit of Vengeance. A flaming hellfire chain for reach, a Penance Stare that burns sinners to their core once per match, and his Hellcycle to tear across the arena at blistering speed.',
     abilities:{
@@ -9216,6 +9216,7 @@ function makeFighter(charId, isBot, spawnX, idOverride){
     turnPending:null,
     yonduArrow:null, holoSuitUntil:0,
     aiMoveDir:0, aiJumpPulse:false, aiDropPulse:false, aiTimer:0, aiNextFourthWall:0,
+    aiFlightToggleLockUntil:0, aiFlightStartedAt:0,
     el:null, overheadFillEl:null, shieldEl:null, flightEl:null, thrusterEl:null,
   };
 }
@@ -22775,9 +22776,48 @@ function updateBotAI(dtF){
     if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'mage'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
-    if(cdReady(bot,'Q',t) && adist <= qAb.radius + 25){ tryUseAbility(bot,player,'Q'); return; }
-    if(cdReady(bot,'E',t) && adist < 850){ tryUseAbility(bot,player,'E'); return; }
-    if(cdReady(bot,'R',t) && (adist > 420 || Math.abs(vertical)>130 || hpPct < 0.35)){ tryUseAbility(bot,player,'R'); return; }
+
+    if(bot.def.id === 'jeangrey'){
+      // Jean Grey's flight is a persistent stance, not a movement pulse. The old
+      // AI could toggle a zero-cooldown R every decision tick when the distance/
+      // height thresholds flipped, causing rapid fly -> unfly -> fly spam.
+      // Give the toggle a deliberate minimum hold time and only leave flight once
+      // Jean has actually reached a useful firing position.
+      const flightLocked = t < (bot.aiFlightToggleLockUntil || 0);
+      const flightAge = t - (bot.aiFlightStartedAt || 0);
+      const verticalGap = Math.abs(vertical);
+      const needsFlight = verticalGap > 105 || adist > 560;
+      const goodGroundPosition = adist <= 420 && verticalGap <= 85;
+      const canToggleFlight = cdReady(bot,'R',t) && !flightLocked;
+
+      if(!bot.flight && canToggleFlight && needsFlight){
+        if(tryUseAbility(bot, player, 'R')){
+          bot.aiFlightStartedAt = t;
+          bot.aiFlightToggleLockUntil = t + 2800;
+          return;
+        }
+      }
+
+      if(bot.flight && canToggleFlight && flightAge >= 1800 && goodGroundPosition){
+        if(tryUseAbility(bot, player, 'R')){
+          bot.aiFlightToggleLockUntil = t + 1100;
+          return;
+        }
+      }
+
+      // While airborne, Jean should actually capitalize on the flight instead of
+      // spending the whole stance toggling it. Keep her ranged pressure active.
+      if(cdReady(bot,'Q',t) && adist <= qAb.radius + 25 && verticalGap <= 220){
+        tryUseAbility(bot,player,'Q'); return;
+      }
+      if(cdReady(bot,'E',t) && adist < 1050){
+        tryUseAbility(bot,player,'E'); return;
+      }
+    } else {
+      if(cdReady(bot,'Q',t) && adist <= qAb.radius + 25){ tryUseAbility(bot,player,'Q'); return; }
+      if(cdReady(bot,'E',t) && adist < 850){ tryUseAbility(bot,player,'E'); return; }
+      if(cdReady(bot,'R',t) && (adist > 420 || Math.abs(vertical)>130 || hpPct < 0.35)){ tryUseAbility(bot,player,'R'); return; }
+    }
   } else if(style === 'wong'){
     const eAb=bot.def.abilities.E;
     if(cdReady(bot,'R',t) && (hpPct < 0.32 || incomingProjectile || missile || adist < 110) && Math.random()<0.82){ tryUseAbility(bot,player,'R'); return; }
@@ -22948,6 +22988,21 @@ function updateBotAI(dtF){
     if(!bot.flight && cdReady(bot,'R',t)){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'Q',t) && adist <= qAb.radius + 20 && Math.abs(vertical) < 90){ tryUseAbility(bot,player,'Q'); return; }
     if(cdReady(bot,'E',t) && adist < 950){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'ghostrider'){
+    const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
+    // Ghost Rider was missing an aiStyle, so he fell through the entire
+    // style-specific section and never selected an attack. Give him a simple
+    // offense-first plan: chain at range, use Penance Stare when he has a clean
+    // line, and use Hellcycle as mobility when he needs to close distance.
+    if(cdReady(bot,'Q',t) && adist <= (qAb.hitRange || 900) && Math.abs(vertical) <= (qAb.hitVertical || 300)){
+      tryUseAbility(bot,player,'Q'); return;
+    }
+    if(cdReady(bot,'E',t) && adist < 1100){
+      tryUseAbility(bot,player,'E'); return;
+    }
+    if(cdReady(bot,'R',t) && (adist > 520 || hpPct < 0.45) && Math.random() < 0.45){
+      tryUseAbility(bot,player,'R'); return;
+    }
   } else if(style === 'zemo'){
     const eAb=bot.def.abilities.E, qAb=bot.def.abilities.Q, rAb=bot.def.abilities.R;
     if(cdReady(bot,'R',t) && adist < (rAb.radius||520) && (hpPct < 0.7 || adist < 260) && Math.random()<0.7){ tryUseAbility(bot,player,'R'); return; }
