@@ -4914,18 +4914,70 @@ body:has(#screen-battle.active), #app:has(#screen-battle.active){overflow:hidden
 /* ===================== SYLVIE ===================== */
 .enh-aura.syl{--a1:rgba(61,220,132,.24);--a2:rgba(255,214,107,.13);--pc:#b8ffd2}.enh-aura.syl i{border-radius:50% 0 50% 0;width:5px;height:7px}
 .fighter.sylvie .fighter-square{border-color:#7dffb0;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 12px 24px rgba(0,0,0,.28),0 0 20px rgba(61,220,132,.22);}
-.sylvie-dagger-held{position:absolute;left:48px;top:8px;width:14px;height:44px;z-index:7;pointer-events:none;opacity:0;transform:rotate(-28deg);transform-origin:50% 78%;filter:drop-shadow(0 0 4px #3ddc84) drop-shadow(0 0 9px rgba(255,214,107,.65));}
-.sylvie-dagger-held i{position:absolute;display:block;}
-.sylvie-dagger-held .sd-glow{left:-14px;top:-4px;width:42px;height:54px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,200,.66),rgba(61,220,132,.22) 55%,transparent 74%);}
-.sylvie-dagger-held .sd-blade{left:2px;top:0;width:10px;height:30px;background:linear-gradient(90deg,#9dffc4 0%,#ffffff 48%,#2fbf74 100%);clip-path:polygon(50% 0,100% 100%,0 100%);}
-.sylvie-dagger-held .sd-guard{left:0;top:29px;width:14px;height:4px;border-radius:2px;background:linear-gradient(90deg,#b8862a,#ffe28a,#b8862a);}
-.sylvie-dagger-held .sd-hilt{left:5px;top:33px;width:4px;height:11px;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#ffd66b,#5a3d12);}
-.sylvie-dagger-held.active{animation:sylvieDaggerSlash .34s cubic-bezier(.18,.82,.2,1) both;}
-.fighter.sylvie.facing-left .sylvie-dagger-held{left:auto;right:48px;transform:scaleX(-1) rotate(-28deg);}
-.fighter.sylvie.facing-left .sylvie-dagger-held.active{animation:sylvieDaggerSlashLeft .34s cubic-bezier(.18,.82,.2,1) both;}
-@keyframes sylvieDaggerSlash{0%{opacity:0;transform:translate(5px,2px) rotate(18deg) scale(.82);}22%{opacity:1;transform:translate(0,0) rotate(-44deg) scale(1.05);}55%{opacity:1;transform:translate(5px,2px) rotate(-72deg) scale(1.1);}100%{opacity:0;transform:translate(8px,4px) rotate(-18deg) scale(.86);}}
-@keyframes sylvieDaggerSlashLeft{0%{opacity:0;transform:scaleX(-1) translate(-5px,2px) rotate(18deg) scale(.82);}22%{opacity:1;transform:scaleX(-1) translate(0,0) rotate(-44deg) scale(1.05);}55%{opacity:1;transform:scaleX(-1) translate(-5px,2px) rotate(-72deg) scale(1.1);}100%{opacity:0;transform:scaleX(-1) translate(-8px,4px) rotate(-18deg) scale(.86);}}
+/* Held dagger reuses the exact same visual pieces as Sylvie's original thrown dagger. */
+.sylvie-dagger-held{--syl-dir:1;--syl-x:4px;position:absolute;left:30px;top:-6px;width:78px;height:78px;z-index:40;pointer-events:none;opacity:0;overflow:visible;transform:translate(0,0) scaleX(var(--syl-dir));transform-origin:50% 50%;filter:drop-shadow(0 0 7px #3dff9d) drop-shadow(0 0 14px rgba(61,220,132,.55));}
+.sylvie-dagger-held .syl-dagger{position:absolute;left:50%;top:50%;width:18px;height:48px;margin:-24px 0 0 -9px;animation:none;transform:rotate(58deg) scale(1.08);transform-origin:50% 50%;filter:drop-shadow(0 0 5px #3ddc84) drop-shadow(0 0 12px rgba(255,214,107,.7));}
+.sylvie-dagger-held .syl-dagger i{position:absolute;display:block;}
+.sylvie-dagger-held .syl-dagger .sd-glow{left:-16px;top:-6px;width:50px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,200,.7),rgba(61,220,132,.25) 55%,transparent 74%);}
+.sylvie-dagger-held .syl-dagger .sd-blade{left:3px;top:0;width:12px;height:32px;background:linear-gradient(90deg,#9dffc4 0%,#ffffff 48%,#2fbf74 100%);clip-path:polygon(50% 0,100% 100%,0 100%);}
+.sylvie-dagger-held .syl-dagger .sd-guard{left:0;top:31px;width:18px;height:4px;border-radius:2px;background:linear-gradient(90deg,#b8862a,#ffe28a,#b8862a);}
+.sylvie-dagger-held .syl-dagger .sd-hilt{left:7px;top:35px;width:4px;height:13px;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#ffd66b,#5a3d12);}
+.fighter.sylvie.facing-left .sylvie-dagger-held{left:auto;right:30px;--syl-dir:-1;--syl-x:-4px;}
+.sylvie-dagger-held.active{animation:sylvieDaggerSlash .42s cubic-bezier(.16,.84,.2,1) both;}
+@keyframes sylvieDaggerSlash{
+  0%{opacity:0;transform:translate(calc(var(--syl-x)),12px) scaleX(var(--syl-dir)) rotate(-18deg) scale(.82);}
+  14%{opacity:1;transform:translate(calc(var(--syl-x)),6px) scaleX(var(--syl-dir)) rotate(22deg) scale(1);}
+  42%{opacity:1;transform:translate(calc(var(--syl-x) * .5),1px) scaleX(var(--syl-dir)) rotate(-32deg) scale(1.12);}
+  68%{opacity:1;transform:translate(calc(var(--syl-x) * -1),3px) scaleX(var(--syl-dir)) rotate(-66deg) scale(1.08);}
+  100%{opacity:0;transform:translate(calc(var(--syl-x) * -2),12px) scaleX(var(--syl-dir)) rotate(-18deg) scale(.9);}
+}
 @media (prefers-reduced-motion:reduce){.sylvie-dagger-held{animation:none!important;opacity:0!important;}}
+/* Sylvie held dagger v2: hilt anchored at her hand, flips with facing */
+.syl-held{position:absolute;left:32px;top:34px;width:0;height:0;z-index:40;pointer-events:none;opacity:0;overflow:visible;transform:scaleX(1);}
+.fighter.facing-left .syl-held{transform:scaleX(-1);}
+.syl-held-arm{position:absolute;left:0;top:0;width:30px;height:100px;margin:-92px 0 0 -15px;transform-origin:15px 92px;transform:translate(24px,0) rotate(-70deg);filter:drop-shadow(0 0 4px #3dff9d) drop-shadow(0 0 10px rgba(61,220,132,.6));}
+.syl-held-arm svg{width:100%;height:100%;display:block;overflow:visible;}
+.syl-held-arm .sdh-aura{animation:sdhPulse .16s ease-in-out infinite alternate;}
+@keyframes sdhPulse{to{opacity:.4}}
+.syl-held.active{opacity:1;animation:sdhShow .42s linear both;}
+.syl-held.active .syl-held-arm{animation:sdhSwing .42s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes sdhShow{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+@keyframes sdhSwing{
+  0%{transform:translate(22px,2px) rotate(-95deg) scale(.85);}
+  30%{transform:translate(24px,-2px) rotate(-60deg) scale(1.05);}
+  65%{transform:translate(28px,2px) rotate(78deg) scale(1.12);}
+  100%{transform:translate(26px,4px) rotate(100deg) scale(1);}
+}
+@media (prefers-reduced-motion:reduce){.syl-held.active,.syl-held.active .syl-held-arm{animation:none;}}
+
+/* Large emerald slash FX: deliberately sits behind the fighter/weapon so the dagger stays readable. */
+.sylvie-dagger-slash-fx{position:absolute;pointer-events:none;z-index:1;overflow:visible;}
+.sylvie-dagger-slash-fx .sds-arc{position:absolute;left:-2px;top:-20px;width:154px;height:92px;border:7px solid transparent;border-top-color:#50ffae;border-right-color:#12d978;border-radius:58% 64% 48% 56%;transform:rotate(-24deg);filter:drop-shadow(0 0 7px #3dff9d) drop-shadow(0 0 20px #00d47a) drop-shadow(0 0 34px rgba(61,255,157,.65));animation:sylvieDaggerArc .42s cubic-bezier(.14,.78,.18,1) both;}
+.sylvie-dagger-slash-fx .sds-arc2{position:absolute;left:12px;top:-10px;width:178px;height:72px;border:3px solid transparent;border-top-color:#b8ffd2;border-right-color:#3dff9d;border-radius:52% 68% 42% 58%;transform:rotate(-18deg);filter:drop-shadow(0 0 8px #3dff9d);animation:sylvieDaggerArc2 .5s cubic-bezier(.12,.78,.18,1) both;}
+.sylvie-dagger-slash-fx .sds-burst{position:absolute;left:46px;top:14px;width:68px;height:68px;border-radius:50%;background:radial-gradient(circle,#e8fff4 0%,#8affc3 10%,#3dff9d 29%,#00d47a 48%,transparent 73%);filter:blur(1px) drop-shadow(0 0 18px #3dff9d);animation:sylvieDaggerBurst .34s ease-out both;}
+.sylvie-dagger-slash-fx .sds-glint{position:absolute;left:42px;top:24px;width:76px;height:6px;border-radius:999px;background:linear-gradient(90deg,transparent,#effff7,#7dffb0,#effff7,transparent);box-shadow:0 0 10px #fff,0 0 22px #3dff9d,0 0 34px #00d47a;transform:rotate(-24deg);animation:sylvieDaggerGlint .28s ease-out .03s both;}
+.sylvie-dagger-slash-fx .sds-particle{position:absolute;width:7px;height:7px;border-radius:50%;background:#b8ffd2;box-shadow:0 0 8px #3dff9d,0 0 16px #00d47a;}
+.sylvie-dagger-slash-fx .sds-p1{left:8px;top:50px;animation:sylvieDaggerPart1 .44s ease-out both;}
+.sylvie-dagger-slash-fx .sds-p2{left:52px;top:-2px;width:9px;height:9px;background:#6dffb5;animation:sylvieDaggerPart2 .48s ease-out .01s both;}
+.sylvie-dagger-slash-fx .sds-p3{left:118px;top:4px;width:6px;height:6px;background:#d7ffea;animation:sylvieDaggerPart3 .4s ease-out .02s both;}
+.sylvie-dagger-slash-fx .sds-p4{left:136px;top:45px;width:5px;height:5px;background:#39f89a;animation:sylvieDaggerPart4 .46s ease-out .03s both;}
+@keyframes sylvieDaggerArc{0%{opacity:0;transform:rotate(-62deg) scale(.45);}22%{opacity:1;}100%{opacity:0;transform:rotate(18deg) scale(1.2) translateX(12px);}}
+@keyframes sylvieDaggerArc2{0%{opacity:0;transform:rotate(-72deg) scale(.5);}25%{opacity:.95;}100%{opacity:0;transform:rotate(10deg) scale(1.25) translateX(22px);}}
+@keyframes sylvieDaggerBurst{0%{opacity:0;transform:scale(.25);}25%{opacity:1;}100%{opacity:0;transform:scale(1.45);}}
+@keyframes sylvieDaggerGlint{0%{opacity:0;transform:translateX(-16px) rotate(-24deg) scaleX(.3);}35%{opacity:1;}100%{opacity:0;transform:translateX(28px) rotate(-24deg) scaleX(1.35);}}
+@keyframes sylvieDaggerPart1{to{opacity:0;transform:translate(-22px,22px) scale(.25);}}
+@keyframes sylvieDaggerPart2{to{opacity:0;transform:translate(18px,-28px) scale(.3);}}
+@keyframes sylvieDaggerPart3{to{opacity:0;transform:translate(26px,-12px) scale(.25);}}
+@keyframes sylvieDaggerPart4{to{opacity:0;transform:translate(24px,14px) scale(.25);}}
+@media (prefers-reduced-motion:reduce){.sylvie-dagger-slash-fx .sds-arc,.sylvie-dagger-slash-fx .sds-arc2,.sylvie-dagger-slash-fx .sds-burst,.sylvie-dagger-slash-fx .sds-glint,.sylvie-dagger-slash-fx .sds-particle{animation:none;opacity:0;}}
+.syl-dagger{position:absolute;left:50%;top:50%;width:18px;height:48px;margin:-24px 0 0 -9px;animation:sylSpin .38s linear infinite;filter:drop-shadow(0 0 5px #3ddc84) drop-shadow(0 0 12px rgba(255,214,107,.7));}
+.syl-dagger i{position:absolute;display:block;}
+.syl-dagger .sd-glow{left:-16px;top:-6px;width:50px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,200,.7),rgba(61,220,132,.25) 55%,transparent 74%);}
+.syl-dagger .sd-blade{left:3px;top:0;width:12px;height:32px;background:linear-gradient(90deg,#9dffc4 0%,#ffffff 48%,#2fbf74 100%);clip-path:polygon(50% 0,100% 100%,0 100%);}
+.syl-dagger .sd-guard{left:0;top:31px;width:18px;height:4px;border-radius:2px;background:linear-gradient(90deg,#b8862a,#ffe28a,#b8862a);}
+.syl-dagger .sd-hilt{left:7px;top:35px;width:4px;height:13px;border-radius:0 0 2px 2px;background:linear-gradient(180deg,#ffd66b,#5a3d12);}
+@keyframes sylSpin{to{transform:rotate(360deg)}}
+
 .syl-dagger{position:absolute;left:50%;top:50%;width:18px;height:48px;margin:-24px 0 0 -9px;animation:sylSpin .38s linear infinite;filter:drop-shadow(0 0 5px #3ddc84) drop-shadow(0 0 12px rgba(255,214,107,.7));}
 .syl-dagger i{position:absolute;display:block;}
 .syl-dagger .sd-glow{left:-16px;top:-6px;width:50px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(160,255,200,.7),rgba(61,220,132,.25) 55%,transparent 74%);}
@@ -9755,7 +9807,7 @@ function buildFighterDOM(f){
       <div class="fighter-square">${squareInner(f.def)}</div>
       ${enhHeldHtml(f.def.id)}
       ${f.def.id==='clea' ? '<div class="clea-blade-held" aria-hidden="true">'+cleaBladeSvg()+'</div>' : ''}
-      ${f.def.id==='sylvie' ? '<div class="sylvie-dagger-held" aria-hidden="true"><i class="sd-glow"></i><i class="sd-blade"></i><i class="sd-guard"></i><i class="sd-hilt"></i></div>' : ''}
+      ${f.def.id==='sylvie' ? '<div class="syl-held" aria-hidden="true"><div class="syl-held-arm"><svg viewBox="0 0 30 100" aria-hidden="true"><defs><linearGradient id="sylBladeG" x1="0" x2="1"><stop offset="0" stop-color="#5fe7a0"/><stop offset=".45" stop-color="#ffffff"/><stop offset="1" stop-color="#22b26a"/></linearGradient></defs><path class="sdh-aura" d="M15 0 C25 20 26 46 22 62 L8 62 C4 46 5 20 15 0Z" fill="rgba(90,255,170,.35)"/><path d="M15 2 C23 20 24 44 21 60 L9 60 C6 44 7 20 15 2Z" fill="url(#sylBladeG)" stroke="#0f7a45" stroke-width="1"/><path d="M15 8 L15 58" stroke="#2fbf74" stroke-width="1.6" stroke-linecap="round" opacity=".7"/><path d="M12 30 C12 42 12 50 12.5 58" stroke="#fff" stroke-width="1" opacity=".8" fill="none"/><path d="M3 60 Q15 55 27 60 L25 66 Q15 62 5 66Z" fill="#e8b93c" stroke="#7a5510" stroke-width="1"/><circle cx="15" cy="62" r="2.2" fill="#3dff9d" stroke="#0f7a45" stroke-width=".6"/><rect x="11.5" y="66" width="7" height="22" rx="2" fill="#4a2f12" stroke="#22140a" stroke-width="1"/><path d="M11.5 71 L18.5 68 M11.5 76 L18.5 73 M11.5 81 L18.5 78" stroke="#e8b93c" stroke-width="1.3"/><circle cx="15" cy="92" r="4.6" fill="#e8b93c" stroke="#7a5510" stroke-width="1"/><circle cx="15" cy="92" r="1.8" fill="#3dff9d"/></svg></div></div>' : ''}
       ${f.def.id==='redskull' ? `<div class="held-ranged-weapon held-redskull-gun" aria-hidden="true">${redSkullHeldGunSvg()}</div>` : ''}
       ${f.def.id==='nickfury' ? `<div class="held-ranged-weapon held-nickfury-gun" aria-hidden="true">${nickFuryHeldGunSvg()}</div><div class="held-ranged-weapon held-nickfury-bazooka" aria-hidden="true">${nickFuryHeldBazookaSvg()}</div>` : ''}
       ${f.def.id==='starlord' ? `<div class="held-ranged-weapon held-starlord-gun b" aria-hidden="true">${starLordBlasterSvg()}</div><div class="held-ranged-weapon held-starlord-gun a" aria-hidden="true">${starLordBlasterSvg()}</div>` : ''}
@@ -12000,7 +12052,7 @@ function executeAbility(caster, target, ability, t){
       //  - a swing whose attacker got knocked away mid-swing doesn't keep its hit.
       const startX = caster.x, startY = caster.y, faceAtStart = caster.facing;
       if(caster.def.id==='sylvie' && ability.name==='Enchanted Dagger'){
-        activateHeldWeapon(caster, '.sylvie-dagger-held', 360, caster.isBot ? caster.facing : dirSignTo(caster, target));
+        activateHeldWeapon(caster, '.syl-held', 440, caster.facing);
       }
       if(caster.def.id==='thor_infinitywar' && ability.name==='Stormbreaker'){
         activateHeldWeapon(caster,'.stormbreaker-held',460,caster.facing);
@@ -14133,10 +14185,15 @@ Object.assign(ENH_SFX,{
 });
 /* ---------------- VISUALS ---------------- */
 Object.assign(ENH_FX,{
-  sylvie_dagger:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,SY[0],300); const x=cx+dir*32;
-    ENH.flash(x,cy,28,SY[3],220); ENH.ring(x,cy,26,SY[0],320); ENH.ring(x,cy,16,SY[1],260,true,2);
-    ENH.slash(x,cy-4,dir,120,64,SY[0],SY[2],260);
-    ENH.streaks(x,cy,SY[1],7,54,300,dir>0?-30:150,60); ENH.parts(x,cy,9,[SY[0],SY[1],SY[2]],40,340,{size:3,br:'1px'}); },
+  sylvie_dagger:(f,a,tg,cx,cy,dir)=>{ ENH.body(f,SY[0],300);
+    const x = cx + dir*6, y = cy - 6;
+    const el = fxEl('sylvie-dagger-slash-fx',`left:${cx-dir*8}px;top:${y-22}px;width:112px;height:58px;transform-origin:0 50%;transform:scaleX(${dir});`,520,
+      '<div class="sds-arc"></div><div class="sds-arc2"></div><div class="sds-burst"></div><div class="sds-glint"></div><i class="sds-particle sds-p1"></i><i class="sds-particle sds-p2"></i><i class="sds-particle sds-p3"></i><i class="sds-particle sds-p4"></i>');
+    if(f.el){
+      f.el.classList.remove('sylvie-dagger-swing'); void f.el.offsetWidth; f.el.classList.add('sylvie-dagger-swing');
+      setTimeout(()=>{ if(f.el) f.el.classList.remove('sylvie-dagger-swing'); },380);
+    }
+  },
   sylvie_eruption:(f,a,tg,cx,cy,dir)=>{ const R=a.radius||165, gy=f.y+FIGHTER_SIZE;
     ENH.body(f,SY[0],520); ENH.flash(cx,cy,R*.55,SY[0],300); ENH.ring(cx,cy,R*.5,SY[1],320,true,3); ENH.ring(cx,cy,R*.34,SY[3],300,true,2);
     setTimeout(()=>{ if(!live()) return;
