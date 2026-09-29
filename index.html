@@ -24006,20 +24006,52 @@ function gpScrollCandidates(){
   push(document.scrollingElement);
   return list;
 }
-function gpStickScroll(){
-  let y = 0;
-  livePads.forEach(gp=>{
-    const v = gp.axes && gp.axes.length > 3 ? (gp.axes[3] || 0) : 0;
-    if(Math.abs(v) > Math.abs(y)) y = v;
+const gpScrollBase = {};
+function gpPadScrollY(gp){
+  // Works for every connected controller: standard-mapped pads use the right
+  // stick's vertical axis (3); other pads are probed on axes 3-5, ignoring any
+  // axis that rests away from centre (those are analog triggers).
+  if(!gp || !gp.axes) return 0;
+  const n = gp.axes.length;
+  if(n < 4) return 0;
+  const key = gp.index + ':' + gp.id;
+  let base = gpScrollBase[key];
+  if(!base){ base = gpScrollBase[key] = gp.axes.map(v => v || 0); }
+  let best = 0;
+  const cands = gp.mapping === 'standard' ? [3] : [3, 4, 5].filter(k => k < n);
+  cands.forEach(k=>{
+    const rest = base[k] || 0;
+    if(gp.mapping !== 'standard' && Math.abs(rest) > 0.3) return;
+    const v = (gp.axes[k] || 0) - (gp.mapping === 'standard' ? 0 : rest);
+    if(Math.abs(v) > Math.abs(best)) best = v;
   });
-  if(Math.abs(y) < GAMEPAD_DEADZONE) return;
-  const dir = y > 0 ? 1 : -1, mag = (Math.abs(y) - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE);
-  const px = dir * (4 + mag * 22);
-  for(const el of gpScrollCandidates()){
-    const before = el.scrollTop;
-    el.scrollTop = before + px;
-    if(el.scrollTop !== before) break;
+  return Math.abs(best) < GAMEPAD_DEADZONE ? 0 : Math.max(-1, Math.min(1, best));
+}
+function gpScrollEl(el, y){
+  if(!el) return false;
+  const mag = (Math.abs(y) - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE);
+  const before = el.scrollTop;
+  el.scrollTop = before + (y > 0 ? 1 : -1) * (4 + mag * 22);
+  return el.scrollTop !== before;
+}
+function gpStickScroll(){
+  // Fighter select: every player's right stick scrolls THEIR OWN roster panel.
+  if(activeScreenName() === 'versus' && !activeModalEl()){
+    try{
+      const n = versus.count, active = getVersusSelectionSlots();
+      for(let slot = 0; slot < n; slot++){
+        const ps = active[slot] ?? slot;
+        const info = versus.slots[ps];
+        const y = gpPadScrollY(info && livePadByIndex(info.index));
+        if(y) gpScrollEl(document.getElementById('vs-scroll-' + slot), y);
+      }
+    }catch(e){}
+    return;
   }
+  let y = 0;
+  livePads.forEach(gp=>{ const v = gpPadScrollY(gp); if(Math.abs(v) > Math.abs(y)) y = v; });
+  if(!y) return;
+  for(const el of gpScrollCandidates()){ if(gpScrollEl(el, y)) break; }
 }
 
 function pollGamepad(){
