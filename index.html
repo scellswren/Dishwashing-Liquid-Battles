@@ -5902,6 +5902,74 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
 /* ---------------- Thor: phasing through platforms ---------------- */
 .fighter.thor-phasing .fighter-square{opacity:.62;filter:brightness(1.6) saturate(1.3) drop-shadow(0 0 14px #b8e8ff)}
 </style>
+<style>
+/* ===== New variants: Weapon XI / Phoenix Force / Cosmic Ghost Rider + Scarlet Witch upgrade ===== */
+.phx-screen{position:absolute;pointer-events:none;z-index:40;mix-blend-mode:screen;background:radial-gradient(circle at 50% 50%,var(--c),transparent 78%);animation:phxScreen var(--l) ease-out forwards;}
+@keyframes phxScreen{0%{opacity:0}12%{opacity:.95}100%{opacity:0}}
+.wxi-beam{position:absolute;pointer-events:none;z-index:12;height:5px;border-radius:3px;background:linear-gradient(90deg,#fff,#ff2b2b 30%,#ff2b2b 70%,transparent);box-shadow:0 0 14px #ff2b2b,0 0 32px #ff2b2b;animation:wxiBeam .42s ease-out forwards;}
+.wxi-beam.rev{background:linear-gradient(270deg,#fff,#ff2b2b 30%,#ff2b2b 70%,transparent);}
+@keyframes wxiBeam{0%{opacity:0;transform:scaleY(.2)}15%{opacity:1;transform:scaleY(1.6)}100%{opacity:0;transform:scaleY(.1)}}
+.wxi-laser-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;filter:none!important;}
+.wxi-laser-core{position:absolute;left:0;right:0;top:32%;height:36%;border-radius:6px;background:linear-gradient(90deg,transparent,#ff5a4d 12%,#fff 50%,#ff5a4d 88%,#fff);box-shadow:0 0 12px #ff2b2b,0 0 30px #ff2b2b,0 0 60px rgba(255,43,43,.7);}
+.wxi-laser-halo{position:absolute;left:-30%;right:-8%;top:-60%;bottom:-60%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,60,60,.55),transparent 70%);animation:wxiPulse .1s linear infinite alternate;}
+@keyframes wxiPulse{from{opacity:.6}to{opacity:1}}
+.phx-fire-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;filter:drop-shadow(0 0 10px #ff9a1a) drop-shadow(0 0 26px #ff3d1a);}
+.phx-fire-core{position:absolute;inset:4% 8%;border-radius:50%;background:radial-gradient(circle at 60% 45%,#fff 0 14%,#fff2a0 26%,#ffb31a 52%,#ff3d1a 80%,transparent 100%);animation:phxFlick .12s ease-in-out infinite alternate;}
+.phx-fire-tail{position:absolute;top:8%;height:84%;width:130%;right:70%;border-radius:50% 0 0 50%;background:linear-gradient(270deg,#ffb31acc,#ff3d1a88 55%,transparent);filter:blur(3px);}
+.phx-fire-projectile.rev .phx-fire-tail{right:auto;left:70%;background:linear-gradient(90deg,#ffb31acc,#ff3d1a88 55%,transparent);border-radius:0 50% 50% 0;}
+@keyframes phxFlick{from{transform:scale(.94)}to{transform:scale(1.1)}}
+.phx-bird-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:phxBird .2s ease-in-out infinite alternate!important;filter:drop-shadow(0 0 16px #ffb31a) drop-shadow(0 0 46px #ff3d1a)!important;}
+.phx-bird-projectile svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.phx-bird-halo{position:absolute;inset:-45%;border-radius:50%;background:radial-gradient(circle,rgba(255,240,150,.55),rgba(255,120,30,.28) 45%,transparent 70%);animation:phxFlick .16s ease-in-out infinite alternate;}
+@keyframes phxBird{from{transform:scale(.96) translateY(2px)}to{transform:scale(1.06) translateY(-3px)}}
+.cosmic-chain-projectile{overflow:visible!important;background:transparent!important;box-shadow:none!important;animation:none!important;filter:drop-shadow(0 0 8px #5ad1ff) drop-shadow(0 0 20px #a45bff);}
+.cosmic-chain-links{position:absolute;left:0;right:22%;top:30%;height:40%;background:repeating-linear-gradient(90deg,#fff 0 7px,#5ad1ff 7px 11px,#1b2a55 11px 15px);border-radius:4px;animation:cosmicLinks .25s linear infinite;}
+@keyframes cosmicLinks{from{background-position:0 0}to{background-position:15px 0}}
+.cosmic-chain-head{position:absolute;right:-6%;top:-25%;width:36%;height:150%;border-radius:50%;background:radial-gradient(circle,#fff 0 18%,#9fe6ff 30%,#5ad1ff 55%,#a45bff 80%,transparent);animation:phxFlick .12s ease-in-out infinite alternate;}
+.phoenix-aura{position:absolute;inset:-30px;z-index:0;pointer-events:none;border-radius:50%;background:radial-gradient(circle,#fff2a055 0,#ffb31a44 32%,#ff3d1a30 58%,transparent 76%);box-shadow:0 0 30px #ff9a1a,0 0 70px rgba(255,61,26,.75);animation:phxAura .7s ease-in-out infinite alternate;}
+.phoenix-aura i{position:absolute;bottom:38%;width:26px;height:70px;border-radius:50% 50% 30% 30%;background:linear-gradient(0deg,#ff3d1a,#ffb31a 55%,#fff2a0);filter:blur(2px);opacity:.85;animation:phxRise 1s ease-out infinite;}
+.phoenix-aura i:nth-child(1){left:6%;animation-delay:0s}.phoenix-aura i:nth-child(2){left:30%;animation-delay:.25s;height:90px}.phoenix-aura i:nth-child(3){left:56%;animation-delay:.5s;height:80px}.phoenix-aura i:nth-child(4){left:78%;animation-delay:.75s}
+@keyframes phxAura{from{opacity:.7;transform:scale(.95)}to{opacity:1;transform:scale(1.1)}}
+@keyframes phxRise{0%{transform:translateY(20px) scaleY(.6);opacity:0}25%{opacity:.9}100%{transform:translateY(-70px) scaleY(1.3);opacity:0}}
+.fighter.phoenix-jean .fighter-square{box-shadow:0 0 14px #ffb31a,0 0 34px #ff3d1a!important;}
+.cosmic-aura{position:absolute;inset:-26px;z-index:0;pointer-events:none;}
+.cosmic-aura b{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 8%,#5ad1ff 18%,transparent 30%,#a45bff 48%,transparent 62%,#9fe6ff 78%,transparent 92%);-webkit-mask:radial-gradient(circle,transparent 60%,#000 63%,#000 68%,transparent 71%);mask:radial-gradient(circle,transparent 60%,#000 63%,#000 68%,transparent 71%);filter:drop-shadow(0 0 6px #5ad1ff);animation:cgrSpin 3.2s linear infinite;}
+.cosmic-aura b:nth-of-type(2){inset:-14px;animation-duration:5.5s;animation-direction:reverse;filter:drop-shadow(0 0 6px #a45bff);opacity:.85;}
+.cosmic-aura i{position:absolute;left:50%;top:50%;width:6px;height:6px;background:#fff;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);filter:drop-shadow(0 0 4px #9fe6ff);animation:cgrOrbit var(--t) linear infinite,cgrTwinkle 1.1s ease-in-out infinite alternate;}
+.cosmic-aura i:nth-of-type(odd){background:#9fe6ff;width:8px;height:8px;}
+@keyframes cgrSpin{to{transform:rotate(360deg)}}
+@keyframes cgrOrbit{from{transform:translate(-50%,-50%) rotate(var(--a)) translateX(var(--r))}to{transform:translate(-50%,-50%) rotate(calc(var(--a) + 360deg)) translateX(var(--r))}}
+@keyframes cgrTwinkle{from{opacity:.35}to{opacity:1}}
+.wxi-blade-swing{position:absolute;width:150px;height:30px;pointer-events:none;z-index:13;transform-origin:8% 50%;filter:drop-shadow(0 0 5px rgba(200,210,225,.9));animation:wxiSwing .34s cubic-bezier(.2,.8,.2,1) forwards;}
+.wxi-blade-swing.alt{animation-name:wxiSwingAlt;}
+.wxi-blade-swing.ghost1{filter:blur(2px);animation-name:wxiSwingG1;animation-delay:.04s;animation-fill-mode:both;}
+.wxi-blade-swing.ghost2{filter:blur(3px);animation-name:wxiSwingG2;animation-delay:.08s;animation-fill-mode:both;}
+.wxi-blade-swing.alt.ghost1{animation-name:wxiSwingAG1;}.wxi-blade-swing.alt.ghost2{animation-name:wxiSwingAG2;}
+@keyframes wxiSwingG1{0%{opacity:0;transform:scaleX(var(--d)) rotate(-80deg)}14%{opacity:.4}70%{opacity:.4;transform:scaleX(var(--d)) rotate(42deg)}100%{opacity:0;transform:scaleX(var(--d)) rotate(58deg)}}
+@keyframes wxiSwingG2{0%{opacity:0;transform:scaleX(var(--d)) rotate(-80deg)}14%{opacity:.2}70%{opacity:.2;transform:scaleX(var(--d)) rotate(42deg)}100%{opacity:0;transform:scaleX(var(--d)) rotate(58deg)}}
+@keyframes wxiSwingAG1{0%{opacity:0;transform:scaleX(var(--d)) rotate(78deg)}14%{opacity:.4}70%{opacity:.4;transform:scaleX(var(--d)) rotate(-38deg)}100%{opacity:0;transform:scaleX(var(--d)) rotate(-54deg)}}
+@keyframes wxiSwingAG2{0%{opacity:0;transform:scaleX(var(--d)) rotate(78deg)}14%{opacity:.2}70%{opacity:.2;transform:scaleX(var(--d)) rotate(-38deg)}100%{opacity:0;transform:scaleX(var(--d)) rotate(-54deg)}}
+@keyframes wxiSwing{0%{opacity:0;transform:scaleX(var(--d)) rotate(-80deg)}14%{opacity:1}70%{opacity:1;transform:scaleX(var(--d)) rotate(42deg)}100%{opacity:0;transform:scaleX(var(--d)) rotate(58deg)}}
+@keyframes wxiSwingAlt{0%{opacity:0;transform:scaleX(var(--d)) rotate(78deg)}14%{opacity:1}70%{opacity:1;transform:scaleX(var(--d)) rotate(-38deg)}100%{opacity:0;transform:scaleX(var(--d)) rotate(-54deg)}}
+.fighter.cosmic-gr .hellcycle-bike{filter:hue-rotate(175deg) saturate(1.7) brightness(1.2) drop-shadow(0 0 10px #5ad1ff);}
+.fighter.cosmic-gr .fighter-square{box-shadow:0 0 12px #5ad1ff,0 0 26px #a45bff!important;}
+.phx-pillar{position:absolute;pointer-events:none;z-index:11;border-radius:40% 40% 10% 10%;background:linear-gradient(0deg,rgba(255,61,26,.9),rgba(255,179,26,.85) 45%,rgba(255,242,160,.7) 80%,transparent);filter:blur(3px);box-shadow:0 0 40px #ff9a1a;transform-origin:50% 100%;animation:phxPillar 1.3s ease-out forwards;}
+@keyframes phxPillar{0%{opacity:0;transform:scaleY(.1) scaleX(.6)}20%{opacity:1;transform:scaleY(1) scaleX(1)}70%{opacity:.85;transform:scaleY(1.05) scaleX(.8)}100%{opacity:0;transform:scaleY(1.15) scaleX(.3)}}
+/* Scarlet Witch (new): much bigger, more powerful looking effects (damage unchanged) */
+.scarlet-chaos-projectile::before{inset:-30px!important;background:radial-gradient(circle at 40% 40%,#fff 0 8%,#ffc2cb 14%,#ff4a61 34%,#c0102c 58%,rgba(120,0,20,.45) 74%,transparent 82%)!important;box-shadow:0 0 22px #ff334f,0 0 52px rgba(255,52,79,.9),0 0 90px rgba(255,20,60,.55)!important;}
+.scarlet-chaos-projectile::after{inset:-22px!important;border-width:3px!important;box-shadow:0 0 18px #ff8390,0 0 34px #ff334f,inset 0 0 12px #fff4f5!important;}
+.scarlet-hex-burst{border-width:6px!important;box-shadow:0 0 30px #ff334d,0 0 80px rgba(255,43,63,.85),inset 0 0 50px rgba(255,53,68,.4)!important;animation:scarletHexPulse .8s cubic-bezier(.2,.8,.2,1) forwards!important;}
+@keyframes scarletHexPulse{from{transform:scale(.2);opacity:1}60%{opacity:.9}to{transform:scale(2.5);opacity:0}}
+.fighter.scarlet-witch-new .scarlet-permanent-glow{inset:-26px!important;box-shadow:0 0 30px #ff304f,0 0 64px #ff304f88!important;}
+.wxi-held-blade{position:absolute;left:56%;top:44%;width:66px;height:10px;margin-top:-5px;z-index:6;pointer-events:none;transform-origin:0 50%;opacity:0;--d:1;filter:drop-shadow(0 0 3px rgba(200,210,225,.85));}
+.fighter.facing-left .wxi-held-blade{--d:-1;}
+.wxi-held-blade.s1,.wxi-held-blade.s2{animation:wxiPoke .22s cubic-bezier(.2,.8,.2,1) forwards;}
+@keyframes wxiPoke{0%{opacity:1;transform:scale(calc(var(--d)*.05),1)}45%{opacity:1;transform:scale(var(--d),1)}70%{opacity:1;transform:scale(var(--d),1)}100%{opacity:0;transform:scale(calc(var(--d)*.3),1)}}
+.wxi-tp-line{position:absolute;width:10px;height:88px;pointer-events:none;z-index:12;background:linear-gradient(180deg,transparent,#ff5a4d 25%,#fff 50%,#ff5a4d 75%,transparent);filter:blur(1px) drop-shadow(0 0 6px #ff2b2b);animation:wxiTpLine .26s ease-out forwards;}
+@keyframes wxiTpLine{0%{opacity:0;transform:scaleX(.2)}25%{opacity:1;transform:scaleX(1.4)}100%{opacity:0;transform:scaleX(.1)}}
+.fighter.wxi-blink .fighter-square{animation:wxiBlink .34s steps(1,end) both!important;}
+@keyframes wxiBlink{0%{opacity:1}14%{opacity:0}28%{opacity:.85;filter:brightness(2.4)}42%{opacity:0}58%{opacity:1;filter:brightness(2)}100%{opacity:1;filter:none}}
+</style>
 </head>
 <body>
 <div id="gamepad-banner"><span class="gp-icon">🎮</span><span>Controller connected — <span class="gp-brand" id="gp-brand-name">Controller</span></span></div>
@@ -8157,7 +8225,9 @@ const CHARACTER_SKINS = {
   groot: ['groot_king'],
   okoye: ['okoye_midnightangel'],
   blackpanther: ['blackpanther_mechstrike'],
-  deadpool: ['deadpool_nicepool'],
+  deadpool: ['deadpool_nicepool','deadpool_weaponxi'],
+  jeangrey: ['jeangrey_phoenix'],
+  ghostrider: ['ghostrider_cosmic'],
   drstrange: ['drstrange_spiritmanipulator'],
   blade: ['blade_knight'],
   hawkeye: ['hawkeye_ronin'],
@@ -8405,6 +8475,63 @@ Object.assign(CHARACTERS, {
       R:{key:'R', name:'What attack?', type:'scarletDisable', damage:0, cooldown:45000, duration:20000,
          sound:'scarlet_disable_big', fx:'scarlet_disable',
          desc:'Randomly disables one of the enemy’s E/Q/R abilities for 20 seconds.'}
+    }
+  },
+  deadpool_weaponxi: {
+    id:'deadpool_weaponxi', skinOf:'deadpool', name:'Deadpool (Weapon XI)',
+    img:'DeadpoolWeaponXI.jpg', color:'#b3202c', accentColor:'#ff5a4d', aiStyle:'deadpool',
+    skinCost:750, maxHealth:19000, passiveRegen:260,
+    description:'The Merc with a Mouth from X-Men Origins: Wolverine \u2014 mutant-powered, sewn-mouth Weapon XI. Tougher and far deadlier than regular Deadpool: adamantium-style arm blades, a laser-sight eye blast, and Nightcrawler-style teleportation.',
+    abilities:{
+      E:{key:'E', name:'Blade', type:'melee', damage:850, cooldown:800, knockback:13, range:104,
+         hitDelay:60, sound:'wxi_blade', fx:'wxi_blade', hitFx:'wxi_blade_hit', hitSound:'wxi_blade_hit',
+         desc:'Slashes with the blades in his hands for 850 damage (regular Deadpool\u2019s katana: 500). Cooldown: 0.8 seconds.'},
+      Q:{key:'Q', name:'Laser Sight', type:'projectile', damage:4600, cooldown:13000, knockback:24,
+         speed:30, w:120, h:12, color:'#ff2b2b', render:'wxi-laser', trail:'wxi-laser',
+         sound:'wxi_laser', fx:'wxi_laser', hitFx:'wxi_laser_hit', hitSound:'wxi_laser_hit',
+         desc:'Fires a piercing, near-instant laser from his eyes for 4,600 damage (regular Deadpool\u2019s leg throw: 2,000, and it hurts him). No self-damage. Cooldown: 13 seconds.'},
+      R:{key:'R', name:'Teleportation', type:'randomTeleport', damage:0, cooldown:6000,
+         sound:'wxi_teleport', fx:'wxi_teleport',
+         desc:'Vanishes and reappears in a random part of the arena. Cooldown: 6 seconds.'}
+    }
+  },
+  jeangrey_phoenix: {
+    id:'jeangrey_phoenix', skinOf:'jeangrey', name:'Jean Grey (Phoenix Force)',
+    img:'JeanGreyPhoenix Force.jpg', color:'#ff8a1a', accentColor:'#fff2a0', aiStyle:'phoenixforce',
+    skinCost:4000, maxHealth:53500,
+    description:'Jean Grey ascended \u2014 the Phoenix Force itself. The most powerful fighter in the game: colossal health, devastating cosmic fire, and the power to be reborn from her own ashes.',
+    abilities:{
+      E:{key:'E', name:'Phoenix Fire', type:'projectile', damage:3600, cooldown:900, knockback:14,
+         speed:22, w:64, h:44, color:'#ffb31a', render:'phoenix-fire', trail:'phoenix',
+         sound:'phoenix_fire', fx:'phoenix_fire', hitFx:'phoenix_fire_hit', hitSound:'phoenix_fire_hit',
+         desc:'Hurls a blazing ball of Phoenix flame for 3,600 damage. Cooldown: 0.9 seconds.'},
+      Q:{key:'Q', name:'Cosmic Firebird', type:'projectile', damage:14000, cooldown:20000, knockback:36,
+         speed:15, w:190, h:130, color:'#ff7a1a', render:'phoenix-bird', trail:'phoenix-bird',
+         sound:'phoenix_bird', fx:'phoenix_bird', hitFx:'phoenix_bird_hit', hitSound:'phoenix_bird_hit',
+         desc:'Unleashes the Phoenix as a colossal firebird that engulfs the enemy for 14,000 damage. Cooldown: 20 seconds.'},
+      R:{key:'R', name:'Phoenix Rebirth', type:'heal', damage:0, heal:4000, cooldown:30000,
+         sound:'phoenix_rebirth', fx:'phoenix_rebirth',
+         desc:'Rises from her own ashes in a pillar of fire, restoring 4,000 health. No damage. Cooldown: 30 seconds.'}
+    }
+  },
+  ghostrider_cosmic: {
+    id:'ghostrider_cosmic', skinOf:'ghostrider', name:'Ghost Rider (Cosmic Ghost Rider)',
+    img:'GhostRiderCosmic.jpg', color:'#1b2a55', accentColor:'#5ad1ff', aiStyle:'ghostrider',
+    skinCost:1500, maxHealth:36000,
+    description:'Frank Castle reborn as the Cosmic Ghost Rider \u2014 the Punisher fused with the Spirit of Vengeance and the power of the cosmos. Far tougher than the classic Ghost Rider, with a star-forged chain, a devastating Cosmic Penance Stare and a blistering Cosmic Hellcycle.',
+    abilities:{
+      E:{key:'E', name:'Cosmic Chain', type:'projectile', damage:1400, cooldown:1090, knockback:12,
+         speed:19, w:84, h:20, color:'#5ad1ff', render:'cosmic-chain', trail:'cosmic',
+         sound:'cgr_chain', fx:'cgr_chain', hitFx:'cgr_chain_hit', hitSound:'cgr_chain_hit',
+         desc:'Lashes out with a star-forged cosmic chain for 1,400 damage (classic Ghost Rider: 650). Cooldown: 1.09 seconds.'},
+      Q:{key:'Q', name:'Cosmic Penance Stare', type:'melee', damage:0, percentMaxHealth:0.45, usesPerMatch:1,
+         cooldown:1000, knockback:16, range:500,
+         hitRange:1000, hitVertical:340, hitStartSlack:200, hitDelay:300,
+         sound:'cgr_stare', fx:'cgr_stare', hitFx:'cgr_stare_hit', hitSound:'cgr_stare_hit',
+         desc:'Locks eyes with the enemy and burns every sin across the cosmos, tearing away 45% of their max health (classic: 33%). Hits from almost anywhere on screen. Once per match.'},
+      R:{key:'R', name:'Cosmic Hellcycle', type:'hellcycleMount', damage:0, cooldown:10000, duration:5000, speedMult:5,
+         sound:'cgr_cycle', fx:'cgr_cycle',
+         desc:'Summons his star-fire Hellcycle and rides it for 5 seconds at 5x speed, leaving a trail of stars. Pure mobility \u2014 no damage. Cooldown: 10 seconds.'}
     }
   },
   hulk_smart: {
@@ -10651,7 +10778,7 @@ function buildFighterDOM(f){
     ${f.def.id==='wasp' ? '<div class="wasp-wings" aria-hidden="true"><svg viewBox="0 0 120 90"><defs><linearGradient id="waspWingGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".55" stop-color="#ffd760" stop-opacity=".72"/><stop offset="1" stop-color="#e84f73" stop-opacity=".34"/></linearGradient></defs><g fill="url(#waspWingGradA)" stroke="#fff3b0" stroke-width="1.5"><path d="M58 44 C39 9 8 8 4 23 C1 38 22 51 56 48 Z"/><path d="M62 44 C81 9 112 8 116 23 C119 38 98 51 64 48 Z"/><path d="M57 49 C39 32 15 33 9 47 C8 59 29 64 57 57 Z"/><path d="M63 49 C81 32 105 33 111 47 C112 59 91 64 63 57 Z"/></g></svg></div>' : ''}
     ${f.def.id==='falcon' ? '<div class="falcon-wings" aria-hidden="true"><svg viewBox="0 0 180 110"><defs><linearGradient id="falconWingGradA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3ac"/><stop offset=".3" stop-color="#e5484d"/><stop offset=".62" stop-color="#9c1e26"/><stop offset="1" stop-color="#230608"/></linearGradient></defs><g fill="url(#falconWingGradA)" stroke="#170406" stroke-width="2"><path d="M87 55 C69 31 50 10 14 7 L22 28 L4 19 L19 43 L0 40 C25 62 52 72 85 66 Z"/><path d="M93 55 C111 31 130 10 166 7 L158 28 L176 19 L161 43 L180 40 C155 62 128 72 95 66 Z"/></g><g fill="none" stroke="#ffd2ce" stroke-width="1.3" opacity=".65"><path d="M82 52 L20 17 M81 57 L13 38 M98 52 L160 17 M99 57 L167 38"/></g></svg></div>' : ''}
     ${f.def.id==='greengoblin' ? `<div class="goblin-glider mounted" aria-hidden="true">${goblinGliderSvg(f.id)}</div>` : ''}
-    ${f.def.id==='ghostrider' ? `<div class="hellcycle-bike" aria-hidden="true">${hellcycleBikeSvg()}</div>` : ''}
+    ${(f.def.id==='ghostrider'||f.def.skinOf==='ghostrider') ? `<div class="hellcycle-bike" aria-hidden="true">${hellcycleBikeSvg()}</div>` : ''}
     ${f.def.id==='magneto' ? magnetoOrbitHtml() : ''}
     ${f.def.id==='doctoroctopus' ? `<div class="octopus-tentacles" aria-hidden="true">${octopusTentacleSvg()}</div>` : ''}
     ${(f.def.id==='groot' || f.def.id==='groot_king') ? `<div class="groot-ball" aria-hidden="true">${grootBallSvg()}</div>` : ''}
@@ -10664,6 +10791,8 @@ function buildFighterDOM(f){
     ${f.def.id==='spiderman_ironspider' ? `<div class="ironspider-rig" aria-hidden="true"><svg viewBox="0 0 180 164" role="presentation"><defs><linearGradient id="isGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a6"/><stop offset=".22" stop-color="#d7aa3b"/><stop offset=".55" stop-color="#ffe7a0"/><stop offset=".82" stop-color="#9d6d18"/><stop offset="1" stop-color="#f5c94e"/></linearGradient></defs><g class="is-leg l1"><path class="is-under" d="M90 82 L56 55 L22 25"/><path class="is-metal" d="M90 82 L56 55 L22 25"/><path class="is-highlight" d="M88 79 L56 52 L25 24"/><circle class="is-joint" cx="56" cy="55" r="8"/><circle class="is-joint-core" cx="56" cy="55" r="3.2"/><path class="is-claw" d="M22 25 l-12 -8 8 13 -13 2 15 5 8 -10z"/><path class="is-claw-accent" d="M22 25 l-8 -2 4 7z"/></g><g class="is-leg l2"><path class="is-under" d="M91 82 L58 78 L24 70"/><path class="is-metal" d="M91 82 L58 78 L24 70"/><path class="is-highlight" d="M89 79 L59 75 L28 68"/><circle class="is-joint" cx="58" cy="78" r="8"/><circle class="is-joint-core" cx="58" cy="78" r="3.2"/><path class="is-claw" d="M24 70 l-14 -5 10 9 -12 7 15 -3 5 -8z"/><path class="is-claw-accent" d="M24 70 l-9 4 6 2z"/></g><g class="is-leg l3"><path class="is-under" d="M89 82 L122 78 L156 70"/><path class="is-metal" d="M89 82 L122 78 L156 70"/><path class="is-highlight" d="M91 79 L121 75 L152 68"/><circle class="is-joint" cx="122" cy="78" r="8"/><circle class="is-joint-core" cx="122" cy="78" r="3.2"/><path class="is-claw" d="M156 70 l14 -5 -10 9 12 7 -15 -3 -5 -8z"/><path class="is-claw-accent" d="M156 70 l9 4 -6 2z"/></g><g class="is-leg l4"><path class="is-under" d="M90 82 L124 55 L158 25"/><path class="is-metal" d="M90 82 L124 55 L158 25"/><path class="is-highlight" d="M92 79 L124 52 L155 24"/><circle class="is-joint" cx="124" cy="55" r="8"/><circle class="is-joint-core" cx="124" cy="55" r="3.2"/><path class="is-claw" d="M158 25 l12 -8 -8 13 13 2 -15 5 -8 -10z"/><path class="is-claw-accent" d="M158 25 l8 -2 -4 7z"/></g></svg></div>` : ''}
     ${f.def.id==='thor_infinitywar' ? `<div class="thor-lightning-aura" aria-hidden="true"></div><div class="stormbreaker-held" aria-hidden="true"><img class="stormbreaker-asset" src="${STORMBREAKER_ASSET}" alt=""></div>` : ''}
     ${f.def.id==='scarletwitch_new' ? '<div class="scarlet-permanent-glow" aria-hidden="true"></div>' : ''}
+    ${f.def.id==='jeangrey_phoenix' ? '<div class="phoenix-aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>' : ''}
+    ${f.def.id==='ghostrider_cosmic' ? '<div class="cosmic-aura" aria-hidden="true"><b></b><b></b><i style="--a:0deg;--r:52px;--t:5.0s"></i><i style="--a:70deg;--r:60px;--t:7.0s"></i><i style="--a:140deg;--r:50px;--t:6.0s"></i><i style="--a:210deg;--r:62px;--t:8.0s"></i><i style="--a:280deg;--r:54px;--t:5.5s"></i><i style="--a:330deg;--r:58px;--t:6.5s"></i></div>' : ''}
     ${f.def.id==='scarletwitch' ? '<div class="wanda-energy-field-aura" aria-hidden="true"></div>' : ''}
     ${f.def.id==='professorx' ? profXChairHtml() : ''}
     ${f.def.id==='clea' ? '<div class="clea-aura" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>' : ''}
@@ -10712,6 +10841,8 @@ function buildFighterDOM(f){
   if(f.def.id === 'ironman_mark85') el.classList.add('mark85');
   if(f.def.id === 'blackpanther_mechstrike') el.classList.add('mech-strike');
   if(f.def.id === 'deadpool_nicepool') el.classList.add('nicepool');
+  if(f.def.id === 'jeangrey_phoenix') el.classList.add('phoenix-jean');
+  if(f.def.id === 'ghostrider_cosmic') el.classList.add('cosmic-gr');
   if(f.def.id === 'drstrange_spiritmanipulator') el.classList.add('spirit-manipulator');
   if(f.def.id === 'clea') el.classList.add('clea');
   f.overheadFillEl = el.querySelector('.overhead-hp .fill');
@@ -11371,8 +11502,13 @@ function teleportToRandomPlatform(caster){
   const from = platformUnderX(caster);
   const dest = randomArenaPlatformPoint(from);
   const ox = caster.x+FIGHTER_SIZE/2, oy = caster.y+FIGHTER_SIZE/2;
+  const wxi = caster.def.id === 'deadpool_weaponxi';
+  const wxiFx = (x,y)=>{ try{ fxEl('wxi-tp-line', `left:${x-5}px;top:${y-44}px;`, 260); ENH.parts(x,y,12,['#b3202c','#1a1a1a','#ff5a4d'],40,340,{size:4,br:'1px'}); }catch(e){} };
+  const wxiBlinkNow = ()=>{ if(!caster.el) return; caster.el.classList.remove('wxi-blink'); void caster.el.offsetWidth; caster.el.classList.add('wxi-blink'); setTimeout(()=>{ if(caster.el) caster.el.classList.remove('wxi-blink'); },380); };
+  if(wxi){ spawnAfterimage(caster,'#b3202c88',320); wxiFx(ox,oy); wxiBlinkNow(); }
   caster.x = dest.x; caster.y = dest.y; caster.vx = 0; caster.vy = 0; caster.onGround = false;
   caster.turnPending = null;
+  if(wxi){ setTimeout(()=>{ if(state.mode!=='battle') return; wxiFx(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2); wxiBlinkNow(); },80); return; }
   if(caster.def.id === 'nightcrawler'){
     try{ ENH.bamf(caster.x+FIGHTER_SIZE/2, caster.y+FIGHTER_SIZE/2, false); spawnAfterimage(caster,'#5b7cff88',380); setTimeout(()=>{ if(state.mode==='battle') sfx('nc_bamf_arrive'); },70); }catch(e){}
     return;
@@ -21736,7 +21872,7 @@ function fighterSpeedMultiplier(f){
   if(f.grootBallUntil && now() < f.grootBallUntil) mult *= (f.grootBallSpeed || 2.4);
   if(f.def.id==='moonknight' && f.moonknightPersona==='jake' && f.moonknightPersonaUntil > now()) mult *= (f.def.abilities.Q.speedMult || 1.35);
   if(f.def.id==='beast' && f.beastSurgeUntil > now()) mult *= (f.def.abilities.R.speedMult || 1.4);
-  if(f.def.id==='ghostrider' && f.hellcycleUntil > now()) mult *= (f.def.abilities.R.speedMult || 4);
+  if((f.def.id==='ghostrider'||f.def.skinOf==='ghostrider') && f.hellcycleUntil > now()) mult *= (f.def.abilities.R.speedMult || 4);
   if(f.def.id==='emmafrost' && f.diamondFormUntil > now()) mult *= 1 - (Number.isFinite(f.diamondMovementReduction) ? f.diamondMovementReduction : .20);
   if(f.def.id==='quicksilver') mult *= (f.quicksilverSpeed || 3);
   if(f.def.id==='thor_infinitywar' && f.flight) mult *= 1.6;
@@ -22835,6 +22971,18 @@ function buildProjectileVisual(p){
     p.el.style.background = 'transparent';
     p.el.style.boxShadow = 'none';
     p.el.innerHTML = '<div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#fff6d8,#ffae4a 34%,#ff5a1e 66%,transparent 82%);box-shadow:0 0 10px #ff8a2b,0 0 22px #ff5a1e,0 0 34px rgba(255,90,30,.7);"></div>';
+  } else if(p.render === 'wxi-laser'){
+    p.el.classList.add('wxi-laser-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="wxi-laser-halo"></div><div class="wxi-laser-core"></div>';
+  } else if(p.render === 'phoenix-fire'){
+    p.el.classList.add('phx-fire-projectile'); if(flip<0) p.el.classList.add('rev'); p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="phx-fire-tail"></div><div class="phx-fire-core"></div>';
+  } else if(p.render === 'phoenix-bird'){
+    p.el.classList.add('phx-bird-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div class="phx-bird-halo"></div><div style="position:absolute;inset:0;transform:scaleX('+flip+')"><svg viewBox="0 0 200 130" aria-hidden="true"><defs><radialGradient id="pfB" cx="55%" cy="50%" r="65%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#ffe06a"/><stop offset=".7" stop-color="#ff7a1a"/><stop offset="1" stop-color="#c81e0a"/></radialGradient></defs><path d="M85 64 C60 58 30 64 2 62 C30 74 60 72 85 72Z" fill="url(#pfB)" opacity=".85"/><path d="M118 56 C104 20 62 0 18 6 C46 22 60 36 72 52 C58 46 44 46 28 52 C58 58 90 62 118 66 Z" fill="url(#pfB)"/><path d="M118 72 C104 106 62 126 18 122 C46 106 60 92 72 76 C58 82 44 82 28 76 C58 72 90 70 118 68 Z" fill="url(#pfB)"/><ellipse cx="122" cy="65" rx="40" ry="19" fill="url(#pfB)"/><circle cx="160" cy="58" r="14" fill="#fff2a0"/><path d="M170 52 L196 62 L172 68Z" fill="#ffd34a"/><circle cx="165" cy="55" r="2.6" fill="#7a1400"/><path d="M150 46 C154 36 160 32 168 34 C162 38 160 42 160 46Z" fill="#ffb31a"/></svg></div>';
+  } else if(p.render === 'cosmic-chain'){
+    p.el.classList.add('cosmic-chain-projectile'); p.el.style.background='transparent'; p.el.style.boxShadow='none'; p.el.style.overflow='visible';
+    p.el.innerHTML='<div style="position:absolute;inset:0;transform:scaleX('+flip+')"><div class="cosmic-chain-links"></div><div class="cosmic-chain-head"></div></div>';
   } else if(p.render === 'cyclops-beam' || p.render === 'cyclops-heavy'){
     p.el.classList.add('cyclops-projectile');
     if(p.render === 'cyclops-heavy') p.el.classList.add('heavy');
@@ -23484,6 +23632,7 @@ const AI_STYLE_RANGE = {
   cyclops:     560,
   vision:      500,
   scarletwitch:520,
+  phoenixforce:480,
   bullseye:    620,
   milesmorales:150,
   wintersoldier:240,
@@ -24238,6 +24387,11 @@ function updateBotAI(dtF){
     if(qAb && cdReady(bot,'Q',t) && adist <= (qAb.range||140)+24 && Math.abs(vertical)<140){ tryUseAbility(bot,player,'Q'); return; }
     if(!bot.flight && cdReady(bot,'R',t) && (Math.abs(vertical)>95 || adist>520) && Math.random()<0.55){ tryUseAbility(bot,player,'R'); return; }
     if(cdReady(bot,'E',t) && adist < 900){ tryUseAbility(bot,player,'E'); return; }
+  } else if(style === 'phoenixforce'){
+    // Phoenix Force Jean: heal when hurt, drop the Cosmic Firebird from range, otherwise spam Phoenix Fire.
+    if(cdReady(bot,'R',t) && hpPct < 0.5){ tryUseAbility(bot,player,'R'); return; }
+    if(cdReady(bot,'Q',t) && adist > 120 && adist < 1000){ tryUseAbility(bot,player,'Q'); return; }
+    if(cdReady(bot,'E',t) && adist < 1100){ tryUseAbility(bot,player,'E'); return; }
   } else if(style === 'scarletwitch'){
     const qAb=bot.def.abilities.Q;
     if(cdReady(bot,'Q',t) && adist <= (qAb.radius||175)+30){ tryUseAbility(bot,player,'Q'); return; }
@@ -27220,6 +27374,121 @@ try{
     CHARACTERS.wolverine_oldmanlogan.abilities.E.hitSound='wolverine_claw_hit';
   }
 } catch(e) { console.warn('variant final safety patch', e); }
+
+/* =========================================================================
+   NEW VARIANTS: Deadpool (Weapon XI), Jean Grey (Phoenix Force),
+   Ghost Rider (Cosmic) FX + SFX, plus the bigger Scarlet Witch (new) effects
+   ========================================================================= */
+try{ (function(){
+  const tg2=(tg,cx,cy)=>tg&&tg.el?[tg.x+FIGHTER_SIZE/2,tg.y+FIGHTER_SIZE/2]:[cx,cy];
+  const later=(ms,fn)=>setTimeout(()=>{ if(state.mode==='battle') try{ fn(); }catch(e){} },ms);
+  const screen=(c,l)=>fxEl('phx-screen','left:0;top:0;width:100%;height:100%;--c:'+c+';--l:'+l+'ms;',l+80);
+  const PH=['#ffb31a','#fff2a0','#ff3d1a'], CO=['#5ad1ff','#ffffff','#a45bff'], WX=['#ff2b2b','#ffffff','#ffd34a'], WA=['#ff334d','#ffb1bb','#ffffff'];
+  const choir=(c,t,notes,dur,vol)=>notes.forEach((f,i)=>{ aTone(c,t+i*.03,'sine',f,f*1.004,dur,vol); aTone(c,t+i*.03,'triangle',f*2,f*2,dur*.75,vol*.35); });
+  const crackle=(c,t,n,v)=>{ for(let i=0;i<n;i++) aNoise(c,t+i*.05+Math.random()*.03,.05,v,'highpass',3500+i*300,1800,1.5); };
+  const rings=(cx,cy,c1,c2,base,n,gap)=>{ for(let i=0;i<n;i++) later(i*gap,()=>ENH.ring(cx,cy,base+i*34,i%2?c2:c1,560+i*60,false,4-Math.min(i,2))); };
+
+  /* ---------------- SOUNDS ---------------- */
+  ENH_SFX.wxi_blade=(c,t)=>{ [0,.07].forEach((d,i)=>{ aNoise(c,t+d,.12,.26,'highpass',5200,2600,1.4); aTone(c,t+d,'sawtooth',2800-i*500,1500,.09,.08); aTone(c,t+d+.02,'sine',3900,2400,.16,.05); }); aTone(c,t,'sine',180,70,.16,.16); };
+  ENH_SFX.wxi_blade_hit=(c,t)=>{ aTone(c,t,'sine',150,45,.3,.34); aNoise(c,t,.14,.3,'bandpass',3000,900,1.2); aTone(c,t,'square',2600,1300,.07,.1); aTone(c,t+.03,'sine',3400,3000,.22,.05); };
+  ENH_SFX.wxi_laser=(c,t)=>{ aTone(c,t,'sawtooth',260,3400,.24,.13); aTone(c,t+.18,'square',2600,520,.4,.2); aTone(c,t+.18,'sawtooth',900,120,.42,.16); aNoise(c,t+.16,.4,.22,'highpass',5000,1200,1); aTone(c,t+.18,'sine',100,40,.5,.4); };
+  ENH_SFX.wxi_laser_hit=(c,t)=>{ enhBoom(c,t,86,.8,.6); aNoise(c,t,.5,.4,'lowpass',3800,160,.7); crackle(c,t,6,.24); aTone(c,t,'sawtooth',1800,90,.5,.14); };
+  ENH_SFX.wxi_teleport=(c,t)=>{ aTone(c,t,'sine',2200,300,.09,.14); aTone(c,t+.08,'sine',300,2200,.09,.14); aNoise(c,t,.16,.16,'highpass',5200,2200,1.2); aTone(c,t+.08,'square',1600,900,.05,.05); };
+  ENH_SFX.phoenix_fire=(c,t)=>{ aTone(c,t,'sawtooth',300,1400,.28,.16); aTone(c,t,'sine',90,40,.4,.34); aNoise(c,t,.34,.26,'bandpass',900,3800,.9); choir(c,t+.02,[784,1175],.36,.05); crackle(c,t,3,.14); };
+  ENH_SFX.phoenix_fire_hit=(c,t)=>{ enhBoom(c,t,80,.7,.55); aNoise(c,t,.5,.36,'lowpass',3400,180,.7); crackle(c,t,5,.2); choir(c,t,[523,784],.5,.05); };
+  ENH_SFX.phoenix_bird=(c,t)=>{ aTone(c,t,'sine',55,26,1.6,.6); aTone(c,t,'sawtooth',90,50,1.2,.22); aTone(c,t+.05,'sawtooth',700,2800,.7,.18); aTone(c,t+.25,'square',1100,3300,.5,.1); aNoise(c,t,1.4,.34,'bandpass',500,5200,.8); choir(c,t+.1,[392,587,784,1175,1568],1.5,.075); crackle(c,t+.2,8,.2); enhBoom(c,t+.35,60,1,.55); };
+  ENH_SFX.phoenix_bird_hit=(c,t)=>{ enhBoom(c,t,64,1.3,.8); enhBoom(c,t+.09,44,1.5,.7); aTone(c,t,'sawtooth',1500,60,.9,.2); aNoise(c,t,1.1,.5,'lowpass',4200,110,.6); aNoise(c,t+.05,.7,.3,'highpass',6000,1500,1); crackle(c,t,10,.24); choir(c,t+.05,[262,392,523,784,1047],1.4,.09); };
+  ENH_SFX.phoenix_rebirth=(c,t)=>{ [523,659,784,1047,1319,1568,2093].forEach((f,i)=>aTone(c,t+i*.075,'sine',f,f*1.01,.6,.11)); choir(c,t+.1,[392,523,784,1047],1.4,.08); aNoise(c,t,1.2,.24,'bandpass',600,4800,.9); aTone(c,t,'sine',70,150,1.0,.4); enhBoom(c,t+.5,70,.9,.5); };
+  ENH_SFX.cgr_chain=(c,t)=>{ SFXT.rat(c,t,6,1.1); aNoise(c,t,.28,.24,'bandpass',800,3600,1); aTone(c,t,'sawtooth',180,700,.26,.12); aTone(c,t+.02,'sine',1500,900,.3,.06); };
+  ENH_SFX.cgr_chain_hit=(c,t)=>{ enhBoom(c,t,84,.7,.55); aTone(c,t,'square',2200,900,.14,.12); aNoise(c,t,.42,.34,'lowpass',3400,160,.7); crackle(c,t,4,.18); };
+  ENH_SFX.cgr_stare=(c,t)=>{ aTone(c,t,'sawtooth',44,120,1.4,.34); aTone(c,t,'sine',60,32,1.8,.5); aNoise(c,t,1.4,.3,'bandpass',300,3800,.8); choir(c,t+.2,[196,294,392,587],1.4,.075); aTone(c,t+.6,'sawtooth',300,2400,.6,.1); };
+  ENH_SFX.cgr_stare_hit=(c,t)=>{ enhBoom(c,t,58,1.4,.85); enhBoom(c,t+.12,40,1.6,.7); aNoise(c,t,1.2,.5,'lowpass',4200,90,.6); aTone(c,t,'sawtooth',900,50,1.1,.2); choir(c,t,[147,220,294,440],1.5,.09); crackle(c,t,8,.22); };
+  ENH_SFX.cgr_cycle=(c,t)=>{ aTone(c,t,'sawtooth',55,420,.7,.28); aTone(c,t+.1,'sawtooth',70,520,.6,.18); aNoise(c,t,.7,.3,'bandpass',300,2600,1.2); for(let i=0;i<5;i++) aTone(c,t+i*.09,'square',90+i*30,70+i*20,.08,.12); choir(c,t+.05,[330,494,659],.7,.05); };
+  /* Scarlet Witch (new) — bigger, heavier audio (damage untouched) */
+  ENH_SFX.scarlet_bolt_big=(c,t)=>{ aTone(c,t,'sawtooth',420,1600,.3,.2); aTone(c,t+.02,'triangle',1300,260,.32,.12); aTone(c,t,'sine',90,38,.44,.38); aNoise(c,t,.26,.26,'highpass',4200,900,1.4); choir(c,t,[220,330],.34,.05); };
+  ENH_SFX.scarlet_bolt_big_hit=(c,t)=>{ enhBoom(c,t,76,.8,.6); aNoise(c,t,.5,.4,'bandpass',2600,300,1.1); crackle(c,t,5,.2); aTone(c,t,'sawtooth',1300,70,.5,.14); };
+  ENH_SFX.scarlet_hex_big=(c,t)=>{ aTone(c,t,'sine',70,30,1.1,.55); aTone(c,t+.03,'sawtooth',160,1500,.8,.2); aNoise(c,t,.9,.34,'bandpass',900,4400,.9); choir(c,t+.1,[185,277,370,554],1.0,.07); enhBoom(c,t+.3,52,1,.5); };
+  ENH_SFX.scarlet_hex_big_hit=(c,t)=>{ enhBoom(c,t,50,1.4,.9); enhBoom(c,t+.1,36,1.5,.7); aTone(c,t,'square',110,26,.9,.24); aNoise(c,t,1.1,.5,'lowpass',4200,100,.6); crackle(c,t,9,.22); choir(c,t,[123,185,247],1.4,.09); };
+  ENH_SFX.scarlet_disable_big=(c,t)=>{ aTone(c,t,'triangle',200,1900,.6,.2); aTone(c,t+.08,'square',1500,180,.4,.12); aNoise(c,t,.6,.26,'bandpass',800,4800,1.2); choir(c,t+.05,[196,294,466],.7,.07); enhBoom(c,t+.25,64,.6,.35); };
+
+  /* ---------------- DEADPOOL (WEAPON XI) ---------------- */
+  ENH_FX.wxi_blade=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,'#c7ccd4',300); if(!f||!f.el) return;
+    f.el.querySelectorAll('.wxi-held-blade').forEach(n=>n.remove());
+    const b=document.createElement('div'); b.className='wxi-held-blade'; b.innerHTML='<svg viewBox="0 0 100 8" width="100%" height="100%" preserveAspectRatio="none" style="overflow:visible"><defs><linearGradient id="wxsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fb"/><stop offset=".5" stop-color="#aeb6c2"/><stop offset="1" stop-color="#565e6b"/></linearGradient></defs><path d="M0 1.2 L93 1.2 L100 4 L93 6.8 L0 6.8 Z" fill="url(#wxsG)" stroke="#1b1f25" stroke-width=".8"/><path d="M4 3.6 L90 3.6" stroke="#fff" stroke-width=".7" opacity=".8"/></svg>'; f.el.appendChild(b);
+    const swing=(cls)=>{ if(!b.parentNode) return; b.classList.remove('s1','s2'); void b.offsetWidth; b.classList.add(cls); };
+    swing('s1'); setTimeout(()=>swing('s2'),160); setTimeout(()=>{ if(b.parentNode) b.remove(); },420);
+    ENH.metal(cx+dir*56,cy,4,28,300,['#eef2f5','#9aa4b2','#ffd34a']); };
+  ENH_HIT.wxi_blade_hit=(tg,cx,cy)=>{ ENH.flash(cx,cy,34,'#ffd9a0',200); ENH.metal(cx,cy,16,72,460,['#eef2f5','#9aa4b2','#ffd34a','#ffb347']); ENH.ring(cx,cy,40,'#b8c0cc',320,false,2); ENH.word(cx,cy-46,'SNIKT!','#c7ccd4',24,640); shakeArena(5,180); };
+  ENH_FX.wxi_laser=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,WX[0],520); const ex=cx+dir*22, ey=cy-14;
+    ENH.flash(ex,ey,30,'#ffffff',200); ENH.flash(ex,ey,64,WX[0],320); ENH.ring(ex,ey,44,WX[0],340,true,3);
+    const [tx,ty]=tg2(tg,cx+dir*300,cy); if(tg&&tg.el){ ENH.reticle(tx,ty,46,'#ff2b2b',760); }
+    fxEl('wxi-beam'+(dir<0?' rev':''),'left:'+(dir>0?ex:ex-1100)+'px;top:'+(ey-2)+'px;width:1100px;',440);
+    ENH.word(cx,f.y-14,'LASER SIGHT','#ff5a4d',22,800); shakeArena(4,200); };
+  ENH_HIT.wxi_laser_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,74,['#ffffff','#ff6b5a','#ff1a1a'],11); ENH.boltBurst(cx,cy,10,100,'#ff3b3b',320); ENH.ring(cx,cy,96,'#ff2b2b',600,false,3); ENH.word(cx,cy-56,'ZAPPED!','#ff5a4d',30,820); screen('rgba(255,40,40,.5)',380); };
+  ENH_FX.wxi_teleport=()=>{};
+
+  /* ---------------- JEAN GREY (PHOENIX FORCE) ---------------- */
+  ENH_FX.phoenix_fire=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,PH[0],440); const x=cx+dir*34;
+    ENH.flash(x,cy,72,PH[0],340); ENH.flash(x,cy,38,'#ffffff',240); ENH.ring(x,cy,56,PH[2],440); ENH.ring(x,cy,34,PH[1],340,true,3);
+    ENH.streaks(x,cy,PH[1],12,120,420,dir>0?-30:150,60); ENH.parts(x,cy,16,PH,66,600,{size:6,br:FIRE,up:26}); ENH.boltBurst(x,cy,4,60,PH[1],220); shakeArena(4,170); };
+  ENH_HIT.phoenix_fire_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,74,['#ffffff','#ffb31a','#ff3d1a'],9); ENH.parts(cx,cy,16,PH,90,700,{size:6,br:FIRE,up:44}); ENH.ring(cx,cy,92,PH[1],560,false,3); ENH.word(cx,cy-54,'BURN!','#ffb31a',26,720); };
+  ENH_FX.phoenix_bird=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,PH[0],1000); screen('rgba(255,150,30,.6)',700);
+    ENH.flash(cx,cy,150,PH[0],620); ENH.flash(cx,cy,80,'#ffffff',420); rings(cx,cy,PH[0],PH[1],50,5,90);
+    ENH.streaks(cx,cy,PH[1],24,200,720); ENH.parts(cx,cy,34,PH,140,900,{size:8,br:FIRE,up:50}); ENH.feathers(cx,cy,16,PH,120,900,40);
+    ENH.sky(cx+dir*40,f.y+FIGHTER_SIZE,'#ffb31a',2); ENH.shock(cx,f.y+FIGHTER_SIZE,150,PH[0],700,6);
+    ENH.word(cx,f.y-22,'PHOENIX FORCE','#ffb31a',30,1200); shakeArena(14,620);
+    ENH.live(f,900,70,()=>{ ENH.parts(f.x+FIGHTER_SIZE/2,f.y+FIGHTER_SIZE/2,4,PH,70,600,{size:6,br:FIRE,up:40}); }); };
+  ENH_HIT.phoenix_bird_hit=(tg,cx,cy)=>{ screen('rgba(255,170,40,.75)',700); ENH.explode(cx,cy,130,['#ffffff','#ffb31a','#ff3d1a'],18);
+    later(90,()=>ENH.explode(cx-40,cy-20,90,['#fff2a0','#ff7a1a','#c81e0a'],10)); later(170,()=>ENH.explode(cx+44,cy+16,90,['#fff2a0','#ff7a1a','#c81e0a'],10));
+    rings(cx,cy,PH[0],PH[1],70,5,80); ENH.parts(cx,cy,40,PH,190,1000,{size:9,br:FIRE,up:70}); ENH.feathers(cx,cy,20,PH,170,1000,50); ENH.boltBurst(cx,cy,12,160,PH[1],420);
+    ENH.sky(cx,cy+FIGHTER_SIZE/2,'#ffb31a',3); ENH.word(cx,cy-74,'INCINERATED!','#fff2a0',38,1100); shakeArena(20,760); };
+  ENH_FX.phoenix_rebirth=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,PH[1],1200); screen('rgba(255,230,140,.55)',800); const gy=f.y+FIGHTER_SIZE;
+    fxEl('phx-pillar','left:'+(cx-42)+'px;top:'+(gy-330)+'px;width:84px;height:330px;',1350);
+    ENH.flash(cx,cy,130,PH[1],640); ENH.flash(cx,cy,64,'#ffffff',420); rings(cx,cy,PH[0],PH[1],44,5,110); ENH.shock(cx,gy,140,PH[0],760,6);
+    ENH.feathers(cx,cy,26,PH,120,1200,90); ENH.parts(cx,cy,30,PH,110,1100,{size:7,br:FIRE,up:110});
+    ENH.word(cx,f.y-22,'REBIRTH','#fff2a0',32,1300); shakeArena(8,420);
+    ENH.live(f,1300,60,()=>{ const x=f.x+FIGHTER_SIZE/2+(Math.random()*60-30); ENH.parts(x,f.y+FIGHTER_SIZE,3,PH,30,800,{size:6,br:FIRE,up:150}); }); };
+
+  /* ---------------- COSMIC GHOST RIDER ---------------- */
+  ENH_FX.cgr_chain=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,CO[0],360); const x=cx+dir*34;
+    ENH.flash(x,cy,54,CO[0],280); ENH.ring(x,cy,42,CO[2],380); ENH.streaks(x,cy,CO[1],9,100,340,dir>0?-28:152,56);
+    ENH.parts(x,cy,12,CO,58,520,{size:4,br:'50%',up:14}); ENH.parts(x,cy,6,['#ffffff'],70,600,{size:3,br:'0'}); shakeArena(3,140); };
+  ENH_HIT.cgr_chain_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,64,['#ffffff','#5ad1ff','#a45bff'],8); ENH.boltBurst(cx,cy,7,80,CO[0],280); ENH.parts(cx,cy,12,CO,80,620,{size:5,br:'50%',up:30}); ENH.word(cx,cy-50,'COSMIC!','#5ad1ff',24,700); };
+  ENH_FX.cgr_stare=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,CO[0],900); screen('rgba(120,90,255,.5)',800);
+    ENH.flash(cx,cy-14,80,CO[1],520); ENH.flash(cx,cy-14,50,CO[0],460); rings(cx,cy,CO[0],CO[2],56,4,110);
+    ENH.streaks(cx,cy,CO[1],20,150,640); ENH.parts(cx,cy,26,CO,110,800,{size:6,br:'50%',up:50});
+    if(tg&&tg.el){ const [tx,ty]=tg2(tg,cx,cy); ENH.bolt(cx,cy-12,tx,ty,'#9fe6ff',420,4,10); later(90,()=>ENH.bolt(cx,cy-12,tx,ty,'#a45bff',380,3,10)); ENH.reticle(tx,ty,62,'#5ad1ff',1100); ENH.ring(tx,ty,70,CO[2],640,true,3); ENH.word(tx,ty-64,'COSMIC PENANCE','#9fe6ff',24,1100); }
+    shakeArena(9,520); };
+  ENH_HIT.cgr_stare_hit=(tg,cx,cy)=>{ screen('rgba(140,110,255,.7)',700); ENH.explode(cx,cy,110,['#ffffff','#5ad1ff','#a45bff'],15); rings(cx,cy,CO[0],CO[2],60,5,80);
+    ENH.parts(cx,cy,34,CO,170,900,{size:7,br:'50%',up:60}); ENH.boltBurst(cx,cy,12,150,CO[1],380); ENH.word(cx,cy-70,'JUDGED!','#9fe6ff',36,1100); shakeArena(16,680); };
+  ENH_FX.cgr_cycle=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,CO[0],560); const gy=f.y+FIGHTER_SIZE;
+    ENH.flash(cx,cy,90,CO[0],420); ENH.ring(cx,cy,64,CO[1],520,true,3); rings(cx,cy,CO[0],CO[2],48,3,100); ENH.shock(cx,gy,110,CO[0],640,5);
+    ENH.parts(cx,cy,24,CO,90,700,{size:5,br:'50%',up:30}); ENH.word(cx,f.y-20,'COSMIC HELLCYCLE','#5ad1ff',22,900); shakeArena(6,260);
+    ENH.live(f,(a&&a.duration)||5000,55,()=>{ const x=f.x+FIGHTER_SIZE/2-(f.facing||1)*24, y=f.y+FIGHTER_SIZE/2+(Math.random()*36-10);
+      ENH.parts(x,y,2,CO,26,520,{size:4,br:'50%',up:10}); if(Math.random()<.5) ENH.flash(x,y,16,CO[0],200); if(Math.random()<.3) ENH.streaks(x,y,CO[1],2,46,240,(f.facing||1)>0?175:-5,20); }); };
+
+  /* ---------------- SCARLET WITCH (NEW): bigger, more powerful effects ---------------- */
+  ENH_FX.scarlet_bolt=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,WA[0],460); const x=cx+dir*30;
+    ENH.flash(x,cy,76,WA[0],340); ENH.flash(x,cy,38,'#ffffff',240); ENH.ring(x,cy,56,'#ff4d6a',440); ENH.ring(x,cy,34,WA[1],340,true,3);
+    ENH.streaks(x,cy,'#ff8194',12,130,400,dir>0?-30:150,60); ENH.parts(x,cy,14,[WA[0],'#ff8194','#ffd3da'],70,560,{size:6,br:'50%'}); ENH.boltBurst(x,cy,5,80,'#ff334f',260); shakeArena(4,160); };
+  ENH_HIT.scarlet_bolt_big_hit=(tg,cx,cy)=>{ ENH.explode(cx,cy,80,['#ffffff','#ff6b7e','#ff2244'],10); ENH.boltBurst(cx,cy,9,100,'#ff334f',320); ENH.ring(cx,cy,100,'#ff8194',600,false,3); ENH.parts(cx,cy,16,[WA[0],'#ff8194','#ffd3da'],90,620,{size:6,br:'50%',up:30}); ENH.word(cx,cy-56,'CHAOS!','#ff4d6a',28,760); };
+  ENH_FX.scarlet_hex=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,WA[0],900); screen('rgba(255,40,70,.55)',700);
+    ENH.flash(cx,cy,170,WA[0],560); ENH.flash(cx,cy,90,'#ffffff',380); rings(cx,cy,WA[0],WA[1],60,5,90); ENH.clock(cx,cy,130,900); ENH.shock(cx,f.y+FIGHTER_SIZE,170,WA[0],720,6);
+    ENH.streaks(cx,cy,WA[1],22,190,680); ENH.boltBurst(cx,cy,12,150,'#ff334f',360); ENH.parts(cx,cy,32,[WA[0],'#ff8194','#ffd3da'],130,800,{size:7,br:'50%',up:40});
+    ENH.word(cx,f.y-22,'HEX BURST','#ff4d6a',30,1100); shakeArena(16,560); };
+  ENH_HIT.scarlet_hex_big_hit=(tg,cx,cy)=>{ screen('rgba(255,50,80,.65)',700); ENH.explode(cx,cy,120,['#ffffff','#ff6b7e','#ff1a3c'],16); later(90,()=>ENH.clock(cx,cy,110,800)); rings(cx,cy,WA[0],WA[1],64,5,80);
+    ENH.boltBurst(cx,cy,14,170,'#ff334f',420); ENH.parts(cx,cy,36,[WA[0],'#ff8194','#ffd3da'],170,900,{size:8,br:'50%',up:60}); ENH.word(cx,cy-72,'REALITY BROKEN!','#ff4d6a',34,1100); shakeArena(18,700); };
+  ENH_FX.scarlet_disable=(f,a,tg,cx,cy,dir)=>{ ENH.body(f,WA[0],720); ENH.flash(cx,cy,110,WA[0],440); rings(cx,cy,WA[0],WA[1],50,4,100); ENH.clock(cx,cy,100,800);
+    ENH.streaks(cx,cy,WA[1],16,150,560); ENH.parts(cx,cy,24,[WA[0],'#ff8194','#ffd3da'],110,700,{size:6,br:'50%',up:34}); ENH.word(cx,f.y-20,'WHAT ATTACK?','#ff4d6a',26,1100); screen('rgba(255,40,70,.4)',600); shakeArena(7,300); };
+  const sceOld=spawnProjTrail;
+  spawnProjTrail=function(p){ sceOld(p); if(!p||!p.render) return; const cx=p.x+p.w/2, cy=p.y+p.h/2+(Math.random()*p.h*.5-p.h*.25), r=Math.random();
+    if(p.render==='scarlet-chaos'){ if(r<.8) ENH.parts(cx,cy,2,[WA[0],'#ff8194','#ffd3da'],46,520,{size:6,br:'50%'}); if(r<.22) ENH.ring(cx,cy,34,'#ff4d6a',360); if(r<.1) ENH.bolt(cx,cy,cx-(p.vx>0?1:-1)*70,cy+(Math.random()*40-20),'#ff8194',220,3,5); }
+    else if(p.render==='phoenix-fire'){ if(r<.85) ENH.parts(cx,cy,2,PH,40,520,{size:6,br:FIRE,up:8}); }
+    else if(p.render==='phoenix-bird'){ ENH.parts(cx,cy,3,PH,80,700,{size:8,br:FIRE,up:16}); if(r<.4) ENH.feathers(cx,cy,2,PH,60,700,10); if(r<.25) ENH.ring(cx,cy,60,'#ffb31a',420); if(r<.15) ENH.flash(cx,cy,60,'#fff2a0',260); }
+    else if(p.render==='cosmic-chain'){ if(r<.8) ENH.parts(cx,cy,2,CO,38,500,{size:4,br:'50%'}); if(r<.25) ENH.flash(cx,cy,22,CO[0],220); }
+    else if(p.render==='wxi-laser'){ if(r<.6) ENH.parts(cx,cy,1,[WX[0],WX[1]],26,300,{size:3,br:'50%'}); }
+  };
+})(); }catch(e){ console.warn('new variant fx patch', e); }
 
 /* =========================================================================
    SECTION: INITIAL RENDER
