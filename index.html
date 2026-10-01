@@ -5985,6 +5985,64 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
 .gwenom-web-projectile.rev .gwenom-web-tail{right:auto;left:60%;background:linear-gradient(90deg,#000c,#0d0d1088 50%,transparent);border-radius:0 50% 50% 0;}
 @keyframes gwenomPulse{from{transform:scale(.94)}to{transform:scale(1.1)}}
 </style>
+<style id="variant-tab-alignment">
+/* Variants tab: every card uses an identical, fixed-slot layout so rows line up. */
+#screen-inventory #inventory-grid .char-card.variant-only-card{
+  display:flex; flex-direction:column; align-items:stretch; align-self:stretch; height:100%; box-sizing:border-box;
+  padding:10px; text-align:center;
+}
+#screen-inventory .variant-only-card .variant-base-preview{flex:0 0 auto; width:100%; aspect-ratio:16/9; margin:0;}
+#screen-inventory .variant-only-card .variant-base-preview img{width:100%; height:100%; object-fit:cover; object-position:center top;}
+#screen-inventory .variant-only-card .mystery-preview{background:repeating-linear-gradient(135deg,#20222f,#20222f 9px,#181a25 9px,#181a25 18px);}
+#screen-inventory .variant-only-card .variant-link-arrow{flex:0 0 20px; height:20px; line-height:20px; margin:0;}
+#screen-inventory .variant-only-card .char-square{flex:0 0 auto; width:100%; aspect-ratio:1/1; height:auto; margin:0 0 8px;}
+#screen-inventory .variant-only-card .char-name{
+  flex:0 0 auto; display:flex; align-items:center; justify-content:center; min-height:2.5em; line-height:1.15;
+  text-wrap:balance; overflow:hidden; margin:0 0 4px; word-break:break-word;
+}
+#screen-inventory .variant-only-card .char-cat{flex:0 0 auto; align-self:center; margin:0 0 10px;}
+#screen-inventory .variant-only-card .variant-buy-btn{
+  flex:0 0 auto; margin-top:auto; width:100%; min-height:38px; display:flex; align-items:center; justify-content:center;
+  white-space:normal; line-height:1.15; padding:6px 8px; box-sizing:border-box;
+}
+</style>
+<style id="new-hero-fx">
+.ef-sai-held{position:absolute;left:30px;top:21px;width:66px;height:28px;z-index:6;pointer-events:none;transform-origin:19% 50%;transform:rotate(-24deg);filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));opacity:0;transition:opacity .14s;}
+.ef-sai-held svg{width:100%;height:100%;display:block;overflow:visible;}
+.fighter.facing-left .ef-sai-held{left:auto;right:30px;transform:scaleX(-1) rotate(-24deg);}
+.ef-thrown .ef-sai-held{opacity:0;}
+.ef-sai-swing .ef-sai-held{opacity:1;transition:none;animation:efSaiSwing .32s cubic-bezier(.2,.8,.2,1) forwards;}
+.fighter.facing-left.ef-sai-swing .ef-sai-held{animation-name:efSaiSwingL;}
+@keyframes efSaiSwing{0%{transform:translateX(-3px) rotate(-78deg)}25%{transform:translateX(12px) rotate(14deg)}48%{transform:translateX(2px) rotate(-52deg)}72%{transform:translateX(12px) rotate(10deg)}100%{transform:rotate(-24deg)}}
+@keyframes efSaiSwingL{0%{transform:scaleX(-1) translateX(-3px) rotate(-78deg)}25%{transform:scaleX(-1) translateX(12px) rotate(14deg)}48%{transform:scaleX(-1) translateX(2px) rotate(-52deg)}72%{transform:scaleX(-1) translateX(12px) rotate(10deg)}100%{transform:scaleX(-1) rotate(-24deg)}}
+.ef-cut{pointer-events:none;z-index:13;animation:efCutFade .5s ease-out forwards;}
+.ef-cut svg,.if-fx svg{display:block;overflow:visible;}
+.ef-cut path{stroke-dasharray:100;stroke-dashoffset:100;animation:efDraw .15s ease-out forwards;}
+.ef-cut path.b{animation-delay:.09s;}
+@keyframes efDraw{to{stroke-dashoffset:0}}
+@keyframes efCutFade{0%,55%{opacity:1}100%{opacity:0}}
+.ef-ink{pointer-events:none;z-index:9;border-radius:50%;animation:efInk .6s ease-out forwards;}
+@keyframes efInk{0%{opacity:.8;transform:scale(.3)}100%{opacity:0;transform:scale(1.7)}}
+.fighter.ef-flipping .fighter-size-body{transform-origin:50% 55%;animation:efFlipR .8s cubic-bezier(.3,.6,.3,1) 1 forwards;}
+.fighter.ef-flipping.ef-flip-l .fighter-size-body{animation-name:efFlipL;}
+@keyframes efFlipR{0%{rotate:0deg}100%{rotate:-360deg}}
+@keyframes efFlipL{0%{rotate:0deg}100%{rotate:360deg}}
+.if-fist-held{position:absolute;left:44px;top:24px;width:26px;height:26px;border-radius:50%;z-index:6;pointer-events:none;mix-blend-mode:screen;opacity:.7;
+  background:radial-gradient(circle,#fff 0,#fff1b0 22%,rgba(63,209,122,.65) 55%,transparent 72%);box-shadow:0 0 9px 1px rgba(63,209,122,.6),inset 0 0 0 1.5px rgba(255,226,122,.85);animation:ifPulse 1.5s ease-in-out infinite;}
+.fighter.facing-left .if-fist-held{left:auto;right:44px;}
+.if-strike .if-fist-held{animation:ifThrust .34s cubic-bezier(.2,.8,.2,1) forwards;}
+.fighter.facing-left.if-strike .if-fist-held{animation-name:ifThrustL;}
+@keyframes ifPulse{0%,100%{transform:scale(.85);opacity:.45}50%{transform:scale(1.1);opacity:.75}}
+@keyframes ifThrust{0%{transform:translateX(-6px) scale(.8);opacity:.7}35%{transform:translateX(30px) scale(1.7);opacity:1}100%{transform:translateX(0) scale(.9);opacity:.6}}
+@keyframes ifThrustL{0%{transform:translateX(6px) scale(.8);opacity:.7}35%{transform:translateX(-30px) scale(1.7);opacity:1}100%{transform:translateX(0) scale(.9);opacity:.6}}
+.if-fx{pointer-events:none;z-index:12;}
+.if-trail{animation:ifTrail .34s ease-out forwards;}
+.if-bloom{animation:ifBloom var(--t,.45s) ease-out forwards;transform-origin:50% 50%;}
+.if-fly{animation:ifFly var(--t,.55s) cubic-bezier(.25,.7,.3,1) forwards;}
+@keyframes ifTrail{0%{opacity:0;transform:scaleX(.15)}25%{opacity:1}100%{opacity:0;transform:scaleX(1.05)}}
+@keyframes ifBloom{0%{opacity:0;transform:scale(.4)}22%{opacity:1}100%{opacity:0;transform:scale(1.35)}}
+@keyframes ifFly{0%{opacity:0;transform:translateX(0) scale(.6)}15%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateX(var(--dx)) scale(1.02)}}
+</style>
 </head>
 <body>
 <div id="gamepad-banner"><span class="gp-icon">🎮</span><span>Controller connected — <span class="gp-brand" id="gp-brand-name">Controller</span></span></div>
@@ -7138,14 +7196,14 @@ const CHARACTERS = {
   },
   blackpanther: {
     id:'blackpanther', name:'Black Panther', img:'BlackPanther.jpg', color:'#8a4fe0',
-    maxHealth:14700, aiStyle:'bruiser',
+    maxHealth:18700, aiStyle:'bruiser',
     description:"Vibranium-powered brawler. Slashes with fast claw strikes and darts in with Panther Dash, but his real threat is Energy Redistribution — tank a hit and pay it right back, multiplied.",
     abilities:{
-      E:{key:'E', name:'Vibranium Claws', type:'melee', damage:650, cooldown:1100, knockback:9, range:90,
+      E:{key:'E', name:'Vibranium Claws', type:'melee', damage:585, cooldown:1100, knockback:9, range:90,
          hitDelay:70,
          sound:'claw_swipe', fx:'bp_claw', hitFx:'bp_claw_hit', hitSound:'claw_hit',
          desc:'Three visible vibranium claw slashes sweep forward at close range. The 90px reach is clearly telegraphed.'},
-      Q:{key:'Q', name:'Energy Redistribution', type:'chargeSlam', chargeTime:4500, baseDamage:400,
+      Q:{key:'Q', name:'Energy Redistribution', type:'chargeSlam', chargeTime:4500, baseDamage:360,
          multiplier:1, radius:150, knockback:22, cooldown:12000,
          sound:'bp_charge', fx:'bp_charge', hitFx:'bp_slam', hitSound:'bp_slam_hit',
          desc:'Channels for 4.5 seconds, absorbing all incoming damage as stored energy, then leaps and slams the ground for a shockwave that deals the stored damage (plus a base amount) to anyone caught in range. The more damage he tanks, the harder the slam hits.'},
@@ -7156,17 +7214,17 @@ const CHARACTERS = {
   },
   killmonger: {
     id:'killmonger', name:'Killmonger', img:'Killmonger.jpg', color:'#d8a12c', accentColor:'#a8781d', aiStyle:'killmonger',
-    maxHealth:14200,
+    maxHealth:18200,
     description:"An aggressive vibranium-blade brawler. Fast claws keep pressure on, Panther Pounce closes the gap, and Warrior's Fury turns him into a tougher, harder-hitting threat for a short burst.",
     abilities:{
-      E:{key:'E', name:'Vibranium Blades', type:'melee', damage:525, cooldown:850, knockback:9, range:96,
+      E:{key:'E', name:'Vibranium Blades', type:'melee', damage:470, cooldown:850, knockback:9, range:96,
          hitRange:145, hitVertical:135, hitStartSlack:55, hitDelay:60,
          sound:'killmonger_blades', fx:'killmonger_blades', hitFx:'killmonger_blade_hit', hitSound:'killmonger_blade_hit',
-         desc:'Fast twin-blade strikes for 525 damage.'},
-      Q:{key:'Q', name:'Panther Pounce', type:'thingCharge', damage:1500, cooldown:15000, knockback:20, range:150,
+         desc:'Fast twin-blade strikes for 470 damage.'},
+      Q:{key:'Q', name:'Panther Pounce', type:'thingCharge', damage:1350, cooldown:15000, knockback:20, range:150,
          boostX:29, boostY:-5, dashMs:255, hitDelay:205,
          sound:'killmonger_pounce', fx:'killmonger_pounce', hitFx:'killmonger_pounce_hit', hitSound:'killmonger_pounce_hit',
-         desc:'Leaps forward and crashes into the enemy for 1,500 damage.'},
+         desc:'Leaps forward and crashes into the enemy for 1,350 damage.'},
       R:{key:'R', name:"Warrior's Fury", type:'killmongerFury', damage:0, cooldown:18000, duration:5000, damageMult:1.3, reduction:.2,
          sound:'killmonger_fury', fx:'killmonger_fury',
          desc:'Enters a 5-second combat frenzy, increasing damage by 30% and reducing incoming damage by 20%.'}
@@ -7191,6 +7249,55 @@ const CHARACTERS = {
       R:{key:'R', name:'Acrobatic Leap', type:'mobility', boostX:16, boostY:-14, cooldown:5000,
          sound:'dd_leap', fx:'dd_leap',
          desc:'A springing acrobatic leap up and forward. Great for closing distance or escaping a bad spot.'}
+    }
+  },
+  lukecage: {
+    id:'lukecage', name:'Luke Cage', img:'LukeCage.jpg', color:'#f2c230', accentColor:'#8a5a12', aiStyle:'bruiser',
+    maxHealth:15000, rangedResist:0.4, knockbackTakenMult:0.4,
+    description:"Passive Bulletproof: takes 40% less damage from projectiles and is very hard to knock back. Unbreakable skin makes him a slow-burning tank. Piston-hard punches, a stunning Harlem Haymaker, and cellular recovery to heal back up.",
+    abilities:{
+      E:{key:'E', name:'Power Punch', type:'melee', damage:400, cooldown:1000, knockback:12, range:92,
+         hitDelay:70, sound:'luke_punch', fx:'luke_punch', hitFx:'luke_punch_hit', hitSound:'luke_punch_hit',
+         desc:'A heavy street-brawler punch for 400 damage with a thudding shockwave. Cooldown: 1 second.'},
+      Q:{key:'Q', name:'Harlem Haymaker', type:'melee', damage:1500, cooldown:11000, knockback:10, range:105, launch:21,
+         hitDelay:240, sound:'luke_haymaker', fx:'luke_haymaker', hitFx:'luke_haymaker_hit', hitSound:'luke_haymaker_hit',
+         desc:'Winds up a rising uppercut that deals 1,500 damage and launches the target high into the air. Cooldown: 11 seconds.'},
+      R:{key:'R', name:'Cellular Recovery', type:'heal', heal:2800, cooldown:20000,
+         sound:'luke_recover', fx:'luke_recover',
+         desc:'Braces his body and lets it knit itself back together, restoring 2,800 health. No damage. Cooldown: 20 seconds.'}
+    }
+  },
+  elektra: {
+    id:'elektra', name:'Elektra', img:'Elektra.jpg', color:'#b3122b', accentColor:'#ff2a3a', aiStyle:'agile',
+    maxHealth:5350,
+    description:"A lethal, fragile assassin. Rapid twin-sai flurries up close, a pair of thrown sai at range, and a backflip to slip out of danger.",
+    abilities:{
+      E:{key:'E', name:'Sai Flurry', type:'melee', damage:200, cooldown:600, knockback:5, range:86,
+         hitDelay:50, sound:'elektra_sai', fx:'elektra_sai', hitFx:'elektra_sai_hit', hitSound:'elektra_sai_hit',
+         desc:'Two lightning-fast crossing strikes with her twin sai for 200 damage, leaving an X-shaped cut. Cooldown: 0.6 seconds.'},
+      Q:{key:'Q', name:'Twin Sai', type:'shrapnelSpread', damage:1000, count:2, splitDamage:true, cooldown:13000, knockback:8,
+         speed:24, w:46, h:23, color:'#cfd8e6', render:'elektra-sai', spreadAngle:0.07,
+         sound:'elektra_throw', fx:'elektra_throw', hitFx:'elektra_throw_hit', hitSound:'elektra_throw_hit',
+         desc:'Hurls two spinning sai in a tight pair for 1,000 total damage (500 each). Cooldown: 13 seconds.'},
+      R:{key:'R', name:'Shadow Backflip', type:'mobility', boostX:-14, boostY:-17, cooldown:4500,
+         sound:'elektra_flip', fx:'elektra_flip',
+         desc:'A high, spinning backflip away from the enemy to reset the fight. Pure mobility, no damage. Cooldown: 4.5 seconds.'}
+    }
+  },
+  ironfist: {
+    id:'ironfist', name:'Iron Fist', img:'IronFist.jpg', color:'#3fd17a', accentColor:'#ffd34a', aiStyle:'wolverine',
+    maxHealth:8600,
+    description:"Kun-Lun's Immortal Weapon. Disciplined chi strikes, the devastating Shou-Lao Iron Fist, and a towering Crane Leap.",
+    abilities:{
+      E:{key:'E', name:'Chi Palm', type:'melee', damage:450, cooldown:800, knockback:8, range:90,
+         hitDelay:60, sound:'ironfist_strike', fx:'ironfist_strike', hitFx:'ironfist_strike_hit', hitSound:'ironfist_strike_hit',
+         desc:'A focused chi-charged palm strike for 450 damage. Cooldown: 0.8 seconds.'},
+      Q:{key:'Q', name:'Shou-Lao Iron Fist', type:'melee', damage:1600, cooldown:12000, knockback:20, range:110,
+         hitDelay:260, sound:'ironfist_dragon', fx:'ironfist_dragon', hitFx:'ironfist_dragon_hit', hitSound:'ironfist_dragon_hit',
+         desc:'Charges his fist with a dragon of chi and drives it forward for 1,600 damage. Cooldown: 12 seconds.'},
+      R:{key:'R', name:'Crane Leap', type:'mobility', boostX:7, boostY:-21, cooldown:5500,
+         sound:'ironfist_leap', fx:'ironfist_leap',
+         desc:'A soaring Kun-Lun crane leap, mostly upward with a little forward drift. Pure mobility, no damage. Cooldown: 5.5 seconds.'}
     }
   },
   moonknight: {
@@ -8223,7 +8330,7 @@ function cleaCastRift(caster, target){
   setTimeout(()=>{ if(caster.el) caster.el.style.opacity=''; }, 1300);
 }
 
-const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','sylvie','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','nightcrawler','deadpool','blade','daredevil','punisher','bullseye','swordsman','blackwidow','whitewidow','redguardian','nickfury','hawkeye','drstrange','wong','clea','ebonymaw','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
+const ROSTER_ORDER = ['spiderman','milesmorales','spidergwen','greengoblin','doctoroctopus','scorpion','venom','ironman','warmachine','ironmonger','vision','captainamerica','redskull','zemo','wintersoldier','falcon','usagent','thor','loki','mobius','sylvie','hulk','redhulk','shehulk','blackpanther','killmonger','okoye','namor','captainmarvel','msmarvel','wolverine','gambit','rogue','storm','cyclops','jeangrey','beast','iceman','emmafrost','magneto','professorx','juggernaut','mystique','nightcrawler','deadpool','blade','daredevil','lukecage','elektra','ironfist','punisher','bullseye','swordsman','blackwidow','whitewidow','redguardian','nickfury','hawkeye','drstrange','wong','clea','ebonymaw','scarletwitch','quicksilver','shangchi','mrfantastic','invisiblewoman','thing','humantorch','starlord','groot','drax','mantis','gamora','nebula','rocket','yondu','antman','wasp','moonknight','ghostrider'];
 /* =========================================================================
    SECTION: CHARACTER VERSIONS / TOKEN SKINS
    ========================================================================= */
@@ -8340,15 +8447,15 @@ Object.assign(CHARACTERS, {
   blackpanther_mechstrike: {
     id:'blackpanther_mechstrike', skinOf:'blackpanther', name:'Black Panther (Mech Strike)',
     img:'BlackPantherMechStrike.jpg', color:'#5e7eea', accentColor:'#77d8ff', aiStyle:'bruiser',
-    skinCost:900, maxHealth:19500, passiveRegen:12,
-    description:'A 19,500-HP heavier armored Black Panther suit with a shoulder cannon and an overdrive combat mode.',
+    skinCost:900, maxHealth:23500, passiveRegen:12,
+    description:'A 23,500-HP heavier armored Black Panther suit with a shoulder cannon and an overdrive combat mode.',
     abilities:{
-      E:{key:'E', name:'Mech Claws', type:'melee', damage:720, cooldown:1050, knockback:10, range:96,
-         hitDelay:65, sound:'killmonger_blades', fx:'bp_claw', hitFx:'bp_claw_hit', hitSound:'claw_hit', desc:'Armored vibranium claw strikes for 720 damage.'},
-      Q:{key:'Q', name:'Shoulder Cannon', type:'mechStrikeCannon', damage:2400, cooldown:11000, knockback:20,
+      E:{key:'E', name:'Mech Claws', type:'melee', damage:650, cooldown:1050, knockback:10, range:96,
+         hitDelay:65, sound:'killmonger_blades', fx:'bp_claw', hitFx:'bp_claw_hit', hitSound:'claw_hit', desc:'Armored vibranium claw strikes for 650 damage.'},
+      Q:{key:'Q', name:'Shoulder Cannon', type:'mechStrikeCannon', damage:2160, cooldown:11000, knockback:20,
          speed:16, w:78, h:30, color:'#74d8ff', render:'mechstrike-cannon', trail:'mechstrike-cannon',
          sound:'hulk_slam', fx:'hulk_smash', hitFx:'hulk_slam_hit', hitSound:'hulk_slam_hit',
-         desc:'Fires the suit’s shoulder cannon for 2,400 damage. Cooldown: 11 seconds.'},
+         desc:'Fires the suit’s shoulder cannon for 2,160 damage. Cooldown: 11 seconds.'},
       R:{key:'R', name:'Combat Overdrive', type:'killmongerFury', damage:0, cooldown:18000, duration:6000, damageMult:1.3, reduction:.2, speedMult:1.45,
          sound:'killmonger_fury', fx:'killmonger_fury', desc:'Overcharges the mech for 6 seconds: +30% damage, 20% less incoming damage, and +45% movement speed. Cooldown: 18 seconds.'}
     }
@@ -9669,7 +9776,7 @@ function renderInventory(){
       card.className='char-card variant-only-card' + (selected?' selected equipped':'') + (!baseUnlocked?' mystery':'');
       card.dataset.variantCard='1'; card.dataset.owned=baseUnlocked?'1':'0'; card.dataset.vars='1';
       if(!baseUnlocked){
-        card.innerHTML='<div class="char-square mystery-square"><span class="mystery-icon">?</span></div>';
+        card.innerHTML='<div class="variant-base-preview mystery-preview"></div><div class="variant-link-arrow">↓</div><div class="char-square mystery-square"><span class="mystery-icon">?</span></div><div class="char-name mystery-name">???</div><div class="char-cat">Locked</div><button class="btn btn-small btn-secondary variant-buy-btn" type="button" disabled>🔒 Locked</button>';
       } else {
         card.style.setProperty('--char-color', def.color);
         const action = owned ? (selected ? '✓ Equipped' : 'Use Version') : `🪙 ${Number(def.skinCost||0).toLocaleString()} TOKENS`;
@@ -10814,6 +10921,51 @@ function falconCaptainWingsSvg(uid){
   </svg>`;
 }
 
+function elektraSaiSvg(){
+const grip=[0,1,2,3].map(i=>`<ellipse cx="${17.5+i*6.6}" cy="28" rx="3.3" ry="5.3" fill="url(#esGrip)" stroke="#050408" stroke-width=".8"/><path d="M${15.6+i*6.6} 24.6 Q${17.5+i*6.6} 23.4 ${19.4+i*6.6} 24.6" stroke="#8a8494" stroke-width=".7" fill="none" opacity=".7"/>`).join('');
+const prong=(d)=>`<path d="${d}" fill="none" stroke="#0b0d12" stroke-width="5.6"/><path d="${d}" fill="none" stroke="url(#esSteel)" stroke-width="3.6"/><path d="${d}" fill="none" stroke="#fff" stroke-width=".8" opacity=".75" transform="translate(0,-.8)"/>`;
+return `<svg viewBox="0 0 130 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="overflow:visible">
+<defs>
+<linearGradient id="esSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f8fc"/><stop offset=".3" stop-color="#aeb8c6"/><stop offset=".62" stop-color="#5d6674"/><stop offset="1" stop-color="#2b303a"/></linearGradient>
+<linearGradient id="esGrip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3a42"/><stop offset=".5" stop-color="#17121a"/><stop offset="1" stop-color="#060409"/></linearGradient>
+</defs>
+<g stroke-linecap="round" stroke-linejoin="round">
+<rect x="12" y="23.4" width="29" height="9.2" rx="3" fill="#c8142f"/>
+${grip}
+<path d="M3 22.2 L14 24 L14 32 L3 33.8 Z" fill="url(#esSteel)" stroke="#0b0d12" stroke-width="1"/><path d="M5 23.6 L12 24.8" stroke="#fff" stroke-width=".8" opacity=".8"/>
+${prong('M51 26 C46 15 54 7 72 6 C79 5.6 84 8 87 13')}
+${prong('M51 30 C46 41 54 49 72 50 C79 50.4 84 48 87 43')}
+<path d="M46 25 L112 26.3 L129 28 L112 29.7 L46 31 Z" fill="url(#esSteel)" stroke="#0b0d12" stroke-width="1"/>
+<path d="M50 26.4 L118 27.3" stroke="#fff" stroke-width=".9" opacity=".85"/>
+<rect x="40" y="20" width="13" height="16" rx="3.6" fill="#1b1a22" stroke="#07060a" stroke-width="1"/>
+<path d="M43 20.6 L46 35.4 M46.4 20.4 L49.4 35.6 M49.6 20.6 L52 34" stroke="#5a5666" stroke-width=".9" opacity=".9"/>
+</g></svg>`;
+}
+
+function ironFistDragonSvg(){
+return `<svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="overflow:visible">
+<defs>
+<linearGradient id="ifBody" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1fa85a" stop-opacity="0"/><stop offset=".45" stop-color="#27c46d"/><stop offset="1" stop-color="#8be8a8"/></linearGradient>
+<linearGradient id="ifHead" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9af0b4"/><stop offset=".55" stop-color="#2fc872"/><stop offset="1" stop-color="#127a43"/></linearGradient>
+<linearGradient id="ifGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b8"/><stop offset="1" stop-color="#f0b429"/></linearGradient>
+</defs>
+<g stroke-linejoin="round" stroke-linecap="round">
+<path d="M0 64 C28 44 56 42 86 58 C116 74 150 70 178 52 L186 82 C152 98 112 98 82 84 C54 72 28 74 0 64 Z" fill="url(#ifBody)"/>
+<path d="M62 56 q5 7 0 14 M88 66 q5 7 0 14 M114 74 q5 7 0 14 M140 72 q5 7 0 14 M164 64 q5 7 0 14" fill="none" stroke="#e4ffee" stroke-width="1.6" opacity=".55"/>
+<path d="M40 48 L46 36 L54 46 Z M76 52 L86 41 L92 57 Z M118 70 L128 58 L134 72 Z M150 66 L160 53 L167 64 Z" fill="url(#ifGold)"/>
+<path d="M206 42 C198 22 172 10 142 8 C162 18 176 32 186 50 Z" fill="url(#ifGold)" stroke="#fff6d0" stroke-width="1"/>
+<path d="M222 38 C218 22 202 12 184 10 C196 20 204 30 208 42 Z" fill="url(#ifGold)" stroke="#fff6d0" stroke-width="1"/>
+<path d="M186 68 C214 70 250 70 272 68 C288 67 302 72 308 80 C286 92 252 92 226 86 C206 82 192 78 186 68 Z" fill="#17935a" stroke="#0b4a2a" stroke-width="1.6"/>
+<path d="M212 66 L302 62 L292 71 L214 72 Z" fill="#06301c"/>
+<path d="M262 63 L266 75 L271 63 Z M240 65 L243 74 L247 65 Z" fill="#fff"/><path d="M262 71 L266 62 L270 71 Z" fill="#fff"/>
+<path d="M178 48 C192 34 222 30 252 38 C270 43 288 48 306 46 C312 45 316 48 312 52 C304 62 288 64 270 63 L222 66 C206 67 192 66 180 62 Z" fill="url(#ifHead)" stroke="#0b4a2a" stroke-width="1.6"/>
+<path d="M190 42 C214 34 240 36 262 44 C278 49 292 50 304 49" fill="none" stroke="#e8fff0" stroke-width="1.6" opacity=".6"/>
+<path d="M230 45 L252 40 L246 51 Z" fill="#06301c"/><circle cx="244" cy="45.4" r="2.5" fill="#ffe27a"/><path d="M228 40 L254 35" stroke="url(#ifGold)" stroke-width="2.4"/>
+<circle cx="297" cy="51" r="1.8" fill="#06301c"/>
+<path d="M302 56 C318 52 330 60 338 54 M298 62 C312 72 326 70 336 82" fill="none" stroke="#ffe27a" stroke-width="2"/>
+</g></svg>`;
+}
+
 function buildFighterDOM(f){
   // Shared clock all ten rings measure their orbit against, so a ring that
   // gets fired and recalled later re-syncs to the exact rotational phase the
@@ -10873,6 +11025,8 @@ function buildFighterDOM(f){
       ${f.def.id==='swordsman' ? '<div class="swordsman-sword-held" aria-hidden="true"><svg viewBox="0 0 100 34" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="swBladeGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8b9099"/><stop offset=".4" stop-color="#f8fafc"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient><linearGradient id="swGripGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e4a26"/><stop offset="1" stop-color="#4a3018"/></linearGradient></defs><ellipse cx="5" cy="17" rx="5" ry="5.2" fill="#3a2a18" stroke="#1a1208" stroke-width="1.1"/><circle cx="3.5" cy="15.3" r="1.1" fill="#7a5a34" opacity=".7"/><rect x="9" y="13.2" width="10" height="7.6" rx="3" fill="url(#swGripGrad)" stroke="#2b1c0d" stroke-width="1.1"/><path d="M10.5 15 L17.5 15 M10.5 17 L17.5 17 M10.5 19 L17.5 19" stroke="#2b1c0d" stroke-width="0.8" opacity=".55"/><rect x="19.5" y="9" width="4.5" height="16" rx="2" fill="#2c2c33" stroke="#0d0d10" stroke-width="1.1"/><circle cx="21.75" cy="11.2" r="1.2" fill="#e0574d"/><circle cx="21.75" cy="22.8" r="1.2" fill="#e0574d"/><path d="M24 12.5 L92 15 L100 17 L92 19 L24 21.5 Z" fill="url(#swBladeGrad)" stroke="#5c6067" stroke-width="1.1"/><path d="M27 14.6 L88 16.3" stroke="#ffffff" stroke-width="1.3" opacity=".85"/><path d="M24 12.5 L92 15 L100 17" fill="none" stroke="#ffffff" stroke-width="0.8" opacity=".5"/><path d="M24 21.5 L92 19 L100 17" fill="none" stroke="#4b4f56" stroke-width="0.7" opacity=".6"/></svg></div>' : ''}
       ${f.def.id==='blade' ? '<div class="blade-sword-held"><svg viewBox="0 0 96 80" aria-hidden="true"><defs><linearGradient id="bladeBlade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8f96"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#c7ccd2"/></linearGradient><linearGradient id="bladeGrip" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0c0c0e"/><stop offset="1" stop-color="#28282c"/></linearGradient></defs><g transform="translate(4 4) rotate(-6 44 36)"><circle cx="3" cy="36" r="4" fill="#0c0c0e" stroke="#000" stroke-width="1.1"/><rect x="2" y="32" width="18" height="8" rx="4" fill="url(#bladeGrip)" stroke="#000" stroke-width="1.1"/><path d="M6 33.3 L11 39.6 M9.5 33 L14.5 39.3 M13 32.8 L18 39" stroke="#454549" stroke-width="0.9" opacity=".7"/><path d="M20 28 L26 36 L20 44 L15 36 Z" fill="#8a1f1f" stroke="#3d0d0d" stroke-width="1.1"/><circle cx="20" cy="36" r="1.6" fill="#e0574d"/><path d="M18 33.5 L84 34.6 L94 36 L84 37.4 L18 38.5 Z" fill="url(#bladeBlade)" stroke="#5c6067" stroke-width="1.1"/><path d="M21 34.6 L80 35.4" stroke="#ffffff" stroke-width="1.1" opacity=".85"/><path d="M18 33.5 L84 34.6 L94 36" fill="none" stroke="#ffffff" stroke-width="0.7" opacity=".5"/><path d="M18 38.5 L84 37.4 L94 36" fill="none" stroke="#4b4f56" stroke-width="0.6" opacity=".6"/></g></svg></div>' : ''}
       ${f.def.id==='mobius' ? '<div class="mobius-stick-held"><svg viewBox="0 0 92 66" aria-hidden="true"><defs><linearGradient id="mobiusShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a2712"/><stop offset=".5" stop-color="#8e5b16"/><stop offset="1" stop-color="#3a2712"/></linearGradient><radialGradient id="mobiusTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fffdf0"/><stop offset=".4" stop-color="#ffd35a"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/></radialGradient></defs><g transform="translate(6 8) rotate(-16 40 25)"><rect x="0" y="19" width="17" height="13" rx="4" fill="#241505" stroke="#000" stroke-width="1.3"/><rect x="3.2" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="7.6" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="12" y="21.3" width="2.3" height="8.4" fill="#4a2f11"/><rect x="17" y="20.5" width="46" height="10" rx="5" fill="url(#mobiusShaft)" stroke="#1c1006" stroke-width="1.3"/><rect x="21" y="22.6" width="38" height="2.1" rx="1" fill="#ffdf94" opacity=".7"/><circle cx="70" cy="25.5" r="11" fill="url(#mobiusTip)"/><circle cx="70" cy="25.5" r="4.4" fill="#fffdf0"/><path d="M63 17 L69 25 L62 27 L71 36" fill="none" stroke="#fff3c6" stroke-width="1.9" stroke-linecap="round"/></g></svg></div>' : ''}
+      ${f.def.id==='elektra' ? '<div class="ef-sai-held" aria-hidden="true">'+elektraSaiSvg()+'</div>' : ''}
+      
       ${f.def.id==='blackwidow' ? '<div class="bw-baton-held"><svg viewBox="0 0 92 72" aria-hidden="true"><defs><linearGradient id="bwShaft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#181a20"/><stop offset=".5" stop-color="#3c4150"/><stop offset="1" stop-color="#101116"/></linearGradient><radialGradient id="bwTip" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#f2ffff"/><stop offset=".4" stop-color="#5ef3ff"/><stop offset="1" stop-color="#1fb8e0" stop-opacity="0"/></radialGradient></defs><g transform="translate(8 9) rotate(-20 40 27)"><rect x="2" y="20" width="19" height="14" rx="4" fill="#101116" stroke="#000" stroke-width="1.4"/><rect x="5.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="10.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="15.5" y="22.5" width="2.6" height="9" fill="#2a2d36"/><rect x="20" y="22.5" width="44" height="10" rx="5" fill="url(#bwShaft)" stroke="#000" stroke-width="1.4"/><ellipse cx="32" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="43" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><ellipse cx="54" cy="27.5" rx="2.1" ry="6.6" fill="none" stroke="#6ef4ff" stroke-width="1.7"/><circle cx="69" cy="27.5" r="11" fill="url(#bwTip)"/><circle cx="69" cy="27.5" r="4.4" fill="#f2ffff"/><path d="M62 19 L68 27 L61 29 L70 38" fill="none" stroke="#eafeff" stroke-width="1.9" stroke-linecap="round"/><path d="M74 17 L70 26 L77 28 L71 35" fill="none" stroke="#c8f9ff" stroke-width="1.5" stroke-linecap="round" opacity=".85"/></g></svg></div>' : ''}
     </div>
     ${f.def.id==='mrfantastic' ? '<div class="mrf-arm-wrap"><div class="mrf-sleeve"></div><div class="mrf-tube"></div><div class="mrf-cuff"></div><div class="mrf-fist"><span class="fingers"></span><span class="knuckles"></span></div></div>' : ''}
@@ -13221,7 +13375,7 @@ function executeAbility(caster, target, ability, t){
         if(inRange && facingOk){
           const healthBefore=target.health;
           damageTargetOrWall(target, attackDamage, ability.knockback, dirNow,
-            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, slowFactor: ability.slowFactor, slowFx: ability.slowFx, stun: ability.stun, ranged:isRangedAbility(ability), attacker:caster, originalWolverineClawsOnly:!!ability.originalWolverineClawsOnly});
+            {hitFx: ability.hitFx, sound: ability.hitSound, slow: ability.slow, slowFactor: ability.slowFactor, slowFx: ability.slowFx, stun: ability.stun, launch: ability.launch, ranged:isRangedAbility(ability), attacker:caster, originalWolverineClawsOnly:!!ability.originalWolverineClawsOnly});
           if(ability.redHulkBurn && target.health<healthBefore && !target.dead){
             const ticks=Math.max(1,ability.burnTicks||4);
             applyBurn(target,{interval:ability.burnTickMs||250,ticks,damage:redHulkBurnDamageFor(target)/ticks,attacker:caster});
@@ -14565,6 +14719,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   if(target.shield && now() < target.shield.expire){
     actual = dmg * (1 - target.shield.reduction);
   }
+  if(opts.ranged && target.def && target.def.rangedResist) actual *= 1 - target.def.rangedResist;
   if(target.magnetoShieldUntil && now()<target.magnetoShieldUntil){
     actual = actual * (1 - (target.magnetoShieldReduction || 0.3));
   }
@@ -14587,6 +14742,7 @@ function applyDamage(target, dmg, knockback, dirSign, opts){
   target.vy = -effectiveKnockback * 1.5 * kbMult;
   target.onGround = false;
   target.hitStun = Math.min(420, 90 + effectiveKnockback*10);
+  if(opts.launch){ target.vy = -opts.launch; target.vx *= .35; target.hitStun = Math.max(target.hitStun, 420); }
   sfx(opts.sound || 'hit');
   spawnHitFx(target, opts.hitFx || '', dirSign, !!opts.originalWolverineClawsOnly);
   if(opts.slow) applyWebSlow(target, opts.slow, opts.slowFactor, opts.slowFx);
@@ -16013,6 +16169,85 @@ F('blade_dagger','sh',P.bla,{r:18,br:'1px'}); H('blade_dagger_hit',P.bla,{s:1.5,
 const sonar=(cx,cy)=>{ ENH.ring(cx,cy,70,'#ffd0a0',600,true,2); setTimeout(()=>{ if(state.mode==='battle') ENH.ring(cx,cy,48,'#ffd0a0',480,true,2); },160); };
 F('dd_club','sl',P.dar,{w:150,d:52,sk:3,br:'1px',x:(f,a,tg,cx,cy)=>sonar(cx,cy)}); F('dd_boomerang','sh',P.dar,{r:22,x:(f,a,tg,cx,cy)=>sonar(cx,cy)});
 H('dd_club_hit',P.dar,{s:1.7,br:'1px',x:(tg,cx,cy)=>ENH.ring(cx,cy,70,'#ffd0a0',560,true,2)}); F('dd_leap','rl',P.dar,{x:(f,a,tg,cx,cy)=>sonar(cx,cy)});
+
+/* ---------- Luke Cage / Elektra / Iron Fist ---------- */
+P.luk=['#f2c230','#fff1b0','#8a5a12']; P.ele=['#ff2a3a','#ffffff','#8a1020']; P.irf=['#3fd17a','#ffd34a','#eafff0'];
+const NS={
+ luke_punch:['sw',{f:60,v:1.3,a:200,b:1800,w:'square'}],
+ luke_punch_hit:['ht',{f:48,v:1.7,d:1,k:1,hp:2400,w:'square',r:[110,165]}],
+ luke_haymaker_hit:['ht',{f:42,v:2,d:1.3,k:1,z:0,hp:2000,w:'square',r:[98,147,196]}],
+ elektra_sai_hit:['ht',{f:170,v:1,hp:6800,w:'square',r:[3136,4186,5274]}],
+ elektra_throw:['zp',{f:1500,m:.5,w:'triangle',v:1,a:2500,b:7000,r:[2637,3951]}],
+ elektra_throw_hit:['ht',{f:140,v:1,hp:6200,w:'triangle',r:[2349,3520]}],
+ ironfist_strike:['sw',{f:230,v:1.1,a:900,b:4600,w:'sine',r:[1046,1568]}],
+ ironfist_strike_hit:['ht',{f:90,v:1.2,hp:4200,w:'triangle',r:[784,1175,1568],rd:.6}],
+ ironfist_dragon_hit:['ht',{f:55,v:1.8,d:1.2,k:1,hp:3000,w:'sawtooth',r:[196,294,392,588]}],
+ ironfist_leap:['up',{f:180,d:.45,w:'sine',v:1,a:700,b:5200,r:[784,1175,1568]}],
+ elektra_flip:['sw',{f:320,v:.9,a:1400,b:6400,w:'sine',r:[1568]}]
+};
+Object.keys(NS).forEach(k=>{ const [tp,o]=NS[k]; ENH_SFX[k]=(c,t)=>SFXT[tp](c,t,o); });
+ENH_SFX.luke_haymaker=(c,t)=>{ SFXT.up(c,t,{f:55,d:.38,w:'sawtooth',v:1.2,a:200,b:2400,r:[147,220]}); aTone(c,t+.24,'square',90,45,.2,.25); enhBoom(c,t+.24,50,.6,.5); };
+ENH_SFX.luke_recover=(c,t)=>{ aTone(c,t,'sine',110,220,.7,.16); aTone(c,t+.05,'triangle',165,330,.7,.08); SFXT.rg(c,t+.25,[523,659,784],.6,.05); aNoise(c,t,.5,.08,'bandpass',500,1800,1.4); };
+ENH_SFX.elektra_sai=(c,t)=>{ [0,.07].forEach((d,i)=>{ aNoise(c,t+d,.09,.2,'highpass',6200,3000,1.2); aTone(c,t+d,'triangle',2800+i*500,1500,.07,.07); }); aTone(c,t+.02,'sine',3520,3520,.18,.03); };
+ENH_SFX.ironfist_dragon=(c,t)=>{ SFXT.up(c,t,{f:90,d:.5,w:'sawtooth',v:1.2,a:200,b:3200,r:[392,523,784,1046]}); aTone(c,t+.2,'sine',1568,1568,.5,.05); aNoise(c,t+.18,.35,.14,'bandpass',900,4200,2); };
+
+ENH_FX.luke_punch=(f,a,tg,cx,cy,dir)=>{ const p=P.luk,x=cx+dir*58; ENH.body(f,p[0],300); ENH.flash(x,cy,46,p[1],220); ENH.ring(x,cy,34,p[0],340,true,3); ENH.ring(x,cy,56,p[2],460,false,2);
+  ENH.parts(x+dir*10,cy,8,[p[0],p[1],'#b8860b'],40,360,{size:5,br:'2px',w:2}); ENH.dust(x,f.y+FIGHTER_SIZE,70,2); shakeArena(4,160); };
+H('luke_punch_hit',P.luk,{s:2.6,w:'POW!',sk:8,br:'2px',up:16,x:(tg,cx,cy)=>ENH.metal(cx,cy,10,52,420,['#fff1b0','#f2c230','#b8860b'])});
+ENH_FX.luke_haymaker=(f,a,tg,cx,cy,dir)=>{ const p=P.luk,x=cx+dir*52; ENH.body(f,p[0],560); ENH.flash(cx,cy+10,40,p[0],300); ENH.ring(cx,f.y+FIGHTER_SIZE-6,48,p[2],300,true,3);
+  setTimeout(()=>{ if(state.mode!=='battle') return; ENH.streaks(x,cy+10,p[1],12,130,420,-90,80); ENH.crescent(x,cy-6,dir>0?-60:240,64,p[1],340,70); ENH.flash(x,cy-10,70,p[0],320); ENH.ring(x,cy-10,60,p[0],440,true,4); ENH.shock(x,f.y+FIGHTER_SIZE,90,p[0],520,4); ENH.dust(x,f.y+FIGHTER_SIZE,110,3); shakeArena(9,300); },230); };
+H('luke_haymaker_hit',P.luk,{s:3.6,w:'HAYMAKER!',sk:13,br:'2px',up:60,x:(tg,cx,cy)=>{ ENH.streaks(cx,cy,'#fff1b0',14,150,460,-90,70); ENH.explode(cx,cy,60,['#ffffff','#fff1b0','#f2c230'],6); }});
+F('luke_recover','up',P.luk,{lv:1400,iv:120,hi:1,up:36,br:'2px',x:(f,a,tg,cx,cy)=>{ ENH.ring(cx,cy,70,'#fff1b0',700,true,3); ENH.word(cx,cy-62,'UNBREAKABLE','#f2c230',22,900); }});
+
+
+const AMB=['#ffb347','#ffe9b8','#c4163a'];
+ENH_FX.elektra_sai=(f,a,tg,cx,cy,dir)=>{
+  if(f.el){ const el=f.el; el.classList.remove('ef-sai-swing'); void el.offsetWidth; el.classList.add('ef-sai-swing'); setTimeout(()=>{ if(el) el.classList.remove('ef-sai-swing'); },340); }
+  const x0=dir>0?cx+4:cx-4-136;
+  fxEl('ef-cut',`left:${x0}px;top:${cy-58}px;width:136px;height:100px;`,520,`<svg width="136" height="100" viewBox="0 0 136 100" style="transform:scaleX(${dir});filter:drop-shadow(0 0 4px rgba(120,10,30,.9))">
+    <path pathLength="100" d="M14 14 Q108 4 128 60" stroke="#7a0f26" stroke-width="7" stroke-linecap="round" fill="none" opacity=".55"/>
+    <path pathLength="100" d="M14 14 Q108 4 128 60" stroke="#eef3fa" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path class="b" pathLength="100" d="M16 84 Q104 96 128 36" stroke="#7a0f26" stroke-width="7" stroke-linecap="round" fill="none" opacity=".55"/>
+    <path class="b" pathLength="100" d="M16 84 Q104 96 128 36" stroke="#eef3fa" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>`);
+  setTimeout(()=>{ if(state.mode==='battle') ENH.parts(cx+dir*74,cy,7,AMB,38,320,{size:3,br:'1px',w:1.4,up:4}); },80); };
+ENH_HIT.elektra_sai_hit=(tg,cx,cy,d)=>{
+  fxEl('ef-cut',`left:${cx-48}px;top:${cy-48}px;width:96px;height:96px;`,520,`<svg width="96" height="96" viewBox="0 0 96 96" style="filter:drop-shadow(0 0 5px #ff3a5c) drop-shadow(0 0 10px rgba(255,190,90,.7))">
+    <path pathLength="100" d="M12 14 L84 82" stroke="#fff3d6" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+    <path class="b" pathLength="100" d="M84 14 L12 82" stroke="#ffd27a" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+    <path pathLength="100" d="M12 14 L84 82" stroke="#c4163a" stroke-width="7" stroke-linecap="round" fill="none" opacity=".55"/>
+    <path class="b" pathLength="100" d="M84 14 L12 82" stroke="#c4163a" stroke-width="7" stroke-linecap="round" fill="none" opacity=".55"/></svg>`);
+  fxEl('ef-ink',`left:${cx-34}px;top:${cy-34}px;width:68px;height:68px;background:radial-gradient(circle,rgba(20,6,12,.85),rgba(120,10,40,.45) 55%,transparent 72%);`,640);
+  ENH.parts(cx,cy,12,AMB,54,440,{size:3,br:'1px',w:1.4,up:14}); ENH.flash(cx,cy,34,'#ffe9b8',160); shakeArena(3,120); };
+F('elektra_throw','sh',['#cfd8e6','#ffe9b8','#8a1020'],{r:18,br:'1px'});
+{ const _et=ENH_FX.elektra_throw; ENH_FX.elektra_throw=(f,a,tg,cx,cy,dir)=>{ if(f.el){ const el=f.el; el.classList.add('ef-thrown'); setTimeout(()=>{ if(el) el.classList.remove('ef-thrown'); },450); } _et(f,a,tg,cx,cy,dir); }; }
+ENH_HIT.elektra_throw_hit=(tg,cx,cy)=>{ ENH.parts(cx,cy,12,AMB,50,440,{size:3,br:'1px',w:1.5,up:10}); ENH.ring(cx,cy,32,'#cfd8e6',340,true,2); ENH.flash(cx,cy,28,'#ffe9b8',160); };
+ENH_FX.elektra_flip=(f,a,tg,cx,cy,dir)=>{ const gy=f.y+FIGHTER_SIZE; ENH.dust(cx,gy,60,3); ENH.streaks(cx,gy-6,'#ffb347',6,60,280,dir>0?10:170,36);
+  if(f.el){ const el=f.el; el.classList.remove('ef-flipping','ef-flip-l'); void el.offsetWidth; el.classList.add('ef-flipping'); if(dir<0) el.classList.add('ef-flip-l'); setTimeout(()=>{ if(el) el.classList.remove('ef-flipping','ef-flip-l'); },840); }
+  for(let i=0;i<5;i++) setTimeout(()=>{ if(state.mode==='battle'){ try{ spawnAfterimage(f,'#b3122b55',300); }catch(e){} } },40+i*90); };
+
+/* ---- Iron Fist: clean, crisp, minimal effects ---- */
+const IFG='#3fd17a', IFY='#ffd34a', IFW='#fff6c8';
+const ifLance=(dir)=>`<svg width="120" height="64" viewBox="0 0 120 64" style="transform:scaleX(${dir});filter:drop-shadow(0 0 5px #3fd17a)"><g fill="none" stroke-linecap="round"><path d="M4 18 Q32 32 4 46" stroke="#3fd17a" stroke-width="2" opacity=".55"/><path d="M16 12 Q52 32 16 52" stroke="#ffd34a" stroke-width="2.6" opacity=".85"/><path d="M30 6 Q74 32 30 58" stroke="#fff6c8" stroke-width="3.2"/></g></svg>`;
+const ifBurst=(sz)=>{ const c=sz/2,R=sz/2-2,r=sz*.1; let pts=[]; for(let i=0;i<8;i++){ const a=i*Math.PI/4,rr=i%2?R*.55:R; pts.push((c+Math.cos(a)*rr).toFixed(1)+','+(c+Math.sin(a)*rr).toFixed(1)); const a2=a+Math.PI/8; pts.push((c+Math.cos(a2)*r).toFixed(1)+','+(c+Math.sin(a2)*r).toFixed(1)); } return `<svg width="${sz}" height="${sz}" viewBox="0 0 ${sz} ${sz}" style="filter:drop-shadow(0 0 6px #3fd17a)"><polygon points="${pts.join(' ')}" fill="${IFW}" stroke="${IFY}" stroke-width="1.5" stroke-linejoin="round"/><circle cx="${c}" cy="${c}" r="${sz*.14}" fill="#fff"/></svg>`; };
+const ifFlare=f=>{ if(f.el){ const el=f.el; el.classList.remove('if-strike'); void el.offsetWidth; el.classList.add('if-strike'); setTimeout(()=>{ if(el) el.classList.remove('if-strike'); },360); } };
+ENH_FX.ironfist_strike=(f,a,tg,cx,cy,dir)=>{ ifFlare(f);
+  const W=120, x0=dir>0?cx+10:cx-10-W;
+  fxEl('if-fx if-fly',`left:${x0}px;top:${cy-32}px;width:${W}px;height:64px;--t:.3s;--dx:${dir*52}px;`,340,ifLance(dir)); };
+ENH_HIT.ironfist_strike_hit=(tg,cx,cy)=>{ ENH.flash(cx,cy,44,IFW,160);
+  fxEl('if-fx if-bloom',`left:${cx-36}px;top:${cy-36}px;width:72px;height:72px;--t:.36s;`,400,ifBurst(72));
+  ENH.ring(cx,cy,46,IFY,320,true,2);
+  ENH.parts(cx,cy,6,[IFY,IFW],48,360,{size:3,br:'50%',up:6}); shakeArena(3,120); };
+ENH_FX.ironfist_dragon=(f,a,tg,cx,cy,dir)=>{ ifFlare(f);
+  ENH.body(f,IFY,480); ENH.ring(cx+dir*30,cy,40,IFY,320,true,3);
+  setTimeout(()=>{ if(state.mode!=='battle') return; const W=300, H=106;
+    fxEl('if-fx if-fly',`left:${dir>0?cx+6:cx-6-W}px;top:${cy-H/2}px;width:${W}px;height:${H}px;--t:.56s;--dx:${dir*300}px;transform-origin:${dir>0?'0%':'100%'} 50%;`,620,
+      `<div style="width:100%;height:100%;transform:scaleX(${dir});filter:drop-shadow(0 0 8px #3fd17a) drop-shadow(0 0 14px rgba(255,211,74,.5))">${ironFistDragonSvg()}</div>`);
+    ENH.shock(cx+dir*70,f.y+FIGHTER_SIZE,64,IFG,460,3); shakeArena(6,240); },200); };
+ENH_HIT.ironfist_dragon_hit=(tg,cx,cy)=>{ ENH.flash(cx,cy,90,'#ffffff',260);
+  fxEl('if-fx if-bloom',`left:${cx-70}px;top:${cy-70}px;width:140px;height:140px;--t:.5s;`,560,ifBurst(140));
+  ENH.ring(cx,cy,60,IFY,400,true,3); ENH.ring(cx,cy,92,IFG,560,false,2);
+  ENH.parts(cx,cy,10,[IFY,IFW,IFG],68,480,{size:4,br:'50%',up:12}); shakeArena(11,300); };
+F('ironfist_leap','rl',P.irf,{br:'50%',x:(f,a,tg,cx,cy,dir)=>{ ENH.streaks(cx,f.y+FIGHTER_SIZE,'#ffd34a',9,110,420,-90,90); ENH.shock(cx,f.y+FIGHTER_SIZE,56,'#3fd17a',440,3); }});
 /* ---------- idle auras ---------- */
 const AUR={wolverine:'wlv',gambit:'gmb',rogue:'rog',storm:'sto',cyclops:'cyc',jeangrey:'jgr',beast:'bst',iceman:'icm',emmafrost:'emf',sylvie:'syl',juggernaut:'jug',mystique:'mys',deadpool:'ddp',blade:'bld',daredevil:'dar'};
 const _eah=enhAuraHtml; enhAuraHtml=function(id){ const m=AUR[id]; return m?`<div class="enh-aura ${m}" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>`:_eah(id); };
@@ -23342,6 +23577,11 @@ function buildProjectileVisual(p){
       <rect x="1" y="1" width="24" height="10" rx="2" fill="#f2f0ea" stroke="#6b1fb0" stroke-width="1.1"/>
       <circle cx="7" cy="6" r="1.6" fill="#9b30ff"/><circle cx="19" cy="6" r="1.6" fill="#9b30ff"/>
     </svg>`;
+  } else if(p.render === 'elektra-sai'){
+    p.el.classList.add('spin-projectile');
+    p.el.style.background = 'transparent';
+    p.el.style.boxShadow = 'none';
+    p.el.innerHTML = `<div style="width:100%;height:100%;filter:drop-shadow(0 0 4px rgba(255,200,120,.7))">${elektraSaiSvg()}</div>`;
   } else if(p.render === 'blade-dagger'){
     p.el.classList.add('spin-projectile');
     p.el.style.background = 'transparent';
