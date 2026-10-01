@@ -6009,12 +6009,13 @@ body .ui-pop.ui-pop{animation:uiPop .28s cubic-bezier(.2,.9,.3,1.25) !important;
 <style id="new-hero-fx">
 .ef-sai-held{position:absolute;left:30px;top:21px;width:66px;height:28px;z-index:6;pointer-events:none;transform-origin:19% 50%;transform:rotate(-24deg);filter:drop-shadow(0 1px 2px rgba(0,0,0,.8));opacity:0;transition:opacity .14s;}
 .ef-sai-held svg{width:100%;height:100%;display:block;overflow:visible;}
-.fighter.facing-left .ef-sai-held{left:auto;right:30px;transform:scaleX(-1) rotate(-24deg);}
+.fighter.facing-left .ef-sai-held{left:-32px;right:auto;transform-origin:81% 50%;transform:rotate(24deg);}
+.fighter.facing-left .ef-sai-held svg{transform:scaleX(-1);}
 .ef-thrown .ef-sai-held{opacity:0;}
 .ef-sai-swing .ef-sai-held{opacity:1;transition:none;animation:efSaiSwing .32s cubic-bezier(.2,.8,.2,1) forwards;}
 .fighter.facing-left.ef-sai-swing .ef-sai-held{animation-name:efSaiSwingL;}
 @keyframes efSaiSwing{0%{transform:translateX(-3px) rotate(-78deg)}25%{transform:translateX(12px) rotate(14deg)}48%{transform:translateX(2px) rotate(-52deg)}72%{transform:translateX(12px) rotate(10deg)}100%{transform:rotate(-24deg)}}
-@keyframes efSaiSwingL{0%{transform:scaleX(-1) translateX(-3px) rotate(-78deg)}25%{transform:scaleX(-1) translateX(12px) rotate(14deg)}48%{transform:scaleX(-1) translateX(2px) rotate(-52deg)}72%{transform:scaleX(-1) translateX(12px) rotate(10deg)}100%{transform:scaleX(-1) rotate(-24deg)}}
+@keyframes efSaiSwingL{0%{transform:translateX(3px) rotate(78deg)}25%{transform:translateX(-12px) rotate(-14deg)}48%{transform:translateX(-2px) rotate(52deg)}72%{transform:translateX(-12px) rotate(-10deg)}100%{transform:rotate(24deg)}}
 .ef-cut{pointer-events:none;z-index:13;animation:efCutFade .5s ease-out forwards;}
 .ef-cut svg,.if-fx svg{display:block;overflow:visible;}
 .ef-cut path{stroke-dasharray:100;stroke-dashoffset:100;animation:efDraw .15s ease-out forwards;}
