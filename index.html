@@ -8379,7 +8379,7 @@ const CHARACTER_SKINS = {
   thor: ['thor_infinitywar'],
   scarletwitch: ['scarletwitch_new'],
   hulk: ['hulk_smart'],
-  captainamerica: ['captainamerica_nomad'],
+  captainamerica: ['captainamerica_nomad','captainamerica_zombie'],
   warmachine: ['warmachine_ironpatriot'],
   groot: ['groot_king'],
   okoye: ['okoye_midnightangel'],
@@ -8392,7 +8392,10 @@ const CHARACTER_SKINS = {
   hawkeye: ['hawkeye_ronin'],
   wolverine: ['wolverine_oldmanlogan'],
   gamora: ['gamora_thanosarmor'],
-  falcon: ['falcon_captainamerica']
+  falcon: ['falcon_captainamerica'],
+  magneto: ['magneto_zombie'],
+  wong: ['wong_zombie'],
+  wasp: ['wasp_zombie']
 };
 const SKIN_IDS = Object.values(CHARACTER_SKINS).flat();
 /* Collection metadata used by the inventory filters + Stats screen.
@@ -8764,6 +8767,76 @@ Object.assign(CHARACTERS, {
       R:{key:'R', name:'Combat Roll', type:'mobility', damage:0, cooldown:6000, boostX:24, boostY:-2, rollMs:380,
          sound:'ws_roll', fx:'ws_roll',
          desc:'A long combat roll across the arena for repositioning or escaping danger. No damage.'}
+    }
+  },
+  /* ================= ZOMBIE VARIANTS ================= */
+  magneto_zombie: {
+    id:'magneto_zombie', skinOf:'magneto', name:'Magneto (Zombie)', img:'MagnetoZombie.jpg', color:'#5c8f3a', accentColor:'#b8ff6a', aiStyle:'zombie_magneto',
+    skinCost:450, maxHealth:9900, zombie:true, difficulty:'hard',
+    description:'An undead master of magnetism with half the health of the original, but he sinks into the earth when killed and claws back at full strength 10 seconds later (up to 3 times). Rusted shrapnel and a brutal Grave Pull replace his normal attacks, while undead magnetic power lets him take to the air for quick repositioning.',
+    abilities:{
+      E:{key:'E', name:'Rusted Shrapnel', type:'shrapnelSpread', damage:280, count:3, cooldown:1000, knockback:5,
+         speed:15, w:18, h:18, color:'#8a9a4a', render:'z-shard', spreadAngle:0.12,
+         sound:'zmag_shrapnel', fx:'zmag_shrapnel', hitFx:'zmag_shrapnel_hit', hitSound:'zmag_shrapnel_hit',
+         desc:'Flings three corroded metal shards for 280 damage each. Cooldown: 1 second.'},
+      Q:{key:'Q', name:'Grave Pull', type:'zPull', damage:1300, cooldown:13000, knockback:20, range:760,
+         sound:'zmag_pull', fx:'zmag_pull', hitFx:'zmag_pull_hit', hitSound:'zmag_pull_hit', cooldownOnMiss:4000,
+         desc:'Magnetic chains rip the enemy across the arena and slam them into the ground for 1,300 damage and a short stun. Cooldown: 13 seconds.'},
+      R:{key:'R', name:'Magnetic Flight', type:'timedToggle', damage:0, cooldown:12000, duration:5000,
+         sound:'magneto_flight', fx:'magneto_flight',
+         desc:'Channels undead magnetic power to fly freely for 5 seconds. Pure mobility with no damage. Cooldown: 12 seconds.'}
+    }
+  },
+  wong_zombie: {
+    id:'wong_zombie', skinOf:'wong', name:'Wong (Zombie)', img:'WongZombie.jpg', color:'#7a8f3a', accentColor:'#d6ff7a', aiStyle:'zombie_wong',
+    skinCost:350, maxHealth:7250, zombie:true, difficulty:'hard',
+    description:'A risen Sorcerer Supreme\'s protector with half the health, who sinks into the ground when killed and returns fully healed after 10 seconds (up to 3 times). His portal and shield are gone, replaced by grasping skeletal hands and a necrotic recovery technique that restores his own health.',
+    abilities:{
+      E:{key:'E', name:'Rotted Whip', type:'melee', damage:380, cooldown:1400, knockback:10, range:185, hitRange:205, hitVertical:122, hitStartSlack:28, hitDelay:145,
+         sound:'zwong_whip', fx:'zwong_whip', hitFx:'zwong_whip_hit', hitSound:'zwong_whip_hit',
+         desc:'Snaps a decayed necrotic whip for 380 damage at short-to-medium range. Cooldown: 1.4 seconds.'},
+      Q:{key:'Q', name:'Grave Grasp', type:'zGrasp', damage:700, cooldown:14000, knockback:4, range:700, rootMs:1800, telegraph:650,
+         sound:'zwong_grasp', fx:'zwong_grasp', hitFx:'zwong_grasp_hit', hitSound:'zwong_grasp_hit',
+         desc:'Marks the ground under the enemy. After a short delay skeletal hands burst out, dealing 700 damage and pinning them in place for 1.8 seconds. Move to dodge. Cooldown: 14 seconds.'},
+      R:{key:'R', name:'Necrotic Recovery', type:'heal', damage:0, heal:1320, cooldown:18000,
+         sound:'zwong_drain', fx:'zwong_drain',
+         desc:'Channels necrotic energy to restore 1,320 health to Wong. This is a self-healing ability and does not damage enemies. Cooldown: 18 seconds.'}
+    }
+  },
+  wasp_zombie: {
+    id:'wasp_zombie', skinOf:'wasp', name:'The Wasp (Zombie)', img:'TheWaspZombie.jpg', color:'#9aa83a', accentColor:'#e8ff6a', aiStyle:'zombie_wasp',
+    skinCost:250, maxHealth:3875, zombie:true, difficulty:'medium',
+    description:'A decayed, venomous Wasp with half the health who sinks into the soil when killed and rises fully healed 10 seconds later (up to 3 times). Poisonous stingers and a homing Swarm Burst replace her Size Disc and shrinking; her rotting wings still carry her through the air.',
+    abilities:{
+      E:{key:'E', name:'Rot Stinger', type:'projectile', damage:200, cooldown:1100, knockback:5,
+         speed:16, w:34, h:16, color:'#c8e84a', render:'z-stinger', trail:'z-stinger',
+         sound:'zwasp_sting', fx:'zwasp_sting', hitFx:'zwasp_sting_hit', hitSound:'zwasp_sting_hit',
+         desc:'Fires a toxic stinger for 200 damage that also poisons the target for 4 ticks of 70 damage. Cooldown: 1.1 seconds.'},
+      Q:{key:'Q', name:'Swarm Burst', type:'zSwarm', damage:170, count:7, cooldown:13000, knockback:3,
+         sound:'zwasp_swarm', fx:'zwasp_swarm', hitFx:'zwasp_swarm_hit', hitSound:'zwasp_swarm_hit',
+         desc:'Looses a swarm of seven undead wasps that fan out and home in on the enemy for 170 damage each. Cooldown: 13 seconds.'},
+      R:{key:'R', name:'Rotting Flight', type:'timedToggle', damage:0, cooldown:10000, duration:5000,
+         sound:'zwasp_flight', fx:'zwasp_flight',
+         desc:'Beats her tattered wings to fly freely for 5 seconds. Recharges after a 10 second cooldown.'}
+    }
+  },
+  captainamerica_zombie: {
+    id:'captainamerica_zombie', skinOf:'captainamerica', name:'Captain America (Zombie)', img:'CaptainAmericaZombie.jpg', color:'#4d6b3a', accentColor:'#c9ff7a', aiStyle:'zombie_cap',
+    skinCost:300, maxHealth:5000, zombie:true, difficulty:'hard',
+    description:'The undead super-soldier has half the health, but sinks into the ground when killed and returns fully healed after 10 seconds (up to 3 times). His rotting shield still returns to hand, while a bone-crunching Undead Lunge and Grave Roar replace his block and super jump.',
+    abilities:{
+      E:{key:'E', name:'Rotten Shield', type:'projectile', damage:650, cooldown:2200, knockback:10,
+         speed:16, w:50, h:50, color:'#5e7a3a',
+         sound:'zcap_throw', fx:'zcap_throw', render:'z-shield', trail:'z-shield',
+         returns:true, pierce:true, shieldViz:true, returnDistance:820,
+         hitFx:'zcap_shield_hit', hitSound:'zcap_shield_hit',
+         desc:'Throws a rotting shield in a straight line for 650 damage. It always returns to hand.'},
+      Q:{key:'Q', name:'Undead Lunge', type:'zLunge', damage:1100, cooldown:11000, knockback:18, boost:21, durationMs:420,
+         sound:'zcap_lunge', fx:'zcap_lunge', hitFx:'zcap_lunge_hit', hitSound:'zcap_lunge_hit',
+         desc:'Hurls himself at the enemy in a ravenous lunge for 1,100 damage and a stun if it connects. Cooldown: 11 seconds.'},
+      R:{key:'R', name:'Grave Roar', type:'zRoar', damage:0, cooldown:16000, radius:340, slowMs:3000, slowFactor:.55,
+         sound:'zcap_roar', fx:'zcap_roar', hitFx:'zcap_roar_hit', hitSound:'zcap_roar_hit',
+         desc:'A terrifying undead roar that blasts everything nearby for 450 damage, shoves them back and slows them by 45% for 3 seconds. Cooldown: 16 seconds.'}
     }
   },
   blade_knight: {
@@ -10082,7 +10155,7 @@ function difficultyOf(def){
 }
 // Opponents are drawn from the whole roster (owned or not), never a mirror of your own fighter.
 function pickOpponent(playerId, diff){
-  let pool = ROSTER_ORDER.filter(id => id !== playerId && (diff === 'random' || difficultyOf(CHARACTERS[id]) === diff));
+  let pool = ROSTER_ORDER.concat(['magneto_zombie','wong_zombie','wasp_zombie','captainamerica_zombie']).filter(id => id !== playerId && (diff === 'random' || difficultyOf(CHARACTERS[id]) === diff));
   if(!pool.length) pool = ROSTER_ORDER.filter(id => id !== playerId);
   return pool[Math.floor(Math.random()*pool.length)];
 }
@@ -27911,6 +27984,506 @@ try{ (function(){
   const oldT=spawnProjTrail;
   spawnProjTrail=function(p){ oldT(p); if(!p||p.render!=='gwenom-web'||Math.random()>.7) return; const cx=p.x+p.w/2, cy=p.y+p.h/2+(Math.random()*10-5); ENH.parts(cx,cy,2,[GW[0],GW[0],GW[2],GW[1]],26,420,{size:4,br:'50%'}); };
 })(); }catch(e){ console.warn('vision white / gwenom fx patch', e); }
+
+/* =========================================================================
+   SECTION: ZOMBIE VARIANTS (Magneto, Wong, The Wasp, Captain America)
+   Half health, sink into the ground on death, rise fully healed 10s later
+   (max 3 times per match), plus unique abilities, visuals and sounds.
+   ========================================================================= */
+try{ (function(){
+const Z_REVIVE_MS = 10000, Z_MAX = 3;
+const G1='#7dff6a', G2='#3fb83a', G3='#b8ff6a', ROT='#9aa83a', DIRT='#6b4a2b', BONE='#ece6c8';
+const zIs = f => !!(f && f.def && f.def.zombie);
+const zCx = f => f.x + FIGHTER_SIZE/2, zCy = f => f.y + FIGHTER_SIZE/2;
+const zOk = t => !!(t && typeof t.health === 'number' && !t.dead && !t.zombieDown);
+const S = fn => { try{ fn(); }catch(e){} };
+const later = (ms,fn) => setTimeout(()=>{ if(state.mode==='battle') S(fn); }, ms);
+const wouldRevive = f => zIs(f) && !f.zombieDown && !f.dead && (f.zombieUsed||0) < Z_MAX;
+['zombie_sink','zombie_rise'].forEach(()=>{});
+
+/* ---------- difficulty + opponent pool ---------- */
+AI_STYLE_RANGE.zombie_magneto = 380; AI_STYLE_RANGE.zombie_wong = 170;
+AI_STYLE_RANGE.zombie_wasp = 300;    AI_STYLE_RANGE.zombie_cap = 120;
+
+/* ---------- CSS ---------- */
+const css = document.createElement('style');
+css.textContent = `
+.fighter.zombie-variant .fighter-square{border-color:${G1}!important;box-shadow:0 0 0 1px rgba(125,255,106,.35),0 0 18px rgba(110,230,90,.55),0 10px 22px rgba(0,0,0,.45)!important;}
+.z-aura{position:absolute;inset:-6px;pointer-events:none;z-index:1;}
+.z-aura i{position:absolute;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#eaffc0,${G1} 55%,transparent 70%);opacity:0;animation:zSpore 2.4s ease-in infinite;}
+.z-aura i:nth-child(1){left:12%;bottom:6px;animation-delay:0s}.z-aura i:nth-child(2){left:48%;bottom:2px;animation-delay:.7s}
+.z-aura i:nth-child(3){left:80%;bottom:8px;animation-delay:1.4s}.z-aura i:nth-child(4){left:30%;bottom:0;animation-delay:1.9s}
+@keyframes zSpore{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:.9}100%{opacity:0;transform:translateY(-70px) translateX(8px) scale(1.2)}}
+.z-pips{position:absolute;left:50%;top:-30px;transform:translateX(-50%);display:flex;gap:2px;z-index:9;pointer-events:none;font-size:11px;line-height:1;}
+.z-pips span{filter:drop-shadow(0 0 3px ${G1});transition:all .3s}.z-pips span.used{opacity:.22;filter:grayscale(1)}
+.fighter.zombie-down .z-aura,.fighter.zombie-down .z-pips,.fighter.zombie-down .overhead-hp{opacity:0!important}
+.fighter.zombie-down{clip-path:inset(-500px -500px 0 -500px);}
+.fighter.zombie-down .fighter-size-body{transform:translateY(80px)!important;transition:transform 1.15s cubic-bezier(.45,.05,.7,.4);filter:brightness(.7) saturate(.7);}
+.fighter.zombie-rising{clip-path:inset(-500px -500px 0 -500px);}
+.fighter.zombie-rising .fighter-size-body{animation:zRiseUp .85s cubic-bezier(.2,.8,.3,1) both;}
+@keyframes zRiseUp{0%{transform:translateY(80px);filter:brightness(1.8) saturate(1.8) hue-rotate(40deg)}60%{transform:translateY(-6px)}100%{transform:translateY(0);filter:none}}
+.fighter.z-poisoned .fighter-square{filter:hue-rotate(70deg) saturate(1.6) brightness(1.05);}
+.fighter.z-draining .fighter-square{box-shadow:0 0 0 2px #d9a8ff,0 0 26px 6px rgba(150,255,110,.6)!important;}
+.z-wings{position:absolute;left:50%;top:50%;width:104px;height:78px;transform:translate(-50%,-52%);display:none;pointer-events:none;z-index:0;filter:drop-shadow(0 0 6px rgba(160,255,90,.6));}
+.fighter.flight-active .z-wings{display:block;animation:zWingBeat .2s ease-in-out infinite alternate;}
+.z-wings svg{width:100%;height:100%;overflow:visible}
+@keyframes zWingBeat{from{transform:translate(-50%,-52%) scaleY(.85) rotate(-2deg);opacity:.75}to{transform:translate(-50%,-52%) scaleY(1.1) rotate(3deg);opacity:1}}
+.z-grave{position:absolute;width:84px;height:66px;pointer-events:none;z-index:6;}
+.z-grave .z-mound{position:absolute;left:6px;bottom:0;width:72px;height:26px;border-radius:50% 50% 10px 10px/100% 100% 10px 10px;background:radial-gradient(ellipse at 50% 20%,#8a6a3e,${DIRT} 55%,#2c1d10);box-shadow:0 0 18px rgba(125,255,106,.6),inset 0 4px 8px rgba(0,0,0,.55);animation:zMoundIn .7s ease-out both;}
+@keyframes zMoundIn{from{transform:scaleY(.1);opacity:0}to{transform:scaleY(1);opacity:1}}
+.z-grave .z-ring{position:absolute;left:50%;top:-4px;width:52px;height:52px;transform:translateX(-50%) rotate(-90deg);overflow:visible;filter:drop-shadow(0 0 6px ${G1});}
+.z-grave .z-ring circle{fill:rgba(8,26,8,.7);stroke-width:4}.z-grave .z-ring .bg{stroke:rgba(125,255,106,.2)}.z-grave .z-ring .fg{stroke:${G1};stroke-linecap:round;stroke-dasharray:119.4;stroke-dashoffset:119.4;fill:none}
+.z-grave .z-count{position:absolute;left:0;right:0;top:9px;text-align:center;font:700 19px Anton,Impact,sans-serif;color:#e4ffc8;text-shadow:0 0 8px ${G1},0 0 2px #000;}
+.z-grave .z-hand{position:absolute;left:50%;bottom:16px;width:22px;height:30px;margin-left:-34px;transform-origin:50% 100%;animation:zHandWave 1.2s ease-in-out infinite alternate;}
+.z-grave .z-hand.h2{margin-left:14px;animation-delay:.5s}
+@keyframes zHandWave{from{transform:rotate(-12deg) translateY(2px)}to{transform:rotate(10deg) translateY(-3px)}}
+.z-plague{position:absolute;border-radius:50%;pointer-events:none;z-index:4;background:radial-gradient(circle,rgba(150,160,70,.06) 0,rgba(120,140,50,.26) 52%,rgba(98,84,40,.52) 100%);border:2px dashed rgba(196,236,96,.75);box-shadow:0 0 34px rgba(130,170,50,.55),inset 0 0 44px rgba(110,90,40,.55);animation:zPlagueSpin 7s linear infinite,zPlagueIn .45s ease-out both;}
+@keyframes zPlagueSpin{to{rotate:360deg}}@keyframes zPlagueIn{from{scale:.2;opacity:0}to{scale:1;opacity:1}}
+.z-plague.out{animation:zPlagueSpin 7s linear infinite,zPlagueOut .45s ease-in forwards}
+@keyframes zPlagueOut{to{scale:1.12;opacity:0}}
+.z-sigil{position:absolute;pointer-events:none;z-index:5;border-radius:50%;border:3px solid ${G1};background:radial-gradient(ellipse,rgba(125,255,106,.4),rgba(10,40,10,.15) 70%);box-shadow:0 0 22px ${G1},inset 0 0 18px rgba(125,255,106,.6);animation:zSigil var(--l,650ms) ease-in forwards;}
+.z-sigil::before{content:'☠';position:absolute;left:0;right:0;top:50%;transform:translateY(-52%);text-align:center;font-size:20px;color:#eaffc8;text-shadow:0 0 8px ${G1};}
+@keyframes zSigil{0%{transform:scale(.3);opacity:0}25%{opacity:1}100%{transform:scale(1.05);opacity:1;box-shadow:0 0 40px #fff,inset 0 0 26px #fff}}
+.z-hands{position:absolute;pointer-events:none;z-index:28;transform-origin:50% 100%;animation:zHandsUp .38s cubic-bezier(.2,1.3,.4,1) both;}
+.z-hands.fade{animation:zHandsOut .35s ease-in forwards}
+@keyframes zHandsUp{from{transform:scaleY(.05);opacity:0}to{transform:scaleY(1);opacity:1}}
+@keyframes zHandsOut{to{transform:translateY(24px);opacity:0}}
+.z-shield-proj,.z-wasp-proj,.z-stinger-proj,.z-shard-proj{overflow:visible!important;background:transparent!important;box-shadow:none!important;}
+.z-wasp-proj svg{animation:zWaspBuzz .09s linear infinite alternate}
+@keyframes zWaspBuzz{from{transform:translateY(-1.5px)}to{transform:translateY(1.5px)}}
+.z-lunge-ghost{position:absolute;width:64px;height:64px;border-radius:10px;pointer-events:none;z-index:3;background:${G1};opacity:.45;filter:blur(2px);animation:zGhost .35s ease-out forwards;}
+@keyframes zGhost{to{opacity:0;transform:scale(.85)}}
+.z-text{position:absolute;pointer-events:none;z-index:40;font:700 20px Anton,Impact,sans-serif;letter-spacing:2px;color:#eaffc8;text-shadow:0 0 10px ${G1},0 2px 2px #000;white-space:nowrap;transform:translateX(-50%);animation:zText 1s ease-out forwards;}
+@keyframes zText{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}20%{opacity:1;transform:translate(-50%,0) scale(1.1)}100%{opacity:0;transform:translate(-50%,-26px) scale(1)}}
+`;
+document.head.appendChild(css);
+const zWord = (x,y,txt)=> fxEl('z-text',`left:${x}px;top:${y}px;`,1000,txt);
+
+/* ---------- SOUNDS ---------- */
+const SND = {
+  zombie_sink(c,t){ enhBoom(c,t,58,.95,.42); aNoise(c,t,1.0,.3,'lowpass',900,110,.8); aTone(c,t,'sawtooth',150,52,1.0,.12); aTone(c,t+.02,'sawtooth',158,55,1.0,.08); aNoise(c,t+.1,.35,.18,'bandpass',520,180,1.8); for(let i=0;i<5;i++) aNoise(c,t+.15+i*.12,.07,.16,'bandpass',700-i*90,260,2.2); aTone(c,t+.3,'sine',80,34,.7,.22); },
+  zombie_rise(c,t){ enhBoom(c,t,48,.9,.5); enhRock(c,t,.2); aNoise(c,t,.6,.26,'lowpass',500,2200,1.0); aTone(c,t,'sawtooth',62,230,.7,.14); aTone(c,t+.02,'square',128,310,.55,.06); aNoise(c,t+.5,.12,.3,'highpass',4200,1800,1.2);
+    aTone(c,t+.5,'sawtooth',200,85,.55,.16); aTone(c,t+.52,'sawtooth',210,90,.5,.1); aNoise(c,t+.5,.5,.2,'bandpass',950,380,1.6); [880,1320].forEach((f,i)=>aTone(c,t+.62+i*.06,'sine',f,f*.8,.5,.04)); },
+  zmag_shrapnel(c,t){ for(let i=0;i<3;i++){ const tt=t+i*.04; aNoise(c,tt,.09,.2,'highpass',3200-i*250,1800,1.4); aTone(c,tt,'square',300+i*70,130,.1,.07); aNoise(c,tt+.02,.06,.1,'bandpass',900,400,2); } aTone(c,t,'sine',90,50,.18,.12); },
+  zmag_shrapnel_hit(c,t){ aTone(c,t,'triangle',1100,260,.13,.11); aNoise(c,t,.12,.22,'bandpass',2800,700,1.8); aNoise(c,t+.02,.1,.14,'lowpass',700,200,1); aTone(c,t,'sine',120,45,.15,.15); },
+  zmag_pull(c,t){ aTone(c,t,'sawtooth',90,420,.5,.1); aTone(c,t+.02,'square',180,840,.45,.05); aNoise(c,t,.5,.2,'bandpass',500,4200,2.2); for(let i=0;i<8;i++) aTone(c,t+i*.05,'square',1500+i*160,900+i*80,.03,.05); aTone(c,t,'sine',65,40,.45,.2); },
+  zmag_pull_hit(c,t){ enhBoom(c,t,62,.9,.55); enhRock(c,t,.22); aTone(c,t,'sine',110,28,.6,.34); aNoise(c,t,.2,.34,'highpass',4800,1800,1.1); [1000,1600,2300].forEach((f,i)=>aTone(c,t+i*.006,'triangle',f,f*.7,.4-i*.06,.08)); aNoise(c,t+.04,.4,.22,'bandpass',420,120,1.4); },
+  zmag_plague(c,t){ aNoise(c,t,1.1,.24,'bandpass',300,1800,1.2); aTone(c,t,'sawtooth',70,160,1.0,.1); aTone(c,t+.05,'sawtooth',74,170,.9,.07); for(let i=0;i<9;i++) aNoise(c,t+.1+i*.07,.05,.12,'highpass',4000+i*200,2400,2); aTone(c,t,'sine',48,38,.9,.2); },
+  zmag_plague_tick(c,t){ aNoise(c,t,.16,.18,'bandpass',1400,500,1.8); aTone(c,t,'sawtooth',180,70,.14,.09); aNoise(c,t,.05,.12,'highpass',5200,3000,1.2); },
+  zwong_whip(c,t){ aNoise(c,t,.16,.24,'bandpass',600,4800,1.4); aTone(c,t,'sawtooth',150,820,.14,.07); aNoise(c,t+.05,.12,.3,'highpass',5600,2400,1.6); aTone(c,t+.06,'sine',70,48,.2,.14); aNoise(c,t+.1,.2,.14,'bandpass',500,160,1.5); },
+  zwong_whip_hit(c,t){ aTone(c,t,'sine',130,36,.3,.28); aNoise(c,t,.14,.28,'highpass',4800,1800,1.2); aNoise(c,t+.02,.22,.2,'lowpass',900,200,1); aTone(c,t,'sawtooth',420,90,.18,.1); [1175,1760].forEach(f=>aTone(c,t+.01,'sine',f,f*.8,.3,.04)); },
+  zwong_grasp(c,t){ aTone(c,t,'sine',90,45,.7,.2); aNoise(c,t,.65,.2,'bandpass',300,1200,1.4); for(let i=0;i<6;i++) aTone(c,t+i*.09,'sawtooth',120+i*30,200+i*40,.12,.05); aTone(c,t+.1,'sawtooth',300,150,.5,.05); },
+  zwong_grasp_hit(c,t){ enhBoom(c,t,66,.85,.5); enhRock(c,t,.24); for(let i=0;i<6;i++) aNoise(c,t+i*.03,.06,.2,'highpass',3600+i*300,1800,2.2); aTone(c,t,'sawtooth',240,60,.4,.12); aNoise(c,t+.05,.5,.18,'bandpass',600,140,1.5); },
+  zwong_drain(c,t){ aTone(c,t,'sine',110,330,.6,.12); aTone(c,t+.04,'sawtooth',55,165,.9,.1); aNoise(c,t,1.2,.2,'bandpass',400,3200,1.6); [523,659,784,988].forEach((f,i)=>aTone(c,t+.08+i*.1,'triangle',f,f*1.5,.5,.045)); aTone(c,t,'sine',44,36,1.0,.2); },
+  zwong_drain_tick(c,t){ aTone(c,t,'sine',700,180,.24,.1); aTone(c,t,'sawtooth',90,45,.2,.14); aNoise(c,t,.2,.22,'bandpass',2200,500,1.6); [1319,1760].forEach(f=>aTone(c,t+.03,'sine',f,f*1.3,.25,.04)); },
+  zwasp_sting(c,t){ aTone(c,t,'sawtooth',900,2400,.08,.06); aNoise(c,t,.1,.18,'highpass',4200,2400,1.6); aTone(c,t+.02,'square',1400,600,.12,.04); aTone(c,t,'sine',180,90,.12,.08); },
+  zwasp_sting_hit(c,t){ aTone(c,t,'triangle',1800,500,.1,.1); aNoise(c,t,.08,.2,'highpass',5000,2400,1.6); aNoise(c,t+.03,.25,.14,'bandpass',900,300,1.8); aTone(c,t+.02,'sawtooth',240,110,.2,.07); },
+  zwasp_swarm(c,t){ for(let i=0;i<14;i++){ aTone(c,t+i*.035,'sawtooth',230+(i%4)*40,260+(i%3)*50,.12,.035); } aNoise(c,t,.6,.2,'bandpass',1400,3600,1.4); aTone(c,t,'sine',90,55,.5,.15); aTone(c,t+.05,'square',420,900,.4,.03); },
+  zwasp_swarm_hit(c,t){ aTone(c,t,'sawtooth',500,180,.08,.07); aNoise(c,t,.06,.14,'highpass',5400,3000,1.4); aNoise(c,t+.02,.1,.1,'bandpass',900,300,1.6); },
+  zwasp_flight(c,t){ aNoise(c,t,.4,.16,'bandpass',500,3200,1.2); for(let i=0;i<8;i++) aTone(c,t+i*.05,'sawtooth',150+i*18,250+i*20,.12,.04); aTone(c,t,'sine',70,50,.4,.12); },
+  zcap_throw(c,t){ aNoise(c,t,.16,.22,'bandpass',900,4200,1.2); aTone(c,t,'sawtooth',200,700,.14,.06); aTone(c,t,'triangle',1500,900,.2,.05); aNoise(c,t+.04,.3,.1,'bandpass',500,200,1.5); aTone(c,t,'sine',80,45,.2,.12); },
+  zcap_shield_hit(c,t){ aTone(c,t,'sine',130,36,.34,.3); aTone(c,t,'triangle',1100,260,.16,.12); aNoise(c,t,.12,.26,'highpass',4800,1800,1.2); aNoise(c,t+.03,.3,.22,'bandpass',500,150,1.6); [1760,2349].forEach(f=>aTone(c,t+.01,'sine',f,f*.7,.3,.05)); },
+  zcap_lunge(c,t){ aTone(c,t,'sawtooth',160,70,.45,.16); aTone(c,t+.02,'sawtooth',168,74,.4,.1); aNoise(c,t,.4,.26,'bandpass',500,2600,1.2); aNoise(c,t+.05,.22,.18,'highpass',3600,1600,1.1); aTone(c,t,'sine',60,40,.3,.2); },
+  zcap_lunge_hit(c,t){ enhBoom(c,t,60,.9,.6); enhRock(c,t,.26); aNoise(c,t,.16,.34,'highpass',5000,1800,1.1); for(let i=0;i<4;i++) aNoise(c,t+.02+i*.04,.05,.22,'bandpass',900+i*200,300,2.4); aTone(c,t,'sawtooth',320,60,.3,.12); },
+  zcap_roar(c,t){ aTone(c,t,'sawtooth',95,55,1.1,.2); aTone(c,t+.01,'sawtooth',101,58,1.1,.16); aTone(c,t,'square',190,110,.9,.07); aNoise(c,t,1.0,.3,'bandpass',900,300,1.4); aNoise(c,t+.1,.8,.22,'highpass',2200,900,1); aTone(c,t,'sine',44,32,1.0,.3); for(let i=0;i<6;i++) aTone(c,t+i*.12,'sine',60+(i%2)*6,50,.14,.08); enhBoom(c,t+.25,52,.9,.5); },
+  zcap_roar_hit(c,t){ aTone(c,t,'sine',100,30,.45,.3); aNoise(c,t,.2,.28,'highpass',3600,1400,1.2); aNoise(c,t+.03,.35,.2,'bandpass',500,140,1.4); aTone(c,t,'sawtooth',260,70,.25,.1); }
+};
+Object.keys(SND).forEach(k=>{ ENH_SFX[k]=(c,t)=>SND[k](c,t); });
+
+/* ---------- CAST + HIT FX ---------- */
+const mkSvg = (w,h,vb,inner)=>`<svg width="${w}" height="${h}" viewBox="${vb}" style="overflow:visible">${inner}</svg>`;
+const fx = {
+  zmag_shrapnel(f,a,tg,cx,cy,dir){ ENH.body(f,G3,280); const x=cx+dir*30; ENH.flash(x,cy,20,'#d8ff9a',220); ENH.ring(x,cy,26,G2,320); ENH.metal(x+dir*10,cy,8,46,420); ENH.parts(x,cy,6,['#8a9a4a','#6b4a2b',G1],34,360,{size:3,br:'1px'}); },
+  zmag_pull(f,a,tg,cx,cy,dir){ ENH.body(f,G1,520); ENH.ring(cx,cy,60,G1,520,true); ENH.ring(cx,cy,40,'#d8ff9a',420); ENH.metal(cx,cy,14,66,560); ENH.boltBurst(cx,cy,6,60,G3,280); zWord(cx,f.y-34,'GRAVE PULL'); },
+  zmag_plague(f,a,tg,cx,cy,dir){ ENH.body(f,ROT,520); ENH.ring(cx,cy,84,ROT,640); ENH.ring(cx,cy,56,G3,520,true,2); ENH.flash(cx,cy,70,'#c8d85a',360); ENH.parts(cx,cy,22,['#9aa83a','#6b4a2b','#b8ff6a','#4a3a20'],90,760,{size:5,br:'1px',up:30}); zWord(cx,f.y-34,'RUST PLAGUE'); },
+  zwong_whip(f,a,tg,cx,cy,dir){ ENH.body(f,G1,320);
+    const L=190, x0=dir>0?cx+14:cx-14-L, y=cy-24;
+    const path = dir>0 ? 'M6 70 Q60 -6 110 46 T186 22' : 'M186 70 Q132 -6 82 46 T6 22';
+    fxEl('wong-whip-fx z-whip',`left:${x0}px;top:${y}px;width:${L}px;height:90px;`,320,
+      mkSvg('100%','100%','0 0 192 90',`<path d="${path}" stroke="#16260f" stroke-width="9" fill="none" stroke-linecap="round" opacity=".35"/><path d="${path}" stroke="${G2}" stroke-width="6" fill="none" stroke-linecap="round" style="filter:drop-shadow(0 0 7px ${G1})" stroke-dasharray="210" stroke-dashoffset="210"><animate attributeName="stroke-dashoffset" from="210" to="0" dur=".16s" fill="freeze"/></path><path d="${path}" stroke="#eaffc8" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-dasharray="210" stroke-dashoffset="210"><animate attributeName="stroke-dashoffset" from="210" to="0" dur=".16s" fill="freeze"/></path>`));
+    ENH.parts(cx+dir*100,cy-10,8,[G1,'#6b4a2b','#eaffc8'],46,380,{size:3}); },
+  zwong_grasp(f,a,tg,cx,cy,dir){ ENH.body(f,G1,500); ENH.ring(cx,cy,56,G1,520); ENH.streaks(cx,cy,G3,10,60,440); zWord(cx,f.y-34,'GRAVE GRASP'); },
+  zwong_drain(f,a,tg,cx,cy,dir){ ENH.body(f,'#d9a8ff',520); ENH.ring(cx,cy,90,'#d9a8ff',620); ENH.ring(cx,cy,60,G1,520,true,2); ENH.flash(cx,cy,60,'#e8ffd0',360); zWord(cx,f.y-34,'SOUL DRAIN'); },
+  zwasp_sting(f,a,tg,cx,cy,dir){ ENH.body(f,'#c8e84a',240); const x=cx+dir*26; ENH.flash(x,cy,16,'#e8ff9a',180); ENH.streaks(x,cy,'#d8ff6a',4,34,200,dir>0?-18:162,36); ENH.parts(x,cy,4,['#c8e84a',G1],24,260,{size:3}); },
+  zwasp_swarm(f,a,tg,cx,cy,dir){ ENH.body(f,'#c8e84a',480); ENH.ring(cx,cy,56,'#c8e84a',480); ENH.flash(cx,cy,46,'#e8ff9a',300); ENH.parts(cx,cy,18,['#c8e84a','#2a3a10','#e8ff6a'],70,560,{size:4,br:'50%'}); zWord(cx,f.y-34,'SWARM!'); },
+  zwasp_flight(f,a,tg,cx,cy,dir){ ENH.body(f,G3,420); const feet=f.y+FIGHTER_SIZE; ENH.flash(cx,feet,40,'#e8ff9a',280); ENH.ring(cx,feet,48,G1,440); ENH.dust(cx,feet,60,3); ENH.parts(cx,cy,12,['#c8e84a',G1,'#e8ffd0'],54,600,{size:3,br:'50%',up:30}); },
+  zcap_throw(f,a,tg,cx,cy,dir){ ENH.body(f,G3,300); const x=cx+dir*30; ENH.flash(x,cy,22,'#d8ff9a',220); ENH.ring(x,cy,28,G2,320); ENH.streaks(x,cy,'#eaffc8',6,58,300,dir>0?-24:156,48); },
+  zcap_lunge(f,a,tg,cx,cy,dir){ ENH.body(f,G1,460); ENH.ring(cx,cy,50,G1,420); ENH.streaks(cx,cy,G3,8,70,380,dir>0?180:0,120); ENH.dust(cx,f.y+FIGHTER_SIZE,50,3); zWord(cx,f.y-34,'RRAAAGH!'); },
+  zcap_roar(f,a,tg,cx,cy,dir){ ENH.body(f,G1,700); zWord(cx,f.y-34,'GRAVE ROAR'); ENH.ring(cx,cy,40,G1,500,true,3); ENH.flash(cx,cy,56,'#d8ffb0',420); }
+};
+Object.keys(fx).forEach(k=>{ ENH_FX[k]=fx[k]; });
+const hit = {
+  zmag_shrapnel_hit(tg,cx,cy){ ENH.flash(cx,cy,22,'#d8ff9a',200); ENH.metal(cx,cy,5,34,320); ENH.parts(cx,cy,5,['#8a9a4a','#6b4a2b'],30,300,{size:3}); },
+  zmag_pull_hit(tg,cx,cy){ ENH.explode(cx,cy,100,['#ffffff',G1,ROT],12); ENH.ring(cx,cy,90,G1,540,false,3); ENH.ring(cx,cy,56,'#ffffff',360,true,3); ENH.shock(cx,cy+FIGHTER_SIZE/2,110,G2,560,5); ENH.metal(cx,cy,16,80,560); ENH.parts(cx,cy,22,[ROT,DIRT,G1],110,700,{size:5,up:40,br:'1px'}); ENH.word(cx,cy-60,'SLAM!',G3,30,800); shakeArena(13,440); },
+  zwong_whip_hit(tg,cx,cy){ ENH.flash(cx,cy,30,'#d8ffb0',220); ENH.streaks(cx,cy,G1,8,44,320); ENH.parts(cx,cy,10,[G1,'#6b4a2b','#eaffc8'],44,380,{size:3}); fxEl('wong-whip-impact-slash',`left:${cx-24}px;top:${cy-24}px;width:48px;height:48px;`,330); },
+  zwong_grasp_hit(tg,cx,cy){ ENH.flash(cx,cy,48,'#d8ffb0',300); ENH.ring(cx,cy+16,64,G1,480); ENH.dust(cx,cy+FIGHTER_SIZE/2,60,4); ENH.parts(cx,cy+20,16,[BONE,DIRT,G1],64,560,{size:4,up:40,br:'1px'}); shakeArena(7,280); },
+  zwasp_sting_hit(tg,cx,cy){ ENH.flash(cx,cy,24,'#e8ff9a',200); ENH.parts(cx,cy,9,['#c8e84a',G1,'#e8ffd0'],38,420,{size:3,br:'50%',grav:30}); ENH.word(cx,cy-40,'POISONED',G3,18,700); },
+  zwasp_swarm_hit(tg,cx,cy){ ENH.flash(cx,cy,18,'#e8ff9a',160); ENH.parts(cx,cy,5,['#c8e84a','#2a3a10'],28,300,{size:3,br:'50%'}); },
+  zcap_shield_hit(tg,cx,cy){ ENH.flash(cx,cy,34,'#d8ffb0',240); ENH.ring(cx,cy,48,G1,360); ENH.streaks(cx,cy,'#eaffc8',8,50,320); ENH.parts(cx,cy,12,[ROT,G1,'#6b4a2b'],50,420,{size:3,br:'1px'}); },
+  zcap_lunge_hit(tg,cx,cy){ ENH.explode(cx,cy,92,['#ffffff',G1,ROT],10); ENH.ring(cx,cy,84,G1,500,false,3); ENH.shock(cx,cy+FIGHTER_SIZE/2,100,G2,520,5); ENH.parts(cx,cy,18,[ROT,G1,BONE],90,600,{size:4,up:30,br:'1px'}); ENH.word(cx,cy-56,'DEVOURED!',G3,26,800); shakeArena(10,360); },
+  zcap_roar_hit(tg,cx,cy){ ENH.explode(cx,cy,70,['#ffffff',G1],8); ENH.ring(cx,cy,60,G1,420); ENH.parts(cx,cy,12,[G1,ROT],56,460,{size:4}); }
+};
+Object.keys(hit).forEach(k=>{ ENH_HIT[k]=(...a)=>S(()=>hit[k](...a)); });
+
+/* ---------- projectile visuals ---------- */
+const _bpv = buildProjectileVisual;
+buildProjectileVisual = function(p){
+  _bpv.apply(this, arguments);
+  if(!p || !p.el || !/^z-/.test(p.render||'')) return;
+  const e = p.el, flip = p.vx < 0 ? -1 : 1;
+  e.style.background='transparent'; e.style.boxShadow='none'; e.style.overflow='visible';
+  if(p.render==='z-shard'){
+    e.classList.add('z-shard-proj');
+    e.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 16 16" style="filter:drop-shadow(0 0 4px #9aff5a)"><path d="M8 0 L13 6 L10 16 L4 13 L1 5 Z" fill="#8a9a4a" stroke="#3b3a1c" stroke-width="1"/><path d="M8 0 L10 16" stroke="#c8d86a" stroke-width=".8"/><circle cx="6" cy="8" r="1.7" fill="#6b4a2b"/><circle cx="9.5" cy="5" r="1.1" fill="#6b4a2b"/></svg>`;
+  } else if(p.render==='z-stinger'){
+    e.classList.add('z-stinger-proj');
+    e.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 34 16" style="transform:scaleX(${flip});filter:drop-shadow(0 0 6px #b8ff3a) drop-shadow(0 0 12px rgba(125,255,60,.6))"><path d="M0 8 L22 2 L34 8 L22 14 Z" fill="#c8e84a" stroke="#2a3a10" stroke-width="1"/><path d="M2 8 L22 5 L30 8 L22 11 Z" fill="#eaffa0"/><path d="M0 8 L9 5 M0 8 L9 11" stroke="#7dff6a" stroke-width="1.2"/></svg>`;
+  } else if(p.render==='z-wasp'){
+    e.classList.add('z-wasp-proj');
+    e.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 30 22" style="transform:scaleX(${flip});filter:drop-shadow(0 0 5px #b8ff3a)"><ellipse cx="8" cy="6" rx="8" ry="4" fill="rgba(220,255,160,.55)" stroke="#e8ffc0" stroke-width=".6"/><ellipse cx="14" cy="5" rx="7" ry="3.4" fill="rgba(220,255,160,.4)" stroke="#e8ffc0" stroke-width=".6"/><ellipse cx="15" cy="13" rx="8" ry="4.6" fill="#c8e84a" stroke="#1b2a08" stroke-width="1"/><path d="M11 9 L11 17 M15.5 8.6 L15.5 17.4 M20 9.4 L20 16.6" stroke="#1b2a08" stroke-width="1.8"/><circle cx="25" cy="12" r="3.2" fill="#7a8a30" stroke="#1b2a08" stroke-width="1"/><circle cx="26.2" cy="11" r="1" fill="#ff5a5a"/><path d="M7 13 L1 15" stroke="#e8ff6a" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+  } else if(p.render==='z-shield'){
+    e.classList.add('spin-projectile','z-shield-proj');
+    e.innerHTML = `<svg viewBox="0 0 100 100" width="100%" height="100%" style="filter:drop-shadow(0 0 8px #7dff6a)"><circle cx="50" cy="50" r="48" fill="#4a5a38" stroke="#1b2a10" stroke-width="3"/><circle cx="50" cy="50" r="38" fill="#6a2f2a"/><circle cx="50" cy="50" r="27" fill="#d9d4b8"/><circle cx="50" cy="50" r="16" fill="#3b4a30"/><polygon points="50,36 54,46 65,46 56,52 60,63 50,56 40,63 44,52 35,46 46,46" fill="#cfd8b0"/><ellipse cx="30" cy="30" rx="8" ry="5" fill="#8aa83a" opacity=".85"/><ellipse cx="70" cy="68" rx="9" ry="6" fill="#7a8a30" opacity=".85"/><circle cx="72" cy="30" r="4" fill="#5a3a20"/><path d="M12 56 L24 52 M78 40 L90 36" stroke="#1b2a10" stroke-width="3"/></svg>`;
+  }
+};
+const _trail = spawnProjTrail;
+spawnProjTrail = function(p){
+  _trail.apply(this, arguments);
+  if(!p || !/^z-/.test(p.render||'') || Math.random()>.55) return;
+  const cx=p.x+p.w/2, cy=p.y+p.h/2+(Math.random()*8-4);
+  S(()=>ENH.parts(cx,cy,1,[G1,'#b8ff6a','#6b8a2a'],20,420,{size:3,br:'50%',grav:24}));
+};
+
+/* ---------- fighter chrome (aura, pips, wasp wings) ---------- */
+const _render = renderFighter;
+renderFighter = function(f){
+  _render.apply(this, arguments);
+  if(!zIs(f) || !f.el) return;
+  const el = f.el;
+  if(!el.classList.contains('zombie-variant')){
+    el.classList.add('zombie-variant');
+    const aura=document.createElement('div'); aura.className='z-aura'; aura.innerHTML='<i></i><i></i><i></i><i></i>'; el.appendChild(aura);
+    const pips=document.createElement('div'); pips.className='z-pips'; pips.innerHTML='<span>☠</span><span>☠</span><span>☠</span>'; el.appendChild(pips);
+    if(f.def.id==='wasp_zombie'){
+      const w=document.createElement('div'); w.className='z-wings';
+      w.innerHTML=`<svg viewBox="0 0 120 90"><g fill="rgba(200,240,120,.45)" stroke="#d8ff9a" stroke-width="1.6"><path d="M60 46 C30 8 6 6 4 22 C2 38 30 50 60 48Z"/><path d="M60 50 C34 54 18 74 26 82 C38 90 54 66 60 52Z"/><path d="M60 46 C90 8 114 6 116 22 C118 38 90 50 60 48Z"/><path d="M60 50 C86 54 102 74 94 82 C82 90 66 66 60 52Z"/></g><g stroke="#6a8a2a" stroke-width="1" fill="none"><path d="M60 46 L20 20 M60 46 L12 34 M60 46 L106 20 M60 46 L112 34"/></g><circle cx="22" cy="30" r="3" fill="#3a2a10" opacity=".6"/><circle cx="98" cy="26" r="2.6" fill="#3a2a10" opacity=".6"/></svg>`;
+      el.insertBefore(w, el.firstChild);
+    }
+  }
+  const pips = el.querySelector('.z-pips');
+  if(pips){ const used=f.zombieUsed||0; [...pips.children].forEach((s,i)=>s.classList.toggle('used', i < used)); }
+  el.classList.toggle('z-poisoned', !!(f.zPoison && f.zPoison.left>0));
+  el.classList.toggle('z-draining', !!(f.zDrainUntil && now()<f.zDrainUntil));
+};
+
+/* ---------- sink / rise ---------- */
+function zGraveEl(f){
+  const g=document.createElement('div'); g.className='z-grave';
+  const hand=`<svg viewBox="0 0 22 30"><g stroke="${BONE}" stroke-width="2.2" stroke-linecap="round" fill="none"><path d="M11 30 L11 14"/><path d="M11 16 L4 8 M11 14 L8 4 M11 13 L12 2 M11 15 L17 6"/></g><g fill="${BONE}"><circle cx="4" cy="8" r="1.5"/><circle cx="8" cy="4" r="1.5"/><circle cx="12" cy="2" r="1.5"/><circle cx="17" cy="6" r="1.5"/></g></svg>`;
+  g.innerHTML=`<div class="z-mound"></div><span class="z-hand">${hand}</span><span class="z-hand h2">${hand}</span><svg class="z-ring" viewBox="0 0 44 44"><circle class="bg" cx="22" cy="22" r="19"/><circle class="fg" cx="22" cy="22" r="19"/></svg><div class="z-count">10</div>`;
+  arenaEl.appendChild(g); f.zGrave=g; return g;
+}
+function zSink(f){
+  const t=now();
+  f.zombieUsed=(f.zombieUsed||0)+1; f.zombieDown=true; f.zombieRiseAt=t+Z_REVIVE_MS; f.health=0;
+  f.vx=0; f.vy=0; f.hitStun=0; f.blocking=false; f.flight=false; f.flightExpire=0; f.rootedUntil=0; f.slowUntil=0; f.zPoison=null;
+  f.zLunge=null; f.zDrainUntil=0; f.chargeState=null; f.windBurstUntil=0; f.pxMindStunUntil=0;
+  f.abilityLockUntil=f.zombieRiseAt+600; f.zGraveLeft=Z_MAX-f.zombieUsed;
+  if(f.zPlagueEl){ f.zPlagueEl.remove(); f.zPlagueEl=null; }
+  if(f.el){ f.el.classList.remove('zombie-rising'); f.el.classList.add('zombie-down'); }
+  const cx=zCx(f), feet=f.y+FIGHTER_SIZE;
+  sfx('zombie_sink'); shakeArena(8,420);
+  S(()=>{ ENH.flash(cx,feet,60,'#b8ff6a',380); ENH.ring(cx,feet,60,G1,620); ENH.dust(cx,feet,80,4); ENH.parts(cx,feet-4,26,[DIRT,'#8a6a3e',G1,'#2c1d10'],80,900,{size:5,up:50,br:'1px'}); ENH.shock(cx,feet,100,G2,560,4); });
+  S(()=>zWord(cx,f.y-30,f.zombieUsed>=Z_MAX?'LAST GRAVE...':'☠ SINKING'));
+  zGraveEl(f);
+}
+function zRise(f){
+  const t=now();
+  f.zombieDown=false; f.health=f.def.maxHealth; f.invulnUntil=t+1000; f.abilityLockUntil=t+500;
+  f.hitStun=0; f.vx=0; f.vy=0; f.slowUntil=0; f.rootedUntil=0; f.burnTicksLeft=0; f.zPoison=null;
+  if(f.zGrave){ f.zGrave.remove(); f.zGrave=null; }
+  if(f.el){ f.el.classList.remove('zombie-down'); f.el.classList.add('zombie-rising'); setTimeout(()=>{ if(f.el) f.el.classList.remove('zombie-rising'); },900); }
+  const cx=zCx(f), feet=f.y+FIGHTER_SIZE;
+  sfx('zombie_rise'); shakeArena(11,520);
+  S(()=>{ ENH.flash(cx,feet-20,90,'#d8ffb0',460); ENH.ring(cx,feet,100,G1,640); ENH.ring(cx,feet-10,60,'#ffffff',420,true,3); ENH.shock(cx,feet,150,G2,640,5); ENH.dust(cx,feet,100,5);
+    ENH.parts(cx,feet-6,34,[DIRT,'#8a6a3e',G1,ROT,BONE],120,1000,{size:6,up:70,br:'1px'}); ENH.streaks(cx,feet-20,G3,10,90,520,-90,140); });
+  S(()=>zWord(cx,f.y-30,f.zombieUsed>=Z_MAX?'RISEN... FINAL TIME':'☠ RISEN!'));
+}
+function zTickGrave(f){
+  const left=Math.max(0,f.zombieRiseAt-now()), prog=1-left/Z_REVIVE_MS, g=f.zGrave;
+  if(g){
+    g.style.left=(f.x+FIGHTER_SIZE/2-42)+'px'; g.style.top=(f.y+FIGHTER_SIZE-62)+'px';
+    const fg=g.querySelector('.fg'), cnt=g.querySelector('.z-count');
+    if(fg) fg.style.strokeDashoffset=(119.4*(1-prog)).toFixed(1);
+    const s=Math.ceil(left/1000); if(cnt && cnt.textContent!==String(s)) cnt.textContent=s;
+    if(Math.random()<.06) S(()=>ENH.parts(f.x+FIGHTER_SIZE/2+(Math.random()*40-20),f.y+FIGHTER_SIZE-14,1,[G1,DIRT],22,600,{size:3,up:30,br:'50%'}));
+  }
+  f.vx=0;
+  if(left<=0) zRise(f);
+}
+
+/* ---------- global per-frame hook (via updatePassiveRegen) ---------- */
+const _reg = updatePassiveRegen;
+updatePassiveRegen = function(f, dtF){
+  if(f){
+    if(f.zombieDown){ if(f.el && f.el.isConnected && state.mode==='battle') zTickGrave(f); else if(f.zGrave){ f.zGrave.remove(); f.zGrave=null; } }
+    if(f.zPoison && f.zPoison.left>0) zTickPoison(f);
+    if(f.zLunge) zTickLunge(f);
+  }
+  return _reg.apply(this, arguments);
+};
+setInterval(()=>{ if(state.mode!=='battle'){ document.querySelectorAll('.z-grave,.z-plague,.z-sigil,.z-hands,.z-text').forEach(e=>e.remove()); } },600);
+
+/* ---------- hook the death handler, damage, physics, AI ---------- */
+const _zero = onFighterZeroHealth;
+onFighterZeroHealth = function(target, reason){
+  if(target && target.def && target.def.zombie && state.mode==='battle'){
+    if(target.zombieDown) return;
+    if(wouldRevive(target)){ zSink(target); return; }
+  }
+  return _zero.apply(this, arguments);
+};
+const _ko = pushKoFeed;
+pushKoFeed = function(target){ if(wouldRevive(target)) return; return _ko.apply(this, arguments); };
+const _dmg = applyDamage;
+applyDamage = function(target, dmg, kb, dir, opts){
+  if(target && target.zombieDown) return;
+  const before = target ? target.health : 0;
+  const r = _dmg.apply(this, arguments);
+  if(opts && opts.hitFx==='zwasp_sting_hit' && opts.attacker && target && !target.zombieDown && target.health < before && target.health>0){
+    target.zPoison = { left:4, next:now()+500, att:opts.attacker };
+  }
+  return r;
+};
+const _phys = updatePhysics;
+updatePhysics = function(f, mv, jump, down, dtF){
+  if(f && f.zombieDown){ mv=0; jump=false; down=false; f.vx=0; }
+  return _phys.call(this, f, mv, jump, down, dtF);
+};
+
+function zTickPoison(f){
+  const p=f.zPoison, t=now();
+  if(f.dead || f.zombieDown || (f.invulnUntil && t<f.invulnUntil) || (f.invulnAbilityUntil && t<f.invulnAbilityUntil)){ f.zPoison=null; return; }
+  while(p.left>0 && t>=p.next){
+    p.left--; p.next+=500;
+    f.health=Math.max(0,f.health-70);
+    spawnDamageNumber(f.x+18,f.y-8,70,false);
+    S(()=>{ ENH.parts(zCx(f),zCy(f),4,[G1,'#c8e84a'],26,420,{size:3,br:'50%',up:16}); });
+    sfx('zmag_plague_tick');
+    if(f.health<=0 && !f.dead){ onFighterZeroHealth(f,'ko-poison'); break; }
+  }
+  if(p.left<=0) f.zPoison=null;
+}
+
+/* ---------- unique ability handlers ---------- */
+const dirTo = (a,b)=> (zCx(b)>=zCx(a)) ? 1 : -1;
+const H = {};
+
+// Magneto: Grave Pull
+H.zPull = (c,tg,ab,t)=>{
+  if(!zOk(tg)) return {hit:false};
+  const dist=Math.hypot(zCx(tg)-zCx(c), zCy(tg)-zCy(c));
+  if(dist>ab.range) return {hit:false};
+  const dir=dirTo(c,tg); c.facing=dir;
+  let n=0; const iv=setInterval(()=>{
+    if(state.mode!=='battle'||n++>9){ clearInterval(iv); return; }
+    S(()=>{ ENH.bolt(zCx(c)+dir*20,zCy(c),zCx(tg),zCy(tg),n%2?G1:'#d8ff9a',110,3,12); ENH.metal(zCx(tg),zCy(tg),2,24,260); });
+  },40);
+  tg.windBurstUntil=t+330; tg.windBurstVx=-dir*27; tg.vx=tg.windBurstVx; tg.vy=-3; tg.onGround=false; tg.hitStun=Math.max(tg.hitStun||0,330);
+  setTimeout(()=>{
+    if(state.mode!=='battle'||!zOk(tg)||c.dead||c.zombieDown) return;
+    const near=Math.abs(zCx(tg)-zCx(c))<=190 && Math.abs(zCy(tg)-zCy(c))<=150;
+    if(near){
+      damageTargetOrWall(tg,ab.damage,ab.knockback,dirTo(c,tg),{hitFx:ab.hitFx,sound:ab.hitSound,attacker:c,ranged:false,stun:600,launch:13});
+    } else { S(()=>zWord(zCx(tg),tg.y-20,'RESISTED')); }
+  },340);
+  return {hit:true};
+};
+
+// Magneto: Rust Plague
+H.zPlague = (c,tg,ab,t)=>{
+  if(c.zPlagueEl){ c.zPlagueEl.remove(); c.zPlagueEl=null; }
+  const R=ab.radius, el=document.createElement('div'); el.className='z-plague';
+  el.style.cssText=`width:${R*2}px;height:${R*2}px;`; arenaEl.appendChild(el); c.zPlagueEl=el;
+  const end=t+ab.duration; let lastTick=t, lastFx=t;
+  const iv=setInterval(()=>{
+    const n=now();
+    if(state.mode!=='battle'||c.dead||c.zombieDown||n>=end||!el.isConnected){
+      clearInterval(iv); el.classList.add('out'); setTimeout(()=>el.remove(),450); if(c.zPlagueEl===el) c.zPlagueEl=null; return;
+    }
+    el.style.left=(zCx(c)-R)+'px'; el.style.top=(zCy(c)-R)+'px';
+    if(n-lastFx>110){ lastFx=n; const a=Math.random()*Math.PI*2, d=Math.random()*R*.9;
+      S(()=>ENH.parts(zCx(c)+Math.cos(a)*d,zCy(c)+Math.sin(a)*d,2,['#9aa83a','#6b4a2b','#b8ff6a','#4a3a20'],22,700,{size:4,br:'1px',up:22})); }
+    const foe=(tg&&tg.health!==undefined)?tg:(c===state.player?state.bot:state.player);
+    if(n-lastTick>=500){ lastTick=n;
+      if(zOk(foe) && Math.hypot(zCx(foe)-zCx(c),zCy(foe)-zCy(c))<=R && !attackBlockedByFloor(c,foe)){
+        applyDamage(foe,ab.tickDamage,0,dirTo(c,foe),{attacker:c,ranged:true,sound:'zmag_plague_tick'});
+        foe.slowFactor=Math.min(foe.slowFactor||1,.72); foe.slowUntil=Math.max(foe.slowUntil||0,n+700);
+        S(()=>{ ENH.parts(zCx(foe),zCy(foe),8,['#9aa83a','#b8ff6a','#6b4a2b'],34,500,{size:4,br:'1px',up:18}); zWord(zCx(foe),foe.y-14,'RUST'); });
+      }
+    }
+  },60);
+  return {};
+};
+
+// Wong: Grave Grasp
+H.zGrasp = (c,tg,ab,t)=>{
+  if(!zOk(tg)) return {hit:false};
+  if(Math.hypot(zCx(tg)-zCx(c),zCy(tg)-zCy(c))>ab.range) return {hit:false};
+  const gx=zCx(tg), gy=tg.y+FIGHTER_SIZE;
+  const sig=fxEl('z-sigil',`left:${gx-76}px;top:${gy-22}px;width:152px;height:44px;--l:${ab.telegraph}ms;`,ab.telegraph+80);
+  c.facing=dirTo(c,tg);
+  later(ab.telegraph,()=>{
+    if(!zOk(tg)||c.dead){ return; }
+    const dx=Math.abs(zCx(tg)-gx), dy=Math.abs((tg.y+FIGHTER_SIZE)-gy);
+    sfx('zwong_grasp_hit'); shakeArena(5,240);
+    const arms=[0,1,2,3,4].map(i=>{ const x=-60+i*30+(Math.random()*8-4), h=60+Math.random()*30, a=(i-2)*7;
+      return `<g transform="translate(${70+x} 96) rotate(${a})"><path d="M0 0 L0 -${h}" stroke="${BONE}" stroke-width="5" stroke-linecap="round"/><path d="M0 -${h} L-9 -${h+14} M0 -${h} L-3 -${h+18} M0 -${h} L4 -${h+17} M0 -${h} L10 -${h+11}" stroke="${BONE}" stroke-width="3" stroke-linecap="round"/><circle cx="0" cy="-${h}" r="4" fill="${BONE}"/></g>`; }).join('');
+    const hands=fxEl('z-hands',`left:${gx-70}px;top:${gy-140}px;width:140px;height:140px;filter:drop-shadow(0 0 7px ${G1});`,2300,mkSvg('100%','100%','0 0 140 140',arms));
+    S(()=>{ ENH.dust(gx,gy,70,4); ENH.parts(gx,gy-6,18,[DIRT,BONE,G1],70,600,{size:4,up:46,br:'1px'}); ENH.ring(gx,gy,70,G1,480); });
+    if(dx<=82 && dy<=100){
+      damageTargetOrWall(tg,ab.damage,ab.knockback,dirTo(c,tg),{hitFx:ab.hitFx,sound:ab.hitSound,attacker:c,ranged:false});
+      if(zOk(tg)){ tg.rootedUntil=now()+ab.rootMs; tg.vx=0; tg.vy=0; S(()=>zWord(zCx(tg),tg.y-18,'PINNED!')); }
+    }
+    setTimeout(()=>{ if(hands){ hands.classList.add('fade'); setTimeout(()=>hands.remove(),380); } },ab.rootMs);
+  });
+  return {hit:true};
+};
+
+// Wong: Soul Drain
+H.zDrain = (c,tg,ab,t)=>{
+  c.zDrainUntil=t+ab.duration+100;
+  const gap=ab.duration/ab.ticks;
+  for(let i=0;i<ab.ticks;i++){
+    later(i*gap+120,()=>{
+      if(c.dead||c.zombieDown) return;
+      const foe=(tg&&tg.health!==undefined)?tg:(c===state.player?state.bot:state.player);
+      const cx=zCx(c), cy=zCy(c);
+      S(()=>{ ENH.ring(cx,cy,ab.radius*.55+i*10,'#d9a8ff',420,true,2); ENH.ring(cx,cy,ab.radius*.3,G1,380,true,2); ENH.parts(cx,cy,10,['#d9a8ff',G1,'#ffffff'],70,500,{size:4,br:'50%'}); });
+      sfx('zwong_drain_tick');
+      if(!zOk(foe)) return;
+      if(Math.hypot(zCx(foe)-cx,zCy(foe)-cy)>ab.radius || attackBlockedByFloor(c,foe)) return;
+      const hp0=foe.health;
+      applyDamage(foe,ab.tickDamage,2,dirTo(c,foe),{attacker:c,ranged:true,sound:'zwong_drain_tick'});
+      const dealt=Math.max(0,hp0-foe.health);
+      if(dealt>0 && !c.zombieDown){
+        c.health=Math.min(c.def.maxHealth,c.health+dealt);
+        spawnDamageNumber(c.x+18,c.y-14,'+'+Math.round(dealt),true);
+        S(()=>{ for(let k=0;k<4;k++) setTimeout(()=>{ if(state.mode==='battle') ENH.bolt(zCx(foe),zCy(foe),zCx(c),zCy(c),k%2?'#d9a8ff':G1,140,2,14); },k*45);
+                ENH.parts(zCx(foe),zCy(foe),8,['#d9a8ff',G1],40,420,{size:3,br:'50%'}); ENH.flash(zCx(c),zCy(c),34,'#e8ffd0',260); });
+      }
+    });
+  }
+  return {};
+};
+
+// Wasp: Swarm Burst
+H.zSwarm = (c,tg,ab,t)=>{
+  const dir=(tg&&tg.x!==undefined)?dirTo(c,tg):c.facing; c.facing=dir;
+  for(let i=0;i<ab.count;i++) setTimeout(()=>{
+    if(state.mode!=='battle'||c.dead||c.zombieDown) return;
+    const ang=((i-(ab.count-1)/2)*0.34)+(Math.random()*.1-.05);
+    const sp=11;
+    state.projectiles.push({
+      x:zCx(c)+dir*20, y:zCy(c)-10+(i%3-1)*5, vx:dir*sp*Math.cos(ang), vy:sp*Math.sin(ang), w:30, h:22, color:'#c8e84a',
+      damage:ab.damage, knockback:ab.knockback, owner:c.id, life:3400, returns:false, phase:'out', originX:c.x, casterRef:c, targetRef:tg,
+      returnDistance:0, homing:true, homingTurn:.1, instantTurn:false, render:'z-wasp', trail:'z-wasp', web:false,
+      hitFx:ab.hitFx, hitSound:ab.hitSound, slow:0, pierce:false, shieldViz:false, hasHitTarget:false, trailTick:0, el:null
+    });
+    S(()=>ENH.parts(zCx(c)+dir*20,zCy(c),3,['#c8e84a','#2a3a10'],20,260,{size:3,br:'50%'}));
+  }, i*70);
+  return {};
+};
+
+// Captain America: Undead Lunge
+H.zLunge = (c,tg,ab,t)=>{
+  if(!zOk(tg)) return {hit:false};
+  const dir=dirTo(c,tg); c.facing=dir;
+  c.windBurstUntil=t+ab.durationMs; c.windBurstVx=dir*ab.boost; c.vx=c.windBurstVx; c.vy=Math.min(c.vy,-4); c.onGround=false;
+  c.zLunge={until:t+ab.durationMs, dir, tg, ab, hit:false, nextGhost:0};
+  return {hit:true};
+};
+function zTickLunge(c){
+  const L=c.zLunge, t=now(); if(!L) return;
+  if(c.dead||c.zombieDown||t>=L.until){ c.zLunge=null; c.windBurstUntil=0; c.vx*=.4; return; }
+  if(t>=L.nextGhost){ L.nextGhost=t+45; fxEl('z-lunge-ghost',`left:${c.x}px;top:${c.y}px;`,380); S(()=>ENH.parts(zCx(c)-L.dir*20,zCy(c)+10,2,[G1,ROT],18,320,{size:3,br:'50%'})); }
+  const tg=L.tg;
+  if(!L.hit && zOk(tg) && Math.abs(zCx(tg)-zCx(c))<74 && Math.abs(zCy(tg)-zCy(c))<92 && !attackBlockedByFloor(c,tg)){
+    L.hit=true;
+    damageTargetOrWall(tg,L.ab.damage,L.ab.knockback,L.dir,{hitFx:L.ab.hitFx,sound:L.ab.hitSound,attacker:c,ranged:false,stun:600,guaranteedHit:true});
+    c.vx=L.dir*3; c.windBurstUntil=0; c.vy=Math.min(c.vy,-4); c.abilityLockUntil=t+80; c.zLunge=null;
+  }
+}
+
+// Captain America: Grave Roar
+H.zRoar = (c,tg,ab,t)=>{
+  const R=ab.radius;
+  setTimeout(()=>{
+    if(state.mode!=='battle'||c.dead||c.zombieDown) return;
+    const cx=zCx(c), cy=zCy(c);
+    shakeArena(14,560);
+    S(()=>{ fxEl('phx-screen','left:0;top:0;width:100%;height:100%;--c:rgba(125,255,106,.45);--l:520ms;',600);
+      ENH.ring(cx,cy,R,G1,640,false,4); ENH.ring(cx,cy,R*.7,G3,540,false,3); ENH.ring(cx,cy,R*.4,'#ffffff',420,false,3); ENH.shock(cx,c.y+FIGHTER_SIZE,R,G2,640,6);
+      ENH.parts(cx,cy,30,[G1,ROT,BONE,'#6b4a2b'],R*.8,800,{size:6,br:'1px',up:20}); ENH.streaks(cx,cy,G3,16,R*.5,520); });
+    const foe=(tg&&tg.health!==undefined)?tg:(c===state.player?state.bot:state.player);
+    if(zOk(foe) && Math.hypot(zCx(foe)-cx,zCy(foe)-cy)<=R && !attackBlockedByFloor(c,foe)){
+      const d=dirTo(c,foe);
+      foe.slowFactor=Math.min(foe.slowFactor||1,ab.slowFactor);
+      foe.slowUntil=Math.max(foe.slowUntil||0,now()+ab.slowMs);
+      foe.windBurstUntil=now()+300;
+      foe.windBurstVx=d*16;
+      foe.vx=foe.windBurstVx;
+      S(()=>zWord(zCx(foe),foe.y-16,'TERRIFIED'));
+    }
+  },300);
+  return {};
+};
+
+const _exec = executeAbility;
+executeAbility = function(caster, target, ability, t){
+  const h = ability && H[ability.type];
+  if(h){ try{ return h(caster,target,ability,t) || {}; }catch(e){ console.warn('zombie ability failed', e); return {}; } }
+  return _exec.apply(this, arguments);
+};
+
+/* ---------- zombie bot AI ---------- */
+function zAI(bot, player){
+  const t=now(), adist=Math.abs(player.x-bot.x), vert=Math.abs(player.y-bot.y), E=bot.def.abilities.E, Q=bot.def.abilities.Q, R=bot.def.abilities.R;
+  if(!zOk(player)) return;
+  const use=k=>{ if(cdReady(bot,k,t)){ tryUseAbility(bot,player,k); return true; } return false; };
+  const id=bot.def.id;
+  if(id==='magneto_zombie'){
+    if(adist>360 && vert<420 && Math.random()<.3 && use('R')) return;
+    if(adist<=Q.range && vert<260 && Math.random()<.7 && use('Q')) return;
+    if(adist<720 && vert<220) use('E');
+  } else if(id==='wong_zombie'){
+    if(bot.health/bot.def.maxHealth<.55 && Math.random()<.8 && use('R')) return;
+    if(adist<=Q.range && vert<200 && Math.random()<.6 && use('Q')) return;
+    if(adist<=E.range+20 && vert<125) use('E');
+  } else if(id==='wasp_zombie'){
+    if(adist<640 && Math.random()<.6 && use('Q')) return;
+    if(adist<820 && vert<240 && use('E')) return;
+    if(adist>440 && !bot.flight && Math.random()<.15) use('R');
+  } else if(id==='captainamerica_zombie'){
+    if(adist>140 && adist<520 && vert<110 && Math.random()<.6 && use('Q')) return;
+    if(adist<=R.radius-30 && Math.random()<.55 && use('R')) return;
+    if(adist<720 && vert<130 && !bot.shieldThrown) use('E');
+  }
+}
+const _bot = updateBotAI;
+updateBotAI = function(dtF){
+  const bot=state.bot, player=state.player;
+  if(bot && bot.zombieDown){ bot.aiMoveDir=0; bot.aiJumpPulse=false; bot.aiDropPulse=false; bot.aiFlyDir=0; return; }
+  const isZ = bot && bot.def && bot.def.zombie && !bot.dead && player && !player.dead && state.mode==='battle' && !state.countdown;
+  const decide = isZ && (bot.aiTimer - dtF*16.67 <= 0);
+  _bot.apply(this, arguments);
+  if(decide) S(()=>zAI(bot,player));
+};
+
+/* ---------- zombies as opponents (Practice / Battle) ---------- */
+const ZOMBIE_IDS = ['magneto_zombie','wong_zombie','wasp_zombie','captainamerica_zombie'];
+window.__ZOMBIE_IDS = ZOMBIE_IDS;
+})(); }catch(e){ console.error('zombie variants init failed', e); }
 
 /* =========================================================================
    SECTION: INITIAL RENDER
